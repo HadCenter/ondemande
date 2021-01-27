@@ -1,27 +1,38 @@
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { AuthInterceptor, AuthService, FakeBackendInterceptor } from '@services/*';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthComponent } from './web/auth/auth.component';
-import { LoginComponent } from './web/auth/login/login.component';
-import { DashboardComponent } from './web/dashboard/dashboard.component';
-import { UnauthGuardService } from './guards/unauth-guard.service';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
+import {MatDialogModule} from '@angular/material/dialog';
+
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AuthComponent,
-    LoginComponent,
-    DashboardComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    NoopAnimationsModule,
+    MatDialogModule,
   ],
   providers: [
-    UnauthGuardService,
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: FakeBackendInterceptor,
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

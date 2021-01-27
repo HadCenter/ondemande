@@ -1,31 +1,33 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { UnauthGuardService } from './guards/unauth-guard.service';
-import { AuthComponent } from './web/auth/auth.component';
-import { LoginComponent } from './web/auth/login/login.component';
 
+import { LayoutsModule } from './layouts';
+import { RouterModule, Routes } from '@angular/router';
+import { CommonLayoutComponent } from './layouts/common-layout';
+
+import { AuthGuard } from '../app/services/auth/auth.guard';
+import { BlankLayoutComponent } from './layouts/blank-layout';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'list-orders', pathMatch: 'prefix' },
   {
-    path: 'auth',
-    component: AuthComponent,
-    canActivate: [UnauthGuardService],
+    path: '', component: CommonLayoutComponent, children: [
+      { path: 'list-orders', loadChildren: () => import('./pages/list-orders/list-orders.module').then(m => m.ListOrdersModule), canActivate: [AuthGuard] },
+      { path: 'details-order/:id', loadChildren: () => import('./pages/details-order/details-order.module').then(m => m.DetailsOrderModule), canActivate: [AuthGuard] },
+    ],
+  },
+  {
+    path: '',
+    component: BlankLayoutComponent,
     children: [
-      {
-        path: '',
-        redirectTo: 'login',
-        pathMatch: 'full'
-      },
-      {
-        path: 'login',
-        component: LoginComponent
-      }
-    ]
-  }
+  { path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule) },
+  { path: 'sign-up', loadChildren: () => import('./pages/sign-up/sign-up.module').then(m => m.SignUpModule) },
+  { path: 'forgot-password', loadChildren: () => import('./pages/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule) },
+    ],
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, { useHash: true }), LayoutsModule],
+  exports: [RouterModule],
 })
 export class AppRoutingModule { }

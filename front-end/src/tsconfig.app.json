@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "./",
+    "module": "esnext",
+    "types": ["d3", "material-design-lite"]
+  },
+  "files": [
+    "main.ts",
+    "polyfills.ts"
+  ]
+}

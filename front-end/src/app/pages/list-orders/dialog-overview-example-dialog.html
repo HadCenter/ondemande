@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Confirmation</h1>
+<div mat-dialog-content>
+  <p>Êtes vous sûre de valoir pusher cette commande vers Urbantz ? </p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Non</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Oui</button>
+</div>

@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   public signup(data) {
-    return this.http.post(`${this.url}/signup`, data)
+    return this.http.post(`${this.url}/register/`, data)
       .pipe(
         map((res: { user: any, token: string }) => {
           this.user = res.user;

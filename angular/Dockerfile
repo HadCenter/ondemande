@@ -6,6 +6,7 @@ FROM node:12.0.0-alpine as builder
 RUN mkdir /app
 WORKDIR /app
 
+
 # Copy app dependencies.
 COPY angular-app/package.json angular-app/package-lock.json /app/angular-app/
 

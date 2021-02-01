@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  dj:
+    container_name: dj
+    build: django
+    command: bash -c " python manage.py makemigrations
+      && python manage.py migrate
+      && python manage.py runserver 0.0.0.0:80"
+    volumes:
+      - ./django:/code
+    ports:
+      - "80:80"
+    environment:
+      - DJANGO_SETTINGS=dev
+  ng:
+    container_name: ng
+    build: angular
+    ports:
+      - "8080:80"

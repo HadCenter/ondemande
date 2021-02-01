@@ -42,7 +42,7 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
     this.error = null;
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.getRawValue())
-        .subscribe(res => this.router.navigate(['/list-orders']),
+        .subscribe(res => this.router.navigate(['/list-file-edi']),
           // error => this.error = "error.message");
           // for fake data 
           error => this.error = "Email ou mot de passe incorrect");

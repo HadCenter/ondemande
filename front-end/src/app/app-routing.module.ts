@@ -8,11 +8,13 @@ import { AuthGuard } from '../app/services/auth/auth.guard';
 import { BlankLayoutComponent } from './layouts/blank-layout';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'list-orders', pathMatch: 'prefix' },
+  { path: '', redirectTo: 'list-file-edi', pathMatch: 'prefix' },
   {
     path: '', component: CommonLayoutComponent, children: [
-      { path: 'list-orders', loadChildren: () => import('./pages/list-orders/list-orders.module').then(m => m.ListOrdersModule), canActivate: [AuthGuard] },
-      { path: 'details-order/:id', loadChildren: () => import('./pages/details-order/details-order.module').then(m => m.DetailsOrderModule), canActivate: [AuthGuard] },
+      { path: 'list-file-edi', loadChildren: () => import('./pages/list-file-edi/list-file-edi.module').then(m => m.ListFileEdiModule), canActivate: [AuthGuard] },
+      { path: 'list-client', loadChildren: () => import('./pages/list-clients/list-clients.module').then(m => m.ListClientsModule), canActivate: [AuthGuard] },
+      /*{ path: 'list-orders', loadChildren: () => import('./pages/list-orders/list-orders.module').then(m => m.ListOrdersModule), canActivate: [AuthGuard] },
+      { path: 'details-order/:id', loadChildren: () => import('./pages/details-order/details-order.module').then(m => m.DetailsOrderModule), canActivate: [AuthGuard] },*/
     ],
   },
   {

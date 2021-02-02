@@ -6,15 +6,15 @@ services:
     build: django
     command: bash -c " python manage.py makemigrations
       && python manage.py migrate
-      && python manage.py runserver 0.0.0.0:80"
+      && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./django:/code
     ports:
-      - "80:80"
+      - "8000:8000"
     environment:
       - DJANGO_SETTINGS=dev
   ng:
     container_name: ng
     build: angular
     ports:
-      - "8080:80"
+      - "80:80"

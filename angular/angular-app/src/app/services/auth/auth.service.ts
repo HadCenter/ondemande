@@ -14,7 +14,7 @@ export class AuthService {
 
   private isLogged$ = new BehaviorSubject(false);
   /*private url = `${environment.apiBaseUrl}/api/auth`;*/
-  private url = 'http://127.0.0.1:80/api/auth'
+  private url = 'http://localhost:8000/api/auth'
   private user = { };
   // username: 'Aya', email: 'aya.kilani@redlean.io' }; // some data about user
 

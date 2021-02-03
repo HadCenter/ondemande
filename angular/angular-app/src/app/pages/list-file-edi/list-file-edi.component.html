@@ -1,1 +1,78 @@
-<p>list-file-edi works!</p>
+
+<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <base-card>
+      <base-card-title>
+        <h1 class="mdl-card__title-text">Liste des fichiers EDI</h1>
+        <div class="mdl-layout-spacer"></div>
+
+
+
+        <mat-form-field>
+          <mat-label>Actions</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let action of actions">
+              {{action.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+          <div class="mdl-textfield label-search">
+            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+              [(ngModel)]="filterValue" placeholder="Rechercher" />
+            <label class="mdl-textfield__label" for="search2"></label>
+          </div>
+        </div>
+
+        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+        </base-pagination>
+
+          <a routerLink="/import-file-edi"><button
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+                >Ajouter fichier EDI
+          </button></a>
+
+      </base-card-title>
+      <base-card-body class="no-padding">
+        <table class="mdl-data-table mdl-js-data-table  sorting-table">
+
+          <thead>
+            <tr>
+              <th>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+              </th>
+              <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric">
+                <span>{{ header.name }}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of advancedTable  | slice:0:limit;" (click)="gotoDetails(row.taskId)">
+              <td>
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
+              </td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.Fichier_EDI }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.Date_creation }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.Client }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.Commandes_erronees }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.Commandes_validees }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.Status }}</td>
+
+              <td class="mdl-data-table__cell--non-numeric">
+                <button
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                  (click)="openDialog(row);$event.stopPropagation();">Analyser
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </base-card-body>
+    </base-card>
+  </div>
+

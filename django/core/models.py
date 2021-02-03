@@ -4,13 +4,12 @@ import os
 
 
 class Client(models.Model):
-    nom = models.CharField(max_length=200, unique=True)
-    prenom = models.CharField(max_length=200)
+    code_client = models.CharField(max_length=200)
+    nom_client = models.CharField(max_length=200, unique=True)
     email = models.EmailField(max_length=100)
-    ville = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.name
+        return self.nom_client
 
 class EDIfile(models.Model):
     file = models.FileField(upload_to="dishes/chinese")

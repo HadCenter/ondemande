@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ListClientsService {
-
+  private url = 'http://127.0.0.1:80/api'
   constructor(private http: HttpClient)
    { }
    public advanceTableData: any = [
@@ -48,19 +48,19 @@ export class ListClientsService {
     return [
         {
             name: 'Nom',
-            
+
         },
         {
             name: 'Prenom',
-            
+
         },
         {
             name: 'Email',
-            
+
         },
         {
             name: 'Ville',
-            
+
         },
 
     ];
@@ -78,6 +78,9 @@ public getOrderById(id) {
   })
   return result;
 }
+public getAllClients () : Observable<any> {
+    return this.http.get(`${this.url}/getClients/`);
+  }
 
 
 }

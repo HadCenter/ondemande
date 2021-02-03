@@ -3,7 +3,9 @@
       <base-card-title>
         <h1 class="mdl-card__title-text">Liste des clients</h1>
         <div class="mdl-layout-spacer"></div>
-        
+
+
+
         <mat-form-field>
           <mat-label>Actions</mat-label>
           <mat-select>
@@ -12,8 +14,8 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-  
-  
+
+
         <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
           <div class="mdl-textfield label-search">
             <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
@@ -21,13 +23,19 @@
             <label class="mdl-textfield__label" for="search2"></label>
           </div>
         </div>
-  
+
         <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
         </base-pagination>
+
+          <a routerLink="/create-client"><button
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+                >Ajouter client
+              </button></a>
+
       </base-card-title>
       <base-card-body class="no-padding">
         <table class="mdl-data-table mdl-js-data-table  sorting-table">
-  
+
           <thead>
             <tr>
               <th>
@@ -37,7 +45,7 @@
                 </mat-checkbox>
               </th>
               <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric">
-                <span>{{ header.name }}</span> 
+                <span>{{ header.name }}</span>
               </th>
             </tr>
           </thead>
@@ -54,7 +62,12 @@
               <td class="mdl-data-table__cell--non-numeric">
                 <button
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                  (click)="openDialog(row);$event.stopPropagation();">Transférer
+                  (click)="openDialog(row);$event.stopPropagation();">Modifier
+                </button>
+                &nbsp;
+                <button
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                  (click)="openDialog(row);$event.stopPropagation();">Archiver
                 </button>
               </td>
             </tr>
@@ -62,6 +75,5 @@
         </table>
       </base-card-body>
     </base-card>
-  </div>
-  
-  
+</div>
+

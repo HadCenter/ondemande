@@ -1,9 +1,10 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component,HostBinding } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
+import { ClientComponent } from './client/client.component';
 import { ListClientsService } from './list-clients.service';
 
 export interface PeriodicElement {
@@ -27,7 +28,6 @@ export class ListClientsComponent extends UpgradableComponent {
   limit = 5;
   selection = new SelectionModel<PeriodicElement>(true, []);
   actions: any[] = [
-    { value: 'transférer', viewValue: 'Transférer' },
     { value: 'supprimer', viewValue: 'Supprimer' },
   ];
 
@@ -38,6 +38,7 @@ export class ListClientsComponent extends UpgradableComponent {
   @HostBinding('class.mdl-cell--4-col-phone') private readonly mdlCell4ColPhone = true;
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
+  clients = [{title : 'test'}];
   public constructor(private tablesService: ListClientsService,
     private router: Router,
     public dialog: MatDialog,
@@ -45,6 +46,7 @@ export class ListClientsComponent extends UpgradableComponent {
     super();
     this.completeTable = this.tablesService.advanceTableData;
     console.log(this.completeTable)
+    this.getClients();
   }
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   public currentPage = 1;
@@ -52,7 +54,7 @@ export class ListClientsComponent extends UpgradableComponent {
   public numPage = this.tablesService.getAdvancedTableNumOfPage(this.countPerPage);
 
   public advancedTable = this.tablesService.getAdvancedTablePage(1, this.countPerPage);
-  
+
   public changePage(page, force = false) {
     if (page !== this.currentPage || force) {
       this.currentPage = page;
@@ -101,6 +103,22 @@ export class ListClientsComponent extends UpgradableComponent {
       duration: 2500,
       panelClass: ['mat-toolbar', 'mat-warn']
     });
+  }
+  onCreate()
+  {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "60%";
+    this.dialog.open(ClientComponent,dialogConfig);
+  }
+  public getClients ()
+  {
+    this.tablesService.getAllClients()
+      .subscribe(res => {this.clients = res; console.log(this.clients);},
+          // error => this.error = "error.message");
+          // for fake data
+          error => console.log(error));
   }
 
 }

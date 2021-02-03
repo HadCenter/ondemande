@@ -11,6 +11,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { SignUpComponent } from './sign-up';
 
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -24,8 +25,6 @@ import { SignUpComponent } from './sign-up';
     LoginComponent,
     SignUpComponent,
     ForgotPasswordComponent,
-    
-    
   ],
 })
 export class PagesModule { }

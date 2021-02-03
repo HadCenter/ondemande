@@ -42,7 +42,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatTableModule,
     MatCheckboxModule,
     MatSelectModule,
-   
+
+
   ],
   entryComponents: [DialogOverviewExampleDialog],
   providers: [

@@ -47,22 +47,17 @@ export class ListClientsService {
    public getAdvancedHeaders() {
     return [
         {
-            name: 'Nom',
+            name: 'Code client',
 
         },
         {
-            name: 'Prenom',
+            name: 'Nom client',
 
         },
         {
             name: 'Email',
 
         },
-        {
-            name: 'Ville',
-
-        },
-
     ];
   }
   public getAdvancedTableNumOfPage(countPerPage) {

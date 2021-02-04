@@ -50,15 +50,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let row of advancedTable  | slice:0:limit;" (click)="gotoDetails(row.taskId)">
+            <tr *ngFor="let row of clients  | slice:0:limit;" (click)="gotoDetails(row.taskId)">
               <td>
                 <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
                   [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
               </td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.Nom }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.Prenom }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.Email }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.Ville }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.code_client }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.nom_client }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
               <td class="mdl-data-table__cell--non-numeric">
                 <button
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ListFileEdiService {
-
+  private url = 'http://127.0.0.1:80/api'
   constructor(private http: HttpClient) { }
 
    public advanceTableData: any = [
@@ -80,9 +80,6 @@ export class ListFileEdiService {
       "Commandes_validees" : "_",
       "Status" : "en attente"
      },
-
-
-
    ];
   public getAdvancedHeaders() {
     return [
@@ -95,7 +92,7 @@ export class ListFileEdiService {
 
         },
         {
-            name: 'Client',
+            name: 'Nom client',
 
         },
         {
@@ -128,6 +125,9 @@ export class ListFileEdiService {
     return obj.id === id;
     })
     return result;
+  }
+  public getAllFiles () : Observable<any> {
+    return this.http.get(`${this.url}/getFiles/`);
   }
 
 

@@ -35,6 +35,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
   @HostBinding('class.mdl-cell--4-col-phone') private readonly mdlCell4ColPhone = true;
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
+  files = [{title : 'test'}];
   constructor(private tablesService: ListFileEdiService,
     private router: Router,
     public dialog: MatDialog,
@@ -43,6 +44,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
     super();
     this.completeTable = this.tablesService.advanceTableData;
     console.log(this.completeTable)
+    this.getFiles();
     }
 
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
@@ -95,11 +97,20 @@ export class ListFileEDIComponent extends UpgradableComponent{
       duration: 2500,
     });
   }
-  openSnackBarError(message: string, action: string) {
+  openSnackBarError(message: string, action: string)
+  {
     this._snackBar.open(message, action, {
       duration: 2500,
       panelClass: ['mat-toolbar', 'mat-warn']
     });
+  }
+  public getFiles ()
+  {
+    this.tablesService.getAllFiles()
+      .subscribe(res => {this.files = res; console.log(this.files);},
+          // error => this.error = "error.message");
+          // for fake data
+          error => console.log(error));
   }
 
 }

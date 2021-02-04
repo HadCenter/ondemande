@@ -1,7 +1,8 @@
 from django.db import models
 import os
 # Create your models here.
-
+def upload_to(instance, filename):
+    return 'files/{filename}'.format(filename=filename)
 
 class Client(models.Model):
     code_client = models.CharField(max_length=200)
@@ -12,10 +13,10 @@ class Client(models.Model):
         return self.nom_client
 
 class EDIfile(models.Model):
-    file = models.FileField(upload_to="dishes/chinese")
+    file = models.FileField(blank = False, null = False, upload_to=upload_to)
     created_at = models.DateTimeField(auto_now =True)
     '''en attente, en cours, complété '''
-    status = models.BooleanField(default=False)
+    status = models.BooleanField(default="En attente")
     wrong_commands = models.CharField(max_length=200, default="_")
     validated_orders = models.CharField(max_length=200, default="_")
     client = models.ForeignKey(Client, on_delete=models.CASCADE)

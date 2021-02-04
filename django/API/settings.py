@@ -99,7 +99,7 @@ DATABASES = {
         'NAME': 'ondemand',
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
-        'HOST': '35.180.109.207',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

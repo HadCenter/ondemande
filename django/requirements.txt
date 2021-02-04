@@ -6,3 +6,5 @@ djangorestframework-jwt
 cryptography
 python-jose
 django-rest-knox
+requests
+mysqlclient

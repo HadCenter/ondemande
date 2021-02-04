@@ -2,7 +2,7 @@ version: "3"
 
 services:
   dj:
-    network_mode: host
+    network_mode: "host"
     container_name: dj
     build: django
     command: python manage.py runserver 0.0.0.0:8000

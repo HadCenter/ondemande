@@ -95,8 +95,12 @@ WSGI_APPLICATION = 'API.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / "db.sqlite3"),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ondemand',
+        'USER': 'ondemand',
+        'PASSWORD': 'ondemand',
+        'HOST': '35.180.109.207',
+        'PORT': '3306',
     }
 }
 

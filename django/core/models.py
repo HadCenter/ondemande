@@ -16,7 +16,7 @@ class EDIfile(models.Model):
     file = models.FileField(blank = False, null = False, upload_to=upload_to)
     created_at = models.DateTimeField(auto_now =True)
     '''en attente, en cours, complété '''
-    status = models.BooleanField(default="En attente")
+    status = models.BooleanField(default= False)
     wrong_commands = models.CharField(max_length=200, default="_")
     validated_orders = models.CharField(max_length=200, default="_")
     client = models.ForeignKey(Client, on_delete=models.CASCADE)

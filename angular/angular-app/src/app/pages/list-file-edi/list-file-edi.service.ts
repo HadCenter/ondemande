@@ -107,6 +107,9 @@ export class ListFileEdiService {
             name: 'Status',
 
         },
+        {
+            name : 'Actions'
+        }
 
     ];
   }

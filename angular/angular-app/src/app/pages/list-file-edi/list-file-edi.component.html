@@ -50,7 +50,7 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             <tr *ngFor="let row of files  | slice:0:limit;" (click)="gotoDetails(row.taskId)">
               <td>
                 <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"

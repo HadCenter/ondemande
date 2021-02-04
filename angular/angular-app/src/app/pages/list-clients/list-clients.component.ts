@@ -38,7 +38,7 @@ export class ListClientsComponent extends UpgradableComponent {
   @HostBinding('class.mdl-cell--4-col-phone') private readonly mdlCell4ColPhone = true;
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
-  clients = [{title : 'test'}];
+  clients = [];
   public constructor(private tablesService: ListClientsService,
     private router: Router,
     public dialog: MatDialog,

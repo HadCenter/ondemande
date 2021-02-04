@@ -35,7 +35,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
   @HostBinding('class.mdl-cell--4-col-phone') private readonly mdlCell4ColPhone = true;
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
-  files = [{title : 'test'}];
+  files = [];
   constructor(private tablesService: ListFileEdiService,
     private router: Router,
     public dialog: MatDialog,

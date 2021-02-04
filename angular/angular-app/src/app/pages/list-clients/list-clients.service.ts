@@ -58,6 +58,9 @@ export class ListClientsService {
             name: 'Email',
 
         },
+        {
+            name : 'Actions'
+        }
     ];
   }
   public getAdvancedTableNumOfPage(countPerPage) {

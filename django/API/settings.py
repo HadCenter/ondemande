@@ -99,7 +99,7 @@ DATABASES = {
         'NAME': 'ondemand',
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
-        'HOST': 'localhost',
+        'HOST': 'gateway.docker.internal',
         'PORT': '3306',
     }
 }

@@ -56,9 +56,9 @@
                 <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
                   [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
               </td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.file }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.created_at }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.client }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.file | slice:7}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | date:"yyyy/MM/dd h:mm:ss" }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.client_name }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.wrong_commands }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.validated_orders }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.status }}</td>

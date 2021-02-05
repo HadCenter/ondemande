@@ -23,7 +23,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
   public snackAction = 'Ok';
   public completeTable: any = [];
   public filterValue: any;
-  limit = 5;
+  limit = 15;
   selection = new SelectionModel<PeriodicElement>(true, []);
   actions: any[] = [
     { value: 'analyser', viewValue: 'Analyser' },

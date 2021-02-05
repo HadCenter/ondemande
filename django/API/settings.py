@@ -95,13 +95,14 @@ WSGI_APPLICATION = 'API.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ondemand',
+       'ENGINE': 'django.db.backends.mysql',
+       'NAME': 'ondemand',
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
         'HOST': '35.180.109.207',
-        'PORT': '3306',
+       'PORT': '3306',
     }
+
 }
 
 

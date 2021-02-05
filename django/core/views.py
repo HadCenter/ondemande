@@ -9,10 +9,13 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Client
 from .serializers import FileSerializer
+
 from .models import EDIfile
 import ftplib
 import time
 import os
+from os import listdir
+from os.path import isfile, join
 # Create your views here.
 
 
@@ -49,6 +52,22 @@ class fileCreate(APIView):
         serializer = FileSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            clientName = Client.objects.get(pk=request.data['client']).nom_client
+            ftp = connect()
+            path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
+            path_client = path_racine + '/' + clientName
+            ftp.cwd(path_client)
+            path = "media/files/"
+            filename = [f for f in listdir(path) if isfile(join(path, f))][0]
+            os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
+            file = open(fileName, 'rb')
+            print(os.path.basename(fileName))
+            ftp.storbinary('STOR ' + os.path.basename(fileName), file)
+            file.close()
+            os.remove(fileName)
+            ediFile = EDIfile.objects.last()
+            ediFile.file = fileName
+            ediFile.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

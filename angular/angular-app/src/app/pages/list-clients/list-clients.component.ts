@@ -25,7 +25,7 @@ export class ListClientsComponent extends UpgradableComponent {
   public snackAction = 'Ok';
   public completeTable: any = [];
   public filterValue: any;
-  limit = 10;
+  limit = 15;
   selection = new SelectionModel<PeriodicElement>(true, []);
   actions: any[] = [
     { value: 'supprimer', viewValue: 'Supprimer' },

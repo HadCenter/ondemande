@@ -30,8 +30,9 @@ export class CreateClientComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-  componentHandler.upgradeDom();
+  ngOnInit(): void
+  {
+    componentHandler.upgradeDom();
   }
  public login() {
     this.error = null;

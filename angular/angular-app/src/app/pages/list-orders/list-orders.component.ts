@@ -130,54 +130,58 @@ export class ListOrdersComponent extends UpgradableComponent {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
-
-  openDialog(order): void {
+openDialog(order): void {
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '250px',
       data: order
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined) {
-        this.order = result;
-        let miniOrder = {
-          "type": this.order.type,
-          "taskId": this.order.taskId,
-          "taskReference": this.order.taskReference,
-          "date": this.order.date
-        }
-        this.tablesService.findByTaskId(miniOrder.taskId).subscribe(res => {
-          if (res == null) {
-            this.tablesService.save(miniOrder).subscribe(result => {
-              console.log(result);
-              this.openSnackBar("Commande ajoutée à Urbantz avec succés", this.snackAction)
+        if (result != undefined)
+         {
+            this.order = result;
+            let miniOrder =
+            {
+              "type": this.order.type,
+              "taskId": this.order.taskId,
+              "taskReference": this.order.taskReference,
+              "date": this.order.date
+            }
+            this.tablesService.findByTaskId(miniOrder.taskId).subscribe(res => {
+              if (res == null)
+              {
+                this.tablesService.save(miniOrder).subscribe(result => {
+                  console.log(result);
+                  this.openSnackBar("Commande ajoutée à Urbantz avec succés", this.snackAction)
+                  }, error => console.error(error));
+              }
+              else
+              {
+                this.openSnackBarError("Cette commande existe déja à Urbantz!", this.snackAction)
+              }
+            },
+              error => console.error(error));
+            }
+            });
+         }
 
-            }, error => console.error(error));
-          }
-          else {
-            this.openSnackBarError("Cette commande existe déja à Urbantz!", this.snackAction)
-          }
-        },
-          error => console.error(error));
+      openSnackBar(message: string, action: string)
+      {
+        this._snackBar.open(message, action, {
+        duration: 2500,
+      });
       }
-
-    });
-  }
-
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2500,
-    });
-  }
-  openSnackBarError(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2500,
-      panelClass: ['mat-toolbar', 'mat-warn']
-    });
-  }
+      openSnackBarError(message: string, action: string)
+      {
+        this._snackBar.open(message, action, {
+          duration: 2500,
+          panelClass: ['mat-toolbar', 'mat-warn']
+        });
+      }
 
 
 }
+
 
 @Component({
   selector: 'dialog-overview-example-dialog',

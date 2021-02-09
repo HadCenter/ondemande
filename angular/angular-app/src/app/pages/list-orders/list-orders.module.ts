@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ListOrdersRoutingModule } from './list-orders-routing.module';
 import { ListOrdersComponent, DialogOverviewExampleDialog } from './list-orders.component';
 import { ListOrderService } from './list-orders.service';
 import { PieChartService } from '../../components/pie-chart/pie-chart.service';
 import { DiscreteBarChartService } from '../../components/discrete-bar-chart/discrete-bar-chart.service';
-
 import { ThemeModule } from 'theme';
 import { PieChartComponent } from '../../components/pie-chart';
 import { DiscreteBarChartComponent } from '../../components/discrete-bar-chart';
-
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';

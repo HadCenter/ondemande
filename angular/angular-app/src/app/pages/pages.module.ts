@@ -12,6 +12,7 @@ import { SignUpComponent } from './sign-up';
 
 
 
+
 @NgModule({
   imports: [
     CommonModule,

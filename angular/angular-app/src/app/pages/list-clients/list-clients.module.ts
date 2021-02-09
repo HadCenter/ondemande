@@ -23,13 +23,11 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-
-
-
-
+import { LoaderComponent } from '../../components/loader/loader.component';
+import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.component';
 
 @NgModule({
-  declarations: [ListClientsComponent, ClientComponent],
+  declarations: [ListClientsComponent, ClientComponent,LoaderComponent, DialogBodyComponent, ],
   imports: [
     CommonModule,
     ListClientsRoutingModule,
@@ -51,9 +49,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatGridListModule,
     MatRadioModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule,
   ],
-  entryComponents: [ClientComponent],
+  entryComponents: [DialogBodyComponent],
   providers: [
     ListClientsService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },

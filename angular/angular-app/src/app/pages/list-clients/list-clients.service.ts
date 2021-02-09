@@ -76,9 +76,14 @@ public getOrderById(id) {
   })
   return result;
 }
-public getAllClients () : Observable<any> {
+  public getAllClients () : Observable<any> {
     return this.http.get(`${this.url}/getClients/`);
   }
+  public archiveClient (id, data) : Observable<any> {
+    return this.http.put(`${this.url}/archiveClient/${id}`, data);
+  }
+
+
 
 
 }

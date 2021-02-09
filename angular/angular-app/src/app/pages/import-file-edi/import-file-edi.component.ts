@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ElementRef, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { ImportFileEdiService } from './import-file-edi.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -9,11 +9,15 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./import-file-edi.component.scss']
 })
 export class ImportFileEdiComponent implements OnInit {
+  minWidth: number = 250;
+  width: number = this.minWidth;
+
   myForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
     file: new FormControl('', [Validators.required]),
     fileSource: new FormControl('', [Validators.required])
   });
+  selectedFiles : File = null;
   constructor(private importFileService: ImportFileEdiService, private fb: FormBuilder, private router: Router)
   {
     this.dropdownRefresh();
@@ -21,7 +25,17 @@ export class ImportFileEdiComponent implements OnInit {
   public listObject : { id: string, nom_client: string }[] = [];
   public listItems : Array<string> = [];
   ngOnInit(): void {
-    componentHandler.upgradeDom();
+
+  }
+  selectFile(event)
+  {
+    if (event.target.files.length > 0) {
+      this.selectedFiles = <File>event.target.files[0];
+      this.myForm.patchValue({
+        fileSource: this.selectedFiles
+      });
+    }
+
   }
   dropdownRefresh()
   {

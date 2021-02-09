@@ -8,6 +8,7 @@ class Client(models.Model):
     code_client = models.CharField(max_length=200)
     nom_client = models.CharField(max_length=200, unique=True)
     email = models.EmailField(max_length=100)
+    archived = models.BooleanField(default= False)
 
     def __str__(self):
         return self.nom_client
@@ -19,6 +20,7 @@ class EDIfile(models.Model):
     status = models.CharField(max_length=200,default= 'En attente')
     wrong_commands = models.CharField(max_length=200, default="_")
     validated_orders = models.CharField(max_length=200, default="_")
+    archived = models.BooleanField(default= False)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     def __str__(self):

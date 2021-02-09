@@ -1,11 +1,12 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component,HostBinding } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Component,HostBinding, OnInit  } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { ClientComponent } from './client/client.component';
 import { ListClientsService } from './list-clients.service';
+import {MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.component';
 
 export interface PeriodicElement {
   name: string;
@@ -19,7 +20,7 @@ export interface PeriodicElement {
   templateUrl: './list-clients.component.html',
   styleUrls: ['./list-clients.component.scss']
 })
-export class ListClientsComponent extends UpgradableComponent {
+export class ListClientsComponent extends UpgradableComponent implements  OnInit {
   public readonly Array = Array;
   public order: any;
   public snackAction = 'Ok';
@@ -39,15 +40,47 @@ export class ListClientsComponent extends UpgradableComponent {
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   clients = [];
-  public constructor(private tablesService: ListClientsService,
+  show = true;
+    public constructor(private tablesService: ListClientsService,
     private router: Router,
-    public dialog: MatDialog,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar, private matDialog: MatDialog) {
     super();
-    this.completeTable = this.tablesService.advanceTableData;
-    console.log(this.completeTable)
-    this.getClients();
+    /*this.completeTable = this.tablesService.advanceTableData;
+    console.log(this.completeTable)*/
+
   }
+  ngOnInit(): void
+   {
+  this.getClients();
+  }
+  openDialog(client) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      width: '250px',
+      data: client
+    };
+    let dialogRef = this.matDialog.open(DialogBodyComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(value => {
+        if (value != undefined)
+        {
+
+          this.tablesService.archiveClient(value.data.id, value.data).subscribe(
+                res =>
+                  {
+                    this.openSnackBar("Client archivé avec succés", this.snackAction)
+                    this.getClients();
+                  },
+                error => console.log(error));
+        }
+    });
+  }
+  openSnackBar(message: string, action: string)
+      {
+        this._snackBar.open(message, action, {
+        duration: 2500,
+        verticalPosition: 'top'
+      });
+      }
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   public currentPage = 1;
   private countPerPage = 20;
@@ -93,32 +126,18 @@ export class ListClientsComponent extends UpgradableComponent {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2500,
-    });
-  }
-  openSnackBarError(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2500,
-      panelClass: ['mat-toolbar', 'mat-warn']
-    });
-  }
-  onCreate()
-  {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = "60%";
-    this.dialog.open(ClientComponent,dialogConfig);
-  }
+
   public getClients ()
   {
     this.tablesService.getAllClients()
-      .subscribe(res => {this.clients = res; console.log(this.clients);},
+      .subscribe(res => {this.clients = res; this.show = false; console.log(this.clients);},
           // error => this.error = "error.message");
           // for fake data
           error => console.log(error));
   }
+   public gotoDetails(id_client) {
+    this.router.navigate(['/details-client', id_client]);
+  }
+
 
 }

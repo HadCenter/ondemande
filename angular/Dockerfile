@@ -17,7 +17,7 @@ RUN npm install --prefix angular-app
 COPY . /app
 
 # Build app
-RUN npm run build --prefix angular-app -- --output-path=./dist/out
+RUN npm run build --prefix angular-app -- --output-path=./dist/out --prod
 
 
 ### Stage 2: delivery ###

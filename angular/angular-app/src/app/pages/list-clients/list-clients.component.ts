@@ -28,10 +28,6 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
   public filterValue: any;
   limit = 15;
   selection = new SelectionModel<PeriodicElement>(true, []);
-  actions: any[] = [
-    { value: 'supprimer', viewValue: 'Supprimer' },
-  ];
-
   @HostBinding('class.mdl-grid') private readonly mdlGrid = true;
   @HostBinding('class.mdl-cell') private readonly mdlCell = true;
   @HostBinding('class.mdl-cell--12-col-desktop') private readonly mdlCell12ColDesktop = true;
@@ -48,11 +44,20 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
     /*this.completeTable = this.tablesService.advanceTableData;
     console.log(this.completeTable)*/
 
+
   }
   ngOnInit(): void
-   {
-  this.getClients();
+  {
+    this.getClients();
   }
+  public changePage(page, force = false) {
+    if (page !== this.currentPage || force) {
+      this.currentPage = page;
+      this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
+      console.log(this.advancedTable)
+    }
+  }
+
   openDialog(client) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
@@ -83,17 +88,15 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
       }
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   public currentPage = 1;
-  private countPerPage = 20;
-  public numPage = this.tablesService.getAdvancedTableNumOfPage(this.countPerPage);
+  private countPerPage = 2;
+  public numPage = 0;
+  public advancedTable = [];
+  public getAdvancedTablePage(page, countPerPage)
+  {
+    return this.clients.slice((page - 1) * countPerPage, page * countPerPage);
 
-  public advancedTable = this.tablesService.getAdvancedTablePage(1, this.countPerPage);
-
-  public changePage(page, force = false) {
-    if (page !== this.currentPage || force) {
-      this.currentPage = page;
-      this.advancedTable = this.tablesService.getAdvancedTablePage(page, this.countPerPage);
-    }
   }
+
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -121,6 +124,7 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
     }
   }
 
+
   filterItems(filterValue) {
     return this.completeTable.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
@@ -130,7 +134,9 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
   public getClients ()
   {
     this.tablesService.getAllClients()
-      .subscribe(res => {this.clients = res; this.show = false; console.log(this.clients);},
+      .subscribe(res => {this.clients = res; this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false; console.log(this.clients);
+        this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+      },
           // error => this.error = "error.message");
           // for fake data
           error => console.log(error));
@@ -138,6 +144,7 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
    public gotoDetails(id_client) {
     this.router.navigate(['/details-client', id_client]);
   }
+
 
 
 }

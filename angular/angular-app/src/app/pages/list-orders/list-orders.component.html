@@ -16,7 +16,7 @@
 
       <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
         <div class="mdl-textfield label-search">
-          <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+          <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems() "
             [(ngModel)]="filterValue" placeholder="Rechercher" />
           <label class="mdl-textfield__label" for="search2"></label>
         </div>
@@ -27,7 +27,6 @@
     </base-card-title>
     <base-card-body class="no-padding">
       <table class="mdl-data-table mdl-js-data-table  sorting-table">
-
         <thead>
           <tr>
             <th>

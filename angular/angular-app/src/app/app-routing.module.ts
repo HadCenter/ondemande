@@ -20,7 +20,7 @@ const routes: Routes = [
 
 
       /*{ path: 'list-orders', loadChildren: () => import('./pages/list-orders/list-orders.module').then(m => m.ListOrdersModule), canActivate: [AuthGuard] },
-      { path: 'details-order/:id', loadChildren: () => import('./pages/details-order/details-order.module').then(m => m.DetailsOrderModule), canActivate: [AuthGuard] },*/
+      /*{ path: 'details-order/:id', loadChildren: () => import('./pages/details-order/details-order.module').then(m => m.DetailsOrderModule), canActivate: [AuthGuard] },*/
     ],
   },
   {

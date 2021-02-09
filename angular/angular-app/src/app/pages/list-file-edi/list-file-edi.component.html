@@ -1,12 +1,8 @@
-
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
     <base-card>
       <base-card-title>
         <h1 class="mdl-card__title-text">Liste des fichiers EDI</h1>
         <div class="mdl-layout-spacer"></div>
-
-
-
         <mat-form-field>
           <mat-label>Actions</mat-label>
           <mat-select>
@@ -15,8 +11,6 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-
-
         <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
           <div class="mdl-textfield label-search">
             <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
@@ -24,7 +18,6 @@
             <label class="mdl-textfield__label" for="search2"></label>
           </div>
         </div>
-
         <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
         </base-pagination>
 
@@ -32,11 +25,9 @@
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
                 >Importer fichier EDI
           </button></a>
-
       </base-card-title>
       <base-card-body class="no-padding">
         <table class="mdl-data-table mdl-js-data-table  sorting-table">
-
           <thead>
             <tr>
               <th>

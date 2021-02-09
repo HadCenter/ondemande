@@ -1,0 +1,19 @@
+<!--<h2 mat-dialog-title>This is a Dialog title</h2>-->
+
+<!--<mat-dialog-content>-->
+
+<!--<p> Place content here </p>-->
+<!--</mat-dialog-content>-->
+
+<!--<mat-dialog-actions>-->
+<!--    <button class="mat-raised-button" (click)="close()">Close</button>-->
+<!--</mat-dialog-actions>-->
+
+<h1 mat-dialog-title>Confirmation</h1>
+<div mat-dialog-content>
+  <p > Voulez vous vraiment archiver le client {{ currentClient.nom_client }} ? </p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">Non</button>
+  <button mat-button  [mat-dialog-close]="data" cdkFocusInitial>Oui</button>
+</div>

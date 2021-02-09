@@ -1,6 +1,6 @@
 ### Stage 1: build ###
 
-FROM node:12.0.0-alpine as builder
+FROM node as builder
 
 # Set working directory.
 RUN mkdir /app
@@ -23,7 +23,7 @@ RUN npm run build --prefix angular-app -- --output-path=./dist/out
 
 ### Stage 2: delivery ###
 
-FROM nginx:1.15.7-alpine
+FROM nginx
 
 # Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*

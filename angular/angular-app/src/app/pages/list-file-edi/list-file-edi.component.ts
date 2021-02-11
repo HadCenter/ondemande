@@ -36,6 +36,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   files = [];
+  show = true;
   constructor(private tablesService: ListFileEdiService,
     private router: Router,
     public dialog: MatDialog,
@@ -46,18 +47,21 @@ export class ListFileEDIComponent extends UpgradableComponent{
     console.log(this.completeTable)
     this.getFiles();
     }
-
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
-  public currentPage = 1;
-  private countPerPage = 20;
-  public numPage = this.tablesService.getAdvancedTableNumOfPage(this.countPerPage);
+   public currentPage = 1;
+  private countPerPage = 2;
+  public numPage = 0;
+  public advancedTable = [];
+  public getAdvancedTablePage(page, countPerPage)
+  {
+    return this.files.slice((page - 1) * countPerPage, page * countPerPage);
 
-  public advancedTable = this.tablesService.getAdvancedTablePage(1, this.countPerPage);
-
+  }
   public changePage(page, force = false) {
     if (page !== this.currentPage || force) {
       this.currentPage = page;
-      this.advancedTable = this.tablesService.getAdvancedTablePage(page, this.countPerPage);
+      this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
+      console.log(this.advancedTable);
     }
   }
   /** Whether the number of selected elements matches the total number of rows. */
@@ -66,7 +70,6 @@ export class ListFileEDIComponent extends UpgradableComponent{
     const numRows = this.advancedTable.length;
     return numSelected === numRows;
   }
-
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
@@ -88,7 +91,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
   }
 
   filterItems(filterValue) {
-    return this.completeTable.filter((item) => {
+    return this.files.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
@@ -107,10 +110,12 @@ export class ListFileEDIComponent extends UpgradableComponent{
   public getFiles ()
   {
     this.tablesService.getAllFiles()
-      .subscribe(res => {this.files = res; console.log(this.files);},
+      .subscribe(res => {this.files = res; console.log(this.files); this.show = false;
+        this.numPage = Math.ceil(res.length / this.countPerPage);
+        this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+      },
           // error => this.error = "error.message");
           // for fake data
           error => console.log(error));
   }
-
 }

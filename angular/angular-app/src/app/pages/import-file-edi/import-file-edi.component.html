@@ -16,10 +16,32 @@
 <!--              </select>-->
 <!--             <label class="mdl-selectfield__label" for="myselect">séléctionner client</label>-->
 <!--            </div>-->
-            <div class = "espace">
+             <div class = "espace">
+             <mat-form-field [ngStyle]="{'width.px': width}">
+                <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.name}}</mat-label>
+                <ng-template #newFile>
+                 <mat-label >Choisir un fichier EDI</mat-label>
+                </ng-template>
+                <input  matInput disabled>
+                <button mat-icon-button matSuffix (click)="fileInput.click()" type='button'>
+                  <mat-icon>attach_file</mat-icon>
+                </button>
+                <input hidden accept=".xlsx, .csv" (change)="selectFile($event)" #fileInput type="file" id="file" >
+             </mat-form-field>
+            </div>
+            <div >
             <mat-form-field appearance="fill">
               <mat-label>Nom client</mat-label>
+<!--              <ngx-mat-select-search [(ngModel)]="searchCtrl" [placeholderLabel]="'Search...'"-->
+<!--                      [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search>-->
               <mat-select formControlName="name">
+<!--                <mat-option >-->
+<!--                    <ngx-mat-select-search ngModel (ngModelChange)="filterMyOptions($event)"-->
+<!--                       placeholderLabel="Rechercher..."-->
+<!--                       noEntriesFoundLabel="'no matching bank found'">-->
+<!--                      <mat-icon ngxMatSelectSearchClear>delete</mat-icon>-->
+<!--                    </ngx-mat-select-search>-->
+<!--                </mat-option>-->
                 <mat-option *ngFor = "let dl of listItems"[value]="dl">
                   {{dl}}
                 </mat-option>
@@ -31,23 +53,11 @@
 <!--            (change)="onFileChange($event)">-->
 <!--            </div>-->
 
-            <div >
-             <mat-form-field [ngStyle]="{'width.px': width}">
-                <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.name}}</mat-label>
-                <ng-template #newFile>
-                 <mat-label >Choisir un fichier EDI</mat-label>
-                </ng-template>
-                <input  matInput disabled>
-                <button mat-icon-button matSuffix (click)="fileInput.click()" type='button'>
-                  <mat-icon>attach_file</mat-icon>
-                </button>
-                <input hidden (change)="selectFile($event)" #fileInput type="file" id="file" >
-             </mat-form-field>
-            </div>
+            <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
 
           </div>
           <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone submit-cell mdl-grid center-items" >
-            <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit">Importer</button>
+            <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit" [disabled]="myForm.invalid">Importer</button>
           </div>
         </form>
       </base-card-body>

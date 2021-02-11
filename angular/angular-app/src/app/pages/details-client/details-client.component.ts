@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsClientService } from './details-client.service';
 import { MatSliderModule } from '@angular/material/slider';
+import { UpgradableComponent } from '../../../theme/components/upgradable';
+
 export class Client {
   id?: any;
   code_client?: string;
@@ -14,15 +16,18 @@ export class Client {
   templateUrl: './details-client.component.html',
   styleUrls: ['./details-client.component.scss']
 })
-export class DetailsClientComponent implements OnInit {
+export class DetailsClientComponent extends UpgradableComponent implements OnInit {
   currentClient : Client = {
     code_client: '',
     nom_client: '',
     email: ''
   };
   message = '';
+  public error: string;
   constructor(private clientService: DetailsClientService, private fb: FormBuilder, private router: Router,private route: ActivatedRoute,)
-   { }
+   {
+    super();
+   }
 
   ngOnInit(): void {
     this.getClient(this.route.snapshot.params.id);
@@ -40,7 +45,7 @@ export class DetailsClientComponent implements OnInit {
           this.router.navigate(['/list-client'])
         },
         error => {
-          console.log(error);
+          this.error = "Le client déjà existe";
         });
   }
 

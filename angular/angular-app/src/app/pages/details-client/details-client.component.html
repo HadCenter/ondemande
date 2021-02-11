@@ -51,23 +51,24 @@
         <form  autocomplete="off" novalidate >
           <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone" >
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" >
-              <label  for="code"  >Code client</label>
+              <label  for="code" style="color:gray; font: 13px Arial, sans-serif;"  >Code client *</label>
               <br>
-              <input  (change)="onInputChange($event)" name="code" [(ngModel)]="currentClient.code_client" class="form-control" class="mdl-textfield__input" type="text" id="code">
+              <input  disabled="disabled" (change)="onInputChange($event)" name="code" [(ngModel)]="currentClient.code_client" class="form-control" class="mdl-textfield__input" type="text" id="code">
 
             </div>
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"  >
-              <label for="nomclient"  >Nom client</label>
+              <label style="color:gray; font: 13px Arial, sans-serif;" for="nomclient"  >Nom client *</label>
               <br>
               <input (change)="onInputChange($event)" name="nomclient" [(ngModel)]="currentClient.nom_client" class="form-control" class="mdl-textfield__input" type="text" id="nomclient">
 
             </div>
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"  >
-              <label for="email" >Email</label>
+              <label style="color:gray; font: 13px Arial, sans-serif;" for="email" >Email *</label>
               <br>
-              <input  (change)="onInputChange($event)" name="email" [(ngModel)]="currentClient.email" class="form-control" class="mdl-textfield__input" type="email" id="email">
+              <input   (change)="onInputChange($event)" name="email" [(ngModel)]="currentClient.email" class="form-control" class="mdl-textfield__input" type="email" id="email">
 
             </div>
+            <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
           </div>
           <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
             <button (click)="updateClient()" class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit">Modifier</button>

@@ -10,19 +10,38 @@
           <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" >
               <input  formControlName="code" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="code">
-              <label class="mdl-textfield__label" >Code client</label>
+              <label class="mdl-textfield__label" >Code client *</label>
+              <div *ngIf="code.invalid">
+                <span *ngIf="code.errors.required" class="mdl-textfield__error">
+                  Code obligatoire
+                </span>
+              </div>
             </div>
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" id="forPass">
               <input formControlName="nom" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="nom">
-              <label class="mdl-textfield__label" >Nom client</label>
+              <label class="mdl-textfield__label" >Nom client *</label>
+              <div *ngIf="nom.invalid">
+                <span *ngIf="nom.errors.required" class="mdl-textfield__error">
+                  Nom obligatoire
+                </span>
+              </div>
             </div>
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
               <input  formControlName="email" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="email">
-              <label class="mdl-textfield__label" >Email</label>
+              <label class="mdl-textfield__label" >Email *</label>
+              <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                <span *ngIf="email.errors.required" class="mdl-textfield__error">
+                  Email obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un email valide.</span>
+                </span>
+                <span *ngIf="email.errors.pattern" class="mdl-textfield__error">
+                  Email invalide.
+                </span>
+              </div>
             </div>
+            <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
           </div>
           <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
-            <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit">Ajouter</button>
+            <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit" [disabled]="loginForm.invalid">Ajouter</button>
           </div>
         </form>
       </base-card-body>

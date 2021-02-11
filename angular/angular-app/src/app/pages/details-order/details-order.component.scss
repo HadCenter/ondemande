@@ -14,9 +14,9 @@
 .map {
     min-height: 630px;
     position: relative;
-  
+
     .map__window {
-  
+
       .gm-style {
         & > div:nth-of-type(2),
         & > .gmnoprint:not(.gm-bundled-control),
@@ -25,15 +25,15 @@
         }
       }
     }
-  
+
     h5 {
       margin-top: 0;
     }
-  
+
     div > a {
       font-size: 1rem;
     }
-  
+
   }
 
   base-card.map.mdl-card.mdl-shadow--2dp {
@@ -43,7 +43,7 @@
 .details-bloc-address.mdl-cell.mdl-cell--12-col-desktop.mdl-cell--12-col-tablet.mdl-cell--4-col-phone {
     display: flex;
 }
-  
+
 .address-payment-bloc.mdl-cell.mdl-cell--12-col-desktop.mdl-cell--12-col-tablet.mdl-cell--4-col-phone {
     display: flex;
 }
@@ -58,3 +58,6 @@ span.price-label {
 app-details-order.mdl-grid {
   padding: 8px 20px 20px 20px;
 }
+
+
+

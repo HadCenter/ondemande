@@ -27,7 +27,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.component';
 
 @NgModule({
-  declarations: [ListClientsComponent, ClientComponent,LoaderComponent, DialogBodyComponent, ],
+  declarations: [ListClientsComponent, ClientComponent, DialogBodyComponent, ],
   imports: [
     CommonModule,
     ListClientsRoutingModule,

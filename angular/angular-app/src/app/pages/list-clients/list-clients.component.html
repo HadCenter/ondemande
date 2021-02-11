@@ -1,5 +1,5 @@
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-  <app-loader [width]="'100%'" [height]="'450px'" [bg]="'transparant'" [show] ="show"></app-loader>
+<!--  <app-loader [width]="'100%'" [height]="'450px'" [bg]="'transparant'" [show] ="show"></app-loader>-->
     <base-card>
       <base-card-title>
         <h1 class="mdl-card__title-text">Liste des clients</h1>
@@ -13,12 +13,10 @@
         </div>
         <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
         </base-pagination>
-
-          <a routerLink="/create-client"><button
+        <a routerLink="/create-client"><button
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
                 >Ajouter client
               </button></a>
-
       </base-card-title>
       <base-card-body class="no-padding">
         <table *ngIf = "advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">

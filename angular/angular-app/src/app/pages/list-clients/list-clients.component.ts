@@ -123,10 +123,8 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
       this.advancedTable = this.advancedTable;
     }
   }
-
-
   filterItems(filterValue) {
-    return this.completeTable.filter((item) => {
+    return this.clients.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }

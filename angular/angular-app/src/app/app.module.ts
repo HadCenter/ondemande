@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDialogModule} from '@angular/material/dialog';
-import { LoaderComponent } from './components/loader/loader.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 @NgModule({
@@ -16,6 +16,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     AppRoutingModule,
     HttpClientModule,
     NoopAnimationsModule,
+    NgxMatSelectSearchModule
   ],
   providers: [
     AuthService,

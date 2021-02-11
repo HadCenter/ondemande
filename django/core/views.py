@@ -60,14 +60,14 @@ def client_detail(request, pk):
         return JsonResponse(client_serializer.data)
     elif request.method == 'PUT':
         client_data = JSONParser().parse(request)
-        ftp = connect()
-        path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-        ftp.cwd(path_racine)
-        ftp.rename(client.nom_client,client_data['nom_client'])
-        print("ancien nom "+ client.nom_client)
-        print("nouveau nom "+client_data['nom_client'])
         client_serializer = ClientSerializer(client, data=client_data)
         if client_serializer.is_valid():
+            ftp = connect()
+            path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
+            ftp.cwd(path_racine)
+            ftp.rename(client.nom_client, client_data['nom_client'])
+            print("ancien nom " + client.nom_client)
+            print("nouveau nom " + client_data['nom_client'])
             client_serializer.save()
             return JsonResponse(client_serializer.data)
         return JsonResponse(client_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -75,15 +75,16 @@ def client_detail(request, pk):
 @api_view(['POST'])
 def clientCreate(request):
     name = request.data['nom_client']
-    ftp = connect()
-    path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-    ftp.cwd(path_racine)
-    if name not in ftp.nlst():
-        ftp.mkd(name)
     serializer = ClientSerializer(data = request.data)
     if serializer.is_valid():
+        ftp = connect()
+        path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
+        ftp.cwd(path_racine)
+        if name not in ftp.nlst():
+            ftp.mkd(name)
         serializer.save()
-    return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def clientList(request):
@@ -99,6 +100,8 @@ class fileCreate(APIView):
         '''print(request.data['file'].name)
         print(request.data['client'])'''
         timestr = time.strftime("%Y-%m-%d-%H-%M-%S")
+        if(request.data['file'] == ''):
+            return Response({ "message" : "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         ext = get_extension(request.data['file'].name)
         fileName = os.path.basename(request.data['file'].name).split('.')[0] + "_" + timestr + ext
         '''print(fileName)'''

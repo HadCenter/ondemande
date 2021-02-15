@@ -23,6 +23,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
   public snackAction = 'Ok';
   public completeTable: any = [];
   public filterValue: any;
+  clicked  = new Array();
   limit = 15;
   selection = new SelectionModel<PeriodicElement>(true, []);
   actions: any[] = [
@@ -113,18 +114,22 @@ export class ListFileEDIComponent extends UpgradableComponent{
       .subscribe(res => {this.files = res; console.log(this.files); this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        for(var i= 0; i < this.advancedTable.length; i++)
+        {
+//           this.clicked.push(false);
+        }
       },
           // error => this.error = "error.message");
           // for fake data
           error => console.log(error));
   }
-  public analyserEDI(id, row)
+  public analyserEDI(row)
   {
+    console.log(row.id);
     this.tablesService.executeJob(row)
     .subscribe( res => {
         console.log("success");
         this.router.navigate(['/list-file-edi']);
       }, error => console.log(error) );
-
   }
 }

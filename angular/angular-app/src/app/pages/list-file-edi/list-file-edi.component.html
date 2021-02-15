@@ -42,13 +42,13 @@
                   [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
                 </mat-checkbox>
               </th>
-              <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric">
+              <th *ngFor="let header of advancedHeaders" class="mdl-data-table__cell--non-numeric">
                 <span>{{ header.name }}</span>
               </th>
             </tr>
           </thead>
           <tbody >
-            <tr *ngFor="let row of advancedTable  | slice:0:limit;" >
+            <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;" >
               <td>
                 <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
                   [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
@@ -61,9 +61,9 @@
               <td class="mdl-data-table__cell--non-numeric">{{ row.status }}</td>
               <td class="mdl-data-table__cell--non-numeric">
                 <button
-                  [disabled]="clicked"
+                  [disabled]="clicked[i]"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                  (click)="analyserEDI(row); clicked = true;"
+                  (click)="analyserEDI(row); clicked[i] = true;"
                   >Analyser
                 </button>
               </td>

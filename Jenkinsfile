@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('get user name') {
             steps {
-                echo $USER
+                sh "echo $USER"
             }
         }
         stage('Build Docker images') {

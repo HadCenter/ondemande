@@ -25,6 +25,12 @@
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
                 >Importer fichier EDI
           </button></a>
+        &nbsp;
+        <a ><button
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+                onclick="history.go(0)"
+                >Actualiser
+          </button></a>
       </base-card-title>
       <base-card-body class="no-padding">
         <table *ngIf = "advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
@@ -53,11 +59,11 @@
               <td class="mdl-data-table__cell--non-numeric">{{ row.wrong_commands }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.validated_orders }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.status }}</td>
-
               <td class="mdl-data-table__cell--non-numeric">
                 <button
+                  [disabled]="clicked"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                  (click)="analyserEDI(row)"
+                  (click)="analyserEDI(row); clicked = true;"
                   >Analyser
                 </button>
               </td>

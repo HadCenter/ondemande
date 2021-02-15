@@ -82,6 +82,10 @@ def clientCreate(request):
         ftp.cwd(path_racine)
         if name not in ftp.nlst():
             ftp.mkd(name)
+        path_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
+        ftp.cwd(path_output)
+        if name not in ftp.nlst():
+            ftp.mkd(name)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

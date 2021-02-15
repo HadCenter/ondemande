@@ -118,12 +118,13 @@ export class ListFileEDIComponent extends UpgradableComponent{
           // for fake data
           error => console.log(error));
   }
-  public analyserEDI(row)
+  public analyserEDI(id, row)
   {
     this.tablesService.executeJob(row)
     .subscribe( res => {
         console.log("success");
         this.router.navigate(['/list-file-edi']);
       }, error => console.log(error) );
+
   }
 }

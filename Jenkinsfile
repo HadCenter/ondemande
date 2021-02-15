@@ -2,20 +2,17 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('get user name') {
             steps {
-                echo 'Building..'
+                echo $USER
             }
         }
-        stage('Test') {
+        stage('Build Docker images') {
             steps {
-                echo 'Testing..'
+                docker-compose build
+                docker-compose up -d
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
+
     }
 }

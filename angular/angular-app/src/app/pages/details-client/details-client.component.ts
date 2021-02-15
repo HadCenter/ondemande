@@ -23,20 +23,45 @@ export class DetailsClientComponent extends UpgradableComponent implements OnIni
     email: ''
   };
   message = '';
+  public updateForm: FormGroup;
+  public code;
+  public nom;
+  public email;
+  public password;
+  public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
+  public codePattern = '^c[0-9]{3}$';
+  public nomPattern = '[A-Z]+';
   public error: string;
   constructor(private clientService: DetailsClientService, private fb: FormBuilder, private router: Router,private route: ActivatedRoute,)
    {
     super();
+    this.updateForm = this.fb.group({
+      code: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.codePattern),
+      ]),
+      nom: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.nomPattern),
+      ]),
+      email: new FormControl('', [
+        Validators.pattern(this.emailPattern),
+        Validators.maxLength(25),
+      ])
+    });
+    this.code = this.updateForm.get('code');
+    this.nom = this.updateForm.get('nom');
+    this.email = this.updateForm.get('email')
    }
 
   ngOnInit(): void {
     this.getClient(this.route.snapshot.params.id);
-
   }
    public onInputChange(event) {
     event.target.required = true;
   }
   updateClient(): void {
+    this.error = null;
     this.clientService.update(this.currentClient.id, this.currentClient)
       .subscribe(
         response => {

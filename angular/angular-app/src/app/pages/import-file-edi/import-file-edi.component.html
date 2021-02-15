@@ -34,7 +34,7 @@
               <mat-label>Nom client</mat-label>
 <!--              <ngx-mat-select-search [(ngModel)]="searchCtrl" [placeholderLabel]="'Search...'"-->
 <!--                      [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search>-->
-              <mat-select formControlName="name">
+
 <!--                <mat-option >-->
 <!--                    <ngx-mat-select-search ngModel (ngModelChange)="filterMyOptions($event)"-->
 <!--                       placeholderLabel="Rechercher..."-->
@@ -42,6 +42,19 @@
 <!--                      <mat-icon ngxMatSelectSearchClear>delete</mat-icon>-->
 <!--                    </ngx-mat-select-search>-->
 <!--                </mat-option>-->
+
+<!--              <input type="text"-->
+<!--                  placeholder="Pick one"-->
+<!--                  aria-label="Nom client" matInput [formControl]="myControl"-->
+<!--                  [matAutocomplete]="auto">-->
+<!--              -->
+<!--              <mat-autocomplete #auto="matAutocomplete">-->
+<!--                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">-->
+<!--                  {{option}}-->
+<!--                </mat-option>-->
+<!--              </mat-autocomplete>-->
+
+              <mat-select formControlName="name" >
                 <mat-option *ngFor = "let dl of listItems"[value]="dl">
                   {{dl}}
                 </mat-option>

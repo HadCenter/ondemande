@@ -46,34 +46,82 @@
       <base-card-title>
         <h1 class="mdl-card__title-text">Mettre à jour votre client</h1>
       </base-card-title>
-
       <base-card-body class="no-padding">
-        <form  autocomplete="off" novalidate >
+        <form  [formGroup]="updateForm" (submit)="updateClient()" autocomplete="off" novalidate >
           <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone" >
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" >
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
+            [class.is-invalid]="code.invalid && (code.dirty || code.touched)"
+                 [class.is-valid]="code.valid && (code.dirty || code.touched)">
               <label  for="code" style="color:gray; font: 13px Arial, sans-serif;"  >Code client *</label>
               <br>
-              <input  disabled="disabled" (change)="onInputChange($event)" name="code" [(ngModel)]="currentClient.code_client" class="form-control" class="mdl-textfield__input" type="text" id="code">
-
+              <input  formControlName="code" pattern="{{codePattern}}" (change)="onInputChange($event)" name="code" [(ngModel)]="currentClient.code_client"  class="mdl-textfield__input" type="text" id="code">
+              <div *ngIf="code.invalid && (code.dirty || code.touched)">
+                <span *ngIf="code.errors.required" class="mdl-textfield__error">
+                  Code obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un code valide.</span>
+                </span>
+                <span *ngIf="code.errors.pattern" class="mdl-textfield__error">
+                  Format cxxx, x est un entier.
+                </span>
+              </div>
             </div>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"  >
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
+            [class.is-invalid]="nom.invalid && (nom.dirty || nom.touched)"
+                 [class.is-valid]="nom.valid && (nom.dirty || nom.touched)">
               <label style="color:gray; font: 13px Arial, sans-serif;" for="nomclient"  >Nom client *</label>
               <br>
-              <input (change)="onInputChange($event)" name="nomclient" [(ngModel)]="currentClient.nom_client" class="form-control" class="mdl-textfield__input" type="text" id="nomclient">
-
+              <input formControlName="nom" pattern="{{nomPattern}}" (change)="onInputChange($event)" name="nomclient" [(ngModel)]="currentClient.nom_client"  class="mdl-textfield__input" type="text" id="nomclient">
+              <div *ngIf="nom.invalid && (nom.dirty || nom.touched)">
+                <span *ngIf="nom.errors.required" class="mdl-textfield__error">
+                  Nom obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un nom valide.</span>
+                </span>
+                <span *ngIf="nom.errors.pattern" class="mdl-textfield__error">
+                  Nom doit être en majuscule.
+                </span>
+              </div>
             </div>
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"  >
-              <label style="color:gray; font: 13px Arial, sans-serif;" for="email" >Email *</label>
+              <label style="color:gray; font: 13px Arial, sans-serif;" for="email" >Email</label>
               <br>
-              <input   (change)="onInputChange($event)" name="email" [(ngModel)]="currentClient.email" class="form-control" class="mdl-textfield__input" type="email" id="email">
-
+              <input  formControlName="email" pattern="{{emailPattern}}" (change)="onInputChange($event)" name="email" [(ngModel)]="currentClient.email"  class="mdl-textfield__input" type="text" id="email">
+              <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                <span *ngIf="email.errors.pattern" class="mdl-textfield__error">
+                  Email invalide.
+                </span>
+              </div>
             </div>
             <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
           </div>
           <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
-            <button (click)="updateClient()" class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit">Modifier</button>
+            <button [disabled]="updateForm.invalid"  class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit">Modifier</button>
           </div>
         </form>
+
+<!--        <form   autocomplete="off" novalidate >-->
+<!--          <div class="mdl-cell mdl-cell&#45;&#45;12-col mdl-cell&#45;&#45;6-col-phone" >-->
+<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size" >-->
+<!--              <label  for="code" style="color:gray; font: 13px Arial, sans-serif;"  >Code client *</label>-->
+<!--              <br>-->
+<!--              <input  disabled="disabled" (change)="onInputChange($event)" name="code" [(ngModel)]="currentClient.code_client" class="form-control" class="mdl-textfield__input" type="text" id="code">-->
+
+<!--            </div>-->
+<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size"  >-->
+<!--              <label style="color:gray; font: 13px Arial, sans-serif;" for="nomclient"  >Nom client *</label>-->
+<!--              <br>-->
+<!--              <input (change)="onInputChange($event)" name="nomclient" [(ngModel)]="currentClient.nom_client" class="form-control" class="mdl-textfield__input" type="text" id="nomclient">-->
+
+<!--            </div>-->
+<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size"  >-->
+<!--              <label style="color:gray; font: 13px Arial, sans-serif;" for="email" >Email *</label>-->
+<!--              <br>-->
+<!--              <input   (change)="onInputChange($event)" name="email" [(ngModel)]="currentClient.email" class="form-control" class="mdl-textfield__input" type="email" id="email">-->
+
+<!--            </div>-->
+<!--            <div class="full-size color-text&#45;&#45;red" *ngIf="error"> {{ error }}</div>-->
+<!--          </div>-->
+<!--          <div class="mdl-cell mdl-cell&#45;&#45;12-col mdl-cell&#45;&#45;4-col-phone submit-cell mdl-grid center-items">-->
+<!--            <button (click)="updateClient()" class="mdl-button mdl-js-button mdl-button&#45;&#45;raised color&#45;&#45;light-blue" type="submit">Modifier</button>-->
+<!--          </div>-->
+<!--        </form>-->
       </base-card-body>
     </base-card>
 </div>

@@ -88,7 +88,7 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
       }
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   public currentPage = 1;
-  private countPerPage = 2;
+  private countPerPage = 8;
   public numPage = 0;
   public advancedTable = [];
   public getAdvancedTablePage(page, countPerPage)

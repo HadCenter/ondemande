@@ -16,6 +16,11 @@ const routes: Routes = [
       { path: 'create-client', loadChildren: () => import('./pages/create-client/create-client.module').then(m => m.CreateClientModule), canActivate: [AuthGuard] },
       { path: 'import-file-edi', loadChildren: () => import('./pages/import-file-edi/import-file-edi.module').then(m => m.ImportFileEdiModule), canActivate: [AuthGuard] },
       { path: 'details-client/:id', loadChildren: () => import('./pages/details-client/details-client.module').then(m => m.DetailsClientModule), canActivate: [AuthGuard] },
+      { path: 'users', loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule), canActivate: [AuthGuard] },
+      { path: 'list-file-delivery', loadChildren: () => import('./pages/list-file-delivery/list-file-delivery.module').then(m => m.ListFileDeliveryModule), canActivate: [AuthGuard] },
+
+
+
 
 
 

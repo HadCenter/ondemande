@@ -49,7 +49,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
     }
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
    public currentPage = 1;
-  private countPerPage = 2;
+  private countPerPage = 8;
   public numPage = 0;
   public advancedTable = [];
   public getAdvancedTablePage(page, countPerPage)
@@ -117,5 +117,13 @@ export class ListFileEDIComponent extends UpgradableComponent{
           // error => this.error = "error.message");
           // for fake data
           error => console.log(error));
+  }
+  public analyserEDI(row)
+  {
+    this.tablesService.executeJob(row)
+    .subscribe( res => {
+        console.log("success");
+        this.router.navigate(['/list-file-edi']);
+      }, error => console.log(error) );
   }
 }

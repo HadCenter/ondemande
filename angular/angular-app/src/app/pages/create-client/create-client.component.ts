@@ -16,16 +16,23 @@ export class CreateClientComponent extends UpgradableComponent implements OnInit
   public email;
   public password;
   public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
+  public codePattern = '^c[0-9]{3}$';
+  public nomPattern = '[A-Z]+';
   public error: string;
 
   constructor(private authService: CreateClientService, private fb: FormBuilder, private router: Router)
   {
     super();
     this.loginForm = this.fb.group({
-      code: new FormControl('', Validators.required),
-      nom: new FormControl('', Validators.required),
-      email: new FormControl('', [
+      code: new FormControl('', [
         Validators.required,
+        Validators.pattern(this.codePattern),
+      ]),
+      nom: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.nomPattern),
+      ]),
+      email: new FormControl('', [
         Validators.pattern(this.emailPattern),
         Validators.maxLength(25),
       ])

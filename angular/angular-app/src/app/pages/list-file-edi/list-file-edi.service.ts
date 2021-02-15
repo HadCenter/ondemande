@@ -8,7 +8,15 @@ export class ListFileEdiService {
 
 //   private url = 'http://127.0.0.1:8000/api'
   private url = `${environment.apiBaseUrl}/api`;
+  private urlJobTalend = `${environment.apiBaseUrl}/talendEsb`;
+
   constructor(private http: HttpClient) { }
+
+  public executeJob(row) : Observable<any> {
+    const body = [{"filePath" : row.file, "ClientOwner" : row.client, "fileId" : row.id}]
+    console.log(body);
+    return this.http.post(`${this.urlJobTalend}/startEngineOnEdiFiles`, body);
+  }
 
    public advanceTableData: any = [
      {

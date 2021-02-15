@@ -4,35 +4,46 @@
       <base-card-title>
         <h1 class="mdl-card__title-text">Ajouter Client</h1>
       </base-card-title>
-
       <base-card-body class="no-padding">
         <form [formGroup]="loginForm" (submit)="login()" autocomplete="off" novalidate >
           <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" >
-              <input  formControlName="code" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="code">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
+            [class.is-invalid]="code.invalid && (code.dirty || code.touched)"
+                 [class.is-valid]="code.valid && (code.dirty || code.touched)">
+              <input  formControlName="code" pattern="{{codePattern}}" (change)="onInputChange($event)"  class="mdl-textfield__input" type="text" id="code">
               <label class="mdl-textfield__label" >Code client *</label>
-              <div *ngIf="code.invalid">
+<!--              <div *ngIf="code.invalid">-->
+<!--                <span *ngIf="code.errors.required" class="mdl-textfield__error">-->
+<!--                  Code obligatoire-->
+<!--                </span>-->
+<!--              </div>-->
+              <div *ngIf="code.invalid && (code.dirty || code.touched)">
                 <span *ngIf="code.errors.required" class="mdl-textfield__error">
-                  Code obligatoire
+                  Code obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un code valide.</span>
+                </span>
+                <span *ngIf="code.errors.pattern" class="mdl-textfield__error">
+                  Format cxxx, x est un entier.
                 </span>
               </div>
             </div>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" id="forPass">
-              <input formControlName="nom" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="nom">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" id="forPass"
+            [class.is-invalid]="nom.invalid && (nom.dirty || nom.touched)"
+                 [class.is-valid]="nom.valid && (nom.dirty || nom.touched)">
+              <input formControlName="nom" pattern="{{nomPattern}}" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="nom">
               <label class="mdl-textfield__label" >Nom client *</label>
-              <div *ngIf="nom.invalid">
+              <div *ngIf="nom.invalid && (nom.dirty || nom.touched)">
                 <span *ngIf="nom.errors.required" class="mdl-textfield__error">
-                  Nom obligatoire
+                  Nom obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un nom valide.</span>
+                </span>
+                <span *ngIf="nom.errors.pattern" class="mdl-textfield__error">
+                  Nom doit être en majuscule.
                 </span>
               </div>
             </div>
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
-              <input  formControlName="email" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="email">
-              <label class="mdl-textfield__label" >Email *</label>
+              <input  formControlName="email" pattern="{{emailPattern}}" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="email">
+              <label class="mdl-textfield__label" >Email </label>
               <div *ngIf="email.invalid && (email.dirty || email.touched)">
-                <span *ngIf="email.errors.required" class="mdl-textfield__error">
-                  Email obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un email valide.</span>
-                </span>
                 <span *ngIf="email.errors.pattern" class="mdl-textfield__error">
                   Email invalide.
                 </span>

@@ -2,6 +2,8 @@ import { Component, OnInit , ElementRef, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { ImportFileEdiService } from './import-file-edi.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-import-file-edi',
@@ -9,6 +11,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./import-file-edi.component.scss']
 })
 export class ImportFileEdiComponent implements OnInit {
+//   myControl = new FormControl();
+//   options: string[] = ['One', 'Two', 'Three'];
+//   filteredOptions: Observable<string[]>;
+
   minWidth: number = 250;
   width: number = this.minWidth;
   public error: string = '';
@@ -56,8 +62,18 @@ export class ImportFileEdiComponent implements OnInit {
           });
           console.log(this.listItems);
           console.log(this.listObject);
+//           this.filteredOptions = this.myControl.valueChanges
+//             .pipe(
+//             startWith(''),
+//             map(value => this._filter(value))
+//           );
       });
   }
+//   private _filter(value: string): string[] {
+//     const filterValue = value.toLowerCase();
+//
+//     return this.listItems.filter(option => option.toLowerCase().includes(filterValue));
+//   }
   get f(){
     return this.myForm.controls;
   }

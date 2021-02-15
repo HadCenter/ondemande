@@ -4,14 +4,14 @@
       <base-card-title>
         <h1 class="mdl-card__title-text">Liste des fichiers EDI</h1>
         <div class="mdl-layout-spacer"></div>
-        <mat-form-field>
-          <mat-label>Actions</mat-label>
-          <mat-select>
-            <mat-option *ngFor="let action of actions">
-              {{action.viewValue}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+<!--        <mat-form-field>-->
+<!--          <mat-label>Actions</mat-label>-->
+<!--          <mat-select>-->
+<!--            <mat-option *ngFor="let action of actions">-->
+<!--              {{action.viewValue}}-->
+<!--            </mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
         <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
           <div class="mdl-textfield label-search">
             <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
@@ -57,6 +57,7 @@
               <td class="mdl-data-table__cell--non-numeric">
                 <button
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                  (click)="analyserEDI(row)"
                   >Analyser
                 </button>
               </td>

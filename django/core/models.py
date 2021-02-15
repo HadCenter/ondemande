@@ -7,7 +7,7 @@ def upload_to(instance, filename):
 class Client(models.Model):
     code_client = models.CharField(max_length=200)
     nom_client = models.CharField(max_length=200, unique=True)
-    email = models.EmailField(max_length=100)
+    email = models.EmailField(max_length=100 , blank= True)
     archived = models.BooleanField(default= False)
 
     def __str__(self):

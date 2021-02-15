@@ -22,6 +22,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 
 @NgModule({
   declarations: [ImportFileEdiComponent],
@@ -47,7 +49,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatAutocompleteModule
 
   ],
   providers: [

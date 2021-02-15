@@ -2,14 +2,23 @@ pipeline {
     agent any
 
     stages {
-        stage('get user name') {
+        stage('shutdown docker image') {
             steps {
-                sh "echo $USER"
+                sh "docker-compose down"
             }
         }
-        stage('Build Docker images') {
+        stage('remove cache from docker') {
+            steps {
+                sh "docker-compose rm -f"
+            }
+        }
+        stage('docker build new image') {
             steps {
                 sh "docker-compose build"
+            }
+        }
+        stage('docker deploy new image') {
+            steps {
                 sh "docker-compose up -d"
             }
         }

@@ -2,20 +2,26 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('shutdown docker image') {
             steps {
-                echo 'Building..'
+                sh "docker-compose down"
             }
         }
-        stage('Test') {
+        stage('remove cache from docker') {
             steps {
-                echo 'Testing..'
+                sh "docker-compose rm -f"
             }
         }
-        stage('Deploy') {
+        stage('docker build new image') {
             steps {
-                echo 'Deploying....'
+                sh "docker-compose build"
             }
         }
+        stage('docker deploy new image') {
+            steps {
+                sh "docker-compose up -d"
+            }
+        }
+
     }
 }

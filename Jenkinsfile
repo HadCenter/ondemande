@@ -17,7 +17,11 @@ pipeline {
                 sh "docker-compose build"
             }
         }
-
+        stage('docker deploy new image') {
+            steps {
+                sh "docker-compose up -d"
+            }
+        }
 
     }
 }

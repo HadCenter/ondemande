@@ -1,8 +1,8 @@
 version: "3"
 
 services:
-  dj:
-    container_name: dj
+  django-service:
+    container_name: django-container
     build: django
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -11,8 +11,8 @@ services:
       - "8000:8000"
     environment:
       - DJANGO_SETTINGS=dev
-  ng:
-    container_name: ng
+  angular-service:
+    container_name: angular-container
     build: angular
     ports:
       - "80:80"

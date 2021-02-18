@@ -96,30 +96,38 @@ export class ListFileEdiService {
     return [
         {
             name: 'Fichier EDI',
+            sort: null,
 
         },
         {
-            name: 'Date création',
+            name: '# Date création',
+            sort: 0,
 
         },
         {
-            name: 'Nom client',
+            name: '# Nom client',
+            sort: 0,
 
         },
         {
             name: 'Commandes erronées',
+            sort: null,
 
         },
         {
             name: 'Commandes validées',
+            sort: null,
 
         },
         {
             name: 'Status',
+            sort: null,
 
         },
         {
-            name : 'Actions'
+            name : 'Actions',
+            sort: null,
+
         }
 
     ];
@@ -142,6 +150,14 @@ export class ListFileEdiService {
   }
   public getAllFiles () : Observable<any> {
     return this.http.get(`${this.url}/getFiles/`);
+  }
+  public uploadFileInput (clientName, fileName) : Observable<any> {
+
+    return this.http.get(`${this.url}/uploadfile/${clientName}/${fileName}/`, { responseType: "blob" });
+  }
+  public uploadFileOutput (clientName, fileName) : Observable<any> {
+
+    return this.http.get(`${this.url}/uploadFileOutput/${clientName}/${fileName}/`, { responseType: "blob" });
   }
 
 

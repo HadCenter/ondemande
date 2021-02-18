@@ -5,6 +5,7 @@ $color-smooth-gray: #999;
 $color-smoke: #666;
 $color-red: #f44336;
 $color-light-blue: #03a9f4;
+$color-blue: #4176fb;
 $color-orange: #ffc107;
 $color-amber: #ff9800;
 $color-teal: #00bcd4;
@@ -30,7 +31,9 @@ $color-grey-500: unquote("rgb(#{$palette-grey-500})");
 .text-color--smoke {
   color: $color-smoke;
 }
-
+.color--blue {
+  background-color: $color-blue !important;
+}
 .color--gray {
   background-color: $color-gray !important;
 }

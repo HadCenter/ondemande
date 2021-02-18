@@ -21,6 +21,7 @@ class EDIfile(models.Model):
     wrong_commands = models.CharField(max_length=200, default="_")
     validated_orders = models.CharField(max_length=200, default="_")
     archived = models.BooleanField(default= False)
+    cliqued = models.BooleanField(default= False)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     def __str__(self):

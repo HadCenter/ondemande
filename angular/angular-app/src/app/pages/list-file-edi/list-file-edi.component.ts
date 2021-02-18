@@ -5,6 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { ListFileEdiService } from './list-file-edi.service';
+import { saveAs } from 'file-saver';
+
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -48,7 +50,24 @@ export class ListFileEDIComponent extends UpgradableComponent{
     console.log(this.completeTable)
     this.getFiles();
     }
+    public readonly sortOrder = {
+    asc: 1,
+    desc: -1,
+    };
+
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
+  getColor(ch)
+  {
+    console.log(ch);
+    if (ch === 'En attente')
+    {
+      return 'blue';
+    }else if (ch ==='Terminé'){
+      return 'green';
+    }else{
+      return 'orange';
+    }
+  }
    public currentPage = 1;
   private countPerPage = 8;
   public numPage = 0;
@@ -58,6 +77,60 @@ export class ListFileEDIComponent extends UpgradableComponent{
     return this.files.slice((page - 1) * countPerPage, page * countPerPage);
 
   }
+     /* available sort value:
+	-1 - desc; 	0 - no sorting; 1 - asc; null - disabled */
+  public changeSorting(header, index) {
+    const current = header.sort;
+    if (current !== null) {
+      this.advancedHeaders.forEach((cell) => {
+        cell.sort = (cell.sort !== null) ? 0 : null;
+      });
+      header.sort = (current === 1) ? -1 : 1;
+      this.changeAdvanceSorting(header.sort, index);
+      this.changePage(1, true);
+    }
+  }
+  public changeAdvanceSorting(order, index) {
+        this.files = this.sortByAttributeObject(this.files, order, index);
+    }
+
+    public sortByAttributeObject(files, order, index) {
+        if (index == 1) {
+            return this.sortByDateOrder(files, order, index);
+        }
+        else if (index == 2) {
+            return this.sortByClientName(files, order, index);
+        }
+    }
+
+    private sortByDateOrder(array, order, value) {
+        const compareFunction = (a, b) => {
+            if (a.created_at.slice(0,10) > b.created_at.slice(0,10)) {
+                return 1 * order;
+            }
+            if (a.created_at.slice(0,10) < b.created_at.slice(0,10)) {
+                return -1 * order;
+            }
+            return 0;
+        }
+
+        return array.sort(compareFunction);
+    }
+
+    private sortByClientName(array, order, value) {
+        const compareFunction = (a, b) => {
+            if (a.client_name > b.client_name) {
+                return 1 * order;
+            }
+            if (a.client_name < b.client_name) {
+                return -1 * order;
+            }
+            return 0;
+        }
+
+        return array.sort(compareFunction);
+    }
+
   public changePage(page, force = false) {
     if (page !== this.currentPage || force) {
       this.currentPage = page;
@@ -116,7 +189,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
         for(var i= 0; i < this.advancedTable.length; i++)
         {
-//           this.clicked.push(false);
+          this.clicked.push(false);
         }
       },
           // error => this.error = "error.message");
@@ -125,11 +198,35 @@ export class ListFileEDIComponent extends UpgradableComponent{
   }
   public analyserEDI(row)
   {
-    console.log(row.id);
+
     this.tablesService.executeJob(row)
     .subscribe( res => {
         console.log("success");
         this.router.navigate(['/list-file-edi']);
+      }, error => console.log(error) );
+  }
+  public actualiser()
+  {
+    this.advancedTable = [];
+    this.files = [] ;
+    this.getFiles();
+  }
+  public uploadFileInput(clientName, fileName)
+  {
+     fileName = fileName.substring(7)
+    this.tablesService.uploadFileInput(clientName, fileName)
+    .subscribe( res => {
+        console.log(res);
+        saveAs(res, fileName);
+      }, error => console.log(error) );
+  }
+  public uploadFileOutput(clientName, fileName)
+  {
+
+    this.tablesService.uploadFileOutput(clientName, fileName)
+    .subscribe( res => {
+        console.log(res);
+        saveAs(res, fileName);
       }, error => console.log(error) );
   }
 }

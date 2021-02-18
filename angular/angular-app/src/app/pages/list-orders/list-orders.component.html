@@ -12,8 +12,6 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
-
       <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
         <div class="mdl-textfield label-search">
           <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems() "
@@ -59,7 +57,6 @@
             <td class="mdl-data-table__cell--non-numeric" *ngIf="row.serviceTime<100">
               <mat-progress-bar mode="determinate" color="warn" value={{row.serviceTime}}></mat-progress-bar>
             </td>
-
             <td class="mdl-data-table__cell--non-numeric task-done" *ngIf="row.serviceTime >= 100">
               <i class="commande-complete material-icons">done</i>
               <span>Complete</span>
@@ -77,7 +74,6 @@
     </base-card-body>
   </base-card>
 </div>
-
 <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone">
   <base-card class="bloc-type-cmd">
     <base-card-title>

@@ -64,8 +64,10 @@ export class ListFileEDIComponent extends UpgradableComponent{
       return 'blue';
     }else if (ch ==='Terminé'){
       return 'green';
-    }else{
+    }else if (ch ==='En cours'){
       return 'orange';
+    }else{
+      return 'red';
     }
   }
    public currentPage = 1;

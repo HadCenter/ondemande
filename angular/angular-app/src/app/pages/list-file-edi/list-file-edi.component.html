@@ -36,12 +36,12 @@
         <table *ngIf = "advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
           <thead>
             <tr>
-              <th>
-                <mat-checkbox (change)="$event ? masterToggle() : null"
-                  [checked]="selection.hasValue() && isAllSelected()"
-                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
-                </mat-checkbox>
-              </th>
+<!--              <th>-->
+<!--                <mat-checkbox (change)="$event ? masterToggle() : null"-->
+<!--                  [checked]="selection.hasValue() && isAllSelected()"-->
+<!--                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">-->
+<!--                </mat-checkbox>-->
+<!--              </th>-->
               <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
               (click)="changeSorting(header, i)">
                 <span>{{ header.name }}</span>
@@ -53,10 +53,10 @@
           </thead>
           <tbody >
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;" >
-              <td>
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
-              </td>
+<!--              <td>-->
+<!--                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"-->
+<!--                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>-->
+<!--              </td>-->
               <td class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileInput(row.client_name, row.file)">{{ row.file | slice:7}}</a></td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | date:"yyyy/MM/dd" }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.client_name }}</td>

@@ -22,12 +22,12 @@
         <table *ngIf = "advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
           <thead>
             <tr>
-              <th>
-                <mat-checkbox (change)="$event ? masterToggle() : null"
-                  [checked]="selection.hasValue() && isAllSelected()"
-                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
-                </mat-checkbox>
-              </th>
+<!--              <th>-->
+<!--                <mat-checkbox (change)="$event ? masterToggle() : null"-->
+<!--                  [checked]="selection.hasValue() && isAllSelected()"-->
+<!--                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">-->
+<!--                </mat-checkbox>-->
+<!--              </th>-->
               <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric">
                 <span>{{ header.name }}</span>
               </th>
@@ -35,10 +35,10 @@
           </thead>
           <tbody>
             <tr  *ngFor="let row of advancedTable  | slice:0:limit;" (click)="gotoDetails(row.id)">
-              <td>
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
-              </td>
+<!--              <td>-->
+<!--                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"-->
+<!--                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>-->
+<!--              </td>-->
               <td class="mdl-data-table__cell--non-numeric">{{ row.code_client }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.nom_client }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>

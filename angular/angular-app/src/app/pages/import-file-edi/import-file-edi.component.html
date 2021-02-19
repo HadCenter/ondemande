@@ -26,7 +26,7 @@
                 <button mat-icon-button matSuffix (click)="fileInput.click()" type='button'>
                   <mat-icon>attach_file</mat-icon>
                 </button>
-                <input hidden accept=".xlsx, .csv" (change)="selectFile($event)" #fileInput type="file" id="file" >
+                <input hidden accept=".xlsx" (change)="selectFile($event)" #fileInput type="file" id="file" >
              </mat-form-field>
             </div>
             <div >

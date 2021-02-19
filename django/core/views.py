@@ -164,12 +164,13 @@ class fileCreate(APIView):
         if(request.data['file'] == ''):
             return Response({ "message" : "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         ext = get_extension(request.data['file'].name)
-        fileName = os.path.basename(request.data['file'].name).split('.')[0] + "_" + timestr + ext
+        clientName = Client.objects.get(pk=request.data['client']).nom_client
+        fileName = "EDI_"+ clientName + "_" + timestr + ext
         '''print(fileName)'''
         serializer = FileSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            clientName = Client.objects.get(pk=request.data['client']).nom_client
+            # clientName = Client.objects.get(pk=request.data['client']).nom_client
             ftp = connect()
             path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
             path_client = path_racine + '/' + clientName

@@ -22,6 +22,7 @@ main {
 
 .mdl-layout__drawer {
   border: none;
+  margin-top : 65px;
 
   header {
     text-align: center;
@@ -37,7 +38,6 @@ main {
 
   .mdl-navigation {
     flex-grow: 1;
-    padding-top: 48px;
     padding-bottom: 8px;
     bottom: 0;
 
@@ -184,7 +184,7 @@ main {
   background: $scrollbar-track;
 }
 
-@media screen and (max-width: $layout-screen-size-threshold) {
+// @media screen and (max-width: $layout-screen-size-threshold) {
   .mdl-layout--fixed-drawer {
     main {
       margin-right: 0;
@@ -213,7 +213,7 @@ main {
       line-height: $layout-header-mobile-row-height;
     }
   }
-}
+// }
 
 @media screen and (max-width: $phone-breakpoint - 1px) {
   .mdl-grid > .mdl-grid .mdl-cell {

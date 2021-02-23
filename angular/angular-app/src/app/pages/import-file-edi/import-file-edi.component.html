@@ -29,9 +29,7 @@
                 <input hidden accept=".xlsx" (change)="selectFile($event)" #fileInput type="file" id="file" >
              </mat-form-field>
             </div>
-            <div >
-            <mat-form-field appearance="fill">
-              <mat-label>Nom client</mat-label>
+
 <!--              <ngx-mat-select-search [(ngModel)]="searchCtrl" [placeholderLabel]="'Search...'"-->
 <!--                      [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search>-->
 
@@ -53,14 +51,32 @@
 <!--                  {{option}}-->
 <!--                </mat-option>-->
 <!--              </mat-autocomplete>-->
-
-              <mat-select formControlName="name" >
-                <mat-option *ngFor = "let dl of listItems"[value]="dl">
-                  {{dl}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+            <div >
+              <mat-form-field>
+                <mat-label>Nom client</mat-label>
+                <input type="text"
+                    matInput
+                    formControlName="stateGroup"
+                    required
+                    [matAutocomplete]="autoGroup">
+                <mat-autocomplete #autoGroup="matAutocomplete">
+                  <mat-optgroup *ngFor="let group of stateGroupOptions | async" [label]="group.letter">
+                    <mat-option *ngFor="let name of group.names" [value]="name">
+                      {{name}}
+                    </mat-option>
+                  </mat-optgroup>
+                </mat-autocomplete>
+              </mat-form-field>
             </div>
+<!--            <mat-form-field appearance="fill">-->
+<!--              <mat-label>Nom client</mat-label>-->
+<!--              <mat-select formControlName="name" >-->
+<!--                <mat-option *ngFor = "let dl of listItems"[value]="dl">-->
+<!--                  {{dl}}-->
+<!--                </mat-option>-->
+<!--              </mat-select>-->
+<!--            </mat-form-field>-->
+
 <!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size" >-->
 <!--              <input formControlName="file"  class="mdl-textfield__input" type="file" class="form-control"-->
 <!--            (change)="onFileChange($event)">-->

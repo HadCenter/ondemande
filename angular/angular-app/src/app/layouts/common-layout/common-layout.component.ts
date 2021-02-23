@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , Input} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '@services/*';
@@ -8,7 +8,7 @@ import { AuthService } from '@services/*';
   templateUrl: './common-layout.component.html',
 })
 export class CommonLayoutComponent implements OnInit {
-
+  @Input() public title = 'onDemend';
   public user : any;
 
   constructor(private authService: AuthService,

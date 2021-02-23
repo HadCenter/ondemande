@@ -23,68 +23,99 @@ export class ImportFileEdiComponent implements OnInit {
 //   myControl = new FormControl();
 //   options: string[] = ['One', 'Two', 'Three'];
 //   filteredOptions: Observable<string[]>;
-  stateForm: FormGroup = this._formBuilder.group({
-    stateGroup: '',
-  });
-  stateGroups: StateGroup[] = [{
+  stateGroups: StateGroup[] = [];
+  nameGroups: StateGroup[] = [{
     letter: 'A',
-    names: ['Alabama', 'Alaska', 'Arizona', 'Arkansas']
-  }, {
+    names: []
+  },
+  {
+    letter: 'B',
+    names: []
+  },
+  {
     letter: 'C',
-    names: ['California', 'Colorado', 'Connecticut']
-  }, {
+    names: []
+  },
+  {
     letter: 'D',
-    names: ['Delaware']
-  }, {
+    names: []
+  },
+  {
+    letter: 'E',
+    names: []
+  },
+  {
     letter: 'F',
-    names: ['Florida']
+    names: []
   }, {
     letter: 'G',
-    names: ['Georgia']
+    names: []
   }, {
     letter: 'H',
-    names: ['Hawaii']
+    names: []
   }, {
     letter: 'I',
-    names: ['Idaho', 'Illinois', 'Indiana', 'Iowa']
-  }, {
+    names: []
+  },
+  {
+    letter: 'J',
+    names: []
+  },
+  {
     letter: 'K',
-    names: ['Kansas', 'Kentucky']
+    names: []
   }, {
     letter: 'L',
-    names: ['Louisiana']
+    names: []
   }, {
     letter: 'M',
-    names: ['Maine', 'Maryland', 'Massachusetts', 'Michigan',
-      'Minnesota', 'Mississippi', 'Missouri', 'Montana']
+    names: []
   }, {
     letter: 'N',
-    names: ['Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
-      'New Mexico', 'New York', 'North Carolina', 'North Dakota']
+    names: []
   }, {
     letter: 'O',
-    names: ['Ohio', 'Oklahoma', 'Oregon']
+    names: []
   }, {
     letter: 'P',
-    names: ['Pennsylvania']
-  }, {
+    names: []
+  },
+  {
+    letter: 'Q',
+    names: []
+  },
+  {
     letter: 'R',
-    names: ['Rhode Island']
-  }, {
+    names: []
+  },
+  {
     letter: 'S',
-    names: ['South Carolina', 'South Dakota']
-  }, {
+    names: []
+  },
+  {
     letter: 'T',
-    names: ['Tennessee', 'Texas']
+    names: []
   }, {
     letter: 'U',
-    names: ['Utah']
+    names: []
   }, {
     letter: 'V',
-    names: ['Vermont', 'Virginia']
+    names: []
   }, {
     letter: 'W',
-    names: ['Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
+    names: []
+  },
+  {
+    letter: 'X',
+    names: []
+  },
+  {
+    letter: 'Y',
+    names: []
+  },
+  {
+    letter: 'Z',
+    names: []
   }];
 
   stateGroupOptions: Observable<StateGroup[]>;
@@ -94,13 +125,13 @@ export class ImportFileEdiComponent implements OnInit {
   public error: string = '';
 
   myForm = new FormGroup({
-    name: new FormControl('', [Validators.required],),
+    stateGroup: new FormControl('', [Validators.required],),
     file: new FormControl('',),
     fileSource: new FormControl('')
   });
   selectedFiles : File = null;
 //   selectedStates = [];
-  constructor(private importFileService: ImportFileEdiService, private _formBuilder: FormBuilder, private router: Router)
+  constructor(private importFileService: ImportFileEdiService, private router: Router)
   {
     this.dropdownRefresh();
 //     this.selectedStates = this.listItems;
@@ -108,7 +139,7 @@ export class ImportFileEdiComponent implements OnInit {
   public listObject : { id: string, nom_client: string }[] = [];
   public listItems : Array<string> = [];
   ngOnInit(): void {
-    this.stateGroupOptions = this.stateForm.get('stateGroup')!.valueChanges
+    this.stateGroupOptions = this.myForm.get('stateGroup')!.valueChanges
       .pipe(
         startWith(''),
         map(value => this._filterGroup(value))
@@ -148,7 +179,24 @@ export class ImportFileEdiComponent implements OnInit {
               this.listObject.push(client);
           });
           console.log(this.listItems);
-          console.log(this.listObject);
+          for(var i=0; i<this.nameGroups.length;i++)
+          {
+            for(var j=0;j<this.listItems.length;j++)
+            {
+              if(this.listItems[j][0] === this.nameGroups[i].letter)
+              {
+                this.nameGroups[i].names.push(this.listItems[j]);
+              }
+             }
+           }
+          for(var k=0;k<this.nameGroups.length;k++)
+          {
+            if(this.nameGroups[k].names.length !==0)
+            {
+              this.stateGroups.push(this.nameGroups[k])
+            }
+          }
+
 //           this.filteredOptions = this.myControl.valueChanges
 //             .pipe(
 //             startWith(''),
@@ -179,7 +227,8 @@ export class ImportFileEdiComponent implements OnInit {
   {
     const formData = new FormData();
     formData.append('file', this.myForm.get('fileSource').value);
-    var nom = this.myForm.getRawValue().name;
+    var nom = this.myForm.getRawValue().stateGroup;
+    console.log(nom);
     var client = this.listObject.find(element => element.nom_client === nom);
     formData.append('client', client.id);
     console.log(formData.get('file'));

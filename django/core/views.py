@@ -209,12 +209,7 @@ class uploadfileNameAPIView(APIView):
         path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
         path_client = path_racine + '/' + clientName
         ftp.cwd(path_client)
-        lines = []
-        ftp.dir(path_client, lines.append)
-        for line in lines:
-            tokens = line.split(maxsplit=9)
-            print(tokens)
-            name = tokens[7]
+        for name in ftp.nlst():
             if name == fileName:
                 with open(name, "wb") as file:
                     commande = "RETR " + name
@@ -235,12 +230,7 @@ class uploadfileoutputNameAPIView(APIView):
         path_racine = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
         path_client = path_racine + '/' + clientName
         ftp.cwd(path_client)
-        lines = []
-        ftp.dir(path_client, lines.append)
-        for line in lines:
-            tokens = line.split(maxsplit=9)
-            print(tokens)
-            name = tokens[7]
+        for name in ftp.nlst():
             if name == fileName:
                 with open(name, "wb") as file:
                     commande = "RETR " + name

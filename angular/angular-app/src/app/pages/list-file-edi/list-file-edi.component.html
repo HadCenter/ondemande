@@ -60,9 +60,9 @@
               <td class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileInput(row.client_name, row.file)">{{decodefile(row.file) | slice:7}} </a></td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | date:"yyyy/MM/dd" }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.client_name }}</td>
-              <td *ngIf = "row.wrong_commands !== '_'"class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileOutput(row.client_name, row.wrong_commands)">{{ row.wrong_commands }}</a></td>
+              <td *ngIf = "row.wrong_commands !== '_'"class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileOutput(row.client_name, row.wrong_commands)">{{ decodefile(row.wrong_commands) }}</a></td>
               <td *ngIf = "row.wrong_commands === '_'"class="mdl-data-table__cell--non-numeric">{{ row.wrong_commands }}</td>
-              <td *ngIf = "row.wrong_commands !== '_'"class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileOutput(row.client_name, row.validated_orders)">{{ row.validated_orders }}</a></td>
+              <td *ngIf = "row.wrong_commands !== '_'"class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileOutput(row.client_name, row.validated_orders)">{{ decodefile(row.validated_orders) }}</a></td>
               <td *ngIf = "row.wrong_commands === '_'"class="mdl-data-table__cell--non-numeric">{{ row.validated_orders }}</td>
               <td class="mdl-data-table__cell--non-numeric">
                 <span

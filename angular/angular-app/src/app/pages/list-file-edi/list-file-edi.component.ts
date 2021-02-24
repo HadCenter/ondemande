@@ -216,6 +216,9 @@ export class ListFileEDIComponent extends UpgradableComponent{
   public uploadFileInput(clientName, fileName)
   {
      fileName = fileName.substring(7)
+     fileName = decodeURI(fileName)
+    console.log(fileName)
+    console.log(clientName)
     this.tablesService.uploadFileInput(clientName, fileName)
     .subscribe( res => {
         console.log(res);
@@ -228,7 +231,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
   }
   public uploadFileOutput(clientName, fileName)
   {
-
+    fileName = decodeURI(fileName)
     this.tablesService.uploadFileOutput(clientName, fileName)
     .subscribe( res => {
         console.log(res);

@@ -16,8 +16,8 @@ export class CreateClientComponent extends UpgradableComponent implements OnInit
   public email;
   public password;
   public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
-  public codePattern = '^c[0-9]{3}$';
-  public nomPattern = '[A-Z]+';
+  public codePattern = '^C[0-9]{3}$';
+  public nomPattern = '[^a-z]+';
   public error: string;
 
   constructor(private authService: CreateClientService, private fb: FormBuilder, private router: Router)

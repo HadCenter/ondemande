@@ -57,7 +57,7 @@
 <!--                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"-->
 <!--                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>-->
 <!--              </td>-->
-              <td class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileInput(row.client_name, row.file)">{{ row.file | slice:7}}</a></td>
+              <td class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileInput(row.client_name, row.file)">{{decodefile(row.file) | slice:7}} </a></td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | date:"yyyy/MM/dd" }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.client_name }}</td>
               <td *ngIf = "row.wrong_commands !== '_'"class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileOutput(row.client_name, row.wrong_commands)">{{ row.wrong_commands }}</a></td>

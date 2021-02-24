@@ -222,6 +222,10 @@ export class ListFileEDIComponent extends UpgradableComponent{
         saveAs(res, fileName);
       }, error => console.log(error) );
   }
+  public decodefile(file)
+  {
+    return decodeURI(file);
+  }
   public uploadFileOutput(clientName, fileName)
   {
 

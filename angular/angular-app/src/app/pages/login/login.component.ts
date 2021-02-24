@@ -24,7 +24,7 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
       email: new FormControl('', [
         Validators.required,
         Validators.pattern(this.emailPattern),
-        Validators.maxLength(25),
+
       ]),
     });
     this.email = this.loginForm.get('email');
@@ -44,7 +44,7 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
       this.authService.login(this.loginForm.getRawValue())
         .subscribe(res => this.router.navigate(['/list-file-edi']),
           // error => this.error = "error.message");
-          // for fake data 
+          // for fake data
           error => this.error = "Email ou mot de passe incorrect");
     }
   }

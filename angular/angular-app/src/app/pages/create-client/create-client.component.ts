@@ -34,7 +34,7 @@ export class CreateClientComponent extends UpgradableComponent implements OnInit
       ]),
       email: new FormControl('', [
         Validators.pattern(this.emailPattern),
-        Validators.maxLength(25),
+
       ])
     });
     this.code = this.loginForm.get('code');

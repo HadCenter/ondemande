@@ -29,8 +29,8 @@ export class DetailsClientComponent extends UpgradableComponent implements OnIni
   public email;
   public password;
   public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
-  public codePattern = '^c[0-9]{3}$';
-  public nomPattern = '[A-Z]+';
+  public codePattern = '^C[0-9]{3}$';
+  public nomPattern = '[^a-z]+';
   public error: string;
   constructor(private clientService: DetailsClientService, private fb: FormBuilder, private router: Router,private route: ActivatedRoute,)
    {
@@ -46,7 +46,6 @@ export class DetailsClientComponent extends UpgradableComponent implements OnIni
       ]),
       email: new FormControl('', [
         Validators.pattern(this.emailPattern),
-        Validators.maxLength(25),
       ])
     });
     this.code = this.updateForm.get('code');

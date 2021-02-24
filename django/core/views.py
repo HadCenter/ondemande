@@ -158,8 +158,8 @@ class fileCreate(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, format=None):
-        '''print(request.data['file'].name)
-        print(request.data['client'])'''
+        # print(request.data['file'].name)
+        # print(request.data['client'])
         timestr = time.strftime("%Y-%m-%d-%H-%M-%S")
         if(request.data['file'] == ''):
             return Response({ "message" : "erreur"}, status=status.HTTP_400_BAD_REQUEST)
@@ -169,13 +169,20 @@ class fileCreate(APIView):
         '''print(fileName)'''
         serializer = FileSerializer(data=request.data)
         if serializer.is_valid():
+            path = "media/files/"
+            if (os.path.isdir(path) == True):
+                shutil.rmtree('media')
+            if (os.path.isdir(path) == False):
+                os.mkdir("media")
+                os.chdir("media")
+                os.mkdir(("files"))
+                os.chdir("..")
             serializer.save()
             # clientName = Client.objects.get(pk=request.data['client']).nom_client
             ftp = connect()
             path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
             path_client = path_racine + '/' + clientName
             ftp.cwd(path_client)
-            path = "media/files/"
             filename = [f for f in listdir(path) if isfile(join(path, f))][0]
             os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
             file = open(fileName, 'rb')

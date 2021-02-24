@@ -5,7 +5,7 @@
         <h1 class="mdl-card__title-text">Importer fichier EDI</h1>
       </base-card-title>
       <base-card-body class="no-padding">
-        <form [formGroup]="myForm" (submit)="submit()" autocomplete="off" >
+        <form [formGroup]="myForm"  autocomplete="off" >
           <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone" >
 <!--            <div class="mdl-selectfield mdl-js-selectfield">-->
 <!--              <select formControlName="name" id="myselect" name="myselect" class="mdl-selectfield__select" class="form-control">-->
@@ -86,7 +86,7 @@
 
           </div>
           <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone submit-cell mdl-grid center-items" >
-            <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit" [disabled]="myForm.invalid">Importer</button>
+            <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit" [disabled]="myForm.invalid || clicked" (click)="submit();clicked = true;">Importer</button>
           </div>
         </form>
       </base-card-body>

@@ -8,11 +8,11 @@
   td,
   th {
     &:first-of-type {
-      padding-left: 16px;
+      padding-left: 8px!important;
     }
 
     &:last-of-type {
-      padding-right: 16px;
+      padding-right: 8px!important;
     }
   }
 
@@ -60,4 +60,7 @@
   tr:last-child td {
     border-bottom: none;
   }
+}
+.mdl-data-table td, .mdl-data-table th {
+    padding: 0px 4px 0px 4px!important;
 }

@@ -7,7 +7,8 @@ import { ForgotPasswordComponent } from './forgot-password';
 import { LoginComponent } from './login';
 import { PagesRoutingModule } from './pages-routing.module';
 import { SignUpComponent } from './sign-up';
-import { LoaderComponent } from './components/loader/loader.component';
+
+
 
 
 

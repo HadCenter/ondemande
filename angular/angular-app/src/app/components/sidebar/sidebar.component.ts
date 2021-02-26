@@ -10,7 +10,7 @@ import { SidebarComponent as BaseSidebarComponent } from 'theme/components/sideb
 export class SidebarComponent extends BaseSidebarComponent {
   public title = 'onDemand';
   public menu = [
-
+    { name : "Accueil" , link: '/home', icon: 'list' },
     { name: 'Clients', link: '/list-client', icon: 'list' },
     { name: 'Fichiers EDI', link: '/list-file-edi', icon: 'list' },
     { name : "Fichiers livraisons" , link: '/list-file-delivery', icon: 'list' },

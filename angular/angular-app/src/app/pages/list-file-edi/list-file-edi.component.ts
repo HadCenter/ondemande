@@ -60,7 +60,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
   
   getColor(ch)
   {
-    console.log(ch);
+    //console.log(ch);
     if (ch === 'En attente')
     {
       return 'blue';
@@ -139,7 +139,6 @@ export class ListFileEDIComponent extends UpgradableComponent{
     if (page !== this.currentPage || force) {
       this.currentPage = page;
       this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
-      console.log(this.advancedTable);
     }
   }
   /** Whether the number of selected elements matches the total number of rows. */
@@ -188,10 +187,11 @@ export class ListFileEDIComponent extends UpgradableComponent{
   public getFiles ()
   {
     this.tablesService.getAllFiles()
-      .subscribe(res => {this.files = res; console.log(this.files); this.show = false;
+      .subscribe(res => {this.files = res; 
+        console.log(this.files);
+        this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
-        console.log(this.advancedTable);
         for(var i= 0; i < this.advancedTable.length; i++)
         {
           this.clicked.push(false);

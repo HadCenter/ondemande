@@ -49,6 +49,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
     this.completeTable = this.tablesService.advanceTableData;
     console.log(this.completeTable)
     this.getFiles();
+    
     }
     public readonly sortOrder = {
     asc: 1,
@@ -56,6 +57,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
     };
 
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
+  
   getColor(ch)
   {
     console.log(ch);
@@ -189,6 +191,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
       .subscribe(res => {this.files = res; console.log(this.files); this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        console.log(this.advancedTable);
         for(var i= 0; i < this.advancedTable.length; i++)
         {
           this.clicked.push(false);
@@ -227,6 +230,12 @@ export class ListFileEDIComponent extends UpgradableComponent{
   }
   public decodefile(file)
   {
+    
+    return decodeURI(file.substring(7));
+  }
+  public decodeValidatorError(file)
+  {
+    
     return decodeURI(file);
   }
   public uploadFileOutput(clientName, fileName)

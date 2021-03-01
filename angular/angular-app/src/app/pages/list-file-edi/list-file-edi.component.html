@@ -1,85 +1,92 @@
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-    <app-loader [width]="'100%'" [height]="'450px'" [bg]="'transparant'" [show] ="show"></app-loader>
-    <base-card>
-      <base-card-title>
-        <h1 class="mdl-card__title-text">Liste des fichiers EDI</h1>
-        <div class="mdl-layout-spacer"></div>
-<!--        <mat-form-field>-->
-<!--          <mat-label>Actions</mat-label>-->
-<!--          <mat-select>-->
-<!--            <mat-option *ngFor="let action of actions">-->
-<!--              {{action.viewValue}}-->
-<!--            </mat-option>-->
-<!--          </mat-select>-->
-<!--        </mat-form-field>-->
-        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-          <div class="mdl-textfield label-search">
-            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-              [(ngModel)]="filterValue" placeholder="Rechercher" />
-            <label class="mdl-textfield__label" for="search2"></label>
-          </div>
+  <app-loader [width]="'100%'" [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
+  <base-card>
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Liste des fichiers EDI</h1>
+      <div class="mdl-layout-spacer"></div>
+      <!--        <mat-form-field>-->
+      <!--          <mat-label>Actions</mat-label>-->
+      <!--          <mat-select>-->
+      <!--            <mat-option *ngFor="let action of actions">-->
+      <!--              {{action.viewValue}}-->
+      <!--            </mat-option>-->
+      <!--          </mat-select>-->
+      <!--        </mat-form-field>-->
+      <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+        <div class="mdl-textfield label-search">
+          <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+            [(ngModel)]="filterValue" placeholder="Rechercher" />
+          <label class="mdl-textfield__label" for="search2"></label>
         </div>
-        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
-        </base-pagination>
-        <a routerLink="/import-file-edi"><button
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
-                >Importer fichier EDI
-          </button></a>
-        &nbsp;
-        <a ><button
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
-                (click)="actualiser()"
-                >Actualiser
-          </button></a>
-      </base-card-title>
-      <base-card-body class="no-padding">
-        <table *ngIf = "advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
-          <thead>
-            <tr>
-<!--              <th>-->
-<!--                <mat-checkbox (change)="$event ? masterToggle() : null"-->
-<!--                  [checked]="selection.hasValue() && isAllSelected()"-->
-<!--                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">-->
-<!--                </mat-checkbox>-->
-<!--              </th>-->
-              <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
+      </div>
+      <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+      </base-pagination>
+      <a routerLink="/import-file-edi"><button
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Importer
+          fichier EDI
+        </button></a>
+      &nbsp;
+      <a><button
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+          (click)="actualiser()">Actualiser
+        </button></a>
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <table *ngIf="advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+        <thead>
+          <tr>
+            <!--              <th>-->
+            <!--                <mat-checkbox (change)="$event ? masterToggle() : null"-->
+            <!--                  [checked]="selection.hasValue() && isAllSelected()"-->
+            <!--                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">-->
+            <!--                </mat-checkbox>-->
+            <!--              </th>-->
+            <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
               (click)="changeSorting(header, i)">
-                <span>{{ header.name }}</span>
-                <i *ngIf="header.sort !== null " class="material-icons sorting"
+              <span>{{ header.name }}</span>
+              <i *ngIf="header.sort !== null " class="material-icons sorting"
                 [class.asc]="header.sort === sortOrder.asc"
                 [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</i>
-              </th>
-            </tr>
-          </thead>
-          <tbody >
-            <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;" >
-<!--              <td>-->
-<!--                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"-->
-<!--                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>-->
-<!--              </td>-->
-              <td class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileInput(row.client_name, row.file)">{{decodefile(row.file) | slice:7}} </a></td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | date:"yyyy/MM/dd" }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.client_name }}</td>
-              <td *ngIf = "row.wrong_commands !== '_'"class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileOutput(row.client_name, row.wrong_commands)">{{ decodefile(row.wrong_commands) }}</a></td>
-              <td *ngIf = "row.wrong_commands === '_'"class="mdl-data-table__cell--non-numeric">{{ row.wrong_commands }}</td>
-              <td *ngIf = "row.wrong_commands !== '_'"class="mdl-data-table__cell--non-numeric"><a [routerLink]="" (click)="uploadFileOutput(row.client_name, row.validated_orders)">{{ decodefile(row.validated_orders) }}</a></td>
-              <td *ngIf = "row.wrong_commands === '_'"class="mdl-data-table__cell--non-numeric">{{ row.validated_orders }}</td>
-              <td class="mdl-data-table__cell--non-numeric">
-                <span
-                class="label label--mini color--{{getColor(row.status)}} ">{{ row.status }}</span>
-              </td>
-              <td class="mdl-data-table__cell--non-numeric">
-                <button
-                  [disabled]="clicked[i] || row.cliqued"
-                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                  (click)="analyserEDI(row); clicked[i] = true;"
-                  >Analyser
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </base-card-body>
-    </base-card>
-</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
+            <!--              <td>-->
+            <!--                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"-->
+            <!--                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>-->
+            <!--              </td>-->
+            <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a [matTooltip]=decodefile(row.file)
+                matTooltipClass="tooltip-custom" [routerLink]=""
+                (click)="uploadFileInput(row.client_name, row.file)">{{decodefile(row.file)}} </a></td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | date:"yyyy/MM/dd" }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.client_name }}</td>
+            
+            <td *ngIf="row.wrong_commands !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
+                [matTooltip]=decodeValidatorError(row.wrong_commands) matTooltipClass="tooltip-custom" [routerLink]=""
+                (click)="uploadFileOutput(row.client_name, row.wrong_commands)">{{
+                  decodeValidatorError(row.wrong_commands) }}</a></td>
+            <td *ngIf="row.wrong_commands === '_'" class="mdl-data-table__cell--non-numeric" >{{ row.wrong_commands }}
+            </td>
 
+            <td *ngIf="row.validated_orders !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
+                [matTooltip]=decodeValidatorError(row.validated_orders) matTooltipClass="tooltip-custom" [routerLink]=""
+                (click)="uploadFileOutput(row.client_name, row.validated_orders)">{{
+                  decodeValidatorError(row.validated_orders) }}</a></td>
+            <td *ngIf="row.validated_orders === '_'" class="mdl-data-table__cell--non-numeric">{{ row.validated_orders }}
+            </td>
+            <td class="mdl-data-table__cell--non-numeric">
+              <span class="label label--mini color--{{getColor(row.status)}} ">{{ row.status }}</span>
+            </td>
+            <td class="mdl-data-table__cell--non-numeric">
+              <button [disabled]="clicked[i] || row.cliqued"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                (click)="analyserEDI(row); clicked[i] = true;">Analyser
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </base-card-body>
+  </base-card>
+</div>

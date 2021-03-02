@@ -49,6 +49,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
     this.completeTable = this.tablesService.advanceTableData;
     console.log(this.completeTable)
     this.getFiles();
+    
     }
     public readonly sortOrder = {
     asc: 1,
@@ -56,9 +57,10 @@ export class ListFileEDIComponent extends UpgradableComponent{
     };
 
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
+  
   getColor(ch)
   {
-    console.log(ch);
+    //console.log(ch);
     if (ch === 'En attente')
     {
       return 'blue';
@@ -136,7 +138,6 @@ export class ListFileEDIComponent extends UpgradableComponent{
     if (page !== this.currentPage || force) {
       this.currentPage = page;
       this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
-      console.log(this.advancedTable);
     }
   }
   /** Whether the number of selected elements matches the total number of rows. */
@@ -185,7 +186,9 @@ export class ListFileEDIComponent extends UpgradableComponent{
   public getFiles ()
   {
     this.tablesService.getAllFiles()
-      .subscribe(res => {this.files = res; console.log(this.files); this.show = false;
+      .subscribe(res => {this.files = res; 
+        console.log(this.files);
+        this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
         for(var i= 0; i < this.advancedTable.length; i++)
@@ -226,6 +229,12 @@ export class ListFileEDIComponent extends UpgradableComponent{
   }
   public decodefile(file)
   {
+    
+    return decodeURI(file.substring(7));
+  }
+  public decodeValidatorError(file)
+  {
+    
     return decodeURI(file);
   }
   public uploadFileOutput(clientName, fileName)

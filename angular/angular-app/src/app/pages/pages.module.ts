@@ -6,7 +6,11 @@ import { ErrorComponent } from './error';
 import { ForgotPasswordComponent } from './forgot-password';
 import { LoginComponent } from './login';
 import { PagesRoutingModule } from './pages-routing.module';
-import { SignUpComponent } from './sign-up';
+//import { SignUpComponent } from './sign-up';
+
+
+
+
 
 @NgModule({
   imports: [
@@ -15,12 +19,11 @@ import { SignUpComponent } from './sign-up';
     PagesRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-
   ],
   declarations: [
     ErrorComponent,
     LoginComponent,
-    SignUpComponent,
+   // SignUpComponent,
     ForgotPasswordComponent,
 
 

@@ -8,11 +8,6 @@ import { LoginComponent } from './login';
 import { PagesRoutingModule } from './pages-routing.module';
 import { SignUpComponent } from './sign-up';
 
-
-
-
-
-
 @NgModule({
   imports: [
     CommonModule,
@@ -20,6 +15,7 @@ import { SignUpComponent } from './sign-up';
     PagesRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+
   ],
   declarations: [
     ErrorComponent,

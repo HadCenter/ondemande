@@ -10,7 +10,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent,],
   imports: [
     BrowserModule,
     AppRoutingModule,

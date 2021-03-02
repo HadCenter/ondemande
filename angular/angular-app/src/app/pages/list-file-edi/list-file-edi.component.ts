@@ -77,7 +77,6 @@ export class ListFileEDIComponent extends UpgradableComponent{
   public getAdvancedTablePage(page, countPerPage)
   {
     return this.files.slice((page - 1) * countPerPage, page * countPerPage);
-
   }
      /* available sort value:
 	-1 - desc; 	0 - no sorting; 1 - asc; null - disabled */

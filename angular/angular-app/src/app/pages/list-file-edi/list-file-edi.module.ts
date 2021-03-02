@@ -16,7 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
-import { LoaderComponent } from '../../components/loader/loader.component';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [ListFileEDIComponent,LoaderComponent,],

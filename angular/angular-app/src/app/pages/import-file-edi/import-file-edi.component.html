@@ -1,10 +1,10 @@
 <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--3-col-phone content">
-
     <base-card>
       <base-card-title>
         <h1 class="mdl-card__title-text">Importer fichier EDI</h1>
       </base-card-title>
-      <base-card-body class="no-padding">
+      <base-card-body class="no-padding" >
+        <app-loader [width]="'100%'" [height]="'500px'" [bg]="'transparant'" [show] ="show"></app-loader>
         <form [formGroup]="myForm"  autocomplete="off" >
           <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone" >
 <!--            <div class="mdl-selectfield mdl-js-selectfield">-->

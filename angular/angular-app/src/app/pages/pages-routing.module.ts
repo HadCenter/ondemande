@@ -1,6 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { LayoutsModule } from 'app/layouts';
 import { BlankLayoutComponent } from 'app/layouts/blank-layout';
 import { ErrorComponent } from './error';

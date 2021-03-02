@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UsersRoutingModule } from './users-routing.module';
-import { UsersComponent } from './users.component';
-import { UsersService } from './users.service';
+import { CreateUserRoutingModule } from './create-user-routing.module';
+import { CreateUserComponent } from './create-user.component';
+import { CreateUserService } from './create-user.service';
 import { ThemeModule } from 'theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -20,14 +20,15 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import {MatNativeDateModule} from '@angular/material/core';
 
 
 @NgModule({
-  declarations: [UsersComponent],
+  declarations: [CreateUserComponent],
   imports: [
     CommonModule,
-    UsersRoutingModule,
+    CreateUserRoutingModule,
+    ReactiveFormsModule,
     ThemeModule,
     MatFormFieldModule,
     FormsModule,
@@ -46,11 +47,11 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatGridListModule,
     MatRadioModule,
     MatDatepickerModule,
-    MatNativeDateModule,
+    MatNativeDateModule
   ],
   providers: [
-    UsersService,
+    CreateUserService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
 })
-export class UsersModule { }
+export class CreateUserModule { }

@@ -8,7 +8,8 @@ from django.utils.translation import gettext_lazy as _
 
 class Profile(models.Model):
     label = models.CharField(max_length=200)
-
+    def __str__(self):
+        return self.label
 
 class Account(AbstractBaseUser, PermissionsMixin):
     email =  models.EmailField(_('email address'), unique=True)
@@ -20,7 +21,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['username',]
 
     objects = CustomUserManager()
 

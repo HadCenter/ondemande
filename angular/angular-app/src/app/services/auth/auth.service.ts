@@ -48,7 +48,7 @@ export class AuthService {
       }));
   }
 
-  public signup(data) {
+  public signup(data) : Observable<any> {
     return this.http.post(`${this.url}/register/`, data)
       .pipe(
         map((res: { user: any, token: string }) => {

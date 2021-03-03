@@ -1,8 +1,13 @@
 
 from django.contrib.auth.models import BaseUserManager
 class CustomUserManager(BaseUserManager):
-	def create_user(self, email, username, password = None):
-		user = self.model(email=self.normalize_email(email),username=username)
+	def create_user(self, email, username, password , is_superadmin, is_admin ):
+		print(email)
+		print(password)
+		print(username)
+		print(is_admin)
+		print(is_superadmin)
+		user = self.model(email=self.normalize_email(email),username=username, is_superadmin = is_superadmin,is_admin = is_admin)
 		user.set_password(password)
 		user.save(using=self._db)
 		return user

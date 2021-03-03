@@ -22,11 +22,12 @@ class RegisterAPI(generics.GenericAPIView):
 	serializer_class = RegisterSerializer
 
 	def post(self, request, *args, **kwargs):
-		print(request.data)
+
 		serializer = self.get_serializer(data=request.data)
 		print("ahmed")
 		serializer.is_valid(raise_exception=True)
 		print("iyed")
+		print(request.data)
 		user = serializer.save()
 
 		return Response({

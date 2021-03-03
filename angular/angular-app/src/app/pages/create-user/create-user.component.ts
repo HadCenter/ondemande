@@ -16,8 +16,8 @@ export class CreateUserComponent extends UpgradableComponent implements OnInit  
   public name;
   public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
   public error: string;
-  public listItems : Array<string> = [];
-  public listObject : { id: string, label: string }[] = [];
+  public listItems : Array<string> = ["Admin","SuperAdmin"];
+//   public listObject : { id: string, label: string }[] = [];
   constructor(private createuserService: CreateUserService,
     private fb: FormBuilder,
     private router: Router)
@@ -37,7 +37,7 @@ export class CreateUserComponent extends UpgradableComponent implements OnInit  
     this.password = this.signupForm.get('password');
     this.username = this.signupForm.get('username');
     this.name = this.signupForm.get('name');
-    this.dropdownRefresh();
+//     this.dropdownRefresh();
    }
 
   public ngOnInit()
@@ -56,9 +56,16 @@ export class CreateUserComponent extends UpgradableComponent implements OnInit  
     formData.append('password', this.signupForm.get('password').value);
     formData.append('username', this.signupForm.get('username').value);
     var name = this.signupForm.getRawValue().name;
+    if (name ==='SuperAdmin')
+    {
+      formData.append('is_superadmin', "true")
+    }else
+    {
+      formData.append('is_admin', "true")
+    }
+//     formData.append('role', name);
 //     console.log(name);
-    var role = this.listObject.find(element => element.label === name);
-    formData.append('role', role.id);
+//     var role = this.listObject.find(element => element.label === name);
 //     console.log(formData.get('email'));
 //     console.log(formData.get('password'));
 //     console.log(formData.get('username'));
@@ -69,24 +76,24 @@ export class CreateUserComponent extends UpgradableComponent implements OnInit  
           error => this.error = "L'email est déja utilisé");
     }
   }
-  dropdownRefresh()
-  {
-    this.createuserService.getAllRoles().subscribe(
-      data => {
-          console.log(data);
-          data.forEach(element => {
-              this.listItems.push(element["label"]);
-              var id = element['id']; var nomClient = element['label'];
-              var client = {
-                  id : id,
-                  label : nomClient
-              };
-              this.listObject.push(client);
-          });
-          console.log(this.listItems);
-          console.log(this.listObject);
-
-      });
-  }
+//   dropdownRefresh()
+//   {
+//     this.createuserService.getAllRoles().subscribe(
+//       data => {
+//           console.log(data);
+//           data.forEach(element => {
+//               this.listItems.push(element["label"]);
+//               var id = element['id']; var nomClient = element['label'];
+//               var client = {
+//                   id : id,
+//                   label : nomClient
+//               };
+//               this.listObject.push(client);
+//           });
+//           console.log(this.listItems);
+//           console.log(this.listObject);
+//
+//       });
+//   }
 
 }

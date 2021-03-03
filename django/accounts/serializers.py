@@ -19,7 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 	# profile = ReadOnlyField(source='role.label')
 	class Meta:
 		model = Account
-		fields = ('id', 'email', 'username', 'password',)
+		fields = ('id', 'email', 'username', 'password', 'is_superadmin', 'is_admin')
 		# fields = '__all__'
 		extra_kwargs = {'password': {'write_only': True}}
 
@@ -28,7 +28,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 		user = Account.objects.create_user(
             email=validated_data["email"],
 			username=validated_data["username"],
-			password=validated_data["password"],
+			password=validated_data["password"], is_superadmin = validated_data["is_superadmin"], is_admin = validated_data["is_admin"]
 		)
 		return user
 

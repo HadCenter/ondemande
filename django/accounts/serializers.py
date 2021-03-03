@@ -1,5 +1,5 @@
 from .models import Account
-from .models import Profile
+# from .models import Profile
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.fields import ReadOnlyField
@@ -16,11 +16,11 @@ class LoginSerializer(serializers.Serializer):
 		raise serializers.ValidationError('Incorrect Credentials')
 
 class RegisterSerializer(serializers.ModelSerializer):
-	profile = ReadOnlyField(source='role.label')
+	# profile = ReadOnlyField(source='role.label')
 	class Meta:
 		model = Account
-		# fields = ('id', 'email', 'username', 'password',)
-		fields = '__all__'
+		fields = ('id', 'email', 'username', 'password',)
+		# fields = '__all__'
 		extra_kwargs = {'password': {'write_only': True}}
 
 	def create(self, validated_data):
@@ -37,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
 		model = Account
 		fields = ('id','email','username')
 
-class RoleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = '__all__'
+# class RoleSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Profile
+#         fields = '__all__'

@@ -8,6 +8,6 @@ urlpatterns = [
 	path("register/", RegisterAPI.as_view()),
 	path("user/", UserAPI.as_view()),
 	path("logout/", knox_views.LogoutView.as_view()),
-	path("getRoles/", views.roleList, name="role-list"),
+	# path("getRoles/", views.roleList, name="role-list"),
 
 ]

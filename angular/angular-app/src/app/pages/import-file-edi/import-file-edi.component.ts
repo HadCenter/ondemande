@@ -23,7 +23,7 @@ export class ImportFileEdiComponent implements OnInit {
   //   myControl = new FormControl();
   //   options: string[] = ['One', 'Two', 'Three'];
   //   filteredOptions: Observable<string[]>;
-  clicked = false;
+ // clicked = false;
 //   myControl = new FormControl();
 //   options: string[] = ['One', 'Two', 'Three'];
 //   filteredOptions: Observable<string[]>;

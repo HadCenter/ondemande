@@ -4,14 +4,6 @@
     <base-card-title>
       <h1 class="mdl-card__title-text">Liste des fichiers EDI</h1>
       <div class="mdl-layout-spacer"></div>
-      <!--        <mat-form-field>-->
-      <!--          <mat-label>Actions</mat-label>-->
-      <!--          <mat-select>-->
-      <!--            <mat-option *ngFor="let action of actions">-->
-      <!--              {{action.viewValue}}-->
-      <!--            </mat-option>-->
-      <!--          </mat-select>-->
-      <!--        </mat-form-field>-->
       <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
         <div class="mdl-textfield label-search">
           <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
@@ -35,12 +27,6 @@
       <table *ngIf="advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
         <thead>
           <tr>
-            <!--              <th>-->
-            <!--                <mat-checkbox (change)="$event ? masterToggle() : null"-->
-            <!--                  [checked]="selection.hasValue() && isAllSelected()"-->
-            <!--                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">-->
-            <!--                </mat-checkbox>-->
-            <!--              </th>-->
             <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
               (click)="changeSorting(header, i)">
               <span>{{ header.name }}</span>
@@ -52,10 +38,6 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-            <!--              <td>-->
-            <!--                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"-->
-            <!--                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>-->
-            <!--              </td>-->
             <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a [matTooltip]=decodefile(row.file)
                 matTooltipClass="tooltip-custom" [routerLink]=""
                 (click)="uploadFileInput(row.client_name, row.file)">{{decodefile(row.file)}} </a></td>

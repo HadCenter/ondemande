@@ -41,10 +41,6 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
     private router: Router,
     private _snackBar: MatSnackBar, private matDialog: MatDialog) {
     super();
-    /*this.completeTable = this.tablesService.advanceTableData;
-    console.log(this.completeTable)*/
-
-
   }
   ngOnInit(): void
   {
@@ -142,7 +138,5 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
    public gotoDetails(id_client) {
     this.router.navigate(['/details-client', id_client]);
   }
-
-
 
 }

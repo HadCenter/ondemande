@@ -8,10 +8,6 @@ import { LoginComponent } from './login';
 import { PagesRoutingModule } from './pages-routing.module';
 //import { SignUpComponent } from './sign-up';
 
-
-
-
-
 @NgModule({
   imports: [
     CommonModule,

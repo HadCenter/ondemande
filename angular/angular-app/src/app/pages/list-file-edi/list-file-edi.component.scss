@@ -47,6 +47,10 @@ body {
   box-sizing: border-box;
 }
 
+span.mat-button-wrapper {
+  color: #00bcd4;
+}
+
 .dialog {
   background: #444;
   border: none;
@@ -111,26 +115,6 @@ body {
 .mat-dialog-actions {
   padding: 8px 32px;
 }
-span.mat-button-wrapper {
-  color: #00bcd4;
-}
-
-.mat-progress-bar.mat-progress-bar.mat-primary._mat-animation-noopable {
-  min-width: 100px;
-  width: auto;
-}
-
-.mat-progress-bar.mat-progress-bar.mat-primary._mat-animation-noopable{
-  display: block;
-  position: relative;
-  height: 4px;
-  //width: 500px;
-  width: 84px;
-  max-width: 100%;
-}
-.mat-progress-bar {
-  width: 84px !important;
-}
 
 .mdl-textfield.mdl-js-textfield.mdl-textfield--expandable.search-table.is-upgraded{
   position: relative;
@@ -146,9 +130,6 @@ span.mat-button-wrapper {
 .mdl-textfield.mdl-js-textfield.mdl-textfield--expandable.search-table.is-upgraded.is-focused input#search2 {
   border-block-end-color: #00bcd4;
 }
-// .search {
-//   padding: 0px 0 !important;
-// }
 
 .mdl-textfield.label-search {
   position: relative;
@@ -162,13 +143,6 @@ span.mat-button-wrapper {
 }
 
 .mdl-textfield-search{
-  // position: relative;
-  // font-size: 16px;
-  // display: inline-block;
-  // box-sizing: border-box;
-  // width: 300px;
-  // max-width: 100%;
-  // margin: 0;
   padding: 0;
 }
 
@@ -182,10 +156,6 @@ span.mat-button-wrapper {
     margin: -2px;
 }
 
-
-// .mdl-textfield.search {
-//   padding:0
-// }
 .mdl-textfield__input{
   padding: 6px 0;
   font-size: 15px;
@@ -194,22 +164,7 @@ span.mat-button-wrapper {
 .mdl-data-table td:last-of-type, .mdl-data-table th:last-of-type {
   padding-right: 6px;
 }
-.mat-checkbox-frame {
-  border-color: currentColor;
-}
 
-.mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: #f44336;
-}
-.mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element, .mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element {
-  background: #f44336 !important;
-}
-.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: #f44336;
-}
-.blue-snackbar {
-  background: #2196F3 !important;
-}
 base-card.bloc-type-cmd.mdl-card.mdl-shadow--2dp {
   height: auto;
 }
@@ -224,7 +179,6 @@ base-card-body.mdl-card__supporting-text {
   background-color:transparent;
 }
 .mat-select-arrow {
-  /* color: rgba(0, 0, 0, 0.54); */
   color: #666 !important;
 }
 .mat-select-value {
@@ -277,19 +231,6 @@ span.mat-option-text {
 base-card.card-oder-by-date.mdl-card.mdl-shadow--2dp{
   margin-top: 1em;
   height: auto;
-}
-
-// g.nv-controlsWrap.nvd3-svg {
-//   display: none;
-// }
-// g.nv-legendWrap.nvd3-svg {
-//   display: none;
-// }
-svg.nvd3-svg {
-  height: auto;
-}
-g.nv-x.nv-axis.nvd3-svg {
-  display: none;
 }
 
 .ui-form-components {

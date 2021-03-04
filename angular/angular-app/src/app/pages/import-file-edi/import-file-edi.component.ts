@@ -1,9 +1,9 @@
-import { Component, OnInit , ElementRef, ViewChild} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ImportFileEdiService } from './import-file-edi.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 export interface StateGroup {
   letter: string;
@@ -20,10 +20,10 @@ export const _filter = (opt: string[], value: string): string[] => {
   styleUrls: ['./import-file-edi.component.scss']
 })
 export class ImportFileEdiComponent implements OnInit {
-//   myControl = new FormControl();
-//   options: string[] = ['One', 'Two', 'Three'];
-//   filteredOptions: Observable<string[]>;
-  clicked  = false;
+  //   myControl = new FormControl();
+  //   options: string[] = ['One', 'Two', 'Three'];
+  //   filteredOptions: Observable<string[]>;
+  clicked = false;
   stateGroups: StateGroup[] = [];
   nameGroups: StateGroup[] = [{
     letter: 'A',
@@ -130,15 +130,14 @@ export class ImportFileEdiComponent implements OnInit {
     file: new FormControl('',),
     fileSource: new FormControl('')
   });
-  selectedFiles : File = null;
-//   selectedStates = [];
-  constructor(private importFileService: ImportFileEdiService, private router: Router)
-  {
+  selectedFiles: File = null;
+  //   selectedStates = [];
+  constructor(private importFileService: ImportFileEdiService, private router: Router) {
     this.dropdownRefresh();
-//     this.selectedStates = this.listItems;
+    //     this.selectedStates = this.listItems;
   }
-  public listObject : { id: string, nom_client: string }[] = [];
-  public listItems : Array<string> = [];
+  public listObject: { id: string, nom_client: string }[] = [];
+  public listItems: Array<string> = [];
   ngOnInit(): void {
     this.stateGroupOptions = this.myForm.get('stateGroup')!.valueChanges
       .pipe(
@@ -149,15 +148,14 @@ export class ImportFileEdiComponent implements OnInit {
   private _filterGroup(value: string): StateGroup[] {
     if (value) {
       return this.stateGroups
-        .map(group => ({letter: group.letter, names: _filter(group.names, value)}))
+        .map(group => ({ letter: group.letter, names: _filter(group.names, value) }))
         .filter(group => group.names.length > 0);
     }
 
     return this.stateGroups;
   }
 
-  selectFile(event)
-  {
+  selectFile(event) {
     if (event.target.files.length > 0) {
       this.selectedFiles = <File>event.target.files[0];
       this.myForm.patchValue({
@@ -166,51 +164,45 @@ export class ImportFileEdiComponent implements OnInit {
     }
 
   }
-  dropdownRefresh()
-  {
+  dropdownRefresh() {
     this.importFileService.getAllClients().subscribe(
       data => {
-          data.forEach(element => {
-              this.listItems.push(element["nom_client"]);
-              var id = element['id']; var nomClient = element['nom_client'];
-              var client = {
-                  id : id,
-                  nom_client : nomClient
-              };
-              this.listObject.push(client);
-          });
-          console.log(this.listItems);
-          for(var i=0; i<this.nameGroups.length;i++)
-          {
-            for(var j=0;j<this.listItems.length;j++)
-            {
-              if(this.listItems[j][0] === this.nameGroups[i].letter)
-              {
-                this.nameGroups[i].names.push(this.listItems[j]);
-              }
-             }
-           }
-          for(var k=0;k<this.nameGroups.length;k++)
-          {
-            if(this.nameGroups[k].names.length !==0)
-            {
-              this.stateGroups.push(this.nameGroups[k])
+        data.forEach(element => {
+          this.listItems.push(element["nom_client"]);
+          var id = element['id']; var nomClient = element['nom_client'];
+          var client = {
+            id: id,
+            nom_client: nomClient
+          };
+          this.listObject.push(client);
+        });
+        // console.log(this.listItems);
+        for (var i = 0; i < this.nameGroups.length; i++) {
+          for (var j = 0; j < this.listItems.length; j++) {
+            if (this.listItems[j][0] === this.nameGroups[i].letter) {
+              this.nameGroups[i].names.push(this.listItems[j]);
             }
           }
+        }
+        for (var k = 0; k < this.nameGroups.length; k++) {
+          if (this.nameGroups[k].names.length !== 0) {
+            this.stateGroups.push(this.nameGroups[k])
+          }
+        }
 
-//           this.filteredOptions = this.myControl.valueChanges
-//             .pipe(
-//             startWith(''),
-//             map(value => this._filter(value))
-//           );
+        //           this.filteredOptions = this.myControl.valueChanges
+        //             .pipe(
+        //             startWith(''),
+        //             map(value => this._filter(value))
+        //           );
       });
   }
-//   private _filter(value: string): string[] {
-//     const filterValue = value.toLowerCase();
-//
-//     return this.listItems.filter(option => option.toLowerCase().includes(filterValue));
-//   }
-  get f(){
+  //   private _filter(value: string): string[] {
+  //     const filterValue = value.toLowerCase();
+  //
+  //     return this.listItems.filter(option => option.toLowerCase().includes(filterValue));
+  //   }
+  get f() {
     return this.myForm.controls;
   }
 
@@ -224,16 +216,14 @@ export class ImportFileEdiComponent implements OnInit {
     }
   }
 
-  submit()
-  {
+  submit() {
     const formData = new FormData();
     formData.append('file', this.myForm.get('fileSource').value);
     var nom = this.myForm.getRawValue().stateGroup;
-    console.log(nom);
     var client = this.listObject.find(element => element.nom_client === nom);
     formData.append('client', client.id);
-    console.log(formData.get('file'));
-    console.log(formData.get('client'));
+    // console.log(formData.get('file'));
+    // console.log(formData.get('client'));
     this.importFileService.upload(formData).subscribe(
       (res) => {
         console.log("success");
@@ -247,17 +237,17 @@ export class ImportFileEdiComponent implements OnInit {
   public onInputChange(event) {
     event.target.required = true;
   }
-//   onKey(value)
-//   {
-//     this.selectedStates = this.search(value);
-//   }
-//
-//
-// search(value: string)
-//  {
-//   let filter = value.toLowerCase();
-//   return this.listItems.filter(option => option.toLowerCase().startsWith(filter));
-//  }
+  //   onKey(value)
+  //   {
+  //     this.selectedStates = this.search(value);
+  //   }
+  //
+  //
+  // search(value: string)
+  //  {
+  //   let filter = value.toLowerCase();
+  //   return this.listItems.filter(option => option.toLowerCase().startsWith(filter));
+  //  }
 
 
 }

@@ -1,4 +1,4 @@
-import { Component,HostBinding } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -19,13 +19,13 @@ export interface PeriodicElement {
   templateUrl: './list-file-edi.component.html',
   styleUrls: ['./list-file-edi.component.scss']
 })
-export class ListFileEDIComponent extends UpgradableComponent{
+export class ListFileEDIComponent extends UpgradableComponent {
   public readonly Array = Array;
   public order: any;
   public snackAction = 'Ok';
   public completeTable: any = [];
   public filterValue: any;
-  clicked  = new Array();
+  clicked = new Array();
   limit = 15;
   selection = new SelectionModel<PeriodicElement>(true, []);
   actions: any[] = [
@@ -42,47 +42,45 @@ export class ListFileEDIComponent extends UpgradableComponent{
   show = true;
   constructor(private tablesService: ListFileEdiService,
     private router: Router,
-    public dialog: MatDialog,
-    private _snackBar: MatSnackBar)
-    {
+  public dialog: MatDialog,
+  private _snackBar: MatSnackBar)
+  {
     super();
     this.completeTable = this.tablesService.advanceTableData;
-    console.log(this.completeTable)
+  }
+
+  ngOnInit() {
     this.getFiles();
-    
-    }
-    public readonly sortOrder = {
+  }
+
+  public readonly sortOrder = {
     asc: 1,
     desc: -1,
-    };
+  };
 
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
-  
-  getColor(ch)
-  {
-    //console.log(ch);
-    if (ch === 'En attente')
-    {
+
+  getColor(ch) {
+    if (ch === 'En attente') {
       return 'blue';
-    }else if (ch ==='Terminé'){
+    } else if (ch === 'Terminé') {
       return 'green';
-    }else if (ch ==='En cours'){
+    } else if (ch === 'En cours') {
       return 'orange';
-    }else{
+    } else {
       return 'red';
     }
   }
-   public currentPage = 1;
+  public currentPage = 1;
   private countPerPage = 8;
   public numPage = 0;
   public advancedTable = [];
-  public getAdvancedTablePage(page, countPerPage)
-  {
+  public getAdvancedTablePage(page, countPerPage) {
     return this.files.slice((page - 1) * countPerPage, page * countPerPage);
 
   }
-     /* available sort value:
-	-1 - desc; 	0 - no sorting; 1 - asc; null - disabled */
+  /* available sort value:
+-1 - desc; 	0 - no sorting; 1 - asc; null - disabled */
   public changeSorting(header, index) {
     const current = header.sort;
     if (current !== null) {
@@ -95,45 +93,45 @@ export class ListFileEDIComponent extends UpgradableComponent{
     }
   }
   public changeAdvanceSorting(order, index) {
-        this.files = this.sortByAttributeObject(this.files, order, index);
+    this.files = this.sortByAttributeObject(this.files, order, index);
+  }
+
+  public sortByAttributeObject(files, order, index) {
+    if (index == 1) {
+      return this.sortByDateOrder(files, order, index);
+    }
+    else if (index == 2) {
+      return this.sortByClientName(files, order, index);
+    }
+  }
+
+  private sortByDateOrder(array, order, value) {
+    const compareFunction = (a, b) => {
+      if (a.created_at.slice(0, 10) > b.created_at.slice(0, 10)) {
+        return 1 * order;
+      }
+      if (a.created_at.slice(0, 10) < b.created_at.slice(0, 10)) {
+        return -1 * order;
+      }
+      return 0;
     }
 
-    public sortByAttributeObject(files, order, index) {
-        if (index == 1) {
-            return this.sortByDateOrder(files, order, index);
-        }
-        else if (index == 2) {
-            return this.sortByClientName(files, order, index);
-        }
+    return array.sort(compareFunction);
+  }
+
+  private sortByClientName(array, order, value) {
+    const compareFunction = (a, b) => {
+      if (a.client_name > b.client_name) {
+        return 1 * order;
+      }
+      if (a.client_name < b.client_name) {
+        return -1 * order;
+      }
+      return 0;
     }
 
-    private sortByDateOrder(array, order, value) {
-        const compareFunction = (a, b) => {
-            if (a.created_at.slice(0,10) > b.created_at.slice(0,10)) {
-                return 1 * order;
-            }
-            if (a.created_at.slice(0,10) < b.created_at.slice(0,10)) {
-                return -1 * order;
-            }
-            return 0;
-        }
-
-        return array.sort(compareFunction);
-    }
-
-    private sortByClientName(array, order, value) {
-        const compareFunction = (a, b) => {
-            if (a.client_name > b.client_name) {
-                return 1 * order;
-            }
-            if (a.client_name < b.client_name) {
-                return -1 * order;
-            }
-            return 0;
-        }
-
-        return array.sort(compareFunction);
-    }
+    return array.sort(compareFunction);
+  }
 
   public changePage(page, force = false) {
     if (page !== this.currentPage || force) {
@@ -141,25 +139,7 @@ export class ListFileEDIComponent extends UpgradableComponent{
       this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
     }
   }
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.advancedTable.length;
-    return numSelected === numRows;
-  }
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.advancedTable.forEach(row => this.selection.select(row));
-  }
-   /** The label for the checkbox on the passed row */
-   checkboxLabel(row?: PeriodicElement): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-  }
+
   setFilteredItems() {
     this.advancedTable = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
@@ -172,79 +152,71 @@ export class ListFileEDIComponent extends UpgradableComponent{
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2500,
-    });
-  }
-  openSnackBarError(message: string, action: string)
-  {
-    this._snackBar.open(message, action, {
-      duration: 2500,
-      panelClass: ['mat-toolbar', 'mat-warn']
-    });
-  }
-  public getFiles ()
-  {
+
+  public getFiles() {
     this.tablesService.getAllFiles()
-      .subscribe(res => {this.files = res; 
-        console.log(this.files);
+      .subscribe(res => {
+        this.files = res;
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
-        for(var i= 0; i < this.advancedTable.length; i++)
-        {
+        for (var i = 0; i < this.advancedTable.length; i++) {
           this.clicked.push(false);
         }
       },
-          // error => this.error = "error.message");
-          // for fake data
-          error => console.log(error));
+        error => console.log(error));
   }
-  public analyserEDI(row)
-  {
+  public analyserEDI(row) {
 
     this.tablesService.executeJob(row)
-    .subscribe( res => {
+      .subscribe(res => {
         console.log("success");
         this.router.navigate(['/list-file-edi']);
-      }, error => console.log(error) );
+      }, error => console.log(error));
   }
-  public actualiser()
-  {
+  public actualiser() {
     this.advancedTable = [];
-    this.files = [] ;
+    this.show = true;
+    this.files = [];
     this.getFiles();
   }
-  public uploadFileInput(clientName, fileName)
-  {
-     fileName = fileName.substring(7)
-     fileName = decodeURI(fileName)
-    console.log(fileName)
-    console.log(clientName)
+  public uploadFileInput(clientName, fileName) {
+    fileName = fileName.substring(7)
+    fileName = decodeURI(fileName)
+
     this.tablesService.uploadFileInput(clientName, fileName)
-    .subscribe( res => {
+      .subscribe(res => {
         console.log(res);
         saveAs(res, fileName);
-      }, error => console.log(error) );
+      }, error => console.log(error));
   }
-  public decodefile(file)
-  {
-    
+  public decodefile(file) {
+
     return decodeURI(file.substring(7));
   }
-  public decodeValidatorError(file)
-  {
-    
+  public decodeValidatorError(file) {
+
     return decodeURI(file);
   }
-  public uploadFileOutput(clientName, fileName)
-  {
+  public uploadFileOutput(clientName, fileName) {
     fileName = decodeURI(fileName)
     this.tablesService.uploadFileOutput(clientName, fileName)
-    .subscribe( res => {
+      .subscribe(res => {
         console.log(res);
         saveAs(res, fileName);
-      }, error => console.log(error) );
+      }, error => console.log(error));
   }
 }
+
+  // openSnackBar(message: string, action: string) {
+  //   this._snackBar.open(message, action, {
+  //     duration: 2500,
+  //   });
+  // }
+  // openSnackBarError(message: string, action: string)
+  // {
+  //   this._snackBar.open(message, action, {
+  //     duration: 2500,
+  //     panelClass: ['mat-toolbar', 'mat-warn']
+  //   });
+  // }

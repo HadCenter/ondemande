@@ -14,20 +14,18 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSelectModule } from '@angular/material/select';
+// import { MatCheckboxModule } from '@angular/material/checkbox';
+// import { MatSelectModule } from '@angular/material/select';
 import { ClientComponent } from './client/client.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatIconModule} from '@angular/material/icon';
+// import {MatToolbarModule} from '@angular/material/toolbar';
+// import {MatIconModule} from '@angular/material/icon';
 import {MatGridListModule} from '@angular/material/grid-list';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.component';
 
 @NgModule({
-  declarations: [ListClientsComponent, ClientComponent, DialogBodyComponent, ],
+  declarations: [ListClientsComponent, ClientComponent, DialogBodyComponent ],
   imports: [
     CommonModule,
     ListClientsRoutingModule,
@@ -41,14 +39,12 @@ import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.co
     MatSnackBarModule,
     MatDialogModule,
     MatTableModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    MatToolbarModule,
-    MatIconModule,
+    // MatCheckboxModule,
+    // MatSelectModule,
+    // MatToolbarModule,
+    // MatIconModule,
     ReactiveFormsModule,
     MatGridListModule,
-    MatRadioModule,
-    MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
   ],

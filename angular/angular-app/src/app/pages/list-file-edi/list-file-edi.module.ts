@@ -10,11 +10,9 @@ import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/mat
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -30,11 +28,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatButtonToggleModule,
     MatButtonModule,
     MatInputModule,
-    MatProgressBarModule,
     MatSnackBarModule,
     MatDialogModule,
     MatTableModule,
-    MatCheckboxModule,
     MatSelectModule,
     MatTooltipModule
   ],

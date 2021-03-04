@@ -39,7 +39,6 @@ td.mdl-data-table__cell--non-numeric.task-done {
   cursor: pointer;
 }
 
-
 body {
   padding-top: 20px;
   padding-left: 20px;
@@ -145,10 +144,6 @@ span.mat-button-wrapper {
 .mdl-textfield.mdl-js-textfield.mdl-textfield--expandable.search-table.is-upgraded.is-focused input#search2 {
   border-block-end-color: #00bcd4;
 }
-// .search {
-//   padding: 0px 0 !important;
-// }
-
 .mdl-textfield.label-search {
   position: relative;
   font-size: 16px;
@@ -161,13 +156,6 @@ span.mat-button-wrapper {
 }
 
 .mdl-textfield-search{
-  // position: relative;
-  // font-size: 16px;
-  // display: inline-block;
-  // box-sizing: border-box;
-  // width: 300px;
-  // max-width: 100%;
-  // margin: 0;
   padding: 0;
 } 
 
@@ -180,11 +168,6 @@ span.mat-button-wrapper {
     max-width: 100%;
     margin: -2px;
 }
-
-
-// .mdl-textfield.search {
-//   padding:0
-// }
 .mdl-textfield__input{
   padding: 6px 0;
   font-size: 15px;
@@ -278,19 +261,6 @@ base-card.card-oder-by-date.mdl-card.mdl-shadow--2dp{
   height: auto;
 }
 
-// g.nv-controlsWrap.nvd3-svg {
-//   display: none;
-// }
-// g.nv-legendWrap.nvd3-svg {
-//   display: none;
-// }
-svg.nvd3-svg {
-  height: auto;
-}
-g.nv-x.nv-axis.nvd3-svg {
-  display: none;
-}
-
 .ui-form-components {
   form {
     .mdl-cell {
@@ -304,5 +274,9 @@ g.nv-x.nv-axis.nvd3-svg {
 }
 .mat-form-field-appearance-fill .mat-form-field-underline::before {
   background-color:rgba(255, 255, 255, 0.2)
+}
+
+.mdl-data-table__cell--non-numeric.mdl-data-table__cell--non-numeric {
+  text-align: center;
 }
 

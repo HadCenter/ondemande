@@ -16,10 +16,10 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
-  declarations: [ImportFileEdiComponent],
+  declarations: [ImportFileEdiComponent,LoaderComponent,],
   imports: [
     CommonModule,
     ImportFileEdiRoutingModule,

@@ -3,20 +3,20 @@
     .mdl-card__supporting-text {
       overflow-x: auto;
     }
-  
+
     table {
       width: 100%;
-  
+
       td {
         font-size: 1rem;
       }
     }
-  
+
     .no-padding {
       padding: 0;
       width: 100%;
     }
-  
+
     .label__availability {
       margin-right: 2px;
     }
@@ -51,7 +51,7 @@ body {
   box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
   width: 280px; }
   .mdl-dialog__title {
-    
+
     padding: 24px 24px 0;
     margin: 0;
     color: #00bcd4;
@@ -69,10 +69,10 @@ body {
             flex-wrap: wrap; }
     .mdl-dialog__actions > * {
       margin-right: 8px;
-     
+
       height: 36px; }
       .mdl-dialog__actions > *:first-child {
-       
+
         margin-right: 0; }
     .mdl-dialog__actions--full-width {
       padding: 0 0 8px 0; }
@@ -103,7 +103,7 @@ body {
 .mat-dialog-title {
   margin: 0 0 20px;
   display: block;
-  color: #00bcd4 !important;  
+  color: #00bcd4 !important;
 }
 
 .mat-dialog-actions {
@@ -138,7 +138,7 @@ span.mat-button-wrapper {
   width: 150px;
   max-width: 100%;
   margin: -2px;
- 
+
 }
 
 .mdl-textfield.mdl-js-textfield.mdl-textfield--expandable.search-table.is-upgraded.is-focused input#search2 {
@@ -157,7 +157,7 @@ span.mat-button-wrapper {
 
 .mdl-textfield-search{
   padding: 0;
-} 
+}
 
 .mdl-textfield-search.mdl-js-textfield.mdl-textfield--expandable.search-table.is-upgraded {
     position: relative;
@@ -224,7 +224,7 @@ base-card-body.mdl-card__supporting-text {
     width: 150px;
     margin-right: 0.4em !important;
     margin-top: -1.1em;
-   
+
 }
 mat-form-field.mat-form-field.ng-tns-c6-0.mat-primary.mat-form-field-type-mat-select.mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-has-label.mat-form-field-hide-placeholder._mat-animation-noopable.ng-star-inserted{
   max-height: -webkit-fill-available !important;
@@ -275,6 +275,14 @@ base-card.card-oder-by-date.mdl-card.mdl-shadow--2dp{
 .mat-form-field-appearance-fill .mat-form-field-underline::before {
   background-color:rgba(255, 255, 255, 0.2)
 }
+//
+// td.mdl-data-table__cell--non-numeric {
+//     margin: auto!important;
+//     text-align: center;
+// }
+// button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.button--colored-teal.dialog-button {
+//     vertical-align: text-top;
+// }
 
 .mdl-data-table__cell--non-numeric.mdl-data-table__cell--non-numeric {
   text-align: center;

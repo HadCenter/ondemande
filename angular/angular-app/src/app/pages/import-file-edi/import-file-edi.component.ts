@@ -24,6 +24,12 @@ export class ImportFileEdiComponent implements OnInit {
   //   options: string[] = ['One', 'Two', 'Three'];
   //   filteredOptions: Observable<string[]>;
   clicked = false;
+//   myControl = new FormControl();
+//   options: string[] = ['One', 'Two', 'Three'];
+//   filteredOptions: Observable<string[]>;
+
+  show = false;
+  clicked  = false;
   stateGroups: StateGroup[] = [];
   nameGroups: StateGroup[] = [{
     letter: 'A',
@@ -216,7 +222,10 @@ export class ImportFileEdiComponent implements OnInit {
     }
   }
 
-  submit() {
+  submit()
+  {
+
+    this.show = true;
     const formData = new FormData();
     formData.append('file', this.myForm.get('fileSource').value);
     var nom = this.myForm.getRawValue().stateGroup;
@@ -227,6 +236,7 @@ export class ImportFileEdiComponent implements OnInit {
     this.importFileService.upload(formData).subscribe(
       (res) => {
         console.log("success");
+        this.show = false;
         this.router.navigate(['/list-file-edi']);
       },
       (err) => {

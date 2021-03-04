@@ -45,10 +45,10 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
         .subscribe(res => this.router.navigate(['/list-file-edi']),
           // error => this.error = "error.message");
           // for fake data
-          error => this.error = "Email ou mot de passe incorrect");
+//           error => this.error = "Email ou mot de passe incorrect");
+          error => this.error = "Utilisateur n'est pas active");
     }
   }
-
   public onInputChange(event) {
     event.target.required = true;
   }

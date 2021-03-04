@@ -6,6 +6,36 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 
 export class UsersService {
-  private url = `${environment.apiBaseUrl}/api`;
+  private url = `${environment.apiBaseUrl}/api/auth`;
   constructor(private http: HttpClient) { }
+  public getAllUsers () : Observable<any> {
+    return this.http.get(`${this.url}/getUsers/`);
+  }
+  public getAdvancedHeaders() {
+    return [
+        {
+            name: 'Nom d\'utilisateur',
+
+        },
+        {
+            name: 'Email',
+
+        },
+        {
+            name: 'Dernière connexion',
+
+        },
+        {
+            name: 'Profile',
+
+        },
+        {
+            name: 'Status',
+
+        },
+        {
+            name : 'Actions'
+        }
+    ];
+  }
 }

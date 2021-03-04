@@ -18,7 +18,30 @@
               </button></a>
       </base-card-title>
       <base-card-body class="no-padding">
-
+        <table *ngIf="users.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+          <thead>
+            <tr>
+              <th *ngFor="let header of advancedHeaders " class="mdl-data-table__cell--non-numeric">
+                <span>{{ header.name }}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of users  | slice:0:limit; let i = index;">
+              <td class="mdl-data-table__cell--non-numeric">{{ row.username }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.last_login | date:"yyyy/MM/dd hh:ss" }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ getProfile(row.is_superadmin) }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ getStatus(row.is_active) }}</td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <button
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                routerLink="/details-user/{{ row.id }}">Modifier
+                </button>
+              </td>
+            </tr>
+          </tbody>
+      </table>
       </base-card-body>
     </base-card>
 </div>

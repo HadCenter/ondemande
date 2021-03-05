@@ -10,15 +10,10 @@ import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/mat
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-// import { MatCheckboxModule } from '@angular/material/checkbox';
-// import { MatSelectModule } from '@angular/material/select';
 import { ClientComponent } from './client/client.component';
-// import {MatToolbarModule} from '@angular/material/toolbar';
-// import {MatIconModule} from '@angular/material/icon';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatNativeDateModule } from '@angular/material/core';
 import { LoaderComponent } from '../../components/loader/loader.component';
@@ -35,14 +30,9 @@ import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.co
     MatButtonToggleModule,
     MatButtonModule,
     MatInputModule,
-    MatProgressBarModule,
     MatSnackBarModule,
     MatDialogModule,
     MatTableModule,
-    // MatCheckboxModule,
-    // MatSelectModule,
-    // MatToolbarModule,
-    // MatIconModule,
     ReactiveFormsModule,
     MatGridListModule,
     MatNativeDateModule,

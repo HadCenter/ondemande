@@ -113,22 +113,6 @@ span.mat-button-wrapper {
   color: #00bcd4;
 }
 
-.mat-progress-bar.mat-progress-bar.mat-primary._mat-animation-noopable {
-  min-width: 100px;
-  width: auto;
-}
-
-.mat-progress-bar.mat-progress-bar.mat-primary._mat-animation-noopable{
-  display: block;
-  position: relative;
-  height: 4px;
-  //width: 500px;
-  width: 84px;
-  max-width: 100%;
-}
-.mat-progress-bar {
-  width: 84px !important;
-}
 
 .mdl-textfield.mdl-js-textfield.mdl-textfield--expandable.search-table.is-upgraded{
   position: relative;
@@ -275,14 +259,6 @@ base-card.card-oder-by-date.mdl-card.mdl-shadow--2dp{
 .mat-form-field-appearance-fill .mat-form-field-underline::before {
   background-color:rgba(255, 255, 255, 0.2)
 }
-//
-// td.mdl-data-table__cell--non-numeric {
-//     margin: auto!important;
-//     text-align: center;
-// }
-// button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.button--colored-teal.dialog-button {
-//     vertical-align: text-top;
-// }
 
 .mdl-data-table__cell--non-numeric.mdl-data-table__cell--non-numeric {
   text-align: center;

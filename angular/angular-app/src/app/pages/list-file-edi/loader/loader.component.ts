@@ -11,6 +11,7 @@ export class LoaderComponent implements OnInit {
 @Input() height : string
 @Input() bg : string
 @Input() show : boolean;
+@Input() position : string;
 @ViewChild('loader') loader: ElementRef;
   constructor() { }
 

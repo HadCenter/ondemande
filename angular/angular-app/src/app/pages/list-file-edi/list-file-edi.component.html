@@ -1,5 +1,5 @@
-<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-  <app-loader [width]="'100%'" [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
+<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone" >
+  <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
   <base-card>
     <base-card-title>
       <h1 class="mdl-card__title-text">Liste des fichiers EDI</h1>
@@ -13,10 +13,10 @@
       </div>
       <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
       </base-pagination>
-      <a routerLink="/import-file-edi"><button
+      <button (click)="openDialog()"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Importer
           fichier EDI
-        </button></a>
+        </button>
       &nbsp;
       <a><button
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
@@ -63,7 +63,7 @@
             <td class="mdl-data-table__cell--non-numeric">
               <button [disabled]="clicked[i] || row.cliqued"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                (click)="analyserEDI(row); clicked[i] = true;">Analyser
+                (click)="analyserEDI(row); clicked[i] = true;">Valider
               </button>
             </td>
           </tr>

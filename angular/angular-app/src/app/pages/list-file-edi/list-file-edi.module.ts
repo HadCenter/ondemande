@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ListFileEdiRoutingModule } from './list-file-edi-routing.module';
 import { DialogImportFile, ListFileEDIComponent } from './list-file-edi.component';
 import { ListFileEdiService } from './list-file-edi.service';
 import { ThemeModule } from 'theme';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';

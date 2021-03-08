@@ -1,6 +1,5 @@
 import { Component, HostBinding, Inject } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { ListFileEdiService } from './list-file-edi.service';
@@ -45,8 +44,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   show = true;
   constructor(private tablesService: ListFileEdiService,
     private router: Router,
-    public dialog: MatDialog,
-    private _snackBar: MatSnackBar) {
+    public dialog: MatDialog) {
     super();
     this.completeTable = this.tablesService.advanceTableData;
   }

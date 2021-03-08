@@ -4,22 +4,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { CardModule } from './components/card';
-import { CheckboxComponent } from './components/checkbox';
 import { IconToggleComponent } from './components/icon-toggle';
 import { PageTopComponent } from './components/page-top';
 import { PaginationComponent } from './components/pagination';
 import { ProgressComponent } from './components/progress';
 import { SidebarModule } from './components/sidebar';
-import { SwitchComponent } from './components/switch';
-import { ToggleComponent } from './components/toggle';
 import { UpgradableComponent } from './components/upgradable';
 import { TooltipModule } from './directives/tooltip';
 import { PieChartComponent } from './components/pie-chart';
-
+import { ToggleComponent } from './components/toggle';
 const BASE_COMPONENTS = [
   PageTopComponent,
-  CheckboxComponent,
-  SwitchComponent,
   IconToggleComponent,
   ProgressComponent,
   PaginationComponent,

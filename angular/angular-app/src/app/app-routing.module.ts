@@ -8,7 +8,7 @@ import { AuthGuard } from '../app/services/auth/auth.guard';
 import { BlankLayoutComponent } from './layouts/blank-layout';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'list-file-edi', pathMatch: 'prefix' },
+  { path: '', redirectTo: 'list-file-edi', pathMatch: 'prefix' },  //make sure to NOT lazy load the initial route
   {
     path: '', component: CommonLayoutComponent, children: [
       { path: 'list-file-edi', loadChildren: () => import('./pages/list-file-edi/list-file-edi.module').then(m => m.ListFileEdiModule), canActivate: [AuthGuard] },

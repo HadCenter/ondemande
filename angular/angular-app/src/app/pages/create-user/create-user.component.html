@@ -19,18 +19,18 @@
                   </span>
                 </div>
             </div>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
-                [class.is-invalid]="password.invalid && (password.dirty || password.touched)"
-                [class.is-valid]="password.valid && (password.dirty || password.touched)" id="forRass">
-                <input formControlName="password" (change)="onInputChange($event)" class="mdl-textfield__input"
-                  type="password" id="password">
-                <label class="mdl-textfield__label" for="password">Password</label>
-                <div *ngIf="password.invalid && (password.dirty || password.touched)">
-                  <span *ngIf="password.errors.required" class="mdl-textfield__error">
-                    Mot de passe obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un mot de passe.</span>
-                  </span>
-                </div>
-              </div>
+<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size"-->
+<!--                [class.is-invalid]="password.invalid && (password.dirty || password.touched)"-->
+<!--                [class.is-valid]="password.valid && (password.dirty || password.touched)" id="forRass">-->
+<!--                <input formControlName="password" (change)="onInputChange($event)" class="mdl-textfield__input"-->
+<!--                  type="password" id="password">-->
+<!--                <label class="mdl-textfield__label" for="password">Password</label>-->
+<!--                <div *ngIf="password.invalid && (password.dirty || password.touched)">-->
+<!--                  <span *ngIf="password.errors.required" class="mdl-textfield__error">-->
+<!--                    Mot de passe obligatoire. <span class="color-text&#45;&#45;orange"> S'il vous plaît, entrez un mot de passe.</span>-->
+<!--                  </span>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
                 [class.is-invalid]="email.invalid && (email.dirty || email.touched)"
                 [class.is-valid]="email.valid && (email.dirty || email.touched)">

@@ -28,14 +28,16 @@ class RegisterSerializer(serializers.ModelSerializer):
 		user = Account.objects.create_user(
             email=validated_data["email"],
 			username=validated_data["username"],
-			password=validated_data["password"], is_superadmin = validated_data["is_superadmin"], is_admin = validated_data["is_admin"]
+			password=validated_data["password"],
+			is_superadmin = validated_data["is_superadmin"],
+			is_admin = validated_data["is_admin"]
 		)
 		return user
 
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Account
-		fields = ('id','email','username')
+		fields = ('id','email','username','is_active','is_superadmin','is_admin', 'last_login' )
 
 # class RoleSerializer(serializers.ModelSerializer):
 #     class Meta:

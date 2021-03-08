@@ -17,7 +17,34 @@ import time
 import os
 from os import listdir
 from os.path import isfile, join
+from django.core.mail import EmailMessage
+from django.core import mail
+
 # Create your views here.
+
+@api_view(['GET'])
+def testCreate(request):
+    print("ahmed")
+    email = 'ahmed.belaiba@redlean.io'
+    email_subject = 'Création de mot de passe'
+    email_body = 'Test body'
+    # email = EmailMessage(
+    #     email_subject,
+    #     email_body,
+    #     'ahmedbelaiba19952018@gmail.com',
+    #     [email],
+    # )
+    # email.send(fail_silently=False)
+    with mail.get_connection() as connection:
+        mail.EmailMessage(
+            email_subject,
+            email_body,
+            'ahmedbelaiba19952018@gmail.com',
+            [email],
+            connection=connection,
+        ).send()
+    return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
+
 @api_view([ 'PUT'])
 def archive_client(request, pk):
     try:

@@ -11,7 +11,7 @@ import { UpgradableComponent } from '../../../theme/components/upgradable';
 export class CreateUserComponent extends UpgradableComponent implements OnInit  {
   public signupForm: FormGroup;
   public email;
-  public password;
+//   public password;
   public username;
   public name;
   public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
@@ -25,7 +25,7 @@ export class CreateUserComponent extends UpgradableComponent implements OnInit  
    super();
 
     this.signupForm = this.fb.group({
-      password: new FormControl('', Validators.required),
+//       password: new FormControl('', Validators.required),
       email: new FormControl('', [
         Validators.required,
         Validators.pattern(this.emailPattern),
@@ -34,7 +34,7 @@ export class CreateUserComponent extends UpgradableComponent implements OnInit  
       name: new FormControl('', [Validators.required],),
     });
     this.email = this.signupForm.get('email');
-    this.password = this.signupForm.get('password');
+//     this.password = this.signupForm.get('password');
     this.username = this.signupForm.get('username');
     this.name = this.signupForm.get('name');
 //     this.dropdownRefresh();
@@ -53,7 +53,7 @@ export class CreateUserComponent extends UpgradableComponent implements OnInit  
     this.error = null;
     const formData = new FormData();
     formData.append('email', this.signupForm.get('email').value);
-    formData.append('password', this.signupForm.get('password').value);
+//     formData.append('password', this.signupForm.get('password').value);
     formData.append('username', this.signupForm.get('username').value);
     var name = this.signupForm.getRawValue().name;
     if (name ==='SuperAdmin')
@@ -72,8 +72,9 @@ export class CreateUserComponent extends UpgradableComponent implements OnInit  
 //     console.log(formData.get('role'));
     if (this.signupForm.valid) {
       this.createuserService.signup(formData)
-        .subscribe(res => this.router.navigate(['/users']),
-          error => this.error = "L'email est déja utilisé");
+        .subscribe(
+        res => this.router.navigate(['/users']),
+        error => {this.error = "L'email est déja utilisé"; console.log(error);});
     }
   }
 //   dropdownRefresh()

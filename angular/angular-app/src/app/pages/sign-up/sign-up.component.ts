@@ -51,8 +51,6 @@ export class SignUpComponent extends BlankLayoutCardComponent implements OnInit 
     if (this.signupForm.valid) {
       this.authService.signup(this.signupForm.getRawValue())
         .subscribe(res => this.router.navigate(['/list-file-edi']),
-          //  error => this.error = error.message);
-          // for fake data
           error => this.error = "L'email est déja utilisé");
     }
   }

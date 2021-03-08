@@ -14,7 +14,6 @@ export class LoaderComponent implements OnInit {
 @Input() position : string;
 @ViewChild('loader') loader: ElementRef;
   constructor() { }
-
   ngOnInit(): void {
   }
 

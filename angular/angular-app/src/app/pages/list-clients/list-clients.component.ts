@@ -3,7 +3,6 @@ import { Component,HostBinding, OnInit  } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
-import { ClientComponent } from './client/client.component';
 import { ListClientsService } from './list-clients.service';
 import {MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.component';
@@ -90,7 +89,6 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
   public getAdvancedTablePage(page, countPerPage)
   {
     return this.clients.slice((page - 1) * countPerPage, page * countPerPage);
-
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -131,8 +129,6 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
       .subscribe(res => {this.clients = res; this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false; console.log(this.clients);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },
-          // error => this.error = "error.message");
-          // for fake data
           error => console.log(error));
   }
    public gotoDetails(id_client) {

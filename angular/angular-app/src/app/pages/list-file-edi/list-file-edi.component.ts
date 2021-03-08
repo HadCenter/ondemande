@@ -6,10 +6,10 @@ import { UpgradableComponent } from 'theme/components/upgradable';
 import { ListFileEdiService } from './list-file-edi.service';
 import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { ImportFileEdiService } from './dialog/import-file-edi.service';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -229,6 +229,7 @@ export const _filter = (opt: string[], value: string): string[] => {
   return opt.filter(item => item.toLowerCase().indexOf(filterValue) === 0);
 };
 
+
 @Component({
   selector: 'app-import-file-edi',
   templateUrl: 'dialog/import-file-edi.component.html',
@@ -403,18 +404,9 @@ export class DialogImportFile {
           }
         }
 
-        //           this.filteredOptions = this.myControl.valueChanges
-        //             .pipe(
-        //             startWith(''),
-        //             map(value => this._filter(value))
-        //           );
       });
   }
-  //   private _filter(value: string): string[] {
-  //     const filterValue = value.toLowerCase();
-  //
-  //     return this.listItems.filter(option => option.toLowerCase().includes(filterValue));
-  //   }
+
   get f() {
     return this.myForm.controls;
   }
@@ -455,15 +447,3 @@ export class DialogImportFile {
   }
 }
 
-  // openSnackBar(message: string, action: string) {
-  //   this._snackBar.open(message, action, {
-  //     duration: 2500,
-  //   });
-  // }
-  // openSnackBarError(message: string, action: string)
-  // {
-  //   this._snackBar.open(message, action, {
-  //     duration: 2500,
-  //     panelClass: ['mat-toolbar', 'mat-warn']
-  //   });
-  // }

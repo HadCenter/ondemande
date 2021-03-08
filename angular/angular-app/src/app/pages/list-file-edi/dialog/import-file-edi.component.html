@@ -1,125 +1,38 @@
 <div class="dialog-content">
-  <app-loader [position]="'absolute'" [width]="'296px'" [height]="'296px'" [bg]="'transparant'"   [show]="showloader"></app-loader>
-    <base-card class="card-dialog">
-      <base-card-title>
-        <h1 class="mdl-card__title-text">Importer fichier EDI</h1>
-      </base-card-title>
-      <base-card-body class="no-padding" >
-        <app-loader [width]="'100%'" [height]="'500px'" [bg]="'transparant'" [show] ="show"></app-loader>
-        <form [formGroup]="myForm"  autocomplete="off" >
-          <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone" >
-             <div class = "espace">
-             <mat-form-field [ngStyle]="{'width.px': width}">
-                <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.name}}</mat-label>
-                <ng-template #newFile>
-                 <mat-label >Choisir un fichier EDI</mat-label>
-                </ng-template>
-                <input  matInput disabled>
-                <button mat-icon-button matSuffix (click)="fileInput.click()" type='button'>
-                  <mat-icon>attach_file</mat-icon>
-                </button>
-                <input hidden accept=".xlsx" (change)="selectFile($event)" #fileInput type="file" id="file" >
-             </mat-form-field>
-            </div>
-
-<!--              <ngx-mat-select-search [(ngModel)]="searchCtrl" [placeholderLabel]="'Search...'"-->
-<!--                      [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search>-->
-
-<!--                <mat-option >-->
-<!--                    <ngx-mat-select-search ngModel (ngModelChange)="filterMyOptions($event)"-->
-<!--                       placeholderLabel="Rechercher..."-->
-<!--                       noEntriesFoundLabel="'no matching bank found'">-->
-<!--                      <mat-icon ngxMatSelectSearchClear>delete</mat-icon>-->
-<!--                    </ngx-mat-select-search>-->
-<!--                </mat-option>-->
-
-<!--              <input type="text"-->
-<!--                  placeholder="Pick one"-->
-<!--                  aria-label="Nom client" matInput [formControl]="myControl"-->
-<!--                  [matAutocomplete]="auto">-->
-<!--              -->
-<!--              <mat-autocomplete #auto="matAutocomplete">-->
-<!--                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">-->
-<!--                  {{option}}-->
-<!--                </mat-option>-->
-<!--              </mat-autocomplete>-->
-            <div >
-              <mat-form-field>
-                <mat-label>Nom client</mat-label>
-                <input type="text"
-                    matInput
-                    formControlName="stateGroup"
-                    required
-                    [matAutocomplete]="autoGroup">
-                <mat-autocomplete #autoGroup="matAutocomplete">
-                  <mat-optgroup *ngFor="let group of stateGroupOptions | async" [label]="group.letter">
-                    <mat-option *ngFor="let name of group.names" [value]="name">
-                      {{name}}
-                    </mat-option>
-                  </mat-optgroup>
-                </mat-autocomplete>
-              </mat-form-field>
-            </div>
-<!--            <mat-form-field appearance="fill">-->
-<!--              <mat-label>Nom client</mat-label>-->
-<!--              <mat-select formControlName="name" >-->
-<!--                <mat-option *ngFor = "let dl of listItems"[value]="dl">-->
-<!--                  {{dl}}-->
-<!--                </mat-option>-->
-<!--              </mat-select>-->
-<!--            </mat-form-field>-->
-
-<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size" >-->
-<!--              <input formControlName="file"  class="mdl-textfield__input" type="file" class="form-control"-->
-<!--            (change)="onFileChange($event)">-->
-<!--            </div>-->
-
-            <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
-
+  <app-loader [position]="'absolute'" [width]="'296px'" [height]="'296px'" [bg]="'transparant'" [show]="showloader">
+  </app-loader>
+  <base-card class="card-dialog">
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Importer fichier EDI</h1>
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <app-loader [width]="'100%'" [height]="'500px'" [bg]="'transparant'" [show]="show"></app-loader>
+      <form [formGroup]="myForm" autocomplete="off">
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
+          <div class="espace">
+            <mat-form-field [ngStyle]="{'width.px': width}">
+              <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.name}}</mat-label>
+              <ng-template #newFile>
+                <mat-label>Choisir un fichier EDI</mat-label>
+              </ng-template>
+              <input matInput disabled>
+              <button mat-icon-button matSuffix (click)="fileInput.click()" type='button'>
+                <mat-icon>attach_file</mat-icon>
+              </button>
+              <input hidden accept=".xlsx" (change)="selectFile($event)" #fileInput type="file" id="file">
+            </mat-form-field>
           </div>
-          <!-- <div mat-dialog-actions>
-            <button mat-button (click)="onNoClick()">No Thanks</button>
-            <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
-          </div> -->
-          <div mat-dialog-actions class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone submit-cell mdl-grid center-items" >
-            <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit" [disabled]="myForm.invalid || clicked" (click)="submit();clicked = true;">Importer</button>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Nom client</mat-label>
+              <input type="text" matInput formControlName="stateGroup" required [matAutocomplete]="autoGroup">
+              <mat-autocomplete #autoGroup="matAutocomplete">
+                <mat-optgroup *ngFor="let group of stateGroupOptions | async" [label]="group.letter">
+                  <mat-option *ngFor="let name of group.names" [value]="name">
+                    {{name}}
+                  </mat-option>
+                </mat-optgroup>
+              </mat-autocomplete>
+            </mat-form-field>
           </div>
-        </form>
-      </base-card-body>
-    </base-card>
-
-</div>
-
-<!--<h1>Angular File Upload Tutorial Example - ItSolutionStuff.com</h1>
-
-<form [formGroup]="myForm" (ngSubmit)="submit()">
-
-    <div class="form-group">
-        <label for="name">Name</label>
-        <select required formControlName="name" id="name" type="text" class="form-control" >
-          <option *ngFor = "let dl of listItems"[value]="dl">
-            {{dl}}
-          </option>
-        </select>
-
-        <div *ngIf="f.name.touched && f.name.invalid" class="alert alert-danger">
-            <div *ngIf="f.name.errors.required">Name is required.</div>
-            <div *ngIf="f.name.errors.minlength">Name should be 3 character.</div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="file">File</label>
-        <input
-            formControlName="file"
-            id="file"
-            type="file"
-            class="form-control"
-            (change)="onFileChange($event)">
-        <div *ngIf="f.file.touched && f.file.invalid" class="alert alert-danger">
-            <div *ngIf="f.file.errors.required">File is required.</div>
-        </div>
-    </div>
-
-    <button class="btn btn-primary" type="submit">Submit</button>
-</form>-->

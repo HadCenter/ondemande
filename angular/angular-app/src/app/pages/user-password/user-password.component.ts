@@ -27,23 +27,29 @@ export class UserPasswordComponent extends BlankLayoutCardComponent implements O
     this.password1 = this.loginForm.get('password1');
     this.password2 = this.loginForm.get('password2');
     }
-
   ngOnInit(): void {
     this.loginForm.valueChanges.subscribe(() => {
       this.error = null;
     });
   }
-
   public onInputChange(event)
   {
     event.target.required = true;
   }
-
   public login()
   {
     const routeParams = this.route.snapshot.paramMap;
     this.id = Number(routeParams.get('id'));
+    this.password1 = this.loginForm.getRawValue()['password1'];
+    this.password2 = this.loginForm.getRawValue()['password2'];
     console.log(this.loginForm.getRawValue());
-    console.log(this.id);
+    var data = this.loginForm.getRawValue();
+    data['id']= this.id;
+    console.log(data);
+    if (this.loginForm.valid) {
+      this.userPasswordService.login(data)
+        .subscribe(res => this.router.navigate(['/login']),
+          error => this.error = "Les mots de passe ne correspondent pas");
+    }
   }
 }

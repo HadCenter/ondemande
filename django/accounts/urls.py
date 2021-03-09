@@ -14,5 +14,5 @@ urlpatterns = [
 	path("getUsers/",views.userList, name = "user-list"),
 	url(r'^getUser/(?P<pk>[0-9]+)$', views.user_detail),
 	url(r'^updateUser/(?P<pk>[0-9]+)$', views.user_detail),
-
+	url("updatePasswordUser/", views.update_user_password),
 ]

@@ -1,8 +1,10 @@
 from .models import Account
 # from .models import Profile
 from django.contrib.auth import authenticate
-from rest_framework import serializers
+
 from rest_framework.fields import ReadOnlyField
+from rest_framework import serializers
+
 
 
 class LoginSerializer(serializers.Serializer):
@@ -43,3 +45,5 @@ class UserSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Profile
 #         fields = '__all__'
+
+

@@ -5,23 +5,23 @@ export class PieChartService {
   public getDaySchedule() {
     return [
       {
-        key: 'Nourriture',
+        key: 'ahmed',
         nbr: 9,
       },
       {
-        key: 'Électronique',
+        key: 'amine',
         nbr: 3,
       },
       {
-        key: 'Vêtements',
+        key: 'aya',
         nbr: 3,
       },
       {
-        key: 'Meuble',
+        key: 'zied',
         nbr: 3,
       },
       {
-        key: 'Matériel sportif',
+        key: 'Ilhem',
         nbr: 6,
       },
     ];

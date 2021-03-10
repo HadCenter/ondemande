@@ -50,7 +50,7 @@ class RegisterAPI(generics.GenericAPIView):
 			request=request).domain
 		relativeLink = reverse(
 			'password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
-		absurl = f'http://localhost:4200/#/user-password/{uidb64}/{token}/'
+		absurl = f'http://{current_site}/#/user-password/{uidb64}/{token}/'
 		email_body = 'Hello, \n Use link below to create your password  \n' + \
 					 absurl
 		# data = {'email_body': email_body, 'to_email': user.email,

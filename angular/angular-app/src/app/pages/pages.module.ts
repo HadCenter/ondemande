@@ -6,6 +6,7 @@ import { ErrorComponent } from './error';
 import { ForgotPasswordComponent } from './forgot-password';
 import { LoginComponent } from './login';
 import { PagesRoutingModule } from './pages-routing.module';
+// import { ProfilComponent } from './profil/profil.component';
 //import { SignUpComponent } from './sign-up';
 
 @NgModule({
@@ -21,6 +22,7 @@ import { PagesRoutingModule } from './pages-routing.module';
     LoginComponent,
    // SignUpComponent,
     ForgotPasswordComponent,
+  //  ProfilComponent,
 
 
   ],

@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="card-content">
+        <div *ngIf="user" class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--12-col-phone"
+            style='text-align: center;'>
+            <!-- <base-card class="bloc-type-cmd">
+            <base-card-body> -->
+            <div class='profil-picture-bloc'>
+                <img src="../../../assets/images/user-profile.png" style="width:150px;height:150px;">
+                <span class="user-name">{{user.username}}</span>
+            </div>
+            <!-- </base-card-body>
+        </base-card> -->
+        </div>
+        <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+            <base-card class="bloc-type-cmd">
+                <!-- <base-card-title>
+                    <h2 class="mdl-card__title-text">Profil Information</h2>
+                </base-card-title> -->
+                <base-card-body>
+                    <div class="user-information mdl-grid">
+                        <div class="mdl-cell mdl-cell--9-col input-group">
+                            <i class="material-icons pull-left">mail_outline</i>
+
+                            <div class="mdl-textfield mdl-js-textfield pull-left">
+                                <label class="mdl-textfield__input">{{user.email}}</label>
+
+                            </div>
+                        </div>
+                    </div>
+                </base-card-body>
+            </base-card>
+
+        </div>
+    </div>
+</div>

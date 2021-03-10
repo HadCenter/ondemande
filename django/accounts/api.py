@@ -13,6 +13,8 @@ from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnico
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+from datetime import datetime
+
 import jwt
 from django.conf import settings
 class LoginAPI(generics.GenericAPIView):
@@ -43,6 +45,8 @@ class RegisterAPI(generics.GenericAPIView):
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		user = serializer.save()
+		now = datetime.now()  # current date and time
+		date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
 		# uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
 		uidb64 = user.id
 		token = PasswordResetTokenGenerator().make_token(user)
@@ -50,9 +54,13 @@ class RegisterAPI(generics.GenericAPIView):
 			request=request).domain
 		relativeLink = reverse(
 			'password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
-		absurl = f'http://{current_site}/#/user-password/{uidb64}/{token}/'
-		email_body = 'Hello, \n Use link below to create your password  \n' + \
-					 absurl
+		absurl = f'http://52.47.208.8/#/user-password/{uidb64}/{token}/'
+		email_body = f'Bonjour,\n\nVotre compte onDemand a été créé le {date_time}.\n\n' \
+					 'Afin de confirmer la création de votre compte, nous vous invitons à cliquer sur ' + \
+					 absurl + '.\n\n'+\
+					 'Nous vous rappelons que votre identifiant correspond à votre adresse email.\n\n' + \
+					 'Cordialement.\n\n' \
+					 'L\'équipe Ecolotrans.'
 		# data = {'email_body': email_body, 'to_email': user.email,
 		# 		'email_subject': 'Reset your passsword'}
 		email = request.data['email']

@@ -11,6 +11,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['../../components/blank-layout-card/blank-layout-card.component.scss']
 })
 export class UserPasswordComponent extends BlankLayoutCardComponent implements OnInit {
+  public tokenStatus = '';
+  public token = '';
   public loginForm: FormGroup;
   public id;
   public password1;
@@ -31,6 +33,21 @@ export class UserPasswordComponent extends BlankLayoutCardComponent implements O
     this.loginForm.valueChanges.subscribe(() => {
       this.error = null;
     });
+    this.getTokenStatus();
+  }
+  public getTokenStatus()
+  {
+    const routeParams = this.route.snapshot.paramMap;
+    this.token = routeParams.get('token');
+    var id = routeParams.get('id');
+    console.log(this.token);
+    var data = {};
+    data['token'] = this.token;
+    data['id'] = id;
+    console.log(data);
+    this.userPasswordService.getTokenStatus(data)
+        .subscribe(res => this.tokenStatus = 'valide',
+          error => this.tokenStatus = 'nonvalide');
   }
   public onInputChange(event)
   {
@@ -39,7 +56,8 @@ export class UserPasswordComponent extends BlankLayoutCardComponent implements O
   public login()
   {
     const routeParams = this.route.snapshot.paramMap;
-    this.id = Number(routeParams.get('id'));
+//     this.id = Number(routeParams.get('id'));
+    this.id = routeParams.get('id');
     this.password1 = this.loginForm.getRawValue()['password1'];
     this.password2 = this.loginForm.getRawValue()['password2'];
     console.log(this.loginForm.getRawValue());

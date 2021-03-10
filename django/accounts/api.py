@@ -8,7 +8,13 @@ from rest_framework import status
 import secrets
 import string
 from django.core.mail import EmailMessage
-
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+import jwt
+from django.conf import settings
 class LoginAPI(generics.GenericAPIView):
 	serializer_class = LoginSerializer
 	def post(self, request, *args, **kwargs):
@@ -30,20 +36,28 @@ class RegisterAPI(generics.GenericAPIView):
 	def post(self, request, *args, **kwargs):
 		password = ''.join(
 			(secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(8)))
-		# remember old state
 		_mutable = request.data._mutable
-		# set to mutable
 		request.data._mutable = True
-		# сhange the values you want
 		request.data['password'] = password
-		# set mutable flag back
 		request.data._mutable = _mutable
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		user = serializer.save()
+		# uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
+		uidb64 = user.id
+		token = PasswordResetTokenGenerator().make_token(user)
+		current_site = get_current_site(
+			request=request).domain
+		relativeLink = reverse(
+			'password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
+		absurl = f'http://localhost:4200/#/user-password/{uidb64}/{token}/'
+		email_body = 'Hello, \n Use link below to create your password  \n' + \
+					 absurl
+		# data = {'email_body': email_body, 'to_email': user.email,
+		# 		'email_subject': 'Reset your passsword'}
 		email = request.data['email']
 		email_subject = 'Création de mot de passe'
-		email_body = 'Test body'
+		# email_body = 'Test body'
 		email = EmailMessage(
 			email_subject,
 			email_body,

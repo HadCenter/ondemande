@@ -3,7 +3,7 @@ from django.urls import path
 from knox import views as  knox_views
 from . import views
 from django.conf.urls import url
-
+from .views import PasswordTokenCheckAPI
 
 urlpatterns = [
 	path("login/", LoginAPI.as_view()),
@@ -15,4 +15,7 @@ urlpatterns = [
 	url(r'^getUser/(?P<pk>[0-9]+)$', views.user_detail),
 	url(r'^updateUser/(?P<pk>[0-9]+)$', views.user_detail),
 	url("updatePasswordUser/", views.update_user_password),
+	path('password-reset/<uidb64>/<token>/', PasswordTokenCheckAPI.as_view(), name='password-reset-confirm'),
+	url("getTokenStatus/", views.token_status),
+
 ]

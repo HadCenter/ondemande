@@ -12,9 +12,11 @@ from django.utils.translation import gettext_lazy as _
 #         return self.label
 
 class Account(AbstractBaseUser, PermissionsMixin):
-    email =  models.EmailField(_('email address'), unique=True)
-    username = models.CharField(_('username'), unique=True, max_length=30)
-    is_active = models.BooleanField(default=True)
+    # email =  models.EmailField(_('email address'), unique=True)
+    # username = models.CharField(_('username'), unique=True, max_length=30)
+    email = models.EmailField(_('email address'), unique=True)
+    username = models.CharField(_('username'), max_length=255)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)

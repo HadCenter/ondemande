@@ -19,6 +19,10 @@ const routes: Routes = [
       { path: 'users', loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule), canActivate: [AuthGuard] },
       { path: 'list-file-delivery', loadChildren: () => import('./pages/list-file-delivery/list-file-delivery.module').then(m => m.ListFileDeliveryModule), canActivate: [AuthGuard] },
       { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule), canActivate: [AuthGuard] },
+      { path: 'create-user', loadChildren: () => import('./pages/create-user/create-user.module').then(m => m.CreateUserModule), canActivate: [AuthGuard] },
+      { path: 'details-user/:id', loadChildren: () => import('./pages/details-user/details-user.module').then(m => m.DetailsUserModule), canActivate: [AuthGuard] },
+      /*{ path: 'list-orders', loadChildren: () => import('./pages/list-orders/list-orders.module').then(m => m.ListOrdersModule), canActivate: [AuthGuard] },
+      /*{ path: 'details-order/:id', loadChildren: () => import('./pages/details-order/details-order.module').then(m => m.DetailsOrderModule), canActivate: [AuthGuard] },*/
     ],
   },
   {
@@ -28,6 +32,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule) },
   // { path: 'sign-up', loadChildren: () => import('./pages/sign-up/sign-up.module').then(m => m.SignUpModule) },
   { path: 'forgot-password', loadChildren: () => import('./pages/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule) },
+    { path: 'user-password/:id/:token', loadChildren: () => import('./pages/user-password/user-password.module').then(m => m.UserPasswordModule) },
     ],
   },
 ];

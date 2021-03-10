@@ -37,7 +37,6 @@ export class AuthService {
           return this.user;
         }));
   }
-
   public logout() {
     return this.http.get(`${this.url}/logout`)
       .pipe(map((data) => {
@@ -47,8 +46,7 @@ export class AuthService {
         return of(false);
       }));
   }
-
-  public signup(data) {
+  public signup(data) : Observable<any> {
     return this.http.post(`${this.url}/register/`, data)
       .pipe(
         map((res: { user: any, token: string }) => {
@@ -61,7 +59,6 @@ export class AuthService {
           return this.user;
         }));
   }
-
   public get authToken(): string {
     return localStorage.getItem(tokenName);
   }
@@ -76,7 +73,6 @@ export class AuthService {
     // it's fake and using only for example
     if (localStorage.getItem('currentUser')) {
       this.user = JSON.parse(localStorage.getItem('currentUser'));
-
     }
     return of(this.user);
   }

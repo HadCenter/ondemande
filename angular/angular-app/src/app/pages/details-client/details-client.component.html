@@ -1,46 +1,4 @@
-<!--<div *ngIf="currentClient.id" class="edit-form">-->
-<!--    <h4>Mettre à jour votre client</h4>-->
-<!--    <form>-->
-<!--      <div class="form-group">-->
-<!--        <label for="code">Code client</label>-->
-<!--        <input-->
-<!--          type="text"-->
-<!--          class="form-control"-->
-<!--          id="code"-->
-<!--          [(ngModel)]="currentClient.code_client"-->
-<!--          name="code"-->
-<!--        />-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <label for="nomclient">Nom client</label>-->
-<!--        <input-->
-<!--          type="text"-->
-<!--          class="form-control"-->
-<!--          id="nomclient"-->
-<!--          [(ngModel)]="currentClient.nom_client"-->
-<!--          name="nomclient"-->
-<!--        />-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <label for="email">Email</label>-->
-<!--        <input-->
-<!--          type="email"-->
-<!--          class="form-control"-->
-<!--          id="email"-->
-<!--          [(ngModel)]="currentClient.email"-->
-<!--          name="email"-->
-<!--        />-->
-<!--      </div>-->
-<!--    </form>-->
-<!--    <button-->
-<!--      type="submit"-->
-<!--      class="badge badge-success mb-2"-->
-<!--      (click)="updateClient()">-->
 
-<!--      Update-->
-<!--    </button>-->
-<!--    <p>{{ message }}</p>-->
-<!--  </div>-->
   <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--3-col-phone content" *ngIf="currentClient.id">
   <base-card>
       <base-card-title>
@@ -96,61 +54,6 @@
           </div>
         </form>
 
-<!--        <form   autocomplete="off" novalidate >-->
-<!--          <div class="mdl-cell mdl-cell&#45;&#45;12-col mdl-cell&#45;&#45;6-col-phone" >-->
-<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size" >-->
-<!--              <label  for="code" style="color:gray; font: 13px Arial, sans-serif;"  >Code client *</label>-->
-<!--              <br>-->
-<!--              <input  disabled="disabled" (change)="onInputChange($event)" name="code" [(ngModel)]="currentClient.code_client" class="form-control" class="mdl-textfield__input" type="text" id="code">-->
-
-<!--            </div>-->
-<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size"  >-->
-<!--              <label style="color:gray; font: 13px Arial, sans-serif;" for="nomclient"  >Nom client *</label>-->
-<!--              <br>-->
-<!--              <input (change)="onInputChange($event)" name="nomclient" [(ngModel)]="currentClient.nom_client" class="form-control" class="mdl-textfield__input" type="text" id="nomclient">-->
-
-<!--            </div>-->
-<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size"  >-->
-<!--              <label style="color:gray; font: 13px Arial, sans-serif;" for="email" >Email *</label>-->
-<!--              <br>-->
-<!--              <input   (change)="onInputChange($event)" name="email" [(ngModel)]="currentClient.email" class="form-control" class="mdl-textfield__input" type="email" id="email">-->
-
-<!--            </div>-->
-<!--            <div class="full-size color-text&#45;&#45;red" *ngIf="error"> {{ error }}</div>-->
-<!--          </div>-->
-<!--          <div class="mdl-cell mdl-cell&#45;&#45;12-col mdl-cell&#45;&#45;4-col-phone submit-cell mdl-grid center-items">-->
-<!--            <button (click)="updateClient()" class="mdl-button mdl-js-button mdl-button&#45;&#45;raised color&#45;&#45;light-blue" type="submit">Modifier</button>-->
-<!--          </div>-->
-<!--        </form>-->
       </base-card-body>
     </base-card>
 </div>
-<!--  <div *ngIf="currentClient.id" class="mdl-cell mdl-cell&#45;&#45;5-col-desktop mdl-cell&#45;&#45;5-col-tablet mdl-cell&#45;&#45;3-col-phone content">-->
-<!--  <base-card>-->
-<!--      <base-card-title>-->
-<!--        <h1 class="mdl-card__title-text">Mettre à jour votre client</h1>-->
-<!--      </base-card-title>-->
-
-<!--      <base-card-body class="no-padding">-->
-<!--        <form  autocomplete="off" novalidate >-->
-<!--          <div class="mdl-cell mdl-cell&#45;&#45;12-col mdl-cell&#45;&#45;6-col-phone">-->
-<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size">-->
-<!--              <input  [(ngModel)]="currentClient.code_client" formControlName="code" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="code">-->
-<!--              <label for="code" class="mdl-textfield__label" >Code client</label>-->
-<!--            </div>-->
-<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size" >-->
-<!--              <input [(ngModel)]="currentClient.nom_client" formControlName="nomclient" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="nomclient">-->
-<!--              <label for="nomclient" class="mdl-textfield__label" >Nom client</label>-->
-<!--            </div>-->
-<!--            <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label full-size">-->
-<!--              <input  [(ngModel)]="currentClient.email" formControlName="email" (change)="onInputChange($event)" class="mdl-textfield__input" type="text" id="email">-->
-<!--              <label for="email" class="mdl-textfield__label" >Email</label>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="mdl-cell mdl-cell&#45;&#45;12-col mdl-cell&#45;&#45;4-col-phone submit-cell mdl-grid center-items">-->
-<!--            <button (click)="updateClient()" class="mdl-button mdl-js-button mdl-button&#45;&#45;raised color&#45;&#45;light-blue" type="submit">Ajouter</button>-->
-<!--          </div>-->
-<!--        </form>-->
-<!--      </base-card-body>-->
-<!--    </base-card>-->
-<!--</div>-->

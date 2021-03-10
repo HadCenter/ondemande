@@ -7,7 +7,6 @@ import { ForgotPasswordComponent } from './forgot-password';
 import { LoginComponent } from './login';
 import { PagesRoutingModule } from './pages-routing.module';
 //import { SignUpComponent } from './sign-up';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -21,8 +20,6 @@ import { PagesRoutingModule } from './pages-routing.module';
     LoginComponent,
    // SignUpComponent,
     ForgotPasswordComponent,
-
-
   ],
 })
 export class PagesModule { }

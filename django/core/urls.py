@@ -3,6 +3,7 @@ from . import views
 from .views import fileCreate, uploadfileNameAPIView, uploadfileoutputNameAPIView
 from django.conf.urls import url
 urlpatterns = [
+    path("test/", views.testCreate, name = "test-create" ),
     path("client/", views.clientCreate, name = "client-create" ),
 	path("getClients/",views.clientList, name = "client-list"),
     path('file/', fileCreate.as_view(), name='file-create'),

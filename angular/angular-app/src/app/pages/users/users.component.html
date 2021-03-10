@@ -1,1 +1,47 @@
-<p>En cours de développement</p>
+<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <base-card>
+      <base-card-title>
+        <h1 class="mdl-card__title-text">Liste des utilisateurs</h1>
+        <div class="mdl-layout-spacer"></div>
+        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+          <div class="mdl-textfield label-search " >
+            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+              [(ngModel)]="filterValue" placeholder="Rechercher" />
+            <label class="mdl-textfield__label" for="search2" ></label>
+          </div>
+        </div>
+        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+        </base-pagination>
+        <a routerLink="/create-user"><button
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+                >Ajouter utilisateur
+              </button></a>
+      </base-card-title>
+      <base-card-body class="no-padding">
+        <table *ngIf="users.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+          <thead>
+            <tr>
+              <th *ngFor="let header of advancedHeaders " class="mdl-data-table__cell--non-numeric">
+                <span>{{ header.name }}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of users  | slice:0:limit; let i = index;">
+              <td class="mdl-data-table__cell--non-numeric">{{ row.username }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.last_login | date:"yyyy/MM/dd" }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ getProfile(row.is_superadmin) }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ getStatus(row.is_active) }}</td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <button
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                routerLink="/details-user/{{ row.id }}">Modifier
+                </button>
+              </td>
+            </tr>
+          </tbody>
+      </table>
+      </base-card-body>
+    </base-card>
+</div>

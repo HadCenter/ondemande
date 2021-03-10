@@ -10,7 +10,6 @@ import { PaginationComponent } from './components/pagination';
 import { ProgressComponent } from './components/progress';
 import { SidebarModule } from './components/sidebar';
 import { UpgradableComponent } from './components/upgradable';
-import { TooltipModule } from './directives/tooltip';
 import { PieChartComponent } from './components/pie-chart';
 import { ToggleComponent } from './components/toggle';
 const BASE_COMPONENTS = [
@@ -46,7 +45,6 @@ const BASE_PIPES = [];
     ...BASE_COMPONENTS,
     SidebarModule,
     CardModule,
-    TooltipModule,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,

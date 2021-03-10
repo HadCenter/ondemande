@@ -1,0 +1,63 @@
+body {
+    padding-top: 20px;
+    padding-left: 20px;
+    box-sizing: border-box;
+  }
+  .profil-picture-bloc{
+    display: inline-grid;
+    margin: 20px;
+  }
+  .user-name{
+    text-align: center;
+    color: white;
+    font-size: x-large;
+    padding-top: 20px;
+  }
+  .container{
+    /* height: 100%;
+    display: grid; */
+    padding: 0;
+    width: 670px;
+    background-color: #444;
+    margin: 16px auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .card-content{
+    display: inherit;
+    margin: auto;
+  }
+  label {
+    font-size: 15px;
+  
+  }
+
+  .input-group>i {
+    margin-right: 15px;
+    margin-top: 8px;
+    margin-left: 5px;
+    font-size: 20px;
+}
+
+label.mdl-textfield__input {
+  border-bottom: 0px;
+}
+.pull-left{
+  padding-top: 0;
+}
+
+.mdl-shadow--2dp{
+  /* box-shadow: 0; */
+  box-shadow: transparent !important;
+}
+
+.mdl-card{
+  box-shadow: none;
+}
+.user-information{
+  display: grid;
+  justify-content: space-around;
+}

@@ -99,10 +99,10 @@ DATABASES = {
     'default': {
        'ENGINE': 'django.db.backends.mysql',
        'NAME': 'ondemand',
-        'USER': 'root',
-        'PASSWORD': 'Terminus0000',
-        'HOST': 'localhost',
-        # 'HOST': '52.47.208.8',
+        'USER': 'ondemand',
+        'PASSWORD': 'ondemand',
+        # 'HOST': 'localhost',
+        'HOST': '172.17.0.1',
        'PORT': '3306',
     }
     ,

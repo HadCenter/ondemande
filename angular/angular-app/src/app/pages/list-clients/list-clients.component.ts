@@ -1,12 +1,14 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component,HostBinding, OnInit  } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { ListClientsService } from './list-clients.service';
-import {MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.component';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
+import { CreateClientService } from './dialog/create-client.service';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -19,7 +21,7 @@ export interface PeriodicElement {
   templateUrl: './list-clients.component.html',
   styleUrls: ['./list-clients.component.scss']
 })
-export class ListClientsComponent extends UpgradableComponent implements  OnInit {
+export class ListClientsComponent extends UpgradableComponent implements OnInit {
   public readonly Array = Array;
   public order: any;
   public snackAction = 'Ok';
@@ -36,21 +38,36 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   clients = [];
   show = true;
-    public constructor(private tablesService: ListClientsService,
+  public constructor(private tablesService: ListClientsService,
     private router: Router,
     private _snackBar: MatSnackBar, private matDialog: MatDialog) {
     super();
   }
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.getClients();
   }
   public changePage(page, force = false) {
     if (page !== this.currentPage || force) {
       this.currentPage = page;
       this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
-      console.log(this.advancedTable)
     }
+  }
+
+  openAddClient() {
+    const dialogRef = this.matDialog.open(DialogCreateClient);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) {
+        this.actualiser();
+      }
+
+    });
+  }
+
+  public actualiser() {
+    this.advancedTable = [];
+    this.show = true;
+    this.clients = [];
+    this.getClients();
   }
 
   openDialog(client) {
@@ -61,33 +78,29 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
     };
     let dialogRef = this.matDialog.open(DialogBodyComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(value => {
-        if (value != undefined)
-        {
+      if (value != undefined) {
 
-          this.tablesService.archiveClient(value.data.id, value.data).subscribe(
-                res =>
-                  {
-                    this.openSnackBar("Client archivé avec succés", this.snackAction)
-                    this.getClients();
-                  },
-                error => console.log(error));
-        }
+        this.tablesService.archiveClient(value.data.id, value.data).subscribe(
+          res => {
+            this.openSnackBar("Client archivé avec succés", this.snackAction)
+            this.getClients();
+          },
+          error => console.log(error));
+      }
     });
   }
-  openSnackBar(message: string, action: string)
-      {
-        this._snackBar.open(message, action, {
-        duration: 2500,
-        verticalPosition: 'top'
-      });
-      }
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2500,
+      verticalPosition: 'top'
+    });
+  }
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   public currentPage = 1;
   private countPerPage = 8;
   public numPage = 0;
   public advancedTable = [];
-  public getAdvancedTablePage(page, countPerPage)
-  {
+  public getAdvancedTablePage(page, countPerPage) {
     return this.clients.slice((page - 1) * countPerPage, page * countPerPage);
   }
 
@@ -104,8 +117,8 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
       this.selection.clear() :
       this.advancedTable.forEach(row => this.selection.select(row));
   }
-   /** The label for the checkbox on the passed row */
-   checkboxLabel(row?: PeriodicElement): string {
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: PeriodicElement): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
@@ -123,16 +136,87 @@ export class ListClientsComponent extends UpgradableComponent implements  OnInit
     });
   }
 
-  public getClients ()
-  {
+  public getClients() {
     this.tablesService.getAllClients()
-      .subscribe(res => {this.clients = res; this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false; console.log(this.clients);
+      .subscribe(res => {
+        this.clients = res; this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false; console.log(this.clients);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },
-          error => console.log(error));
+        error => console.log(error));
   }
-   public gotoDetails(id_client) {
+  public gotoDetails(id_client) {
     this.router.navigate(['/details-client', id_client]);
   }
+
+}
+
+@Component({
+  //selector: 'app-create-client',
+  templateUrl: 'dialog/create-client.component.html',
+  styleUrls: ['dialog/create-client.component.scss']
+})
+export class DialogCreateClient extends UpgradableComponent {
+  public loginForm: FormGroup;
+  public code;
+  public nom;
+  public email;
+  public password;
+  public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
+  public codePattern = '^C[0-9]{3}$';
+  public nomPattern = '[^a-z]+';
+  public error: string;
+  showloader = false;
+
+  constructor(private authService: CreateClientService,
+    public dialogRef: MatDialogRef<DialogCreateClient>,
+    private fb: FormBuilder,
+    private router: Router) {
+    super();
+    this.loginForm = this.fb.group({
+      code: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.codePattern),
+      ]),
+      nom: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.nomPattern),
+      ]),
+      email: new FormControl('', [
+        Validators.pattern(this.emailPattern),
+
+      ])
+    });
+    this.code = this.loginForm.get('code');
+    this.nom = this.loginForm.get('nom');
+    this.email = this.loginForm.get('email')
+
+  }
+
+  ngOnInit(): void {
+    this.loginForm.valueChanges.subscribe(() => {
+      this.error = null;
+    });
+
+  }
+  public login() {
+    this.error = null;
+    if (this.loginForm.valid) {
+      this.showloader = true;
+      this.authService.login(this.loginForm.getRawValue())
+        .subscribe(res => {
+          this.showloader = false;
+          this.dialogRef.close('submit');
+          // this.router.navigate(['/list-client']);
+        },
+          // error => this.error = "error.message");
+          // for fake data
+          err => this.error = "Le client déjà existe");
+    }
+  }
+  public onInputChange(event) {
+    event.target.required = true;
+  }
+
+
 
 }

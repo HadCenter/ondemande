@@ -229,7 +229,7 @@ export const _filter = (opt: string[], value: string): string[] => {
 
 
 @Component({
-  selector: 'app-import-file-edi',
+  //selector: 'app-import-file-edi',
   templateUrl: 'dialog/import-file-edi.component.html',
   styleUrls: ['dialog/import-file-edi.component.scss']
 })

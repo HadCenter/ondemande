@@ -17,8 +17,12 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ImportFileEdiService } from './dialog/import-file-edi.service';
+import { LoaderModule } from 'app/components/loader/loader.module';
+// import { ListClientsModule } from '../list-clients/list-clients.module';
+
 @NgModule({
-  declarations: [ListFileEDIComponent, LoaderComponent,DialogImportFile,],
+  declarations: [ListFileEDIComponent,DialogImportFile,],
+
   imports: [
     CommonModule,
     ListFileEdiRoutingModule,
@@ -34,6 +38,8 @@ import { ImportFileEdiService } from './dialog/import-file-edi.service';
     MatTooltipModule,
     MatIconModule,
     MatAutocompleteModule,
+    LoaderModule,
+    // ListClientsModule,
     FormsModule, ReactiveFormsModule
   ],
 

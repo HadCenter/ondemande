@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ListClientsRoutingModule } from './list-clients-routing.module';
-import { ListClientsComponent } from './list-clients.component';
+import { ListClientsComponent,DialogCreateClient } from './list-clients.component';
 import { ListClientsService } from './list-clients.service';
 import { ThemeModule } from 'theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,11 +16,19 @@ import { MatTableModule } from '@angular/material/table';
 import { ClientComponent } from './client/client.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatNativeDateModule } from '@angular/material/core';
-import { LoaderComponent } from '../../components/loader/loader.component';
+import { MatSelectModule } from '@angular/material/select';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
 import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.component';
+import { CreateClientService } from './dialog/create-client.service';
+import { LoaderModule } from 'app/components/loader/loader.module';
+
+
+
+
 
 @NgModule({
-  declarations: [ListClientsComponent, ClientComponent, DialogBodyComponent ],
+  declarations: [ListClientsComponent,ClientComponent,DialogCreateClient, DialogBodyComponent ],
   imports: [
     CommonModule,
     ListClientsRoutingModule,
@@ -36,11 +44,15 @@ import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.co
     ReactiveFormsModule,
     MatGridListModule,
     MatNativeDateModule,
-    MatDialogModule,
+    MatToolbarModule,
+    MatSelectModule,
+    MatIconModule,
+    LoaderModule,
   ],
-  entryComponents: [DialogBodyComponent],
+  entryComponents: [DialogBodyComponent,DialogCreateClient],
   providers: [
     ListClientsService,
+    CreateClientService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
 })

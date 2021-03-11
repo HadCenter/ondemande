@@ -46,7 +46,7 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
           // error => this.error = "error.message");
           // for fake data
 //           error => this.error = "Email ou mot de passe incorrect");
-          error => this.error = "Utilisateur n'est pas active");
+          error => this.error = "Utilisateur n'est pas actif");
     }
   }
   public onInputChange(event) {

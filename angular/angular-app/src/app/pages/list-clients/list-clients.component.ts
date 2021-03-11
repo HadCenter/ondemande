@@ -135,11 +135,11 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
-
   public getClients() {
     this.tablesService.getAllClients()
       .subscribe(res => {
-        this.clients = res; this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false; console.log(this.clients);
+        this.clients = res;
+        this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },
         error => console.log(error));

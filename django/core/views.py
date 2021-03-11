@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from salesforceEsb.models import Contact
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from .serializers import ClientSerializer
+from .serializers import ClientSerializer, ContactSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -19,9 +20,6 @@ from os import listdir
 from os.path import isfile, join
 from django.core.mail import EmailMessage
 from django.core import mail
-
-# Create your views here.
-
 @api_view(['GET'])
 def testCreate(request):
     print("ahmed")
@@ -44,7 +42,6 @@ def testCreate(request):
             connection=connection,
         ).send()
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
-
 @api_view([ 'PUT'])
 def archive_client(request, pk):
     try:
@@ -128,7 +125,6 @@ def archive_client(request, pk):
             client_serializer.save()
             return JsonResponse(client_serializer.data)
         return JsonResponse(client_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 @api_view(['GET', 'PUT'])
 def client_detail(request, pk):
     try:
@@ -155,7 +151,6 @@ def client_detail(request, pk):
             client_serializer.save()
             return JsonResponse(client_serializer.data)
         return JsonResponse(client_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 @api_view(['POST'])
 def clientCreate(request):
     name = request.data['nom_client']
@@ -173,27 +168,28 @@ def clientCreate(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 @api_view(['GET'])
 def clientList(request):
     clients = Client.objects.filter(archived = False).order_by('-id')
     serializer = ClientSerializer(clients, many= True)
     return Response(serializer.data)
-
+@api_view(['GET'])
+def contactList(request):
+    contacts = Contact.objects.all()
+    serializer = ContactSerializer(contacts, many= True)
+    return Response(serializer.data)
 class fileCreate(APIView):
 
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, format=None):
-        # print(request.data['file'].name)
-        # print(request.data['client'])
+        code_client = request.data['client']
         timestr = time.strftime("%Y-%m-%d-%H-%M-%S")
         if(request.data['file'] == ''):
             return Response({ "message" : "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         ext = get_extension(request.data['file'].name)
-        clientName = Client.objects.get(pk=request.data['client']).nom_client
+        clientName = Contact.objects.get(code_client=code_client).last_name
         fileName = "EDI_"+ clientName + "_" + timestr + ext
-        '''print(fileName)'''
         serializer = FileSerializer(data=request.data)
         if serializer.is_valid():
             path = "media/files/"
@@ -205,10 +201,16 @@ class fileCreate(APIView):
                 os.mkdir(("files"))
                 os.chdir("..")
             serializer.save()
-            # clientName = Client.objects.get(pk=request.data['client']).nom_client
             ftp = connect()
             path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-            path_client = path_racine + '/' + clientName
+            ftp.cwd(path_racine)
+            if code_client not in ftp.nlst():
+                ftp.mkd(code_client)
+            path_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
+            ftp.cwd(path_output)
+            if code_client not in ftp.nlst():
+                ftp.mkd(code_client)
+            path_client = path_racine + '/' + code_client
             ftp.cwd(path_client)
             filename = [f for f in listdir(path) if isfile(join(path, f))][0]
             os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
@@ -270,7 +272,6 @@ class uploadfileoutputNameAPIView(APIView):
         response['Content-Length'] = os.path.getsize(fileName)
         os.remove(fileName)
         return response
-
 def connect():
     FTP_HOST = "talend.ecolotrans.net"
     FTP_USER = "talend"
@@ -278,7 +279,6 @@ def connect():
     ftp = ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASS)
     ftp.encoding = "utf-8"
     return ftp
-
 def get_extension(filename):
     basename = os.path.basename(filename)  # os independent
     ext = '.'.join(basename.split('.')[1:])

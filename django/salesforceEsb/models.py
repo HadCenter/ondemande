@@ -88,4 +88,6 @@ class Contact(models.Model):
         verbose_name = 'Contact'
         verbose_name_plural = 'Contacts'
         # keyPrefix = '003'
+    def __str__(self):
+        return self.last_name
 

@@ -12,13 +12,11 @@ talendUrl ='https://webhooks.eu.cloud.talend.com/onDemandPipeline/f370e80809334a
 
 @api_view(['POST'])
 def startEngineOnEdiFiles(request):
-	# pdb.set_trace()
 	request.data[0]["filePath"] = request.data[0]["filePath"][7:]
 	print(request.data[0]["fileId"])
 	fileEdi = EDIfile.objects.get(pk=request.data[0]["fileId"])
 	fileEdi.cliqued = True
 	fileEdi.save()
 	requests.post(talendUrl,json = request.data)
-	# return HttpResponse("Hello, world. starting engine.")
 	return Response({"message" : "ok"}, status=status.HTTP_200_OK)
 

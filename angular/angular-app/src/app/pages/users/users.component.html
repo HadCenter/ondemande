@@ -3,15 +3,15 @@
       <base-card-title>
         <h1 class="mdl-card__title-text">Liste des utilisateurs</h1>
         <div class="mdl-layout-spacer"></div>
-        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-          <div class="mdl-textfield label-search " >
-            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-              [(ngModel)]="filterValue" placeholder="Rechercher" />
-            <label class="mdl-textfield__label" for="search2" ></label>
-          </div>
-        </div>
-        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
-        </base-pagination>
+<!--        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield&#45;&#45;expandable search-table">-->
+<!--          <div class="mdl-textfield label-search " >-->
+<!--            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"-->
+<!--              [(ngModel)]="filterValue" placeholder="Rechercher" />-->
+<!--            <label class="mdl-textfield__label" for="search2" ></label>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">-->
+<!--        </base-pagination>-->
         <a routerLink="/create-user"><button
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
                 >Ajouter utilisateur

@@ -99,12 +99,13 @@ DATABASES = {
     'default': {
        'ENGINE': 'django.db.backends.mysql',
        'NAME': 'ondemand',
-        'USER': 'ondemand',
-        'PASSWORD': 'ondemand',
-        'HOST': '172.17.0.1',
+        'USER': 'root',
+        'PASSWORD': 'Terminus0000',
+        'HOST': 'localhost',
         # 'HOST': '52.47.208.8',
        'PORT': '3306',
-    },
+    }
+    ,
     'sf_db': {
         'ENGINE': 'salesforce.backend',
         'CONSUMER_KEY': '3MVG95AcBeaB55lViRbMRG9bijMQz3ezbHCkfLYt_Z3k6DV_9z1ccjA90G1BeO1TM8IWPH.4qxFrRGsTHAibP',  # 'client_id'   in OAuth2 terminology

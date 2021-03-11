@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersRoutingModule } from './users-routing.module';
-import { DialogCreateUser, UsersComponent } from './users.component';
+import { DialogCreateUser, DialogDetailsUser, UsersComponent } from './users.component';
 import { UsersService } from './users.service';
 import { ThemeModule } from 'theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -23,13 +23,14 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CreateUserService } from './dialog/create-user.service';
 import { LoaderModule } from 'app/components/loader/loader.module';
+import { DetailsUserService } from './dialog-details-user/details-user.service';
 
 
 
 
 @NgModule({
-  declarations: [UsersComponent,DialogCreateUser],
-  entryComponents: [DialogCreateUser],
+  declarations: [UsersComponent,DialogCreateUser,DialogDetailsUser],
+  entryComponents: [DialogCreateUser,DialogDetailsUser],
   imports: [
     CommonModule,
     UsersRoutingModule,
@@ -57,6 +58,7 @@ import { LoaderModule } from 'app/components/loader/loader.module';
   providers: [
     UsersService,
     CreateUserService,
+    DetailsUserService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
 })

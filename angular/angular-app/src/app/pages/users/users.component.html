@@ -35,9 +35,8 @@
               <td class="mdl-data-table__cell--non-numeric">{{ getProfile(row.is_superadmin) }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ getStatus(row.is_active) }}</td>
               <td class="mdl-data-table__cell--non-numeric">
-                <button
-                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                routerLink="/details-user/{{ row.id }}">Modifier
+                <button (click)="openUpdateUser(row.id)"
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Modifier
                 </button>
               </td>
             </tr>

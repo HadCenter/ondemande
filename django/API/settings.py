@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'accounts',
-    'core'
+    'core',
+    'salesforceEsb',
+    'salesforce'
 ]
 
 MIDDLEWARE = [
@@ -102,6 +104,14 @@ DATABASES = {
         #'HOST': '172.17.0.1',
         'HOST': '52.47.208.8',
        'PORT': '3306',
+    },
+    'sf_db': {
+        'ENGINE': 'salesforce.backend',
+        'CONSUMER_KEY': '3MVG95AcBeaB55lViRbMRG9bijMQz3ezbHCkfLYt_Z3k6DV_9z1ccjA90G1BeO1TM8IWPH.4qxFrRGsTHAibP',  # 'client_id'   in OAuth2 terminology
+        'CONSUMER_SECRET': 'C8E4BCF5AD524548675F9C92365C58CC9D54DB52B0F097AC0C7C2200974BF707',  # 'client_secret'
+        'USER': 'admin_sf@ecolotrans.com.devbox1',
+        'PASSWORD': 'ecolotrans2022',
+        'HOST': 'https://ecolotrans--devbox1.my.salesforce.com/',
     }
 
 }
@@ -112,6 +122,9 @@ DATABASES = {
 #     }
 # }
 
+DATABASE_ROUTERS = [
+    "salesforceEsb.routers.SfRouter"
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

@@ -8,3 +8,4 @@ python-jose
 django-rest-knox
 requests
 mysqlclient
+django-salesforce

@@ -52,9 +52,9 @@ export class UsersComponent extends UpgradableComponent implements  OnInit  {
   {
     if (is_active)
     {
-      return "Active";
+      return "Actif";
     }else{
-      return "InActive";
+      return "Non actif";
     }
   }
 

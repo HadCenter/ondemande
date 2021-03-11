@@ -68,9 +68,9 @@ public getStatus(is_active)
 {
   if(is_active === true)
   {
-    return "Active";
+    return "Actif";
   }else{
-    return "InActive";
+    return "Non actif";
   }
 }
 public getRole(is_admin)

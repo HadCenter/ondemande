@@ -15,7 +15,7 @@
                         [(ngModel)]="currentUser.username"  class="mdl-textfield__input" type="text" id="username">
                 <div *ngIf="username.invalid && (username.dirty || username.touched)">
                   <span *ngIf="username.errors.required" class="mdl-textfield__error">
-                    Nom obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un nom.</span>
+                    Nom obligatoire.
                   </span>
                 </div>
             </div>
@@ -47,8 +47,8 @@
             <div>
               <mat-form-field appearance="fill">
               <mat-select  [(value)]="activated" [placeholder]="activated" formControlName="status" >
-                <mat-option value="Active">Active</mat-option>
-                <mat-option value="InActive">InActive</mat-option>
+                <mat-option value="Actif">Actif</mat-option>
+                <mat-option value="Non actif">Non actif</mat-option>
               </mat-select>
             </mat-form-field>
             </div>

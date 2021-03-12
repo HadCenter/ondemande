@@ -179,7 +179,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   }
   public uploadFileInput(clientName, fileName) {
     fileName = fileName.substring(7)
-    fileName = decodeURI(fileName)
+    fileName = decodeURI(fileName).replace('%26','&');
 
     this.tablesService.uploadFileInput(clientName, fileName)
       .subscribe(res => {
@@ -188,14 +188,14 @@ export class ListFileEDIComponent extends UpgradableComponent {
   }
   public decodefile(file) {
 
-    return decodeURI(file.substring(7));
+    return decodeURI(file.substring(7)).replace('%26','&');
   }
   public decodeValidatorError(file) {
 
     return decodeURI(file);
   }
   public uploadFileOutput(clientName, fileName) {
-    fileName = decodeURI(fileName)
+    fileName = decodeURI(fileName).replace('%26','&');
     this.tablesService.uploadFileOutput(clientName, fileName)
       .subscribe(res => {
         console.log(res);

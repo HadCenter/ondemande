@@ -13,7 +13,7 @@ export class ListFileEdiService {
   constructor(private http: HttpClient) { }
 
   public executeJob(row) : Observable<any> {
-    var fileName = decodeURI(row.file);
+    var fileName = decodeURI(row.file).replace('%26','&');
     console.log(fileName);
     const body = [{"filePath" : fileName, "ClientOwner" : row.client, "fileId" : row.id}]
     console.log(body);

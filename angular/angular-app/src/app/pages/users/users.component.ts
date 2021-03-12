@@ -282,7 +282,7 @@ export class DialogDetailsUser extends UpgradableComponent {
     console.log(this.currentUser);
     console.log(this.role);
     console.log(this.activated);
-    if (this.activated === 'Active') {
+    if (this.activated === 'Actif') {
       this.currentUser['is_active'] = 'true';
     } else {
       this.currentUser['is_active'] = 'false';

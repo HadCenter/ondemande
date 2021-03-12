@@ -27,7 +27,7 @@
                 <label  for="email" style="color:gray; font: 13px Arial, sans-serif;"  >Email</label>
                 <br>
                 <input  formControlName="email"  (change)="onInputChange($event)"
-                        [(ngModel)]="currentUser.email"  class="mdl-textfield__input" type="text" id="email">
+                        [(ngModel)]="currentUser.email"  class="mdl-textfield__input" type="text" id="email" disabled>
 
                 <div *ngIf="email.invalid && (email.dirty || email.touched)">
                   <span *ngIf="email.errors.required" class="mdl-textfield__error">

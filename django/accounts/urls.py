@@ -15,7 +15,7 @@ urlpatterns = [
 	url(r'^getUser/(?P<pk>[0-9]+)$', views.user_detail),
 	url(r'^updateUser/(?P<pk>[0-9]+)$', views.user_detail),
 	url("updatePasswordUser/", views.update_user_password),
-	path('password-reset/<uidb64>/<token>/', PasswordTokenCheckAPI.as_view(), name='password-reset-confirm'),
+	path('password-reset/<token>/', PasswordTokenCheckAPI.as_view(), name='password-reset-confirm'),
 	url("getTokenStatus/", views.token_status),
 
 ]

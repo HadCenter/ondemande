@@ -1,3 +1,5 @@
+import base64
+
 import pytz
 from datetime import datetime
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -5,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.encoding import smart_str, force_str
 from rest_framework.response import Response
-from .models import Account, UserUniqueToken
+from .models import Account
 from rest_framework.decorators import api_view
 from .serializers import UserSerializer
 from rest_framework import status
@@ -39,18 +41,21 @@ def user_detail(request, pk):
 
 @api_view(['PUT'])
 def update_user_password (request):
-    # uidb64 = request.data['id']
-    # id = smart_str(urlsafe_base64_decode(uidb64))
-    user = Account.objects.get(pk=request.data['id'])
+    token = request.data['token']
+    print(token)
+    message = smart_str(urlsafe_base64_decode(token))
+    print(message)
+    id = message[32:]
+    account = Account.objects.get(pk=id)
     # user = Account.objects.get(pk=id)
     if request.method == 'PUT':
-        user_serializer = UserSerializer(user)
+        user_serializer = UserSerializer(account)
         if(request.data['password1'] != request.data['password2']):
             return JsonResponse({"message" : "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            user.is_active = True
-            user.set_password(request.data['password1'])
-            user.save()
+            account.is_active = True
+            account.set_password(request.data['password1'])
+            account.save()
             return JsonResponse(user_serializer.data)
 
 class PasswordTokenCheckAPI(generics.GenericAPIView):
@@ -60,14 +65,16 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
 @api_view(['POST'])
 def token_status (request):
     token = request.data['token']
-    user_token = get_object_or_404(UserUniqueToken, token=token)  # get object or throw 404
+    print(token)
+    message = smart_str(urlsafe_base64_decode(token))
+    print(message)
+    id = message[32:]
+    account = Account.objects.get(pk=id)
     now = datetime.utcnow().replace(tzinfo=pytz.utc)
-    # now = datetime.now()
-    # returns a timedelta object
-    c = now - user_token.datetime
+    c = now - account.created_at
     minutes = c.total_seconds() / 60
     print(minutes)
-    if minutes > 5:
+    if minutes > 30:
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'message' : 'token est encore valide'}, status = status.HTTP_200_OK)

@@ -39,12 +39,8 @@ export class UserPasswordComponent extends BlankLayoutCardComponent implements O
   {
     const routeParams = this.route.snapshot.paramMap;
     this.token = routeParams.get('token');
-    var id = routeParams.get('id');
-    console.log(this.token);
     var data = {};
     data['token'] = this.token;
-    data['id'] = id;
-    console.log(data);
     this.userPasswordService.getTokenStatus(data)
         .subscribe(res => this.tokenStatus = 'valide',
           error => this.tokenStatus = 'nonvalide');
@@ -57,12 +53,12 @@ export class UserPasswordComponent extends BlankLayoutCardComponent implements O
   {
     const routeParams = this.route.snapshot.paramMap;
 //     this.id = Number(routeParams.get('id'));
-    this.id = routeParams.get('id');
+    this.token = routeParams.get('token');
     this.password1 = this.loginForm.getRawValue()['password1'];
     this.password2 = this.loginForm.getRawValue()['password2'];
     console.log(this.loginForm.getRawValue());
     var data = this.loginForm.getRawValue();
-    data['id']= this.id;
+    data['token']= this.token;
     console.log(data);
     if (this.loginForm.valid) {
       this.userPasswordService.login(data)

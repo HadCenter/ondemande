@@ -1,4 +1,4 @@
-from .models import Account
+from .models import Account, UserUniqueToken
 from rest_framework.response import Response
 from .serializers import LoginSerializer, UserSerializer, RegisterSerializer
 from knox.models import AuthToken
@@ -14,6 +14,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from datetime import datetime
+import secrets, hashlib
 
 import jwt
 from django.conf import settings
@@ -49,9 +50,13 @@ class RegisterAPI(generics.GenericAPIView):
 		date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
 		# uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
 		uidb64 = user.id
-		token = PasswordResetTokenGenerator().make_token(user)
-		current_site = get_current_site(
-			request=request).domain
+		# token = PasswordResetTokenGenerator().make_token(user)
+		# current_site = get_current_site(
+		# 	request=request).domain
+		salt = secrets.token_hex(8) + str(uidb64)
+		token = hashlib.sha256(salt.encode('utf-8')).hexdigest()
+		account = Account.objects.get(pk=uidb64)
+		usreToken = UserUniqueToken.objects.create(user_id= account, token= token)
 		relativeLink = reverse(
 			'password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
 		absurl = f'http://52.47.208.8/#/user-password/{uidb64}/{token}/'

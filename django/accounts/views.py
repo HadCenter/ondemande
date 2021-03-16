@@ -1,8 +1,11 @@
+import pytz
+from datetime import datetime
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
 from django.utils.encoding import smart_str, force_str
 from rest_framework.response import Response
-from .models import Account
+from .models import Account, UserUniqueToken
 from rest_framework.decorators import api_view
 from .serializers import UserSerializer
 from rest_framework import status
@@ -56,9 +59,21 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
 
 @api_view(['POST'])
 def token_status (request):
-    user = Account.objects.get(pk=request.data['id'])
     token = request.data['token']
-    if not PasswordResetTokenGenerator().check_token(user, token):
-        return Response({'error' : 'Token is not valide'}, status= status.HTTP_400_BAD_REQUEST)
+    user_token = get_object_or_404(UserUniqueToken, token=token)  # get object or throw 404
+    now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    # now = datetime.now()
+    # returns a timedelta object
+    c = now - user_token.datetime
+    minutes = c.total_seconds() / 60
+    print(minutes)
+    if minutes > 5:
+        return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'message' : 'token est encore valide'}, status = status.HTTP_200_OK)
+    # user = Account.objects.get(pk=request.data['id'])
+    # token = request.data['token']
+    # if not PasswordResetTokenGenerator().check_token(user, token):
+    #     return Response({'error' : 'Token is not valide'}, status= status.HTTP_400_BAD_REQUEST)
+    # else:
+    #     return Response({'message' : 'token est encore valide'}, status = status.HTTP_200_OK)

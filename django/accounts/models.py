@@ -5,6 +5,7 @@ from .managers import CustomUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 # class Profile(models.Model):
 #     label = models.CharField(max_length=200)
@@ -27,6 +28,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['username',]
 
     objects = CustomUserManager()
+
+class UserUniqueToken(models.Model):
+    user_id = models.ForeignKey(Account, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100)
+    # datetime = models.DateField(default=timezone.now)  # for token expiration
+    datetime = models.DateTimeField(auto_now=True)
 
 
 

@@ -151,9 +151,11 @@ export class ListFileEDIComponent extends UpgradableComponent {
   }
 
   public getFiles() {
+
     this.tablesService.getAllFiles()
       .subscribe(res => {
         this.files = res;
+        console.warn(this.files)
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
@@ -177,25 +179,33 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.files = [];
     this.getFiles();
   }
-  public uploadFileInput(clientName, fileName) {
+  public uploadFileInput(row, clientName, fileName) {
+    console.warn(row)
+
     fileName = fileName.substring(7)
-    fileName = decodeURI(fileName).replace('%26','&');
+    fileName = decodeURI(fileName).replace('%26', '&');
 
     this.tablesService.uploadFileInput(clientName, fileName)
       .subscribe(res => {
         saveAs(res, fileName);
+
       }, error => console.log(error));
+  }
+
+  gotoDetails(row) {
+    console.log('GOTO DETAILS', row)
+    this.router.navigate(['details-file-edi', row.id])
   }
   public decodefile(file) {
 
-    return decodeURI(file.substring(7)).replace('%26','&');
+    return decodeURI(file.substring(7)).replace('%26', '&');
   }
   public decodeValidatorError(file) {
 
     return decodeURI(file);
   }
   public uploadFileOutput(clientName, fileName) {
-    fileName = decodeURI(fileName).replace('%26','&');
+    fileName = decodeURI(fileName).replace('%26', '&');
     this.tablesService.uploadFileOutput(clientName, fileName)
       .subscribe(res => {
         console.log(res);
@@ -347,8 +357,8 @@ export class DialogImportFile {
   ) {
     this.dropdownRefresh();
   }
-//   public listObject: { id: string, nom_client: string }[] = [];
-  public listObject: { code_client : string ,nom_client: string }[] = [];
+  //   public listObject: { id: string, nom_client: string }[] = [];
+  public listObject: { code_client: string, nom_client: string }[] = [];
   public listItems: Array<string> = [];
   ngOnInit(): void {
     this.stateGroupOptions = this.myForm.get('stateGroup')!.valueChanges

@@ -8,6 +8,7 @@ import { ErrorComponent } from './error';
 import { ForgotPasswordComponent } from './forgot-password';
 import { LoginComponent } from './login';
 import { PagesRoutingModule } from './pages-routing.module';
+import { DetailsFileEdiComponent } from './details-file-edi/details-file-edi.component';
 
 //import { SignUpComponent } from './sign-up';
 
@@ -26,6 +27,7 @@ import { PagesRoutingModule } from './pages-routing.module';
    LoaderComponent,
    // SignUpComponent,
     ForgotPasswordComponent,
+   DetailsFileEdiComponent,
 
 
   ],

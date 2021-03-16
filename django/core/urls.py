@@ -11,6 +11,7 @@ urlpatterns = [
     path('uploadfile/<clientName>/<fileName>/', uploadfileNameAPIView.as_view(), name = "upload-file"),
     path("getFiles/", views.fileList, name = "file-list"),
     url(r'^getClient/(?P<pk>[0-9]+)$', views.client_detail),
+    url(r'^getFile/(?P<pk>[0-9]+)$', views.file_detail),
     url(r'^updateClient/(?P<pk>[0-9]+)$', views.client_detail),
     url(r'^archiveClient/(?P<pk>[0-9]+)$', views.archive_client),
     path('uploadfile/<clientName>/<fileName>/', uploadfileNameAPIView.as_view(), name = "upload-file"),

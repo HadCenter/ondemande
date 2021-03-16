@@ -151,6 +151,12 @@ def client_detail(request, pk):
             client_serializer.save()
             return JsonResponse(client_serializer.data)
         return JsonResponse(client_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET'])
+def file_detail(request, pk):
+    file = EDIfile.objects.get(pk=pk)
+    if request.method == 'GET':
+        file_serializer = FileSerializer(file)
+        return JsonResponse(file_serializer.data)
 @api_view(['POST'])
 def clientCreate(request):
     name = request.data['nom_client']

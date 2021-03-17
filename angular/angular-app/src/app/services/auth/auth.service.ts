@@ -2,16 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { environment } from '../../../environments/environment';
-
 const tokenName = 'token';
-
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-
   private isLogged$ = new BehaviorSubject(false);
   private url = `${environment.apiBaseUrl}/api/auth`;
   /*private url = 'http://35.180.109.207:8000/api/auth'*/

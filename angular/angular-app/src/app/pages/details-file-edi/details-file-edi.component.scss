@@ -1,0 +1,141 @@
+body {
+    padding-top: 20px;
+    padding-left: 20px;
+    box-sizing: border-box;
+  }
+
+  .content-first-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-auto-rows: 30px;
+    grid-gap: 10px;
+  }
+  .content-first-card>label{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .content-labels{
+    display: flex;
+    align-items: center;
+  }
+
+  .mat-expansion-panel{
+      background: transparent;
+  }
+
+mat-panel-title.mat-expansion-panel-header-title {
+    color: white;
+}
+.mat-expansion-panel-body {
+    color: white;
+}
+base-card-body.content-first-card.mdl-card__supporting-text{
+    padding: 20px 16px;
+}
+.table-validator{
+  width: max-content;
+}
+
+.ui-tables {
+  .mdl-card,
+  .mdl-card__supporting-text {
+        overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    overflow-x: auto;
+
+    td {
+      font-size: 14px;
+    }
+  }
+
+  .no-padding {
+    padding: 0;
+    width: 100%;
+  }
+
+  .label__availability {
+    margin-right: 2px;
+  }
+}
+.file-input-text{
+  margin:0;
+  padding: 0;
+}
+.section-validation{
+  text-align: end;
+  margin: 8px;
+  margin-top: 31px;
+}
+.label-success{
+  color:#00d45a;
+}
+.label-wrong{
+color: #f44336;
+}
+.content-file-line{
+  padding: 20px 16px !important;
+}
+.content-file-edi{
+display: list-item;
+text-align: center;
+vertical-align: middle;padding-left: 20px;
+padding-right: 20px;
+}
+.container{
+// display: table-caption;
+display: initial;
+//height: 100%;
+}
+// input#firstName {
+//   text-align: center;
+// }
+@media (max-width: 479px) {
+  .content-file-edi{
+    display: list-item;
+    padding-left: 10px; 
+     padding-right: 10px;
+  }
+  .container{
+    margin: auto;
+    position: absolute;
+    top: 5%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+@media (min-width: 480px) and (max-width: 839px) {
+  .container{
+    margin: auto;
+    position: absolute;
+    top: 10%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+@media (min-width: 840px) {
+  .container{
+    margin: auto;
+    position: absolute;
+    top: 15%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.content-table{
+  width: 1200px;
+  /* height: 50px; */
+  overflow: auto;
+}
+mat-panel-description.mat-expansion-panel-header-description{
+  flex-grow: 0;
+}

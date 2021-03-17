@@ -194,7 +194,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
   gotoDetails(row) {
     console.log('GOTO DETAILS', row)
-    this.router.navigate(['details-file-edi', row.id])
+    this.router.navigate(['/details-file-edi',row.id])
   }
   public decodefile(file) {
 

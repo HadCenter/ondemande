@@ -1,1 +1,183 @@
-<p>details-file-edi works!</p>
+<div class="container mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone" >
+    <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
+    <div class="content-file-edi">
+        <div class="content-labels">
+            <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--2-col-phone">
+                <!-- <base-card-title>
+        
+      </base-card-title> -->
+                <base-card-body class="content-first-card ">
+                    <label>{{file?.status}}</label>
+                    <label>{{file?.created_at| date:"yyyy/MM/dd"}}</label>
+                    <label>{{file?.client}}</label>
+                    <label class="label-wrong">{{advancedTable.length}}</label>
+                    <label class="label-success">{{advancedTable.length}}</label>
+                </base-card-body>
+            </base-card>
+            <div style='text-align: center;'
+                class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone">
+                <button [disabled]="advancedTable.length>0"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
+                    à Urbantz
+                </button>
+            </div>
+        </div>
+
+        <div class="content-labels">
+            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+                <base-card-title>
+                    <label class="label-success">Success</label>
+                </base-card-title>
+                <base-card-body class="content-file-line">
+                    <mat-accordion>
+                        <mat-expansion-panel hideToggle (click)="getWrongFile()">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Afficher Log
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="content-table"> 
+                            <table *ngIf="advancedTable.length > 0"
+                                class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let header of advancedHeaders ; let i = index"
+                                            class="mdl-data-table__cell--non-numeric">
+                                            <span>{{header}}</span>
+                                            <!-- <i *ngIf="header.sort !== null " class="material-icons sorting"
+                                    [class.asc]="header.sort === sortOrder.asc"
+                                    [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</i> -->
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- *ngFor="let row of advancedTable  | slice:0:limit; let i = index;" -->
+                                    <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
+                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">
+
+                                            <div
+                                                class="file-input-text mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-dirty is-upgraded">
+                                                <input type="text" id="firstName" [(ngModel)]="row.position"
+                                                    class="mdl-textfield__input">
+                                            </div>
+
+
+                                        </td>
+                                        <td class="mdl-data-table__cell--non-numeric"> <input type="text" id="firstName"
+                                                [(ngModel)]="row.name" class="mdl-textfield__input"></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                                [(ngModel)]="row.weight" class="mdl-textfield__input"></td>
+
+                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
+                                                type="text" id="firstName" [(ngModel)]="row.symbol"
+                                                class="mdl-textfield__input"></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                                [(ngModel)]="row.start" class="mdl-textfield__input">
+                                        </td>
+
+                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
+                                                type="text" id="firstName" [(ngModel)]="row.end"
+                                                class="mdl-textfield__input"></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                                [(ngModel)]="row.name" class="mdl-textfield__input">
+                                        </td>
+                                        <td class="mdl-data-table__cell--non-numeric">
+                                            <span class="mdl-data-table__cell--non-numeric"><input type="text"
+                                                    id="firstName" [(ngModel)]="row.name"
+                                                    class="mdl-textfield__input"></span>
+                                        </td>
+                                        <!-- <td class="mdl-data-table__cell--non-numeric"> -->
+
+                                        <!-- </td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        </mat-expansion-panel>
+
+                    </mat-accordion>
+                </base-card-body>
+            </base-card>
+
+        </div>
+        <div>
+            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+                <base-card-title>
+                    <label class="label-wrong">Errors</label>
+                </base-card-title>
+                <base-card-body class="content-file-line">
+                    <mat-accordion>
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Afficher Log
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    <button 
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
+                        </button>
+                                  </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <table *ngIf="advancedTable.length > 0"
+                                class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let header of advancedHeaders ; let i = index"
+                                            class="mdl-data-table__cell--non-numeric">
+                                            <span>{{header}}</span>
+                                            <!-- <i *ngIf="header.sort !== null " class="material-icons sorting"
+                                    [class.asc]="header.sort === sortOrder.asc"
+                                    [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</i> -->
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- *ngFor="let row of advancedTable  | slice:0:limit; let i = index;" -->
+                                    <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
+                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"> <input
+                                                type="text" id="firstName" [(ngModel)]="row.position"
+                                                class="mdl-textfield__input"></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                                [(ngModel)]="row.name" class="mdl-textfield__input"></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                                [(ngModel)]="row.name" class="mdl-textfield__input"></td>
+
+                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
+                                                type="text" id="firstName" [(ngModel)]="row.name"
+                                                class="mdl-textfield__input"></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                                [(ngModel)]="row.name" class="mdl-textfield__input">
+                                        </td>
+
+                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
+                                                type="text" id="firstName" [(ngModel)]="row.name"
+                                                class="mdl-textfield__input"></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                                [(ngModel)]="row.name" class="mdl-textfield__input">
+                                        </td>
+                                        <td class="mdl-data-table__cell--non-numeric">
+                                            <span class="mdl-data-table__cell--non-numeric"><input type="text"
+                                                    id="firstName" [(ngModel)]="row.name"
+                                                    class="mdl-textfield__input"></span>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </mat-expansion-panel>
+
+                    </mat-accordion>
+                    <!-- <div class="section-validation">
+                       
+                    </div> -->
+                </base-card-body>
+            </base-card>
+
+        </div>
+        <!-- <div class="section-validation">
+            <button
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
+            </button>
+        </div> -->
+    </div>
+</div>

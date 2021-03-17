@@ -42,7 +42,7 @@
                                 <thead>
                                     <tr>
                                         <th *ngFor="let header of advancedHeaders ; let i = index"
-                                            class="mdl-data-table__cell--non-numeric">
+                                            class="details-line mdl-data-table__cell--non-numeric">
                                             <span>{{header}}</span>
                                             <!-- <i *ngIf="header.sort !== null " class="material-icons sorting"
                                     [class.asc]="header.sort === sortOrder.asc"
@@ -53,7 +53,7 @@
                                 <tbody>
                                     <!-- *ngFor="let row of advancedTable  | slice:0:limit; let i = index;" -->
                                     <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">
+                                        <td class="details-line mdl-data-table__cell--non-numeric" style="color: #00bcd4;">
 
                                             <div
                                                 class="file-input-text mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-dirty is-upgraded">
@@ -63,25 +63,25 @@
 
 
                                         </td>
-                                        <td class="mdl-data-table__cell--non-numeric"> <input type="text" id="firstName"
+                                        <td class="details-line mdl-data-table__cell--non-numeric"> <input type="text" id="firstName"
                                                 [(ngModel)]="row.name" class="mdl-textfield__input"></td>
-                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                        <td class="details-line mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
                                                 [(ngModel)]="row.weight" class="mdl-textfield__input"></td>
 
-                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
+                                        <td class="details-line mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
                                                 type="text" id="firstName" [(ngModel)]="row.symbol"
                                                 class="mdl-textfield__input"></td>
-                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                        <td class="details-line mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
                                                 [(ngModel)]="row.start" class="mdl-textfield__input">
                                         </td>
 
-                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
+                                        <td class="details-line mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
                                                 type="text" id="firstName" [(ngModel)]="row.end"
                                                 class="mdl-textfield__input"></td>
-                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                        <td class="details-line mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
                                                 [(ngModel)]="row.name" class="mdl-textfield__input">
                                         </td>
-                                        <td class="mdl-data-table__cell--non-numeric">
+                                        <td class="details-line mdl-data-table__cell--non-numeric">
                                             <span class="mdl-data-table__cell--non-numeric"><input type="text"
                                                     id="firstName" [(ngModel)]="row.name"
                                                     class="mdl-textfield__input"></span>
@@ -114,16 +114,17 @@
                                 </mat-panel-title>
                                 <mat-panel-description>
                                     <button 
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                         </button>
                                   </mat-panel-description>
                             </mat-expansion-panel-header>
+                            <div class="content-table"> 
                             <table *ngIf="advancedTable.length > 0"
                                 class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                                 <thead>
                                     <tr>
                                         <th *ngFor="let header of advancedHeaders ; let i = index"
-                                            class="mdl-data-table__cell--non-numeric">
+                                            class="details-line mdl-data-table__cell--non-numeric">
                                             <span>{{header}}</span>
                                             <!-- <i *ngIf="header.sort !== null " class="material-icons sorting"
                                     [class.asc]="header.sort === sortOrder.asc"
@@ -134,28 +135,28 @@
                                 <tbody>
                                     <!-- *ngFor="let row of advancedTable  | slice:0:limit; let i = index;" -->
                                     <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"> <input
+                                        <td class="details-line mdl-data-table__cell--non-numeric" style="color: #00bcd4;"> <input
                                                 type="text" id="firstName" [(ngModel)]="row.position"
                                                 class="mdl-textfield__input"></td>
-                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                        <td class="details-line mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
                                                 [(ngModel)]="row.name" class="mdl-textfield__input"></td>
-                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                        <td class="details-line mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
                                                 [(ngModel)]="row.name" class="mdl-textfield__input"></td>
 
-                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
+                                        <td class="details-line mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
                                                 type="text" id="firstName" [(ngModel)]="row.name"
                                                 class="mdl-textfield__input"></td>
-                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                        <td class="details-line mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
                                                 [(ngModel)]="row.name" class="mdl-textfield__input">
                                         </td>
 
-                                        <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
+                                        <td class="details-line mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><input
                                                 type="text" id="firstName" [(ngModel)]="row.name"
                                                 class="mdl-textfield__input"></td>
-                                        <td class="mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
+                                        <td class="details-line mdl-data-table__cell--non-numeric"><input type="text" id="firstName"
                                                 [(ngModel)]="row.name" class="mdl-textfield__input">
                                         </td>
-                                        <td class="mdl-data-table__cell--non-numeric">
+                                        <td class="details-line mdl-data-table__cell--non-numeric">
                                             <span class="mdl-data-table__cell--non-numeric"><input type="text"
                                                     id="firstName" [(ngModel)]="row.name"
                                                     class="mdl-textfield__input"></span>
@@ -164,6 +165,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
                         </mat-expansion-panel>
 
                     </mat-accordion>

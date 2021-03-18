@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import fileCreate, uploadfileNameAPIView, uploadfileoutputNameAPIView
+from .views import fileCreate, uploadfileNameAPIView, uploadfileoutputNameAPIView,seeFileContent
 from django.conf.urls import url
 urlpatterns = [
     path("test/", views.testCreate, name = "test-create" ),
@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^archiveClient/(?P<pk>[0-9]+)$', views.archive_client),
     path('uploadfile/<clientName>/<fileName>/', uploadfileNameAPIView.as_view(), name = "upload-file"),
     path('uploadFileOutput/<clientName>/<fileName>/', uploadfileoutputNameAPIView.as_view(), name = "upload-file-output"),
+    path('seeFileContent', seeFileContent, name="seeFileContent"),
+
 ]

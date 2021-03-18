@@ -26,3 +26,8 @@ class EDIfile(models.Model):
     client = models.CharField(max_length=200)
     def __str__(self):
         return os.path.basename(self.file.name)
+
+class FileExcelContent:
+    def __init__(self,columns,rows):
+        self.columns = columns
+        self.rows =rows

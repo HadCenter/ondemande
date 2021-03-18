@@ -20,6 +20,11 @@ from os import listdir
 from os.path import isfile, join
 from django.core.mail import EmailMessage
 from django.core import mail
+import pandas as pd
+from .models import FileExcelContent
+import jsonpickle
+from django.core.serializers import serialize
+
 @api_view(['GET'])
 def testCreate(request):
     print("ahmed")
@@ -257,6 +262,28 @@ class uploadfileNameAPIView(APIView):
         response['Content-Length'] = os.path.getsize(fileName)
         os.remove(fileName)
         return response
+
+@api_view(['POST'])
+def seeFileContent(request):
+        ftp = connect()
+        path_racine = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
+        path_client = path_racine + '/' + request.data['clientCode']
+        ftp.cwd(path_client)
+        for name in ftp.nlst():
+            if name == request.data['fileName']:
+                with open(name, "wb") as file:
+                    commande = "RETR " + name
+                    ftp.retrbinary(commande, file.write)
+                break
+        excelfile = pd.read_excel(request.data['fileName'])
+        excelfile = excelfile.fillna('')
+        columns = list(excelfile.columns)
+        rows = excelfile.values.tolist()
+        responseObject = FileExcelContent(columns,rows)
+        responseObjectText = jsonpickle.encode(responseObject,unpicklable=False)
+        print (responseObjectText)
+        return HttpResponse(responseObjectText, content_type="application/json")
+
 class uploadfileoutputNameAPIView(APIView):
     def get(self, request, clientName, fileName):
         print(clientName)

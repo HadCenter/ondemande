@@ -9,3 +9,7 @@ django-rest-knox
 requests
 mysqlclient
 django-salesforce
+jsonpickle
+pandas
+xlrd
+openpyxl

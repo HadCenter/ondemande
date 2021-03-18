@@ -1,3 +1,5 @@
+import pytz
+
 from .models import Account
 from rest_framework.response import Response
 from .serializers import LoginSerializer, UserSerializer, RegisterSerializer
@@ -9,9 +11,8 @@ import string
 from django.core.mail import EmailMessage
 from datetime import datetime
 import secrets
-import base64
-from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import smart_bytes
+from django.utils.http import urlsafe_base64_encode
 class LoginAPI(generics.GenericAPIView):
 	serializer_class = LoginSerializer
 	def post(self, request, *args, **kwargs):
@@ -33,6 +34,7 @@ class RegisterAPI(generics.GenericAPIView):
 			(secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(8)))
 		_mutable = request.data._mutable
 		request.data._mutable = True
+		request.data['created_at'] = datetime.utcnow().replace(tzinfo=pytz.utc)
 		request.data['password'] = password
 		request.data._mutable = _mutable
 		serializer = self.get_serializer(data=request.data)
@@ -41,12 +43,9 @@ class RegisterAPI(generics.GenericAPIView):
 		now = datetime.now()
 		date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
 		id = user.id
-		print(id)
 		token = secrets.token_hex(16) + str(id)
-		print(token)
 		encodeToken = urlsafe_base64_encode(smart_bytes(token))
 		base64_message = encodeToken.decode('ascii')
-		print(type(base64_message))
 		absurl = f'http://52.47.208.8/#/user-password/{base64_message}/'
 		email_body = f'Bonjour,\n\nVotre compte onDemand a été créé le {date_time}.\n\n' \
 					 'Afin de confirmer la création de votre compte, nous vous invitons à cliquer sur ' + \

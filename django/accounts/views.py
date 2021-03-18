@@ -1,20 +1,17 @@
-import base64
-
 import pytz
 from datetime import datetime
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
-from django.utils.encoding import smart_str, force_str
+import secrets
+from django.utils.encoding import smart_bytes
+from django.utils.encoding import smart_str
 from rest_framework.response import Response
 from .models import Account
 from rest_framework.decorators import api_view
 from .serializers import UserSerializer
-from rest_framework import status
 from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
-from rest_framework import generics, status, views, permissions
+from rest_framework import generics, status
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.core.mail import EmailMessage
 @api_view(['GET'])
 def userList(request):
     users = Account.objects.all().order_by('-id')
@@ -58,6 +55,22 @@ def update_user_password (request):
             account.save()
             return JsonResponse(user_serializer.data)
 
+@api_view(['PUT'])
+def update_reset_user_password(request):
+    token = request.data['token']
+    print(token)
+    message = smart_str(urlsafe_base64_decode(token))
+    print(message)
+    id = message[32:]
+    account = Account.objects.get(pk=id)
+    if request.method == 'PUT':
+        user_serializer = UserSerializer(account)
+        if (request.data['password1'] != request.data['password2']):
+            return JsonResponse({"message": "erreur"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            account.set_password(request.data['password1'])
+            account.save()
+            return JsonResponse(user_serializer.data)
 class PasswordTokenCheckAPI(generics.GenericAPIView):
     def get(self, request, uidb64, token):
         pass
@@ -71,6 +84,8 @@ def token_status (request):
     id = message[32:]
     account = Account.objects.get(pk=id)
     now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    print(now)
+    print(account.created_at)
     c = now - account.created_at
     minutes = c.total_seconds() / 60
     print(minutes)
@@ -84,3 +99,53 @@ def token_status (request):
     #     return Response({'error' : 'Token is not valide'}, status= status.HTTP_400_BAD_REQUEST)
     # else:
     #     return Response({'message' : 'token est encore valide'}, status = status.HTTP_200_OK)
+
+@api_view(['POST'])
+def forgetPassword(request):
+    try:
+        account = Account.objects.get(email=request.data['email'])
+    except :
+        return Response({'message':'Votre compte n\'existe plus'},status.HTTP_200_OK)
+    if(account.is_active == False):
+        return Response({'message':'Votre compte n\'est pas actif'},status.HTTP_200_OK)
+    account.updated_at = datetime.utcnow().replace(tzinfo=pytz.utc)
+    account.save()
+    id = account.id
+    token = secrets.token_hex(16) + str(id)
+    encodeToken = urlsafe_base64_encode(smart_bytes(token))
+    base64_message = encodeToken.decode('ascii')
+    absurl = f'http://52.47.208.8/#/forgot-password/{base64_message}/'
+    email_body = f'Bonjour,\n\n' \
+                 'Afin de confirmer la la réinitialisation du votre mot de passe, nous vous invitons à cliquer sur ' + \
+                 absurl + '.\n\n' + \
+                 'L\'équipe Ecolotrans.'
+    email = request.data['email']
+    email_subject = 'Réinitialisation de mot de passe'
+    email = EmailMessage(
+        email_subject,
+        email_body,
+        'ahmedbelaiba19952018@gmail.com',
+        [email],
+    )
+    email.send(fail_silently=False)
+    return Response({'message':'success'},status.HTTP_200_OK)
+    # print(request.data['email'])
+    # if(request.data['email'] != 'ahmed@redlean.io'):
+    #     return Response({'message': "Department name should start with 'Dept-' "}, status=status.HTTP_200_OK)
+    # else:
+    #     return Response({'message': "Department name should start with 'Dept-' "},status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def token_rest_status(request):
+    token = request.data['token']
+    message = smart_str(urlsafe_base64_decode(token))
+    id = message[32:]
+    account = Account.objects.get(pk=id)
+    now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    c = now - account.updated_at
+    minutes = c.total_seconds() / 60
+    print(minutes)
+    if minutes > 30:
+        return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({'message': 'token est encore valide'}, status=status.HTTP_200_OK)

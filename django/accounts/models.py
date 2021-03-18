@@ -13,8 +13,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(null=True)
+    updated_at = models.DateTimeField(null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username',]
     objects = CustomUserManager()

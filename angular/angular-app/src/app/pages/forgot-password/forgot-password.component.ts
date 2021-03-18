@@ -15,6 +15,7 @@ export class ForgotPasswordComponent extends BlankLayoutCardComponent implements
   public email;
   public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
   public error: string;
+  public sendMail: string;
   constructor(private authService: ForgotPasswordService, private fb: FormBuilder, private router: Router) {
     super();
     this.loginForm = this.fb.group({
@@ -32,8 +33,12 @@ export class ForgotPasswordComponent extends BlankLayoutCardComponent implements
   }
   public login() {
     this.error = null;
+    this.sendMail = null;
     if (this.loginForm.valid) {
-      console.log(this.loginForm.getRawValue());
+      this.authService.login(this.loginForm.getRawValue())
+        .subscribe(
+          res => this.error = res.message,
+          err => this.error = 'ERREUR');
     }
   }
   public onInputChange(event) {

@@ -20,7 +20,6 @@ export class AuthService {
   public get isLoggedIn(): boolean {
     return this.isLogged$.value;
   }
-
   public login(data): Observable<any> {
     return this.http.post(`${this.url}/login/`, data)
       .pipe(

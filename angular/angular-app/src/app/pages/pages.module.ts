@@ -5,7 +5,6 @@ import { LoaderComponent } from 'app/components/loader/loader.component';
 // import { LoaderComponent } from 'app/components/loader/loader.component';
 import { ThemeModule } from 'theme';
 import { ErrorComponent } from './error';
-import { ForgotPasswordComponent } from './forgot-password';
 import { LoginComponent } from './login';
 import { PagesRoutingModule } from './pages-routing.module';
 import { DetailsFileEdiComponent } from './details-file-edi/details-file-edi.component';
@@ -31,7 +30,7 @@ import { DetailsFileEdiComponent } from './details-file-edi/details-file-edi.com
 
 
   ],
-  
-  
+
+
 })
 export class PagesModule { }

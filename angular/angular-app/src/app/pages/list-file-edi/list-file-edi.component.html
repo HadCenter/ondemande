@@ -39,20 +39,22 @@
         <tbody>
           <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;" (click)="row.status=='Terminé' ? gotoDetails(row)  : 'else $event.stopPropagation()'">
             <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a [matTooltip]=decodefile(row.file)
-                matTooltipClass="tooltip-custom" >{{decodefile(row.file)}} </a></td>
+                matTooltipClass="tooltip-custom" [routerLink]=""
+            (click)="uploadFileInput(row.client_name, row.file)">{{decodefile(row.file)}} </a></td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | date:"yyyy/MM/dd" }}</td>
-            <td class="mdl-data-table__cell--non-numeric">{{ row.client }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.client_name }}</td>
 
             <td *ngIf="row.wrong_commands !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
-                [matTooltip]=decodeValidatorError(row.wrong_commands) matTooltipClass="tooltip-custom" 
-                (click)="uploadFileOutput(row.client, row.wrong_commands)">{{
+
+                [matTooltip]=decodeValidatorError(row.wrong_commands) matTooltipClass="tooltip-custom" [routerLink]=""
+                (click)="uploadFileOutput(row.client_name, row.wrong_commands)">{{
                   decodeValidatorError(row.wrong_commands) }}</a></td>
             <td *ngIf="row.wrong_commands === '_'" class="mdl-data-table__cell--non-numeric" >{{ row.wrong_commands }}
             </td>
 
             <td *ngIf="row.validated_orders !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
-                [matTooltip]=decodeValidatorError(row.validated_orders) matTooltipClass="tooltip-custom" 
-                (click)="uploadFileOutput(row.client, row.validated_orders)">{{
+                [matTooltip]=decodeValidatorError(row.validated_orders) matTooltipClass="tooltip-custom" [routerLink]=""
+                (click)="uploadFileOutput(row.client_name, row.validated_orders)">{{
                   decodeValidatorError(row.validated_orders) }}</a></td>
             <td *ngIf="row.validated_orders === '_'" class="mdl-data-table__cell--non-numeric">{{ row.validated_orders }}
             </td>

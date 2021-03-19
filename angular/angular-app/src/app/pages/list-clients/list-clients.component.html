@@ -13,10 +13,10 @@
         </div>
         <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
         </base-pagination>
-<!--        <button (click)="openAddClient()"-->
-<!--                class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect button&#45;&#45;colored-teal dialog-button "-->
-<!--                >Ajouter client-->
-<!--              </button>-->
+        <button (click)="openAddClient()"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+                >Ajouter client
+              </button>
               <!-- <a routerLink="/create-client"><button
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
                 >Ajouter client
@@ -32,17 +32,16 @@
             </tr>
           </thead>
           <tbody>
-<!--            <tr  *ngFor="let row of advancedTable  | slice:0:limit;" (click)="gotoDetails(row.id)">-->
-            <tr  *ngFor="let row of advancedTable  | slice:0:limit;" >
+            <tr  *ngFor="let row of advancedTable  | slice:0:limit;" (click)="gotoDetails(row.id)">
               <td class="mdl-data-table__cell--non-numeric">{{ row.code_client }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.last_name }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.nom_client }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
               <td class="mdl-data-table__cell--non-numeric">
 
-<!--                  <button-->
-<!--                  class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect button&#45;&#45;colored-teal dialog-button"-->
-<!--                  routerLink="/details-client/{{ row.id }}" >Modifier-->
-<!--                </button>-->
+                  <button
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                  routerLink="/details-client/{{ row.id }}" >Modifier
+                </button>
                 &nbsp;
                 <button
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"

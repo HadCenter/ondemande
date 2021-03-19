@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from salesforceEsb.models import Contact
+# from salesforceEsb.models import Contact
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from .serializers import ClientSerializer, ContactSerializer
+from .serializers import ClientSerializer
+# from .serializers import ContactSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -184,22 +185,23 @@ def clientList(request):
     clients = Client.objects.filter(archived = False).order_by('-id')
     serializer = ClientSerializer(clients, many= True)
     return Response(serializer.data)
-@api_view(['GET'])
-def contactList(request):
-    contacts = Contact.objects.all()
-    serializer = ContactSerializer(contacts, many= True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# def contactList(request):
+#     contacts = Contact.objects.all()
+#     serializer = ContactSerializer(contacts, many= True)
+#     return Response(serializer.data)
 class fileCreate(APIView):
 
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, format=None):
-        code_client = request.data['client']
+        # code_client = request.data['client']
         timestr = time.strftime("%Y-%m-%d-%H-%M-%S")
         if(request.data['file'] == ''):
             return Response({ "message" : "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         ext = get_extension(request.data['file'].name)
-        clientName = Contact.objects.get(code_client=code_client).last_name
+        clientName = Client.objects.get(pk=request.data['client']).nom_client
+        # clientName = Contact.objects.get(code_client=code_client).last_name
         fileName = "EDI_"+ clientName + "_" + timestr + ext
         serializer = FileSerializer(data=request.data)
         if serializer.is_valid():
@@ -214,14 +216,15 @@ class fileCreate(APIView):
             serializer.save()
             ftp = connect()
             path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-            ftp.cwd(path_racine)
-            if code_client not in ftp.nlst():
-                ftp.mkd(code_client)
-            path_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
-            ftp.cwd(path_output)
-            if code_client not in ftp.nlst():
-                ftp.mkd(code_client)
-            path_client = path_racine + '/' + code_client
+            path_client = path_racine + '/' + clientName
+            # ftp.cwd(path_racine)
+            # if code_client not in ftp.nlst():
+            #     ftp.mkd(code_client)
+            # path_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
+            # ftp.cwd(path_output)
+            # if code_client not in ftp.nlst():
+            #     ftp.mkd(code_client)
+            # path_client = path_racine + '/' + code_client
             ftp.cwd(path_client)
             filename = [f for f in listdir(path) if isfile(join(path, f))][0]
             os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))

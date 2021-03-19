@@ -46,6 +46,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     private router: Router,
     public dialog: MatDialog) {
     super();
+    this.completeTable = this.tablesService.advanceTableData;
   }
   ngOnInit() {
     this.getFiles();
@@ -151,11 +152,9 @@ export class ListFileEDIComponent extends UpgradableComponent {
   }
 
   public getFiles() {
-
     this.tablesService.getAllFiles()
       .subscribe(res => {
         this.files = res;
-        console.warn(this.files)
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
@@ -179,16 +178,13 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.files = [];
     this.getFiles();
   }
-  public uploadFileInput(row, clientName, fileName) {
-    console.warn(row)
-
+  public uploadFileInput(clientName, fileName) {
     fileName = fileName.substring(7)
-    fileName = decodeURI(fileName).replace('%26', '&');
+    fileName = decodeURIComponent(fileName);
 
     this.tablesService.uploadFileInput(clientName, fileName)
       .subscribe(res => {
         saveAs(res, fileName);
-
       }, error => console.log(error));
   }
 
@@ -198,14 +194,14 @@ export class ListFileEDIComponent extends UpgradableComponent {
   }
   public decodefile(file) {
 
-    return decodeURI(file.substring(7)).replace('%26', '&');
+    return decodeURIComponent(file.substring(7));
   }
   public decodeValidatorError(file) {
 
     return decodeURI(file);
   }
   public uploadFileOutput(clientName, fileName) {
-    fileName = decodeURI(fileName).replace('%26', '&');
+    fileName = decodeURIComponent(fileName);
     this.tablesService.uploadFileOutput(clientName, fileName)
       .subscribe(res => {
         console.log(res);
@@ -357,8 +353,8 @@ export class DialogImportFile {
   ) {
     this.dropdownRefresh();
   }
-  //   public listObject: { id: string, nom_client: string }[] = [];
-  public listObject: { code_client: string, nom_client: string }[] = [];
+  public listObject: { id: string, nom_client: string }[] = [];
+//   public listObject: { code_client : string ,nom_client: string }[] = [];
   public listItems: Array<string> = [];
   ngOnInit(): void {
     this.stateGroupOptions = this.myForm.get('stateGroup')!.valueChanges
@@ -390,11 +386,13 @@ export class DialogImportFile {
     this.importFileService.getAllClients().subscribe(
       data => {
         data.forEach(element => {
-          this.listItems.push(element["last_name"]);
-          var code_client = element['code_client'];
-          var nomClient = element['last_name'];
+//           this.listItems.push(element["last_name"]);
+//           var code_client = element['code_client'];
+//           var nomClient = element['last_name'];
+           this.listItems.push(element["nom_client"]);var id = element['id']; var nomClient = element['nom_client'];
           var client = {
-            code_client: code_client,
+//             code_client: code_client,
+            id: id,
             nom_client: nomClient
           };
           this.listObject.push(client);
@@ -439,7 +437,8 @@ export class DialogImportFile {
     formData.append('file', this.myForm.get('fileSource').value);
     var nom = this.myForm.getRawValue().stateGroup;
     var client = this.listObject.find(element => element.nom_client === nom);
-    formData.append('client', client.code_client);
+    formData.append('client', client.id);
+//     formData.append('client', client.code_client);
     this.importFileService.upload(formData).subscribe(
       (res) => {
         this.showloader = false;

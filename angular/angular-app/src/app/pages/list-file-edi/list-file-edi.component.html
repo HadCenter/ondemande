@@ -40,13 +40,13 @@
           <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
             <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a [matTooltip]=decodefile(row.file)
                 matTooltipClass="tooltip-custom" [routerLink]=""
-            (click)="uploadFileInput(row.client_name, row.file)">{{decodefile(row.file)}} </a></td>
+            (click)="downloadFileInput(row.client_name, row.file)">{{decodefile(row.file)}} </a></td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | date:"yyyy/MM/dd" }}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.client_name }}</td>
 
             <td *ngIf="row.wrong_commands !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
                 [matTooltip]=decodeValidatorError(row.wrong_commands) matTooltipClass="tooltip-custom" [routerLink]=""
-                (click)="uploadFileOutput(row.client_name, row.wrong_commands)">{{
+                (click)="downloadFileOutput(row.client_name, row.wrong_commands)">{{
                   decodeValidatorError(row.wrong_commands) }}</a></td>
             <td *ngIf="row.wrong_commands === '_'" class="mdl-data-table__cell--non-numeric" >{{ row.wrong_commands }}
             </td>

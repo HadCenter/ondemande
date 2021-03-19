@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { FileNameAndClientName } from 'app/models/FileNameAndClientCode.model';
 
 @Injectable()
 export class ListFileEdiService {
@@ -15,7 +16,7 @@ export class ListFileEdiService {
   public executeJob(row) : Observable<any> {
     var fileName = decodeURIComponent(row.file);
     console.log(fileName);
-    const body = [{"filePath" : fileName, "ClientOwner" : row.client, "fileId" : row.id}]
+    const body = [{"filePath" : fileName, "ClientOwner" : row.client_name, "fileId" : row.id}]
     console.log(body);
     return this.http.post(`${this.urlJobTalend}/startEngineOnEdiFiles`, body);
   }
@@ -154,14 +155,12 @@ export class ListFileEdiService {
   public getAllFiles () : Observable<any> {
     return this.http.get(`${this.url}/getFiles/`);
   }
-  public uploadFileInput (clientName, fileName) : Observable<any> {
-
-    return this.http.get(`${this.url}/uploadfile/${clientName}/${fileName}/`, { responseType: "blob" });
+  public downloadFileInput (clientName, fileName) : Observable<any> {
+    let body = new FileNameAndClientName(fileName, clientName,);
+    return this.http.post(`${this.url}/downloadFile/`,body, { responseType: "blob" });
   }
-  public uploadFileOutput (clientName, fileName) : Observable<any> {
-
-    return this.http.get(`${this.url}/uploadFileOutput/${clientName}/${fileName}/`, { responseType: "blob" });
+  public downloadFileOutput (clientName, fileName) : Observable<any> {
+    let body = new FileNameAndClientName(fileName,clientName );
+    return this.http.post(`${this.url}/downloadFileOutput/`,body, { responseType: "blob" });
   }
-
-
 }

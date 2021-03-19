@@ -185,11 +185,6 @@ def clientList(request):
     clients = Client.objects.filter(archived = False).order_by('-id')
     serializer = ClientSerializer(clients, many= True)
     return Response(serializer.data)
-# @api_view(['GET'])
-# def contactList(request):
-#     contacts = Contact.objects.all()
-#     serializer = ContactSerializer(contacts, many= True)
-#     return Response(serializer.data)
 class fileCreate(APIView):
 
     parser_classes = [MultiPartParser, FormParser]
@@ -217,14 +212,6 @@ class fileCreate(APIView):
             ftp = connect()
             path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
             path_client = path_racine + '/' + clientName
-            # ftp.cwd(path_racine)
-            # if code_client not in ftp.nlst():
-            #     ftp.mkd(code_client)
-            # path_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
-            # ftp.cwd(path_output)
-            # if code_client not in ftp.nlst():
-            #     ftp.mkd(code_client)
-            # path_client = path_racine + '/' + code_client
             ftp.cwd(path_client)
             filename = [f for f in listdir(path) if isfile(join(path, f))][0]
             os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
@@ -244,10 +231,10 @@ def fileList(request):
     files = EDIfile.objects.filter(archived = False).order_by('-id')
     serializer = FileSerializer(files, many= True)
     return Response(serializer.data)
-class uploadfileNameAPIView(APIView):
-    def get(self, request, clientName, fileName):
-        print(clientName)
-        print(fileName)
+@api_view(['POST'])
+def downloadFileName(request):
+        fileName = request.data['fileName']
+        clientName = request.data['clientName']
         ftp = connect()
         path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
         path_client = path_racine + '/' + clientName
@@ -265,7 +252,6 @@ class uploadfileNameAPIView(APIView):
         response['Content-Length'] = os.path.getsize(fileName)
         os.remove(fileName)
         return response
-
 @api_view(['POST'])
 def seeFileContent(request):
         ftp = connect()
@@ -286,8 +272,8 @@ def seeFileContent(request):
         responseObjectText = jsonpickle.encode(responseObject,unpicklable=False)
         print (responseObjectText)
         return HttpResponse(responseObjectText, content_type="application/json")
-
-class uploadfileoutputNameAPIView(APIView):
+@api_view(['POST'])
+def downloadFileoutputName(request):
     def get(self, request, clientName, fileName):
         print(clientName)
         print(fileName)

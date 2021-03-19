@@ -178,11 +178,10 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.files = [];
     this.getFiles();
   }
-  public uploadFileInput(clientName, fileName) {
+  public downloadFileInput(clientName, fileName) {
     fileName = fileName.substring(7)
     fileName = decodeURIComponent(fileName);
-
-    this.tablesService.uploadFileInput(clientName, fileName)
+    this.tablesService.downloadFileInput(clientName, fileName)
       .subscribe(res => {
         saveAs(res, fileName);
       }, error => console.log(error));
@@ -192,12 +191,11 @@ export class ListFileEDIComponent extends UpgradableComponent {
     return decodeURIComponent(file.substring(7));
   }
   public decodeValidatorError(file) {
-
     return decodeURI(file);
   }
-  public uploadFileOutput(clientName, fileName) {
+  public downloadFileOutput(clientName, fileName) {
     fileName = decodeURIComponent(fileName);
-    this.tablesService.uploadFileOutput(clientName, fileName)
+    this.tablesService.downloadFileOutput(clientName, fileName)
       .subscribe(res => {
         console.log(res);
         saveAs(res, fileName);

@@ -45,7 +45,6 @@
             <td class="mdl-data-table__cell--non-numeric">{{ row.client_name }}</td>
 
             <td *ngIf="row.wrong_commands !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
-
                 [matTooltip]=decodeValidatorError(row.wrong_commands) matTooltipClass="tooltip-custom" >{{
                   decodeValidatorError(row.wrong_commands) }}</a></td>
             <td *ngIf="row.wrong_commands === '_'" class="mdl-data-table__cell--non-numeric" >{{ row.wrong_commands }}

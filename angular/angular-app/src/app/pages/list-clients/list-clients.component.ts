@@ -210,7 +210,10 @@ export class DialogCreateClient extends UpgradableComponent {
         },
           // error => this.error = "error.message");
           // for fake data
-          err => this.error = "Le client déjà existe");
+          (err) => {
+            this.showloader = false;
+            err => this.error = "Le client déjà existe"
+          });
     }
   }
   public onInputChange(event) {

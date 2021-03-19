@@ -29,6 +29,9 @@ export class ForgotPasswordTokenComponent extends BlankLayoutCardComponent imple
       });
       this.password1 = this.loginForm.get('password1');
       this.password2 = this.loginForm.get('password2');
+      this.route.queryParams.subscribe(params =>{
+        this.token = params.token;
+      })
     }
 
   ngOnInit(): void {
@@ -43,8 +46,8 @@ export class ForgotPasswordTokenComponent extends BlankLayoutCardComponent imple
   }
   public getTokenStatus()
   {
-    const routeParams = this.route.snapshot.paramMap;
-    this.token = routeParams.get('token');
+//     const routeParams = this.route.snapshot.paramMap;
+//     this.token = routeParams.get('token');
     var data = {};
     data['token'] = this.token;
     this.userPasswordService.getTokenStatus(data)
@@ -53,8 +56,8 @@ export class ForgotPasswordTokenComponent extends BlankLayoutCardComponent imple
   }
   public login()
   {
-    const routeParams = this.route.snapshot.paramMap;
-    this.token = routeParams.get('token');
+//     const routeParams = this.route.snapshot.paramMap;
+//     this.token = routeParams.get('token');
     this.password1 = this.loginForm.getRawValue()['password1'];
     this.password2 = this.loginForm.getRawValue()['password2'];
     console.log(this.loginForm.getRawValue());

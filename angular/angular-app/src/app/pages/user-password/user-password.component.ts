@@ -28,6 +28,9 @@ export class UserPasswordComponent extends BlankLayoutCardComponent implements O
     });
     this.password1 = this.loginForm.get('password1');
     this.password2 = this.loginForm.get('password2');
+    this.route.queryParams.subscribe(params =>{
+        this.token = params.token;
+      })
     }
   ngOnInit(): void {
     this.loginForm.valueChanges.subscribe(() => {
@@ -37,8 +40,8 @@ export class UserPasswordComponent extends BlankLayoutCardComponent implements O
   }
   public getTokenStatus()
   {
-    const routeParams = this.route.snapshot.paramMap;
-    this.token = routeParams.get('token');
+//     const routeParams = this.route.snapshot.paramMap;
+//     this.token = routeParams.get('token');
     var data = {};
     data['token'] = this.token;
     this.userPasswordService.getTokenStatus(data)
@@ -51,9 +54,9 @@ export class UserPasswordComponent extends BlankLayoutCardComponent implements O
   }
   public login()
   {
-    const routeParams = this.route.snapshot.paramMap;
+//     const routeParams = this.route.snapshot.paramMap;
 //     this.id = Number(routeParams.get('id'));
-    this.token = routeParams.get('token');
+//     this.token = routeParams.get('token');
     this.password1 = this.loginForm.getRawValue()['password1'];
     this.password2 = this.loginForm.getRawValue()['password2'];
     console.log(this.loginForm.getRawValue());

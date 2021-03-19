@@ -93,32 +93,28 @@ def token_status (request):
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'message' : 'token est encore valide'}, status = status.HTTP_200_OK)
-    # user = Account.objects.get(pk=request.data['id'])
-    # token = request.data['token']
-    # if not PasswordResetTokenGenerator().check_token(user, token):
-    #     return Response({'error' : 'Token is not valide'}, status= status.HTTP_400_BAD_REQUEST)
-    # else:
-    #     return Response({'message' : 'token est encore valide'}, status = status.HTTP_200_OK)
+
 
 @api_view(['POST'])
 def forgetPassword(request):
     try:
         account = Account.objects.get(email=request.data['email'])
     except :
-        return Response({'message':'Votre compte n\'existe plus'},status.HTTP_200_OK)
+        return Response({'message':'Votre compte n\'existe plus/n\'est pas actif'},status.HTTP_200_OK)
     if(account.is_active == False):
-        return Response({'message':'Votre compte n\'est pas actif'},status.HTTP_200_OK)
+        return Response({'message':'Votre compte n\'existe plus/n\'est pas actif'},status.HTTP_200_OK)
     account.updated_at = datetime.utcnow().replace(tzinfo=pytz.utc)
     account.save()
     id = account.id
     token = secrets.token_hex(16) + str(id)
     encodeToken = urlsafe_base64_encode(smart_bytes(token))
     base64_message = encodeToken.decode('ascii')
-    absurl = f'http://52.47.208.8/#/forgot-password/{base64_message}/'
+    absurl = f'http://52.47.208.8/#/forgot-password?token={base64_message}'
     email_body = f'Bonjour,\n\n' \
-                 'Afin de confirmer la la réinitialisation du votre mot de passe, nous vous invitons à cliquer sur ' + \
+                 'Vous avez oublié votre mot de passe pour accéder à votre espace onDemand . Pour définir un nouveau mot de passe, il vous suffit de cliquer sur le lien ci-dessous : ' + \
                  absurl + '.\n\n' + \
-                 'L\'équipe Ecolotrans.'
+                 'Ce lien expirera dans 30 minutes, assurez-vous de l\'utiliser bientôt.\n\n' \
+                 'Merci.'
     email = request.data['email']
     email_subject = 'Réinitialisation de mot de passe'
     email = EmailMessage(
@@ -129,11 +125,6 @@ def forgetPassword(request):
     )
     email.send(fail_silently=False)
     return Response({'message':'success'},status.HTTP_200_OK)
-    # print(request.data['email'])
-    # if(request.data['email'] != 'ahmed@redlean.io'):
-    #     return Response({'message': "Department name should start with 'Dept-' "}, status=status.HTTP_200_OK)
-    # else:
-    #     return Response({'message': "Department name should start with 'Dept-' "},status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def token_rest_status(request):

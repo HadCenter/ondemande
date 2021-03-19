@@ -1,5 +1,4 @@
 import pytz
-
 from .models import Account
 from rest_framework.response import Response
 from .serializers import LoginSerializer, UserSerializer, RegisterSerializer
@@ -46,7 +45,7 @@ class RegisterAPI(generics.GenericAPIView):
 		token = secrets.token_hex(16) + str(id)
 		encodeToken = urlsafe_base64_encode(smart_bytes(token))
 		base64_message = encodeToken.decode('ascii')
-		absurl = f'http://52.47.208.8/#/user-password/{base64_message}/'
+		absurl = f'http://52.47.208.8/#/user-password?token={base64_message}'
 		email_body = f'Bonjour,\n\nVotre compte onDemand a été créé le {date_time}.\n\n' \
 					 'Afin de confirmer la création de votre compte, nous vous invitons à cliquer sur ' + \
 					 absurl + '.\n\n'+\

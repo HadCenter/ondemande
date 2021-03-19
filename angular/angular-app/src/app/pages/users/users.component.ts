@@ -170,7 +170,9 @@ export class DialogCreateUser extends UpgradableComponent {
             this.showloader = false;
             this.dialogRef.close('submit');
           },
-          error => { this.error = "L'email est déja utilisé"; console.log(error); });
+          error => { 
+            this.showloader = false;
+            this.error = "L'email est déja utilisé"; console.log(error); });
     }
   }
   //   dropdownRefresh()

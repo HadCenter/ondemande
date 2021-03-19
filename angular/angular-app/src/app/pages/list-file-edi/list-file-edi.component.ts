@@ -438,6 +438,7 @@ export class DialogImportFile {
         this.dialogRef.close('submit');
       },
       (err) => {
+        this.showloader = false;
         this.error = "SVP, Télécharger un fichier EDI !";
       }
     );

@@ -9,7 +9,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { DetailsFileEdiComponent } from './details-file-edi.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
-
+import { LoaderModule } from 'app/components/loader/loader.module';
 @NgModule({
   declarations: [DetailsFileEdiComponent],
   imports: [
@@ -19,7 +19,8 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule,
     ReactiveFormsModule,
     MatExpansionModule,
-    MatInputModule
+    MatInputModule,
+    LoaderModule
   ],
   providers: [
     DetailsFileEdiService,

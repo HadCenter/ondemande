@@ -20,4 +20,9 @@ export class DetailsFileEdiService {
 
     return this.http.get(`${this.url}/uploadfile/${clientName}/${fileName}/`, { responseType: "blob" });
   }
+
+  public getFileEdi (data) : Observable<any> {
+
+    return this.http.post(`${this.url}/seeFileContent`, data);
+  }
 }

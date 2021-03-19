@@ -10,53 +10,70 @@ import * as XLSX from 'xlsx';
 })
 export class DetailsFileEdiComponent extends UpgradableComponent implements OnInit {
   file: any;
-  data: any;
-   AOA : any[][];
-   headData: any;
-   advancedHeaders: string[] = ['RefClient', 'Expediteur', 'Type', 'Date_livraison',"Start",'End',"Labels","Quantite","CodeArticle","Nom_destinataire","rue","ville","CP","Adresse2","CODE_interphone","Etage","Porte","Instructions","Telephone","Tel2","Tel3","email","Ref_commande","Ref2","Ref3","Code_barres","Nom_tournee","Arret"
-  ];
-    advancedTable = [
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-    {position: 'LIVINNOCENT01', name: 'INNOCENT', weight: 'delivery', symbol: '16/01/17',start:'07:30',end:'12:00'},
-  ];
+  fileWrong: any;
+  fileValid: any;
+  show=false;
+  column: string;
 
   constructor(private route: ActivatedRoute, private fileService: DetailsFileEdiService) {
     super();
   }
 
   ngOnInit(): void {
+    this.show=true;
     this.getFile(this.route.snapshot.params.id);
 
   }
 
   getWrongFile() {
-    // let fileName = this.file.file.substring(7)
-    // fileName = decodeURI(fileName).replace('%26', '&');
-      
-      //  });
+    var data = {
+      "clientCode": this.file.client,
+      "fileName": this.file.wrong_commands,
+    }
+    this.fileService.getFileEdi(data).subscribe(res => {
+      console.log("res", res)
+      this.fileWrong = res;
+      this.show=false;
+    })
+    // this.getValidFile();
+  }
+
+  getValidFile() {
+    var data = {
+      "clientCode": this.file.client,
+      "fileName": this.file.validated_orders,
+    }
+    this.fileService.getFileEdi(data).subscribe(res => {
+      console.log("res", res)
+      this.fileValid = res;
+    })
+  }
+
+
+
+  getFile(id: string) {
+    this.fileService.get(id)
+      .subscribe(
+        data => {
+          this.file = data;
+          console.log("file", this.file);
+          this.getValidFile();
+          this.getWrongFile();
+        },
+        error => {
+          console.log(error);
+        });
+  }
+
+  onSearchChange(searchValue: string): void {  
+    console.log(searchValue);
+    this.column=searchValue;
+    console.warn("***",this.column)
+  }
+
+correctionFile (){
+  console.warn("****",this.fileWrong.rows)
 }
-
-getFile(id: string): void {
-  this.fileService.get(id)
-    .subscribe(
-      data => {
-        this.file = data;
-        console.log("file", this.file);
-      },
-      error => {
-        console.log(error);
-      });
-}
-
-
 
 
 }

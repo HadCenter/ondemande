@@ -17,7 +17,6 @@ export interface DialogData {
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent extends UpgradableComponent implements OnInit {
-  limit = 15;
   @HostBinding('class.mdl-grid') private readonly mdlGrid = true;
   @HostBinding('class.mdl-cell') private readonly mdlCell = true;
   @HostBinding('class.mdl-cell--12-col-desktop') private readonly mdlCell12ColDesktop = true;
@@ -27,6 +26,15 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   users = [];
   show = true;
+  public currentPage = 1;
+  private countPerPage = 8;
+  public numPage = 0;
+  public advancedTable = [];
+  public filterValue: any;
+  limit = 15;
+  public getAdvancedTablePage(page, countPerPage) {
+    return this.users.slice((page - 1) * countPerPage, page * countPerPage);
+  }
   public advancedHeaders = this.usersService.getAdvancedHeaders();
   constructor(private usersService: UsersService,
     private matDialog: MatDialog, private router: Router,) {
@@ -35,13 +43,31 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
-    console.log(this.users);
+  }
+  public changePage(page, force = false) {
+    if (page !== this.currentPage || force) {
+      this.currentPage = page;
+      this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
+    }
+  }
+  setFilteredItems() {
+    this.advancedTable = this.filterItems(this.filterValue);
+    if (this.filterValue === '') {
+      this.advancedTable = this.advancedTable;
+    }
+  }
+  filterItems(filterValue) {
+    return this.users.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
+    });
   }
 
   public getUsers() {
     this.usersService.getAllUsers()
       .subscribe(res => {
-        this.users = res; console.log(this.users);
+        this.users = res;
+        this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
+        this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },
         // error => this.error = "error.message");
         // for fake data
@@ -64,6 +90,7 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
   }
 
   public actualiser() {
+    this.advancedTable = [];
     this.users = [];
     this.show = true;
     this.getUsers();
@@ -147,7 +174,6 @@ export class DialogCreateUser extends UpgradableComponent {
     this.error = null;
     const formData = new FormData();
     formData.append('email', this.signupForm.get('email').value);
-    //     formData.append('password', this.signupForm.get('password').value);
     formData.append('username', this.signupForm.get('username').value);
     var name = this.signupForm.getRawValue().name;
     if (name === 'SuperAdmin') {
@@ -155,13 +181,6 @@ export class DialogCreateUser extends UpgradableComponent {
     } else {
       formData.append('is_admin', "true")
     }
-    //     formData.append('role', name);
-    //     console.log(name);
-    //     var role = this.listObject.find(element => element.label === name);
-    //     console.log(formData.get('email'));
-    //     console.log(formData.get('password'));
-    //     console.log(formData.get('username'));
-    //     console.log(formData.get('role'));
     if (this.signupForm.valid) {
       this.showloader = true;
       this.createuserService.signup(formData)
@@ -170,7 +189,7 @@ export class DialogCreateUser extends UpgradableComponent {
             this.showloader = false;
             this.dialogRef.close('submit');
           },
-          error => { 
+          error => {
             this.showloader = false;
             this.error = "L'email est déja utilisé"; console.log(error); });
     }

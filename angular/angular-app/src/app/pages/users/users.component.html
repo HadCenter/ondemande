@@ -4,22 +4,22 @@
       <base-card-title>
         <h1 class="mdl-card__title-text">Liste des utilisateurs</h1>
         <div class="mdl-layout-spacer"></div>
-<!--        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield&#45;&#45;expandable search-table">-->
-<!--          <div class="mdl-textfield label-search " >-->
-<!--            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"-->
-<!--              [(ngModel)]="filterValue" placeholder="Rechercher" />-->
-<!--            <label class="mdl-textfield__label" for="search2" ></label>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">-->
-<!--        </base-pagination>-->
+        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+          <div class="mdl-textfield label-search " >
+            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+              [(ngModel)]="filterValue" placeholder="Rechercher" />
+            <label class="mdl-textfield__label" for="search2" ></label>
+          </div>
+        </div>
+        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+        </base-pagination>
         <button (click)="openAddUser()"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
                 >Ajouter utilisateur
               </button>
       </base-card-title>
       <base-card-body class="no-padding">
-        <table *ngIf="users.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+        <table *ngIf="advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
           <thead>
             <tr>
               <th *ngFor="let header of advancedHeaders " class="mdl-data-table__cell--non-numeric">
@@ -28,7 +28,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let row of users  | slice:0:limit; let i = index;">
+            <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
               <td class="mdl-data-table__cell--non-numeric">{{ row.username }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.last_login | date:"yyyy/MM/dd" }}</td>

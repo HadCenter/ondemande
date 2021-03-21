@@ -1,16 +1,13 @@
-from django.shortcuts import render
-# from salesforceEsb.models import Contact
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from .serializers import ClientSerializer
-# from .serializers import ContactSerializer
+from .serializers import ClientSerializer, FileSerializer,ClientTestSerialize
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Client
-from .serializers import FileSerializer
 from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
 import shutil
 from .models import EDIfile
@@ -19,12 +16,10 @@ import time
 import os
 from os import listdir
 from os.path import isfile, join
-from django.core.mail import EmailMessage
 from django.core import mail
 import pandas as pd
 from .models import FileExcelContent
 import jsonpickle
-from django.core.serializers import serialize
 
 @api_view(['GET'])
 def testCreate(request):
@@ -294,6 +289,19 @@ def downloadFileoutputName(request):
         response['Content-Length'] = os.path.getsize(fileName)
         os.remove(fileName)
         return response
+
+@api_view(['GET'])
+def numberOfFilesPerClient(request):
+    queryset = Client.objects.all()
+    serializer_class = ClientTestSerialize(queryset,many=True)
+    result = []
+    for client in serializer_class.data:
+        data= {}
+        data['clientName'] = client['nom_client']
+        data['nbrFiles'] = len(client['files'])
+        result.append(data)
+    json_data = JSONRenderer().render(result)
+    return HttpResponse(json_data,content_type='application/json')
 def connect():
     FTP_HOST = "talend.ecolotrans.net"
     FTP_USER = "talend"
@@ -305,6 +313,7 @@ def get_extension(filename):
     basename = os.path.basename(filename)  # os independent
     ext = '.'.join(basename.split('.')[1:])
     return '.' + ext if ext else None
+
 
 
 

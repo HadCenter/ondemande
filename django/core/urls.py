@@ -16,5 +16,6 @@ urlpatterns = [
     path('downloadFile/', views.downloadFileName, name = "upload-file"),
     path('downloadFileOutput/', views.downloadFileoutputName, name ="upload-file-output"),
     path('seeFileContent', views.seeFileContent, name="seeFileContent"),
+    path('getNumberOfFilesPerClient/', views.numberOfFilesPerClient, name="numberOfFilesPerClient"),
 
 ]

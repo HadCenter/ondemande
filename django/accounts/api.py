@@ -49,6 +49,7 @@ class RegisterAPI(generics.GenericAPIView):
 		email_body = f'Bonjour,\n\nVotre compte onDemand a été créé le {date_time}.\n\n' \
 					 'Afin de confirmer la création de votre compte, nous vous invitons à cliquer sur ' + \
 					 absurl + '.\n\n'+\
+					 'Ce lien expirera dans 2 jours, assurez-vous de l\'utiliser bientôt.\n\n' \
 					 'Nous vous rappelons que votre identifiant correspond à votre adresse email.\n\n' + \
 					 'Cordialement.\n\n' \
 					 'L\'équipe Ecolotrans.'

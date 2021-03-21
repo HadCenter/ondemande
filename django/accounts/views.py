@@ -58,9 +58,7 @@ def update_user_password (request):
 @api_view(['PUT'])
 def update_reset_user_password(request):
     token = request.data['token']
-    print(token)
     message = smart_str(urlsafe_base64_decode(token))
-    print(message)
     id = message[32:]
     account = Account.objects.get(pk=id)
     if request.method == 'PUT':
@@ -68,6 +66,7 @@ def update_reset_user_password(request):
         if (request.data['password1'] != request.data['password2']):
             return JsonResponse({"message": "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         else:
+            account.is_staff = True
             account.set_password(request.data['password1'])
             account.save()
             return JsonResponse(user_serializer.data)
@@ -78,18 +77,15 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
 @api_view(['POST'])
 def token_status (request):
     token = request.data['token']
-    print(token)
     message = smart_str(urlsafe_base64_decode(token))
-    print(message)
     id = message[32:]
     account = Account.objects.get(pk=id)
     now = datetime.utcnow().replace(tzinfo=pytz.utc)
-    print(now)
     print(account.created_at)
     c = now - account.created_at
     minutes = c.total_seconds() / 60
     print(minutes)
-    if minutes > 30:
+    if minutes > 2880 or account.is_active == True:
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'message' : 'token est encore valide'}, status = status.HTTP_200_OK)
@@ -111,7 +107,7 @@ def forgetPassword(request):
     base64_message = encodeToken.decode('ascii')
     absurl = f'http://52.47.208.8/#/forgot-password?token={base64_message}'
     email_body = f'Bonjour,\n\n' \
-                 'Vous avez oublié votre mot de passe pour accéder à votre espace onDemand . Pour définir un nouveau mot de passe, il vous suffit de cliquer sur le lien ci-dessous : ' + \
+                 'Vous avez oublié votre mot de passe pour accéder à votre espace onDemand . Pour définir un nouveau mot de passe, il vous suffit de cliquer sur le lien ci-dessous : \n' + \
                  absurl + '.\n\n' + \
                  'Ce lien expirera dans 30 minutes, assurez-vous de l\'utiliser bientôt.\n\n' \
                  'Merci.'
@@ -135,8 +131,7 @@ def token_rest_status(request):
     now = datetime.utcnow().replace(tzinfo=pytz.utc)
     c = now - account.updated_at
     minutes = c.total_seconds() / 60
-    print(minutes)
-    if minutes > 30:
+    if minutes > 30 or account.is_staff == True:
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'message': 'token est encore valide'}, status=status.HTTP_200_OK)

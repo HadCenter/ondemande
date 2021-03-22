@@ -155,6 +155,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.getAllFiles()
       .subscribe(res => {
         this.files = res;
+        console.log('files',this.files)
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
@@ -191,9 +192,9 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
   gotoDetails(row) {
     console.log('GOTO DETAILS', row)
-    this.router.navigate(['/details-file-edi',row.id])
+    this.router.navigate(['/details-file-edi',row.idFile])
   }
-  public decodefile(file) {
+  // public decodefile(file) {
 
   //   return decodeURIComponent(file.substring(7));
   // }

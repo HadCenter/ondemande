@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { FileNameAndClientName } from 'app/models/FileNameAndClientCode.model';
+import { FileNameAndClientCode } from 'app/models/FileNameAndClientCode.model';
 
 @Injectable()
 export class ListFileEdiService {
@@ -155,12 +155,12 @@ export class ListFileEdiService {
   public getAllFiles () : Observable<any> {
     return this.http.get(`${this.url}/getFiles/`);
   }
-  public downloadFileInput (clientName, fileName) : Observable<any> {
-    let body = new FileNameAndClientName(fileName, clientName,);
+  public downloadFileInput (clientCode, fileName) : Observable<any> {
+    let body = new FileNameAndClientCode(fileName, clientCode,);
     return this.http.post(`${this.url}/downloadFile/`,body, { responseType: "blob" });
   }
-  public downloadFileOutput (clientName, fileName) : Observable<any> {
-    let body = new FileNameAndClientName(fileName,clientName );
+  public downloadFileOutput (clientCode, fileName) : Observable<any> {
+    let body = new FileNameAndClientCode(fileName,clientCode);
     return this.http.post(`${this.url}/downloadFileOutput/`,body, { responseType: "blob" });
   }
 }

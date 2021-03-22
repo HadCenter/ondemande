@@ -1,8 +1,8 @@
-export class FileNameAndClientName  {
+export class FileNameAndClientCode  {
     fileName: string;
-    clientName: string;
-    constructor(fileName: string, clientName: string) {
+    clientCode: string;
+    constructor(fileName: string, clientCode: string) {
       this.fileName = fileName;
-      this.clientName = clientName;
+      this.clientCode= clientCode;
   }
 }

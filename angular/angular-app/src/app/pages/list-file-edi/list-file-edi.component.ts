@@ -154,6 +154,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   public getFiles() {
     this.tablesService.getAllFiles()
       .subscribe(res => {
+        console.warn('res',res);
         this.files = res;
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
@@ -178,24 +179,25 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.files = [];
     this.getFiles();
   }
-  public downloadFileInput(clientName, fileName) {
-    fileName = fileName.substring(7)
-    fileName = decodeURIComponent(fileName);
-    this.tablesService.downloadFileInput(clientName, fileName)
+  public downloadFileInput(clientCode, fileName) {
+    // fileName = fileName.substring(7)
+    // fileName = decodeURIComponent(fileName);
+    console.log("****",fileName)
+    this.tablesService.downloadFileInput(clientCode, fileName)
       .subscribe(res => {
         saveAs(res, fileName);
       }, error => console.log(error));
   }
-  public decodefile(file) {
+  // public decodefile(file) {
 
-    return decodeURIComponent(file.substring(7));
-  }
-  public decodeValidatorError(file) {
-    return decodeURI(file);
-  }
-  public downloadFileOutput(clientName, fileName) {
-    fileName = decodeURIComponent(fileName);
-    this.tablesService.downloadFileOutput(clientName, fileName)
+  //   return decodeURIComponent(file.substring(7));
+  // }
+  // public decodeValidatorError(file) {
+  //   return decodeURI(file);
+  // }
+  public downloadFileOutput(clientCode, fileName) {
+  //  fileName = decodeURIComponent(fileName);
+    this.tablesService.downloadFileOutput(clientCode, fileName)
       .subscribe(res => {
         console.log(res);
         saveAs(res, fileName);

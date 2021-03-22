@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Client
+from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from rest_framework.parsers import JSONParser
 from django.http import HttpResponse
@@ -183,8 +183,12 @@ def clientCreate(request):
 @api_view(['GET'])
 def clientList(request):
     clients = Client.objects.filter(archived = False).order_by('-id')
-    serializer = ClientSerializer(clients, many= True)
-    return Response(serializer.data)
+    listClients = list()
+    for clientDB in clients :
+        clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
+        listClients.append(clientResponse)
+    #serializer = ClientSerializer(clients, many= True)
+    return HttpResponse(jsonpickle.encode(listClients,unpicklable=False),content_type="application/json")
 class fileCreate(APIView):
 
     parser_classes = [MultiPartParser, FormParser]
@@ -195,7 +199,9 @@ class fileCreate(APIView):
         if(request.data['file'] == ''):
             return Response({ "message" : "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         ext = get_extension(request.data['file'].name)
+        clientCode = Client.objects.get(pk=request.data['client']).code_client
         clientName = Client.objects.get(pk=request.data['client']).nom_client
+
         # clientName = Contact.objects.get(code_client=code_client).last_name
         fileName = "EDI_"+ clientName + "_" + timestr + ext
         serializer = FileSerializer(data=request.data)
@@ -211,7 +217,7 @@ class fileCreate(APIView):
             serializer.save()
             ftp = connect()
             path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-            path_client = path_racine + '/' + clientName
+            path_client = path_racine + '/' + clientCode
             ftp.cwd(path_client)
             filename = [f for f in listdir(path) if isfile(join(path, f))][0]
             os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
@@ -228,16 +234,24 @@ class fileCreate(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET'])
 def fileList(request):
-    files = EDIfile.objects.filter(archived = False).order_by('-id')
-    serializer = FileSerializer(files, many= True)
-    return Response(serializer.data)
+    files = EDIfile.objects.select_related('client').filter(archived = False).order_by('-id')
+    listFiles = list()
+    for fileDB  in files :
+        clientDB = fileDB.client
+        clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
+        fileReponse = FileInfo(idFile= fileDB.id,fileName=fileDB.file.name,createdAt=fileDB.created_at,status=fileDB.status ,wrongCommands=fileDB.wrong_commands,validatedOrders=fileDB.validated_orders,archived=fileDB.archived,cliqued=fileDB.cliqued,contact=clientResponse)
+        listFiles.append(fileReponse)
+  #  serializer = FileSerializer(files, many= True)
+ #   return Response(serializer.data)
+
+    return HttpResponse( jsonpickle.encode(listFiles,unpicklable=False),content_type="application/json")
 @api_view(['POST'])
 def downloadFileName(request):
         fileName = request.data['fileName']
-        clientName = request.data['clientName']
+        clientCode = request.data['clientCode']
         ftp = connect()
         path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-        path_client = path_racine + '/' + clientName
+        path_client = path_racine + '/' + clientCode
         ftp.cwd(path_client)
         for name in ftp.nlst():
             if name == fileName:
@@ -274,26 +288,25 @@ def seeFileContent(request):
         return HttpResponse(responseObjectText, content_type="application/json")
 @api_view(['POST'])
 def downloadFileoutputName(request):
-    def get(self, request, clientName, fileName):
-        print(clientName)
-        print(fileName)
-        ftp = connect()
-        path_racine = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
-        path_client = path_racine + '/' + clientName
-        ftp.cwd(path_client)
-        for name in ftp.nlst():
-            if name == fileName:
-                with open(name, "wb") as file:
-                    commande = "RETR " + name
-                    ftp.retrbinary(commande, file.write)
-                break
-        with open(fileName, 'rb') as f:
-            file = f.read()
-        response = HttpResponse(file, content_type="application/xls")
-        response['Content-Disposition'] = "attachment; filename={0}".format(fileName)
-        response['Content-Length'] = os.path.getsize(fileName)
-        os.remove(fileName)
-        return response
+    fileName = request.data['fileName']
+    clientCode = request.data['clientCode']
+    ftp = connect()
+    path_racine = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
+    path_client = path_racine + '/' + clientCode
+    ftp.cwd(path_client)
+    for name in ftp.nlst():
+        if name == fileName:
+            with open(name, "wb") as file:
+                commande = "RETR " + name
+                ftp.retrbinary(commande, file.write)
+            break
+    with open(fileName, 'rb') as f:
+        file = f.read()
+    response = HttpResponse(file, content_type="application/xls")
+    response['Content-Disposition'] = "attachment; filename={0}".format(fileName)
+    response['Content-Length'] = os.path.getsize(fileName)
+    os.remove(fileName)
+    return response
 def connect():
     FTP_HOST = "talend.ecolotrans.net"
     FTP_USER = "talend"

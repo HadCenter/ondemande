@@ -12,9 +12,6 @@ talendUrl ='https://webhooks.eu.cloud.talend.com/onDemandPipeline/f370e80809334a
 
 @api_view(['POST'])
 def startEngineOnEdiFiles(request):
-	print(request.data)
-	request.data[0]["filePath"] = request.data[0]["filePath"][7:]
-	print(request.data[0]["fileId"])
 	fileEdi = EDIfile.objects.get(pk=request.data[0]["fileId"])
 	fileEdi.cliqued = True
 	fileEdi.save()

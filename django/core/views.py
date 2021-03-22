@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Client, FileInfo
+from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from rest_framework.parsers import JSONParser
 from django.http import HttpResponse
@@ -183,8 +183,12 @@ def clientCreate(request):
 @api_view(['GET'])
 def clientList(request):
     clients = Client.objects.filter(archived = False).order_by('-id')
-    serializer = ClientSerializer(clients, many= True)
-    return Response(serializer.data)
+    listClients = list()
+    for clientDB in clients :
+        clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
+        listClients.append(clientResponse)
+    #serializer = ClientSerializer(clients, many= True)
+    return HttpResponse(jsonpickle.encode(listClients,unpicklable=False),content_type="application/json")
 class fileCreate(APIView):
 
     parser_classes = [MultiPartParser, FormParser]
@@ -232,8 +236,8 @@ def fileList(request):
     listFiles = list()
     for fileDB  in files :
         clientDB = fileDB.client
-        clientResponse = Client(idClient=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
-        fileReponse = FileInfo(idFile= fileDB.id,fileName=fileDB.file.name,createdAt=fileDB.created_at,status=fileDB.status ,wrongCommands=fileDB.wrong_commands,validatedOrders=fileDB.validated_orders,archived=fileDB.archived,cliqued=fileDB.cliqued,client=clientResponse)
+        clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
+        fileReponse = FileInfo(idFile= fileDB.id,fileName=fileDB.file.name,createdAt=fileDB.created_at,status=fileDB.status ,wrongCommands=fileDB.wrong_commands,validatedOrders=fileDB.validated_orders,archived=fileDB.archived,cliqued=fileDB.cliqued,contact=clientResponse)
         listFiles.append(fileReponse)
   #  serializer = FileSerializer(files, many= True)
  #   return Response(serializer.data)

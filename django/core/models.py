@@ -34,9 +34,9 @@ class FileExcelContent:
 
 
 
-class Client:
-    def __init__(self, idClient : int, codeClient : str , nomClient: str , email : str , archived:  int):
-        self.idClient = idClient
+class Contact:
+    def __init__(self, idContact : int, codeClient : str , nomClient: str , email : str , archived:  int):
+        self.idContact = idContact
         self.codeClient = codeClient
         self.nomClient = nomClient
         self.email = email
@@ -46,7 +46,7 @@ class Client:
 
 
 class FileInfo:
-    def __init__(self,idFile : int ,fileName : str,createdAt :models.DateTimeField,status : str,wrongCommands : str,validatedOrders :str,archived : int,cliqued : int , client : Client ):
+    def __init__(self,idFile : int ,fileName : str,createdAt :models.DateTimeField,status : str,wrongCommands : str,validatedOrders :str,archived : int,cliqued : int , contact : Contact ):
         self.idFile = idFile
         self.fileName = fileName
         self.createdAt = createdAt
@@ -55,4 +55,4 @@ class FileInfo:
         self.validatedOrders = validatedOrders
         self.archived = archived
         self.cliqued = cliqued
-        self.client = client
+        self.Contact = contact

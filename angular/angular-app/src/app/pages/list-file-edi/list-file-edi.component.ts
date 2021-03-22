@@ -352,6 +352,7 @@ export class DialogImportFile {
 //   public listObject: { code_client : string ,nom_client: string }[] = [];
   public listItems: Array<string> = [];
   ngOnInit(): void {
+    console.warn('******/',this.myForm.get)
     this.stateGroupOptions = this.myForm.get('stateGroup')!.valueChanges
       .pipe(
         startWith(''),
@@ -440,9 +441,9 @@ export class DialogImportFile {
     formData.append('file', this.myForm.get('fileSource').value);
 
     console.log("***",this.myForm.getRawValue().stateGroup)
-    var nom = this.myForm.getRawValue().stateGroup;
-    var client = this.listObject.find(element => element.nomClient === nom);
-    formData.append('client', client.id);
+    var client = this.myForm.getRawValue().stateGroup;
+    //var client = this.listObject.find(element => element.nomClient === nom);
+    formData.append('client', client.idContact);
 //     formData.append('client', client.code_client);
     this.importFileService.upload(formData).subscribe(
       (res) => {

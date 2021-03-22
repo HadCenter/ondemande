@@ -26,7 +26,7 @@
           <div>
             <mat-form-field>
               <mat-label>Nom client</mat-label>
-               <input type="text" matInput formControlName="stateGroup" required [matAutocomplete]="autoGroup"> 
+               <input matInput formControlName="stateGroup" required [matAutocomplete]="autoGroup"> 
               <mat-autocomplete #autoGroup="matAutocomplete">
                 <mat-optgroup *ngFor="let group of nameGroups " [label]="group.letter">
                   <mat-option *ngFor="let contact of group.names" [value]="contact">

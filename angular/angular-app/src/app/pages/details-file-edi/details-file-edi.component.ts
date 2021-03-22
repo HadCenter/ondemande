@@ -27,7 +27,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   getWrongFile() {
     var data = {
-      "clientCode": this.file.client,
+      "clientCode": this.file.client.toString(),
       "fileName": this.file.wrong_commands,
     }
     this.fileService.getFileEdi(data).subscribe(res => {
@@ -40,7 +40,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   getValidFile() {
     var data = {
-      "clientCode": this.file.client,
+      "clientCode": this.file.client.toString(),
       "fileName": this.file.validated_orders,
     }
     this.fileService.getFileEdi(data).subscribe(res => {

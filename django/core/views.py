@@ -248,10 +248,10 @@ def fileList(request):
 @api_view(['POST'])
 def downloadFileName(request):
         fileName = request.data['fileName']
-        clientName = request.data['clientName']
+        clientCode = request.data['clientCode']
         ftp = connect()
         path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-        path_client = path_racine + '/' + clientName
+        path_client = path_racine + '/' + clientCode
         ftp.cwd(path_client)
         for name in ftp.nlst():
             if name == fileName:
@@ -288,26 +288,25 @@ def seeFileContent(request):
         return HttpResponse(responseObjectText, content_type="application/json")
 @api_view(['POST'])
 def downloadFileoutputName(request):
-    def get(self, request, clientName, fileName):
-        print(clientName)
-        print(fileName)
-        ftp = connect()
-        path_racine = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
-        path_client = path_racine + '/' + clientName
-        ftp.cwd(path_client)
-        for name in ftp.nlst():
-            if name == fileName:
-                with open(name, "wb") as file:
-                    commande = "RETR " + name
-                    ftp.retrbinary(commande, file.write)
-                break
-        with open(fileName, 'rb') as f:
-            file = f.read()
-        response = HttpResponse(file, content_type="application/xls")
-        response['Content-Disposition'] = "attachment; filename={0}".format(fileName)
-        response['Content-Length'] = os.path.getsize(fileName)
-        os.remove(fileName)
-        return response
+    fileName = request.data['fileName']
+    clientCode = request.data['clientCode']
+    ftp = connect()
+    path_racine = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
+    path_client = path_racine + '/' + clientCode
+    ftp.cwd(path_client)
+    for name in ftp.nlst():
+        if name == fileName:
+            with open(name, "wb") as file:
+                commande = "RETR " + name
+                ftp.retrbinary(commande, file.write)
+            break
+    with open(fileName, 'rb') as f:
+        file = f.read()
+    response = HttpResponse(file, content_type="application/xls")
+    response['Content-Disposition'] = "attachment; filename={0}".format(fileName)
+    response['Content-Length'] = os.path.getsize(fileName)
+    os.remove(fileName)
+    return response
 def connect():
     FTP_HOST = "talend.ecolotrans.net"
     FTP_USER = "talend"

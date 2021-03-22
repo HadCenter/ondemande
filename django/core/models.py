@@ -9,6 +9,7 @@ class Client(models.Model):
     nom_client = models.CharField(max_length=200, unique=True)
     email = models.EmailField(max_length=100 , blank= True)
     archived = models.BooleanField(default= False)
+    id_salesforce = models.CharField( max_length=200)
 
     def __str__(self):
         return self.nom_client

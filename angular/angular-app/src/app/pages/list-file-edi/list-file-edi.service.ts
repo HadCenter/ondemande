@@ -14,9 +14,9 @@ export class ListFileEdiService {
   constructor(private http: HttpClient) { }
 
   public executeJob(row) : Observable<any> {
-    var fileName = decodeURIComponent(row.file);
-    console.log(fileName);
-    const body = [{"filePath" : fileName, "ClientOwner" : row.client.codeClient, "fileId" : row.id}]
+   // var fileName = decodeURIComponent(row.file);
+    // console.log(fileName);
+    const body = [{"filePath" : row.fileName, "ClientOwner" : row.contact.codeClient, "fileId" : row.idFile}]
     console.log(body);
     return this.http.post(`${this.urlJobTalend}/startEngineOnEdiFiles`, body);
   }

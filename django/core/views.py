@@ -195,7 +195,7 @@ class fileCreate(APIView):
         if(request.data['file'] == ''):
             return Response({ "message" : "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         ext = get_extension(request.data['file'].name)
-        clientName = Client.objects.get(pk=request.data['client']).nom_client
+        clientName = Client.objects.get(pk=request.data['client']).code_client
         # clientName = Contact.objects.get(code_client=code_client).last_name
         fileName = "EDI_"+ clientName + "_" + timestr + ext
         serializer = FileSerializer(data=request.data)

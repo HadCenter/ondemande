@@ -28,8 +28,8 @@
               <mat-label>Nom client</mat-label>
                <input matInput formControlName="stateGroup" required [matAutocomplete]="autoGroup"> 
               <mat-autocomplete #autoGroup="matAutocomplete">
-                <mat-optgroup *ngFor="let group of nameGroups " [label]="group.letter">
-                  <mat-option *ngFor="let contact of group.names" [value]="contact">
+                <mat-optgroup  *ngFor="let group of nameGroups "   [label]="group.letter">
+                  <mat-option  *ngFor="let contact of group.names"  [value]="contact.nomClient">
                     {{contact.nomClient}}
                   </mat-option>
                 </mat-optgroup>

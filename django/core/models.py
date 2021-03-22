@@ -55,4 +55,4 @@ class FileInfo:
         self.validatedOrders = validatedOrders
         self.archived = archived
         self.cliqued = cliqued
-        self.Contact = contact
+        self.contact = contact

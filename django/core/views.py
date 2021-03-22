@@ -233,7 +233,7 @@ def fileList(request):
     for fileDB  in files :
         clientDB = fileDB.client
         clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
-        fileReponse = FileInfo(idFile= fileDB.id,fileName=fileDB.file,createdAt=fileDB.created_at,status=fileDB.status ,wrongCommands=fileDB.wrong_commands,validatedOrders=fileDB.validated_orders,archived=fileDB.archived,cliqued=fileDB.cliqued,contact=clientResponse)
+        fileReponse = FileInfo(idFile= fileDB.id,fileName=fileDB.file.name,createdAt=fileDB.created_at,status=fileDB.status ,wrongCommands=fileDB.wrong_commands,validatedOrders=fileDB.validated_orders,archived=fileDB.archived,cliqued=fileDB.cliqued,contact=clientResponse)
         listFiles.append(fileReponse)
   #  serializer = FileSerializer(files, many= True)
  #   return Response(serializer.data)

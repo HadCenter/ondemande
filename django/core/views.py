@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Client
+from .models import Client, FileInfo, Contact
 from .serializers import FileSerializer
 from rest_framework.parsers import JSONParser
 from django.http import HttpResponse
@@ -228,9 +228,17 @@ class fileCreate(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET'])
 def fileList(request):
-    files = EDIfile.objects.filter(archived = False).order_by('-id')
-    serializer = FileSerializer(files, many= True)
-    return Response(serializer.data)
+    files = EDIfile.objects.select_related('client').filter(archived = False).order_by('-id')
+    listFiles = list()
+    for fileDB  in files :
+        clientDB = fileDB.client
+        clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
+        fileReponse = FileInfo(idFile= fileDB.id,fileName=fileDB.file,createdAt=fileDB.created_at,status=fileDB.status ,wrongCommands=fileDB.wrong_commands,validatedOrders=fileDB.validated_orders,archived=fileDB.archived,cliqued=fileDB.cliqued,contact=clientResponse)
+        listFiles.append(fileReponse)
+  #  serializer = FileSerializer(files, many= True)
+ #   return Response(serializer.data)
+
+    return HttpResponse( jsonpickle.encode(listFiles,unpicklable=False),content_type="application/json")
 @api_view(['POST'])
 def downloadFileName(request):
         fileName = request.data['fileName']

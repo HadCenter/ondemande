@@ -32,15 +32,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr  *ngFor="let row of advancedTable  | slice:0:limit;" (click)="gotoDetails(row.id)">
-              <td class="mdl-data-table__cell--non-numeric">{{ row.code_client }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.nom_client }}</td>
+            <tr  *ngFor="let row of advancedTable  | slice:0:limit;" (click)="gotoDetails(row.idContact)">
+              <td class="mdl-data-table__cell--non-numeric">{{ row.codeClient }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.nomClient }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
               <td class="mdl-data-table__cell--non-numeric">
 
                   <button
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                  routerLink="/details-client/{{ row.id }}" >Modifier
+                  routerLink="/details-client/{{ row.idContact }}" >Modifier
                 </button>
                 &nbsp;
                 <button

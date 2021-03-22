@@ -341,6 +341,7 @@ export class DialogImportFile {
     fileSource: new FormControl('')
   });
   selectedFiles: File = null;
+  clients: any;
 
   constructor(private importFileService: ImportFileEdiService,
     private router: Router,
@@ -378,11 +379,13 @@ export class DialogImportFile {
     }
 
   }
+
   dropdownRefresh() {
     console.warn('******/',this.myForm.get('stateGroup'))
     this.importFileService.getAllClients().subscribe(
       data => {
         console.log("data",data);
+        this.clients=data;
         data.forEach(element => {
             var indexInGroup=element.nomClient.substring(0).charCodeAt(0)-65;
            
@@ -442,7 +445,8 @@ export class DialogImportFile {
     formData.append('file', this.myForm.get('fileSource').value);
 
     console.log("***",this.myForm.getRawValue().stateGroup)
-    var client = this.myForm.getRawValue().stateGroup;
+
+    var client = this.clients.find(element => element.nomClient === this.myForm.getRawValue().stateGroup);
     //var client = this.listObject.find(element => element.nomClient === nom);
     formData.append('client', client.idContact);
 //     formData.append('client', client.code_client);

@@ -94,7 +94,7 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let item of fileWrong?.rows  | slice:0:limit; let i = index;">
-                                            <td *ngFor="let column of item; let j=index" [ngClass]="(j==28 || j==9 ||j==21)?'remarque-column':'full-column'"
+                                            <td *ngFor="let column of item; let j=index" [ngClass]="(j==28 || j==16 || j==8|| j==9 ||j==21)?'remarque-column':'full-column'"
                                                 class="details-line mdl-data-table__cell--non-numeric">
                                                 <input *ngIf="j==28"  [(ngModel)]="item[j]" disabled class="mdl-textfield__input"
                                                     style="color: #00bcd4;">

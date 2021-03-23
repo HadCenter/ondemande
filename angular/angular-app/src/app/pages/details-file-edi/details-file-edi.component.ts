@@ -61,7 +61,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
             this.getValidFile();
           }
           if (this.file.wrongCommands != '_') {
-            console.warn('hahahhaha')
             this.getWrongFile();
           }
 

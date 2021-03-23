@@ -141,14 +141,16 @@ mat-panel-description.mat-expansion-panel-header-description{
 }
 td.details-line.mdl-data-table__cell--non-numeric {
   text-align: left;
-  max-width: initial;
+  // max-width: initial;
+    max-width: 140px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 th.details-line.mdl-data-table__cell--non-numeric {
   text-align: left;
-  max-width: initial;
+  // max-width: initial;
+  max-width: 140px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

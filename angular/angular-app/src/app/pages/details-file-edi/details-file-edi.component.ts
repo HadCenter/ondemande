@@ -12,7 +12,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   file: any;
   fileWrong: any;
   fileValid: any;
-  show=false;
+  show = false;
   column: string;
 
   constructor(private route: ActivatedRoute, private fileService: DetailsFileEdiService) {
@@ -20,28 +20,28 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   ngOnInit(): void {
-    this.show=true;
+    this.show = true;
     this.getFile(this.route.snapshot.params.id);
 
   }
 
   getWrongFile() {
     var data = {
-      "clientCode": this.file.client.toString(),
-      "fileName": this.file.wrong_commands,
+      "clientCode": this.file.contact.codeClient,
+      "fileName": this.file.wrongCommands,
     }
     this.fileService.getFileEdi(data).subscribe(res => {
       console.log("res", res)
       this.fileWrong = res;
-      this.show=false;
+      this.show = false;
     })
     // this.getValidFile();
   }
 
   getValidFile() {
     var data = {
-      "clientCode": this.file.client.toString(),
-      "fileName": this.file.validated_orders,
+      "clientCode": this.file.contact.codeClient,
+      "fileName": this.file.validatedOrders,
     }
     this.fileService.getFileEdi(data).subscribe(res => {
       console.log("res", res)
@@ -57,23 +57,26 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         data => {
           this.file = data;
           console.log("file", this.file);
-          this.getValidFile();
-          this.getWrongFile();
+          if (this.file.validatedOrders != '_') {
+            this.getValidFile();
+          }
+          if (this.file.wrongCommands != '_') {
+            console.warn('hahahhaha')
+            this.getWrongFile();
+          }
+
         },
         error => {
           console.log(error);
         });
   }
 
-  onSearchChange(searchValue: string): void {  
-    console.log(searchValue);
-    this.column=searchValue;
-    console.warn("***",this.column)
-  }
+  correctionFile() {
+    // this.fileService.postFile(this.fileWrong).subscribe(res=>{
 
-correctionFile (){
-  console.warn("****",this.fileWrong.rows)
-}
+    // })
+    console.warn("****", this.fileWrong)
+  }
 
 
 }

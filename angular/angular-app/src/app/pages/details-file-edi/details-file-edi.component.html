@@ -3,17 +3,17 @@
     <div class="content-file-edi">
         <div class="content-labels">
             <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--2-col-phone">
-                <base-card-body  class="content-first-card ">
+                <base-card-body class="content-first-card ">
                     <label>{{file?.status}}</label>
-                    <label>{{file?.created_at| date:"yyyy/MM/dd"}}</label>
-                    <label>{{file?.client}}</label>
-                    <label class="label-wrong">{{fileWrong?.rows.length}}</label>
-                    <label class="label-success">{{fileValid?.rows.length}}</label>
+                    <label>{{file?.createdAt| date:"yyyy/MM/dd"}}</label>
+                    <label>{{file?.contact.codeClient}}</label>
+                    <label class="label-wrong">{{fileWrong?.rows.length || "0"}} </label>
+                    <label class="label-success">{{fileValid?.rows.length || '0'}}</label>
                 </base-card-body>
             </base-card>
             <div style='text-align: center;'
                 class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone">
-                <button [disabled]="fileWrong?.rows.length>0 || fileWrong== undefined" 
+                <button [disabled]="fileWrong?.rows.length>0 || file?.wrongCommands !== '_'"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
                     à Urbantz
                 </button>
@@ -27,7 +27,7 @@
                 </base-card-title>
                 <base-card-body class="content-file-line">
                     <mat-accordion>
-                        <mat-expansion-panel hideToggle (click)="getWrongFile()">
+                        <mat-expansion-panel hideToggle>
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Afficher Log
@@ -35,7 +35,7 @@
                             </mat-expansion-panel-header>
                             <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
                             <div class="content-table">
-                              
+
                                 <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                                     <thead>
                                         <tr>
@@ -76,12 +76,12 @@
                                     Afficher Log
                                 </mat-panel-title>
                                 <mat-panel-description>
-                                    <button (click)='correctionFile()'
+                                    <button (click)='correctionFile()' [disabled]=" file?.wrongCommands == '_'"
                                         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                                     </button>
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
-                              <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
+                            <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
                             <div class="content-table">
                                 <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                                     <thead>
@@ -96,9 +96,9 @@
                                         <tr *ngFor="let item of fileWrong?.rows  | slice:0:limit; let i = index;">
                                             <td *ngFor="let column of item; let j=index"
                                                 class="details-line mdl-data-table__cell--non-numeric">
-                                                <input *ngIf="j==28" [(ngModel)]="column" class="mdl-textfield__input"
+                                                <input *ngIf="j==28" [(ngModel)]="item[j]" class="mdl-textfield__input"
                                                     style="color: #00bcd4;">
-                                                <input *ngIf="j!==28" type="text" [(ngModel)]="column" (input)="onSearchChange($event.target.value)"
+                                                <input *ngIf="j!==28" type="text" [(ngModel)]="item[j]"
                                                     class="mdl-textfield__input">
                                             </td>
                                         </tr>
@@ -112,6 +112,6 @@
             </base-card>
 
         </div>
-        
+
     </div>
 </div>

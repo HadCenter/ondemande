@@ -14,6 +14,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   fileValid: any;
   show = false;
   column: string;
+  fileTocheck: { columns: any; rows: any; };
 
   constructor(private route: ActivatedRoute, private fileService: DetailsFileEdiService) {
     super();
@@ -25,13 +26,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   }
 
+  customTrackBy(index: number, obj: any) {
+    return index;
+  }
+
   getWrongFile() {
     var data = {
       "clientCode": this.file.contact.codeClient,
       "fileName": this.file.wrongCommands,
     }
     this.fileService.getFileEdi(data).subscribe(res => {
-      console.log("res", res)
+      console.log("res wrong", res)
       this.fileWrong = res;
       this.show = false;
     })
@@ -44,7 +49,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       "fileName": this.file.validatedOrders,
     }
     this.fileService.getFileEdi(data).subscribe(res => {
-      console.log("res", res)
       this.fileValid = res;
     })
   }
@@ -74,7 +78,16 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     // this.fileService.postFile(this.fileWrong).subscribe(res=>{
 
     // })
-    console.warn("****", this.fileWrong)
+
+    console.log("correct",this.fileWrong);
+    console.log('wrong',this.fileValid.rows);
+    this.fileTocheck = {
+      columns:this.fileWrong.columns ,
+      rows: this.fileValid.rows.concat(this.fileWrong.rows),
+    }
+   // let  x = this.fileValid.rows.concat(this.fileWrong.rows);
+    
+    console.warn("****", this.fileTocheck)
   }
 
 

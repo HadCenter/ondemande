@@ -47,9 +47,12 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let item of fileValid?.rows  | slice:0:limit; let i = index;">
-                                            <td *ngFor="let column of item; let j=index" [ngClass]="(j==8 ||j==16 || j==20)?'remarque-column':'full-column'"
+                                            <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
+                                                [ngClass]="(j==8 ||j==16 || j==20)?'remarque-column':'full-column'"
                                                 class="details-line mdl-data-table__cell--non-numeric">
-                                                <input type="text" [ngClass]="(j==3 ||j==4 || j==6|| j==11  )?'mini-column':'full-column'" [(ngModel)]="column" class="mdl-textfield__input">
+                                                <input type="text" disabled
+                                                    [ngClass]="(j==3 ||j==4 || j==6|| j==11  )?'mini-column':'full-column'"
+                                                    [(ngModel)]="column" class="mdl-textfield__input">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -93,14 +96,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let item of fileWrong?.rows  | slice:0:limit; let i = index;">
-                                            <td *ngFor="let column of item; let j=index" [ngClass]="(j==28 || j==16 || j==8|| j==9 ||j==21)?'remarque-column':'full-column'"
+                                        <tr *ngFor="let item of fileWrong?.rows ; let i=index">
+                                            <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
+                                                [ngClass]="(j==28 || j==16 || j==8|| j==9 ||j==21)?'remarque-column':'full-column'"
                                                 class="details-line mdl-data-table__cell--non-numeric">
-                                                <input *ngIf="j==28"  [(ngModel)]="item[j]" disabled class="mdl-textfield__input"
-                                                    style="color: #00bcd4;">
-                                                <input *ngIf="j!==28"  [ngClass]="(j==4 ||j==5 || j==7|| j==12  )?'mini-column':'full-column'" type="text"  [(ngModel)]="item[j]"
-                                                    class="mdl-textfield__input">
+                                                <input *ngIf="j==28" [(ngModel)]="item[j]" type="text" disabled
+                                                    class="mdl-textfield__input"  style="color: #00bcd4;">
+
+                                                <input *ngIf="j!==28" id='{{item[j]}}' name='{{item[j]}}'
+                                                    [ngClass]="(j==4 ||j==5 || j==7|| j==12  )?'mini-column':'full-column'"
+                                                    type="text"  [(ngModel)]="item[j]" class="mdl-textfield__input">
                                             </td>
+                                            <!-- (change)="valuechange($event.target.value,i,j)"   -->
                                         </tr>
                                     </tbody>
                                 </table>

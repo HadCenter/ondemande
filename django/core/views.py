@@ -23,6 +23,10 @@ import pandas as pd
 from .models import FileExcelContent
 import jsonpickle
 
+
+path_racine_input = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/"
+path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
+
 @api_view(['GET'])
 def testCreate(request):
     print("ahmed")
@@ -219,11 +223,15 @@ class fileCreate(APIView):
                 os.chdir("..")
             serializer.save()
             ftp = connect()
-            path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-            path_client = path_racine + '/' + clientCode
-            if clientCode not in ftp.nlst():
-                ftp.mkd(clientCode)
-            ftp.cwd(path_client)
+
+            path_client_input = path_racine_input + clientCode
+            path_client_output = path_racine_output + clientCode
+            if path_client_input not in ftp.nlst():
+                ftp.mkd(path_client_input)
+            if path_client_output not in ftp.nlst():
+                ftp.mkd(path_client_output)
+
+            ftp.cwd(path_client_input)
             filename = [f for f in listdir(path) if isfile(join(path, f))][0]
             os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
             file = open(fileName, 'rb')

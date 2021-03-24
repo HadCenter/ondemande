@@ -25,4 +25,13 @@ export class DetailsFileEdiService {
 
     return this.http.post(`${this.url}/seeFileContent`, data);
   }
+
+public corretFile (data): Observable<any> {
+ return  this.http.post(`${this.url}/createFileFromColumnAndRowsAndUpdate/`,data);
+}
+
+public sendFileToUrbantz(data): Observable<any> {
+ return this.http.post(`${this.url}/urbantzEsb/SendFromFileToUrbantzAsTasks`,data);
+}
+
 }

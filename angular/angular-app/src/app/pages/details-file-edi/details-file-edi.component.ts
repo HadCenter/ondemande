@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
+import { throwIfEmpty } from 'rxjs/operators';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
 @Component({
@@ -13,7 +14,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   fileValid: any;
   show = false;
   column: string;
-  fileTocheck: {idFile:any; columns: any; rows: any; };
+  fileTocheck: { fileId: any; columns: any; rows: any; };
   _fileWrong: any;
 
   constructor(private route: ActivatedRoute, private fileService: DetailsFileEdiService) {
@@ -74,22 +75,44 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   correctionFile() {
-    // this.fileService.postFile(this.fileWrong).subscribe(res=>{
-
-    // })
-    console.log("wrong file", this.fileWrong);
-    console.log('correct file ', this.fileValid.rows);
     this._fileWrong = this.fileWrong;
     this._fileWrong.rows.forEach(element => {
       element = element.pop();
     });
-    this.fileTocheck = {
-      idFile: this.file.idFile,
-      columns: this._fileWrong.columns.splice(0, this._fileWrong.columns.length - 1),
-      rows: this.fileValid.rows.concat(this._fileWrong.rows),
+    if (this.fileWrong && this.fileValid) {
+
+      this.fileTocheck = {
+        fileId: this.file.idFile,
+        columns: this._fileWrong.columns.splice(0, this._fileWrong.columns.length - 1),
+        rows: this.fileValid.rows.concat(this._fileWrong.rows),
+      }
+    }
+    else {
+      this.fileTocheck = {
+        fileId: this.file.idFile,
+        columns: this._fileWrong.columns.splice(0, this._fileWrong.columns.length - 1),
+        rows: this._fileWrong.rows,
+      }
     }
 
+
+
     console.warn("****", this.fileTocheck)
+    this.fileService.corretFile(this.fileTocheck).subscribe(res => {
+      console.log('res correction', res);
+    })
+
+
+  }
+
+  sendFileToUrbantz() {
+    let data = {
+      clientCode: this.file.contact.codeClient,
+      fileName: this.file.fileName,
+    }
+    this.fileService.sendFileToUrbantz(data).subscribe(res => {
+      console.log("urbantz",res);
+    })
   }
 
 

@@ -7,8 +7,8 @@
                     <label>{{file?.status}}</label>
                     <label>{{file?.createdAt| date:"yyyy/MM/dd"}}</label>
                     <label>{{file?.contact.codeClient}}</label>
-                    <label class="label-wrong">{{fileWrong?.rows.length || "0"}} </label>
-                    <label class="label-success">{{fileValid?.rows.length || '0'}}</label>
+                    <label class="label-wrong">{{file?.number_wrong_commands}} </label>
+                    <label class="label-success">{{file?.number_correct_commands}}</label>
                 </base-card-body>
             </base-card>
             <div style='text-align: center;'

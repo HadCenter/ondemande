@@ -46,7 +46,9 @@ def contactHandler(objectAction : str , objectToSendToDB) :
 def contactMapFields(client :Client, objectToSendToDB):
     client.code_client = objectToSendToDB['Code_Client__c']
     client.nom_client = objectToSendToDB['LastName']
-    client.email = objectToSendToDB['Email']
-    client.archived = objectToSendToDB['archived']
+    if 'Email' in objectToSendToDB :
+        client.email = objectToSendToDB['Email']
+    if 'RL_Archived__c' in objectToSendToDB:
+        client.archived = objectToSendToDB['RL_Archived__c']
     client.id_salesforce = objectToSendToDB['Id']
     return client

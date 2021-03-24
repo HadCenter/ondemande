@@ -391,7 +391,7 @@ export class DialogImportFile {
         this.clients=data;
         data.forEach(element => {
             var indexInGroup=element.nomClient.substring(0).charCodeAt(0)-65;
-
+          console.warn('index',indexInGroup)
             this.nameGroups[indexInGroup].names.push(element);
             console.warn("**",this.nameGroups);
 //           this.listItems.push(element["last_name"]);

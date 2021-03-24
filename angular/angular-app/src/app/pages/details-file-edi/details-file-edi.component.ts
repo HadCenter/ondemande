@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
-import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-details-file-edi',
   templateUrl: './details-file-edi.component.html',
@@ -15,6 +14,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   show = false;
   column: string;
   fileTocheck: { columns: any; rows: any; };
+  _fileWrong: any;
 
   constructor(private route: ActivatedRoute, private fileService: DetailsFileEdiService) {
     super();
@@ -40,7 +40,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.fileWrong = res;
       this.show = false;
     })
-    // this.getValidFile();
   }
 
   getValidFile() {
@@ -78,15 +77,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     // this.fileService.postFile(this.fileWrong).subscribe(res=>{
 
     // })
-
-    console.log("correct",this.fileWrong);
-    console.log('wrong',this.fileValid.rows);
+    console.log("wrong file", this.fileWrong);
+    console.log('correct file ', this.fileValid.rows);
+    this._fileWrong = this.fileWrong;
+    this._fileWrong.rows.forEach(element => {
+      element = element.pop();
+    });
     this.fileTocheck = {
-      columns:this.fileWrong.columns ,
-      rows: this.fileValid.rows.concat(this.fileWrong.rows),
+      columns: this._fileWrong.columns.splice(0, this._fileWrong.columns.length - 1),
+      rows: this.fileValid.rows.concat(this._fileWrong.rows),
     }
-   // let  x = this.fileValid.rows.concat(this.fileWrong.rows);
-    
+
     console.warn("****", this.fileTocheck)
   }
 

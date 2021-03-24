@@ -224,6 +224,8 @@ class fileCreate(APIView):
             ftp = connect()
             path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
             path_client = path_racine + '/' + clientCode
+            if clientCode not in ftp.nlst():
+                ftp.mkd(clientCode)
             ftp.cwd(path_client)
             filename = [f for f in listdir(path) if isfile(join(path, f))][0]
             os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))

@@ -460,7 +460,7 @@ export class DialogImportFile {
       },
       (err) => {
         this.showloader = false;
-        this.error = "SVP, Télécharger un fichier EDI !";
+        this.error = "Veuillez télécharger un fichier EDI";
       }
     );
   }

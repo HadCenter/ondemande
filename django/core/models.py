@@ -9,6 +9,7 @@ class Client(models.Model):
     nom_client = models.CharField(max_length=200, unique=True)
     email = models.EmailField(max_length=100 , blank= True)
     archived = models.BooleanField(default= False)
+    id_salesforce = models.CharField( max_length=200)
 
     def __str__(self):
         return self.nom_client
@@ -28,3 +29,28 @@ class FileExcelContent:
     def __init__(self,columns,rows):
         self.columns = columns
         self.rows =rows
+
+
+
+class Contact:
+    def __init__(self, idContact : int, codeClient : str , nomClient: str , email : str , archived:  int):
+        self.idContact = idContact
+        self.codeClient = codeClient
+        self.nomClient = nomClient
+        self.email = email
+        self.archived = archived
+
+
+
+
+class FileInfo:
+    def __init__(self,idFile : int ,fileName : str,createdAt :models.DateTimeField,status : str,wrongCommands : str,validatedOrders :str,archived : int,cliqued : int , contact : Contact ):
+        self.idFile = idFile
+        self.fileName = fileName
+        self.createdAt = createdAt
+        self.status = status
+        self.wrongCommands =wrongCommands
+        self.validatedOrders = validatedOrders
+        self.archived = archived
+        self.cliqued = cliqued
+        self.contact = contact

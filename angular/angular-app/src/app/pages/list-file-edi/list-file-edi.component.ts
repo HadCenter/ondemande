@@ -155,6 +155,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.getAllFiles()
       .subscribe(res => {
         this.files = res;
+        console.log('files',this.files)
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
@@ -178,24 +179,31 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.files = [];
     this.getFiles();
   }
-  public downloadFileInput(clientName, fileName) {
-    fileName = fileName.substring(7)
-    fileName = decodeURIComponent(fileName);
-    this.tablesService.downloadFileInput(clientName, fileName)
+  public downloadFileInput(clientCode, fileName) {
+    // fileName = fileName.substring(7)
+    // fileName = decodeURIComponent(fileName);
+    console.log("****",fileName)
+    this.tablesService.downloadFileInput(clientCode, fileName)
       .subscribe(res => {
         saveAs(res, fileName);
       }, error => console.log(error));
   }
-  public decodefile(file) {
+  // public decodefile(file) {
 
-    return decodeURIComponent(file.substring(7));
+  gotoDetails(row) {
+    console.log('GOTO DETAILS', row)
+    this.router.navigate(['/details-file-edi',row.idFile])
   }
-  public decodeValidatorError(file) {
-    return decodeURI(file);
-  }
-  public downloadFileOutput(clientName, fileName) {
-    fileName = decodeURIComponent(fileName);
-    this.tablesService.downloadFileOutput(clientName, fileName)
+  // public decodefile(file) {
+
+  //   return decodeURIComponent(file.substring(7));
+  // }
+  // public decodeValidatorError(file) {
+  //   return decodeURI(file);
+  // }
+  public downloadFileOutput(clientCode, fileName) {
+  //  fileName = decodeURIComponent(fileName);
+    this.tablesService.downloadFileOutput(clientCode, fileName)
       .subscribe(res => {
         console.log(res);
         saveAs(res, fileName);
@@ -339,6 +347,7 @@ export class DialogImportFile {
     fileSource: new FormControl('')
   });
   selectedFiles: File = null;
+  clients: any;
 
   constructor(private importFileService: ImportFileEdiService,
     private router: Router,
@@ -346,7 +355,7 @@ export class DialogImportFile {
   ) {
     this.dropdownRefresh();
   }
-  public listObject: { id: string, nom_client: string }[] = [];
+  public listObject: { id: string, nomClient: string }[] = [];
 //   public listObject: { code_client : string ,nom_client: string }[] = [];
   public listItems: Array<string> = [];
   ngOnInit(): void {
@@ -378,32 +387,41 @@ export class DialogImportFile {
   dropdownRefresh() {
     this.importFileService.getAllClients().subscribe(
       data => {
+        console.log("data",data);
+        this.clients=data;
         data.forEach(element => {
+            var indexInGroup=element.nomClient.substring(0).charCodeAt(0)-65;
+
+            this.nameGroups[indexInGroup].names.push(element);
+            console.warn("**",this.nameGroups);
 //           this.listItems.push(element["last_name"]);
 //           var code_client = element['code_client'];
 //           var nomClient = element['last_name'];
-           this.listItems.push(element["nom_client"]);var id = element['id']; var nomClient = element['nom_client'];
-          var client = {
-//             code_client: code_client,
-            id: id,
-            nom_client: nomClient
-          };
-          this.listObject.push(client);
-        });
-        for (var i = 0; i < this.nameGroups.length; i++) {
-          for (var j = 0; j < this.listItems.length; j++) {
-            if (this.listItems[j][0] === this.nameGroups[i].letter) {
-              this.nameGroups[i].names.push(this.listItems[j]);
-            }
-          }
-        }
-        for (var k = 0; k < this.nameGroups.length; k++) {
-          if (this.nameGroups[k].names.length !== 0) {
-            this.stateGroups.push(this.nameGroups[k])
-          }
-        }
+//            this.listItems.push(element["nomClient"]);var id = element['id']; var nomClient = element['nomClient'];
+//           var client = {
+// //             code_client: code_client,
+//             id: id,
+//             nomClient: nomClient
+//           };
+//           this.listObject.push(client);
+//         });
+//         for (var i = 0; i < this.nameGroups.length; i++) {
+//           for (var j = 0; j < this.listItems.length; j++) {
+//             if (this.listItems[j][0] === this.nameGroups[i].letter) {
+//               this.nameGroups[i].names.push(this.listItems[j]);
+//             }
+//           }
+//         }
+//         for (var k = 0; k < this.nameGroups.length; k++) {
+//           if (this.nameGroups[k].names.length !== 0) {
+//             this.stateGroups.push(this.nameGroups[k])
+//           }
+//         }
 
-      });
+//       });
+        })
+      })
+
   }
 
   get f() {
@@ -428,9 +446,12 @@ export class DialogImportFile {
     this.showloader = true;
     const formData = new FormData();
     formData.append('file', this.myForm.get('fileSource').value);
-    var nom = this.myForm.getRawValue().stateGroup;
-    var client = this.listObject.find(element => element.nom_client === nom);
-    formData.append('client', client.id);
+
+    console.log("***",this.myForm.getRawValue().stateGroup)
+
+    var client = this.clients.find(element => element.nomClient === this.myForm.getRawValue().stateGroup);
+    //var client = this.listObject.find(element => element.nomClient === nom);
+    formData.append('client', client.idContact);
 //     formData.append('client', client.code_client);
     this.importFileService.upload(formData).subscribe(
       (res) => {

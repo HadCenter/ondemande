@@ -7,6 +7,8 @@ import { ThemeModule } from 'theme';
 import { ErrorComponent } from './error';
 import { LoginComponent } from './login';
 import { PagesRoutingModule } from './pages-routing.module';
+import { DetailsFileEdiComponent } from './details-file-edi/details-file-edi.component';
+
 //import { SignUpComponent } from './sign-up';
 
 @NgModule({
@@ -23,6 +25,8 @@ import { PagesRoutingModule } from './pages-routing.module';
     LoginComponent,
    LoaderComponent,
    // SignUpComponent,
+    ForgotPasswordComponent,
+   DetailsFileEdiComponent,
 
 
   ],

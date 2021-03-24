@@ -79,8 +79,8 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     let dialogRef = this.matDialog.open(DialogBodyComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(value => {
       if (value != undefined) {
-
-        this.tablesService.archiveClient(value.data.id, value.data).subscribe(
+        console.warn("dataaaa",value.data)
+        this.tablesService.archiveClient(value.data.idContact, value.data).subscribe(
           res => {
             this.openSnackBar("Client archivé avec succés", this.snackAction)
             this.getClients();
@@ -139,6 +139,7 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     this.tablesService.getAllClients()
       .subscribe(res => {
         this.clients = res;
+        console.warn("/*/*",this.clients);
         this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },

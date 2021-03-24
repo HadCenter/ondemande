@@ -1,0 +1,123 @@
+<div class="container mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
+    <div class="content-file-edi">
+        <div class="content-labels">
+            <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--2-col-phone">
+                <base-card-body class="content-first-card ">
+                    <label>{{file?.status}}</label>
+                    <label>{{file?.createdAt| date:"yyyy/MM/dd"}}</label>
+                    <label>{{file?.contact.codeClient}}</label>
+                    <label class="label-wrong">{{fileWrong?.rows.length || "0"}} </label>
+                    <label class="label-success">{{fileValid?.rows.length || '0'}}</label>
+                </base-card-body>
+            </base-card>
+            <div style='text-align: center;'
+                class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone">
+                <button [disabled]="fileWrong?.rows.length>0 || file?.wrongCommands !== '_'"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
+                    à Urbantz
+                </button>
+            </div>
+        </div>
+
+        <div class="content-labels">
+            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+                <base-card-title>
+                    <label class="label-success">Success</label>
+                </base-card-title>
+                <base-card-body class="content-file-line">
+                    <mat-accordion>
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Afficher Log
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
+                            <div class="content-table">
+
+                                <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
+                                    <thead>
+                                        <tr>
+                                            <th *ngFor="let row of fileValid?.columns ; let i = index"
+                                                class="details-line mdl-data-table__cell--non-numeric">
+                                                <span>{{row}}</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of fileValid?.rows  | slice:0:limit; let i = index;">
+                                            <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
+                                                [ngClass]="(j==8 ||j==16 || j==20)?'remarque-column':'full-column'"
+                                                class="details-line mdl-data-table__cell--non-numeric">
+                                                <input type="text" disabled
+                                                    [ngClass]="(j==3 ||j==4 || j==6|| j==11  )?'mini-column':'full-column'"
+                                                    [(ngModel)]="column" class="mdl-textfield__input">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </mat-expansion-panel>
+
+                    </mat-accordion>
+                </base-card-body>
+            </base-card>
+
+        </div>
+        <div>
+            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+                <base-card-title>
+                    <label class="label-wrong">Errors</label>
+                </base-card-title>
+                <base-card-body class="content-file-line">
+                    <mat-accordion>
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Afficher Log
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    <button (click)='correctionFile()' [disabled]=" file?.wrongCommands == '_'"
+                                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
+                                    </button>
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
+                            <div class="content-table">
+                                <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
+                                    <thead>
+                                        <tr>
+                                            <th *ngFor="let row of fileWrong?.columns ; let i = index"
+                                                class="details-line mdl-data-table__cell--non-numeric">
+                                                <span>{{row}}</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of fileWrong?.rows ; let i=index">
+                                            <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
+                                                [ngClass]="(j==28 || j==16 || j==8|| j==9 ||j==21)?'remarque-column':'full-column'"
+                                                class="details-line mdl-data-table__cell--non-numeric">
+                                                <input *ngIf="j==28" [(ngModel)]="item[j]" type="text" disabled
+                                                    class="mdl-textfield__input"  style="color: #00bcd4;">
+
+                                                <input *ngIf="j!==28" id='{{item[j]}}' name='{{item[j]}}'
+                                                    [ngClass]="(j==4 ||j==5 || j==7|| j==12  )?'mini-column':'full-column'"
+                                                    type="text"  [(ngModel)]="item[j]" class="mdl-textfield__input">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </mat-expansion-panel>
+
+                    </mat-accordion>
+                </base-card-body>
+            </base-card>
+
+        </div>
+
+    </div>
+</div>

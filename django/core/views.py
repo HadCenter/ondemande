@@ -370,8 +370,6 @@ def createFileFromColumnAndRowsAndUpdate(request):
     fileDB.wrong_commands = "_"
     fileDB.status = "En attente"
     fileDB.save()
-    data = []
-    fileRequest = [{"filePath":fileName,"ClientOwner":clientDB.code_client,"fileId":fileDB.id}]
-    data.append(fileRequest)
+    data = [{"filePath":fileName,"ClientOwner":clientDB.code_client,"fileId":fileDB.id}]
     startEngineWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)

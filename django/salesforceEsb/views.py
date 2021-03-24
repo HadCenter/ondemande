@@ -32,12 +32,12 @@ def contactHandler(objectAction : str , objectToSendToDB) :
         client.save()
         response = "ok"
     elif objectAction == "edit" :
-        client = Client.objects.filter(id_salesforce = objectToSendToDB['Id'] )
+        client = Client.objects.get(id_salesforce = objectToSendToDB['Id'] )
         client = contactMapFields(client = client , objectToSendToDB = objectToSendToDB)
         client.save()
         response = "ok"
     elif objectAction == "delete" :
-        client = Client.objects.filter(id_salesforce = objectToSendToDB['Id'] )
+        client = Client.objects.get(id_salesforce = objectToSendToDB['Id'] )
         client.delete()
         response = "ok"
     else:

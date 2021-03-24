@@ -19,6 +19,8 @@ def makeDbChangePushMode(request):
     message : str
     if objectName == "Contact" :
         message = contactHandler(objectAction = objectAction,objectToSendToDB = objectToSendToDB)
+    else:
+        print("objectName : " + objectName + " is not supported")
 
     return Response({"message" : message}, status=status.HTTP_200_OK)
 
@@ -39,14 +41,16 @@ def contactHandler(objectAction : str , objectToSendToDB) :
         client.delete()
         response = "ok"
     else:
-        response = "action type not supported"
+        response = "objectAction : "+objectAction + " is not supported"
     return response
 
 
 def contactMapFields(client :Client, objectToSendToDB):
     client.code_client = objectToSendToDB['Code_Client__c']
     client.nom_client = objectToSendToDB['LastName']
-    client.email = objectToSendToDB['Email']
-    client.archived = objectToSendToDB['archived']
+    if 'Email' in objectToSendToDB :
+        client.email = objectToSendToDB['Email']
+    if 'RL_Archived__c' in objectToSendToDB:
+        client.archived = objectToSendToDB['RL_Archived__c']
     client.id_salesforce = objectToSendToDB['Id']
     return client

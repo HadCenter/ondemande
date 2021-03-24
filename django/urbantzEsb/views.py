@@ -18,7 +18,7 @@ path_racine_talend_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
 
 @api_view(['POST'])
 
-def sendTask(request):
+def SendFromFileToUrbantzAsTasks(request):
 
 
 	ftp = connect()
@@ -45,10 +45,10 @@ def sendTask(request):
 	#START END Adresse2 Porte Instruction NOT MAPPED
 	#Tel3 is not used
 	for row in excelfile.itertuples() :
-		contact = ContactUrbantz(name = row.Nom_destinataire,phone = row.Telephone ,email= row.email)
-		metadata = Metadata(codeArticle= row.codeArticle)
 		buildingInfo = BuildingInfoUrbantz(interphoneCode= row.CODE_interphone , floor=row.Etage,digicode2=row.Tel2)
-		location = LocationUrbantz(street= row.rue , city= row.ville , zip= row.CP , buildingInfo = buildingInfo)
+		contact = ContactUrbantz(name = row.Nom_destinataire,phone = row.Telephone ,email= row.email,buildingInfo = buildingInfo)
+		metadata = Metadata(codeArticle= row.codeArticle)
+		location = LocationUrbantz(street= row.rue , city= row.ville , zip= row.CP)
 		item = TaskItem(type = row.Labels, description= row.Labels,quantity= row.Quantite ,name =row.Ref2,reference=row.Ref3,barcodeEncoding=row.Code_barres )
 		items=[]
 		items.append(item)

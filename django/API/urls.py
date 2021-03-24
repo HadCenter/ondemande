@@ -24,6 +24,6 @@ urlpatterns = [
     path('api/', include('core.urls')),
     path('talendEsb/', include('talendEsb.urls')),
     path('salesforceEsb/', include('salesforceEsb.urls')),
-    # path('urbantzEsb/', include('urbantzEsb.urls'))
+    path('urbantzEsb/', include('urbantzEsb.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

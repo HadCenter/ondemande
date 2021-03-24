@@ -297,6 +297,7 @@ def seeFileContent(request):
         excelfile = excelfile.fillna('')
         columns = list(excelfile.columns)
         rows = excelfile.values.tolist()
+        os.remove(name)
         responseObject = FileExcelContent(columns,rows)
         responseObjectText = jsonpickle.encode(responseObject,unpicklable=False)
         print (responseObjectText)
@@ -347,4 +348,26 @@ def get_extension(filename):
     return '.' + ext if ext else None
 
 
-
+@api_view(['POST'])
+def createFileFromColumnAndRowsAndUpdate(request):
+    columns = request.data['columns']
+    rows = request.data['rows']
+    fileId = request.data['fileId']
+    fileDB = EDIfile.objects.select_related('client').get(pk = fileId)
+    clientDB = fileDB.client
+    df = pd.DataFrame(rows, columns = columns)
+    fileName = fileDB.file.name
+    df.to_excel(fileName , index= False)
+    ftp = connect()
+    ftp.cwd(path_racine_input + clientDB.code_client)
+    file = open(fileName, 'rb')
+    print(os.path.basename(fileName))
+    ftp.storbinary('STOR ' + os.path.basename(fileName), file)
+    file.close()
+    os.remove(fileName)
+    fileDB.validated_orders = "_"
+    fileDB.wrong_commands = "_"
+    fileDB.cliqued = 0
+    fileDB.status = "En attente"
+    fileDB.save()
+    return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)

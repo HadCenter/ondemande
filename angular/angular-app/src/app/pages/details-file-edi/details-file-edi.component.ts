@@ -13,7 +13,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   fileValid: any;
   show = false;
   column: string;
-  fileTocheck: { columns: any; rows: any; };
+  fileTocheck: {idFile:any; columns: any; rows: any; };
   _fileWrong: any;
 
   constructor(private route: ActivatedRoute, private fileService: DetailsFileEdiService) {
@@ -84,6 +84,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       element = element.pop();
     });
     this.fileTocheck = {
+      idFile: this.file.idFile,
       columns: this._fileWrong.columns.splice(0, this._fileWrong.columns.length - 1),
       rows: this.fileValid.rows.concat(this._fileWrong.rows),
     }

@@ -312,6 +312,18 @@ def downloadFileoutputName(request):
     response['Content-Length'] = os.path.getsize(fileName)
     os.remove(fileName)
     return response
+@api_view(['GET'])
+def numberOfFilesPerClient(request):
+    queryset = Client.objects.all()
+    serializer_class = ClientTestSerialize(queryset,many=True)
+    result = []
+    for client in serializer_class.data:
+        data= {}
+        data['label'] = client['nom_client']
+        data['value'] = len(client['files'])
+        result.append(data)
+    json_data = JSONRenderer().render(result)
+    return HttpResponse(json_data,content_type='application/json')
 def connect():
     FTP_HOST = "talend.ecolotrans.net"
     FTP_USER = "talend"

@@ -1,7 +1,7 @@
 from django.db import models
 
 class ChangeDataBaseObject:
-    def __init__(self,objectName,ObjectAction,ObjectToSendToDB):
+    def __init__(self,objectName,objectAction,objectToSendToDB):
         self.objectName = objectName
-        self.ObjectAction = ObjectAction
-        self.ObjectToSendToDB = ObjectToSendToDB
+        self.objectAction = objectAction
+        self.objectToSendToDB = objectToSendToDB

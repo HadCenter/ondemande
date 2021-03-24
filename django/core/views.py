@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 from rest_framework.decorators import api_view
 from .serializers import ClientSerializer, FileSerializer,ClientTestSerialize
 from rest_framework.response import Response
@@ -23,6 +23,7 @@ import pandas as pd
 from .models import FileExcelContent
 import jsonpickle
 
+from talendEsb.views import startEngineWithData
 
 path_racine_input = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/"
 path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
@@ -367,7 +368,10 @@ def createFileFromColumnAndRowsAndUpdate(request):
     os.remove(fileName)
     fileDB.validated_orders = "_"
     fileDB.wrong_commands = "_"
-    fileDB.cliqued = 0
     fileDB.status = "En attente"
     fileDB.save()
+    data = []
+    fileRequest = [{"filePath":fileName,"ClientOwner":clientDB.code_client,"fileId":fileDB.id}]
+    data.append(fileRequest)
+    startEngineWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)

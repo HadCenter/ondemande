@@ -100,6 +100,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     console.warn("****", this.fileTocheck)
     this.fileService.corretFile(this.fileTocheck).subscribe(res => {
       console.log('res correction', res);
+      if (res.message=="success"){
+        this.getFile(this.file.idFile);
+      }
     })
 
 

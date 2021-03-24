@@ -96,9 +96,9 @@ def forgetPassword(request):
     try:
         account = Account.objects.get(email=request.data['email'])
     except :
-        return Response({'message':'Votre compte n\'existe plus/n\'est pas actif'},status.HTTP_200_OK)
+        return Response({'message':'Utilisateur n\'est pas actif/n\'existe pas'},status.HTTP_200_OK)
     if(account.is_active == False):
-        return Response({'message':'Votre compte n\'existe plus/n\'est pas actif'},status.HTTP_200_OK)
+        return Response({'message':'Utilisateur n\'est pas actif/n\'existe pas'},status.HTTP_200_OK)
     account.updated_at = datetime.utcnow().replace(tzinfo=pytz.utc)
     account.save()
     id = account.id

@@ -19,6 +19,8 @@ def makeDbChangePushMode(request):
     message : str
     if objectName == "Contact" :
         message = contactHandler(objectAction = objectAction,objectToSendToDB = objectToSendToDB)
+    else:
+        print("objectName : " + objectName + " is not supported")
 
     return Response({"message" : message}, status=status.HTTP_200_OK)
 
@@ -39,7 +41,7 @@ def contactHandler(objectAction : str , objectToSendToDB) :
         client.delete()
         response = "ok"
     else:
-        response = "action type not supported"
+        response = "objectAction : "+objectAction + " is not supported"
     return response
 
 

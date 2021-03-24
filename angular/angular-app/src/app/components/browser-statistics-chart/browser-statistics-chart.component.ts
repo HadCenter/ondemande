@@ -10,18 +10,26 @@ import { BrowserStatisticsChartService } from './browser-statistics-chart.servic
 @Component({
   selector: 'app-browser-statistics-chart',
   styleUrls: ['../../../theme/components/pie-chart/pie-chart.component.scss'],
-  template: ``,
+  template: `<div id="chart">
+  <svg></svg>
+</div>`,
   providers: [BrowserStatisticsChartService],
 })
-export class BrowserStatisticsChartComponent extends BasePieChartComponent implements OnInit {
+export class BrowserStatisticsChartComponent implements OnInit {
   constructor(
     public el: ElementRef,
     public browserStatisticsChartService: BrowserStatisticsChartService,
   ) {
-    super();
+
   }
 
   public ngOnInit() {
+  this.browserStatisticsChartService.getNumberOfFilesPerClient()
+      .subscribe(res => {
+        var data = res;
+        var h = 600;
+    var r = h/2;
+    var arc = d3.svg.arc().outerRadius(r);
     const COLORS = {
       red: '#f44336',
       lightBlue: '#03a9f4',
@@ -33,9 +41,19 @@ export class BrowserStatisticsChartComponent extends BasePieChartComponent imple
       rowBgColor: '#4a4a4a',
     };
 
-    const container1 = d3.select(this.el.nativeElement);
-    if (container1[0][0]) {
-      const colors = [
+//     var data = [
+//       {"label":"Colorectale levermetastase (n=336)", "value":1},
+//       {"label":"Levensmetatase van andere origine (n=32)", "value":4},
+//       {"label":"Beningne levertumor (n=34)", "value":3},
+//       {"label": "Primaire maligne levertumor (n=56)", "value":2},
+//       {"label":"Colorecta (n=336)", "value":5},
+//       {"label":"Colorecta ", "value":3},
+//       {"label":"ahmed ", "value":6},
+//       {"label":"safa ", "value":6},
+//     ];
+
+
+    var colors = [
         COLORS.purple,
         COLORS.red,
         COLORS.orange,
@@ -43,90 +61,54 @@ export class BrowserStatisticsChartComponent extends BasePieChartComponent imple
         COLORS.lightBlue,
       ];
 
-      const data = this.browserStatisticsChartService.getBrowserStatistics();
-      console.warn(data)
-      nv.addGraph(() => {
-        const innerRadius = 0.03;
-        let outerRadius = 0.02;
 
-        const pieChart = nv.models.pieChart()
-          .x(d => d.key)
-          .y(d => d.y)
-          .showLabels(false)
-          .donut(true)
-          .growOnHover(true)
-          .padAngle(.03)
-          .margin({ left: 0, right: 0, top: 0, bottom: 0 })
-          .color(colors)
-          .arcsRadius([{ inner: innerRadius, outer: outerRadius },
-            { inner: innerRadius, outer: outerRadius },
-            { inner: innerRadius, outer: outerRadius },
-            { inner: innerRadius, outer: outerRadius },
-            { inner: innerRadius, outer: outerRadius },
-          ])
-          .showLegend(false)
-          .titleOffset(10);
+nv.addGraph(function() {
+    var chart = nv.models.pieChart()
+        .x(function(d) { return d.label })
+        .y(function(d) { return d.value })
+        .color(colors)
+        .showLabels(true)
+        .labelThreshold(.05)
+        .labelType("value")
+        .donut(true).donutRatio(0) /* Trick to make the labels go inside the chart*/
+    ;
+    d3.select("#chart svg")
+        .datum(data)
+        .transition().duration(1200)
+        .call(chart)
+    ;
+    d3.selectAll(".nv-label text")
+        /* Alter SVG attribute (not CSS attributes) */
+        .attr("transform", function(d){
+            d.innerRadius = -250;
+            d.outerRadius = r;
+            return "translate(" + arc.centroid(d) + ")";}
+        )
+        .attr("text-anchor", "middle")
+        /* Alter CSS attributes */
+        .style({"font-size": "1em"})
+    ;
 
-        pieChart.tooltip.enabled(false);
-        pieChart.valueFormat(d3.format('d'));
+    /* Replace bullets with blocks */
+    d3.selectAll('.nv-series').each(function(d,i) {
+        var group = d3.select(this),
+            circle = group.select('circle');
+        var color = circle.style('fill');
+        circle.remove();
+        var symbol = group.append('path')
+            .attr('d', d3.svg.symbol().type('square'))
+            .style('stroke', color)
+            .style('fill', color)
+            // ADJUST SIZE AND POSITION
+            .attr('transform', 'scale(1.5) translate(-2,0)')
+    });
+      return chart;
+    });
 
-        container1.append('div')
-          .append('svg')
-          .datum(data)
-          .transition().duration(1200)
-          .call(pieChart);
+      },
+        error => console.log(error));
 
-        const h = 0;
-        let i = 0.35;
-        const timer = setInterval(animatePie, 70);
 
-        function animatePie() {
-          if (outerRadius < 1.02) {
-            pieChart.arcsRadius([{ inner: innerRadius, outer: outerRadius },
-              { inner: innerRadius, outer: outerRadius },
-              { inner: innerRadius, outer: outerRadius },
-              { inner: innerRadius, outer: outerRadius },
-              { inner: innerRadius, outer: outerRadius },
-            ]).update();
-            outerRadius += i;
-            if (i > 0.2) {
-              i -= 0.05;
-            }
-          } else {
-            outerRadius = 1.02;
-            pieChart.arcsRadius([{ inner: innerRadius, outer: outerRadius },
-              { inner: innerRadius, outer: outerRadius },
-              { inner: innerRadius, outer: outerRadius },
-              { inner: innerRadius, outer: outerRadius },
-              { inner: innerRadius, outer: outerRadius },
-            ])
-              .showLabels(true)
-              .labelType('value')
-              .update();
-            clearInterval(timer);
-          }
-        }
-
-        const color = d3.scale.ordinal().range(colors);
-
-        const legend = container1.append('div')
-          .attr('class', 'legend')
-          .selectAll('.legend__item')
-          .data(data)
-          .enter()
-          .append('div')
-          .attr('class', 'legend__item');
-
-        legend.append('div')
-          .attr('class', 'legend__mark pull-left')
-          .style('background-color', (d => color(d.key)) as any);
-
-        legend.append('div')
-          .attr('class', 'legend__text')
-          .text(d => d.key);
-
-        return pieChart;
-      });
     }
-  }
+
 }

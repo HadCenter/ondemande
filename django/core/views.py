@@ -297,8 +297,8 @@ def numberOfFilesPerClient(request):
     result = []
     for client in serializer_class.data:
         data= {}
-        data['clientName'] = client['nom_client']
-        data['nbrFiles'] = len(client['files'])
+        data['label'] = client['nom_client']
+        data['value'] = len(client['files'])
         result.append(data)
     json_data = JSONRenderer().render(result)
     return HttpResponse(json_data,content_type='application/json')

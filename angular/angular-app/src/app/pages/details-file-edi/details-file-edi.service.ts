@@ -31,7 +31,7 @@ public corretFile (data): Observable<any> {
 }
 
 public sendFileToUrbantz(data): Observable<any> {
- return this.http.post(`${this.url}/urbantzEsb/SendFromFileToUrbantzAsTasks`,data);
+ return this.http.post(`${environment.apiBaseUrl}/urbantzEsb/SendFromFileToUrbantzAsTasks/`,data);
 }
 
 }

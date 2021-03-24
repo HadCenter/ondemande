@@ -40,6 +40,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       console.log("res wrong", res)
       this.fileWrong = res;
       this.show = false;
+      console.warn('***filewrong',this.fileWrong)
     })
   }
 
@@ -50,6 +51,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
     this.fileService.getFileEdi(data).subscribe(res => {
       this.fileValid = res;
+      console.warn('***filevalid',this.fileValid)
     })
   }
 
@@ -111,7 +113,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   sendFileToUrbantz() {
     let data = {
       clientCode: this.file.contact.codeClient,
-      fileName: this.file.fileName,
+      fileName: this.file.validatedOrders,
     }
     this.fileService.sendFileToUrbantz(data).subscribe(res => {
       console.log("urbantz",res);

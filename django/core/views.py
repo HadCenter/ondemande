@@ -225,11 +225,13 @@ class fileCreate(APIView):
             ftp = connect()
 
             path_client_input = path_racine_input + clientCode
-            path_client_output = path_racine_output + clientCode
-            if path_client_input not in ftp.nlst():
-                ftp.mkd(path_client_input)
-            if path_client_output not in ftp.nlst():
-                ftp.mkd(path_client_output)
+            ftp.cwd(path_racine_output)
+            if clientCode not in ftp.nlst():
+                ftp.mkd(clientCode)
+
+            ftp.cwd(path_racine_input)
+            if clientCode not in ftp.nlst():
+                ftp.mkd(clientCode)
 
             ftp.cwd(path_client_input)
             filename = [f for f in listdir(path) if isfile(join(path, f))][0]

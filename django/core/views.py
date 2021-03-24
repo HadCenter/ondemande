@@ -369,6 +369,8 @@ def createFileFromColumnAndRowsAndUpdate(request):
     fileDB.validated_orders = "_"
     fileDB.wrong_commands = "_"
     fileDB.status = "En attente"
+    fileDB.number_correct_commands = 0
+    fileDB.number_wrong_commands = 0
     fileDB.save()
     data = [{"filePath":fileName,"ClientOwner":clientDB.code_client,"fileId":fileDB.id}]
     startEngineWithData(data)

@@ -22,6 +22,8 @@ class EDIfile(models.Model):
     archived = models.BooleanField(default= False)
     cliqued = models.BooleanField(default= False)
     client = models.ForeignKey(Client,related_name='files', on_delete=models.CASCADE)
+    number_correct_commands = models.IntegerField(default=0)
+    number_wrong_commands = models.IntegerField(default=0)
     def __str__(self):
         return os.path.basename(self.file.name)
 
@@ -44,7 +46,7 @@ class Contact:
 
 
 class FileInfo:
-    def __init__(self,idFile : int ,fileName : str,createdAt :models.DateTimeField,status : str,wrongCommands : str,validatedOrders :str,archived : int,cliqued : int , contact : Contact ):
+    def __init__(self,idFile : int ,fileName : str,createdAt :models.DateTimeField,status : str,wrongCommands : str,validatedOrders :str,archived : int,cliqued : int , contact : Contact ,  number_wrong_commands : int , number_correct_commands : int  ):
         self.idFile = idFile
         self.fileName = fileName
         self.createdAt = createdAt
@@ -54,3 +56,5 @@ class FileInfo:
         self.archived = archived
         self.cliqued = cliqued
         self.contact = contact
+        self.number_wrong_commands = number_wrong_commands
+        self.number_correct_commands = number_correct_commands

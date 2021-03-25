@@ -7,13 +7,13 @@
                     <label>{{file?.status}}</label>
                     <label>{{file?.createdAt| date:"yyyy/MM/dd"}}</label>
                     <label>{{file?.contact.codeClient}}</label>
-                    <label class="label-wrong">{{fileWrong?.rows.length || "0"}} </label>
-                    <label class="label-success">{{fileValid?.rows.length || '0'}}</label>
+                    <label class="label-wrong">{{file?.number_wrong_commands}} </label>
+                    <label class="label-success">{{file?.number_correct_commands}}</label>
                 </base-card-body>
             </base-card>
             <div style='text-align: center;'
                 class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone">
-                <button [disabled]="fileWrong?.rows.length>0 || file?.wrongCommands !== '_'"
+                <button [disabled]="fileWrong?.rows.length>0 || file?.wrongCommands !== '_'" (click)="sendFileToUrbantz()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
                     à Urbantz
                 </button>
@@ -103,7 +103,7 @@
                                                 <input *ngIf="j==28" [(ngModel)]="item[j]" type="text" disabled
                                                     class="mdl-textfield__input"  style="color: #00bcd4;">
 
-                                                <input *ngIf="j!==28" id='{{item[j]}}' name='{{item[j]}}'
+                                                <input *ngIf="j!==28"  name='{{item[j]}}'
                                                     [ngClass]="(j==4 ||j==5 || j==7|| j==12  )?'mini-column':'full-column'"
                                                     type="text"  [(ngModel)]="item[j]" class="mdl-textfield__input">
                                             </td>

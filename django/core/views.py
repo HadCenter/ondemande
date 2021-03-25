@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 from rest_framework.decorators import api_view
 from .serializers import ClientSerializer, FileSerializer,ClientTestSerialize
 from rest_framework.response import Response
@@ -23,6 +23,7 @@ import pandas as pd
 from .models import FileExcelContent
 import jsonpickle
 
+from talendEsb.views import startEngineWithData
 
 path_racine_input = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/"
 path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
@@ -167,7 +168,7 @@ def file_detail(request, pk):
     fileReponse = FileInfo(idFile=fileDB.id, fileName=fileDB.file.name, createdAt=fileDB.created_at,
                            status=fileDB.status, wrongCommands=fileDB.wrong_commands,
                            validatedOrders=fileDB.validated_orders, archived=fileDB.archived, cliqued=fileDB.cliqued,
-                           contact=clientResponse)
+                           contact=clientResponse , number_wrong_commands=fileDB.number_wrong_commands , number_correct_commands= fileDB.number_correct_commands)
 
     return HttpResponse(jsonpickle.encode(fileReponse,unpicklable=False),content_type="application/json")
 @api_view(['POST'])
@@ -254,7 +255,7 @@ def fileList(request):
     for fileDB  in files :
         clientDB = fileDB.client
         clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
-        fileReponse = FileInfo(idFile= fileDB.id,fileName=fileDB.file.name,createdAt=fileDB.created_at,status=fileDB.status ,wrongCommands=fileDB.wrong_commands,validatedOrders=fileDB.validated_orders,archived=fileDB.archived,cliqued=fileDB.cliqued,contact=clientResponse)
+        fileReponse = FileInfo(idFile= fileDB.id,fileName=fileDB.file.name,createdAt=fileDB.created_at,status=fileDB.status ,wrongCommands=fileDB.wrong_commands,validatedOrders=fileDB.validated_orders,archived=fileDB.archived,cliqued=fileDB.cliqued,contact=clientResponse , number_correct_commands= fileDB.number_correct_commands , number_wrong_commands= fileDB.number_wrong_commands )
         listFiles.append(fileReponse)
   #  serializer = FileSerializer(files, many= True)
  #   return Response(serializer.data)
@@ -367,7 +368,10 @@ def createFileFromColumnAndRowsAndUpdate(request):
     os.remove(fileName)
     fileDB.validated_orders = "_"
     fileDB.wrong_commands = "_"
-    fileDB.cliqued = 0
     fileDB.status = "En attente"
+    fileDB.number_correct_commands = 0
+    fileDB.number_wrong_commands = 0
     fileDB.save()
+    data = [{"filePath":fileName,"ClientOwner":clientDB.code_client,"fileId":fileDB.id}]
+    startEngineWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)

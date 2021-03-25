@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router'
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router'
 import { throwIfEmpty } from 'rxjs/operators';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
@@ -14,10 +15,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   fileValid: any;
   show = false;
   column: string;
+  public snackAction = 'Ok';
   fileTocheck: { fileId: any; columns: any; rows: any; };
   _fileWrong: any;
 
-  constructor(private route: ActivatedRoute, private fileService: DetailsFileEdiService) {
+  constructor(private route: ActivatedRoute,
+    private _snackBar: MatSnackBar,
+    private router: Router,
+    private fileService: DetailsFileEdiService) {
     super();
   }
 
@@ -98,15 +103,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
 
 
-
+    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+   
     console.warn("****", this.fileTocheck)
     this.fileService.corretFile(this.fileTocheck).subscribe(res => {
       console.log('res correction', res);
       if (res.message=="success"){
-        this.getFile(this.file.idFile);
+     
+        this.router.navigate(['/list-file-edi']);
+      //  this.getFile(this.file.idFile);
       }
     })
-
 
   }
 
@@ -118,6 +125,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.fileService.sendFileToUrbantz(data).subscribe(res => {
       console.log("urbantz",res);
     })
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 4500,
+      verticalPosition: 'bottom',
+      horizontalPosition: 'center',
+    });
   }
 
 

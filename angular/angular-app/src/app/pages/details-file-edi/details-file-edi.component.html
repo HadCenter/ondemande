@@ -23,7 +23,7 @@
         <div class="content-labels">
             <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
                 <base-card-title>
-                    <label class="label-success">Success</label>
+                    <label class="label-success">Prestations validées</label>
                 </base-card-title>
                 <base-card-body class="content-file-line">
                     <mat-accordion>
@@ -69,7 +69,7 @@
         <div>
             <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
                 <base-card-title>
-                    <label class="label-wrong">Errors</label>
+                    <label class="label-wrong">Prestations erronées</label>
                 </base-card-title>
                 <base-card-body class="content-file-line">
                     <mat-accordion>
@@ -79,7 +79,7 @@
                                     Afficher Log
                                 </mat-panel-title>
                                 <mat-panel-description>
-                                    <button (click)='correctionFile()' [disabled]=" file?.wrongCommands == '_'"
+                                    <button (click)='correctionFile();$event.stopPropagation();' [disabled]=" file?.wrongCommands == '_'"
                                         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                                     </button>
                                 </mat-panel-description>

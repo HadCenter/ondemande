@@ -10,105 +10,52 @@ import { BrowserStatisticsChartService } from './browser-statistics-chart.servic
 @Component({
   selector: 'app-browser-statistics-chart',
   styleUrls: ['../../../theme/components/pie-chart/pie-chart.component.scss'],
-  template: `<div id="chart">
-  <svg></svg>
-</div>`,
+  template: `<div id="conteneur" >
+  <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'100px'" [bg]="'transparant'" [show]="show"></app-loader>
+        <div *ngIf = "data.length > 0">
+          <h4>Choisir un client </h4>
+          <mat-form-field appearance="fill" >
+            <mat-label>Client</mat-label>
+            <mat-select [(value)]="selected">
+              <mat-option *ngFor="let object of data" [value]="object.label">
+                {{object.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf = "data.length > 0">
+          <h4 >Nombre de fichiers importés : </h4>
+          <h4  > {{get(selected)}}</h4>
+        </div></div>
+  `,
   providers: [BrowserStatisticsChartService],
 })
 export class BrowserStatisticsChartComponent implements OnInit {
+  data =[];
+  show = true;
+  selected = "";
   constructor(
     public el: ElementRef,
     public browserStatisticsChartService: BrowserStatisticsChartService,
   ) {
 
   }
-
   public ngOnInit() {
-  this.browserStatisticsChartService.getNumberOfFilesPerClient()
+    this.getData();
+  }
+   public getData() {
+    this.browserStatisticsChartService.getNumberOfFilesPerClient()
       .subscribe(res => {
-        var data = res;
-        var h = 600;
-    var r = h/2;
-    var arc = d3.svg.arc().outerRadius(r);
-    const COLORS = {
-      red: '#f44336',
-      lightBlue: '#03a9f4',
-      orange: '#ffc107',
-      amber: '#ff9800',
-      teal: '#00bcd4',
-      purple: '#7726d3',
-      green: '#00d45a',
-      rowBgColor: '#4a4a4a',
-    };
-
-//     var data = [
-//       {"label":"Colorectale levermetastase (n=336)", "value":1},
-//       {"label":"Levensmetatase van andere origine (n=32)", "value":4},
-//       {"label":"Beningne levertumor (n=34)", "value":3},
-//       {"label": "Primaire maligne levertumor (n=56)", "value":2},
-//       {"label":"Colorecta (n=336)", "value":5},
-//       {"label":"Colorecta ", "value":3},
-//       {"label":"ahmed ", "value":6},
-//       {"label":"safa ", "value":6},
-//     ];
-
-
-    var colors = [
-        COLORS.purple,
-        COLORS.red,
-        COLORS.orange,
-        COLORS.teal,
-        COLORS.lightBlue,
-      ];
-
-
-nv.addGraph(function() {
-    var chart = nv.models.pieChart()
-        .x(function(d) { return d.label })
-        .y(function(d) { return d.value })
-        .color(colors)
-        .showLabels(true)
-        .labelThreshold(.05)
-        .labelType("value")
-        .donut(true).donutRatio(0) /* Trick to make the labels go inside the chart*/
-    ;
-    d3.select("#chart svg")
-        .datum(data)
-        .transition().duration(1200)
-        .call(chart)
-    ;
-    d3.selectAll(".nv-label text")
-        /* Alter SVG attribute (not CSS attributes) */
-        .attr("transform", function(d){
-            d.innerRadius = -250;
-            d.outerRadius = r;
-            return "translate(" + arc.centroid(d) + ")";}
-        )
-        .attr("text-anchor", "middle")
-        /* Alter CSS attributes */
-        .style({"font-size": "1em"})
-    ;
-
-    /* Replace bullets with blocks */
-    d3.selectAll('.nv-series').each(function(d,i) {
-        var group = d3.select(this),
-            circle = group.select('circle');
-        var color = circle.style('fill');
-        circle.remove();
-        var symbol = group.append('path')
-            .attr('d', d3.svg.symbol().type('square'))
-            .style('stroke', color)
-            .style('fill', color)
-            // ADJUST SIZE AND POSITION
-            .attr('transform', 'scale(1.5) translate(-2,0)')
-    });
-      return chart;
-    });
-
+        this.data = res;
+        this.selected = this.data[0].label;
+        this.show = false;
       },
         error => console.log(error));
-
-
     }
+    public get()
+    {
+      return this.data.find(element => element.label === this.selected).value;
+    }
+
 
 }

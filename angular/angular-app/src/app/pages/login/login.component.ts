@@ -41,7 +41,7 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
     this.error = null;
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.getRawValue())
-        .subscribe(res => this.router.navigate(['/list-file-edi']),
+        .subscribe(res => this.router.navigate(['/home']),
           error => this.error = "Utilisateur n'est pas actif/n'existe pas");
     }
   }

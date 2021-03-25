@@ -6,6 +6,9 @@ import { HomeService } from './home.service';
 import { ThemeModule } from 'theme';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { BrowserStatisticsChartComponent } from 'app/components/browser-statistics-chart';
+import {MatSelectModule} from '@angular/material/select';
+import { LoaderModule } from 'app/components/loader/loader.module';
+
 
 
 @NgModule({
@@ -14,6 +17,8 @@ import { BrowserStatisticsChartComponent } from 'app/components/browser-statisti
     CommonModule,
     HomeRoutingModule,
     ThemeModule,
+    MatSelectModule,
+    LoaderModule,
   ],
   providers: [
     HomeService,

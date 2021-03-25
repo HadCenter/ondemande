@@ -9,4 +9,7 @@ export class HomeService {
 
   private url = `${environment.apiBaseUrl}/api`;
   constructor(private http: HttpClient) { }
+   public getNumberOfFilesPerClient () : Observable<any> {
+    return this.http.get(`${this.url}/getNumberOfFilesPerClient/`);
+  }
 }

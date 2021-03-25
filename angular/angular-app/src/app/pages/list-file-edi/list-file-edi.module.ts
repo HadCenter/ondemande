@@ -19,7 +19,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { LoaderModule } from 'app/components/loader/loader.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-// import { ListClientsModule } from '../list-clients/list-clients.module';
+
 
 @NgModule({
   declarations: [ListFileEDIComponent,DialogImportFile,],
@@ -41,7 +41,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatAutocompleteModule,
     LoaderModule,
     MatSnackBarModule,
-    // ListClientsModule,
     FormsModule, ReactiveFormsModule
   ],
 

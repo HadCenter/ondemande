@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router'
-import { throwIfEmpty } from 'rxjs/operators';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
 @Component({
@@ -42,10 +41,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       "fileName": this.file.wrongCommands,
     }
     this.fileService.getFileEdi(data).subscribe(res => {
-      console.log("res wrong", res)
       this.fileWrong = res;
       this.show = false;
-      console.warn('***filewrong',this.fileWrong)
+      console.warn('***filewrong', this.fileWrong)
     })
   }
 
@@ -56,25 +54,21 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
     this.fileService.getFileEdi(data).subscribe(res => {
       this.fileValid = res;
-      console.warn('***filevalid',this.fileValid)
+      console.warn('***filevalid', this.fileValid)
     })
   }
-
-
 
   getFile(id: string) {
     this.fileService.get(id)
       .subscribe(
         data => {
           this.file = data;
-          console.log("file", this.file);
           if (this.file.validatedOrders != '_') {
             this.getValidFile();
           }
           if (this.file.wrongCommands != '_') {
             this.getWrongFile();
           }
-
         },
         error => {
           console.log(error);
@@ -83,11 +77,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   correctionFile() {
     this._fileWrong = JSON.parse(JSON.stringify(this.fileWrong));
-    var inputs = document.getElementsByTagName("input"); 
-    for (var i = 0; i < inputs.length; i++) { 
-        inputs[i].disabled = true;
-    } 
-    console.log("_filewrong",this._fileWrong)
+    var inputs = document.getElementsByTagName("input");
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].disabled = true;
+    }
     this._fileWrong.rows.forEach(element => {
       element = element.pop();
     });
@@ -106,17 +99,13 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         rows: this._fileWrong.rows,
       }
     }
-
-    console.warn("***",this.fileWrong)
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-   
-    console.warn("****", this.fileTocheck)
+
+    console.warn("**file to check**", this.fileTocheck)
     this.fileService.corretFile(this.fileTocheck).subscribe(res => {
-      console.log('res correction', res);
-      if (res.message=="success"){
-     
+      console.log('resultat correction', res);
+      if (res.message == "success") {
         this.router.navigate(['/list-file-edi']);
-      //  this.getFile(this.file.idFile);
       }
     })
 
@@ -128,7 +117,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       fileName: this.file.validatedOrders,
     }
     this.fileService.sendFileToUrbantz(data).subscribe(res => {
-      console.log("urbantz",res);
+      console.log("res urbantz", res);
     })
   }
 

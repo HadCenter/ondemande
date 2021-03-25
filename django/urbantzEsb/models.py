@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class UrbantzTask:
-    def __init__(self,type,taskId,taskReference,product,products,hasBeenPaid,notificationSettings,client,collectedAmount,price,round,sequence,instructions,date,serviceTime,maxTransitTime,timeWindow,timeWindow2,contact,address,items,requires,metadata,categories,collect):
+    def __init__(self,type,taskId,taskReference,client,date,timeWindow,timeWindow2,contact,address,items,metadata,requires = {},categories=[],collect = {},product="string",products = [],hasBeenPaid = False,notificationSettings = {},collectedAmount = 0,price = 0,round = "",sequence = 1 ,instructions = "" ,serviceTime = 0 ,maxTransitTime = 0 ):
         self.type = type
         self.taskId = taskId
         self.taskReference = taskReference
@@ -31,7 +31,7 @@ class UrbantzTask:
         self.collect = collect
 
 class TaskItem:
-    def __init__(self,type,name,description,barcode,barcodeEncoding,reference,quantity,dimensions,labels,skills,metadata,conditionalChecklists,group):
+    def __init__(self,type,name,description,barcodeEncoding,reference,quantity,conditionalChecklists=[],group ="string",barcode = "",metadata ={},dimensions = {"volume": 0.01,"weight": 1},labels=[],skills=[]):
         self.type =type
         self.name =name
         self.description =description
@@ -47,11 +47,14 @@ class TaskItem:
         self.group = group
 
 class Metadata :
-    def __init__(self,codeArticle):
-        self.codeArticle = codeArticle
+    def __init__(self,CodeArticle,Porte,Instructions,Tel3):
+        self.CodeArticle = CodeArticle
+        self.Porte = Porte
+        self.Instructions = Instructions
+        self.Tel3 = Tel3
 
 class ContactUrbantz :
-    def __init__(self,account,name,person,phone,email,extraPhones,extraEmails,language,buildingInfo):
+    def __init__(self,name,phone,email,buildingInfo,extraPhones = [],extraEmails = [],language = "fr",account ="",person =""):
         self.account = account
         self.name = name
         self.person =person
@@ -63,7 +66,7 @@ class ContactUrbantz :
         self.buildingInfo =buildingInfo
 
 class BuildingInfoUrbantz :
-    def __init__(self,floor,hasElevator,digicode1,digicode2,hasInterphone,interphoneCode):
+    def __init__(self,floor,hasElevator,digicode2,hasInterphone,interphoneCode,digicode1 = ""):
         self.floor =floor
         self.hasElevator =hasElevator
         self.digicode1 =digicode1
@@ -72,7 +75,7 @@ class BuildingInfoUrbantz :
         self.interphoneCode = interphoneCode
 
 class LocationUrbantz :
-    def __init__(self,building,number,street,city,zip,origin,country,location,address,addressLines,cleanScore,geocodeScore):
+    def __init__(self,number,street,city,zip,address,addressLines=[],cleanScore =0,geocodeScore = 100,building ="",country = "France",origin=""):
         self.building = building
         self.number =number
         self.street =street
@@ -80,8 +83,13 @@ class LocationUrbantz :
         self.zip = zip
         self.origin = origin
         self.country = country
-        self.location = location
         self.address = address
         self.addressLines = addressLines
         self.cleanScore = cleanScore
         self.geocodeScore = geocodeScore
+
+
+class TimeWindowUrbantz:
+    def __init__(self,start,stop):
+        self.start = start
+        self.stop = stop

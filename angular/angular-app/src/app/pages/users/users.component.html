@@ -31,9 +31,9 @@
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
               <td class="mdl-data-table__cell--non-numeric">{{ row.username }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.last_login | date:"yyyy/MM/dd" }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ getProfile(row.is_superadmin) }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ getStatus(row.is_active) }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.last_login | date:"yyyy-MM-dd" }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.profile }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.status }}</td>
               <td class="mdl-data-table__cell--non-numeric">
                 <button (click)="openUpdateUser(row.id)"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Modifier

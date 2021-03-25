@@ -52,6 +52,7 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
   }
   setFilteredItems() {
     this.advancedTable = this.filterItems(this.filterValue);
+    console.log(this.advancedTable);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
     }
@@ -66,8 +67,28 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
     this.usersService.getAllUsers()
       .subscribe(res => {
         this.users = res;
+        for(var i= 0; i < res.length; i++)
+        {
+
+          if(res[i].is_admin == true)
+          {
+            res[i].profile = "Admin"
+          }else{
+            res[i].profile = "SuperAdmin"
+          }
+          if(res[i].is_active == true)
+          {
+            res[i].status = "Actif"
+          }else{
+            res[i].status = "Non actif"
+          }
+          delete res[i].is_admin;
+          delete res[i].is_superadmin;
+        }
+
         this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        console.log(this.advancedTable);
       },
         // error => this.error = "error.message");
         // for fake data

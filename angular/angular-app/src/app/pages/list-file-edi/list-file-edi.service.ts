@@ -114,12 +114,12 @@ export class ListFileEdiService {
 
         },
         {
-            name: 'Commandes erronées',
+            name: 'Prestations erronées',
             sort: null,
 
         },
         {
-            name: 'Commandes validées',
+            name: 'Prestations validées',
             sort: null,
 
         },

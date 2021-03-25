@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ImportFileEdiService } from './dialog/import-file-edi.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -44,6 +45,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   show = true;
   constructor(private tablesService: ListFileEdiService,
     private router: Router,
+    private _snackBar: MatSnackBar,
     public dialog: MatDialog) {
     super();
     this.completeTable = this.tablesService.advanceTableData;
@@ -170,6 +172,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.executeJob(row)
       .subscribe(res => {
         console.log("success");
+        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction)
         this.router.navigate(['/list-file-edi']);
       }, error => console.log(error));
   }
@@ -217,6 +220,14 @@ export class ListFileEDIComponent extends UpgradableComponent {
         this.actualiser();
       }
 
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 4500,
+      verticalPosition: 'bottom',
+      horizontalPosition: 'center',
     });
   }
 

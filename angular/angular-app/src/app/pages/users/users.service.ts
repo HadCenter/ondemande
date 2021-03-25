@@ -30,7 +30,7 @@ export class UsersService {
 
         },
         {
-            name: 'Status',
+            name: 'Statut',
 
         },
         {

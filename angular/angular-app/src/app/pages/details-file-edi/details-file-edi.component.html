@@ -2,18 +2,34 @@
     <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
     <div class="content-file-edi">
         <div class="content-labels">
-            <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--2-col-phone">
+            <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--5-col-phone">
                 <base-card-body class="content-first-card ">
-                    <label>{{file?.status}}</label>
-                    <label>{{file?.createdAt| date:"yyyy/MM/dd"}}</label>
-                    <label>{{file?.contact.codeClient}}</label>
-                    <label class="label-wrong">{{file?.number_wrong_commands}} </label>
-                    <label class="label-success">{{file?.number_correct_commands}}</label>
+                    <div class="content-label">
+                        <label class="details-label">Status</label>
+                        <label class="details-label">{{file?.status}}</label>
+                    </div>
+                    <div class="content-label">
+                        <label class="details-label">Date</label>
+                        <label class="details-label">{{file?.createdAt| date:"yyyy/MM/dd"}}</label>
+                    </div>
+                    <div class="content-label">
+                        <label class="details-label">Code client</label>
+                        <label class="details-label">{{file?.contact.codeClient}}</label>
+                    </div>
+                    <div class="content-label">
+                        <label class="details-label">Nombre des prestations erronées</label>
+                        <label class="label-wrong">{{file?.number_wrong_commands}} </label>
+                    </div>
+                    <div class="content-label">
+                        <label class="details-label">Nombre des prestations validées</label>
+                        <label class="label-success">{{file?.number_correct_commands}}</label>
+                    </div>
                 </base-card-body>
             </base-card>
             <div style='text-align: center;'
-                class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone">
-                <button [disabled]="fileWrong?.rows.length>0 || file?.wrongCommands !== '_'" (click)="sendFileToUrbantz()"
+                class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                <button [disabled]="fileWrong?.rows.length>0 || file?.wrongCommands !== '_'"
+                    (click)="sendFileToUrbantz()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
                     à Urbantz
                 </button>
@@ -79,7 +95,8 @@
                                     Afficher Log
                                 </mat-panel-title>
                                 <mat-panel-description>
-                                    <button (click)='correctionFile();$event.stopPropagation();' [disabled]=" file?.wrongCommands == '_'"
+                                    <button (click)='correctionFile();$event.stopPropagation();'
+                                        [disabled]=" file?.wrongCommands == '_'"
                                         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                                     </button>
                                 </mat-panel-description>
@@ -101,11 +118,11 @@
                                                 [ngClass]="(j==28 || j==16 || j==8|| j==9 ||j==21)?'remarque-column':'full-column'"
                                                 class="details-line mdl-data-table__cell--non-numeric">
                                                 <input *ngIf="j==28" [(ngModel)]="item[j]" type="text" disabled
-                                                    class="mdl-textfield__input"  style="color: #00bcd4;">
+                                                    class="mdl-textfield__input" style="color: #00bcd4;">
 
-                                                <input *ngIf="j!==28"  name='{{item[j]}}'
+                                                <input *ngIf="j!==28" name='{{item[j]}}'
                                                     [ngClass]="(j==4 ||j==5 || j==7|| j==12  )?'mini-column':'full-column'"
-                                                    type="text"  [(ngModel)]="item[j]" class="mdl-textfield__input">
+                                                    type="text" [(ngModel)]="item[j]" class="mdl-textfield__input">
                                             </td>
                                         </tr>
                                     </tbody>

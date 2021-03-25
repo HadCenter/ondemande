@@ -82,7 +82,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   correctionFile() {
-    this._fileWrong = this.fileWrong;
+    this._fileWrong = JSON.parse(JSON.stringify(this.fileWrong));
+    var inputs = document.getElementsByTagName("input"); 
+    for (var i = 0; i < inputs.length; i++) { 
+        inputs[i].disabled = true;
+    } 
+    console.log("_filewrong",this._fileWrong)
     this._fileWrong.rows.forEach(element => {
       element = element.pop();
     });
@@ -102,7 +107,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
     }
 
-
+    console.warn("***",this.fileWrong)
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
    
     console.warn("****", this.fileTocheck)

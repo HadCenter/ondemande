@@ -1,5 +1,5 @@
-<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone" >
-  <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
+<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+  <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
   <base-card>
     <base-card-title>
       <h1 class="mdl-card__title-text">Liste des fichiers EDI</h1>
@@ -14,9 +14,9 @@
       <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
       </base-pagination>
       <button (click)="openDialog()"
-          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Importer
-          fichier EDI
-        </button>
+        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Importer
+        fichier EDI
+      </button>
       &nbsp;
       <a><button
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
@@ -37,21 +37,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;" (click)="row.status=='Terminé' ? gotoDetails(row)  : 'else $event.stopPropagation()'">
+          <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;"
+            (click)="row.status=='Terminé' ? gotoDetails(row)  : 'else $event.stopPropagation()'">
             <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a [matTooltip]=row.fileName
-                matTooltipClass="tooltip-custom" [routerLink]=""
-            (click)="downloadFileInput(row.contact.codeClient, row.fileName)">{{row.fileName}} </a></td>
+                matTooltipClass="tooltip-custom">{{row.fileName}} </a></td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"yyyy/MM/dd" }}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.contact.nomClient}}</td>
 
             <!-- <td *ngIf="row.wrongCommands !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
                 [matTooltip]=row.wrongCommands matTooltipClass="tooltip-custom">{{row.wrongCommands }}</a></td> -->
-            <td class="mdl-data-table__cell--non-numeric" >{{ row.number_wrong_commands }}
+            <td class="mdl-data-table__cell--non-numeric">{{ row.number_wrong_commands }}
             </td>
 
             <!-- <td *ngIf="row.validatedOrders !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
                 [matTooltip]=row.validatedOrders matTooltipClass="tooltip-custom">{{row.validatedOrders}}</a></td> -->
-            <td  class="mdl-data-table__cell--non-numeric">{{ row.number_correct_commands }}
+            <td class="mdl-data-table__cell--non-numeric">{{ row.number_correct_commands }}
             </td>
             <td class="mdl-data-table__cell--non-numeric">
               <span class="label label--mini color--{{getColor(row.status)}} ">{{ row.status }}</span>
@@ -59,8 +59,11 @@
             <td class="mdl-data-table__cell--non-numeric">
               <button [disabled]="clicked[i] || row.cliqued"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                (click)="analyserEDI(row); clicked[i] = true;">Valider
+                (click)="analyserEDI(row); clicked[i] = true;">Corriger
               </button>
+              <span (click)="downloadFileInput(row.contact.codeClient, row.fileName);$event.stopPropagation();" class="download material-icons">
+                download
+              </span>
             </td>
           </tr>
         </tbody>

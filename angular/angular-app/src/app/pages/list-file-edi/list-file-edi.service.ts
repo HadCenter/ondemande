@@ -15,9 +15,7 @@ export class ListFileEdiService {
 
   public executeJob(row) : Observable<any> {
    // var fileName = decodeURIComponent(row.file);
-    // console.log(fileName);
     const body = [{"filePath" : row.fileName, "ClientOwner" : row.contact.codeClient, "fileId" : row.idFile}]
-    console.log(body);
     return this.http.post(`${this.urlJobTalend}/startEngineOnEdiFiles`, body);
   }
 
@@ -114,12 +112,12 @@ export class ListFileEdiService {
 
         },
         {
-            name: 'Commandes erronées',
+            name: 'Prestations erronées',
             sort: null,
 
         },
         {
-            name: 'Commandes validées',
+            name: 'Prestations validées',
             sort: null,
 
         },

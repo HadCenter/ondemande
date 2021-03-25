@@ -32,7 +32,7 @@ mat-panel-title.mat-expansion-panel-header-title {
     color: white;
 }
 base-card-body.content-first-card.mdl-card__supporting-text{
-    padding: 20px 16px;
+    padding: 30px 16px;
 }
 .table-validator{
   width: max-content;
@@ -73,9 +73,11 @@ base-card-body.content-first-card.mdl-card__supporting-text{
 }
 .label-success{
   color:#00d45a;
+
 }
 .label-wrong{
 color: #f44336;
+
 }
 .content-file-line{
   padding: 20px 16px !important;
@@ -108,6 +110,12 @@ display: initial;
     bottom: 0;
     right: 0;
   }
+  .content-label {
+    display: contents;
+}
+base-card-body.content-first-card.mdl-card__supporting-text {
+  padding: 5px 16px;
+}
 }
 @media (min-width: 480px) and (max-width: 839px) {
   .container{
@@ -118,6 +126,9 @@ display: initial;
     bottom: 0;
     right: 0;
   }
+  .content-label {
+    display: inline-grid;
+}
 }
 
 @media (min-width: 840px) {
@@ -128,6 +139,9 @@ display: initial;
     left: 0;
     bottom: 0;
     right: 0;
+  }
+  .content-label {
+    display: inline-grid;
   }
 }
 
@@ -164,4 +178,9 @@ th.details-line.mdl-data-table__cell--non-numeric {
 td.details-line.mdl-data-table__cell--non-numeric.remarque-column.ng-star-inserted {
   max-width: initial;
   width: 250px;
+}
+
+
+.details-label{
+  line-height: 18px;
 }

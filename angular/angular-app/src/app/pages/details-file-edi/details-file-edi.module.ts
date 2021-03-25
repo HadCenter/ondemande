@@ -10,6 +10,7 @@ import { DetailsFileEdiComponent } from './details-file-edi.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderModule } from 'app/components/loader/loader.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [DetailsFileEdiComponent],
   imports: [
@@ -20,7 +21,8 @@ import { LoaderModule } from 'app/components/loader/loader.module';
     ReactiveFormsModule,
     MatExpansionModule,
     MatInputModule,
-    LoaderModule
+    LoaderModule,
+    MatSnackBarModule
   ],
   providers: [
     DetailsFileEdiService,

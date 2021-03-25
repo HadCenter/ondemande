@@ -13,10 +13,10 @@
         </div>
         <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
         </base-pagination>
-        <button (click)="openAddClient()"
+        <!-- <button (click)="openAddClient()"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
                 >Ajouter client
-        </button>
+        </button> -->
       </base-card-title>
       <base-card-body class="no-padding">
         <table *ngIf = "advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
@@ -34,11 +34,11 @@
               <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
               <td class="mdl-data-table__cell--non-numeric">
 
-                  <button
+                  <!-- <button
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                   routerLink="/details-client/{{ row.idContact }}" >Modifier
                 </button>
-                &nbsp;
+                &nbsp; -->
                 <button
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                   (click)="openDialog(row);$event.stopPropagation();">Archiver

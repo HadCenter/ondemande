@@ -13,7 +13,7 @@ import { BrowserStatisticsChartService } from './browser-statistics-chart.servic
   template: `<div id="conteneur" >
   <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'100px'" [bg]="'transparant'" [show]="show"></app-loader>
         <div *ngIf = "data.length > 0">
-          <h4>Choisir un client </h4>
+          <h5>Choisir un client </h5>
           <mat-form-field appearance="fill" >
             <mat-label>Client</mat-label>
             <mat-select [(value)]="selected">
@@ -24,8 +24,8 @@ import { BrowserStatisticsChartService } from './browser-statistics-chart.servic
           </mat-form-field>
         </div>
         <div *ngIf = "data.length > 0">
-          <h4 >Nombre de fichiers importés : </h4>
-          <h4  > {{get(selected)}}</h4>
+          <h5 >Nombre de fichiers importés : </h5>
+          <div class="centrage"><h4> {{get(selected)}}</h4></div>
         </div></div>
   `,
   providers: [BrowserStatisticsChartService],

@@ -122,7 +122,7 @@ export class ListFileEdiService {
 
         },
         {
-            name: 'Status',
+            name: 'Statut',
             sort: null,
 
         },

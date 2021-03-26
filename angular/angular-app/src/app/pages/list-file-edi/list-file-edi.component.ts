@@ -222,7 +222,8 @@ export class ListFileEDIComponent extends UpgradableComponent {
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,
-      verticalPosition: 'bottom',
+     // verticalPosition: 'bottom',
+      verticalPosition: 'top',
       horizontalPosition: 'center',
     });
   }

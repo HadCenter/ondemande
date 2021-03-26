@@ -28,7 +28,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   ngOnInit(): void {
     this.show = true;
     this.getFile(this.route.snapshot.params.id);
-
   }
 
   customTrackBy(index: number, obj: any) {
@@ -124,8 +123,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,
-      verticalPosition: 'bottom',
+      verticalPosition: 'top',
       horizontalPosition: 'center',
+      // panelClass: ['blue-snackbar']
     });
   }
 

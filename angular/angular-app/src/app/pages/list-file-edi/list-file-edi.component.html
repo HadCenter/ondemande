@@ -38,7 +38,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;"
-            (click)="row.status=='Terminé' ? gotoDetails(row)  : 'else $event.stopPropagation()'">
+           >
             <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a [matTooltip]=row.fileName
                 matTooltipClass="tooltip-custom">{{row.fileName}} </a></td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"yyyy/MM/dd" }}</td>
@@ -61,6 +61,11 @@
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                 (click)="analyserEDI(row); clicked[i] = true;">Corriger
               </button>
+              <button  style="margin-left: 3px;" [disabled]="row.status!=='Terminé'"
+               (click)="gotoDetails(row)"
+              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+              >Details
+            </button>
               <span (click)="downloadFileInput(row.contact.codeClient, row.fileName);$event.stopPropagation();" class="download material-icons">
                 download
               </span>

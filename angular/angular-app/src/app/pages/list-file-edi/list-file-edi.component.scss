@@ -268,3 +268,8 @@ a{
   .mat-simple-snackbar-action button span {
    color: #ff4081;
   }
+
+  td.column-actions.mdl-data-table__cell--non-numeric{
+  text-overflow: inherit;
+  overflow: inherit;
+  }

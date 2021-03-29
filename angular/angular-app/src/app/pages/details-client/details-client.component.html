@@ -2,58 +2,26 @@
   <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--3-col-phone content" *ngIf="currentClient.id">
   <base-card>
       <base-card-title>
-        <h1 class="mdl-card__title-text">Mettre à jour votre client</h1>
+        <h1 class="mdl-card__title-text">Informations client</h1>
       </base-card-title>
       <base-card-body class="no-padding">
-        <form  [formGroup]="updateForm" (submit)="updateClient()" autocomplete="off" novalidate >
           <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone" >
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
-            [class.is-invalid]="code.invalid && (code.dirty || code.touched)"
-                 [class.is-valid]="code.valid && (code.dirty || code.touched)">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
               <label  for="code" style="color:gray; font: 13px Arial, sans-serif;"  >Code client *</label>
               <br>
-              <input  formControlName="code" pattern="{{codePattern}}" (change)="onInputChange($event)" name="code" [(ngModel)]="currentClient.code_client"  class="mdl-textfield__input" type="text" id="code">
-              <div *ngIf="code.invalid && (code.dirty || code.touched)">
-                <span *ngIf="code.errors.required" class="mdl-textfield__error">
-                  Code obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un code valide.</span>
-                </span>
-                <span *ngIf="code.errors.pattern" class="mdl-textfield__error">
-                  Format Cxxx, x est un entier.
-                </span>
-              </div>
+              <input disabled  name="code" [(ngModel)]="currentClient.code_client"  class="mdl-textfield__input" type="text" id="code">
             </div>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
-            [class.is-invalid]="nom.invalid && (nom.dirty || nom.touched)"
-                 [class.is-valid]="nom.valid && (nom.dirty || nom.touched)">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
               <label style="color:gray; font: 13px Arial, sans-serif;" for="nomclient"  >Nom client *</label>
               <br>
-              <input formControlName="nom" pattern="{{nomPattern}}" (change)="onInputChange($event)" name="nomclient" [(ngModel)]="currentClient.nom_client"  class="mdl-textfield__input" type="text" id="nomclient">
-              <div *ngIf="nom.invalid && (nom.dirty || nom.touched)">
-                <span *ngIf="nom.errors.required" class="mdl-textfield__error">
-                  Nom obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un nom valide.</span>
-                </span>
-                <span *ngIf="nom.errors.pattern" class="mdl-textfield__error">
-                  Nom doit être en majuscule.
-                </span>
-              </div>
+              <input disabled name="nomclient" [(ngModel)]="currentClient.nom_client"  class="mdl-textfield__input" type="text" id="nomclient">
             </div>
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"  >
               <label style="color:gray; font: 13px Arial, sans-serif;" for="email" >Email</label>
               <br>
-              <input  formControlName="email" pattern="{{emailPattern}}" (change)="onInputChange($event)" name="email" [(ngModel)]="currentClient.email"  class="mdl-textfield__input" type="text" id="email">
-              <div *ngIf="email.invalid && (email.dirty || email.touched)">
-                <span *ngIf="email.errors.pattern" class="mdl-textfield__error">
-                  Email invalide.
-                </span>
-              </div>
+              <input  disabled name="email" [(ngModel)]="currentClient.email"  class="mdl-textfield__input" type="text" id="email">
             </div>
-            <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
           </div>
-          <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
-            <button [disabled]="updateForm.invalid"  class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit">Modifier</button>
-          </div>
-        </form>
-
       </base-card-body>
     </base-card>
 </div>

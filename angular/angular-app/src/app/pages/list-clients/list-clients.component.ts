@@ -104,26 +104,6 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     return this.clients.slice((page - 1) * countPerPage, page * countPerPage);
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.advancedTable.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.advancedTable.forEach(row => this.selection.select(row));
-  }
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-  }
   setFilteredItems() {
     this.advancedTable = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
@@ -139,7 +119,6 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     this.tablesService.getAllClients()
       .subscribe(res => {
         this.clients = res;
-        console.warn("/*/*",this.clients);
         this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },
@@ -152,7 +131,6 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
 }
 
 @Component({
-  //selector: 'app-create-client',
   templateUrl: 'dialog/create-client.component.html',
   styleUrls: ['dialog/create-client.component.scss']
 })

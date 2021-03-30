@@ -115,13 +115,14 @@
                                     <tbody>
                                         <tr *ngFor="let item of fileWrong?.rows ; let i=index">
                                             <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
-                                                [ngClass]="(j==0 || j==17 || j==10 ||j==212)?'remarque-column':'full-column'"
+                                                [ngClass]="(j==0 || j==17 ||j==18 || j==10 ||j==22)?'remarque-column':'full-column'"
                                                 class="details-line mdl-data-table__cell--non-numeric">
-                                                <input *ngIf="j==0" [(ngModel)]="item[j]" type="text" disabled
-                                                    class="mdl-textfield__input" style="color: #00bcd4;">
+                                                <label *ngIf="j==0" class="label-remarque">{{item[j]}}</label>
+                                                <!-- <input *ngIf="j==0" [(ngModel)]="item[j]" type="text" disabled
+                                                    class="mdl-textfield__input" style="color: #00bcd4;"> -->
 
                                                 <input *ngIf="j!==0" name='{{item[j]}}'
-                                                    [ngClass]="(j==5 ||j==6 || j==8|| j==13 )?'mini-column':'full-column'"
+                                                    [ngClass]="( j==1 || j==5 ||j==6 || j==8||j==9|| j==13 )?'mini-column':'full-column'"
                                                     type="text" [(ngModel)]="item[j]" class="mdl-textfield__input">
                                             </td>
                                         </tr>

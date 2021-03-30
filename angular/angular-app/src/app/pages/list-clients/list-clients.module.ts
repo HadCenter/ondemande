@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ListClientsRoutingModule } from './list-clients-routing.module';
-import { ListClientsComponent, DialogCreateClient } from './list-clients.component';
+import { DetailsClientComponent, ListClientsComponent } from './list-clients.component';
 import { ListClientsService } from './list-clients.service';
 import { ThemeModule } from 'theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,13 +17,16 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.component';
 import { CreateClientService } from './dialog/create-client.service';
 import { LoaderModule } from 'app/components/loader/loader.module';
+import { DetailsClientService } from './details-client/details-client.service';
+
+
 
 
 
 
 
 @NgModule({
-  declarations: [ListClientsComponent, DialogCreateClient, DialogBodyComponent],
+  declarations: [ListClientsComponent, DetailsClientComponent, DialogBodyComponent],
   imports: [
     CommonModule,
     ListClientsRoutingModule,
@@ -40,10 +43,11 @@ import { LoaderModule } from 'app/components/loader/loader.module';
     MatGridListModule,
     LoaderModule,
   ],
-  entryComponents: [DialogBodyComponent, DialogCreateClient],
+  entryComponents: [DialogBodyComponent, DetailsClientComponent],
   providers: [
     ListClientsService,
     CreateClientService,
+    DetailsClientService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
 })

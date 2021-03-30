@@ -161,4 +161,7 @@ export class ListFileEdiService {
     let body = new FileNameAndClientCode(fileName,clientCode);
     return this.http.post(`${this.url}/downloadFileOutput/`,body, { responseType: "blob" });
   }
+  public sendFileToUrbantz(data): Observable<any> {
+    return this.http.post(`${environment.apiBaseUrl}/urbantzEsb/SendFromFileToUrbantzAsTasks/`,data);
+   }
 }

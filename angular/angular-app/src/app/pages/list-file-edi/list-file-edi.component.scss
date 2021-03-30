@@ -245,7 +245,8 @@ base-card.card-oder-by-date.mdl-card.mdl-shadow--2dp{
 }
 .mdl-data-table__cell--non-numeric.mdl-data-table__cell--non-numeric {
   text-align: center;
-  max-width: 150px;
+  // max-width: 150px;
+  max-width: max-content ;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

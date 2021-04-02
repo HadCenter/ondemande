@@ -9,21 +9,14 @@ import { Router } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent extends UpgradableComponent implements OnInit {
-  files =[];
+export class HomeComponent extends UpgradableComponent implements OnInit
+{
   constructor(public tablesService: HomeService, private router: Router,)
   { super();}
 
   ngOnInit(): void {
-//     this.getData();
   }
-   public getData() {
-    this.tablesService.getNumberOfFilesPerClient()
-      .subscribe(res => {
-        this.files = res;
-        console.log('files',this.files)
-      },
-        error => console.log(error));
-  }
-
 }
+
+
+

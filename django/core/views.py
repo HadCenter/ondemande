@@ -328,13 +328,7 @@ def downloadFileoutputName(request):
 def numberOfFilesPerClient(request):
     queryset = Client.objects.all()
     serializer_class = ClientTestSerialize(queryset,many=True)
-    result = []
-    for client in serializer_class.data:
-        data= {}
-        data['label'] = client['nom_client']
-        data['value'] = len(client['files'])
-        result.append(data)
-    json_data = JSONRenderer().render(result)
+    json_data = JSONRenderer().render(serializer_class.data)
     return HttpResponse(json_data,content_type='application/json')
 def connect():
     FTP_HOST = "talend.ecolotrans.net"

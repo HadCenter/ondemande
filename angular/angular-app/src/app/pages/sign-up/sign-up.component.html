@@ -30,7 +30,7 @@
                 <label class="mdl-textfield__label" for="password">Password</label>
                 <div *ngIf="password.invalid && (password.dirty || password.touched)">
                   <span *ngIf="password.errors.required" class="mdl-textfield__error">
-                    Mot de passe obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un mot de passe.</span>
+                    Mot de passe obligatoire. 
                   </span>
                 </div>
               </div>
@@ -43,7 +43,7 @@
 
                 <div *ngIf="email.invalid && (email.dirty || email.touched)">
                   <span *ngIf="email.errors.required" class="mdl-textfield__error">
-                    Email obligatoire. <span class="color-text--orange"> S'il vous plaît, entrez un email valide.</span>
+                    Email obligatoire.
                   </span>
                   <span *ngIf="email.errors.pattern" class="mdl-textfield__error">
                     Email non valide.

@@ -28,7 +28,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   ngOnInit(): void {
     this.show = true;
     this.getFile(this.route.snapshot.params.id);
-
   }
 
   customTrackBy(index: number, obj: any) {
@@ -43,8 +42,23 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.fileService.getFileEdi(data).subscribe(res => {
       this.fileWrong = res;
       this.show = false;
-      console.warn('***filewrong', this.fileWrong)
+      this.MoveLastElementToTheStart();
     })
+  }
+
+
+  MoveLastElementToTheStart() {
+    /*** Deplace column ***/
+    const prevColumn = [...this.fileWrong.columns]
+    prevColumn.unshift(prevColumn.pop())
+    this.fileWrong.columns = prevColumn;
+    /**** Deplace rows *****/
+    this.fileWrong.rows.forEach((element, index) => {
+      const prevRows = [...element]
+      prevRows.unshift(prevRows.pop())
+      this.fileWrong.rows[index] = prevRows;
+    });
+    console.warn('***filewrong', this.fileWrong);
   }
 
   getValidFile() {
@@ -82,25 +96,24 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       inputs[i].disabled = true;
     }
     this._fileWrong.rows.forEach(element => {
-      element = element.pop();
+      element = element.shift();
     });
     if (this.fileWrong && this.fileValid) {
 
       this.fileTocheck = {
         fileId: this.file.idFile,
-        columns: this._fileWrong.columns.splice(0, this._fileWrong.columns.length - 1),
+        columns: this._fileWrong.columns.splice(1),
         rows: this.fileValid.rows.concat(this._fileWrong.rows),
       }
     }
     else {
       this.fileTocheck = {
         fileId: this.file.idFile,
-        columns: this._fileWrong.columns.splice(0, this._fileWrong.columns.length - 1),
+        columns: this._fileWrong.columns.splice(1),
         rows: this._fileWrong.rows,
       }
     }
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-
     console.warn("**file to check**", this.fileTocheck)
     this.fileService.corretFile(this.fileTocheck).subscribe(res => {
       console.log('resultat correction', res);
@@ -124,8 +137,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,
-      verticalPosition: 'bottom',
+      verticalPosition: 'top',
       horizontalPosition: 'center',
+      // panelClass: ['blue-snackbar']
     });
   }
 

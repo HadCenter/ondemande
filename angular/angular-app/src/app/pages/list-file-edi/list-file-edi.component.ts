@@ -188,20 +188,13 @@ export class ListFileEDIComponent extends UpgradableComponent {
         saveAs(res, fileName);
       }, error => console.log(error));
   }
-  // public decodefile(file) {
+
 
   gotoDetails(row) {
     this.router.navigate(['/details-file-edi', row.idFile])
   }
-  // public decodefile(file) {
-
-  //   return decodeURIComponent(file.substring(7));
-  // }
-  // public decodeValidatorError(file) {
-  //   return decodeURI(file);
-  // }
+ 
   public downloadFileOutput(clientCode, fileName) {
-    //  fileName = decodeURIComponent(fileName);
     this.tablesService.downloadFileOutput(clientCode, fileName)
       .subscribe(res => {
         console.log(res);
@@ -209,6 +202,15 @@ export class ListFileEDIComponent extends UpgradableComponent {
       }, error => console.log(error));
   }
 
+  sendFileToUrbantz(codeClient,validatedOrders) {
+    let data = {
+      clientCode: codeClient,
+      fileName: validatedOrders,
+    }
+    this.tablesService.sendFileToUrbantz(data).subscribe(res => {
+      console.log("res urbantz", res);
+    })
+  }
   openDialog() {
     const dialogRef = this.dialog.open(DialogImportFile);
     dialogRef.afterClosed().subscribe(result => {
@@ -222,7 +224,8 @@ export class ListFileEDIComponent extends UpgradableComponent {
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,
-      verticalPosition: 'bottom',
+     // verticalPosition: 'bottom',
+      verticalPosition: 'top',
       horizontalPosition: 'center',
     });
   }

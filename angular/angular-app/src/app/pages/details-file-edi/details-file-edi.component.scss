@@ -184,3 +184,20 @@ td.details-line.mdl-data-table__cell--non-numeric.remarque-column.ng-star-insert
 .details-label{
   line-height: 18px;
 }
+// .blue-snackbar {
+//   background: #00d45a;
+// }
+
+.mat-simple-snackbar span {
+color: #00d45a;
+}
+.mat-simple-snackbar-action button span {
+ color: #ff4081;
+}
+
+label.label-remarque{
+  color: #00bcd4;
+  white-space: initial;
+  //  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 0;
+}

@@ -1,53 +1,56 @@
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-  <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
-    <base-card>
-      <base-card-title>
-        <h1 class="mdl-card__title-text">Liste des clients</h1>
-        <div class="mdl-layout-spacer"></div>
-        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-          <div class="mdl-textfield label-search " >
-            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-              [(ngModel)]="filterValue" placeholder="Rechercher" />
-            <label class="mdl-textfield__label" for="search2" ></label>
-          </div>
+  <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
+  <base-card>
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Liste des clients</h1>
+      <div class="mdl-layout-spacer"></div>
+      <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+        <div class="mdl-textfield label-search ">
+          <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+            [(ngModel)]="filterValue" placeholder="Rechercher" />
+          <label class="mdl-textfield__label" for="search2"></label>
         </div>
-        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
-        </base-pagination>
-        <!-- <button (click)="openAddClient()"
+      </div>
+      <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+      </base-pagination>
+      <!-- <button (click)="openAddClient()"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
                 >Ajouter client
         </button> -->
-      </base-card-title>
-      <base-card-body class="no-padding">
-        <table *ngIf = "advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
-          <thead>
-            <tr>
-              <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric">
-                <span>{{ header.name }}</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr  *ngFor="let row of advancedTable  | slice:0:limit;" (click)="gotoDetails(row.idContact)">
-              <td class="mdl-data-table__cell--non-numeric">{{ row.codeClient }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.nomClient }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
-              <td class="mdl-data-table__cell--non-numeric">
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <table *ngIf="advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+        <thead>
+          <tr>
+            <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric">
+              <span>{{ header.name }}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of advancedTable  | slice:0:limit;">
+            <td class="mdl-data-table__cell--non-numeric">{{ row.codeClient }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.nomClient }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
+            <td class="column-actions mdl-data-table__cell--non-numeric">
 
-                  <!-- <button
+              <!-- <button
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                   routerLink="/details-client/{{ row.idContact }}" >Modifier
                 </button>
                 &nbsp; -->
-                <button
-                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                  (click)="openDialog(row);$event.stopPropagation();">Archiver
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </base-card-body>
-    </base-card>
+              <button
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                (click)="openDialog(row);$event.stopPropagation();">Archiver
+              </button>
+              <button style="margin-left: 3px;"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                (click)="gotoDetails(row.idContact);$event.stopPropagation();">Détails
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </base-card-body>
+  </base-card>
 </div>
-

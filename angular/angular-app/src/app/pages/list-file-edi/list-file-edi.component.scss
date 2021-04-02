@@ -245,7 +245,8 @@ base-card.card-oder-by-date.mdl-card.mdl-shadow--2dp{
 }
 .mdl-data-table__cell--non-numeric.mdl-data-table__cell--non-numeric {
   text-align: center;
-  max-width: 100px;
+  // max-width: 150px;
+  max-width: max-content ;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -262,3 +263,14 @@ a{
   vertical-align: middle;
   cursor: pointer;
 }
+.mat-simple-snackbar span {
+  color: #00d45a;
+  }
+  .mat-simple-snackbar-action button span {
+   color: #ff4081;
+  }
+
+  td.column-actions.mdl-data-table__cell--non-numeric{
+  text-overflow: inherit;
+  overflow: inherit;
+  }

@@ -1,13 +1,14 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { ListClientsService } from './list-clients.service';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.component';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { CreateClientService } from './dialog/create-client.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DetailsClientService } from './details-client/details-client.service';
+// import { CreateClientService } from './dialog/create-client.service';
 
 export interface PeriodicElement {
   name: string;
@@ -53,16 +54,6 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     }
   }
 
-  openAddClient() {
-    const dialogRef = this.matDialog.open(DialogCreateClient);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined) {
-        this.actualiser();
-      }
-
-    });
-  }
-
   public actualiser() {
     this.advancedTable = [];
     this.show = true;
@@ -79,7 +70,6 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     let dialogRef = this.matDialog.open(DialogBodyComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(value => {
       if (value != undefined) {
-        console.warn("dataaaa",value.data)
         this.tablesService.archiveClient(value.data.idContact, value.data).subscribe(
           res => {
             this.openSnackBar("Client archivé avec succés", this.snackAction)
@@ -104,26 +94,6 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     return this.clients.slice((page - 1) * countPerPage, page * countPerPage);
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.advancedTable.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.advancedTable.forEach(row => this.selection.select(row));
-  }
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-  }
   setFilteredItems() {
     this.advancedTable = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
@@ -139,88 +109,64 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     this.tablesService.getAllClients()
       .subscribe(res => {
         this.clients = res;
-        console.warn("/*/*",this.clients);
         this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },
         error => console.log(error));
   }
   public gotoDetails(id_client) {
-    this.router.navigate(['/details-client', id_client]);
+    const dialogRef = this.matDialog.open(DetailsClientComponent, {
+      // width: '250px',
+      data: { id: id_client }
+    });
   }
 
 }
 
+
+export interface DialogData {
+  id: string;
+}
+
+export class Client {
+  id?: any;
+  code_client?: string;
+  nom_client?: string;
+  email?: string;
+}
 @Component({
-  //selector: 'app-create-client',
-  templateUrl: 'dialog/create-client.component.html',
-  styleUrls: ['dialog/create-client.component.scss']
+  templateUrl: './details-client/details-client.component.html',
+  styleUrls: ['./details-client/details-client.component.scss']
 })
-export class DialogCreateClient extends UpgradableComponent {
-  public loginForm: FormGroup;
-  public code;
-  public nom;
-  public email;
-  public password;
-  public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
-  public codePattern = '^C[0-9]{3}$';
-  public nomPattern = '[^a-z]+';
-  public error: string;
-  showloader = false;
+export class DetailsClientComponent extends UpgradableComponent implements OnInit {
+  currentClient: Client = {
+    code_client: '',
+    nom_client: '',
+    email: ''
+  };
+  id: string;
 
-  constructor(private authService: CreateClientService,
-    public dialogRef: MatDialogRef<DialogCreateClient>,
-    private fb: FormBuilder,
-    private router: Router) {
+  constructor(
+    public dialogRef: MatDialogRef<DetailsClientComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private clientService: DetailsClientService) {
     super();
-    this.loginForm = this.fb.group({
-      code: new FormControl('', [
-        Validators.required,
-        Validators.pattern(this.codePattern),
-      ]),
-      nom: new FormControl('', [
-        Validators.required,
-        Validators.pattern(this.nomPattern),
-      ]),
-      email: new FormControl('', [
-        Validators.pattern(this.emailPattern),
-
-      ])
-    });
-    this.code = this.loginForm.get('code');
-    this.nom = this.loginForm.get('nom');
-    this.email = this.loginForm.get('email')
-
   }
 
   ngOnInit(): void {
-    this.loginForm.valueChanges.subscribe(() => {
-      this.error = null;
-    });
-
+    this.getClient(this.data.id);
   }
-  public login() {
-    this.error = null;
-    if (this.loginForm.valid) {
-      this.showloader = true;
-      this.authService.login(this.loginForm.getRawValue())
-        .subscribe(res => {
-          this.showloader = false;
-          this.dialogRef.close('submit');
-          // this.router.navigate(['/list-client']);
+
+  getClient(id: string): void {
+    this.clientService.get(id)
+      .subscribe(
+        data => {
+          this.currentClient = data;
         },
-          // error => this.error = "error.message");
-          // for fake data
-          (err) => {
-            this.showloader = false;
-            err => this.error = "Le client déjà existe"
-          });
-    }
+        error => {
+          console.log(error);
+        });
   }
-  public onInputChange(event) {
-    event.target.required = true;
-  }
-
-
 
 }
+

@@ -1,0 +1,27 @@
+
+  <!-- *ngIf="currentClient.id"  -->
+  <base-card style="box-shadow: none; " >
+      <base-card-title>
+        <h1 class="mdl-card__title-text">Informations client</h1>
+      </base-card-title>
+      <base-card-body class="no-padding">
+          <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone" >
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+              <label  for="code" style="color:gray; font: 13px Arial, sans-serif;"  >Code client *</label>
+              <br>
+              <input disabled  name="code" [(ngModel)]="currentClient.code_client"  class="details-client mdl-textfield__input" type="text" id="code">
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+              <label style="color:gray; font: 13px Arial, sans-serif;" for="nomclient"  >Nom client *</label>
+              <br>
+              <input disabled name="nomclient" [(ngModel)]="currentClient.nom_client"  class="details-client mdl-textfield__input" type="text" id="nomclient">
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"  >
+              <label style="color:gray; font: 13px Arial, sans-serif;" for="email" >Email</label>
+              <br>
+              <input  disabled name="email" [(ngModel)]="currentClient.email"  class="details-client mdl-textfield__input" type="text" id="email">
+            </div>
+          </div>
+      </base-card-body>
+    </base-card>
+

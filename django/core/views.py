@@ -50,89 +50,43 @@ def testCreate(request):
             connection=connection,
         ).send()
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
-@api_view([ 'PUT'])
-def archive_client(request, pk):
-    try:
-        client = Client.objects.get(pk=pk)
-    except Client.DoesNotExist:
-        return JsonResponse({'message': 'le client n''existe pas !'}, status=status.HTTP_404_NOT_FOUND)
+def archive_client(client: Client):
+    files = EDIfile.objects.filter(client=client['id']).update(archived=True)
 
-    if request.method == 'PUT':
-        client_data = JSONParser().parse(request)
-        files = EDIfile.objects.filter(client = client_data['id']).update(archived = True)
-        ftp = connect()
-        client_name = client_data['nom_client']
-        os.mkdir(client_name)
-        storetodir = client_name
-        os.chdir(storetodir)
+    archiveDirectoryOfClientFromInto(client,path_racine_input , path_racine_input+"archive")
+    archiveDirectoryOfClientFromInto(client,path_racine_output , path_racine_output+"archive")
 
-        path = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-        path_archive = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/archive"
-        path_client = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput" + "/" + client_name
-        ftp.cwd(path_client)
+    client['archived'] = True
+    client.save()
 
-        for fileName in ftp.nlst():
-            with open(fileName, "wb") as file:
-                commande = "RETR " + fileName
-                ftp.retrbinary(commande, file.write)
-                ftp.delete(fileName)
-        os.chdir("..")
-        shutil.make_archive(client_name, 'zip', client_name)
-        ftp.cwd(path_archive)
-        name = client_name + '.zip'
-        file = open(name, 'rb')
-        ftp.storbinary('STOR ' + name, file)
-        file.close()
-        ftp.cwd(path)
-        ftp.rmd(client_name)
-        shutil.rmtree(client_name)
-        os.remove(name)
+def archiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathToArchiveTo):
+    ftp = connect()
+    client_Code = client['code_client']
 
-        os.mkdir(client_name)
-        storetodir = client_name
-        os.chdir(storetodir)
+    os.mkdir(client_Code)
+    storetodir = client_Code
+    os.chdir(storetodir)
 
-        path = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
-        path_archive = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/archive"
-        path_client = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput" + "/" + client_name
-        ftp.cwd(path_client)
 
-        for fileName in ftp.nlst():
-            with open(fileName, "wb") as file:
-                commande = "RETR " + fileName
-                ftp.retrbinary(commande, file.write)
-                ftp.delete(fileName)
-        os.chdir("..")
-        shutil.make_archive(client_name, 'zip', client_name)
-        ftp.cwd(path_archive)
-        name = client_name + '.zip'
-        file = open(name, 'rb')
-        ftp.storbinary('STOR ' + name, file)
-        file.close()
-        ftp.cwd(path)
-        ftp.rmd(client_name)
-        shutil.rmtree(client_name)
-        os.remove(name)
-        # ftp = connect()
-        # path = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-        # client_name = client_data['nom_client']
-        # path_archive = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/archive"
-        # ftp.cwd(path_archive)
-        # ftp.mkd(client_name)
-        # path_client = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput" +"/"+ client_name
-        # ftp.cwd(path_client)
-        # for file in ftp.nlst():
-        #     ftp.rename(path_client +"/"+ file, path_archive +"/"+ client_name+"/"+ file)
-        #     ftp.cwd(path_client)
-        # ftp.cwd(path)
-        # if client_name in ftp.nlst():
-        #     ftp.rmd(client_name)
-        client_data['archived'] = True;
-        client_serializer = ClientSerializer(client, data=client_data)
-        if client_serializer.is_valid():
-            client_serializer.save()
-            return JsonResponse(client_serializer.data)
-        return JsonResponse(client_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    ftp.cwd(pathFilesAreFromFrom +client['code_client'])
+
+    for fileName in ftp.nlst():
+        with open(fileName, "wb") as file:
+            commande = "RETR " + fileName
+            ftp.retrbinary(commande, file.write)
+            ftp.delete(fileName)
+    os.chdir("..")
+    shutil.make_archive(client_Code, 'zip', client_Code)
+    ftp.cwd(pathToArchiveTo)
+    name = client_Code + '.zip'
+    file = open(name, 'rb')
+    ftp.storbinary('STOR ' + name, file)
+    file.close()
+    ftp.cwd(pathFilesAreFromFrom)
+    ftp.rmd(client_Code)
+    shutil.rmtree(client_Code)
+    os.remove(name)
+
 @api_view(['GET', 'PUT'])
 def client_detail(request, pk):
     try:

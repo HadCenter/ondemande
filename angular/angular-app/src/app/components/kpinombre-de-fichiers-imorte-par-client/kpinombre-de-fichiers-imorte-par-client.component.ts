@@ -38,7 +38,7 @@ export const MY_FORMATS = {
 /*************************************************************************************/
 export class KPInombreDeFichiersImorteParClientComponent implements OnInit {
   @ViewChild('input') input: ElementRef;
-  data = [];
+  data : any [] = [];
   show = true;
   count = 0 ;
   selected = undefined;
@@ -58,12 +58,19 @@ export class KPInombreDeFichiersImorteParClientComponent implements OnInit {
     this.serviceKPI.getNumberOfFilesPerClient()
       .subscribe(res => {
         this.data = res;
-         this.data.forEach(element => this.count = this.count + element.files.length);
+        this.data.forEach(element => this.count = this.count + element.files.length);
+        this.data = this.alphabeticalOrder(this.data);
         this.show = false;
       },
         error => console.log(error));
   }
 /*************************************************************************************/
+  alphabeticalOrder(arr :any[] )
+  {
+    return arr.sort((a : any,b : any) =>{
+        return a.nom_client === b.nom_client ? 0 : a.nom_client > b.nom_client ? 1 : -1;
+    });
+  }
   onChangeClient(ob) {
        this.selected = ob.value;
        this.onChangeClientOrDate();

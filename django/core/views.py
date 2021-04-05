@@ -20,6 +20,7 @@ from os import listdir
 from os.path import isfile, join
 from django.core import mail
 import pandas as pd
+import re
 from .models import FileExcelContent
 import jsonpickle
 
@@ -152,20 +153,12 @@ def clientList(request):
     #serializer = ClientSerializer(clients, many= True)
     return HttpResponse(jsonpickle.encode(listClients,unpicklable=False),content_type="application/json")
 class fileCreate(APIView):
-
     parser_classes = [MultiPartParser, FormParser]
-
     def post(self, request, format=None):
-        # code_client = request.data['client']
         timestr = time.strftime("%Y-%m-%d-%H-%M-%S")
         if(request.data['file'] == ''):
             return Response({ "message" : "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         ext = get_extension(request.data['file'].name)
-        clientCode = Client.objects.get(pk=request.data['client']).code_client
-        clientName = Client.objects.get(pk=request.data['client']).nom_client
-
-        # clientName = Contact.objects.get(code_client=code_client).last_name
-        fileName = "EDI_"+ clientName + "_" + timestr + ext
         serializer = FileSerializer(data=request.data)
         if serializer.is_valid():
             path = "media/files/"
@@ -177,28 +170,73 @@ class fileCreate(APIView):
                 os.mkdir(("files"))
                 os.chdir("..")
             serializer.save()
-            ftp = connect()
-
-            path_client_input = path_racine_input + clientCode
-            ftp.cwd(path_racine_output)
-            if clientCode not in ftp.nlst():
-                ftp.mkd(clientCode)
-
-            ftp.cwd(path_racine_input)
-            if clientCode not in ftp.nlst():
-                ftp.mkd(clientCode)
-
-            ftp.cwd(path_client_input)
-            filename = [f for f in listdir(path) if isfile(join(path, f))][0]
-            os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
-            file = open(fileName, 'rb')
-            print(os.path.basename(fileName))
-            ftp.storbinary('STOR ' + os.path.basename(fileName), file)
-            file.close()
-            os.remove(fileName)
-            ediFile = EDIfile.objects.last()
-            ediFile.file = fileName
-            ediFile.save()
+            EDIfile.objects.last().delete()
+            path_file = path + os.listdir(path)[0]
+            df = pd.read_excel(path_file, index_col=0)
+            os.remove(path_file)
+            list_expediteur_unique = df.Expediteur.unique()
+            x = df.groupby(['Expediteur'])
+            df_clients = pd.DataFrame(list(Client.objects.all().values()))
+            for expediteur in list_expediteur_unique:
+                c = x.get_group(expediteur)
+                Expediteur = c["Expediteur"].values[0]
+                e = re.search(r'C[0-9]{3}', Expediteur)
+                if e: # code_client exist
+                    code_client = e.group(0)
+                    c.insert(0, 'code_client', code_client)
+                    df3 = pd.merge(c, df_clients, left_on="code_client", right_on="code_client")
+                    if df3.empty == False:
+                        name= re.sub(r'C[0-9]{3}-', '', Expediteur)
+                        fileName = "EDI_"+ name + "_" + timestr + ext
+                        nom_client = name + '.xlsx'
+                        c.to_excel(path + nom_client)
+                        filename = [f for f in listdir(path) if isfile(join(path, f))][0]
+                        os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
+                        ftp = connect()
+                        path_client_input = path_racine_input + code_client
+                        ftp.cwd(path_racine_output)
+                        if code_client not in ftp.nlst():
+                            ftp.mkd(code_client)
+                        ftp.cwd(path_racine_input)
+                        if code_client not in ftp.nlst():
+                            ftp.mkd(code_client)
+                        ftp.cwd(path_client_input)
+                        file = open(fileName, 'rb')
+                        print(os.path.basename(fileName))
+                        ftp.storbinary('STOR ' + os.path.basename(fileName), file)
+                        file.close()
+                        os.remove(fileName)
+                        b = EDIfile(file=fileName, client_id=df3["id"].values[0])
+                        b.save()
+                    else:
+                        print(expediteur)
+                else: # code_client n'existe pas
+                    df4 = pd.merge(c, df_clients, left_on="Expediteur", right_on="nom_client")
+                    if df4.empty == False:
+                        fileName = "EDI_" + Expediteur + "_" + timestr + ext
+                        nom_client = Expediteur + '.xlsx'
+                        c.to_excel(path + nom_client)
+                        filename = [f for f in listdir(path) if isfile(join(path, f))][0]
+                        os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
+                        ftp = connect()
+                        code_client = df4["code_client"].values[0]
+                        path_client_input = path_racine_input + code_client
+                        ftp.cwd(path_racine_output)
+                        if code_client not in ftp.nlst():
+                            ftp.mkd(code_client)
+                        ftp.cwd(path_racine_input)
+                        if code_client not in ftp.nlst():
+                            ftp.mkd(code_client)
+                        ftp.cwd(path_client_input)
+                        file = open(fileName, 'rb')
+                        print(os.path.basename(fileName))
+                        ftp.storbinary('STOR ' + os.path.basename(fileName), file)
+                        file.close()
+                        os.remove(fileName)
+                        b = EDIfile(file=fileName, client_id=df4["id"].values[0])
+                        b.save()
+                    else:
+                        print(expediteur)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

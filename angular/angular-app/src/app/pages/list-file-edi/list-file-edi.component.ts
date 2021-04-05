@@ -193,7 +193,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   gotoDetails(row) {
     this.router.navigate(['/details-file-edi', row.idFile])
   }
- 
+
   public downloadFileOutput(clientCode, fileName) {
     this.tablesService.downloadFileOutput(clientCode, fileName)
       .subscribe(res => {
@@ -456,9 +456,9 @@ export class DialogImportFile {
     this.showloader = true;
     const formData = new FormData();
     formData.append('file', this.myForm.get('fileSource').value);
-    var client = this.clients.find(element => element.nomClient === this.myForm.getRawValue().stateGroup);
+//     var client = this.clients.find(element => element.nomClient === this.myForm.getRawValue().stateGroup);
     //var client = this.listObject.find(element => element.nomClient === nom);
-    formData.append('client', client.idContact);
+//     formData.append('client', client.idContact);
     //     formData.append('client', client.code_client);
     this.importFileService.upload(formData).subscribe(
       (res) => {

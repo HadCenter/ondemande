@@ -195,6 +195,7 @@ class fileCreate(APIView):
                     df3 = pd.merge(dataFrameExpediteur, df_clients, left_on="code_client", right_on="code_client")
                     if df3.empty == False:
                         name= re.sub(r'C[0-9]{3}-', '', Expediteur)
+                        dataFrameExpediteur.Expediteur = name
                         fileName = "EDI_"+ name + "_" + timestr + extension
                         nom_client = name + '.xlsx'
                         dataFrameExpediteur.to_excel(path + nom_client, index=False)

@@ -13,6 +13,7 @@ import { KPIEvolutionNombreDeFichiersImorteParClientComponent } from 'app/compon
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 @NgModule({
   declarations: [BrowserStatisticsChartComponent, KPInombreDeFichiersImorteParClientComponent, KPIEvolutionNombreDeFichiersImorteParClientComponent,HomeComponent, ],
@@ -24,7 +25,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     LoaderModule,
     MatDatepickerModule,
     MatInputModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    HighchartsChartModule
   ],
   providers: [
     HomeService,

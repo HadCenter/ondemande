@@ -320,7 +320,7 @@ def downloadFileoutputName(request):
     return response
 @api_view(['GET'])
 def numberOfFilesPerClient(request):
-    queryset = Client.objects.all()
+    queryset = Client.objects.filter(archived = False)
     serializer_class = ClientTestSerialize(queryset,many=True)
     json_data = JSONRenderer().render(serializer_class.data)
     return HttpResponse(json_data,content_type='application/json')

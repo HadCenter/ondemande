@@ -195,10 +195,10 @@ class fileCreate(APIView):
                     df3 = pd.merge(dataFrameExpediteur, df_clients, left_on="code_client", right_on="code_client")
                     if df3.empty == False:
                         name= re.sub(r'C[0-9]{3}-', '', Expediteur)
-                        dataFrameExpediteur.Expediteur = name
                         fileName = "EDI_"+ name + "_" + timestr + extension
                         nom_client = name + '.xlsx'
-                        dataFrameExpediteur.to_excel(path + nom_client, index=False)
+                        # Delete using drop()
+                        dataFrameExpediteur.drop(['code_client'], axis=1).to_excel(path + nom_client, index=False)
                         filename = [f for f in listdir(path) if isfile(join(path, f))][0]
                         os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
 

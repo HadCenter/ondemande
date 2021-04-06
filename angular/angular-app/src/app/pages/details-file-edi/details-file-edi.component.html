@@ -28,7 +28,7 @@
             </base-card>
             <div style='text-align: center;'
                 class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                <button [disabled]="fileWrong?.rows.length>0 || file?.wrongCommands !== '_'"
+                <button [disabled]="fileWrong?.rows?.length>0 || file?.wrongCommands !== '_'"
                     (click)="sendFileToUrbantz()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
                     à Urbantz
@@ -43,14 +43,14 @@
                 </base-card-title>
                 <base-card-body class="content-file-line">
                     <mat-accordion>
-                        <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel hideToggle  >
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Afficher Log
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
-                            <div class="content-table">
+                            <app-loader [width]="'94%'" [position]="'initial'"  [height]="'0%'" [bg]="'transparant'" [show]="showValid"></app-loader> 
+                            <div *ngIf="fileValid?.columns" class="content-table">
 
                                 <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                                     <thead>
@@ -65,10 +65,10 @@
                                         <tr *ngFor="let item of fileValid?.rows  | slice:0:limit; let i = index;">
                                             <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
                                                 [ngClass]="(j==9 || j==10 || j==11 ||j==16 || j==21)?'remarque-column':'full-column'"
-                                                class="details-line mdl-data-table__cell--non-numeric">
-                                                <input type="text" disabled
+                                                class="details-line mdl-data-table__cell--non-numeric" >
+                                                <label 
                                                     [ngClass]="(j==4 || j==5|| j==6||j==7 || j==12  )?'mini-column':'full-column'"
-                                                    [(ngModel)]="column" class="mdl-textfield__input">
+                                                   >{{column}}</label>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -89,7 +89,7 @@
                 </base-card-title>
                 <base-card-body class="content-file-line">
                     <mat-accordion>
-                        <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel hideToggle >
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Afficher Log
@@ -101,10 +101,10 @@
                                     </button>
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
-                            <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
-                            <div class="content-table">
-                                <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
-                                    <thead>
+                            <app-loader [width]="'94%'" [position]="'initial'"  [height]="'0%'" [bg]="'transparant'" [show]="showWrong"></app-loader> 
+                            <div *ngIf="copyFileWrong" class="content-table">
+                                <table mat-table  [dataSource]="copyFileWrong" class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
+                                    <!-- <thead>
                                         <tr>
                                             <th *ngFor="let row of fileWrong?.columns ; let i = index"
                                                 class="details-line mdl-data-table__cell--non-numeric">
@@ -115,18 +115,171 @@
                                     <tbody>
                                         <tr *ngFor="let item of fileWrong?.rows ; let i=index">
                                             <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
-                                                [ngClass]="(j==0 || j==17 ||j==18 || j==10 ||j==22)?'remarque-column':'full-column'"
+                                            (mousedown)="onMouseDown(i, j, fileWrong?.columns[j])"
+                                            (mouseup)="onMouseUp(i, j, fileWrong?.columns[j])"
+        [ngClass]="{'selected': selectedCellsState[i][j], 'unselected': !selectedCellsState[i][j+1]}"
+  
                                                 class="details-line mdl-data-table__cell--non-numeric">
                                                 <label *ngIf="j==0" class="label-remarque">{{item[j]}}</label>
-                                                <!-- <input *ngIf="j==0" [(ngModel)]="item[j]" type="text" disabled
-                                                    class="mdl-textfield__input" style="color: #00bcd4;"> -->
+                                                
 
                                                 <input *ngIf="j!==0" name='{{item[j]}}'
                                                     [ngClass]="( j==1 || j==5 ||j==6 || j==8||j==9|| j==13 )?'mini-column':'full-column'"
                                                     type="text" [(ngModel)]="item[j]" class="mdl-textfield__input">
                                             </td>
                                         </tr>
-                                    </tbody>
+                                    </tbody> -->
+                                    <ng-container matColumnDef="Remarque">
+                                        <th  mat-header-cell *matHeaderCellDef> Remarque </th>
+                                        <td mat-cell *matCellDef="let element" class="label-remarque"> {{element.Remarque}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="RefClient">
+                                        <th  mat-header-cell *matHeaderCellDef> RefClient </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 1, 'RefClient')" (mouseup)="onMouseUp(i, 1, 'RefClient')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}"
+                                        
+                                        > {{element.RefClient}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Expediteur">
+                                        <th mat-header-cell *matHeaderCellDef> Expediteur </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 2, 'Expediteur')" (mouseup)="onMouseUp(i, 2, 'Expediteur')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}"> {{element.Expediteur}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Type">
+                                        <th mat-header-cell *matHeaderCellDef> Type </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 3, 'Type')" (mouseup)="onMouseUp(i, 3, 'Type')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}"> {{element.Type}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Date_livraison">
+                                        <th mat-header-cell *matHeaderCellDef> Date_livraison </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 4, 'Date_livraison')" (mouseup)="onMouseUp(i, 4, 'Date_livraison')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}"> {{element.Date_livraison}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Start">
+                                        <th mat-header-cell *matHeaderCellDef> Start </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 5, 'Start')" (mouseup)="onMouseUp(i, 5, 'Start')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}"> {{element.Start}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="End">
+                                        <th mat-header-cell *matHeaderCellDef> End </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 6, 'End')" (mouseup)="onMouseUp(i, 6, 'End')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}"> {{element.End}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Labels">
+                                        <th mat-header-cell *matHeaderCellDef> Labels </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 7, 'Labels')" (mouseup)="onMouseUp(i, 7, 'Labels')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}"> {{element.Labels}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Quantite">
+                                        <th mat-header-cell *matHeaderCellDef> Quantite </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 8, 'Quantite')" (mouseup)="onMouseUp(i, 8, 'Quantite')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}"> {{element.Quantite}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="CodeArticle">
+                                        <th mat-header-cell *matHeaderCellDef> CodeArticle </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 9, 'CodeArticle')" (mouseup)="onMouseUp(i, 9, 'CodeArticle')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9]}"> {{element.CodeArticle}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Nom_destinataire">
+                                        <th mat-header-cell *matHeaderCellDef> Nom_destinataire </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 10, 'Nom_destinataire')" (mouseup)="onMouseUp(i, 10, 'Nom_destinataire')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10]}"> {{element.Nom_destinataire}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="rue">
+                                        <th mat-header-cell *matHeaderCellDef> rue </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 11, 'rue')" (mouseup)="onMouseUp(i, 11, 'rue')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}"> {{element.rue}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="ville">
+                                        <th mat-header-cell *matHeaderCellDef> ville </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 12, 'ville')" (mouseup)="onMouseUp(i, 12, 'ville')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}"> {{element.ville}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="CP">
+                                        <th mat-header-cell *matHeaderCellDef> CP </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 13, 'CP')" (mouseup)="onMouseUp(i, 13, 'CP')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13]}"> {{element.CP}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Adresse2">
+                                        <th mat-header-cell *matHeaderCellDef> Adresse2 </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 14, 'Adresse2')" (mouseup)="onMouseUp(i, 14, 'Adresse2')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][14], 'unselected': !selectedCellsState[i][14]}"> {{element.Adresse2}} </td>
+                                      </ng-container>
+
+                                       <ng-container matColumnDef="CODE_interphone">
+                                        <th mat-header-cell *matHeaderCellDef> CODE_interphone </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 15, 'CODE_interphone')" (mouseup)="onMouseUp(i, 15, 'CODE_interphone')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][15]}"> {{element.CODE_interphone}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Etage">
+                                        <th mat-header-cell *matHeaderCellDef> Etage </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 16, 'Etage')" (mouseup)="onMouseUp(i, 16, 'CODE_interphone')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][16], 'unselected': !selectedCellsState[i][16]}"> {{element.Etage}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Porte">
+                                        <th mat-header-cell *matHeaderCellDef> Porte </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 17, 'Porte')" (mouseup)="onMouseUp(i, 17, 'Porte')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][17], 'unselected': !selectedCellsState[i][17]}"> {{element.Porte}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Instructions">
+                                        <th mat-header-cell *matHeaderCellDef> Instructions </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 18, 'Instructions')" (mouseup)="onMouseUp(i, 18, 'Instructions')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][18], 'unselected': !selectedCellsState[i][18]}"> {{element.Instructions}} </td>
+                                      </ng-container>
+
+                                      <ng-container matColumnDef="Telephone">
+                                        <th mat-header-cell *matHeaderCellDef> Telephone </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 19, 'Telephone')" (mouseup)="onMouseUp(i, 19, 'Telephone')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][19], 'unselected': !selectedCellsState[i][19]}"> {{element.Telephone}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Tel2">
+                                        <th mat-header-cell *matHeaderCellDef> Tel2 </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 20, 'Tel2')" (mouseup)="onMouseUp(i, 20, 'Tel2')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][20], 'unselected': !selectedCellsState[i][20]}"> {{element.Tel2}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Tel3">
+                                        <th mat-header-cell *matHeaderCellDef> Tel3 </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 21, 'Tel3')" (mouseup)="onMouseUp(i, 21, 'Tel3')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][21], 'unselected': !selectedCellsState[i][21]}"> {{element.Tel3}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="email">
+                                        <th mat-header-cell *matHeaderCellDef> email </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 22, 'email')" (mouseup)="onMouseUp(i, 22, 'email')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][22], 'unselected': !selectedCellsState[i][22]}"> {{element.email}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Ref_commande">
+                                        <th mat-header-cell *matHeaderCellDef> Ref_commande </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 23, 'Ref_commande')" (mouseup)="onMouseUp(i, 23, 'Ref_commande')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][23], 'unselected': !selectedCellsState[i][23]}"> {{element.Ref_commande}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Ref2">
+                                        <th mat-header-cell *matHeaderCellDef> Ref2 </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 24, 'Ref2')" (mouseup)="onMouseUp(i, 24, 'Ref2')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][24], 'unselected': !selectedCellsState[i][24]}"> {{element.Ref2}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Ref3">
+                                        <th mat-header-cell *matHeaderCellDef> Ref3 </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 25, 'Ref3')" (mouseup)="onMouseUp(i, 25, 'Ref3')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][25], 'unselected': !selectedCellsState[i][25]}"> {{element.Ref3}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Code_barres">
+                                        <th mat-header-cell *matHeaderCellDef> Code_barres </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 26, 'Code_barres')" (mouseup)="onMouseUp(i, 26, 'Code_barres')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][26], 'unselected': !selectedCellsState[i][26]}"> {{element.Code_barres}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Nom_tournee">
+                                        <th mat-header-cell *matHeaderCellDef> Nom_tournee </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 27, 'Nom_tournee')" (mouseup)="onMouseUp(i, 27, 'Nom_tournee')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][27], 'unselected': !selectedCellsState[i][27]}"> {{element.Nom_tournee}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="Arret">
+                                        <th mat-header-cell *matHeaderCellDef> Arret </th>
+                                        <td mat-cell (mousedown)="onMouseDown(i, 28, 'Arret')" (mouseup)="onMouseUp(i, 28, 'Arret')" *matCellDef="let element; let i = index"
+                                        [ngClass]="{'selected': selectedCellsState[i][28], 'unselected': !selectedCellsState[i][28]}"> {{element.Arret}} </td>
+                                      </ng-container>
+                                      
+                                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                                 </table>
                             </div>
                         </mat-expansion-panel>

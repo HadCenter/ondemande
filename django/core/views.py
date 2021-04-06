@@ -64,6 +64,7 @@ def archiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathT
     ftp = connect()
     client_Code = client.code_client
 
+    print(os.getcwd())
     os.chdir("media")
     os.chdir("files")
     os.mkdir(client_Code)

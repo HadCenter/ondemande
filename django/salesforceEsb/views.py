@@ -17,6 +17,7 @@ def makeDbChangePushMode(request):
     objectAction= request.data['objectAction']
     objectToSendToDB= request.data['objectToSendToDB']
     message : str
+    print( "processing change on object " + objectName + " with action " + objectAction + "with sf_id" + objectToSendToDB['Id']  )
     if objectName == "Contact" :
         message = contactHandler(objectAction = objectAction,objectToSendToDB = objectToSendToDB)
     else:

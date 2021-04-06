@@ -11,6 +11,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderModule } from 'app/components/loader/loader.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
 @NgModule({
   declarations: [DetailsFileEdiComponent],
   imports: [
@@ -22,7 +23,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatExpansionModule,
     MatInputModule,
     LoaderModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule
+    
   ],
   providers: [
     DetailsFileEdiService,

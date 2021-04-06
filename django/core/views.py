@@ -179,6 +179,7 @@ class fileCreate(APIView):
             df_clients = pd.DataFrame(list(Client.objects.all().values()))
             response = [] # [{},{}] le resultat du web service: une liste des objets (expediteur,numr_ligne) au cas
             # ou le fichier contient des clients qui n'existent pas dans la base ( ne sont pas importés depuis salesforce ).
+            ftp = connect()
             for expediteur in list_expediteur_unique:
                 dataFrameExpediteur = resultat_groupBy.get_group(expediteur)
                 Expediteur = dataFrameExpediteur["Expediteur"].values[0]
@@ -194,7 +195,7 @@ class fileCreate(APIView):
                         dataFrameExpediteur.to_excel(path + nom_client, index=False)
                         filename = [f for f in listdir(path) if isfile(join(path, f))][0]
                         os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
-                        ftp = connect()
+
                         path_client_input = path_racine_input + code_client
                         ftp.cwd(path_racine_output)
                         if code_client not in ftp.nlst():
@@ -219,7 +220,7 @@ class fileCreate(APIView):
                         dataFrameExpediteur.to_excel(path + nom_client, index=False)
                         filename = [f for f in listdir(path) if isfile(join(path, f))][0]
                         os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
-                        ftp = connect()
+
                         code_client = df4["code_client"].values[0]
                         path_client_input = path_racine_input + code_client
                         ftp.cwd(path_racine_output)

@@ -18,7 +18,7 @@ def contactHandler(objectAction : str , objectToSendToDB) :
         client = Client.objects.get(id_salesforce = objectToSendToDB['Id'] )
         client.delete()
         response = "ok"
-    elif objectAction == "Archive" :
+    elif objectAction == "archive" :
         client = Client.objects.get(id_salesforce = objectToSendToDB['Id'] )
         archive_client(client)
         response = "ok"

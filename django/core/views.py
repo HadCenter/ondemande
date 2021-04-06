@@ -52,24 +52,26 @@ def testCreate(request):
         ).send()
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 def archive_client(client: Client):
-    files = EDIfile.objects.filter(client=client['id']).update(archived=True)
+    files = EDIfile.objects.filter(client=client).update(archived=True)
 
     archiveDirectoryOfClientFromInto(client,path_racine_input , path_racine_input+"archive")
     archiveDirectoryOfClientFromInto(client,path_racine_output , path_racine_output+"archive")
 
-    client['archived'] = True
+    client.archived = True
     client.save()
 
 def archiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathToArchiveTo):
     ftp = connect()
-    client_Code = client['code_client']
+    client_Code = client.code_client
 
+    os.chdir("media")
+    os.chdir("files")
     os.mkdir(client_Code)
     storetodir = client_Code
     os.chdir(storetodir)
 
 
-    ftp.cwd(pathFilesAreFromFrom +client['code_client'])
+    ftp.cwd(pathFilesAreFromFrom +client_Code)
 
     for fileName in ftp.nlst():
         with open(fileName, "wb") as file:
@@ -87,6 +89,8 @@ def archiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathT
     ftp.rmd(client_Code)
     shutil.rmtree(client_Code)
     os.remove(name)
+    os.chdir("..")
+    os.chdir("..")
 
 @api_view(['GET', 'PUT'])
 def client_detail(request, pk):

@@ -150,7 +150,7 @@ def clientCreate(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET'])
 def clientList(request):
-    clients = Client.objects.filter(archived = False).order_by('-id')
+    clients = Client.objects.all().order_by('-id')
     listClients = list()
     for clientDB in clients :
         clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
@@ -181,7 +181,7 @@ class fileCreate(APIView):
             os.remove(path_file) # delete imported file
             list_expediteur_unique = df.Expediteur.unique() # list des expediteurs uniques
             resultat_groupBy = df.groupby(['Expediteur']) # groupBy
-            df_clients = pd.DataFrame(list(Client.objects.all().values()))
+            df_clients = pd.DataFrame(list(Client.objects.filter(archived = False).values()))
             response = [] # [{},{}] le resultat du web service: une liste des objets (expediteur,numr_ligne) au cas
             # ou le fichier contient des clients qui n'existent pas dans la base ( ne sont pas importés depuis salesforce ).
             ftp = connect()

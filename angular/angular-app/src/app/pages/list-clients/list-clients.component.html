@@ -32,17 +32,8 @@
             <td class="mdl-data-table__cell--non-numeric">{{ row.codeClient }}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.nomClient }}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ getStatusArchivage(row.archived) }}</td>
             <td class="column-actions mdl-data-table__cell--non-numeric">
-
-              <!-- <button
-                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                  routerLink="/details-client/{{ row.idContact }}" >Modifier
-                </button>
-                &nbsp; -->
-              <button
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                (click)="openDialog(row);$event.stopPropagation();">Archiver
-              </button>
               <button style="margin-left: 3px;"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                 (click)="gotoDetails(row.idContact);$event.stopPropagation();">Détails

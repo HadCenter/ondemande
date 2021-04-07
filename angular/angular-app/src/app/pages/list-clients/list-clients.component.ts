@@ -51,7 +51,7 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
   {
     if (status === false)
     {
-      return 'Activé';
+      return 'Actif';
     }else{
       return 'Archivé';
     }

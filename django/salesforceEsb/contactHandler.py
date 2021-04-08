@@ -5,7 +5,7 @@ import jsonpickle
 
 def contactHandler(objectAction : str , objectToSendToDB) :
     response : str
-    print("object to send to DB = "jsonpickle.encode(objectToSendToDB,unpicklable=False))
+    print("object to send to DB = " + jsonpickle.encode(objectToSendToDB,unpicklable=False))
     if objectAction == "insert":
         client = Client()
         client = contactMapFields(client = client , objectToSendToDB = objectToSendToDB)

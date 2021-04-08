@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ListFileDeliveryComponent } from './list-file-delivery.component';
+import { ListTransactionComponent } from './list-transaction.component';
+
 
 const routes: Routes = [{
   path: '',
-  component: ListFileDeliveryComponent,
+  component: ListTransactionComponent,
 }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ListFileDeliveryRoutingModule { }
+export class ListTransactionRoutingModule { }

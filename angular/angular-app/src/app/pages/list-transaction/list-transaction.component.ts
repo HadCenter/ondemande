@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListTransactionService } from './list-transaction.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-list-transaction',
   templateUrl: './list-transaction.component.html',
@@ -14,6 +14,7 @@ export class ListTransactionComponent implements OnInit {
   constructor(private tablesService: ListTransactionService,
     private router: Router,
     public dialog: MatDialog) { }
+
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   public readonly sortOrder = {
     asc: 1,
@@ -119,10 +120,9 @@ export class ListTransactionComponent implements OnInit {
 
     });
 
-}
+  }
 
 }
-
 
 @Component({
   templateUrl: 'dialog/generer-transaction.component.html',
@@ -132,21 +132,15 @@ export class DailogGenerateTransaction {
 
   showloader = false;
   clicked = false;
- 
-  
 
   constructor(
-    private router: Router,
     public dialogRef: MatDialogRef<DailogGenerateTransaction>,
   ) {
-    
+
   }
-  
+
   ngOnInit(): void {
-   
-  }
-
-
+ }
   onNoclick() {
     this.dialogRef.close();
   }

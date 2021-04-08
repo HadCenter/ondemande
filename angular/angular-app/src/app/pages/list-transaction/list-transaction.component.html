@@ -16,10 +16,6 @@
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Générer une transaction
         </button>
         &nbsp;
-        <!-- <a><button
-            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
-            (click)="actualiser()">Actualiser
-          </button></a> -->
       </base-card-title>
       <base-card-body class="no-padding">
         <table  class="table-list mdl-data-table mdl-js-data-table sorting-table">
@@ -40,17 +36,10 @@
               <!-- <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{row.fileName}}</td> -->
               <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{ row.transaction  }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.date_debut }}</td>
-  
-             
               <td class="mdl-data-table__cell--non-numeric">{{ row.date_fin }}
               </td>
-  
-            
               <td class="mdl-data-table__cell--non-numeric">{{ row.statut }}
               </td>
-              <!-- <td class="mdl-data-table__cell--non-numeric">
-                <span class="label label--mini color--{{getColor(row.status)}} ">{{ row.status }}</span>
-              </td> -->
               <td class="column-actions mdl-data-table__cell--non-numeric">
                 <button (click)="gotoDetails(row)"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
@@ -59,14 +48,6 @@
                 <button style="margin-left: 3px;" 
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
                 </button>
-                <!-- <button style="margin-left: 3px;" [disabled]=" row.number_wrong_commands>0 || row.status!=='Terminé' "
-                 (click)="sendFileToUrbantz(row.contact.codeClient, row.validatedOrders);$event.stopPropagation();"
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer à Urbantz
-              </button>
-                <span (click)="downloadFileInput(row.contact.codeClient, row.fileName);$event.stopPropagation();"
-                  class="download material-icons">
-                  download
-                </span> -->
               </td>
             </tr>
           </tbody>

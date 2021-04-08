@@ -15,7 +15,6 @@ export class DetailsTransactionComponent implements OnInit {
    ) { }
 
   ngOnInit(): void {
-   // this.transaction.transaction=this.route.snapshot.params.id;
     this.transaction=this.service.getTransactionById(this.route.snapshot.params.id);
     console.log(this.transaction)
   }

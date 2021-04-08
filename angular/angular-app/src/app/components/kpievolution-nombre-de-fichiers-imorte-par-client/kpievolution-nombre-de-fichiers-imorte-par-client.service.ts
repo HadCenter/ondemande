@@ -10,4 +10,7 @@ export class KPIEvolutionNombreDeFichiersImorteParClientService {
   public getNumberOfFilesPerClient () : Observable<any> {
     return this.http.get(`${this.url}/getNumberOfFilesPerClient/`);
   }
+  public getAllFiles () : Observable<any> {
+    return this.http.get(`${this.url}/getFiles/`);
+  }
 }

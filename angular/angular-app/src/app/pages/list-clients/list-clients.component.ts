@@ -47,6 +47,15 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
   ngOnInit(): void {
     this.getClients();
   }
+  getStatusArchivage(status)
+  {
+    if (status === false)
+    {
+      return 'Actif';
+    }else{
+      return 'Archivé';
+    }
+  }
   public changePage(page, force = false) {
     if (page !== this.currentPage || force) {
       this.currentPage = page;
@@ -61,24 +70,7 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     this.getClients();
   }
 
-  openDialog(client) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      width: '250px',
-      data: client
-    };
-    let dialogRef = this.matDialog.open(DialogBodyComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(value => {
-      if (value != undefined) {
-        this.tablesService.archiveClient(value.data.idContact, value.data).subscribe(
-          res => {
-            this.openSnackBar("Client archivé avec succés", this.snackAction)
-            this.getClients();
-          },
-          error => console.log(error));
-      }
-    });
-  }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2500,

@@ -71,6 +71,7 @@ export class KPInombreDeFichiersImorteParClientComponent implements OnInit {
         return a.nom_client === b.nom_client ? 0 : a.nom_client > b.nom_client ? 1 : -1;
     });
   }
+/********************************************************************************/
   onChangeClient(ob) {
        this.selected = ob.value;
        this.onChangeClientOrDate();

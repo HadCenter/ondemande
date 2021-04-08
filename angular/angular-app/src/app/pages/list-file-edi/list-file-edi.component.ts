@@ -107,10 +107,10 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
   private sortByDateOrder(array, order, value) {
     const compareFunction = (a, b) => {
-      if (a.created_at.slice(0, 10) > b.created_at.slice(0, 10)) {
+      if (a.createdAt.slice(0, 10) > b.createdAt.slice(0, 10)) {
         return 1 * order;
       }
-      if (a.created_at.slice(0, 10) < b.created_at.slice(0, 10)) {
+      if (a.createdAt.slice(0, 10) < b.createdAt.slice(0, 10)) {
         return -1 * order;
       }
       return 0;
@@ -121,10 +121,10 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
   private sortByClientName(array, order, value) {
     const compareFunction = (a, b) => {
-      if (a.client_name > b.client_name) {
+      if (a.contact.nomClient > b.contact.nomClient) {
         return 1 * order;
       }
-      if (a.client_name < b.client_name) {
+      if (a.contact.nomClient < b.contact.nomClient) {
         return -1 * order;
       }
       return 0;

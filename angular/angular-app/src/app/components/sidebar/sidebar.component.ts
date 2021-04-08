@@ -30,7 +30,7 @@ export class SidebarComponent extends BaseSidebarComponent {
     { name : "Accueil" , link: '/home', icon: 'list' },
     { name: 'Clients', link: '/list-client', icon: 'list' },
     { name: 'Fichiers EDI', link: '/list-file-edi', icon: 'list' },
-    { name : "Fichiers livraisons" , link: '/list-file-delivery', icon: 'list' },
+    { name : "Fichiers livraisons" , link: '/list-transaction', icon: 'list' },
     { name : "Utilisateurs" , link: '/users', icon: 'list' },
     ];
     }else{
@@ -38,7 +38,7 @@ export class SidebarComponent extends BaseSidebarComponent {
     { name : "Accueil" , link: '/home', icon: 'list' },
     { name: 'Clients', link: '/list-client', icon: 'list' },
     { name: 'Fichiers EDI', link: '/list-file-edi', icon: 'list' },
-    { name : "Fichiers livraisons" , link: '/list-file-delivery', icon: 'list' },
+    { name : "Fichiers livraisons" , link: '/list-transaction', icon: 'list' },
     ];
     }
   }

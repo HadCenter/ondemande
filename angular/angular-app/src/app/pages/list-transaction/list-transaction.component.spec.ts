@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListFileDeliveryComponent } from './list-file-delivery.component';
+import { ListTransactionComponent } from './list-transaction.component';
 
-describe('ListFileDeliveryComponent', () => {
-  let component: ListFileDeliveryComponent;
-  let fixture: ComponentFixture<ListFileDeliveryComponent>;
+describe('ListTransactionComponent', () => {
+  let component: ListTransactionComponent;
+  let fixture: ComponentFixture<ListTransactionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListFileDeliveryComponent ]
+      declarations: [ ListTransactionComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListFileDeliveryComponent);
+    fixture = TestBed.createComponent(ListTransactionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

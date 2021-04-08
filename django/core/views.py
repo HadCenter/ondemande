@@ -52,46 +52,53 @@ def testCreate(request):
         ).send()
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 def archive_client(client: Client):
+    client.archived = True
+    client.save()
+
     files = EDIfile.objects.filter(client=client).update(archived=True)
 
     archiveDirectoryOfClientFromInto(client,path_racine_input , path_racine_input+"archive")
     archiveDirectoryOfClientFromInto(client,path_racine_output , path_racine_output+"archive")
 
-    client.archived = True
-    client.save()
+
 
 def archiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathToArchiveTo):
     ftp = connect()
     client_Code = client.code_client
+    osDefaultPath = os.getcwd()
+    try:
 
-    print("os current path = " + os.getcwd())
-    os.chdir("media")
-    os.chdir("files")
-    os.mkdir(client_Code)
-    storetodir = client_Code
-    os.chdir(storetodir)
+        ftp.cwd(pathFilesAreFromFrom + client_Code)
+        os.chdir("media")
+        os.chdir("files")
+        os.mkdir(client_Code)
+        storetodir = client_Code
+        os.chdir(storetodir)
 
 
-    ftp.cwd(pathFilesAreFromFrom +client_Code)
 
-    for fileName in ftp.nlst():
-        with open(fileName, "wb") as file:
-            commande = "RETR " + fileName
-            ftp.retrbinary(commande, file.write)
-            ftp.delete(fileName)
-    os.chdir("..")
-    shutil.make_archive(client_Code, 'zip', client_Code)
-    ftp.cwd(pathToArchiveTo)
-    name = client_Code + '.zip'
-    file = open(name, 'rb')
-    ftp.storbinary('STOR ' + name, file)
-    file.close()
-    ftp.cwd(pathFilesAreFromFrom)
-    ftp.rmd(client_Code)
-    shutil.rmtree(client_Code)
-    os.remove(name)
-    os.chdir("..")
-    os.chdir("..")
+
+        for fileName in ftp.nlst():
+            with open(fileName, "wb") as file:
+                commande = "RETR " + fileName
+                ftp.retrbinary(commande, file.write)
+                ftp.delete(fileName)
+        os.chdir("..")
+        shutil.make_archive(client_Code, 'zip', client_Code)
+        ftp.cwd(pathToArchiveTo)
+        name = client_Code + '.zip'
+        file = open(name, 'rb')
+        ftp.storbinary('STOR ' + name, file)
+        file.close()
+        ftp.cwd(pathFilesAreFromFrom)
+        ftp.rmd(client_Code)
+        shutil.rmtree(client_Code)
+        os.remove(name)
+        os.chdir("..")
+        os.chdir("..")
+    except:
+        print('ERROR path : ' + pathFilesAreFromFrom + client_Code + ' is not existant while archiving')
+        os.chdir(osDefaultPath)
 
 @api_view(['GET', 'PUT'])
 def client_detail(request, pk):
@@ -150,7 +157,7 @@ def clientCreate(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET'])
 def clientList(request):
-    clients = Client.objects.all().order_by('-id')
+    clients = Client.objects.filter(archived = False).order_by('-id')
     listClients = list()
     for clientDB in clients :
         clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)

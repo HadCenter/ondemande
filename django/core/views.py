@@ -52,13 +52,15 @@ def testCreate(request):
         ).send()
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 def archive_client(client: Client):
+    client.archived = True
+    client.save()
+
     files = EDIfile.objects.filter(client=client).update(archived=True)
 
     archiveDirectoryOfClientFromInto(client,path_racine_input , path_racine_input+"archive")
     archiveDirectoryOfClientFromInto(client,path_racine_output , path_racine_output+"archive")
 
-    client.archived = True
-    client.save()
+
 
 def archiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathToArchiveTo):
     ftp = connect()

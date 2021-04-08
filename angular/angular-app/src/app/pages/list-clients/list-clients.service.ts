@@ -60,6 +60,9 @@ export class ListClientsService {
 
         },
         {
+            name: 'Statut'
+        },
+        {
             name : 'Actions'
         }
     ];
@@ -80,11 +83,5 @@ public getOrderById(id) {
   public getAllClients () : Observable<any> {
     return this.http.get(`${this.url}/getClients/`);
   }
-  public archiveClient (id, data) : Observable<any> {
-    return this.http.put(`${this.url}/archiveClient/${id}`, data);
-  }
-
-
-
 
 }

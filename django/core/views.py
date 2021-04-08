@@ -155,7 +155,7 @@ def clientCreate(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET'])
 def clientList(request):
-    clients = Client.objects.filter(archived = False).order_by('-id')
+    clients = Client.objects.all().order_by('-id')
     listClients = list()
     for clientDB in clients :
         clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
@@ -186,7 +186,7 @@ class fileCreate(APIView):
             os.remove(path_file) # delete imported file
             list_expediteur_unique = df.Expediteur.unique() # list des expediteurs uniques
             resultat_groupBy = df.groupby(['Expediteur']) # groupBy
-            df_clients = pd.DataFrame(list(Client.objects.all().values()))
+            df_clients = pd.DataFrame(list(Client.objects.filter(archived = False).values()))
             response = [] # [{},{}] le resultat du web service: une liste des objets (expediteur,numr_ligne) au cas
             # ou le fichier contient des clients qui n'existent pas dans la base ( ne sont pas importés depuis salesforce ).
             ftp = connect()
@@ -202,7 +202,8 @@ class fileCreate(APIView):
                         name= re.sub(r'C[0-9]{3}-', '', Expediteur)
                         fileName = "EDI_"+ name + "_" + timestr + extension
                         nom_client = name + '.xlsx'
-                        dataFrameExpediteur.to_excel(path + nom_client, index=False)
+                        # Delete using drop()
+                        dataFrameExpediteur.drop(['code_client'], axis=1).to_excel(path + nom_client, index=False)
                         filename = [f for f in listdir(path) if isfile(join(path, f))][0]
                         os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
 
@@ -330,7 +331,7 @@ def downloadFileoutputName(request):
     return response
 @api_view(['GET'])
 def numberOfFilesPerClient(request):
-    queryset = Client.objects.all()
+    queryset = Client.objects.filter(archived = False)
     serializer_class = ClientTestSerialize(queryset,many=True)
     json_data = JSONRenderer().render(serializer_class.data)
     return HttpResponse(json_data,content_type='application/json')

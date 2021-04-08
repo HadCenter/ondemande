@@ -253,108 +253,108 @@ export class DialogImportFile {
   showloader = false;
   clicked = false;
   stateGroups: StateGroup[] = [];
-  nameGroups: StateGroup[] = [{
-    letter: 'A',
-    names: []
-  },
-  {
-    letter: 'B',
-    names: []
-  },
-  {
-    letter: 'C',
-    names: []
-  },
-  {
-    letter: 'D',
-    names: []
-  },
-  {
-    letter: 'E',
-    names: []
-  },
-  {
-    letter: 'F',
-    names: []
-  }, {
-    letter: 'G',
-    names: []
-  }, {
-    letter: 'H',
-    names: []
-  }, {
-    letter: 'I',
-    names: []
-  },
-  {
-    letter: 'J',
-    names: []
-  },
-  {
-    letter: 'K',
-    names: []
-  }, {
-    letter: 'L',
-    names: []
-  }, {
-    letter: 'M',
-    names: []
-  }, {
-    letter: 'N',
-    names: []
-  }, {
-    letter: 'O',
-    names: []
-  }, {
-    letter: 'P',
-    names: []
-  },
-  {
-    letter: 'Q',
-    names: []
-  },
-  {
-    letter: 'R',
-    names: []
-  },
-  {
-    letter: 'S',
-    names: []
-  },
-  {
-    letter: 'T',
-    names: []
-  }, {
-    letter: 'U',
-    names: []
-  }, {
-    letter: 'V',
-    names: []
-  }, {
-    letter: 'W',
-    names: []
-  },
-  {
-    letter: 'X',
-    names: []
-  },
-  {
-    letter: 'Y',
-    names: []
-  },
-  {
-    letter: 'Z',
-    names: []
-  }];
+  // nameGroups: StateGroup[] = [{
+  //   letter: 'A',
+  //   names: []
+  // },
+  // {
+  //   letter: 'B',
+  //   names: []
+  // },
+  // {
+  //   letter: 'C',
+  //   names: []
+  // },
+  // {
+  //   letter: 'D',
+  //   names: []
+  // },
+  // {
+  //   letter: 'E',
+  //   names: []
+  // },
+  // {
+  //   letter: 'F',
+  //   names: []
+  // }, {
+  //   letter: 'G',
+  //   names: []
+  // }, {
+  //   letter: 'H',
+  //   names: []
+  // }, {
+  //   letter: 'I',
+  //   names: []
+  // },
+  // {
+  //   letter: 'J',
+  //   names: []
+  // },
+  // {
+  //   letter: 'K',
+  //   names: []
+  // }, {
+  //   letter: 'L',
+  //   names: []
+  // }, {
+  //   letter: 'M',
+  //   names: []
+  // }, {
+  //   letter: 'N',
+  //   names: []
+  // }, {
+  //   letter: 'O',
+  //   names: []
+  // }, {
+  //   letter: 'P',
+  //   names: []
+  // },
+  // {
+  //   letter: 'Q',
+  //   names: []
+  // },
+  // {
+  //   letter: 'R',
+  //   names: []
+  // },
+  // {
+  //   letter: 'S',
+  //   names: []
+  // },
+  // {
+  //   letter: 'T',
+  //   names: []
+  // }, {
+  //   letter: 'U',
+  //   names: []
+  // }, {
+  //   letter: 'V',
+  //   names: []
+  // }, {
+  //   letter: 'W',
+  //   names: []
+  // },
+  // {
+  //   letter: 'X',
+  //   names: []
+  // },
+  // {
+  //   letter: 'Y',
+  //   names: []
+  // },
+  // {
+  //   letter: 'Z',
+  //   names: []
+  // }];
 
   stateGroupOptions: Observable<StateGroup[]>;
   minWidth: number = 250;
   width: number = this.minWidth;
   public error: string = '';
   myForm = new FormGroup({
-    stateGroup: new FormControl('', [Validators.required],),
+    // stateGroup: new FormControl('', [Validators.required],),
     file: new FormControl('',),
-    fileSource: new FormControl('')
+    fileSource: new FormControl('', [Validators.required],)
   });
   selectedFiles: File = null;
   clients: any;
@@ -363,27 +363,27 @@ export class DialogImportFile {
     private router: Router,
     public dialogRef: MatDialogRef<DialogImportFile>,
   ) {
-    this.dropdownRefresh();
+    // this.dropdownRefresh();
   }
   public listObject: { id: string, nomClient: string }[] = [];
   //   public listObject: { code_client : string ,nom_client: string }[] = [];
   public listItems: Array<string> = [];
   ngOnInit(): void {
-    this.stateGroupOptions = this.myForm.get('stateGroup')!.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filterGroup(value))
-      );
+    // this.stateGroupOptions = this.myForm.get('stateGroup')!.valueChanges
+    //   .pipe(
+    //     startWith(''),
+    //     map(value => this._filterGroup(value))
+    //   );
   }
-  private _filterGroup(value: string): StateGroup[] {
-    if (value) {
-      return this.stateGroups
-        .map(group => ({ letter: group.letter, names: _filter(group.names, value) }))
-        .filter(group => group.names.length > 0);
-    }
+  // private _filterGroup(value: string): StateGroup[] {
+  //   if (value) {
+  //     return this.stateGroups
+  //       .map(group => ({ letter: group.letter, names: _filter(group.names, value) }))
+  //       .filter(group => group.names.length > 0);
+  //   }
 
-    return this.stateGroups;
-  }
+  //   return this.stateGroups;
+  // }
 
   selectFile(event) {
     if (event.target.files.length > 0) {
@@ -394,45 +394,45 @@ export class DialogImportFile {
     }
 
   }
-  dropdownRefresh() {
-    this.importFileService.getAllClients().subscribe(
-      data => {
-        console.log("data", data);
-        this.clients = data;
-        data.forEach(element => {
-          var indexInGroup = element.nomClient.substring(0).charCodeAt(0) - 65;
-          console.warn('index', indexInGroup)
-          this.nameGroups[indexInGroup].names.push(element);
-          console.warn("**", this.nameGroups);
-          //           this.listItems.push(element["last_name"]);
-          //           var code_client = element['code_client'];
-          //           var nomClient = element['last_name'];
-          //            this.listItems.push(element["nomClient"]);var id = element['id']; var nomClient = element['nomClient'];
-          //           var client = {
-          // //             code_client: code_client,
-          //             id: id,
-          //             nomClient: nomClient
-          //           };
-          //           this.listObject.push(client);
-          //         });
-          //         for (var i = 0; i < this.nameGroups.length; i++) {
-          //           for (var j = 0; j < this.listItems.length; j++) {
-          //             if (this.listItems[j][0] === this.nameGroups[i].letter) {
-          //               this.nameGroups[i].names.push(this.listItems[j]);
-          //             }
-          //           }
-          //         }
-          //         for (var k = 0; k < this.nameGroups.length; k++) {
-          //           if (this.nameGroups[k].names.length !== 0) {
-          //             this.stateGroups.push(this.nameGroups[k])
-          //           }
-          //         }
+  // dropdownRefresh() {
+  //   this.importFileService.getAllClients().subscribe(
+  //     data => {
+  //       console.log("data", data);
+  //       this.clients = data;
+  //       data.forEach(element => {
+  //         var indexInGroup = element.nomClient.substring(0).charCodeAt(0) - 65;
+  //         console.warn('index', indexInGroup)
+  //         this.nameGroups[indexInGroup].names.push(element);
+  //         console.warn("**", this.nameGroups);
+  //         //           this.listItems.push(element["last_name"]);
+  //         //           var code_client = element['code_client'];
+  //         //           var nomClient = element['last_name'];
+  //         //            this.listItems.push(element["nomClient"]);var id = element['id']; var nomClient = element['nomClient'];
+  //         //           var client = {
+  //         // //             code_client: code_client,
+  //         //             id: id,
+  //         //             nomClient: nomClient
+  //         //           };
+  //         //           this.listObject.push(client);
+  //         //         });
+  //         //         for (var i = 0; i < this.nameGroups.length; i++) {
+  //         //           for (var j = 0; j < this.listItems.length; j++) {
+  //         //             if (this.listItems[j][0] === this.nameGroups[i].letter) {
+  //         //               this.nameGroups[i].names.push(this.listItems[j]);
+  //         //             }
+  //         //           }
+  //         //         }
+  //         //         for (var k = 0; k < this.nameGroups.length; k++) {
+  //         //           if (this.nameGroups[k].names.length !== 0) {
+  //         //             this.stateGroups.push(this.nameGroups[k])
+  //         //           }
+  //         //         }
 
-          //       });
-        })
-      })
+  //         //       });
+  //       })
+  //     })
 
-  }
+  // }
 
   get f() {
     return this.myForm.controls;
@@ -456,13 +456,12 @@ export class DialogImportFile {
     this.showloader = true;
     const formData = new FormData();
     formData.append('file', this.myForm.get('fileSource').value);
-//     var client = this.clients.find(element => element.nomClient === this.myForm.getRawValue().stateGroup);
+    // var client = this.clients.find(element => element.nomClient === this.myForm.getRawValue().stateGroup);
     //var client = this.listObject.find(element => element.nomClient === nom);
-//     formData.append('client', client.idContact);
+    // formData.append('client', client.idContact);
     //     formData.append('client', client.code_client);
     this.importFileService.upload(formData).subscribe(
       (res) => {
-        console.log(res);
         this.showloader = false;
         this.dialogRef.close('submit');
       },

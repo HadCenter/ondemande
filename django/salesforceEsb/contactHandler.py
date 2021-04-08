@@ -18,14 +18,6 @@ def contactHandler(objectAction : str , objectToSendToDB) :
         client = Client.objects.get(id_salesforce = objectToSendToDB['Id'] )
         client.delete()
         response = "ok"
-    elif objectAction == "archive" :
-        client = Client.objects.get(id_salesforce = objectToSendToDB['Id'] )
-        archive_client(client)
-        response = "ok"
-    elif objectAction == "desarchive" :
-        client = Client.objects.get(id_salesforce = objectToSendToDB['Id'] )
-        desarchive_client(client)
-        response = "ok"
     else:
         response = "objectAction : "+objectAction + " is not supported"
     return response
@@ -36,7 +28,13 @@ def contactMapFields(client :Client, objectToSendToDB):
     client.nom_client = objectToSendToDB['LastName']
     if 'Email' in objectToSendToDB :
         client.email = objectToSendToDB['Email']
-    client.archived = False
+
+    if client.archived != objectToSendToDB['Archived__c'] : #detect if archived changed to apply action
+        client.archived = objectToSendToDB['Archived__c']
+        if  client.archived == True :
+            archive_client(client)
+        else :
+            desarchive_client(client)
     client.id_salesforce = objectToSendToDB['Id']
     return client
 

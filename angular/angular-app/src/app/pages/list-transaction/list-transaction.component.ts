@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListTransactionService } from './list-transaction.service';
-
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-list-transaction',
   templateUrl: './list-transaction.component.html',
@@ -12,7 +12,9 @@ export class ListTransactionComponent implements OnInit {
   public filterValue: any;
 
   constructor(private tablesService: ListTransactionService,
-    private router: Router,) { }
+    private router: Router,
+    public dialog: MatDialog) { }
+
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   public readonly sortOrder = {
     asc: 1,
@@ -109,4 +111,60 @@ export class ListTransactionComponent implements OnInit {
     });
   }
 
+  openDialog() {
+    const dialogRef = this.dialog.open(DailogGenerateTransaction);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) {
+        // this.actualiser();
+      }
+
+    });
+
+  }
+
+}
+
+@Component({
+  templateUrl: 'dialog/generer-transaction.component.html',
+  styleUrls: ['dialog/generer-transaction.component.scss']
+})
+export class DailogGenerateTransaction {
+
+  showloader = false;
+  clicked = false;
+
+  constructor(
+    public dialogRef: MatDialogRef<DailogGenerateTransaction>,
+  ) {
+
+  }
+
+  ngOnInit(): void {
+ }
+  onNoclick() {
+    this.dialogRef.close();
+  }
+
+  // submit() {
+  //   this.showloader = true;
+  //   const formData = new FormData();
+  //   formData.append('file', this.myForm.get('fileSource').value);
+  //   // var client = this.clients.find(element => element.nomClient === this.myForm.getRawValue().stateGroup);
+  //   //var client = this.listObject.find(element => element.nomClient === nom);
+  //   // formData.append('client', client.idContact);
+  //   //     formData.append('client', client.code_client);
+  //   this.importFileService.upload(formData).subscribe(
+  //     (res) => {
+  //       this.showloader = false;
+  //       this.dialogRef.close('submit');
+  //     },
+  //     (err) => {
+  //       this.showloader = false;
+  //       this.error = "Veuillez télécharger un fichier EDI";
+  //     }
+  //   );
+  // }
+  // public onInputChange(event) {
+  //   event.target.required = true;
+  // }
 }

@@ -1,0 +1,50 @@
+body {
+  padding-top: 20px;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+base-card.card-dialog {
+  box-shadow: none;
+}
+.title-form{
+  color: white;
+}
+.icon-date{
+  color:#00bcd4
+}
+.mat-date-range-input-separator {
+  color:#00bcd4;
+  border-color: transparent;
+}
+.mat-calendar-body-selected {
+  background-color: #00bcd4;
+}
+.mat-form-field-ripple {
+  background-color: #00bcd4!important;
+}
+.field-date{
+  display: inline-block!important;
+  position: relative!important;
+  text-align: left!important;
+  font-size: inherit!important;
+    font-weight: 400!important;
+    line-height: 1.125!important;
+    font-family: Roboto, "Helvetica Neue", sans-serif!important;
+    letter-spacing: normal!important;
+  width: initial !important;
+  margin-right: 0!important;
+  margin-top: 0!important;
+}
+// .mat-form-field-appearance-fill .mat-form-field-flex {
+//   background-color: rgba(0, 0, 0, 0.04);
+// }
+.field-date .mat-form-field-wrapper{
+  padding-bottom: 1.34375em;
+}
+.field-date .mat-form-field-wrapper .mat-form-field-flex{
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.card-content{
+padding: 20px 16px !important;
+}

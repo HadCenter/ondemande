@@ -383,10 +383,10 @@ def createFileFromColumnAndRowsAndUpdate(request):
 
 
 def desarchive_client(client: Client):
-    client.archived = True
+    client.archived = False
     client.save()
 
-    files = EDIfile.objects.filter(client=client).update(archived=True)
+    files = EDIfile.objects.filter(client=client).update(archived=False)
 
     desarchiveDirectoryOfClientFromInto(client,path_racine_input , path_racine_input+"archive")
     desarchiveDirectoryOfClientFromInto(client,path_racine_output , path_racine_output+"archive")

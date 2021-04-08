@@ -185,6 +185,7 @@ class fileCreate(APIView):
             response = [] # [{},{}] le resultat du web service: une liste des objets (expediteur,numr_ligne) au cas
             # ou le fichier contient des clients qui n'existent pas dans la base ( ne sont pas importés depuis salesforce ).
             ftp = connect()
+            list_expediteur_unique = [x for x in list_expediteur_unique if str(x) != 'nan']
             for expediteur in list_expediteur_unique:
                 dataFrameExpediteur = resultat_groupBy.get_group(expediteur)
                 Expediteur = dataFrameExpediteur["Expediteur"].values[0]

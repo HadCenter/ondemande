@@ -12,7 +12,7 @@
         </div>
         <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
         </base-pagination>
-        <button 
+        <button (click)='openDialog()'
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Générer une transaction
         </button>
         &nbsp;

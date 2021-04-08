@@ -1,0 +1,26 @@
+<div class="dialog-content">
+  <!-- <app-loader [position]="'absolute'" [width]="'296px'" [height]="'296px'" [bg]="'transparant'" [show]="false">
+    </app-loader> -->
+  <base-card class="card-dialog">
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Générer une transaction</h1>
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <!-- <app-loader [width]="'100%'" [height]="'500px'" [bg]="'transparant'" [show]="show"></app-loader> -->
+
+      <mat-form-field appearance="fill">
+        <mat-label class="title-form">Entrez une plage de dates</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Date de début">
+          <input matEndDate placeholder="Date de fin">
+        </mat-date-range-input>
+        <mat-datepicker-toggle class="icon-date" matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+      <div style="text-align: center;">
+        <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue">Générer</button>
+      </div>
+    </base-card-body>
+  </base-card>
+
+</div>

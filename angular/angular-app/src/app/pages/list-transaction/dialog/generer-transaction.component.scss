@@ -1,0 +1,30 @@
+body {
+  padding-top: 20px;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+base-card.card-dialog {
+  box-shadow: none;
+}
+.title-form{
+  color: white;
+}
+.icon-date{
+  color:#00bcd4
+}
+.mat-date-range-input-separator {
+  color:#00bcd4;
+  border-color: transparent;
+}
+.mat-calendar-body-selected {
+  background-color: #00bcd4;
+}
+.mat-form-field.mat-focused .mat-form-field-label{
+  color:red !important;
+}
+// .mat-form-field-appearance-fill .mat-form-field-underline::before {
+//   background-color: yellow!important;
+// }
+.mat-form-field-ripple {
+  background-color: #00bcd4!important;
+}

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsTransactionService } from './details-transaction.service';
 @Component({
@@ -9,7 +10,9 @@ import { DetailsTransactionService } from './details-transaction.service';
 export class DetailsTransactionComponent implements OnInit {
   transaction:any={};
 
-  constructor(private route: ActivatedRoute,public service: DetailsTransactionService) { }
+  constructor(private route: ActivatedRoute,
+    public service: DetailsTransactionService,
+   ) { }
 
   ngOnInit(): void {
    // this.transaction.transaction=this.route.snapshot.params.id;
@@ -18,3 +21,7 @@ export class DetailsTransactionComponent implements OnInit {
   }
 
 }
+
+
+
+

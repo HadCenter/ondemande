@@ -20,6 +20,11 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
   Highcharts = Highcharts;
   ohlc = [];
   chartOptions = {
+    rangeSelector: {
+      labelStyle: {
+         display: 'none'
+      }
+    },
     credits: {
       enabled: false,
  },

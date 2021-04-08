@@ -188,7 +188,7 @@ class fileCreate(APIView):
             os.remove(path_file) # delete imported file
             list_expediteur_unique = df.Expediteur.unique() # list des expediteurs uniques
             resultat_groupBy = df.groupby(['Expediteur']) # groupBy
-            df_clients = pd.DataFrame(list(Client.objects.filter(archived = False).values()))
+            df_clients = pd.DataFrame(list(Client.objects.all().values()))
             response = [] # [{},{}] le resultat du web service: une liste des objets (expediteur,numr_ligne) au cas
             # ou le fichier contient des clients qui n'existent pas dans la base ( ne sont pas importés depuis salesforce ).
             ftp = connect()
@@ -202,56 +202,66 @@ class fileCreate(APIView):
                     dataFrameExpediteur.insert(0, 'code_client', code_client)
                     df3 = pd.merge(dataFrameExpediteur, df_clients, left_on="code_client", right_on="code_client")
                     if df3.empty == False:
-                        name= re.sub(r'C[0-9]{3}-', '', Expediteur)
-                        fileName = "EDI_"+ name + "_" + timestr + extension
-                        nom_client = name + '.xlsx'
-                        # Delete using drop()
-                        dataFrameExpediteur.drop(['code_client'], axis=1).to_excel(path + nom_client, index=False)
-                        filename = [f for f in listdir(path) if isfile(join(path, f))][0]
-                        os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
+                        client_archived = df3["archived"].values[0]
+                        if (client_archived):
+                            response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2, 'archivé':True,'existe':True})
+                        else:
+                            name= re.sub(r'C[0-9]{3}-', '', Expediteur)
+                            fileName = "EDI_"+ name + "_" + timestr + extension
+                            nom_client = name + '.xlsx'
+                            # Delete using drop()
+                            dataFrameExpediteur.drop(['code_client'], axis=1).to_excel(path + nom_client, index=False)
+                            filename = [f for f in listdir(path) if isfile(join(path, f))][0]
+                            os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
 
-                        path_client_input = path_racine_input + code_client
-                        ftp.cwd(path_racine_output)
-                        if code_client not in ftp.nlst():
-                            ftp.mkd(code_client)
-                        ftp.cwd(path_racine_input)
-                        if code_client not in ftp.nlst():
-                            ftp.mkd(code_client)
-                        ftp.cwd(path_client_input)
-                        file = open(fileName, 'rb')
-                        ftp.storbinary('STOR ' + os.path.basename(fileName), file)
-                        file.close()
-                        os.remove(fileName)
-                        b = EDIfile(file=fileName, client_id=df3["id"].values[0])
-                        b.save()
+                            path_client_input = path_racine_input + code_client
+                            ftp.cwd(path_racine_output)
+                            if code_client not in ftp.nlst():
+                                ftp.mkd(code_client)
+                            ftp.cwd(path_racine_input)
+                            if code_client not in ftp.nlst():
+                                ftp.mkd(code_client)
+                            ftp.cwd(path_client_input)
+                            file = open(fileName, 'rb')
+                            ftp.storbinary('STOR ' + os.path.basename(fileName), file)
+                            file.close()
+                            os.remove(fileName)
+                            b = EDIfile(file=fileName, client_id=df3["id"].values[0])
+                            b.save()
+                            response.append({'expediteur': expediteur, 'numr_ligne': dataFrameExpediteur.index.values + 2, 'archivé':False,'existe':True})
                     else:
-                        response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2})
+                        response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2, 'archivé':False,'existe':False})
                 else: # code_client n'existe pas
                     df4 = pd.merge(dataFrameExpediteur, df_clients, left_on="Expediteur", right_on="nom_client")
                     if df4.empty == False:
-                        fileName = "EDI_" + Expediteur + "_" + timestr + extension
-                        nom_client = Expediteur + '.xlsx'
-                        dataFrameExpediteur.to_excel(path + nom_client, index=False)
-                        filename = [f for f in listdir(path) if isfile(join(path, f))][0]
-                        os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
+                        client_archived = df4["archived"].values[0]
+                        if (client_archived):
+                            response.append({'expediteur': expediteur, 'numr_ligne': dataFrameExpediteur.index.values + 2,'archivé': True, 'existe': True})
+                        else:
+                            fileName = "EDI_" + Expediteur + "_" + timestr + extension
+                            nom_client = Expediteur + '.xlsx'
+                            dataFrameExpediteur.to_excel(path + nom_client, index=False)
+                            filename = [f for f in listdir(path) if isfile(join(path, f))][0]
+                            os.rename(r'media/files/{}'.format(filename), r'{}'.format(fileName))
 
-                        code_client = df4["code_client"].values[0]
-                        path_client_input = path_racine_input + code_client
-                        ftp.cwd(path_racine_output)
-                        if code_client not in ftp.nlst():
-                            ftp.mkd(code_client)
-                        ftp.cwd(path_racine_input)
-                        if code_client not in ftp.nlst():
-                            ftp.mkd(code_client)
-                        ftp.cwd(path_client_input)
-                        file = open(fileName, 'rb')
-                        ftp.storbinary('STOR ' + os.path.basename(fileName), file)
-                        file.close()
-                        os.remove(fileName)
-                        b = EDIfile(file=fileName, client_id=df4["id"].values[0])
-                        b.save()
+                            code_client = df4["code_client"].values[0]
+                            path_client_input = path_racine_input + code_client
+                            ftp.cwd(path_racine_output)
+                            if code_client not in ftp.nlst():
+                                ftp.mkd(code_client)
+                            ftp.cwd(path_racine_input)
+                            if code_client not in ftp.nlst():
+                                ftp.mkd(code_client)
+                            ftp.cwd(path_client_input)
+                            file = open(fileName, 'rb')
+                            ftp.storbinary('STOR ' + os.path.basename(fileName), file)
+                            file.close()
+                            os.remove(fileName)
+                            b = EDIfile(file=fileName, client_id=df4["id"].values[0])
+                            b.save()
+                            response.append({'expediteur': expediteur, 'numr_ligne': dataFrameExpediteur.index.values + 2, 'archivé':False,'existe':True})
                     else:
-                        response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2})
+                        response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2, 'archivé':False,'existe':False})
             json_data = JSONRenderer().render(response)
             return HttpResponse(json_data,content_type='application/json')
         else:

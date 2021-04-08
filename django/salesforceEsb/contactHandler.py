@@ -1,5 +1,5 @@
 from core.models import Client
-from core.views import archive_client
+from core.views import archive_client , desarchive_client
 
 
 def contactHandler(objectAction : str , objectToSendToDB) :
@@ -22,6 +22,10 @@ def contactHandler(objectAction : str , objectToSendToDB) :
         client = Client.objects.get(id_salesforce = objectToSendToDB['Id'] )
         archive_client(client)
         response = "ok"
+    elif objectAction == "desarchive" :
+        client = Client.objects.get(id_salesforce = objectToSendToDB['Id'] )
+        desarchive_client(client)
+        response = "ok"
     else:
         response = "objectAction : "+objectAction + " is not supported"
     return response
@@ -32,8 +36,7 @@ def contactMapFields(client :Client, objectToSendToDB):
     client.nom_client = objectToSendToDB['LastName']
     if 'Email' in objectToSendToDB :
         client.email = objectToSendToDB['Email']
-    if 'RL_Archived__c' in objectToSendToDB:
-        client.archived = objectToSendToDB['RL_Archived__c']
+    client.archived = False
     client.id_salesforce = objectToSendToDB['Id']
     return client
 

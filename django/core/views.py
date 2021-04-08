@@ -97,7 +97,7 @@ def archiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathT
         os.chdir("..")
         os.chdir("..")
     except:
-        print('ERROR path : ' + pathFilesAreFromFrom + client_Code + ' is not existant while archiving')
+        print('WARNING path : ' + pathFilesAreFromFrom + client_Code + ' is not existant while archiving')
         os.chdir(osDefaultPath)
 
 @api_view(['GET', 'PUT'])
@@ -376,3 +376,65 @@ def createFileFromColumnAndRowsAndUpdate(request):
     data = [{"filePath":fileName,"ClientOwner":clientDB.code_client,"fileId":fileDB.id}]
     startEngineWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
+
+
+
+
+
+def desarchive_client(client: Client):
+    client.archived = True
+    client.save()
+
+    files = EDIfile.objects.filter(client=client).update(archived=True)
+
+    desarchiveDirectoryOfClientFromInto(client,path_racine_input , path_racine_input+"archive")
+    desarchiveDirectoryOfClientFromInto(client,path_racine_output , path_racine_output+"archive")
+
+
+
+def desarchiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathToArchiveTo):
+    ftp = connect()
+    client_Code = client.code_client
+    osDefaultPath = os.getcwd()
+    try:
+
+        os.chdir("media")
+        os.chdir("files")
+        if client_Code not in os.listdir() :
+            os.mkdir(client_Code)
+        os.chdir(client_Code)
+
+        ftp.cwd(pathToArchiveTo)
+        fileNameZiped = client_Code+".zip"
+        if fileNameZiped in ftp.nlst():
+            file = open(fileNameZiped, "wb")
+            commande = "RETR " + fileNameZiped
+            ftp.retrbinary(commande, file.write)
+            file.close()
+            ftp.delete(fileNameZiped)
+
+
+
+        shutil.unpack_archive(fileNameZiped)
+        os.remove(fileNameZiped)
+
+        ftp.cwd(pathFilesAreFromFrom)
+        if client_Code not in ftp.nlst():
+            ftp.mkd(client_Code)
+        ftp.cwd(client_Code)
+
+        for fileNameInOs in os.listdir() :
+            file = open(fileNameInOs, 'rb')
+            ftp.storbinary('STOR ' + os.path.basename(fileNameInOs), file)
+            file.close()
+            os.remove(fileNameInOs)
+
+        os.chdir("..")
+        os.rmdir(client_Code)
+
+
+        os.chdir("..")
+        os.chdir("..")
+    except:
+        print('WARNING path : ' + pathToArchiveTo + '/' + client_Code + '.zip is not existant while desarchiving')
+        os.chdir(osDefaultPath)

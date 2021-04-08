@@ -32,8 +32,10 @@ def contactMapFields(client :Client, objectToSendToDB):
     if client.archived != objectToSendToDB['Archived__c'] : #detect if archived changed to apply action
         client.archived = objectToSendToDB['Archived__c']
         if  client.archived == True :
+            print("lancement archivage")
             archive_client(client)
         else :
+            print("lancement archivage")
             desarchive_client(client)
     client.id_salesforce = objectToSendToDB['Id']
     return client

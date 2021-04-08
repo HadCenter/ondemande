@@ -157,7 +157,7 @@ def clientCreate(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET'])
 def clientList(request):
-    clients = Client.objects.filter(archived = False).order_by('-id')
+    clients = Client.objects.all().order_by('-id')
     listClients = list()
     for clientDB in clients :
         clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)

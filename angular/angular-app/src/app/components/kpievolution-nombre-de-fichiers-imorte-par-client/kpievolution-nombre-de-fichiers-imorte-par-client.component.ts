@@ -20,6 +20,9 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
   Highcharts = Highcharts;
   ohlc = [];
   chartOptions = {
+    credits: {
+      enabled: false,
+ },
     yAxis: [
       {
         labels: {

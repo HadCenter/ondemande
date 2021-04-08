@@ -63,35 +63,40 @@ def archive_client(client: Client):
 def archiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathToArchiveTo):
     ftp = connect()
     client_Code = client.code_client
+    osDefaultPath = os.getcwd()
+    try:
 
-    print("os current path = " + os.getcwd())
-    os.chdir("media")
-    os.chdir("files")
-    os.mkdir(client_Code)
-    storetodir = client_Code
-    os.chdir(storetodir)
+        ftp.cwd(pathFilesAreFromFrom + client_Code)
+        os.chdir("media")
+        os.chdir("files")
+        os.mkdir(client_Code)
+        storetodir = client_Code
+        os.chdir(storetodir)
 
 
-    ftp.cwd(pathFilesAreFromFrom +client_Code)
 
-    for fileName in ftp.nlst():
-        with open(fileName, "wb") as file:
-            commande = "RETR " + fileName
-            ftp.retrbinary(commande, file.write)
-            ftp.delete(fileName)
-    os.chdir("..")
-    shutil.make_archive(client_Code, 'zip', client_Code)
-    ftp.cwd(pathToArchiveTo)
-    name = client_Code + '.zip'
-    file = open(name, 'rb')
-    ftp.storbinary('STOR ' + name, file)
-    file.close()
-    ftp.cwd(pathFilesAreFromFrom)
-    ftp.rmd(client_Code)
-    shutil.rmtree(client_Code)
-    os.remove(name)
-    os.chdir("..")
-    os.chdir("..")
+
+        for fileName in ftp.nlst():
+            with open(fileName, "wb") as file:
+                commande = "RETR " + fileName
+                ftp.retrbinary(commande, file.write)
+                ftp.delete(fileName)
+        os.chdir("..")
+        shutil.make_archive(client_Code, 'zip', client_Code)
+        ftp.cwd(pathToArchiveTo)
+        name = client_Code + '.zip'
+        file = open(name, 'rb')
+        ftp.storbinary('STOR ' + name, file)
+        file.close()
+        ftp.cwd(pathFilesAreFromFrom)
+        ftp.rmd(client_Code)
+        shutil.rmtree(client_Code)
+        os.remove(name)
+        os.chdir("..")
+        os.chdir("..")
+    except:
+        print('ERROR path : ' + pathFilesAreFromFrom + client_Code + ' is not existant while archiving')
+        os.chdir(osDefaultPath)
 
 @api_view(['GET', 'PUT'])
 def client_detail(request, pk):

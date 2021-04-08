@@ -1,23 +1,23 @@
-<!--<div id="conteneur">-->
-<!--  <div id="chart" >-->
-<!--    <svg></svg>-->
-<!--  </div>-->
-<!--  <div *ngIf = "data.length > 0">-->
-<!--    <h5>Choisir un client </h5>-->
-<!--    <mat-form-field appearance="fill" >-->
-<!--      <mat-label>Client</mat-label>-->
-<!--      <mat-select [(value)]="selected" (selectionChange)="onBookChange($event)">-->
-<!--        <mat-option *ngFor="let object of data" [value]="object.nom_client">-->
-<!--          {{object.nom_client}}-->
-<!--        </mat-option>-->
-<!--      </mat-select>-->
-<!--    </mat-form-field>-->
-<!--  </div>-->
-<!--</div>-->
-<highcharts-chart style="width: 100%; display: block"
+<div *ngIf = "data.length > 0">
+  <h5>Choisir un client </h5>
+  <mat-form-field appearance="fill" >
+    <mat-label>Tous</mat-label>
+    <mat-select [(value)]="selected" (selectionChange)="onChangeClient($event)">
+      <mat-option>Tous</mat-option>
+      <mat-option *ngFor="let object of data" [value]="object.nom_client">
+        {{object.nom_client}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div *ngIf = "data2.length > 0">
+  <highcharts-chart style="width: 100%; display: block"
 	[Highcharts]="Highcharts"
 	[constructorType]="'stockChart'"
-	[options]="chartOptions">
-</highcharts-chart>
+	[options]="chartOptions"[callbackFunction]="chartCallback"
+  [(update)]="updateFromInput">
+  </highcharts-chart>
+</div>
+
 
 

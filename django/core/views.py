@@ -204,7 +204,7 @@ class fileCreate(APIView):
                     if df3.empty == False:
                         client_archived = df3["archived"].values[0]
                         if (client_archived):
-                            response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2, 'archivé':True,'existe':True})
+                            response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2, 'archive':True,'existe':True})
                         else:
                             name= re.sub(r'C[0-9]{3}-', '', Expediteur)
                             fileName = "EDI_"+ name + "_" + timestr + extension
@@ -228,15 +228,15 @@ class fileCreate(APIView):
                             os.remove(fileName)
                             b = EDIfile(file=fileName, client_id=df3["id"].values[0])
                             b.save()
-                            response.append({'expediteur': expediteur, 'numr_ligne': dataFrameExpediteur.index.values + 2, 'archivé':False,'existe':True})
+                            response.append({'expediteur': expediteur, 'numr_ligne': dataFrameExpediteur.index.values + 2, 'archive':False,'existe':True})
                     else:
-                        response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2, 'archivé':False,'existe':False})
+                        response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2, 'archive':False,'existe':False})
                 else: # code_client n'existe pas
                     df4 = pd.merge(dataFrameExpediteur, df_clients, left_on="Expediteur", right_on="nom_client")
                     if df4.empty == False:
                         client_archived = df4["archived"].values[0]
                         if (client_archived):
-                            response.append({'expediteur': expediteur, 'numr_ligne': dataFrameExpediteur.index.values + 2,'archivé': True, 'existe': True})
+                            response.append({'expediteur': expediteur, 'numr_ligne': dataFrameExpediteur.index.values + 2,'archive': True, 'existe': True})
                         else:
                             fileName = "EDI_" + Expediteur + "_" + timestr + extension
                             nom_client = Expediteur + '.xlsx'
@@ -259,9 +259,9 @@ class fileCreate(APIView):
                             os.remove(fileName)
                             b = EDIfile(file=fileName, client_id=df4["id"].values[0])
                             b.save()
-                            response.append({'expediteur': expediteur, 'numr_ligne': dataFrameExpediteur.index.values + 2, 'archivé':False,'existe':True})
+                            response.append({'expediteur': expediteur, 'numr_ligne': dataFrameExpediteur.index.values + 2, 'archive':False,'existe':True})
                     else:
-                        response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2, 'archivé':False,'existe':False})
+                        response.append({'expediteur':expediteur, 'numr_ligne': dataFrameExpediteur.index.values +2, 'archive':False,'existe':False})
             json_data = JSONRenderer().render(response)
             return HttpResponse(json_data,content_type='application/json')
         else:

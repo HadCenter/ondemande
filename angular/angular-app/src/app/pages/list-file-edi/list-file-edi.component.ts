@@ -7,7 +7,6 @@ import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 export interface PeriodicElement {
@@ -202,7 +201,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
       }, error => console.log(error));
   }
 
-  sendFileToUrbantz(codeClient,validatedOrders) {
+  sendFileToUrbantz(codeClient, validatedOrders) {
     let data = {
       clientCode: codeClient,
       fileName: validatedOrders,
@@ -224,7 +223,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,
-     // verticalPosition: 'bottom',
+      // verticalPosition: 'bottom',
       verticalPosition: 'top',
       horizontalPosition: 'center',
     });
@@ -244,7 +243,6 @@ export const _filter = (opt: string[], value: string): string[] => {
 
 
 @Component({
-  //selector: 'app-import-file-edi',
   templateUrl: 'dialog/import-file-edi.component.html',
   styleUrls: ['dialog/import-file-edi.component.scss']
 })
@@ -252,101 +250,7 @@ export class DialogImportFile {
 
   showloader = false;
   clicked = false;
-  stateGroups: StateGroup[] = [];
-  // nameGroups: StateGroup[] = [{
-  //   letter: 'A',
-  //   names: []
-  // },
-  // {
-  //   letter: 'B',
-  //   names: []
-  // },
-  // {
-  //   letter: 'C',
-  //   names: []
-  // },
-  // {
-  //   letter: 'D',
-  //   names: []
-  // },
-  // {
-  //   letter: 'E',
-  //   names: []
-  // },
-  // {
-  //   letter: 'F',
-  //   names: []
-  // }, {
-  //   letter: 'G',
-  //   names: []
-  // }, {
-  //   letter: 'H',
-  //   names: []
-  // }, {
-  //   letter: 'I',
-  //   names: []
-  // },
-  // {
-  //   letter: 'J',
-  //   names: []
-  // },
-  // {
-  //   letter: 'K',
-  //   names: []
-  // }, {
-  //   letter: 'L',
-  //   names: []
-  // }, {
-  //   letter: 'M',
-  //   names: []
-  // }, {
-  //   letter: 'N',
-  //   names: []
-  // }, {
-  //   letter: 'O',
-  //   names: []
-  // }, {
-  //   letter: 'P',
-  //   names: []
-  // },
-  // {
-  //   letter: 'Q',
-  //   names: []
-  // },
-  // {
-  //   letter: 'R',
-  //   names: []
-  // },
-  // {
-  //   letter: 'S',
-  //   names: []
-  // },
-  // {
-  //   letter: 'T',
-  //   names: []
-  // }, {
-  //   letter: 'U',
-  //   names: []
-  // }, {
-  //   letter: 'V',
-  //   names: []
-  // }, {
-  //   letter: 'W',
-  //   names: []
-  // },
-  // {
-  //   letter: 'X',
-  //   names: []
-  // },
-  // {
-  //   letter: 'Y',
-  //   names: []
-  // },
-  // {
-  //   letter: 'Z',
-  //   names: []
-  // }];
-
+  public snackAction = 'voir plus +';
   stateGroupOptions: Observable<StateGroup[]>;
   minWidth: number = 250;
   width: number = this.minWidth;
@@ -362,28 +266,15 @@ export class DialogImportFile {
   constructor(private importFileService: ImportFileEdiService,
     private router: Router,
     public dialogRef: MatDialogRef<DialogImportFile>,
+    private _snackBar: MatSnackBar
   ) {
-    // this.dropdownRefresh();
   }
   public listObject: { id: string, nomClient: string }[] = [];
-  //   public listObject: { code_client : string ,nom_client: string }[] = [];
   public listItems: Array<string> = [];
   ngOnInit(): void {
-    // this.stateGroupOptions = this.myForm.get('stateGroup')!.valueChanges
-    //   .pipe(
-    //     startWith(''),
-    //     map(value => this._filterGroup(value))
-    //   );
-  }
-  // private _filterGroup(value: string): StateGroup[] {
-  //   if (value) {
-  //     return this.stateGroups
-  //       .map(group => ({ letter: group.letter, names: _filter(group.names, value) }))
-  //       .filter(group => group.names.length > 0);
-  //   }
 
-  //   return this.stateGroups;
-  // }
+  }
+
 
   selectFile(event) {
     if (event.target.files.length > 0) {
@@ -394,48 +285,18 @@ export class DialogImportFile {
     }
 
   }
-  // dropdownRefresh() {
-  //   this.importFileService.getAllClients().subscribe(
-  //     data => {
-  //       console.log("data", data);
-  //       this.clients = data;
-  //       data.forEach(element => {
-  //         var indexInGroup = element.nomClient.substring(0).charCodeAt(0) - 65;
-  //         console.warn('index', indexInGroup)
-  //         this.nameGroups[indexInGroup].names.push(element);
-  //         console.warn("**", this.nameGroups);
-  //         //           this.listItems.push(element["last_name"]);
-  //         //           var code_client = element['code_client'];
-  //         //           var nomClient = element['last_name'];
-  //         //            this.listItems.push(element["nomClient"]);var id = element['id']; var nomClient = element['nomClient'];
-  //         //           var client = {
-  //         // //             code_client: code_client,
-  //         //             id: id,
-  //         //             nomClient: nomClient
-  //         //           };
-  //         //           this.listObject.push(client);
-  //         //         });
-  //         //         for (var i = 0; i < this.nameGroups.length; i++) {
-  //         //           for (var j = 0; j < this.listItems.length; j++) {
-  //         //             if (this.listItems[j][0] === this.nameGroups[i].letter) {
-  //         //               this.nameGroups[i].names.push(this.listItems[j]);
-  //         //             }
-  //         //           }
-  //         //         }
-  //         //         for (var k = 0; k < this.nameGroups.length; k++) {
-  //         //           if (this.nameGroups[k].names.length !== 0) {
-  //         //             this.stateGroups.push(this.nameGroups[k])
-  //         //           }
-  //         //         }
 
-  //         //       });
-  //       })
-  //     })
-
-  // }
 
   get f() {
     return this.myForm.controls;
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
   }
 
   onFileChange(event) {
@@ -456,14 +317,13 @@ export class DialogImportFile {
     this.showloader = true;
     const formData = new FormData();
     formData.append('file', this.myForm.get('fileSource').value);
-    // var client = this.clients.find(element => element.nomClient === this.myForm.getRawValue().stateGroup);
-    //var client = this.listObject.find(element => element.nomClient === nom);
-    // formData.append('client', client.idContact);
-    //     formData.append('client', client.code_client);
     this.importFileService.upload(formData).subscribe(
       (res) => {
         console.log(res);
         this.showloader = false;
+        if (res[0].archive == false || res[0].existe == false) {
+          this.openSnackBar("Veuillez vérifier la validité de ces clients ", this.snackAction)
+        }
         this.dialogRef.close('submit');
       },
       (err) => {

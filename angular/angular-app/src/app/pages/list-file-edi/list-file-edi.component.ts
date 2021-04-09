@@ -462,6 +462,7 @@ export class DialogImportFile {
     //     formData.append('client', client.code_client);
     this.importFileService.upload(formData).subscribe(
       (res) => {
+        console.log(res);
         this.showloader = false;
         this.dialogRef.close('submit');
       },

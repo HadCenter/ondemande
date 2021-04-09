@@ -359,8 +359,6 @@ def get_extension(filename):
     basename = os.path.basename(filename)  # os independent
     ext = '.'.join(basename.split('.')[1:])
     return '.' + ext if ext else None
-
-
 @api_view(['POST'])
 def createFileFromColumnAndRowsAndUpdate(request):
     columns = request.data['columns']
@@ -387,11 +385,6 @@ def createFileFromColumnAndRowsAndUpdate(request):
     data = [{"filePath":fileName,"ClientOwner":clientDB.code_client,"fileId":fileDB.id}]
     startEngineWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
-
-
-
-
-
 def desarchive_client(client: Client):
     client.archived = False
     client.save()
@@ -400,9 +393,6 @@ def desarchive_client(client: Client):
 
     desarchiveDirectoryOfClientFromInto(client,path_racine_input , path_racine_input+"archive")
     desarchiveDirectoryOfClientFromInto(client,path_racine_output , path_racine_output+"archive")
-
-
-
 def desarchiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pathToArchiveTo):
     ftp = connect()
     client_Code = client.code_client

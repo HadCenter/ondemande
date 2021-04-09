@@ -18,39 +18,70 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
   updateFromInput = false;
   chartCallback;
   Highcharts = Highcharts;
+
   ohlc = [];
   chartOptions = {
+
     rangeSelector: {
+      buttons: [{
+    type: 'month',
+    count: 1,
+    text: '1m',
+    title: 'Voir 1 mois'
+}, {
+    type: 'month',
+    count: 3,
+    text: '3m',
+    title: 'Voir 3 mois'
+}, {
+    type: 'month',
+    count: 6,
+    text: '6m',
+    title: 'Voir 6 mois'
+}, {
+    type: 'ytd',
+    text: 'YTD',
+    title: 'Voir l\'année à ce jour'
+}, {
+    type: 'year',
+    count: 1,
+    text: '1a',
+    title: 'Voir 1 an'
+}, {
+    type: 'all',
+    text: 'Tous',
+    title: 'Voir tout'
+}],
       labelStyle: {
          display: 'none'
-      }
+      },
+      selected: 1,
+      inputDateFormat: '%Y-%m-%d',
+      inputEditDateFormat: '%Y-%m-%d'
     },
     credits: {
       enabled: false,
- },
-    yAxis: [
-      {
-        labels: {
-          align: "left"
-        },
-        height: "80%",
-        resize: {
-          enabled: true
+    },
+    xAxis: {
+        type: 'datetime',
+        //tickInterval: 24 * 3600 * 1000, // one day
+        labels:
+        {
+          formatter: function()
+          {
+            return Highcharts.dateFormat('%Y-%m-%d', this.value);
+          }
         }
-      },
-      {
-        labels: {
-          align: "left"
-        },
-        top: "80%",
-        height: "20%",
-        offset: 0
-      }
-    ],
+    },
+    tooltip: {
+        xDateFormat: '%Y-%m-%d',
+        shared: true
+    },
     series: [
       {
         name: "Nombre de fichiers",
-        data: this.ohlc
+        data: this.ohlc,
+
       },
 
     ],
@@ -69,6 +100,7 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
       ]
     }
   };
+
   /********************************************************************************************/
   constructor(public serviceKPI : KPIEvolutionNombreDeFichiersImorteParClientService,)
   {

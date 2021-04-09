@@ -1,20 +1,9 @@
-import secrets
-import string
-from django.core.mail import EmailMessage
-# secure password
-password = ''.join((secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(8)))
-print(password)
+# import time
+# import datetime
+# s = "2021-04-05"
+# time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d").timetuple())
+# print(time)
 
-# nous avons maintenant password, username et email
-# je vais envoyer un email contenant un lien
-
-email = 'ahmed.belaiba@redlean.io'
-email_subject = 'Création de mot de passe'
-email_body = 'Test body'
-email = EmailMessage(
-    email_subject,
-    email_body,
-    'ahmedbelaiba19952018@gmail.com',
-    [email],
-)
-email.send(fail_silently=False)
+import datetime
+stime = "2021-04-05T02:13:40"
+print(datetime.datetime.strptime(stime, "%Y-%m-%dT%H:%M:%S").timestamp())

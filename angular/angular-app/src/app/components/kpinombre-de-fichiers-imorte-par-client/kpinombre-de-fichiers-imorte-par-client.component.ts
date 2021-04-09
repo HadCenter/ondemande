@@ -39,7 +39,7 @@ export const MY_FORMATS = {
 export class KPInombreDeFichiersImorteParClientComponent implements OnInit {
   @ViewChild('input') input: ElementRef;
   data : any [] = [];
-  show = true;
+//   show = true;
   count = 0 ;
   selected = undefined;
 /*************************************************************************************/
@@ -60,7 +60,7 @@ export class KPInombreDeFichiersImorteParClientComponent implements OnInit {
         this.data = res;
         this.data.forEach(element => this.count = this.count + element.files.length);
         this.data = this.alphabeticalOrder(this.data);
-        this.show = false;
+//         this.show = false;
       },
         error => console.log(error));
   }

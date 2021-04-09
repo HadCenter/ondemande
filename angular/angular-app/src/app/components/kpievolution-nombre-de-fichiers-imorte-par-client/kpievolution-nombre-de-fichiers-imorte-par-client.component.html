@@ -1,5 +1,7 @@
-<div *ngIf = "data.length > 0">
-  <h5>Choisir un client </h5>
+<div>
+  <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'100px'" [bg]="'transparant'" [show]="show"></app-loader>
+  <div *ngIf = "data.length > 0">
+  <h6>Choisir un client </h6>
   <mat-form-field appearance="fill" >
     <mat-label>Tous</mat-label>
     <mat-select [(value)]="selected" (selectionChange)="onChangeClient($event)">
@@ -18,6 +20,9 @@
   [(update)]="updateFromInput">
   </highcharts-chart>
 </div>
+</div>
+
+
 
 
 

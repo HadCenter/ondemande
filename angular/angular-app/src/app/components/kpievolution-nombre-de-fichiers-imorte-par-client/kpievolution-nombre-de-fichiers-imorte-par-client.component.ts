@@ -13,6 +13,7 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
   data : any [] = [];
   data2 : any [] = [];
   selected = undefined;
+  show = true;
 /*********************************************************************************************/
   chart;
   updateFromInput = false;
@@ -147,6 +148,7 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
       .subscribe(res => {
         this.data = res;
         this.data = this.alphabeticalOrder(this.data);
+        this.show = false;
       },
         error => console.log(error));
   }

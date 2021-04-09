@@ -1,7 +1,7 @@
 <div id="conteneur" >
-  <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'100px'" [bg]="'transparant'" [show]="show"></app-loader>
+<!--  <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'100px'" [bg]="'transparant'" [show]="show"></app-loader>-->
         <div *ngIf = "data.length > 0">
-          <h5>Choisir un client </h5>
+          <h6>Choisir un client </h6>
           <mat-form-field appearance="fill" >
             <mat-label>Tous</mat-label>
             <mat-select [(value)]="selected" (selectionChange)="onChangeClient($event)">
@@ -13,7 +13,7 @@
           </mat-form-field>
         </div>
         <div *ngIf = "data.length > 0">
-          <h5>Choisir une date </h5>
+          <h6>Choisir une date </h6>
           <mat-form-field >
             <mat-label>Tous</mat-label>
             <input #input matInput [matDatepicker]="picker"  (dateChange)="addEvent('change', $event)" >
@@ -22,7 +22,7 @@
           </mat-form-field>
         </div>
         <div *ngIf = "data.length > 0">
-          <h5 >Nombre de fichiers importés : </h5>
+          <h6 >Nombre de fichiers importés : </h6>
           <div class="centrage"><h4> {{count}}</h4></div>
         </div>
 </div>

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ListTransactionRoutingModule } from './list-transaction-routing.module';
 import { DailogGenerateTransaction, ListTransactionComponent } from './list-transaction.component';
 import { ThemeModule } from 'theme';

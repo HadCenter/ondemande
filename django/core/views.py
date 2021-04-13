@@ -1,13 +1,11 @@
 from django.core.files.storage import FileSystemStorage
-from django.http import JsonResponse, HttpRequest
+from django.http import JsonResponse
 from rest_framework.decorators import api_view, parser_classes
-from .serializers import ClientSerializer, FileSerializer,ClientTestSerialize
+from .serializers import ClientSerializer,ClientTestSerialize
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
-from .models import Client, FileInfo,Contact
-from .serializers import FileSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+from .models import FileInfo,Contact
 from .models import Client
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -24,8 +22,9 @@ import pandas as pd
 import re
 from .models import FileExcelContent
 import jsonpickle
-
 from talendEsb.views import startEngineWithData
+import logging,traceback
+logger = logging.getLogger('django')
 
 path_racine_input = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/"
 path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
@@ -187,6 +186,7 @@ def updateDB(fileName, client_id):
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
 def fileCreate(request,format=None):
+    logger.info('début web service : génération automatique des fichiers EDI !')
     request_file = request.FILES['file']
     fs = FileSystemStorage()
     file_name = request_file.name
@@ -198,6 +198,7 @@ def fileCreate(request,format=None):
     df = pd.read_excel(path_file)
     df = df.fillna(value={'Expediteur': ''})
     os.remove(path_file)
+    logger.info('upload fichier EDI avec succes !')
     #************************ on travaille maintenant avec un dataFrame ***********************
     list_expediteur_unique = df.Expediteur.unique()
     resultat_groupBy = df.groupby(['Expediteur'])
@@ -214,6 +215,7 @@ def fileCreate(request,format=None):
     # ]
     response = []
     for expediteur in list_expediteur_unique:
+        logger.info('début traitement pour l''expéditeur'+ expediteur)
         dataFrameExpediteur = resultat_groupBy.get_group(expediteur)
         Expediteur = dataFrameExpediteur["Expediteur"].values[0]
         resultat_regex = re.search(r'C[0-9]{3}', Expediteur)
@@ -300,7 +302,9 @@ def fileCreate(request,format=None):
                         'archive': False,
                         'existe': False
                     })
+        logger.info('fin traitement pour l\'expéditeur ' + expediteur)
     json_data = JSONRenderer().render(response)
+    logger.info('fin web service : génération automatique des fichiers EDI ')
     return HttpResponse(json_data, content_type='application/json')
 
 @api_view(['GET'])

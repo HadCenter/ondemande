@@ -1,11 +1,6 @@
 from .models import Account
-# from .models import Profile
 from django.contrib.auth import authenticate
-
-from rest_framework.fields import ReadOnlyField
 from rest_framework import serializers
-
-
 
 class LoginSerializer(serializers.Serializer):
 	email = serializers.EmailField()
@@ -18,11 +13,9 @@ class LoginSerializer(serializers.Serializer):
 		raise serializers.ValidationError('Incorrect Credentials')
 
 class RegisterSerializer(serializers.ModelSerializer):
-	# profile = ReadOnlyField(source='role.label')
 	class Meta:
 		model = Account
-		fields = ('id', 'email', 'username', 'password', 'is_superadmin', 'is_admin', 'created_at')
-		# fields = '__all__'
+		fields = ('id', 'email', 'username', 'password', 'role', 'created_at')
 		extra_kwargs = {'password': {'write_only': True}}
 
 	def create(self, validated_data):
@@ -31,8 +24,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data["email"],
 			username=validated_data["username"],
 			password=validated_data["password"],
-			is_superadmin = validated_data["is_superadmin"],
-			is_admin = validated_data["is_admin"],
+			role = validated_data["role"],
 			created_at=validated_data["created_at"],
 		)
 		return user
@@ -40,11 +32,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Account
-		fields = ('id','email','username','is_active','is_superadmin','is_admin', 'last_login' )
+		fields = ('id','email','username','is_active','role', 'last_login' )
 
-# class RoleSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Profile
-#         fields = '__all__'
 
 

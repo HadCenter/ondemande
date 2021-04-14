@@ -18,13 +18,13 @@ export class SidebarComponent extends BaseSidebarComponent {
     }
 
   public ngOnInit() {
-    this.authService.userData.subscribe(user => this.user = user);
-    console.log("uuser",this.user.is_superadmin)
+    this.authService.userData.subscribe(
+    user => this.user = user);
     this.updateMenu();
   }
   public updateMenu()
   {
-    if (this.user.is_superadmin === true)
+    if (this.user.role === 'SuperAdmin')
     {
       this.menu = [
     { name : "Accueil" , link: '/home', icon: 'list' },

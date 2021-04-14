@@ -69,29 +69,16 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
         this.users = res;
         for(var i= 0; i < res.length; i++)
         {
-
-          if(res[i].is_admin == true)
-          {
-            res[i].profile = "Admin"
-          }else{
-            res[i].profile = "SuperAdmin"
-          }
           if(res[i].is_active == true)
           {
             res[i].status = "Actif"
           }else{
             res[i].status = "Non actif"
           }
-          delete res[i].is_admin;
-          delete res[i].is_superadmin;
         }
-
         this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
-        console.log(this.advancedTable);
       },
-        // error => this.error = "error.message");
-        // for fake data
         error => console.log(error));
   }
   public getProfile(is_superadmin) {
@@ -152,15 +139,12 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
 export class DialogCreateUser extends UpgradableComponent {
   public signupForm: FormGroup;
   public email;
-  //   public password;
   public username;
-  public name;
+  public role;
   public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
   public error: string;
   public listItems: Array<string> = ["Admin", "SuperAdmin"];
   showloader = false;
-
-  //   public listObject : { id: string, label: string }[] = [];
   constructor(private createuserService: CreateUserService,
     public dialogRef: MatDialogRef<DialogCreateUser>,
     private fb: FormBuilder,
@@ -168,19 +152,16 @@ export class DialogCreateUser extends UpgradableComponent {
     super();
 
     this.signupForm = this.fb.group({
-      //       password: new FormControl('', Validators.required),
       email: new FormControl('', [
         Validators.required,
         Validators.pattern(this.emailPattern),
       ]),
       username: new FormControl('', [Validators.required,]),
-      name: new FormControl('', [Validators.required],),
+      role: new FormControl('', [Validators.required],),
     });
     this.email = this.signupForm.get('email');
-    //     this.password = this.signupForm.get('password');
     this.username = this.signupForm.get('username');
-    this.name = this.signupForm.get('name');
-    //     this.dropdownRefresh();
+    this.role = this.signupForm.get('role');
   }
 
   public ngOnInit() {
@@ -196,12 +177,7 @@ export class DialogCreateUser extends UpgradableComponent {
     const formData = new FormData();
     formData.append('email', this.signupForm.get('email').value);
     formData.append('username', this.signupForm.get('username').value);
-    var name = this.signupForm.getRawValue().name;
-    if (name === 'SuperAdmin') {
-      formData.append('is_superadmin', "true")
-    } else {
-      formData.append('is_admin', "true")
-    }
+    formData.append('role', this.signupForm.get('role').value);
     if (this.signupForm.valid) {
       this.showloader = true;
       this.createuserService.signup(formData)
@@ -215,26 +191,6 @@ export class DialogCreateUser extends UpgradableComponent {
             this.error = "L'email est déja utilisé"; console.log(error); });
     }
   }
-  //   dropdownRefresh()
-  //   {
-  //     this.createuserService.getAllRoles().subscribe(
-  //       data => {
-  //           console.log(data);
-  //           data.forEach(element => {
-  //               this.listItems.push(element["label"]);
-  //               var id = element['id']; var nomClient = element['label'];
-  //               var client = {
-  //                   id : id,
-  //                   label : nomClient
-  //               };
-  //               this.listObject.push(client);
-  //           });
-  //           console.log(this.listItems);
-  //           console.log(this.listObject);
-  //
-  //       });
-  //   }
-
 }
 
 export class User {
@@ -242,8 +198,7 @@ export class User {
   username?: string;
   email?: string;
   is_active?: string;
-  is_superadmin?: string;
-  is_admin?: string;
+  role?: string;
   last_login?: string;
 }
 
@@ -256,8 +211,7 @@ export class DialogDetailsUser extends UpgradableComponent {
     username: '',
     email: '',
     is_active: '',
-    is_superadmin: '',
-    is_admin: '',
+    role : '',
     last_login: ''
   };
   public updateForm: FormGroup;
@@ -309,41 +263,21 @@ export class DialogDetailsUser extends UpgradableComponent {
       return "Non actif";
     }
   }
-  public getRole(is_admin) {
-    console.log(is_admin);
-    if (is_admin === true) {
-      return "Admin";
-    } else {
-      return "SuperAdmin";
-    }
-  }
   public onInputChange(event) {
     event.target.required = true;
   }
   updateUser(): void {
-    console.log(this.currentUser);
-    console.log(this.role);
-    console.log(this.activated);
     if (this.activated === 'Actif') {
       this.currentUser['is_active'] = 'true';
     } else {
       this.currentUser['is_active'] = 'false';
     }
-    if (this.role === 'Admin') {
-      this.currentUser['is_admin'] = 'true';
-      this.currentUser['is_superadmin'] = 'false';
-    } else {
-      this.currentUser['is_admin'] = 'false';
-      this.currentUser['is_superadmin'] = 'true';
-    }
-
+    this.currentUser['role'] = this.role;
     console.log(this.currentUser);
-    // if (this.updateForm.valid) {
     this.showloader = true;
     this.userService.update(this.currentUser.id, this.currentUser)
       .subscribe(
         response => {
-          console.log(response);
           this.showloader = false;
           this.dialogRef.close('submit');
         });
@@ -355,9 +289,8 @@ export class DialogDetailsUser extends UpgradableComponent {
       .subscribe(
         data => {
           this.currentUser = data;
-          this.role = this.getRole(this.currentUser.is_admin);
+          this.role = this.currentUser.role;
           this.activated = this.getStatus(this.currentUser.is_active);
-          console.log(this.currentUser);
         },
         error => {
           console.log(error);

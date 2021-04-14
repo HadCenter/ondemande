@@ -274,3 +274,8 @@ a{
   text-overflow: inherit;
   overflow: inherit;
   }
+
+  .snack-exp{
+    overflow-y: scroll;
+    min-width: 355px;
+  }

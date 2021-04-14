@@ -1,0 +1,31 @@
+h3{
+    font-size: 24px;
+    font-weight: 400;
+    line-height: normal;
+    overflow: hidden;
+    transform-origin: 149px 48px;
+    margin: 0;
+    color: white;
+    margin-bottom: revert;
+}
+td.column{
+    text-align: center;
+}
+.title-snack{
+    display: -webkit-inline-box;
+}
+.btn-dismiss{
+    background-color: transparent;
+    box-shadow: none !important;
+}
+.btn-dismiss span {
+    color: #ff4081;
+}
+.container-btn{
+    position: absolute;
+    right: 3px;
+}
+/* snack-bar-container{
+    overflow-y: scroll;
+    min-width: 355px;
+} */

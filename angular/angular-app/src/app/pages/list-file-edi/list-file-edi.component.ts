@@ -1,20 +1,14 @@
 import { Component, HostBinding, Inject } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { ListFileEdiService } from './list-file-edi.service';
 import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+import { SnackbarComponent } from './customSnackBar/snackbar/snackbar.component';
+
 
 @Component({
   selector: 'app-list-file-edi',
@@ -29,7 +23,6 @@ export class ListFileEDIComponent extends UpgradableComponent {
   public filterValue: any;
   clicked = new Array();
   limit = 15;
-  selection = new SelectionModel<PeriodicElement>(true, []);
   actions: any[] = [
     { value: 'analyser', viewValue: 'Analyser' },
   ];
@@ -95,6 +88,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.files = this.sortByAttributeObject(this.files, order, index);
   }
 
+  /***Sort by diff column */
   public sortByAttributeObject(files, order, index) {
     if (index == 1) {
       return this.sortByDateOrder(files, order, index);
@@ -139,6 +133,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     }
   }
 
+  /**** Filter items */
   setFilteredItems() {
     this.advancedTable = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
@@ -166,8 +161,8 @@ export class ListFileEDIComponent extends UpgradableComponent {
       },
         error => console.log(error));
   }
-  public analyserEDI(row) {
 
+  public analyserEDI(row) {
     this.tablesService.executeJob(row)
       .subscribe(res => {
         console.log("success");
@@ -175,12 +170,14 @@ export class ListFileEDIComponent extends UpgradableComponent {
         this.router.navigate(['/list-file-edi']);
       }, error => console.log(error));
   }
+
   public actualiser() {
     this.advancedTable = [];
     this.show = true;
     this.files = [];
     this.getFiles();
   }
+
   public downloadFileInput(clientCode, fileName) {
     this.tablesService.downloadFileInput(clientCode, fileName)
       .subscribe(res => {
@@ -188,17 +185,8 @@ export class ListFileEDIComponent extends UpgradableComponent {
       }, error => console.log(error));
   }
 
-
   gotoDetails(row) {
     this.router.navigate(['/details-file-edi', row.idFile])
-  }
-
-  public downloadFileOutput(clientCode, fileName) {
-    this.tablesService.downloadFileOutput(clientCode, fileName)
-      .subscribe(res => {
-        console.log(res);
-        saveAs(res, fileName);
-      }, error => console.log(error));
   }
 
   sendFileToUrbantz(codeClient, validatedOrders) {
@@ -210,6 +198,8 @@ export class ListFileEDIComponent extends UpgradableComponent {
       console.log("res urbantz", res);
     })
   }
+
+  /******Open dialog Import File */
   openDialog() {
     const dialogRef = this.dialog.open(DialogImportFile);
     dialogRef.afterClosed().subscribe(result => {
@@ -231,10 +221,6 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
 }
 
-export interface StateGroup {
-  letter: string;
-  names: string[];
-}
 export const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
 
@@ -251,17 +237,19 @@ export class DialogImportFile {
   showloader = false;
   clicked = false;
   public snackAction = 'voir plus +';
-  stateGroupOptions: Observable<StateGroup[]>;
+  snackActionExpediteur = "ok";
   minWidth: number = 250;
   width: number = this.minWidth;
   public error: string = '';
   myForm = new FormGroup({
-    // stateGroup: new FormControl('', [Validators.required],),
     file: new FormControl('',),
     fileSource: new FormControl('', [Validators.required],)
   });
   selectedFiles: File = null;
   clients: any;
+  snackBarRef: any;
+  nbExpNotArchived: number;
+  expediteurArray: any = [];
 
   constructor(private importFileService: ImportFileEdiService,
     private router: Router,
@@ -275,7 +263,6 @@ export class DialogImportFile {
 
   }
 
-
   selectFile(event) {
     if (event.target.files.length > 0) {
       this.selectedFiles = <File>event.target.files[0];
@@ -286,21 +273,30 @@ export class DialogImportFile {
 
   }
 
-
   get f() {
     return this.myForm.controls;
   }
 
   openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 5000,
+    this.snackBarRef = this._snackBar.open(message, action, {
+      duration: 6000,
       verticalPosition: 'top',
       horizontalPosition: 'center',
     });
   }
 
-  onFileChange(event) {
+  openSnackbarListExpediteur() {
+    // const config = new MatSnackBarConfig();
+    // config.panelClass = ['snack-exp'];
+    this._snackBar.openFromComponent(SnackbarComponent, {
+      panelClass:"snack-exp",
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      data: this.expediteurArray
+    });
+  }
 
+  onFileChange(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.myForm.patchValue({
@@ -319,11 +315,21 @@ export class DialogImportFile {
     formData.append('file', this.myForm.get('fileSource').value);
     this.importFileService.upload(formData).subscribe(
       (res) => {
-        console.log(res);
         this.showloader = false;
-        if (res[0].archive == false || res[0].existe == false) {
-          this.openSnackBar("Veuillez vérifier la validité de ces clients ", this.snackAction)
-        }
+
+        /******* Test if expediteur is arrchived and existe */
+        this.expediteurArray = Object.keys(res).map(i => res[i]);
+        console.log('expediteurs=', this.expediteurArray)
+        this.expediteurArray.forEach(expediteur => {
+          this.nbExpNotArchived = 0;
+          if (expediteur.archive == false || expediteur.existe == false) {
+            this.nbExpNotArchived++;
+          }
+        })
+        if (this.nbExpNotArchived > 0) { this.openSnackBar("Veuillez vérifier la validité de ces clients ", this.snackAction) }
+        this.snackBarRef.onAction().subscribe(() => {
+          this.openSnackbarListExpediteur()
+        });
         this.dialogRef.close('submit');
       },
       (err) => {

@@ -96,11 +96,10 @@ WSGI_APPLICATION = 'API.wsgi.application'
 
 DATABASES = {
     'default': {
-       'ENGINE': 'django.db.backends.mysql',
-       'NAME': 'ondemand',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ondemand',
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
-        # 'HOST': 'localhost',
         'HOST': '172.17.0.1',
        'PORT': '3306',
     }
@@ -151,8 +150,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/files/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/files")
 
 # email stuff
 # EMAIL_HOST = os.environ.get('EMAIL_HOST')
@@ -167,5 +166,29 @@ DEFAULT_FROM_EMAIL = 'ahmedbelaiba19952018@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
+
+LOGGING ={
+    'version':1,
+    'loggers':{
+        'django':{
+            'handlers':['console'],
+            'level':'DEBUG'
+        }
+    },
+    'handlers':{
+        'console':{
+            'level':'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter':'simpleRe',
+        }
+    },
+    'formatters':{
+        'simpleRe': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        }
+
+    }
+}
 
 

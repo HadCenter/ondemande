@@ -1,0 +1,29 @@
+<div class="content-snack">
+    <div class="title-snack">
+        <h3  *ngIf='data.length>0'>Liste des clients </h3>
+        <div class="container-btn"> 
+            <button class="btn-dismiss" mat-raised-button (click)="_snackBar.dismiss()">Dismiss</button>
+        </div>
+    </div>
+</div>
+
+<div >
+    <table style="width:100%">
+        <tr>
+            <!-- <th>Ligne</th> -->
+            <th>Nom Client</th>
+            <th>Code Client</th>
+        </tr>
+        <tr *ngFor="let row of data">
+            <!-- <td class="column">
+                <label *ngFor="let ligne of row.numr_ligne; let i = index">{{ligne}}
+                    <label *ngIf="i!=row.numr_ligne.length-1">,</label>
+                </label>
+               
+            </td> -->
+            <td class="column">{{row.expediteur}}</td>
+            <td class="column"> {{row.code_client}}</td>
+        </tr>
+
+    </table>
+</div>

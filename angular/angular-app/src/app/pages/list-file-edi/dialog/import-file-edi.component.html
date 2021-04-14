@@ -6,7 +6,6 @@
       <h1 class="mdl-card__title-text">Importer fichier EDI</h1>
     </base-card-title>
     <base-card-body class="no-padding">
-      <!-- <app-loader [width]="'100%'" [height]="'500px'" [bg]="'transparant'" [show]="show"></app-loader> -->
       <form [formGroup]="myForm" autocomplete="off">
         <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
           <div class="espace">
@@ -19,25 +18,10 @@
               <button mat-icon-button matSuffix (click)="fileInput.click()" type='button'>
                 <mat-icon>attach_file</mat-icon>
               </button>
-              <input hidden accept=".xlsx" (change)="selectFile($event)" #fileInput type="file" id="file">
+              <input hidden accept=".xlsx" (change)="selectFile($event)" #fileInput type="file" id="file" name="file">
             </mat-form-field>
           </div>
-
-          <!-- <div>
-            <mat-form-field>
-              <mat-label>Nom client</mat-label>
-               <input matInput formControlName="stateGroup" required [matAutocomplete]="autoGroup"> 
-              <mat-autocomplete #autoGroup="matAutocomplete">
-                <mat-optgroup  *ngFor="let group of nameGroups "   [label]="group.letter">
-                  <mat-option  *ngFor="let contact of group.names"  [value]="contact.nomClient">
-                    {{contact.nomClient}}
-                  </mat-option>
-                </mat-optgroup>
-              </mat-autocomplete>
-            </mat-form-field>
-          </div> -->
           <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
-
         </div>
         <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone submit-cell mdl-grid center-items">
           <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit"

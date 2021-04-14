@@ -47,15 +47,6 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
   ngOnInit(): void {
     this.getClients();
   }
-  getStatusArchivage(status)
-  {
-    if (status === false)
-    {
-      return 'Actif';
-    }else{
-      return 'Archivé';
-    }
-  }
   public changePage(page, force = false) {
     if (page !== this.currentPage || force) {
       this.currentPage = page;
@@ -101,10 +92,34 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     this.tablesService.getAllClients()
       .subscribe(res => {
         this.clients = res;
-        this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
+        this.numPage = Math.ceil(res.length / this.countPerPage);
+        this.show = false;
+        this.addStatusForSearch();
+        console.log("clients", this.clients)
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        console.log("clients",this.advancedTable);
       },
         error => console.log(error));
+  }
+  /***
+    deux solutions:
+      1- créer un attribut status et supprimer l'attribut archived
+      2- modifier le model client : archived : booléen ====> status : string
+        j'ai choisi 1 ère solution parceque si je modifie le model normalemnent je vais cassé le travail de
+        amine.
+  ***/
+  public addStatusForSearch()
+  {
+    for (let i = 0; i < this.clients.length; i++)
+    {
+      if(this.clients[i].archived === false)
+      {
+        this.clients[i].status = 'Actif' // add status to client object
+      }else{
+        this.clients[i].status = 'Archivé' // add status to client object
+      }
+      delete this.clients[i].archived; // delete archived pour éviter la confusion lors de recherche
+    }
   }
   public gotoDetails(id_client) {
     const dialogRef = this.matDialog.open(DetailsClientComponent, {

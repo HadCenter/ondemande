@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
-from .models import Client
+from .models import Client ,AnomaliesEdiFileAnnuaire , HistoryAnomaliesEdiFiles
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
@@ -315,6 +315,13 @@ def seeFileContent(request):
         excelfile = pd.read_excel(request.data['fileName'])
         excelfile = excelfile.fillna('')
         columns = list(excelfile.columns)
+
+        if "Remarque_id" in columns :
+            annuaireAnomalies = pd.DataFrame(list(AnomaliesEdiFileAnnuaire.objects.all().values()))
+            annuaireAnomaliesColumnName = annuaireAnomalies.rename(columns={"id_anomalie": "Remarque_id" , "label" : "Remarque"})
+            excelfile = pd.merge(excelfile, annuaireAnomaliesColumnName, on="Remarque_id" )
+            columns = list(excelfile.columns)
+
         rows = excelfile.values.tolist()
         os.remove(name)
         responseObject = FileExcelContent(columns,rows)

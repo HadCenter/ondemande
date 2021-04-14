@@ -58,3 +58,22 @@ class FileInfo:
         self.contact = contact
         self.number_wrong_commands = number_wrong_commands
         self.number_correct_commands = number_correct_commands
+
+
+class AnomaliesEdiFileAnnuaire(models.Model):
+    id_anomalie = models.AutoField(primary_key=True)
+    label = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'anomalies_edi_file_annuaire'
+
+class HistoryAnomaliesEdiFiles(models.Model):
+    edi_file_id = models.IntegerField(blank=True, null=True)
+    execution_time = models.DateTimeField(blank=True, null=True)
+    anomalie_id = models.IntegerField(blank=True, null=True)
+    number_of_anomalies = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'history_anomalies_edi_files'

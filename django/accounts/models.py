@@ -11,8 +11,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(_('username'), max_length=255)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_superadmin = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
+    role = models.CharField(max_length=200)
     created_at = models.DateTimeField(null=True)
     updated_at = models.DateTimeField(null=True)
     USERNAME_FIELD = 'email'

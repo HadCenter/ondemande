@@ -26,20 +26,20 @@
 
                             </div>
                         </div>
-                        <div  *ngIf='user.is_superadmin' class="mdl-cell mdl-cell--9-col input-group">
+                        <div  *ngIf="user.role === 'SuperAdmin'" class="mdl-cell mdl-cell--9-col input-group">
                             <i class="material-icons pull-left">supervisor_account</i>
                             <div class="mdl-textfield mdl-js-textfield pull-left">
                                 <label class="mdl-textfield__input">Super admin</label>
                             </div>
                         </div>
-                        <div  *ngIf='user.is_admin' class="mdl-cell mdl-cell--9-col input-group">
+                        <div  *ngIf="user.role === 'Admin'" class="mdl-cell mdl-cell--9-col input-group">
                             <img src="../../../assets/icons/admin.png" style="margin-top: inherit;" class="material-icons pull-left">
 
                             <div class="mdl-textfield mdl-js-textfield pull-left">
                                 <label  class="mdl-textfield__input">Admin</label>
                             </div>
                         </div>
-                       
+
                     </div>
                 </base-card-body>
             </base-card>

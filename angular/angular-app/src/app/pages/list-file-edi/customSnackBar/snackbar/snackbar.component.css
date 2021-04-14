@@ -25,6 +25,7 @@ td.column{
     position: absolute;
     right: 3px;
 }
-snack-bar-container{
-    overflow: scroll;
-}
+/* snack-bar-container{
+    overflow-y: scroll;
+    min-width: 355px;
+} */

@@ -1,5 +1,4 @@
 import { Component, HostBinding, Inject } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { ListFileEdiService } from './list-file-edi.service';
@@ -9,12 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from './customSnackBar/snackbar/snackbar.component';
-// export interface PeriodicElement {
-//   name: string;
-//   position: number;
-//   weight: number;
-//   symbol: string;
-// }
+
 
 @Component({
   selector: 'app-list-file-edi',
@@ -29,7 +23,6 @@ export class ListFileEDIComponent extends UpgradableComponent {
   public filterValue: any;
   clicked = new Array();
   limit = 15;
-  // selection = new SelectionModel<PeriodicElement>(true, []);
   actions: any[] = [
     { value: 'analyser', viewValue: 'Analyser' },
   ];
@@ -228,10 +221,6 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
 }
 
-// export interface StateGroup {
-//   letter: string;
-//   names: string[];
-// }
 export const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
 
@@ -249,12 +238,10 @@ export class DialogImportFile {
   clicked = false;
   public snackAction = 'voir plus +';
   snackActionExpediteur = "ok";
-  // stateGroupOptions: Observable<StateGroup[]>;
   minWidth: number = 250;
   width: number = this.minWidth;
   public error: string = '';
   myForm = new FormGroup({
-    // stateGroup: new FormControl('', [Validators.required],),
     file: new FormControl('',),
     fileSource: new FormControl('', [Validators.required],)
   });
@@ -299,7 +286,10 @@ export class DialogImportFile {
   }
 
   openSnackbarListExpediteur() {
+    // const config = new MatSnackBarConfig();
+    // config.panelClass = ['snack-exp'];
     this._snackBar.openFromComponent(SnackbarComponent, {
+      panelClass:"snack-exp",
       verticalPosition: 'top',
       horizontalPosition: 'center',
       data: this.expediteurArray

@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'knox',
     'accounts',
     'core',
-    'salesforceEsb'
+    'salesforceEsb',
+    'rest_framework_swagger'
 ]
 
 MIDDLEWARE = [

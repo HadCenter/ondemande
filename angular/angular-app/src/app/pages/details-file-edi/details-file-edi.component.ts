@@ -349,8 +349,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   resetFiltre(){
+    // this.filterValues=[];
+    this.filterValues.forEach((value, key) => {
+      value.modelValue = undefined;
+    })
+    this.filterValues=[]
     this.copyFileWrong = this.testFile;
     this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    // console.warn(this.filterValues)
   }
 
   convertToArrayOfObjects(data) {

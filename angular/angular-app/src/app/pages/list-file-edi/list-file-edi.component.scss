@@ -256,7 +256,7 @@ a{
 }
 .tooltip-custom {
   background: #00bcd4;;
- 
+
 }
 .download{
   padding-left: inherit;
@@ -279,3 +279,12 @@ a{
     overflow-y: scroll;
     min-width: 355px;
   }
+  .filter-column{
+    width: 20px;
+    background-color: transparent;
+    border: none;
+    color: white
+  }
+  option {
+    color: black;
+}

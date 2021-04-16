@@ -12,6 +12,9 @@ import { MatInputModule } from '@angular/material/input';
 import { LoaderModule } from 'app/components/loader/loader.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+
 @NgModule({
   declarations: [DetailsFileEdiComponent],
   imports: [
@@ -24,7 +27,10 @@ import { MatTableModule } from '@angular/material/table';
     MatInputModule,
     LoaderModule,
     MatSnackBarModule,
-    MatTableModule
+    MatTableModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    
     
   ],
   providers: [

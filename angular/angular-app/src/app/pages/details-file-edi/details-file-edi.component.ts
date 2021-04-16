@@ -33,17 +33,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   showValid = true;
   copyFileWrong: any;
   fileWrongUpdated: any = [];
-  showWrong: boolean = true;;
+  showWrong: boolean = true; testFile: any;
+  options: any = [];
+  files: any;
+  ;
   displayedColumns = [];
+  filterValues: any = [];
   clickCorrection: boolean = false;
   selectedCellsState: boolean[][] = [
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
     // [false, false, false],
   ];
 
@@ -67,7 +64,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       if (this.tableMouseDown.cellsType === this.tableMouseUp.cellsType) {
         //convert every rows to object
         const dataCopy = this.copyFileWrong.slice();// copy and mutate
-        console.warn(dataCopy)
         let startCol: number;
         let endCol: number;
         let startRow: number;
@@ -144,7 +140,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         this.newCellValue = '';
         this.updateSelectedCellsState(this.tableMouseDown.colId, this.tableMouseUp.colId, this.tableMouseDown.rowId, this.tableMouseUp.rowId);
       }
-    } 
+    }
     else {  //disable click after click correction
       return false;
     }
@@ -244,12 +240,18 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.fileService.getFileEdi(data).subscribe(res => {
       console.warn(res)
       this.fileWrong = res;
+
       this.MoveLastElementToTheStart();
-      //create a copy array of object from the res and an array of displayed column 
+      //create a copy array of object from the res and an array of displayed column
       this.copyFileWrong = JSON.parse(JSON.stringify(this.fileWrong));
+
       this.copyFileWrong.rows.splice(0, 0, this.copyFileWrong.columns);
       this.copyFileWrong = this.convertToArrayOfObjects(this.copyFileWrong.rows);
-      this.displayedColumns = (Object.keys(this.copyFileWrong[0]))
+      this.testFile = this.copyFileWrong;
+
+      this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); /*****sort by remaque id  */
+      this.files = this.copyFileWrong;
+      this.displayedColumns = (Object.keys(this.copyFileWrong[0]).slice(0, -1));  /****not display remarque id */
       //
       this.showWrong = false;
       this.LAST_EDITABLE_ROW = this.copyFileWrong.length - 1;
@@ -258,9 +260,97 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.copyFileWrong.forEach(element => {
         this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 2 }, () => false))
       });
-
+      this.displayedColumns.forEach(item => {
+        this.getOption(item);
+      })
     })
 
+
+  }
+
+  /**
+     * Get options inside selects
+     * @param filter
+     */
+  getOption(filter) {
+    let options = [];
+    options = this.testFile.map((item) => item[filter]);
+    options = options.filter(function (value, index, options) {
+      return options.indexOf(value) == index && value != "";
+    });
+
+    this.displayedColumns.forEach((item, key) => {
+
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: options
+        };
+        this.options.push(obj)
+      }
+    })
+  }
+
+
+  setFilteredItemsOptions(filter) {
+    // check if filter is already selected
+    const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
+    if (filterExists == false) { this.filterValues.push(filter) }
+    // if only one select is selected
+    if (this.filterValues.length == 1) {
+      this.copyFileWrong = this.filterChange(filter);
+      // this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    }
+    else {
+      // if already another select is active merge the results
+      if (filterExists == false) {
+      this.copyFileWrong = [...this.copyFileWrong, ...this.filterChange(filter)];
+      this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+      }
+      else{
+        this.copyFileWrong=[];
+        this.filterValues.forEach(element => {
+          this.copyFileWrong = this.copyFileWrong.concat(this.filterChange(element));
+        });
+
+      }
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "") {
+      if (this.filterValues.length == 1) {
+        this.copyFileWrong = this.testFile;
+        this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+      }
+      else {
+        this.filterValues = this.filterValues.filter(function (item) {
+          return item.columnProp !== filter.columnProp;
+
+        })
+        this.filterValues.forEach(element => {
+          this.copyFileWrong = this.filterChange(element)
+        });
+
+      }
+
+    }
+  }
+
+  /**
+   * Get lignes when filter change
+   * @param filter
+   */
+  filterChange(filter) {
+    this.files = this.files.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    return this.files.filter(function (item) {
+      return item[filter.columnProp] == String(filter.modelValue);
+    });
+
+  }
+
+  resetFiltre(){
+    this.copyFileWrong = this.testFile;
+    this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
   }
 
   convertToArrayOfObjects(data) {
@@ -283,7 +373,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   MoveLastElementToTheStart() {
-    //Deplace column 
+    //Deplace column
     const prevColumn = [...this.fileWrong.columns]
     prevColumn.unshift(prevColumn.pop())
     this.fileWrong.columns = prevColumn;
@@ -346,7 +436,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     // for (var i = 0; i < inputs.length; i++) {
     //   inputs[i].disabled = true;
     // }
-    
+
     document.querySelector('.selected').classList.remove('selected');
     this._fileWrong.rows.forEach(element => {
       element = element.shift();

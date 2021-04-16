@@ -1,110 +1,112 @@
 <div class="container mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-    <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
-    <div class="content-file-edi">
-        <div class="content-labels">
-            <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--5-col-phone">
-                <base-card-body class="content-first-card ">
-                    <div class="content-label">
-                        <label class="details-label">Statut</label>
-                        <label class="details-label">{{file?.status}}</label>
-                    </div>
-                    <div class="content-label">
-                        <label class="details-label">Date</label>
-                        <label class="details-label">{{file?.createdAt| date:"yyyy/MM/dd"}}</label>
-                    </div>
-                    <div class="content-label">
-                        <label class="details-label">Code client</label>
-                        <label class="details-label">{{file?.contact.codeClient}}</label>
-                    </div>
-                    <div class="content-label">
-                        <label class="details-label">Nombre des prestations erronées</label>
-                        <label class="label-wrong">{{file?.number_wrong_commands}} </label>
-                    </div>
-                    <div class="content-label">
-                        <label class="details-label">Nombre des prestations validées</label>
-                        <label class="label-success">{{file?.number_correct_commands}}</label>
-                    </div>
-                </base-card-body>
-            </base-card>
-            <div style='text-align: center;'
-                class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                <button [disabled]="fileWrong?.rows?.length>0 || file?.wrongCommands !== '_'"
-                    (click)="sendFileToUrbantz()"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
-                    à Urbantz
+  <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
+  <div class="content-file-edi">
+    <div class="content-labels">
+      <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--5-col-phone">
+        <base-card-body class="content-first-card ">
+          <div class="content-label">
+            <label class="details-label">Statut</label>
+            <label class="details-label">{{file?.status}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Date</label>
+            <label class="details-label">{{file?.createdAt| date:"yyyy/MM/dd"}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Code client</label>
+            <label class="details-label">{{file?.contact.codeClient}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Nombre des prestations erronées</label>
+            <label class="label-wrong">{{file?.number_wrong_commands}} </label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Nombre des prestations validées</label>
+            <label class="label-success">{{file?.number_correct_commands}}</label>
+          </div>
+        </base-card-body>
+      </base-card>
+      <div style='text-align: center;'
+        class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+        <button [disabled]="fileWrong?.rows?.length>0 || file?.wrongCommands !== '_'" (click)="sendFileToUrbantz()"
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
+          à Urbantz
+        </button>
+      </div>
+    </div>
+
+    <div class="content-labels">
+      <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+        <base-card-title>
+          <label class="label-success">Prestations validées</label>
+        </base-card-title>
+        <base-card-body class="content-file-line">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Afficher Log
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
+                [show]="showValid"></app-loader>
+              <div *ngIf="fileValid?.columns" class="content-table">
+
+                <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
+                  <thead>
+                    <tr>
+                      <th *ngFor="let row of fileValid?.columns ; let i = index"
+                        class="details-line mdl-data-table__cell--non-numeric">
+                        <span>{{row}}</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of fileValid?.rows  | slice:0:limit; let i = index;">
+                      <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
+                        [ngClass]="(j==9 || j==10 || j==11 ||j==16 || j==21)?'remarque-column':'full-column'"
+                        class="details-line mdl-data-table__cell--non-numeric">
+                        <label
+                          [ngClass]="(j==4 || j==5|| j==6||j==7 || j==12  )?'mini-column':'full-column'">{{column}}</label>
+                      </td>
+                    </tr>
+                  </tbody>
+
+                </table>
+              </div>
+            </mat-expansion-panel>
+
+          </mat-accordion>
+        </base-card-body>
+      </base-card>
+
+    </div>
+    <div>
+      <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+        <base-card-title>
+          <label class="label-wrong">Prestations erronées</label>
+        </base-card-title>
+        <base-card-body class="content-file-line">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Afficher Log
+                </mat-panel-title>
+                <mat-panel-description>
+                  <button (click)='correctionFile();$event.stopPropagation();' [disabled]=" file?.wrongCommands == '_'"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
+                  </button>
+                  <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser les filtres
                 </button>
-            </div>
-        </div>
-
-        <div class="content-labels">
-            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-                <base-card-title>
-                    <label class="label-success">Prestations validées</label>
-                </base-card-title>
-                <base-card-body class="content-file-line">
-                    <mat-accordion>
-                        <mat-expansion-panel hideToggle  >
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Afficher Log
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-                            <app-loader [width]="'94%'" [position]="'initial'"  [height]="'0%'" [bg]="'transparant'" [show]="showValid"></app-loader> 
-                            <div *ngIf="fileValid?.columns" class="content-table">
-
-                                <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
-                                    <thead>
-                                        <tr>
-                                            <th *ngFor="let row of fileValid?.columns ; let i = index"
-                                                class="details-line mdl-data-table__cell--non-numeric">
-                                                <span>{{row}}</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of fileValid?.rows  | slice:0:limit; let i = index;">
-                                            <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
-                                                [ngClass]="(j==9 || j==10 || j==11 ||j==16 || j==21)?'remarque-column':'full-column'"
-                                                class="details-line mdl-data-table__cell--non-numeric" >
-                                                <label 
-                                                    [ngClass]="(j==4 || j==5|| j==6||j==7 || j==12  )?'mini-column':'full-column'"
-                                                   >{{column}}</label>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-
-                                </table>
-                            </div>
-                        </mat-expansion-panel>
-
-                    </mat-accordion>
-                </base-card-body>
-            </base-card>
-
-        </div>
-        <div>
-            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-                <base-card-title>
-                    <label class="label-wrong">Prestations erronées</label>
-                </base-card-title>
-                <base-card-body class="content-file-line">
-                    <mat-accordion>
-                        <mat-expansion-panel hideToggle >
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Afficher Log
-                                </mat-panel-title>
-                                <mat-panel-description>
-                                    <button (click)='correctionFile();$event.stopPropagation();'
-                                        [disabled]=" file?.wrongCommands == '_'"
-                                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-                                    </button>
-                                </mat-panel-description>
-                            </mat-expansion-panel-header>
-                            <app-loader [width]="'94%'" [position]="'initial'"  [height]="'0%'" [bg]="'transparant'" [show]="showWrong"></app-loader> 
-                            <div *ngIf="copyFileWrong" class="content-table">
-                                <table mat-table  [dataSource]="copyFileWrong" class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
-                                    <!-- <thead>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
+                [show]="showWrong"></app-loader>
+              <div *ngIf="copyFileWrong" class="content-table">
+                <table mat-table [dataSource]="copyFileWrong"
+                  class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
+                  <!-- <thead>
                                         <tr>
                                             <th *ngFor="let row of fileWrong?.columns ; let i = index"
                                                 class="details-line mdl-data-table__cell--non-numeric">
@@ -129,166 +131,619 @@
                                             </td>
                                         </tr>
                                     </tbody> -->
-                                    <ng-container matColumnDef="Remarque">
-                                        <th  mat-header-cell *matHeaderCellDef> Remarque </th>
-                                        <td mat-cell *matCellDef="let element" class="label-remarque"> {{element.Remarque}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="RefClient">
-                                        <th  mat-header-cell *matHeaderCellDef> RefClient </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 1, 'RefClient')" (mouseup)="onMouseUp(i, 1, 'RefClient')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}"
-                                        
-                                        > {{element.RefClient}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Expediteur">
-                                        <th mat-header-cell *matHeaderCellDef> Expediteur </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 2, 'Expediteur')" (mouseup)="onMouseUp(i, 2, 'Expediteur')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}"> {{element.Expediteur}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Type">
-                                        <th mat-header-cell *matHeaderCellDef> Type </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 3, 'Type')" (mouseup)="onMouseUp(i, 3, 'Type')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}"> {{element.Type}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Date_livraison">
-                                        <th mat-header-cell *matHeaderCellDef> Date_livraison </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 4, 'Date_livraison')" (mouseup)="onMouseUp(i, 4, 'Date_livraison')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}"> {{element.Date_livraison}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Start">
-                                        <th mat-header-cell *matHeaderCellDef> Start </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 5, 'Start')" (mouseup)="onMouseUp(i, 5, 'Start')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}"> {{element.Start}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="End">
-                                        <th mat-header-cell *matHeaderCellDef> End </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 6, 'End')" (mouseup)="onMouseUp(i, 6, 'End')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}"> {{element.End}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Labels">
-                                        <th mat-header-cell *matHeaderCellDef> Labels </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 7, 'Labels')" (mouseup)="onMouseUp(i, 7, 'Labels')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}"> {{element.Labels}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Quantite">
-                                        <th mat-header-cell *matHeaderCellDef> Quantite </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 8, 'Quantite')" (mouseup)="onMouseUp(i, 8, 'Quantite')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}"> {{element.Quantite}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="CodeArticle">
-                                        <th mat-header-cell *matHeaderCellDef> CodeArticle </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 9, 'CodeArticle')" (mouseup)="onMouseUp(i, 9, 'CodeArticle')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9]}"> {{element.CodeArticle}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Nom_destinataire">
-                                        <th mat-header-cell *matHeaderCellDef> Nom_destinataire </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 10, 'Nom_destinataire')" (mouseup)="onMouseUp(i, 10, 'Nom_destinataire')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10]}"> {{element.Nom_destinataire}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="rue">
-                                        <th mat-header-cell *matHeaderCellDef> rue </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 11, 'rue')" (mouseup)="onMouseUp(i, 11, 'rue')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}"> {{element.rue}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="ville">
-                                        <th mat-header-cell *matHeaderCellDef> ville </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 12, 'ville')" (mouseup)="onMouseUp(i, 12, 'ville')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}"> {{element.ville}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="CP">
-                                        <th mat-header-cell *matHeaderCellDef> CP </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 13, 'CP')" (mouseup)="onMouseUp(i, 13, 'CP')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13]}"> {{element.CP}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Adresse2">
-                                        <th mat-header-cell *matHeaderCellDef> Adresse2 </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 14, 'Adresse2')" (mouseup)="onMouseUp(i, 14, 'Adresse2')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][14], 'unselected': !selectedCellsState[i][14]}"> {{element.Adresse2}} </td>
-                                      </ng-container>
 
-                                       <ng-container matColumnDef="CODE_interphone">
-                                        <th mat-header-cell *matHeaderCellDef> CODE_interphone </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 15, 'CODE_interphone')" (mouseup)="onMouseUp(i, 15, 'CODE_interphone')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][15]}"> {{element.CODE_interphone}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Etage">
-                                        <th mat-header-cell *matHeaderCellDef> Etage </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 16, 'Etage')" (mouseup)="onMouseUp(i, 16, 'CODE_interphone')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][16], 'unselected': !selectedCellsState[i][16]}"> {{element.Etage}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Porte">
-                                        <th mat-header-cell *matHeaderCellDef> Porte </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 17, 'Porte')" (mouseup)="onMouseUp(i, 17, 'Porte')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][17], 'unselected': !selectedCellsState[i][17]}"> {{element.Porte}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Instructions">
-                                        <th mat-header-cell *matHeaderCellDef> Instructions </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 18, 'Instructions')" (mouseup)="onMouseUp(i, 18, 'Instructions')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][18], 'unselected': !selectedCellsState[i][18]}"> {{element.Instructions}} </td>
-                                      </ng-container>
+                  <ng-container matColumnDef="Remarque">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Remarque
+                      <!-- <select class="filter-column" matNativeControl name="{{options[0].columnProp}}"
+                        [(ngModel)]="options[0].modelValue" (change)="setFilteredItemsOptions(options[0],$event)">
+                        <option value="">-- Select {{options[0].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[0].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[0].columnProp}}"
+                        [(ngModel)]="options[0].modelValue" (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+                          <mat-option value="">-- Select {{options[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[0].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="label-remarque"> {{element.Remarque}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="RefClient">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> RefClient
 
-                                      <ng-container matColumnDef="Telephone">
-                                        <th mat-header-cell *matHeaderCellDef> Telephone </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 19, 'Telephone')" (mouseup)="onMouseUp(i, 19, 'Telephone')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][19], 'unselected': !selectedCellsState[i][19]}"> {{element.Telephone}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Tel2">
-                                        <th mat-header-cell *matHeaderCellDef> Tel2 </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 20, 'Tel2')" (mouseup)="onMouseUp(i, 20, 'Tel2')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][20], 'unselected': !selectedCellsState[i][20]}"> {{element.Tel2}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Tel3">
-                                        <th mat-header-cell *matHeaderCellDef> Tel3 </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 21, 'Tel3')" (mouseup)="onMouseUp(i, 21, 'Tel3')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][21], 'unselected': !selectedCellsState[i][21]}"> {{element.Tel3}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="email">
-                                        <th mat-header-cell *matHeaderCellDef> email </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 22, 'email')" (mouseup)="onMouseUp(i, 22, 'email')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][22], 'unselected': !selectedCellsState[i][22]}"> {{element.email}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Ref_commande">
-                                        <th mat-header-cell *matHeaderCellDef> Ref_commande </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 23, 'Ref_commande')" (mouseup)="onMouseUp(i, 23, 'Ref_commande')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][23], 'unselected': !selectedCellsState[i][23]}"> {{element.Ref_commande}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Ref2">
-                                        <th mat-header-cell *matHeaderCellDef> Ref2 </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 24, 'Ref2')" (mouseup)="onMouseUp(i, 24, 'Ref2')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][24], 'unselected': !selectedCellsState[i][24]}"> {{element.Ref2}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Ref3">
-                                        <th mat-header-cell *matHeaderCellDef> Ref3 </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 25, 'Ref3')" (mouseup)="onMouseUp(i, 25, 'Ref3')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][25], 'unselected': !selectedCellsState[i][25]}"> {{element.Ref3}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Code_barres">
-                                        <th mat-header-cell *matHeaderCellDef> Code_barres </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 26, 'Code_barres')" (mouseup)="onMouseUp(i, 26, 'Code_barres')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][26], 'unselected': !selectedCellsState[i][26]}"> {{element.Code_barres}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Nom_tournee">
-                                        <th mat-header-cell *matHeaderCellDef> Nom_tournee </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 27, 'Nom_tournee')" (mouseup)="onMouseUp(i, 27, 'Nom_tournee')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][27], 'unselected': !selectedCellsState[i][27]}"> {{element.Nom_tournee}} </td>
-                                      </ng-container>
-                                      <ng-container matColumnDef="Arret">
-                                        <th mat-header-cell *matHeaderCellDef> Arret </th>
-                                        <td mat-cell (mousedown)="onMouseDown(i, 28, 'Arret')" (mouseup)="onMouseUp(i, 28, 'Arret')" *matCellDef="let element; let i = index"
-                                        [ngClass]="{'selected': selectedCellsState[i][28], 'unselected': !selectedCellsState[i][28]}"> {{element.Arret}} </td>
-                                      </ng-container>
-                                      
-                                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                                </table>
-                            </div>
-                        </mat-expansion-panel>
+                      <!-- <select class="filter-column" matNativeControl name="{{options[1].columnProp}}"
+                        [(ngModel)]="options[1].modelValue" (change)="setFilteredItemsOptions(options[1],$event)">
+                        <option value="">-- Select {{options[1].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[1].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[1].columnProp}}"
+                        [(ngModel)]="options[1].modelValue" (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                          <mat-option value="">-- Select {{options[1].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[1].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 1, 'RefClient')" (mouseup)="onMouseUp(i, 1, 'RefClient')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
+                      {{element.RefClient}} </td>
+                  </ng-container>
 
-                    </mat-accordion>
-                </base-card-body>
-            </base-card>
 
-        </div>
+                  <ng-container matColumnDef="Expediteur">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+
+                      <!-- <select class="filter-column" matNativeControl name="{{options[2].columnProp}}"
+                        [(ngModel)]="options[2].modelValue" (change)="setFilteredItemsOptions(options[2],$event)">
+                        <option value="">-- Select {{options[2].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[2].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[2].columnProp}}"
+                        [(ngModel)]="options[2].modelValue" (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+                          <mat-option value="">-- Select {{options[2].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[2].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 2, 'Expediteur')" (mouseup)="onMouseUp(i, 2, 'Expediteur')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
+                      {{element.Expediteur}} </td>
+                  </ng-container>
+
+
+                  <ng-container matColumnDef="Type">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type
+
+                      <!-- <select class="filter-column" matNativeControl name="{{options[3].columnProp}}"
+                        [(ngModel)]="options[3].modelValue" (change)="setFilteredItemsOptions(options[3],$event)">
+                        <option value="">-- Select {{options[3].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[3].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[3].columnProp}}"
+                        [(ngModel)]="options[3].modelValue" (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+                          <mat-option value="">-- Select {{options[3].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[3].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 3, 'Type')" (mouseup)="onMouseUp(i, 3, 'Type')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
+                      {{element.Type}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Date_livraison">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date_livraison
+
+                      <!-- <select class="filter-column" matNativeControl name="{{options[4].columnProp}}"
+                        [(ngModel)]="options[4].modelValue" (change)="setFilteredItemsOptions(options[4],$event)">
+                        <option value="">-- Select {{options[4].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[4].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[4].columnProp}}"
+                        [(ngModel)]="options[4].modelValue" (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+                          <mat-option value="">-- Select {{options[4].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[4].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 4, 'Date_livraison')"
+                      (mouseup)="onMouseUp(i, 4, 'Date_livraison')" *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
+                      {{element.Date_livraison}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Start">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Start
+
+                      <!-- <select class="filter-column" matNativeControl name="{{options[5].columnProp}}"
+                        [(ngModel)]="options[5].modelValue" (change)="setFilteredItemsOptions(options[5],$event)">
+                        <option value="">-- Select {{options[5].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[5].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[5].columnProp}}"
+                        [(ngModel)]="options[5].modelValue" (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+                          <mat-option value="">-- Select {{options[5].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[5].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 5, 'Start')" (mouseup)="onMouseUp(i, 5, 'Start')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
+                      {{element.Start}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="End">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> End
+                      <!-- <select class="filter-column" matNativeControl name="{{options[6].columnProp}}"
+                        [(ngModel)]="options[6].modelValue" (change)="setFilteredItemsOptions(options[6],$event)">
+                        <option value="">-- Select {{options[6].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[6].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[6].columnProp}}"
+                        [(ngModel)]="options[6].modelValue" (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+                          <mat-option value="">-- Select {{options[6].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[6].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 6, 'End')" (mouseup)="onMouseUp(i, 6, 'End')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
+                      {{element.End}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Labels">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Labels
+                      <!-- <select class="filter-column" matNativeControl name="{{options[7].columnProp}}"
+                        [(ngModel)]="options[7].modelValue" (change)="setFilteredItemsOptions(options[7],$event)">
+                        <option value="">-- Select {{options[7].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[7].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[7].columnProp}}"
+                        [(ngModel)]="options[7].modelValue" (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+                          <mat-option value="">-- Select {{options[7].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[7].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 7, 'Labels')" (mouseup)="onMouseUp(i, 7, 'Labels')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
+                      {{element.Labels}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Quantite">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Quantite
+                      <!-- <select class="filter-column" matNativeControl name="{{options[8].columnProp}}"
+                        [(ngModel)]="options[8].modelValue" (change)="setFilteredItemsOptions(options[8],$event)">
+                        <option value="">-- Select {{options[8].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[8].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[8].columnProp}}"
+                        [(ngModel)]="options[8].modelValue" (selectionChange)="setFilteredItemsOptions(options[8],$event)">
+                          <mat-option value="">-- Select {{options[8].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[8].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 8, 'Quantite')" (mouseup)="onMouseUp(i, 8, 'Quantite')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}">
+                      {{element.Quantite}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="CodeArticle">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> CodeArticle
+
+                      <!-- <select class="filter-column" matNativeControl name="{{options[9].columnProp}}"
+                        [(ngModel)]="options[9].modelValue" (change)="setFilteredItemsOptions(options[9],$event)">
+                        <option value="">-- Select {{options[9].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[9].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[9].columnProp}}"
+                        [(ngModel)]="options[9].modelValue" (selectionChange)="setFilteredItemsOptions(options[9],$event)">
+                          <mat-option value="">-- Select {{options[9].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[9].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 9, 'CodeArticle')"
+                      (mouseup)="onMouseUp(i, 9, 'CodeArticle')" *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9]}">
+                      {{element.CodeArticle}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Nom_destinataire">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Nom_destinataire
+                      <!-- <select class="filter-column" matNativeControl name="{{options[10].columnProp}}"
+                        [(ngModel)]="options[10].modelValue" (change)="setFilteredItemsOptions(options[10],$event)">
+                        <option value="">-- Select {{options[10].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[10].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[10].columnProp}}"
+                        [(ngModel)]="options[10].modelValue" (selectionChange)="setFilteredItemsOptions(options[10],$event)">
+                          <mat-option value="">-- Select {{options[10].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[10].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 10, 'Nom_destinataire')"
+                      (mouseup)="onMouseUp(i, 10, 'Nom_destinataire')" *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10]}">
+                      {{element.Nom_destinataire}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="rue">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> rue
+                      <!-- <select class="filter-column" matNativeControl name="{{options[11].columnProp}}"
+                        [(ngModel)]="options[11].modelValue" (change)="setFilteredItemsOptions(options[11],$event)">
+                        <option value="">-- Select {{options[11].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[11].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[11].columnProp}}"
+                        [(ngModel)]="options[11].modelValue" (selectionChange)="setFilteredItemsOptions(options[11],$event)">
+                          <mat-option value="">-- Select {{options[11].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[11].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 11, 'rue')" (mouseup)="onMouseUp(i, 11, 'rue')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}">
+                      {{element.rue}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="ville">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ville
+                      <!-- <select class="filter-column" matNativeControl name="{{options[12].columnProp}}"
+                        [(ngModel)]="options[12].modelValue" (change)="setFilteredItemsOptions(options[12],$event)">
+                        <option value="">-- Select {{options[12].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[12].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[12].columnProp}}"
+                        [(ngModel)]="options[12].modelValue" (selectionChange)="setFilteredItemsOptions(options[12],$event)">
+                          <mat-option value="">-- Select {{options[12].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[12].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 12, 'ville')" (mouseup)="onMouseUp(i, 12, 'ville')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}">
+                      {{element.ville}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="CP">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> CP
+                      <!-- <select class="filter-column" matNativeControl name="{{options[13].columnProp}}"
+                        [(ngModel)]="options[13].modelValue" (change)="setFilteredItemsOptions(options[13],$event)">
+                        <option value="">-- Select {{options[13].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[13].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[13].columnProp}}"
+                        [(ngModel)]="options[13].modelValue" (selectionChange)="setFilteredItemsOptions(options[13],$event)">
+                          <mat-option value="">-- Select {{options[13].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[13].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 13, 'CP')" (mouseup)="onMouseUp(i, 13, 'CP')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13]}">
+                      {{element.CP}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Adresse2">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Adresse2
+                      <!-- <select class="filter-column" matNativeControl name="{{options[14].columnProp}}"
+                        [(ngModel)]="options[14].modelValue" (change)="setFilteredItemsOptions(options[14],$event)">
+                        <option value="">-- Select {{options[14].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[14].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[14].columnProp}}"
+                        [(ngModel)]="options[14].modelValue" (selectionChange)="setFilteredItemsOptions(options[14],$event)">
+                          <mat-option value="">-- Select {{options[14].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[14].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 14, 'Adresse2')" (mouseup)="onMouseUp(i, 14, 'Adresse2')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][14], 'unselected': !selectedCellsState[i][14]}">
+                      {{element.Adresse2}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="CODE_interphone">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> CODE_interphone
+
+                      <!-- <select class="filter-column" matNativeControl name="{{options[15].columnProp}}"
+                        [(ngModel)]="options[15].modelValue" (change)="setFilteredItemsOptions(options[15],$event)">
+                        <option value="">-- Select {{options[15].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[15].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[15].columnProp}}"
+                        [(ngModel)]="options[15].modelValue" (selectionChange)="setFilteredItemsOptions(options[15],$event)">
+                          <mat-option value="">-- Select {{options[15].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[15].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 15, 'CODE_interphone')"
+                      (mouseup)="onMouseUp(i, 15, 'CODE_interphone')" *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][15]}">
+                      {{element.CODE_interphone}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Etage">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Etage
+
+                      <!-- <select class="filter-column" matNativeControl name="{{options[16].columnProp}}"
+                        [(ngModel)]="options[16].modelValue" (change)="setFilteredItemsOptions(options[16],$event)">
+                        <option value="">-- Select {{options[16].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[16].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[16].columnProp}}"
+                        [(ngModel)]="options[16].modelValue" (selectionChange)="setFilteredItemsOptions(options[16],$event)">
+                          <mat-option value="">-- Select {{options[16].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[16].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 16, 'Etage')"
+                      (mouseup)="onMouseUp(i, 16, 'CODE_interphone')" *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][16], 'unselected': !selectedCellsState[i][16]}">
+                      {{element.Etage}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Porte">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Porte
+                      <!-- <select class="filter-column" matNativeControl name="{{options[17].columnProp}}"
+                        [(ngModel)]="options[17].modelValue" (change)="setFilteredItemsOptions(options[17],$event)">
+                        <option value="">-- Select {{options[17].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[17].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[17].columnProp}}"
+                        [(ngModel)]="options[17].modelValue" (selectionChange)="setFilteredItemsOptions(options[17],$event)">
+                          <mat-option value="">-- Select {{options[17].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[17].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 17, 'Porte')" (mouseup)="onMouseUp(i, 17, 'Porte')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][17], 'unselected': !selectedCellsState[i][17]}">
+                      {{element.Porte}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Instructions">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Instructions
+
+                      <!-- <select class="filter-column" matNativeControl name="{{options[18].columnProp}}"
+                        [(ngModel)]="options[18].modelValue" (change)="setFilteredItemsOptions(options[18],$event)">
+                        <option value="">-- Select {{options[18].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[18].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[18].columnProp}}"
+                        [(ngModel)]="options[18].modelValue" (selectionChange)="setFilteredItemsOptions(options[18],$event)">
+                          <mat-option value="">-- Select {{options[18].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[18].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 18, 'Instructions')"
+                      (mouseup)="onMouseUp(i, 18, 'Instructions')" *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][18], 'unselected': !selectedCellsState[i][18]}">
+                      {{element.Instructions}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Telephone">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Telephone
+                      <!-- <select class="filter-column" matNativeControl name="{{options[19].columnProp}}"
+                        [(ngModel)]="options[19].modelValue" (change)="setFilteredItemsOptions(options[19],$event)">
+                        <option value="">-- Select {{options[19].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[19].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[19].columnProp}}"
+                        [(ngModel)]="options[19].modelValue" (selectionChange)="setFilteredItemsOptions(options[19],$event)">
+                          <mat-option value="">-- Select {{options[19].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[19].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 19, 'Telephone')" (mouseup)="onMouseUp(i, 19, 'Telephone')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][19], 'unselected': !selectedCellsState[i][19]}">
+                      {{element.Telephone}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Tel2">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Tel2
+                      <!-- <select class="filter-column" matNativeControl name="{{options[20].columnProp}}"
+                        [(ngModel)]="options[20].modelValue" (change)="setFilteredItemsOptions(options[20],$event)">
+                        <option value="">-- Select {{options[20].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[20].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[20].columnProp}}"
+                        [(ngModel)]="options[20].modelValue" (selectionChange)="setFilteredItemsOptions(options[20],$event)">
+                          <mat-option value="">-- Select {{options[20].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[20].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 20, 'Tel2')" (mouseup)="onMouseUp(i, 20, 'Tel2')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][20], 'unselected': !selectedCellsState[i][20]}">
+                      {{element.Tel2}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Tel3">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Tel3
+
+                      <!-- <select class="filter-column" matNativeControl name="{{options[21].columnProp}}"
+                        [(ngModel)]="options[21].modelValue" (change)="setFilteredItemsOptions(options[21],$event)">
+                        <option value="">-- Select {{options[21].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[21].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[21].columnProp}}"
+                        [(ngModel)]="options[21].modelValue" (selectionChange)="setFilteredItemsOptions(options[21],$event)">
+                          <mat-option value="">-- Select {{options[21].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[21].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 21, 'Tel3')" (mouseup)="onMouseUp(i, 21, 'Tel3')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][21], 'unselected': !selectedCellsState[i][21]}">
+                      {{element.Tel3}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="email">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> email
+                      <!-- <select class="filter-column" matNativeControl name="{{options[22].columnProp}}"
+                        [(ngModel)]="options[22].modelValue" (change)="setFilteredItemsOptions(options[22],$event)">
+                        <option value="">-- Select {{options[22].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[22].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[22].columnProp}}"
+                        [(ngModel)]="options[22].modelValue" (selectionChange)="setFilteredItemsOptions(options[22],$event)">
+                          <mat-option value="">-- Select {{options[22].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[22].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 22, 'email')" (mouseup)="onMouseUp(i, 22, 'email')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][22], 'unselected': !selectedCellsState[i][22]}">
+                      {{element.email}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Ref_commande">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Ref_commande
+                      <!-- <select class="filter-column" matNativeControl name="{{options[23].columnProp}}"
+                        [(ngModel)]="options[23].modelValue" (change)="setFilteredItemsOptions(options[23],$event)">
+                        <option value="">-- Select {{options[23].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[23].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[23].columnProp}}"
+                        [(ngModel)]="options[23].modelValue" (selectionChange)="setFilteredItemsOptions(options[23],$event)">
+                          <mat-option value="">-- Select {{options[23].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[23].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 23, 'Ref_commande')"
+                      (mouseup)="onMouseUp(i, 23, 'Ref_commande')" *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][23], 'unselected': !selectedCellsState[i][23]}">
+                      {{element.Ref_commande}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Ref2">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Ref2
+                      <!-- <select class="filter-column" matNativeControl name="{{options[24].columnProp}}"
+                        [(ngModel)]="options[24].modelValue" (change)="setFilteredItemsOptions(options[24],$event)">
+                        <option value="">-- Select {{options[24].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[24].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[24].columnProp}}"
+                        [(ngModel)]="options[24].modelValue" (selectionChange)="setFilteredItemsOptions(options[24],$event)">
+                          <mat-option value="">-- Select {{options[24].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[24].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 24, 'Ref2')" (mouseup)="onMouseUp(i, 24, 'Ref2')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][24], 'unselected': !selectedCellsState[i][24]}">
+                      {{element.Ref2}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Ref3">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Ref3
+                      <!-- <select class="filter-column" matNativeControl name="{{options[25].columnProp}}"
+                        [(ngModel)]="options[25].modelValue" (change)="setFilteredItemsOptions(options[25],$event)">
+                        <option value="">-- Select {{options[25].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[25].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[25].columnProp}}"
+                        [(ngModel)]="options[25].modelValue" (selectionChange)="setFilteredItemsOptions(options[25],$event)">
+                          <mat-option value="">-- Select {{options[25].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[25].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 25, 'Ref3')" (mouseup)="onMouseUp(i, 25, 'Ref3')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][25], 'unselected': !selectedCellsState[i][25]}">
+                      {{element.Ref3}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Code_barres">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_barres
+                      <!-- <select class="filter-column" matNativeControl name="{{options[26].columnProp}}"
+                        [(ngModel)]="options[26].modelValue" (change)="setFilteredItemsOptions(options[26],$event)">
+                        <option value="">-- Select {{options[26].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[26].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[26].columnProp}}"
+                        [(ngModel)]="options[26].modelValue" (selectionChange)="setFilteredItemsOptions(options[26],$event)">
+                          <mat-option value="">-- Select {{options[26].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[26].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 26, 'Code_barres')"
+                      (mouseup)="onMouseUp(i, 26, 'Code_barres')" *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][26], 'unselected': !selectedCellsState[i][26]}">
+                      {{element.Code_barres}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Nom_tournee">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Nom_tournee
+                      <!-- <select class="filter-column" matNativeControl name="{{options[27].columnProp}}"
+                        [(ngModel)]="options[27].modelValue" (change)="setFilteredItemsOptions(options[27],$event)">
+                        <option value="">-- Select {{options[27].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[27].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[27].columnProp}}"
+                        [(ngModel)]="options[27].modelValue" (selectionChange)="setFilteredItemsOptions(options[27],$event)">
+                          <mat-option value="">-- Select {{options[27].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[27].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 27, 'Nom_tournee')"
+                      (mouseup)="onMouseUp(i, 27, 'Nom_tournee')" *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][27], 'unselected': !selectedCellsState[i][27]}">
+                      {{element.Nom_tournee}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Arret">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Arret
+                      <!-- <select class="filter-column" matNativeControl name="{{options[28].columnProp}}"
+                        [(ngModel)]="options[28].modelValue" (change)="setFilteredItemsOptions(options[28],$event)">
+                        <option value="">-- Select {{options[28].columnProp}}--</option>
+                        <option [value]="item" *ngFor="let item of options[28].options"><label>{{item}}</label></option>
+                      </select> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[28].columnProp}}"
+                        [(ngModel)]="options[28].modelValue" (selectionChange)="setFilteredItemsOptions(options[28],$event)">
+                          <mat-option value="">-- Select {{options[28].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[28].options"><label>{{item}}</label></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell (mousedown)="onMouseDown(i, 28, 'Arret')" (mouseup)="onMouseUp(i, 28, 'Arret')"
+                      *matCellDef="let element; let i = index"
+                      [ngClass]="{'selected': selectedCellsState[i][28], 'unselected': !selectedCellsState[i][28]}">
+                      {{element.Arret}} </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns">
+
+                  </tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+
+          </mat-accordion>
+        </base-card-body>
+      </base-card>
 
     </div>
+
+  </div>
 </div>

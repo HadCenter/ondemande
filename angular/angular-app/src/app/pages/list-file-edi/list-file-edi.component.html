@@ -40,7 +40,7 @@
           <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
             <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a [matTooltip]=row.fileName
                 matTooltipClass="tooltip-custom">{{row.fileName}} </a></td>
-            <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"yyyy/MM/dd 'à' HH:mm"}}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"yyyy/MM/dd 'à' HH:mm":'UTC'  }}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.contact.nomClient}}</td>
 
             <!-- <td *ngIf="row.wrongCommands !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a

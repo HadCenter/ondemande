@@ -334,6 +334,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
 
     }
+    /*******modif en masse intialise seletion */
+    this.copyFileWrong.forEach(element => {
+      this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 2 }, () => false))
+    });
   }
 
   /**
@@ -349,11 +353,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   resetFiltre(){
-    // this.filterValues=[];
+    // deselectionner all select
     this.filterValues.forEach((value, key) => {
       value.modelValue = undefined;
     })
-    this.filterValues=[]
+    this.filterValues=[];
+
     this.copyFileWrong = this.testFile;
     this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
     // console.warn(this.filterValues)

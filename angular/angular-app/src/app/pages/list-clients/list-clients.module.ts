@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ListClientsRoutingModule } from './list-clients-routing.module';
-import { DetailsClientComponent, ListClientsComponent } from './list-clients.component';
+import { DetailsClientComponent, ListClientsComponent, TokenClientComponent } from './list-clients.component';
 import { ListClientsService } from './list-clients.service';
 import { ThemeModule } from 'theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,7 +26,7 @@ import { DetailsClientService } from './details-client/details-client.service';
 
 
 @NgModule({
-  declarations: [ListClientsComponent, DetailsClientComponent, DialogBodyComponent],
+  declarations: [ListClientsComponent, DetailsClientComponent, DialogBodyComponent, TokenClientComponent],
   imports: [
     CommonModule,
     ListClientsRoutingModule,
@@ -43,7 +43,7 @@ import { DetailsClientService } from './details-client/details-client.service';
     MatGridListModule,
     LoaderModule,
   ],
-  entryComponents: [DialogBodyComponent, DetailsClientComponent],
+  entryComponents: [DialogBodyComponent, DetailsClientComponent, TokenClientComponent],
   providers: [
     ListClientsService,
     CreateClientService,

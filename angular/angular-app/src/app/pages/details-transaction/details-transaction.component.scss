@@ -39,7 +39,7 @@ body {
     @media (max-width: 479px) {
         .content-file-edi{
           display: list-item;
-          padding-left: 10px; 
+          padding-left: 10px;
            padding-right: 10px;
         }
         .container-transaction {
@@ -90,7 +90,7 @@ body {
       .mat-expansion-panel{
         background: transparent;
     }
-  
+
   mat-panel-title.mat-expansion-panel-header-title {
       color: white;
   }
@@ -103,3 +103,9 @@ body {
 .content-file-line{
     padding: 20px 16px !important;
   }
+
+#conteneur
+{
+    display: flex;
+    justify-content: space-between;
+}

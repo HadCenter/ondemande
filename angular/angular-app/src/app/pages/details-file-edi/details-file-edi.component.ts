@@ -3,6 +3,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
+import {SelectionModel} from '@angular/cdk/collections';
+import {MatTableDataSource} from '@angular/material/table';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 export interface MouseEvent {
   rowId: number;
@@ -16,6 +19,8 @@ export interface MouseEvent {
   styleUrls: ['./details-file-edi.component.scss']
 })
 export class DetailsFileEdiComponent extends UpgradableComponent implements OnInit {
+  selection = new SelectionModel<any>(true, []);
+  dataSource :any;
   file: any;
   fileWrong: any = [];
   fileValid: any;
@@ -66,7 +71,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     if (this.tableMouseDown && this.tableMouseUp) {
       if (this.tableMouseDown.cellsType === this.tableMouseUp.cellsType) {
         //convert every rows to object
-        const dataCopy = this.copyFileWrong.slice();// copy and mutate
+        const dataCopy = this.copyFileWrong.data.slice();// copy and mutate
         console.warn(dataCopy)
         let startCol: number;
         let endCol: number;
@@ -108,8 +113,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         }
         console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
-        this.copyFileWrong = dataCopy;
-        console.warn('****result', this.copyFileWrong)
+        this.copyFileWrong.data = dataCopy;
+        console.warn('****result', this.copyFileWrong.data)
 
       } else {
         this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'OK');
@@ -144,7 +149,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         this.newCellValue = '';
         this.updateSelectedCellsState(this.tableMouseDown.colId, this.tableMouseUp.colId, this.tableMouseDown.rowId, this.tableMouseUp.rowId);
       }
-    } 
+    }
     else {  //disable click after click correction
       return false;
     }
@@ -235,6 +240,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   customTrackBy(index: number, obj: any) {
     return index;
   }
+  public onCheckboxStateChange(changeEvent: MatCheckboxChange, id: number) {
+    if(changeEvent.checked === true)
+    {
+      this.selection.select(id);
+    }else{
+      this.selection.deselect(id);
+    }
+}
 
   getWrongFile() {
     var data = {
@@ -245,17 +258,20 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       console.warn(res)
       this.fileWrong = res;
       this.MoveLastElementToTheStart();
-      //create a copy array of object from the res and an array of displayed column 
-      this.copyFileWrong = JSON.parse(JSON.stringify(this.fileWrong));
-      this.copyFileWrong.rows.splice(0, 0, this.copyFileWrong.columns);
-      this.copyFileWrong = this.convertToArrayOfObjects(this.copyFileWrong.rows);
-      this.displayedColumns = (Object.keys(this.copyFileWrong[0]))
+      //create a copy array of object from the res and an array of displayed column
+      this.dataSource = JSON.parse(JSON.stringify(this.fileWrong));
+      this.dataSource.rows.splice(0, 0, this.dataSource.columns);
+      this.dataSource = this.convertToArrayOfObjects(this.dataSource.rows);
+      this.displayedColumns = (Object.keys(this.dataSource[0]));
+      const column_remarque_id = this.displayedColumns.pop(); // remove column remarque_id
+      this.displayedColumns.splice(1, 0, "select"); // add column select
+      this.copyFileWrong = new MatTableDataSource<any>(this.dataSource); // copyFileWrong doit etre de type MatTableDataSource pour ajouter checkbox
       //
       this.showWrong = false;
-      this.LAST_EDITABLE_ROW = this.copyFileWrong.length - 1;
+      this.LAST_EDITABLE_ROW = this.copyFileWrong.data.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
       // initialize all selectedCellsState to false
-      this.copyFileWrong.forEach(element => {
+      this.copyFileWrong.data.forEach(element => {
         this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 2 }, () => false))
       });
 
@@ -283,7 +299,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   MoveLastElementToTheStart() {
-    //Deplace column 
+    //Deplace column
     const prevColumn = [...this.fileWrong.columns]
     prevColumn.unshift(prevColumn.pop())
     this.fileWrong.columns = prevColumn;
@@ -293,7 +309,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       prevRows.unshift(prevRows.pop())
       this.fileWrong.rows[index] = prevRows;
     });
-    console.warn('***filewrong', this.fileWrong);
+    console.warn('***filewrong', this.fileWrong.columns);
   }
 
   getValidFile() {
@@ -333,26 +349,31 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   correctionFile() {
     this.clickCorrection = true;
-    let columns = Object.keys(this.copyFileWrong[0]);
-    let rows = this.copyFileWrong.map(Object.values);
+    let columns = Object.keys(this.copyFileWrong.data[0]);
+    let rows = this.copyFileWrong.data.map(Object.values);
     this.fileWrongUpdated = {
       columns: columns,
       rows: rows
     }
     this._fileWrong = JSON.parse(JSON.stringify(this.fileWrongUpdated));
-    //Disable input after click on correction
-
-    // var inputs = document.getElementsByTagName("input");
-    // for (var i = 0; i < inputs.length; i++) {
-    //   inputs[i].disabled = true;
-    // }
-    
     document.querySelector('.selected').classList.remove('selected');
     this._fileWrong.rows.forEach(element => {
-      element = element.shift();
-    });
-    if (this.fileWrong && this.fileValid) {
+      element.shift(); // remove remarque
+      element.pop(); // remove remarque_id
+      if(this.selection.selected.includes(this._fileWrong.rows.indexOf(element))){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
+        element.push(1); // add true (c'est à dire la ligne du tableau est séléctionnées)
+      }else{
+        element.push(0); // add fales (c'est à dire la ligne du tableau n'est pas séléctionnées)
+      }
 
+    });
+    this._fileWrong.columns.pop(); // remove column remarque_id
+    this._fileWrong.columns.push('selected'); //add column selected
+    if (this.fileWrong && this.fileValid) {
+      // boucle pour ajouter false à toutes les lignes du tableau fileValid
+      this.fileValid.rows.forEach(element => {
+        element.push(0);
+      });
       this.fileTocheck = {
         fileId: this.file.idFile,
         columns: this._fileWrong.columns.splice(1),

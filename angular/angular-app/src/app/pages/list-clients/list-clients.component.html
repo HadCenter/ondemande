@@ -38,6 +38,11 @@
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                 (click)="gotoDetails(row.idContact);$event.stopPropagation();">Détails
               </button>
+              &nbsp;
+              <button
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                (click)="openDialog(row.idContact);$event.stopPropagation();" *ngIf="user.role == 'SuperAdmin'">Key
+              </button>
             </td>
           </tr>
         </tbody>

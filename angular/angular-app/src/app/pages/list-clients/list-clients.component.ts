@@ -9,6 +9,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsClientService } from './details-client/details-client.service';
 // import { CreateClientService } from './dialog/create-client.service';
+import { AuthService } from '@services/*';
 
 export interface PeriodicElement {
   name: string;
@@ -23,6 +24,7 @@ export interface PeriodicElement {
   styleUrls: ['./list-clients.component.scss']
 })
 export class ListClientsComponent extends UpgradableComponent implements OnInit {
+  public user : any;
   public readonly Array = Array;
   public order: any;
   public snackAction = 'Ok';
@@ -39,12 +41,14 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   clients = [];
   show = true;
-  public constructor(private tablesService: ListClientsService,
+  public constructor(private authService: AuthService,private tablesService: ListClientsService,
     private router: Router,
     private _snackBar: MatSnackBar, private matDialog: MatDialog) {
     super();
   }
   ngOnInit(): void {
+    this.authService.userData.subscribe(
+      user => this.user = user);
     this.getClients();
   }
   public changePage(page, force = false) {
@@ -127,6 +131,13 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
       data: { id: id_client }
     });
   }
+  public openDialog(id_client)
+  {
+    const dialogRef = this.matDialog.open(TokenClientComponent, {
+      // width: '250px',
+      data: { id: id_client }
+    });
+  }
 
 }
 
@@ -173,6 +184,20 @@ export class DetailsClientComponent extends UpgradableComponent implements OnIni
         error => {
           console.log(error);
         });
+  }
+
+}
+
+@Component({
+  templateUrl: './token-client/token-client.component.html',
+  styleUrls: ['./token-client/token-client.component.css']
+})
+export class TokenClientComponent extends UpgradableComponent implements OnInit {
+
+  constructor(public dialogRef: MatDialogRef<TokenClientComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { super(); }
+
+  ngOnInit(): void {
   }
 
 }

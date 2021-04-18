@@ -104,34 +104,21 @@
                             <app-loader [width]="'94%'" [position]="'initial'"  [height]="'0%'" [bg]="'transparant'" [show]="showWrong"></app-loader> 
                             <div *ngIf="copyFileWrong" class="content-table">
                                 <table mat-table  [dataSource]="copyFileWrong" class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
-                                    <!-- <thead>
-                                        <tr>
-                                            <th *ngFor="let row of fileWrong?.columns ; let i = index"
-                                                class="details-line mdl-data-table__cell--non-numeric">
-                                                <span>{{row}}</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of fileWrong?.rows ; let i=index">
-                                            <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
-                                            (mousedown)="onMouseDown(i, j, fileWrong?.columns[j])"
-                                            (mouseup)="onMouseUp(i, j, fileWrong?.columns[j])"
-        [ngClass]="{'selected': selectedCellsState[i][j], 'unselected': !selectedCellsState[i][j+1]}"
-  
-                                                class="details-line mdl-data-table__cell--non-numeric">
-                                                <label *ngIf="j==0" class="label-remarque">{{item[j]}}</label>
-                                                
-
-                                                <input *ngIf="j!==0" name='{{item[j]}}'
-                                                    [ngClass]="( j==1 || j==5 ||j==6 || j==8||j==9|| j==13 )?'mini-column':'full-column'"
-                                                    type="text" [(ngModel)]="item[j]" class="mdl-textfield__input">
-                                            </td>
-                                        </tr>
-                                    </tbody> -->
-                                    <ng-container matColumnDef="Remarque">
+                                      <ng-container matColumnDef="Remarque">
                                         <th  mat-header-cell *matHeaderCellDef> Remarque </th>
                                         <td mat-cell *matCellDef="let element" class="label-remarque"> {{element.Remarque}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="select">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                          ACTIF
+                                        </th>
+                                        <td mat-cell *matCellDef="let row" >
+                                          <mat-checkbox (click)="$event.stopPropagation()"
+                                                        (change)="onCheckboxStateChange($event, copyFileWrong.data.indexOf(row))"
+                                                        [checked]="selection.isSelected(row)"
+                                                        *ngIf="row.Remarque_id == 6">
+                                          </mat-checkbox>
+                                        </td>
                                       </ng-container>
                                       <ng-container matColumnDef="RefClient">
                                         <th  mat-header-cell *matHeaderCellDef> RefClient </th>

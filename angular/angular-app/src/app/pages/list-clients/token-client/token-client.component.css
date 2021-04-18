@@ -1,0 +1,10 @@
+.mdl-grid.center-items {
+  justify-content: center;
+}
+
+body {
+  padding-top: 20px;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+

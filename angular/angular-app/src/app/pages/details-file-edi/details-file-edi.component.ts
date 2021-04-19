@@ -38,17 +38,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   showValid = true;
   copyFileWrong: any;
   fileWrongUpdated: any = [];
-  showWrong: boolean = true;;
+  showWrong: boolean = true; testFile: any;
+  options: any = [];
+  files: any;
+  ;
   displayedColumns = [];
+  filterValues: any = [];
   clickCorrection: boolean = false;
   selectedCellsState: boolean[][] = [
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
-    // [false, false, false],
     // [false, false, false],
   ];
 
@@ -262,8 +259,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.dataSource = JSON.parse(JSON.stringify(this.fileWrong));
       this.dataSource.rows.splice(0, 0, this.dataSource.columns);
       this.dataSource = this.convertToArrayOfObjects(this.dataSource.rows);
-      this.displayedColumns = (Object.keys(this.dataSource[0]));
-      const column_remarque_id = this.displayedColumns.pop(); // remove column remarque_id
+      this.testFile = this.dataSource;
+
+      this.copyFileWrong.data = this.dataSource.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); /*****sort by remaque id  */
+      this.files = this.dataSource;
+      this.displayedColumns = (Object.keys(this.dataSource[0]).slice(0, -1));  /****not display remarque id */
       this.displayedColumns.splice(1, 0, "select"); // add column select
       this.copyFileWrong = new MatTableDataSource<any>(this.dataSource); // copyFileWrong doit etre de type MatTableDataSource pour ajouter checkbox
       //
@@ -274,9 +274,108 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.copyFileWrong.data.forEach(element => {
         this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 2 }, () => false))
       });
-
+      this.displayedColumns.forEach(item => {
+        this.getOption(item);
+      })
     })
 
+
+  }
+
+  /**
+     * Get options inside selects
+     * @param filter
+     */
+  getOption(filter) {
+    let options = [];
+    options = this.testFile.map((item) => item[filter]);
+    options = options.filter(function (value, index, options) {
+      return options.indexOf(value) == index && value != "";
+    });
+
+    this.displayedColumns.forEach((item, key) => {
+
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: options
+        };
+        this.options.push(obj)
+      }
+    })
+  }
+
+
+  setFilteredItemsOptions(filter) {
+    // check if filter is already selected
+    const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
+    if (filterExists == false) { this.filterValues.push(filter) }
+    // if only one select is selected
+    if (this.filterValues.length == 1) {
+      this.copyFileWrong = this.filterChange(filter);
+      // this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    }
+    else {
+      // if already another select is active merge the results
+      if (filterExists == false) {
+      this.copyFileWrong = [...this.copyFileWrong, ...this.filterChange(filter)];
+      this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+      }
+      else{
+        this.copyFileWrong=[];
+        this.filterValues.forEach(element => {
+          this.copyFileWrong = this.copyFileWrong.concat(this.filterChange(element));
+        });
+
+      }
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "") {
+      if (this.filterValues.length == 1) {
+        this.copyFileWrong = this.testFile;
+        this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+      }
+      else {
+        this.filterValues = this.filterValues.filter(function (item) {
+          return item.columnProp !== filter.columnProp;
+
+        })
+        this.filterValues.forEach(element => {
+          this.copyFileWrong = this.filterChange(element)
+        });
+
+      }
+
+    }
+    /*******modif en masse intialise seletion */
+    this.copyFileWrong.forEach(element => {
+      this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 2 }, () => false))
+    });
+  }
+
+  /**
+   * Get lignes when filter change
+   * @param filter
+   */
+  filterChange(filter) {
+    this.files = this.files.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    return this.files.filter(function (item) {
+      return item[filter.columnProp] == String(filter.modelValue);
+    });
+
+  }
+
+  resetFiltre(){
+    // deselectionner all select
+    this.filterValues.forEach((value, key) => {
+      value.modelValue = undefined;
+    })
+    this.filterValues=[];
+
+    this.copyFileWrong.data = this.testFile;
+    this.copyFileWrong.data = this.copyFileWrong.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    // console.warn(this.filterValues)
   }
 
   convertToArrayOfObjects(data) {
@@ -309,7 +408,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       prevRows.unshift(prevRows.pop())
       this.fileWrong.rows[index] = prevRows;
     });
-    console.warn('***filewrong', this.fileWrong.columns);
+    console.warn('***filewrong', this.fileWrong);
   }
 
   getValidFile() {
@@ -356,16 +455,22 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       rows: rows
     }
     this._fileWrong = JSON.parse(JSON.stringify(this.fileWrongUpdated));
+    //Disable input after click on correction
+
+    // var inputs = document.getElementsByTagName("input");
+    // for (var i = 0; i < inputs.length; i++) {
+    //   inputs[i].disabled = true;
+    // }
+
     document.querySelector('.selected').classList.remove('selected');
     this._fileWrong.rows.forEach(element => {
-      element.shift(); // remove remarque
+      element = element.shift();
       element.pop(); // remove remarque_id
       if(this.selection.selected.includes(this._fileWrong.rows.indexOf(element))){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
         element.push(1); // add true (c'est à dire la ligne du tableau est séléctionnées)
       }else{
         element.push(0); // add fales (c'est à dire la ligne du tableau n'est pas séléctionnées)
       }
-
     });
     this._fileWrong.columns.pop(); // remove column remarque_id
     this._fileWrong.columns.push('selected'); //add column selected

@@ -243,3 +243,97 @@ label.full-column {
   font-size: 16px;
   font-family: "Helvetica", "Arial", sans-serif;
 }
+
+.filter-column{
+  width: 20px;
+  background-color: transparent;
+  border: none;
+  color: white !important
+}
+option {
+  color: black;
+}
+.mat-form-field {
+  font-size: 15px;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color:transparent;
+}
+
+.mat-select-value {
+  color: #00bcd4;
+}
+.mdl-card__title-text {
+  align-self: center;
+}
+.mat-form-field-flex {
+  border-radius: 3px 3px 0 0;
+  padding: .3em 0.2em 0 .5em;
+}
+
+.mat-form-field {
+    width: 150px;
+    margin-right: 0.4em !important;
+    margin-top: -1.1em;
+
+}
+mat-form-field.mat-form-field.ng-tns-c6-0.mat-primary.mat-form-field-type-mat-select.mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-has-label.mat-form-field-hide-placeholder._mat-animation-noopable.ng-star-inserted{
+  max-height: -webkit-fill-available !important;
+}
+.mdl-card__title {
+  align-items: top !important;
+}
+base-card-title.mdl-card__title {
+  align-items: initial;
+}
+.mat-form-field-wrapper {
+  padding-bottom: 0.58em;
+}
+.mat-form-field-label {
+  color: #666 !important;
+}
+.mat-form-field-ripple {
+  background-color: #00bcd4;
+}
+.mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #00bcd4;
+}
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: #00bcd4;
+}
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
+  background-color:rgba(255, 255, 255, 0.2)
+}
+.ng-trigger-transformPanel.mat-select-panel.mat-primary {
+  background-color: #666 ;
+}
+span.mat-option-text {
+  color: white;
+}
+.mat-option.mat-active {
+  color: #00bcd4;
+
+}
+.form-column{
+  width: 0px !important;
+}
+.form-column .mat-select-value {
+  color: transparent !important;
+}
+
+.form-column .mat-select-arrow {
+  /* color: rgba(0, 0, 0, 0.54); */
+  color: white !important;
+}
+.form-column .mat-select-arrow-wrapper{
+  transform: translateY(0%) !important;;
+}
+
+.form-column .mat-form-field-wrapper .mat-form-field-flex{
+  padding: .75em .75em 0 0;
+}
+
+th.titre-column{
+  padding: 0 8px 0 8px !important;
+}

@@ -69,11 +69,20 @@ class AnomaliesEdiFileAnnuaire(models.Model):
         db_table = 'anomalies_edi_file_annuaire'
 
 class HistoryAnomaliesEdiFiles(models.Model):
-    edi_file_id = models.IntegerField(blank=True, null=True)
+    edi_file = models.ForeignKey(EDIfile ,db_column="edi_file_id", on_delete= models.DO_NOTHING )
     execution_time = models.DateTimeField(blank=True, null=True)
-    anomalie_id = models.IntegerField(blank=True, null=True)
+    anomalie = models.ForeignKey(AnomaliesEdiFileAnnuaire,db_column="anomalie_id",on_delete=models.DO_NOTHING , blank=True, null=True)
     number_of_anomalies = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'history_anomalies_edi_files'
+
+class kpi3SchemaSingleAnomalie :
+    def __init__(self,anomalie_id,number_of_anomalies,execution_time,edi_file_id,client_id,client_name,client_code):
+        self.anomalie_id = anomalie_id
+        self.number_of_anomalies = number_of_anomalies
+        self.execution_time = execution_time
+        self.edi_file_id = edi_file_id
+        self.client_id = client_id
+        self.client_name = client_name
+        self.client_code = client_code

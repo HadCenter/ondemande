@@ -11,7 +11,7 @@ export class SnackbarComponent implements OnInit {
   constructor( @Inject(MAT_SNACK_BAR_DATA) public data: any,public _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    console.warn('***',this.data)
+    console.warn('**snackbar data*',this.data);
   }
 
 }

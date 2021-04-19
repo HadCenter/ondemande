@@ -9,7 +9,6 @@ import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from './customSnackBar/snackbar/snackbar.component';
 
-
 @Component({
   selector: 'app-list-file-edi',
   templateUrl: './list-file-edi.component.html',
@@ -35,6 +34,9 @@ export class ListFileEDIComponent extends UpgradableComponent {
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   files = [];
   show = true;
+  copy_advancedTable: any[];
+  allTable: any[];
+  // filterValues: any=[];
   constructor(private tablesService: ListFileEdiService,
     private router: Router,
     private _snackBar: MatSnackBar,
@@ -154,10 +156,17 @@ export class ListFileEDIComponent extends UpgradableComponent {
         console.log('files', this.files)
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
-        this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage); /****to display */
+        console.log("advanced",this.advancedTable)
+        this.copy_advancedTable = this.advancedTable; /***copy for filter */
+        this.allTable = this.advancedTable; /****all content */
         for (var i = 0; i < this.advancedTable.length; i++) {
           this.clicked.push(false);
         }
+        /****initialiser les selects */
+        // this.advancedHeaders.forEach(item => {
+        //   this.getOption(item);
+        // })
       },
         error => console.log(error));
   }
@@ -250,6 +259,7 @@ export class DialogImportFile {
   snackBarRef: any;
   nbExpNotArchived: number;
   expediteurArray: any = [];
+  expediteurArrayFiltred: any;
 
   constructor(private importFileService: ImportFileEdiService,
     private router: Router,
@@ -286,13 +296,11 @@ export class DialogImportFile {
   }
 
   openSnackbarListExpediteur() {
-    // const config = new MatSnackBarConfig();
-    // config.panelClass = ['snack-exp'];
     this._snackBar.openFromComponent(SnackbarComponent, {
-      panelClass:"snack-exp",
+      panelClass: "snack-exp",
       verticalPosition: 'top',
       horizontalPosition: 'center',
-      data: this.expediteurArray
+      data: this.expediteurArrayFiltred
     });
   }
 
@@ -319,17 +327,15 @@ export class DialogImportFile {
 
         /******* Test if expediteur is arrchived and existe */
         this.expediteurArray = Object.keys(res).map(i => res[i]);
-        console.log('expediteurs=', this.expediteurArray)
-        this.expediteurArray.forEach(expediteur => {
-          this.nbExpNotArchived = 0;
-          if (expediteur.archive == false || expediteur.existe == false) {
-            this.nbExpNotArchived++;
-          }
-        })
-        if (this.nbExpNotArchived > 0) { this.openSnackBar("Veuillez vérifier la validité de ces clients ", this.snackAction) }
-        this.snackBarRef.onAction().subscribe(() => {
-          this.openSnackbarListExpediteur()
-        });
+        this.expediteurArrayFiltred = this.expediteurArray;
+        this.expediteurArrayFiltred = this.expediteurArrayFiltred.filter(obj => obj.archive == true || obj.existe == false)
+        if (this.expediteurArrayFiltred.length > 0) {
+          this.openSnackBar("Veuillez vérifier la validité de ces clients ", this.snackAction);
+          this.snackBarRef.onAction().subscribe(() => {
+            this.openSnackbarListExpediteur()
+          });
+        }
+
         this.dialogRef.close('submit');
       },
       (err) => {

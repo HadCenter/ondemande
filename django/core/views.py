@@ -8,7 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from .models import Client ,AnomaliesEdiFileAnnuaire , HistoryAnomaliesEdiFiles
-from .models import FileInfo,Contact
+from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie
 from .models import Client
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -27,6 +27,12 @@ from .models import FileExcelContent
 import jsonpickle
 from talendEsb.views import startEngineWithData
 import logging,traceback
+from typing import Optional
+from rest_framework_swagger.views import get_swagger_view
+from rest_framework.renderers import CoreJSONRenderer
+
+schema_view = get_swagger_view(title='TEST API')
+
 logger = logging.getLogger('django')
 
 path_racine_input = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/"
@@ -490,3 +496,14 @@ def desarchiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pa
     except:
         print('WARNING path : ' + pathToArchiveTo + '/' + client_Code + '.zip is not existant while desarchiving')
         os.chdir(osDefaultPath)
+
+
+@api_view(['GET'])
+def kpi3(request):
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.all()
+    listAnomaliesToReturn = []
+    for anomaly in historyanomalies :
+        listAnomaliesToReturn.append(kpi3SchemaSingleAnomalie(anomalie_id=anomaly.id,number_of_anomalies= anomaly.number_of_anomalies,execution_time = anomaly.execution_time,edi_file_id =anomaly.edi_file.id ,client_id = anomaly.edi_file.client.id,client_name = anomaly.edi_file.client.nom_client,client_code = anomaly.edi_file.client.code_client))
+    return HttpResponse(jsonpickle.encode(listAnomaliesToReturn,unpicklable=False),content_type='applicaiton/json')
+
+

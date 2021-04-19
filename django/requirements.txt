@@ -13,3 +13,4 @@ jsonpickle
 pandas
 xlrd
 openpyxl
+django-rest-swagger

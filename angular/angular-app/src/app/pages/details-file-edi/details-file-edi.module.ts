@@ -30,7 +30,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     LoaderModule,
     MatSnackBarModule,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
     MatTableModule,
     MatSelectModule,
     MatFormFieldModule,

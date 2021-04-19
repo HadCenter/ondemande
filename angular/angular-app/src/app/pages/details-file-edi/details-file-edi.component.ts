@@ -68,8 +68,18 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     if (this.tableMouseDown && this.tableMouseUp) {
       if (this.tableMouseDown.cellsType === this.tableMouseUp.cellsType) {
         //convert every rows to object
-        const dataCopy = this.copyFileWrong.data.slice();// copy and mutate
-        console.warn(dataCopy)
+        console.log(this.copyFileWrong);
+        let dataCopy = [];
+        if (this.copyFileWrong.data == undefined)
+        {
+          dataCopy = this.copyFileWrong.slice();// copy and mutate
+          console.warn(dataCopy)
+        }else{
+          dataCopy = this.copyFileWrong.data.slice();// copy and mutate
+          console.warn(dataCopy)
+        }
+        
+        
         let startCol: number;
         let endCol: number;
         let startRow: number;
@@ -238,6 +248,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     return index;
   }
   public onCheckboxStateChange(changeEvent: MatCheckboxChange, id: number) {
+    console.log(id);
     if(changeEvent.checked === true)
     {
       this.selection.select(id);
@@ -259,13 +270,13 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.dataSource = JSON.parse(JSON.stringify(this.fileWrong));
       this.dataSource.rows.splice(0, 0, this.dataSource.columns);
       this.dataSource = this.convertToArrayOfObjects(this.dataSource.rows);
+      this.copyFileWrong = new MatTableDataSource<any>(this.dataSource); // copyFileWrong doit etre de type MatTableDataSource pour ajouter checkbox
       this.testFile = this.dataSource;
-
       this.copyFileWrong.data = this.dataSource.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); /*****sort by remaque id  */
       this.files = this.dataSource;
       this.displayedColumns = (Object.keys(this.dataSource[0]).slice(0, -1));  /****not display remarque id */
       this.displayedColumns.splice(1, 0, "select"); // add column select
-      this.copyFileWrong = new MatTableDataSource<any>(this.dataSource); // copyFileWrong doit etre de type MatTableDataSource pour ajouter checkbox
+      
       //
       this.showWrong = false;
       this.LAST_EDITABLE_ROW = this.copyFileWrong.data.length - 1;
@@ -294,8 +305,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     });
 
     this.displayedColumns.forEach((item, key) => {
-
-      if (item == filter) {
+      if (item == filter && item != 'select') {
         var obj = {
           columnProp: item,
           options: options
@@ -303,6 +313,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         this.options.push(obj)
       }
     })
+    console.log(this.options);
   }
 
 
@@ -372,9 +383,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       value.modelValue = undefined;
     })
     this.filterValues=[];
-
+    
     this.copyFileWrong.data = this.testFile;
-    this.copyFileWrong.data = this.copyFileWrong.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    
+    this.copyFileWrong = this.copyFileWrong.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    console.log(this.copyFileWrong);
     // console.warn(this.filterValues)
   }
 
@@ -447,9 +460,30 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   correctionFile() {
+    console.log(this.copyFileWrong.data);
+    console.log("test file",this.testFile);
     this.clickCorrection = true;
     let columns = Object.keys(this.copyFileWrong.data[0]);
-    let rows = this.copyFileWrong.data.map(Object.values);
+    let rows = [];
+    if(this.testFile.length == this.copyFileWrong.data)
+    {
+      rows = this.copyFileWrong.data.map(Object.values);
+    }else{
+      let arrayFileToCorrect = [];
+      this.testFile.forEach((element) => {
+        if(this.copyFileWrong.data.indexOf(element) === -1)
+        {
+          
+          arrayFileToCorrect.push(element)
+        }
+      });
+      console.log("copyFileWrong",this.copyFileWrong.data)
+      console.log("arrayFileToCorrect",arrayFileToCorrect);
+      arrayFileToCorrect = arrayFileToCorrect.concat(this.copyFileWrong.data);
+      rows = arrayFileToCorrect.map(Object.values);
+      console.log("rows",rows);
+    }
+    
     this.fileWrongUpdated = {
       columns: columns,
       rows: rows
@@ -461,17 +495,26 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     // for (var i = 0; i < inputs.length; i++) {
     //   inputs[i].disabled = true;
     // }
-
-    document.querySelector('.selected').classList.remove('selected');
+    console.log(this._fileWrong);
+    if(document.querySelector('.selected'))
+    {
+      //console.log(document.querySelectorAll('.selected'));
+      document.querySelector('.selected').classList.remove('selected');
+    }
+   
     this._fileWrong.rows.forEach(element => {
-      element = element.shift();
+      element.shift();
       element.pop(); // remove remarque_id
+      console.log("condition",this.selection.selected.includes(this._fileWrong.rows.indexOf(element)))
       if(this.selection.selected.includes(this._fileWrong.rows.indexOf(element))){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
-        element.push(1); // add true (c'est à dire la ligne du tableau est séléctionnées)
+        console.log(element);
+        element = element.push(1); // add true (c'est à dire la ligne du tableau est séléctionnées)
+        console.log("après ",element);
       }else{
-        element.push(0); // add fales (c'est à dire la ligne du tableau n'est pas séléctionnées)
+        element = element.push(0); // add fales (c'est à dire la ligne du tableau n'est pas séléctionnées)
       }
     });
+    console.log( 'rows',this._fileWrong.rows);
     this._fileWrong.columns.pop(); // remove column remarque_id
     this._fileWrong.columns.push('selected'); //add column selected
     if (this.fileWrong && this.fileValid) {

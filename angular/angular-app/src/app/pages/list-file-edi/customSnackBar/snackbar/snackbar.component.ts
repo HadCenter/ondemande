@@ -12,6 +12,11 @@ export class SnackbarComponent implements OnInit {
 
   ngOnInit(): void {
     console.warn('**snackbar data*',this.data);
+    this.data.forEach((element, index) => {
+      if ((element.archive !== true && element.existe !== true) || element.existe !== true) {
+        this.data.slice(index, 1);
+      }
+    });
   }
 
 }

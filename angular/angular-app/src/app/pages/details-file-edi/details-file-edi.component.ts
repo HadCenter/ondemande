@@ -248,13 +248,13 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     return index;
   }
   public onCheckboxStateChange(changeEvent: MatCheckboxChange, id: number) {
-    console.log(id);
     if(changeEvent.checked === true)
     {
       this.selection.select(id);
     }else{
       this.selection.deselect(id);
     }
+    console.log(this.selection.selected);
 }
 
   getWrongFile() {
@@ -460,28 +460,25 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   correctionFile() {
-    console.log(this.copyFileWrong.data);
-    console.log("test file",this.testFile);
     this.clickCorrection = true;
     let columns = Object.keys(this.copyFileWrong.data[0]);
     let rows = [];
+    console.log("testFile",this.testFile.length);
+    console.log("copyFileWrong",this.copyFileWrong.data.length);
     if(this.testFile.length == this.copyFileWrong.data)
     {
       rows = this.copyFileWrong.data.map(Object.values);
-    }else{
+    }else
+    {
       let arrayFileToCorrect = [];
       this.testFile.forEach((element) => {
         if(this.copyFileWrong.data.indexOf(element) === -1)
         {
-          
           arrayFileToCorrect.push(element)
         }
       });
-      console.log("copyFileWrong",this.copyFileWrong.data)
-      console.log("arrayFileToCorrect",arrayFileToCorrect);
       arrayFileToCorrect = arrayFileToCorrect.concat(this.copyFileWrong.data);
       rows = arrayFileToCorrect.map(Object.values);
-      console.log("rows",rows);
     }
     
     this.fileWrongUpdated = {
@@ -489,32 +486,20 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       rows: rows
     }
     this._fileWrong = JSON.parse(JSON.stringify(this.fileWrongUpdated));
-    //Disable input after click on correction
-
-    // var inputs = document.getElementsByTagName("input");
-    // for (var i = 0; i < inputs.length; i++) {
-    //   inputs[i].disabled = true;
-    // }
-    console.log(this._fileWrong);
     if(document.querySelector('.selected'))
     {
-      //console.log(document.querySelectorAll('.selected'));
       document.querySelector('.selected').classList.remove('selected');
     }
-   
     this._fileWrong.rows.forEach(element => {
       element.shift();
       element.pop(); // remove remarque_id
-      console.log("condition",this.selection.selected.includes(this._fileWrong.rows.indexOf(element)))
       if(this.selection.selected.includes(this._fileWrong.rows.indexOf(element))){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
-        console.log(element);
-        element = element.push(1); // add true (c'est à dire la ligne du tableau est séléctionnées)
-        console.log("après ",element);
+        element.push(1); // add true (c'est à dire la ligne du tableau est séléctionnées)
       }else{
-        element = element.push(0); // add fales (c'est à dire la ligne du tableau n'est pas séléctionnées)
+        element.push(0); // add fales (c'est à dire la ligne du tableau n'est pas séléctionnées)
       }
     });
-    console.log( 'rows',this._fileWrong.rows);
+    console.log("_fileWrong après",this._fileWrong);
     this._fileWrong.columns.pop(); // remove column remarque_id
     this._fileWrong.columns.push('selected'); //add column selected
     if (this.fileWrong && this.fileValid) {

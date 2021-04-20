@@ -6,7 +6,6 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 export class DetailsFileEdiService {
   private url = `${environment.apiBaseUrl}/api`;
-//   private url = 'http://127.0.0.1:8000/api'
   constructor(private http: HttpClient) { }
   get(id): Observable<any> {
     return this.http.get(`${this.url}/getFile/${id}`);
@@ -26,12 +25,12 @@ export class DetailsFileEdiService {
     return this.http.post(`${this.url}/seeFileContent`, data);
   }
 
-public corretFile (data): Observable<any> {
- return  this.http.post(`${this.url}/createFileFromColumnAndRowsAndUpdate/`,data);
-}
+  public corretFile (data): Observable<any> {
+    return  this.http.post(`${this.url}/createFileFromColumnAndRowsAndUpdate/`,data);
+  }
 
-public sendFileToUrbantz(data): Observable<any> {
- return this.http.post(`${environment.apiBaseUrl}/urbantzEsb/SendFromFileToUrbantzAsTasks/`,data);
-}
+  public sendFileToUrbantz(data): Observable<any> {
+    return this.http.post(`${environment.apiBaseUrl}/urbantzEsb/SendFromFileToUrbantzAsTasks/`,data);
+  }
 
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DetailsTransactionRoutingModule } from './details-transaction-routing.module';
 import { DetailsTransactionComponent } from './details-transaction.component';
 import { ThemeModule } from 'theme';
@@ -15,7 +15,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     ThemeModule,
     FormsModule,
     ReactiveFormsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSnackBarModule,
   ]
 })
 export class DetailsTransactionModule { }

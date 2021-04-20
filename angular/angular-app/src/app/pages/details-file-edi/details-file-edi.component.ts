@@ -73,10 +73,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         if (this.copyFileWrong.data == undefined)
         {
           dataCopy = this.copyFileWrong.slice();// copy and mutate
-          console.warn(dataCopy)
         }else{
           dataCopy = this.copyFileWrong.data.slice();// copy and mutate
-          console.warn(dataCopy)
         }
         
         
@@ -247,14 +245,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   customTrackBy(index: number, obj: any) {
     return index;
   }
-  public onCheckboxStateChange(changeEvent: MatCheckboxChange, id: number) {
+  public onCheckboxStateChange(changeEvent: MatCheckboxChange, id) {
     if(changeEvent.checked === true)
     {
       this.selection.select(id);
     }else{
       this.selection.deselect(id);
     }
-    console.log(this.selection.selected);
+    console.log("selection",this.selection.selected);
 }
 
   getWrongFile() {
@@ -269,12 +267,15 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       //create a copy array of object from the res and an array of displayed column
       this.dataSource = JSON.parse(JSON.stringify(this.fileWrong));
       this.dataSource.rows.splice(0, 0, this.dataSource.columns);
+
+  // this.dataSource.columns.push('rowId');
       this.dataSource = this.convertToArrayOfObjects(this.dataSource.rows);
       this.copyFileWrong = new MatTableDataSource<any>(this.dataSource); // copyFileWrong doit etre de type MatTableDataSource pour ajouter checkbox
       this.testFile = this.dataSource;
       this.copyFileWrong.data = this.dataSource.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); /*****sort by remaque id  */
       this.files = this.dataSource;
-      this.displayedColumns = (Object.keys(this.dataSource[0]).slice(0, -1));  /****not display remarque id */
+      this.displayedColumns=Object.keys(this.dataSource[0]);
+      this.displayedColumns.splice(29, 2);  /****not display remarque id */
       this.displayedColumns.splice(1, 0, "select"); // add column select
       
       //
@@ -330,12 +331,15 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       // if already another select is active merge the results
       if (filterExists == false) {
       this.copyFileWrong = [...this.copyFileWrong, ...this.filterChange(filter)];
+      this.copyFileWrong= this.copyFileWrong.filter((v,i,a)=>a.findIndex(t=>(t.rowId === v.rowId))===i);
+     /******* */
       this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
       }
       else{
         this.copyFileWrong=[];
         this.filterValues.forEach(element => {
           this.copyFileWrong = this.copyFileWrong.concat(this.filterChange(element));
+          this.copyFileWrong= this.copyFileWrong.filter((v,i,a)=>a.findIndex(t=>(t.rowId === v.rowId))===i);
         });
 
       }
@@ -353,7 +357,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
         })
         this.filterValues.forEach(element => {
-          this.copyFileWrong = this.filterChange(element)
+          this.copyFileWrong = this.filterChange(element);
         });
 
       }
@@ -387,19 +391,19 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.copyFileWrong.data = this.testFile;
     
     this.copyFileWrong = this.copyFileWrong.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
-    console.log(this.copyFileWrong);
     // console.warn(this.filterValues)
   }
 
   convertToArrayOfObjects(data) {
+   
     var keys = data.shift(),
+    
       i = 0, k = 0,
       obj = null,
       output = [];
-
+keys.push('rowId');
     for (i = 0; i < data.length; i++) {
       obj = {};
-
       for (k = 0; k < keys.length; k++) {
         obj[keys[k]] = data[i][k];
       }
@@ -412,15 +416,19 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   MoveLastElementToTheStart() {
     //Deplace column
-    const prevColumn = [...this.fileWrong.columns]
-    prevColumn.unshift(prevColumn.pop())
-    this.fileWrong.columns = prevColumn;
-    //Deplace rows
-    this.fileWrong.rows.forEach((element, index) => {
-      const prevRows = [...element]
-      prevRows.unshift(prevRows.pop())
-      this.fileWrong.rows[index] = prevRows;
-    });
+    const prevColumn = [...this.fileWrong.columns];
+    prevColumn.unshift(prevColumn.splice(this.fileWrong.columns.length-2,  1)[0]);
+    // const prevColumn = [...this.fileWrong.columns]
+   prevColumn.pop()
+  this.fileWrong.columns = prevColumn;
+    // //Deplace rows
+     this.fileWrong.rows.forEach((element, index) => {
+       const prevRows = [...element];
+      prevRows.unshift(prevRows.splice(prevRows.length-2,  1)[0])
+    //  prevRows.unshift(prevRows.splice(prevRows.length-2,  1)[0])
+        // prevRows.pop()
+   this.fileWrong.rows[index] = prevRows;
+     });
     console.warn('***filewrong', this.fileWrong);
   }
 
@@ -432,7 +440,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.fileService.getFileEdi(data).subscribe(res => {
       this.fileValid = res;
       this.showValid = false;
-      console.warn('***filevalid', this.fileValid)
     })
   }
 
@@ -461,10 +468,16 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   correctionFile() {
     this.clickCorrection = true;
-    let columns = Object.keys(this.copyFileWrong.data[0]);
+    let columns=[];
+    if (this.copyFileWrong.data == undefined){
+      columns = Object.keys(this.copyFileWrong[0]);
+    }
+    else{
+      columns = Object.keys(this.copyFileWrong.data[0]);
+    }
+   
     let rows = [];
-    console.log("testFile",this.testFile.length);
-    console.log("copyFileWrong",this.copyFileWrong.data.length);
+    // console.log("copyFileWrong",this.copyFileWrong.data.length);
     if(this.testFile.length == this.copyFileWrong.data)
     {
       rows = this.copyFileWrong.data.map(Object.values);
@@ -472,13 +485,32 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     {
       let arrayFileToCorrect = [];
       this.testFile.forEach((element) => {
-        if(this.copyFileWrong.data.indexOf(element) === -1)
-        {
-          arrayFileToCorrect.push(element)
+        if (this.copyFileWrong.data !== undefined){
+          if(this.copyFileWrong.data.indexOf(element) === -1)
+          {
+            arrayFileToCorrect.push(element)
+          }
         }
+        else {
+          if(this.copyFileWrong.indexOf(element) === -1)
+          {
+            arrayFileToCorrect.push(element)
+          }
+        }
+      
+        
       });
-      arrayFileToCorrect = arrayFileToCorrect.concat(this.copyFileWrong.data);
+
+      /********* to check .data */
+      if(this.copyFileWrong.data !== undefined){
+        arrayFileToCorrect = arrayFileToCorrect.concat(this.copyFileWrong.data);
+      }
+      else if (this.copyFileWrong.data == undefined) {
+        arrayFileToCorrect = arrayFileToCorrect.concat(this.copyFileWrong);
+      }
+    
       rows = arrayFileToCorrect.map(Object.values);
+
     }
     
     this.fileWrongUpdated = {
@@ -490,18 +522,25 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     {
       document.querySelector('.selected').classList.remove('selected');
     }
+    
     this._fileWrong.rows.forEach(element => {
-      element.shift();
-      element.pop(); // remove remarque_id
-      if(this.selection.selected.includes(this._fileWrong.rows.indexOf(element))){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
+      // console.warn('//**/*///*element',element[el])
+      element.shift(); // remove remarque
+     
+
+      // element.pop();
+      if(this.selection.selected.includes(element[element.length-1])){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
         element.push(1); // add true (c'est à dire la ligne du tableau est séléctionnées)
       }else{
         element.push(0); // add fales (c'est à dire la ligne du tableau n'est pas séléctionnées)
       }
+      element.splice(element.length-3,2); // remove rows remarque_id & rowId
     });
-    console.log("_fileWrong après",this._fileWrong);
-    this._fileWrong.columns.pop(); // remove column remarque_id
+    
     this._fileWrong.columns.push('selected'); //add column selected
+    this._fileWrong.columns.splice(this._fileWrong.columns.length-3,2);// remove column row id
+
+    
     if (this.fileWrong && this.fileValid) {
       // boucle pour ajouter false à toutes les lignes du tableau fileValid
       this.fileValid.rows.forEach(element => {
@@ -509,13 +548,15 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       });
       this.fileTocheck = {
         fileId: this.file.idFile,
-        columns: this._fileWrong.columns.splice(1),
+      //  columns: this._fileWrong.columns.splice(this._fileWrong.columns.length-2, 1),
+       columns: this._fileWrong.columns.splice(1),
         rows: this.fileValid.rows.concat(this._fileWrong.rows),
       }
     }
     else {
       this.fileTocheck = {
         fileId: this.file.idFile,
+       // columns: this._fileWrong.columns.splice(this._fileWrong.columns.length-2, 1),
         columns: this._fileWrong.columns.splice(1),
         rows: this._fileWrong.rows,
       }

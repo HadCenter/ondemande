@@ -26,11 +26,12 @@ import re
 from .models import FileExcelContent
 import jsonpickle
 from talendEsb.views import startEngineWithData
+#from sftpConnectionToExecutionServer.views import dowloadFileSFTP
 import logging,traceback
 from typing import Optional
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.renderers import CoreJSONRenderer
-
+import numpy as np
 schema_view = get_swagger_view(title='TEST API')
 
 logger = logging.getLogger('django')
@@ -370,8 +371,9 @@ def seeFileContent(request):
             annuaireAnomalies = pd.DataFrame(list(AnomaliesEdiFileAnnuaire.objects.all().values()))
             annuaireAnomaliesColumnName = annuaireAnomalies.rename(columns={"id_anomalie": "Remarque_id" , "label" : "Remarque"})
             excelfile = pd.merge(excelfile, annuaireAnomaliesColumnName, on="Remarque_id" )
-            columns = list(excelfile.columns)
 
+        excelfile.insert(loc =len(excelfile.columns) , column='rowId', value=np.arange(len(excelfile)))
+        columns = list(excelfile.columns)
         rows = excelfile.values.tolist()
         os.remove(name)
         responseObject = FileExcelContent(columns,rows)
@@ -506,4 +508,8 @@ def kpi3(request):
         listAnomaliesToReturn.append(kpi3SchemaSingleAnomalie(anomalie_id=anomaly.id,number_of_anomalies= anomaly.number_of_anomalies,execution_time = anomaly.execution_time,edi_file_id =anomaly.edi_file.id ,client_id = anomaly.edi_file.client.id,client_name = anomaly.edi_file.client.nom_client,client_code = anomaly.edi_file.client.code_client))
     return HttpResponse(jsonpickle.encode(listAnomaliesToReturn,unpicklable=False),content_type='applicaiton/json')
 
-
+@api_view(['GET'])
+def testSftpFilesDownload(request):
+    #dowloadFileSFTP()
+    print("done")
+    return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)

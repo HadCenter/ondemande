@@ -25,8 +25,8 @@ import pandas as pd
 import re
 from .models import FileExcelContent
 import jsonpickle
-from talendEsb.views import startEngineWithData
-#from sftpConnectionToExecutionServer.views import dowloadFileSFTP
+from talendEsb.views import startEngineOnEdiFilesWithData
+from sftpConnectionToExecutionServer.views import dowloadFileSFTP
 import logging,traceback
 from typing import Optional
 from rest_framework_swagger.views import get_swagger_view
@@ -442,7 +442,7 @@ def createFileFromColumnAndRowsAndUpdate(request):
     fileDB.number_wrong_commands = 0
     fileDB.save()
     data = [{"filePath":fileName,"ClientOwner":clientDB.code_client,"fileId":fileDB.id}]
-    startEngineWithData(data)
+    startEngineOnEdiFilesWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 def desarchive_client(client: Client):
     client.archived = False
@@ -508,8 +508,26 @@ def kpi3(request):
         listAnomaliesToReturn.append(kpi3SchemaSingleAnomalie(anomalie_id=anomaly.id,number_of_anomalies= anomaly.number_of_anomalies,execution_time = anomaly.execution_time,edi_file_id =anomaly.edi_file.id ,client_id = anomaly.edi_file.client.id,client_name = anomaly.edi_file.client.nom_client,client_code = anomaly.edi_file.client.code_client))
     return HttpResponse(jsonpickle.encode(listAnomaliesToReturn,unpicklable=False),content_type='applicaiton/json')
 
-@api_view(['GET'])
-def testSftpFilesDownload(request):
-    #dowloadFileSFTP()
-    print("done")
-    return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
+@api_view(['POST'])
+def seeFileContentMADFile(request):
+    osOriginalPath = os.getcwd()
+    fileName = request.data['fileName']
+    transaction_id = request.data['transaction_id']
+    try :
+
+        dowloadFileSFTP(transaction_id=transaction_id, fileName=fileName)
+        os.chdir("media/files/UrbantzToHub/")
+        excelfile =pd.read_excel(fileName)
+        excelfile = excelfile.fillna('')
+        columns = list(excelfile.columns)
+        rows = excelfile.values.tolist()
+        os.remove(fileName)
+        responseObject = FileExcelContent(columns, rows)
+        responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
+
+        os.chdir(osOriginalPath)
+        return HttpResponse(responseObjectText, content_type="application/json")
+    except Exception as e :
+        os.chdir(osOriginalPath)
+        print(e)
+        return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)

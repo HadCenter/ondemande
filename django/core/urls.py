@@ -17,5 +17,6 @@ urlpatterns = [
     path('seeFileContent', views.seeFileContent, name="seeFileContent"),
     path('getNumberOfFilesPerClient/', views.numberOfFilesPerClient, name="numberOfFilesPerClient"),
     path('createFileFromColumnAndRowsAndUpdate/', views.createFileFromColumnAndRowsAndUpdate, name="createFileFromColumnAndRowsAndUpdate"),
-    path('kpi3/',views.kpi3 , name = "kpi3")
+    path('kpi3/',views.kpi3 , name = "kpi3"),
+    path('seeFileContentMADFile',views.seeFileContentMADFile , name= "seeFileContentMADFile")
 ]

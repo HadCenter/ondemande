@@ -8,7 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from .models import Client ,AnomaliesEdiFileAnnuaire , HistoryAnomaliesEdiFiles
-from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie
+from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie ,getNumberOfAnomaliesPerDateDTO
 from .models import Client
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -551,3 +551,10 @@ def seeFileContentMADFile(request):
         os.chdir(osOriginalPath)
         print(e)
         return JsonResponse({'message': 'internal error'}, status=status.HTTP_403_FORBIDDEN)
+
+
+@api_view(['POST'])
+def getNumberOfAnomaliesPerDate(request):
+    dateToFilter = request.data['date']
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.filter(execution_time = dateToFilter).prefetch_related("anomalie").prefetch_related("edi_file")
+    return HttpResponse(jsonpickle.encode(getNumberOfAnomaliesPerDateDTO(dateToFilter,len(historyanomalies)),unpicklable=False),content_type='applicaiton/json')

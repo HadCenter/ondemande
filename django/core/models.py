@@ -88,3 +88,8 @@ class kpi3SchemaSingleAnomalie :
         self.client_code = client_code
         self.anomalie_name = anomalie_name
         self.edi_file_name = edi_file_name
+
+class getNumberOfAnomaliesPerDateDTO:
+    def __init__(self,date,numberOfAnomalies):
+        self.date= date
+        self.numberOfAnomalies = numberOfAnomalies

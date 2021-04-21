@@ -8,7 +8,7 @@ from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
-from models import SendMadPostProcessPostObject , TransactionsLivraison
+from .models import SendMadPostProcessPostObject , TransactionsLivraison
 import pandas as pd
 
 talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/onDemandPipeline/f370e80809334a5499c2b7bc8d58a746'

@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'accounts',
     'core',
     'salesforceEsb',
-    'rest_framework_swagger'
+    'rest_framework_swagger',
+    'talendEsb'
 ]
 
 MIDDLEWARE = [
@@ -102,7 +103,7 @@ DATABASES = {
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
         'HOST': '172.17.0.1',
-       'PORT': '3306',
+        'PORT': '3306',
     }
 }
 # DATABASES = {

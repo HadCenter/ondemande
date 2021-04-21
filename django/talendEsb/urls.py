@@ -8,4 +8,7 @@ urlpatterns = [
     path('genererMADFile', views.genererMADFile),
     path('correctExceptionFile', views.correctExceptionFile),
     path('correctMetadataFile', views.correctMetadataFile),
+    #TODO MAD FILE AFTER ZIED TALEND JOB IS DONE
+    #path('correctMADFile', views.correctMetadataFile),
+    #TODO FIND ALL TRANSACTION FROM DB
 ]

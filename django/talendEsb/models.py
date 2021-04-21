@@ -3,9 +3,8 @@ from django.db import models
 # Create your models here.
 
 class SendMadPostProcessPostObject:
-    def __init__(self,transaction_id,client_code,end_date_plus_one,start_date,jobs_to_start):
+    def __init__(self,transaction_id,end_date_plus_one,start_date,jobs_to_start):
         self.transaction_id = transaction_id
-        self.client_code = client_code
         self.end_date_plus_one = end_date_plus_one
         self.start_date = start_date
         self.jobs_to_start = jobs_to_start

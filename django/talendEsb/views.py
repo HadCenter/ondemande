@@ -40,13 +40,13 @@ madPlanJobList = ["ECOLOTRANS_URBANTZ_TO_HUB_SANS_MAD_OTHERS_ONDEMAND",
 def integrerMADFile(request):
 	transactionToDo = request.data['transactionToDo']
 	jobs_to_start = []
-	if transactionToDo == "integrer/generation":
+	if transactionToDo == "integrer":
 		jobs_to_start.append(madPlanJobList[0])
 		jobs_to_start.append(madPlanJobList[1])
 		jobs_to_start.append(madPlanJobList[2])
 		jobs_to_start.append(madPlanJobList[3])
 		jobs_to_start.append(madPlanJobList[4])
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = request.data['transaction_id'],client_code = request.data['client_code'],end_date_plus_one = request.data['end_date_plus_one'],start_date = request.data['start_date'],jobs_to_start =jobs_to_start)
+	madObjectToPost = SendMadPostProcessPostObject(transaction_id = request.data['transaction_id'],end_date_plus_one = request.data['end_date_plus_one'],start_date = request.data['start_date'],jobs_to_start =jobs_to_start)
 	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
@@ -56,13 +56,14 @@ def genererMADFile(request):
 	#TODO HANDLE DATABASE
 	transactionToDo = request.data['transactionToDo']
 	jobs_to_start = []
-	if transactionToDo == "integrer/generation":
+	if transactionToDo == "generer":
 		jobs_to_start.append(madPlanJobList[0])
 		jobs_to_start.append(madPlanJobList[1])
 		jobs_to_start.append(madPlanJobList[2])
 		jobs_to_start.append(madPlanJobList[3])
 		jobs_to_start.append(madPlanJobList[4])
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = request.data['transaction_id'],client_code = request.data['client_code'],end_date_plus_one = request.data['end_date_plus_one'],start_date = request.data['start_date'],jobs_to_start =jobs_to_start)
+		#TODO transaction id to get from DB after line creation
+	madObjectToPost = SendMadPostProcessPostObject(transaction_id = request.data['transaction_id'],end_date_plus_one = request.data['end_date_plus_one'],start_date = request.data['start_date'],jobs_to_start =jobs_to_start)
 	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
@@ -85,7 +86,7 @@ def correctExceptionFile(request):
 	if transactionToDo == "correction exceptionFile":
 		jobs_to_start.append(madPlanJobList[5])
 
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = request.data['transaction_id'],client_code = request.data['client_code'],end_date_plus_one = request.data['end_date_plus_one'],start_date = request.data['start_date'],jobs_to_start =jobs_to_start)
+	madObjectToPost = SendMadPostProcessPostObject(transaction_id = request.data['transaction_id'],end_date_plus_one = request.data['end_date_plus_one'],start_date = request.data['start_date'],jobs_to_start =jobs_to_start)
 	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
@@ -109,7 +110,6 @@ def correctMetadataFile(request):
 		jobs_to_start.append(madPlanJobList[6])
 
 	madObjectToPost = SendMadPostProcessPostObject(transaction_id=request.data['transaction_id'],
-												   client_code=request.data['client_code'],
 												   end_date_plus_one=request.data['end_date_plus_one'],
 												   start_date=request.data['start_date'], jobs_to_start=jobs_to_start)
 	startEngineOnMadFiles(madObjectToPost)
@@ -119,3 +119,6 @@ def correctMetadataFile(request):
 def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):
 	requests.post(talendUrlMADFileWebHook, json=madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
+
+
+#TODO FIND ALL TRANSACTIONS FROM DB

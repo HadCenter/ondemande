@@ -502,10 +502,10 @@ def desarchiveDirectoryOfClientFromInto(client: Client ,pathFilesAreFromFrom, pa
 
 @api_view(['GET'])
 def kpi3(request):
-    historyanomalies = HistoryAnomaliesEdiFiles.objects.all()
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.all().prefetch_related("anomalie").prefetch_related("edi_file")
     listAnomaliesToReturn = []
     for anomaly in historyanomalies :
-        listAnomaliesToReturn.append(kpi3SchemaSingleAnomalie(anomalie_id=anomaly.id,number_of_anomalies= anomaly.number_of_anomalies,execution_time = anomaly.execution_time,edi_file_id =anomaly.edi_file.id ,client_id = anomaly.edi_file.client.id,client_name = anomaly.edi_file.client.nom_client,client_code = anomaly.edi_file.client.code_client))
+        listAnomaliesToReturn.append(kpi3SchemaSingleAnomalie(anomalie_id=anomaly.id,number_of_anomalies= anomaly.number_of_anomalies,execution_time = anomaly.execution_time,edi_file_id =anomaly.edi_file.id ,client_id = anomaly.edi_file.client.id,client_name = anomaly.edi_file.client.nom_client,client_code = anomaly.edi_file.client.code_client , edi_file_name= anomaly.edi_file.file.name, anomalie_name=anomaly.anomalie.label))
     return HttpResponse(jsonpickle.encode(listAnomaliesToReturn,unpicklable=False),content_type='applicaiton/json')
 
 @api_view(['POST'])

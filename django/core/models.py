@@ -78,7 +78,7 @@ class HistoryAnomaliesEdiFiles(models.Model):
         db_table = 'history_anomalies_edi_files'
 
 class kpi3SchemaSingleAnomalie :
-    def __init__(self,anomalie_id,number_of_anomalies,execution_time,edi_file_id,client_id,client_name,client_code):
+    def __init__(self,anomalie_id,number_of_anomalies,execution_time,edi_file_id,client_id,client_name,client_code, anomalie_name , edi_file_name):
         self.anomalie_id = anomalie_id
         self.number_of_anomalies = number_of_anomalies
         self.execution_time = execution_time
@@ -86,3 +86,5 @@ class kpi3SchemaSingleAnomalie :
         self.client_id = client_id
         self.client_name = client_name
         self.client_code = client_code
+        self.anomalie_name = anomalie_name
+        self.edi_file_name = edi_file_name

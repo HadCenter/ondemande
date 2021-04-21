@@ -18,6 +18,7 @@ urlpatterns = [
     path('getNumberOfFilesPerClient/', views.numberOfFilesPerClient, name="numberOfFilesPerClient"),
     path('createFileFromColumnAndRowsAndUpdate/', views.createFileFromColumnAndRowsAndUpdate, name="createFileFromColumnAndRowsAndUpdate"),
     path('kpi3/',views.kpi3 , name = "kpi3"),
-    path('getNumberOfAnomaliesPerDate',views.getNumberOfAnomaliesPerDate , name = "kpi3"),
+    path('getNumberOfAnomaliesPerDate',views.getNumberOfAnomaliesPerDate , name = "getNumberOfAnomaliesPerDate"),
+    path('getNumberOfAnomaliesPerId',views.getNumberOfAnomaliesPerId , name = "getNumberOfAnomaliesPerId"),
     path('seeFileContentMADFile',views.seeFileContentMADFile , name= "seeFileContentMADFile")
 ]

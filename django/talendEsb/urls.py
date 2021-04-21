@@ -10,5 +10,7 @@ urlpatterns = [
     path('correctMetadataFile', views.correctMetadataFile),
     #TODO MAD FILE AFTER ZIED TALEND JOB IS DONE
     #path('correctMADFile', views.correctMetadataFile),
-    #TODO FIND ALL TRANSACTION FROM DB
+
+    path('getAllTransactionMadLivraison', views.getAllTransactionMadLivraison),
+    path('getSingleTransactionMadLivraison/<int:pk>', views.getSingleTransactionMadLivraison)
 ]

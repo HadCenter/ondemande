@@ -26,7 +26,10 @@ import re
 from .models import FileExcelContent
 import jsonpickle
 from talendEsb.views import startEngineOnEdiFilesWithData
-from sftpConnectionToExecutionServer.views import dowloadFileSFTP
+from sftpConnectionToExecutionServer.views import  sftp
+
+from talendEsb.models import TransactionsLivraison
+
 import logging,traceback
 from typing import Optional
 from rest_framework_swagger.views import get_swagger_view
@@ -511,12 +514,29 @@ def kpi3(request):
 @api_view(['POST'])
 def seeFileContentMADFile(request):
     osOriginalPath = os.getcwd()
-    fileName = request.data['fileName']
+    fileType = request.data['fileType']
     transaction_id = request.data['transaction_id']
     try :
-
-        dowloadFileSFTP(transaction_id=transaction_id, fileName=fileName)
         os.chdir("media/files/UrbantzToHub/")
+        transaction = TransactionsLivraison.objects.get(id=transaction_id)
+        remotefilePath = ""
+        fileName = ""
+        if fileType == "livraison" :
+            remotefilePath=  transaction.fichier_livraison_sftp
+            fileName = "Livraisons.xlsx"
+        elif fileType == "exception" :
+            remotefilePath = transaction.fichier_exception_sftp
+            fileName = "Livraisons_Exception.xlsx"
+        elif fileType == "metadata" :
+            remotefilePath = transaction.fichier_metadata_sftp
+            fileName = "ExceptionFacturationValue_Livraisons.xlsx"
+        elif fileType == "mad" :
+            remotefilePath = transaction.fichier_mad_sftp
+            fileName = "ToVerifyQTE_MAD_Livraisons.xlsx"
+        else :
+            raise Exception("fileType not supported by server")
+        sftp.get(remotepath= remotefilePath,localpath= os.getcwd() + '/'+ fileName)
+
         excelfile =pd.read_excel(fileName)
         excelfile = excelfile.fillna('')
         columns = list(excelfile.columns)
@@ -530,4 +550,4 @@ def seeFileContentMADFile(request):
     except Exception as e :
         os.chdir(osOriginalPath)
         print(e)
-        return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
+        return JsonResponse({'message': 'internal error'}, status=status.HTTP_403_FORBIDDEN)

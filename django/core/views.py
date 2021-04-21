@@ -557,4 +557,8 @@ def seeFileContentMADFile(request):
 def getNumberOfAnomaliesPerDate(request):
     dateToFilter = request.data['date']
     historyanomalies = HistoryAnomaliesEdiFiles.objects.filter(execution_time = dateToFilter).prefetch_related("anomalie").prefetch_related("edi_file")
-    return HttpResponse(jsonpickle.encode(getNumberOfAnomaliesPerDateDTO(dateToFilter,len(historyanomalies)),unpicklable=False),content_type='applicaiton/json')
+    numberOfAnomaliestotal = 0
+    for anomaly in historyanomalies:
+        numberOfAnomaliestotal+= anomaly.number_of_anomalies
+
+    return HttpResponse(jsonpickle.encode(getNumberOfAnomaliesPerDateDTO(dateToFilter,numberOfAnomaliestotal),unpicklable=False),content_type='applicaiton/json')

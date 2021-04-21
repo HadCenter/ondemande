@@ -12,8 +12,8 @@ from .models import SendMadPostProcessPostObject , TransactionsLivraison
 import pandas as pd
 
 talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/onDemandPipeline/f370e80809334a5499c2b7bc8d58a746'
-#TODO REPLACE LINK WITH CORRECT LINK FOR MAD
-talendUrlMADFileWebHook ='https://webhooks.eu.cloud.talend.com/onDemandPipeline/f370e80809334a5499c2b7bc8d58a746'
+
+talendUrlMADFileWebHook ='https://webhooks.eu.cloud.talend.com/urbantz_to_hub_WH/6c07cf469ee9412e9f6c432d7749b51a'
 
 
 @api_view(['POST'])
@@ -72,8 +72,7 @@ def genererMADFile(request):
 def correctExceptionFile(request):
 	transaction_id = request.data['transaction_id']
 	fileReplacement = request.data['fileReplacement']
-	# TODO FILE NAME FROM TALEND
-	fileName = request.data['fileName']
+	fileName = "Livraisons_Exception.csv"
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
 	transaction = TransactionsLivraison.objects.get(id=transaction_id)
 	df.to_excel(fileName, index=False)
@@ -95,8 +94,7 @@ def correctExceptionFile(request):
 def correctMetadataFile(request):
 	transaction_id = request.data['transaction_id']
 	fileReplacement = request.data['fileReplacement']
-	# TODO FILE NAME FROM TALEND
-	fileName = request.data['fileName']
+	fileName = "ExceptionFacturationValue_Livraisons.xlsx"
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
 	transaction = TransactionsLivraison.objects.get(id=transaction_id)
 	df.to_excel(fileName, index=False)

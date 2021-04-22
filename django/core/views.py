@@ -8,7 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from .models import Client ,AnomaliesEdiFileAnnuaire , HistoryAnomaliesEdiFiles
-from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie
+from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie ,getNumberOfAnomaliesPerDateDTO
 from .models import Client
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -542,3 +542,51 @@ def seeFileContentMADFile(request):
         os.chdir(osOriginalPath)
         print(e)
         return JsonResponse({'message': 'internal error'}, status=status.HTTP_403_FORBIDDEN)
+
+
+@api_view(['POST'])
+def getNumberOfAnomaliesPerDate(request):
+    dateToFilter = request.data['date']
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.filter(execution_time = dateToFilter).prefetch_related("anomalie").prefetch_related("edi_file")
+    numberOfAnomaliestotal = 0
+    for anomaly in historyanomalies:
+        numberOfAnomaliestotal+= anomaly.number_of_anomalies
+
+    return HttpResponse(jsonpickle.encode(getNumberOfAnomaliesPerDateDTO(dateToFilter,numberOfAnomaliestotal),unpicklable=False),content_type='applicaiton/json')
+
+@api_view(['GET'])
+def getNumberOfAnomaliesPerDateAll(request):
+
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.all().prefetch_related("anomalie").prefetch_related("edi_file")
+    mapDateToNumberOfAnomalies = {}
+    for anomaly in historyanomalies:
+        if anomaly.execution_time.strftime("%m-%d-%Y %H:%M:%S") not in mapDateToNumberOfAnomalies.keys():
+            mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y %H:%M:%S")] = 0
+
+        mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y %H:%M:%S")] += anomaly.number_of_anomalies
+
+    return HttpResponse(jsonpickle.encode(mapDateToNumberOfAnomalies,unpicklable=False),content_type='applicaiton/json')
+
+
+@api_view(['POST'])
+def getNumberOfAnomaliesPerId(request):
+    anomalie_id = request.data['anomalie_id']
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.filter(anomalie = anomalie_id).prefetch_related("anomalie").prefetch_related("edi_file")
+    numberOfAnomaliestotal = 0
+    for anomaly in historyanomalies:
+        numberOfAnomaliestotal+= anomaly.number_of_anomalies
+
+    return HttpResponse(jsonpickle.encode(getNumberOfAnomaliesPerDateDTO(anomalie_id,numberOfAnomaliestotal),unpicklable=False),content_type='applicaiton/json')
+
+@api_view(['GET'])
+def getNumberOfAnomaliesPerIdAll(request):
+
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.all().prefetch_related("anomalie").prefetch_related("edi_file")
+    mapDateToNumberOfAnomalies = {}
+    for anomaly in historyanomalies:
+        if anomaly.anomalie_id not in mapDateToNumberOfAnomalies.keys():
+            mapDateToNumberOfAnomalies[anomaly.anomalie_id] = 0
+
+        mapDateToNumberOfAnomalies[anomaly.anomalie_id] += anomaly.number_of_anomalies
+
+    return HttpResponse(jsonpickle.encode(mapDateToNumberOfAnomalies,unpicklable=False),content_type='applicaiton/json')

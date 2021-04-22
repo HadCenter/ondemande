@@ -584,9 +584,9 @@ def getNumberOfAnomaliesPerIdAll(request):
     historyanomalies = HistoryAnomaliesEdiFiles.objects.all().prefetch_related("anomalie").prefetch_related("edi_file")
     mapDateToNumberOfAnomalies = {}
     for anomaly in historyanomalies:
-        if anomaly.anomalie_id not in mapDateToNumberOfAnomalies.keys():
-            mapDateToNumberOfAnomalies[anomaly.anomalie_id] = 0
+        if anomaly.anomalie.label not in mapDateToNumberOfAnomalies.keys():
+            mapDateToNumberOfAnomalies[anomaly.anomalie.label] = 0
 
-        mapDateToNumberOfAnomalies[anomaly.anomalie_id] += anomaly.number_of_anomalies
+        mapDateToNumberOfAnomalies[anomaly.anomalie.label] += anomaly.number_of_anomalies
 
     return HttpResponse(jsonpickle.encode(mapDateToNumberOfAnomalies,unpicklable=False),content_type='applicaiton/json')

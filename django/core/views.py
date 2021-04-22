@@ -563,6 +563,19 @@ def getNumberOfAnomaliesPerDate(request):
 
     return HttpResponse(jsonpickle.encode(getNumberOfAnomaliesPerDateDTO(dateToFilter,numberOfAnomaliestotal),unpicklable=False),content_type='applicaiton/json')
 
+@api_view(['GET'])
+def getNumberOfAnomaliesPerDateAll(request):
+
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.all().prefetch_related("anomalie").prefetch_related("edi_file")
+    mapDateToNumberOfAnomalies = {}
+    for anomaly in historyanomalies:
+        if anomaly.execution_time.strftime("%m-%d-%Y %H:%M:%S") not in mapDateToNumberOfAnomalies.keys():
+            mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y %H:%M:%S")] = 0
+
+        mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y %H:%M:%S")] += anomaly.number_of_anomalies
+
+    return HttpResponse(jsonpickle.encode(mapDateToNumberOfAnomalies,unpicklable=False),content_type='applicaiton/json')
+
 
 @api_view(['POST'])
 def getNumberOfAnomaliesPerId(request):

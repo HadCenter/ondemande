@@ -18,12 +18,7 @@ import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.co
 import { CreateClientService } from './dialog/create-client.service';
 import { LoaderModule } from 'app/components/loader/loader.module';
 import { DetailsClientService } from './details-client/details-client.service';
-
-
-
-
-
-
+import { TokenClientService } from './token-client/token-client.service';
 
 @NgModule({
   declarations: [ListClientsComponent, DetailsClientComponent, DialogBodyComponent, TokenClientComponent],
@@ -48,6 +43,7 @@ import { DetailsClientService } from './details-client/details-client.service';
     ListClientsService,
     CreateClientService,
     DetailsClientService,
+    TokenClientService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
 })

@@ -28,16 +28,14 @@
                   [class.asc]="header.sort === sortOrder.asc"
                   [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</i>
               </th>
-              
+
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-              <!-- <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{row.fileName}}</td> -->
-              <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{ row.transaction  }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.date_debut }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.date_fin }}
-              </td>
+              <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{ row.transaction_id  }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.start_date | date:"yyyy-MM-dd"}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.end_date | date:"yyyy-MM-dd"}}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.statut }}
               </td>
               <td class="column-actions mdl-data-table__cell--non-numeric">
@@ -45,7 +43,7 @@
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                 >Corriger
                 </button>
-                <button style="margin-left: 3px;" 
+                <button (click)="integrerTransaction(row.transaction_id)"style="margin-left: 3px;"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
                 </button>
               </td>

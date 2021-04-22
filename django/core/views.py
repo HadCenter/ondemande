@@ -123,15 +123,6 @@ def client_detail(request, pk):
         client_data = JSONParser().parse(request)
         client_serializer = ClientSerializer(client, data=client_data)
         if client_serializer.is_valid():
-            ftp = connect()
-            path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-            ftp.cwd(path_racine)
-            ftp.rename(client.nom_client, client_data['nom_client'])
-            path_racine = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
-            ftp.cwd(path_racine)
-            ftp.rename(client.nom_client, client_data['nom_client'])
-            print("ancien nom " + client.nom_client)
-            print("nouveau nom " + client_data['nom_client'])
             client_serializer.save()
             return JsonResponse(client_serializer.data)
         return JsonResponse(client_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

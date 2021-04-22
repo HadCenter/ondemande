@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ListTransactionService {
 
-  constructor() { }
+  private url = `${environment.apiBaseUrl}/talendEsb`;
+  constructor(private http: HttpClient) { }
+  public getAllTransactions () : Observable<any> {
+    return this.http.get(`${this.url}/getAllTransactionMadLivraison`);
+  }
+  public integrerTransaction(data) : Observable<any>{
+    return this.http.post(`${this.url}/integrerMADFile`, data);
+  }
   public getAdvancedHeaders() {
     return [
       {
-        name: 'transaction',
+        name: 'Transaction',
         sort: 0,
 
       },
@@ -19,7 +27,6 @@ export class ListTransactionService {
 
       },
       {
-        //             name: '# Code client',
         name: 'Date fin',
         sort: 0,
 
@@ -37,20 +44,5 @@ export class ListTransactionService {
 
     ];
   }
-  public advanceTableData: any = [{
-    transaction: "2", date_debut: "18/03/2021", date_fin: "19/03/2021", statut: "Terminé"
-  },
-  {
-    transaction: "1", date_debut: "16/03/2021", date_fin: "17/03/2021", statut: "Terminé"
-  }
-  ]
 
-  public getAdvancedTableNumOfPage(countPerPage)
-  {
-    return Math.ceil(this.advanceTableData.length / countPerPage);
-  }
-  public getAdvancedTablePage(page, countPerPage)
-  {
-    return this.advanceTableData.slice((page - 1) * countPerPage, page * countPerPage);
-  }
 }

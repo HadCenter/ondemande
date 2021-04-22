@@ -6,6 +6,8 @@ import { DetailsTransactionComponent } from './details-transaction.component';
 import { ThemeModule } from 'theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { DetailsTransactionService } from './details-transaction.service';
 
 @NgModule({
   declarations: [DetailsTransactionComponent],
@@ -17,6 +19,10 @@ import {MatExpansionModule} from '@angular/material/expansion';
     ReactiveFormsModule,
     MatExpansionModule,
     MatSnackBarModule,
-  ]
+  ],
+  providers: [
+    DetailsTransactionService,
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+  ],
 })
 export class DetailsTransactionModule { }

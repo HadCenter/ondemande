@@ -8,6 +8,8 @@ import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/mat
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import { ListTransactionService } from './list-transaction.service';
+import { GenererTransactionService } from './dialog/generer-transaction.service';
 @NgModule({
   declarations: [ListTransactionComponent,DailogGenerateTransaction],
   imports: [
@@ -20,11 +22,16 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule
-    
-    
+
+
   ],
   entryComponents: [
     DailogGenerateTransaction,
+  ],
+  providers: [
+    ListTransactionService,
+    GenererTransactionService,
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
 })
 export class ListTransactionModule { }

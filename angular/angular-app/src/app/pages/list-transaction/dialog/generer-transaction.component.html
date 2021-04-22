@@ -10,15 +10,15 @@
 
       <mat-form-field class="field-date" appearance="fill">
         <mat-label class="title-form">Entrez une plage de dates</mat-label>
-        <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate placeholder="Date de début">
-          <input matEndDate placeholder="Date de fin">
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+          <input matStartDate formControlName="start_date" placeholder="Date de début">
+          <input matEndDate formControlName="end_date" placeholder="Date de fin">
         </mat-date-range-input>
         <mat-datepicker-toggle class="icon-date" matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
       <div style="text-align: center;">
-        <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue">Générer</button>
+        <button (click)="genererTransaction()" class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit">Générer</button>
       </div>
     </base-card-body>
   </base-card>

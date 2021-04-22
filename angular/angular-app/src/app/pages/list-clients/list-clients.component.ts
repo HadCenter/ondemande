@@ -8,7 +8,7 @@ import { DialogBodyComponent } from '../../components/dialog-body/dialog-body.co
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsClientService } from './details-client/details-client.service';
-// import { CreateClientService } from './dialog/create-client.service';
+import { TokenClientService } from './token-client/token-client.service';
 import { AuthService } from '@services/*';
 
 export interface PeriodicElement {
@@ -193,11 +193,39 @@ export class DetailsClientComponent extends UpgradableComponent implements OnIni
   styleUrls: ['./token-client/token-client.component.css']
 })
 export class TokenClientComponent extends UpgradableComponent implements OnInit {
-
+   currentClient = {};
   constructor(public dialogRef: MatDialogRef<TokenClientComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { super(); }
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private clientService: TokenClientService) { super(); }
 
   ngOnInit(): void {
+    this.getClient(this.data.id);
+  }
+  getClient(id: string): void {
+    this.clientService.getClient(id)
+      .subscribe(
+        data => {
+          this.currentClient = data;
+          console.log(this.currentClient);
+        },
+        error => {
+          console.log(error);
+    });
+  }
+  sauvegarder()
+  {
+    var id = this.currentClient['id'];
+    var data = this.currentClient;
+    this.clientService.updateClientToken(id,data).subscribe(
+      (res) => {
+        console.log(res);
+        this.dialogRef.close('submit');
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
   }
 
 }

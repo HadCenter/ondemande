@@ -52,7 +52,6 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
   }
   setFilteredItems() {
     this.advancedTable = this.filterItems(this.filterValue);
-    console.log(this.advancedTable);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
     }

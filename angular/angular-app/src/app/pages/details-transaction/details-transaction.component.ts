@@ -4,6 +4,7 @@ import { DetailsTransactionService } from './details-transaction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UpgradableComponent } from 'theme/components/upgradable';
 
+
 @Component({
   selector: 'app-details-transaction',
   templateUrl: './details-transaction.component.html',
@@ -20,37 +21,22 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     private _snackBar: MatSnackBar, private router: Router,) { super(); }
 
   ngOnInit(): void {
-    this.transaction=this.service.getTransactionById(this.route.snapshot.params.id);
-    //this.getFile(this.route.snapshot.params.id);
+    this.getDetailTransaction(this.route.snapshot.params.id);
   }
-  getFile(id: string) {
-    this.service.get(id)
+  getDetailTransaction(route_param_id)
+  {
+    this.service.getDetailTransaction(route_param_id)
       .subscribe(
         data => {
-          this.file = data;
-          if (this.file.validatedOrders != '_') {
-            this.getValidFile();
-          }
-          else {
-            this.showValid = false;
-          }
-          if (this.file.wrongCommands != '_') {
-            this.getWrongFile();
-          }
-          else {
-            this.showWrong = false;
-          }
+        console.log(data);
+        this.transaction = data;
         },
         error => {
           console.log(error);
         });
+
   }
-  getValidFile()
-  {
-  }
-  getWrongFile()
-  {
-  }
+
 
 
 }

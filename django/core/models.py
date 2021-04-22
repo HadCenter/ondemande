@@ -10,6 +10,7 @@ class Client(models.Model):
     email = models.EmailField(max_length=100 , blank= True)
     archived = models.BooleanField(default= False)
     id_salesforce = models.CharField( max_length=200)
+    token = models.CharField( max_length=250,blank=True, null=True)
 
     def __str__(self):
         return self.nom_client

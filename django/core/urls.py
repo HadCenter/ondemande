@@ -21,5 +21,6 @@ urlpatterns = [
     path('getNumberOfAnomaliesPerDate',views.getNumberOfAnomaliesPerDate , name = "getNumberOfAnomaliesPerDate"),
     path('getNumberOfAnomaliesPerDateAll',views.getNumberOfAnomaliesPerDateAll , name = "getNumberOfAnomaliesPerDate"),
     path('getNumberOfAnomaliesPerId',views.getNumberOfAnomaliesPerId , name = "getNumberOfAnomaliesPerId"),
+    path('getNumberOfAnomaliesPerIdAll',views.getNumberOfAnomaliesPerIdAll , name = "getNumberOfAnomaliesPerIdAll"),
     path('seeFileContentMADFile',views.seeFileContentMADFile , name= "seeFileContentMADFile")
 ]

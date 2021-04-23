@@ -94,3 +94,8 @@ class getNumberOfAnomaliesPerDateDTO:
     def __init__(self,date,numberOfAnomalies):
         self.date= date
         self.numberOfAnomalies = numberOfAnomalies
+
+class getNumberOfAnomaliesWithFiltersDTO:
+    def __init__(self,mapIdToNumberOfAnomalies,mapDateToNumberOfAnomalies):
+        self.mapIdToNumberOfAnomalies = mapIdToNumberOfAnomalies
+        self.mapDateToNumberOfAnomalies = mapDateToNumberOfAnomalies

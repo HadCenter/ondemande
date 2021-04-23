@@ -619,11 +619,11 @@ def getNumberOfAnomaliesWithFilters(request):
     for anomaly in historyanomalies:
         if anomaly.anomalie.label not in mapIdToNumberOfAnomalies.keys():
             mapIdToNumberOfAnomalies[anomaly.anomalie.label] = 0
-        if anomaly.execution_time.strftime("%m-%d-%Y") not in mapDateToNumberOfAnomalies.keys():
-            mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y")] = 0
+        if anomaly.execution_time.strftime("%m-%d-%Y %H:%M:%S") not in mapDateToNumberOfAnomalies.keys():
+            mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y %H:%M:%S")] = 0
 
         mapIdToNumberOfAnomalies[anomaly.anomalie.label] += anomaly.number_of_anomalies
-        mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y")] += anomaly.number_of_anomalies
+        mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y %H:%M:%S")] += anomaly.number_of_anomalies
 
 
 

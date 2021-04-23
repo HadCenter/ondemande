@@ -1,4 +1,5 @@
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="showLowderListTransaction"></app-loader>
     <base-card>
       <base-card-title>
         <h1 class="mdl-card__title-text">Liste des transactions</h1>
@@ -41,7 +42,7 @@
               <td class="column-actions mdl-data-table__cell--non-numeric">
                 <button (click)="gotoDetails(row)"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                >Corriger
+                >Détails
                 </button>
                 <button (click)="integrerTransaction(row.transaction_id)"style="margin-left: 3px;"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer

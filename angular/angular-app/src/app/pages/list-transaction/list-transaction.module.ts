@@ -10,6 +10,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { ListTransactionService } from './list-transaction.service';
 import { GenererTransactionService } from './dialog/generer-transaction.service';
+import { LoaderModule } from 'app/components/loader/loader.module';
 @NgModule({
   declarations: [ListTransactionComponent,DailogGenerateTransaction],
   imports: [
@@ -21,7 +22,8 @@ import { GenererTransactionService } from './dialog/generer-transaction.service'
     MatFormFieldModule,
     MatDialogModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    LoaderModule
 
 
   ],

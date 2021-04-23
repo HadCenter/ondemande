@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { DetailsTransactionService } from './details-transaction.service';
+import { MatTableModule } from '@angular/material/table';
+import { LoaderModule } from 'app/components/loader/loader.module';
 
 @NgModule({
   declarations: [DetailsTransactionComponent],
@@ -19,6 +21,8 @@ import { DetailsTransactionService } from './details-transaction.service';
     ReactiveFormsModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatTableModule,
+    LoaderModule
   ],
   providers: [
     DetailsTransactionService,

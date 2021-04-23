@@ -10,7 +10,7 @@ class SendMadPostProcessPostObject:
         self.jobs_to_start = jobs_to_start
 
 class TransactionsLivraisonMadDto:
-    def __init__(self,transaction_id,start_date,end_date,statut,fichier_livraison_sftp,fichier_exception_sftp,fichier_metadata_sftp,fichier_mad_sftp):
+    def __init__(self,transaction_id,start_date,end_date,statut,fichier_livraison_sftp,fichier_exception_sftp,fichier_metadata_sftp,fichier_mad_sftp,created_at):
         self.transaction_id = transaction_id
         self.start_date = start_date
         self.end_date = end_date
@@ -19,6 +19,7 @@ class TransactionsLivraisonMadDto:
         self.fichier_exception_sftp = fichier_exception_sftp
         self.fichier_metadata_sftp = fichier_metadata_sftp
         self.fichier_mad_sftp = fichier_mad_sftp
+        self.created_at = created_at
 
 
 class TransactionsLivraison(models.Model):
@@ -29,6 +30,7 @@ class TransactionsLivraison(models.Model):
     fichier_exception_sftp = models.CharField(max_length=100, blank=True, null=True)
     fichier_metadata_sftp = models.CharField(max_length=100, blank=True, null=True)
     fichier_mad_sftp = models.CharField(max_length=100, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False

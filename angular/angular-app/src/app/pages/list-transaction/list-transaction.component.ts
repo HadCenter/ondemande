@@ -10,6 +10,7 @@ import { GenererTransactionService } from './dialog/generer-transaction.service'
   styleUrls: ['./list-transaction.component.scss']
 })
 export class ListTransactionComponent implements OnInit {
+  showLowderListTransaction = false;
   transactions: any = [];
   public filterValue: any;
   public readonly sortOrder = {
@@ -45,14 +46,19 @@ export class ListTransactionComponent implements OnInit {
     this.getTransactions();
   }
   public getTransactions() {
+    this.showLowderListTransaction = true;
     this.tablesService.getAllTransactions()
       .subscribe(res => {
+        this.showLowderListTransaction = false;
         this.transactions = res;
         console.log(this.transactions);
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },
-        error => console.log(error));
+        error => {
+          this.showLowderListTransaction = false;
+          console.log(error)
+        });
   }
   public integrerTransaction(transaction_id)
   {
@@ -161,6 +167,8 @@ export class ListTransactionComponent implements OnInit {
   styleUrls: ['dialog/generer-transaction.component.scss']
 })
 export class DailogGenerateTransaction {
+  showloader = false;
+  clicked = false;
   range = new FormGroup({
     start_date: new FormControl(),
     end_date: new FormControl()
@@ -179,6 +187,8 @@ export class DailogGenerateTransaction {
   }
   genererTransaction()
   {
+    this.clicked = true;
+    this.showloader = true;
     var start_date = this.toJSONLocal(this.range.value.start_date);
     var end_date = this.toJSONLocal(this.range.value.end_date);
     const formData = new FormData();
@@ -186,10 +196,12 @@ export class DailogGenerateTransaction {
     formData.append('end_date', end_date);
     this.service_genererTransaction.genererTransaction(formData).subscribe(
       (res) => {
+        this.showloader = false;
         console.log(res);
         this.dialogRef.close('submit');
       },
       (err) => {
+        this.showloader = false;
         console.log(err);
       }
     );

@@ -103,9 +103,50 @@ body {
 .content-file-line{
     padding: 20px 16px !important;
   }
+.ui-tables {
+  .mdl-card,
+  .mdl-card__supporting-text {
+        overflow-x: auto;
+  }
 
+  table {
+    width: 100%;
+    overflow-x: auto;
+
+    td {
+      font-size: 14px;
+    }
+  }
+
+  .no-padding {
+    padding: 0;
+    width: 100%;
+  }
+
+  .label__availability {
+    margin-right: 2px;
+  }
+}
 #conteneur
 {
     display: flex;
     justify-content: space-between;
+}
+.content-table{
+  overflow: auto;
+}
+.table-livraison
+{
+  width: max-content;
+}
+th.titre-column{
+  padding: 0 8px 0 8px !important;
+}
+td.mat-cell{
+  padding: 0 8px 12px 8px !important;
+  text-align: left;
+  font-size: 16px;
+  font-family: "Helvetica", "Arial", sans-serif;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }

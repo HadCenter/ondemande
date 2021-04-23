@@ -120,8 +120,8 @@ def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):
 @api_view(['get'])
 def getAllTransactionMadLivraison (request):
 	response = []
-	for transactionDB in TransactionsLivraison.objects.all() :
-		t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp)
+	for transactionDB in TransactionsLivraison.objects.all().order_by('-created_at') :
+		t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp,created_at = transactionDB.created_at)
 		response.append(t)
 	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
 
@@ -131,7 +131,7 @@ def getAllTransactionMadLivraison (request):
 def getSingleTransactionMadLivraison (request,pk):
 
 	transactionDB =  TransactionsLivraison.objects.get(id = pk)
-	t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp)
+	t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp,created_at = transactionDB.created_at)
 
 	return HttpResponse(jsonpickle.encode(t,unpicklable=False), content_type="application/json")
 

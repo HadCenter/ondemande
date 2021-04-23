@@ -8,7 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from .models import Client ,AnomaliesEdiFileAnnuaire , HistoryAnomaliesEdiFiles
-from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie ,getNumberOfAnomaliesPerDateDTO
+from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie ,getNumberOfAnomaliesPerDateDTO , getNumberOfAnomaliesWithFiltersDTO
 from .models import Client
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -29,7 +29,7 @@ from talendEsb.views import startEngineOnEdiFilesWithData
 from sftpConnectionToExecutionServer.views import  sftp
 
 from talendEsb.models import TransactionsLivraison
-
+import datetime
 import logging,traceback
 from typing import Optional
 from rest_framework_swagger.views import get_swagger_view
@@ -584,9 +584,47 @@ def getNumberOfAnomaliesPerIdAll(request):
     historyanomalies = HistoryAnomaliesEdiFiles.objects.all().prefetch_related("anomalie").prefetch_related("edi_file")
     mapDateToNumberOfAnomalies = {}
     for anomaly in historyanomalies:
-        if anomaly.anomalie_id not in mapDateToNumberOfAnomalies.keys():
-            mapDateToNumberOfAnomalies[anomaly.anomalie_id] = 0
+        if anomaly.anomalie.label not in mapDateToNumberOfAnomalies.keys():
+            mapDateToNumberOfAnomalies[anomaly.anomalie.label] = 0
 
-        mapDateToNumberOfAnomalies[anomaly.anomalie_id] += anomaly.number_of_anomalies
+        mapDateToNumberOfAnomalies[anomaly.anomalie.label] += anomaly.number_of_anomalies
 
     return HttpResponse(jsonpickle.encode(mapDateToNumberOfAnomalies,unpicklable=False),content_type='applicaiton/json')
+
+
+@api_view(['POST'])
+def getNumberOfAnomaliesWithFilters(request):
+    dateFilter = request.data["dateFilter"]
+    clientFilter = request.data["clientFilter"]
+    anomalieFilter = request.data["anomalieFilter"]
+    fileFilter = request.data["fileFilter"]
+
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.all().prefetch_related("anomalie").prefetch_related("edi_file").prefetch_related("edi_file__client")
+
+    if dateFilter != None :
+        startDate : datetime = dateFilter['startDate']
+        endDate : datetime= dateFilter['endDate']
+        if startDate != None :
+            historyanomalies = historyanomalies.filter(execution_time__gte = startDate)
+        if endDate != None :
+            historyanomalies = historyanomalies.filter(execution_time__lte = endDate)
+    if (clientFilter != None) and (len(clientFilter) > 0 ):
+        historyanomalies = historyanomalies.filter(edi_file__client__nom_client__in=clientFilter)
+    if (fileFilter != None) and (len(fileFilter) > 0 ):
+        historyanomalies = historyanomalies.filter(edi_file__file__in=fileFilter)
+    if (anomalieFilter != None) and (len(anomalieFilter) > 0 ):
+        historyanomalies = historyanomalies.filter(anomalie__label__in=anomalieFilter)
+    mapDateToNumberOfAnomalies = {}
+    mapIdToNumberOfAnomalies = {}
+    for anomaly in historyanomalies:
+        if anomaly.anomalie.label not in mapIdToNumberOfAnomalies.keys():
+            mapIdToNumberOfAnomalies[anomaly.anomalie.label] = 0
+        if anomaly.execution_time.strftime("%m-%d-%Y") not in mapDateToNumberOfAnomalies.keys():
+            mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y")] = 0
+
+        mapIdToNumberOfAnomalies[anomaly.anomalie.label] += anomaly.number_of_anomalies
+        mapDateToNumberOfAnomalies[anomaly.execution_time.strftime("%m-%d-%Y")] += anomaly.number_of_anomalies
+
+
+
+    return HttpResponse(jsonpickle.encode(getNumberOfAnomaliesWithFiltersDTO(mapIdToNumberOfAnomalies,mapDateToNumberOfAnomalies),unpicklable=False),content_type='applicaiton/json')

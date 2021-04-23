@@ -431,10 +431,10 @@ export class KpiAnomaliesComponent implements OnInit {
 
   loadChart_nbAnomaliesByType(): any {
 
-    this.allAnomalies.forEach(element => {
-      if (this.list_anomalies_names.indexOf(element.anomalie_name) === -1)
-        this.list_anomalies_names.push(element.anomalie_name)
-    });
+    // this.allAnomalies.forEach(element => {
+    //   if (this.list_anomalies_names.indexOf(element.anomalie_name) === -1)
+    //     this.list_anomalies_names.push(element.anomalie_name)
+    // });
 
     this.options_type.xAxis.categories= this.typesAnomalies;
     this.options_type.series = [{

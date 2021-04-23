@@ -1,0 +1,12 @@
+.bloc-charts{
+    display: flex;
+}
+base-card-title.card-title.mdl-card__title{
+    padding: 8px 16px;
+  }
+  base-card-title.card-title.mdl-card__title h2 {
+    font-size: larger;
+  }
+  base-card.bloc-type base-card-body{
+    padding: 10px 16px;
+  }

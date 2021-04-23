@@ -1,22 +1,98 @@
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-  <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-    <base-card class="bloc-type-cmd">
-        <base-card-title>
+  <div class="information-file mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+      <base-card style="height:auto" class="bloc-type">
+        <base-card-title class="card-title">
           <h2 class="mdl-card__title-text">Nombre de fichiers importés</h2>
         </base-card-title>
         <base-card-body>
           <app-kpinombre-de-fichiers-imorte-par-client></app-kpinombre-de-fichiers-imorte-par-client>
         </base-card-body>
-    </base-card>
-  </div>
-  <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-    <base-card class="bloc-type-cmd">
-        <base-card-title>
+      </base-card>
+    </div>
+
+    <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+      <base-card class="bloc-type">
+        <base-card-title class="card-title">
           <h2 class="mdl-card__title-text">Evolution de nombre de fichiers importés</h2>
         </base-card-title>
         <base-card-body>
-          <app-kpievolution-nombre-de-fichiers-imorte-par-client></app-kpievolution-nombre-de-fichiers-imorte-par-client>
+          <app-kpievolution-nombre-de-fichiers-imorte-par-client>
+          </app-kpievolution-nombre-de-fichiers-imorte-par-client>
         </base-card-body>
-    </base-card>
+      </base-card>
+    </div>
   </div>
+
+  <div class="all-selection mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <div style="display: grid"
+      class="mdl-cell mdl-cell--3-col-desktop mdl-cell--3-col-tablet mdl-cell--6-col-phone">
+      <label class="select-label">Date</label>
+      <mat-form-field class="field-date-kpi" appearance="fill">
+        <mat-label class="title-form-date">Entrez une plage de dates</mat-label>
+        <mat-date-range-input  [formGroup]="range"  [rangePicker]="picker">
+          <input matStartDate formControlName="start"  (dateInput)="getDate()"  (dateChange)="getDate()" placeholder="Date de début">
+          <input matEndDate formControlName="end"  (dateInput)="getDate()" (dateChange)="getDate()" placeholder="Date de fin">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      </mat-form-field>
+      <!-- 
+      <p>Selected range: {{range.value | json}}</p> -->
+    </div>
+    <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--6-col-phone">
+      <label class="select-label">Client</label>
+      <mat-form-field class="select-filter" appearance="fill">
+        <!-- <mat-label>Tout</mat-label> -->
+        <mat-select placeholder="Tout"  [formControl]="nameSelected" multiple>
+          <mat-select-trigger>
+            {{nameSelected.value ? nameSelected.value[0] : ''}}
+            <span *ngIf="nameSelected.value?.length > 1" class="example-additional-selection">
+              (+{{nameSelected.value.length - 1}} {{nameSelected.value?.length === 2 ? 'autre' : 'autres'}})
+            </span>
+          </mat-select-trigger>
+          <mat-option class="select-option" (onSelectionChange)="changeSelection()"  *ngFor="let topping of listClientsNames" [value]="topping">{{topping}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--6-col-phone">
+      <label class="select-label">Fichier</label>
+      <mat-form-field class="select-filter" appearance="fill">
+        <!-- <mat-label>Tout</mat-label> -->
+        <mat-select placeholder="Tout"  [formControl]="fileSelected" multiple>
+          <mat-select-trigger>
+            {{fileSelected.value ? fileSelected.value[0] : ''}}
+            <span *ngIf="fileSelected.value?.length > 1" class="example-additional-selection">
+              (+{{fileSelected.value.length - 1}} {{fileSelected.value?.length === 2 ? 'autre' : 'autres'}})
+            </span>
+          </mat-select-trigger>
+          <mat-option class="select-option"  (onSelectionChange)="changeSelection()"  *ngFor="let topping of listFilesNames" [value]="topping">{{topping}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--32-col-tablet mdl-cell--6-col-phone">
+      <label class="select-label">Type d'anomalie</label>
+      <mat-form-field style="width: 300px;" class="select-filter" floatLabel="never">
+        <!-- <mat-label>Tout</mat-label> -->
+        <mat-select  placeholder="Tout" [formControl]="typeAnomaliesSelected" multiple>
+          <mat-select-trigger>
+            {{typeAnomaliesSelected.value ? typeAnomaliesSelected.value[0] : ''}}
+            <span *ngIf="typeAnomaliesSelected.value?.length > 1" class="example-additional-selection">
+              (+{{typeAnomaliesSelected.value.length - 1}} {{typeAnomaliesSelected.value?.length === 2 ? 'autre' : 'autres'}})
+            </span>
+          </mat-select-trigger>
+          <mat-option class="select-option"  (onSelectionChange)="changeSelection()"  *ngFor="let topping of listTypesAnomaliesNames" [value]="topping">{{topping}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+<div>
+  <app-kpi-anomalies [rangeDate]="rangeDate" [nameSelected]="nameSelected.value" [fileSelected]="fileSelected.value" [typeAnomaliesSelected]="typeAnomaliesSelected.value"></app-kpi-anomalies>
+</div>
+
+
 </div>

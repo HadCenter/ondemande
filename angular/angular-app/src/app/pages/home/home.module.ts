@@ -7,6 +7,7 @@ import { ThemeModule } from 'theme';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { BrowserStatisticsChartComponent } from 'app/components/browser-statistics-chart';
 import {MatSelectModule} from '@angular/material/select';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LoaderModule } from 'app/components/loader/loader.module';
 import { KPInombreDeFichiersImorteParClientComponent } from 'app/components/kpinombre-de-fichiers-imorte-par-client';
 import { KPIEvolutionNombreDeFichiersImorteParClientComponent } from 'app/components/kpievolution-nombre-de-fichiers-imorte-par-client';
@@ -14,9 +15,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { KpiAnomaliesComponent } from 'app/components/kpi-anomalies/kpi-anomalies.component';
 
 @NgModule({
-  declarations: [BrowserStatisticsChartComponent, KPInombreDeFichiersImorteParClientComponent, KPIEvolutionNombreDeFichiersImorteParClientComponent,HomeComponent, ],
+  declarations: [BrowserStatisticsChartComponent, KPInombreDeFichiersImorteParClientComponent, KPIEvolutionNombreDeFichiersImorteParClientComponent,HomeComponent,KpiAnomaliesComponent ],
   imports: [
     CommonModule,
     HomeRoutingModule,
@@ -26,11 +28,13 @@ import { HighchartsChartModule } from 'highcharts-angular';
     MatDatepickerModule,
     MatInputModule,
     MatMomentDateModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    FormsModule, ReactiveFormsModule
   ],
   providers: [
     HomeService,
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' },
+   },
   ],
 })
 export class HomeModule { }

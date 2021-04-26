@@ -12,4 +12,8 @@ export class HomeService {
    public getNumberOfFilesPerClient () : Observable<any> {
     return this.http.get(`${this.url}/getNumberOfFilesPerClient/`);
   }
+  public getAllAnomalies() : Observable<any> {
+    return this.http.get(`${this.url}/kpi3/`);
+  }
+
 }

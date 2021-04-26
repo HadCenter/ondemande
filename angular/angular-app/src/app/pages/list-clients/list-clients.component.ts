@@ -134,7 +134,7 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
   public openDialog(id_client)
   {
     const dialogRef = this.matDialog.open(TokenClientComponent, {
-      // width: '250px',
+       width: '300px',
       data: { id: id_client }
     });
   }

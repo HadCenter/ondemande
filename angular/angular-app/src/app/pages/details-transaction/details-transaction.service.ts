@@ -14,6 +14,31 @@ export class DetailsTransactionService {
   public seeFileContent(data) : Observable<any> {
     return this.http.post(`${this.url2}/seeFileContentMADFile`, data);
   }
+  public getDetailTransactionSynchrone(route_param_id)
+  {
+    var request = new XMLHttpRequest();
+    request.open('GET', `${this.url1}/getSingleTransactionMadLivraison/${route_param_id}`, false);  // `false`
+    //makes the request synchronous
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(null);
+    if (request.status == 200) {
+        return request.response;
+    } else {
+        console.log("erreur");
+    }
+  }
+  public getDataSynchronous(data) {
+    var request = new XMLHttpRequest();
+    request.open('POST', `${this.url2}/seeFileContentMADFile`, false);  // `false`
+    //makes the request synchronous
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(JSON.stringify(data));
+    if (request.status == 200) {
+        return request.response;
+    } else {
+        console.log("erreur");
+    }
+}
 
 
 }

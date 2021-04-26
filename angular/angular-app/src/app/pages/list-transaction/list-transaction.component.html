@@ -34,7 +34,6 @@
           </thead>
           <tbody>
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-              <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{ row.transaction_id  }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.start_date | date:"yyyy-MM-dd"}}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.end_date | date:"yyyy-MM-dd"}}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.statut }}

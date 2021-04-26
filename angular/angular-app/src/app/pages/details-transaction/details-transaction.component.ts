@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsTransactionService } from './details-transaction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,7 +10,7 @@ import { UpgradableComponent } from 'theme/components/upgradable';
   templateUrl: './details-transaction.component.html',
   styleUrls: ['./details-transaction.component.scss']
 })
-export class DetailsTransactionComponent extends UpgradableComponent implements OnInit {
+export class DetailsTransactionComponent extends UpgradableComponent implements OnInit,AfterViewInit{
   transaction:any={};
   showLowderLivraisonFile: boolean = true;
   showLowderExceptionFile: boolean = true;
@@ -30,44 +30,45 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     private _snackBar: MatSnackBar, private router: Router,) { super(); }
 
   ngOnInit(): void {
-    this.getDetailTransaction(this.route.snapshot.params.id);
+    this.transaction = JSON.parse(this.service.getDetailTransactionSynchrone(this.route.snapshot.params.id));
+  }
+  ngAfterContentInit() {
+    if ( this.transaction.fichier_livraison_sftp != null){
+      console.log("Début getLivraisonFile");
+      this.getLivraisonFile();
+      console.log("Fin getLivraisonFile");
+    }
+    else{
+      this.showLowderLivraisonFile = false;
+    }
+    if (this.transaction.fichier_exception_sftp != null) {
+      console.log("Début getExceptionFile");
+      this.getExceptionFile();
+      console.log("Début getExceptionFile");
+    }
+    else{
+      this.showLowderExceptionFile = false;
+    }
+    if (this.transaction.fichier_metadata_sftp != null) {
+      console.log("Début getMetadataFile");
+      this.getMetadataFile();
+      console.log("Début getMetadataFile");
+    }
+    else{
+      this.showLowderMetadataFile = false;
+    }
+    if (this.transaction.fichier_mad_sftp != null) {
+      console.log("Début getMadFile");
+      this.getMadFile();
+      console.log("Début getMadFile");
+    }
+    else{
+      this.showLowderMadFile = false;
+    }
+
   }
   getDetailTransaction(route_param_id)
   {
-    this.service.getDetailTransaction(route_param_id)
-      .subscribe(
-        data => {
-        console.log(data);
-        this.transaction = data;
-        if (this.transaction.fichier_livraison_sftp != null){
-            this.getLivraisonFile();
-        }
-        else{
-            this.showLowderLivraisonFile = false;
-        }
-//         if (this.transaction.fichier_exception_sftp != null) {
-//             this.getExceptionFile();
-//         }
-//         else{
-//             this.showLowderExceptionFile = false;
-//         }
-//         if (this.transaction.fichier_metadata_sftp != null) {
-//             this.getMetadataFile();
-//         }
-//         else{
-//             this.showLowderMetadataFile = false;
-//         }
-//         if (this.transaction.fichier_mad_sftp != null) {
-//             this.getMadFile();
-//         }
-//         else{
-//             this.showLowderMadFile = false;
-//         }
-
-        },
-        error => {
-          console.log(error);
-        });
 
   }
   convertToArrayOfObjects(data) {
@@ -91,22 +92,20 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       "fileType": "livraison",
       "transaction_id": this.transaction.transaction_id,
     }
-    this.service.seeFileContent(data).subscribe(res => {
-      var tableau_res = res;
-      //create a copy array of object from the res and an array of displayed column
-      var dataSource = JSON.parse(JSON.stringify(tableau_res));
-      dataSource.rows.splice(0, 0, dataSource.columns);
-      if (tableau_res.rows.length > 0 ){
-        this.dataSourceLivraison = this.convertToArrayOfObjects(dataSource.rows);
-        this.displayedColumnsLivraison =Object.keys(this.dataSourceLivraison[0]);
-      }else{
-        this.dataSourceLivraison = [];
-        this.displayedColumnsLivraison = tableau_res.columns;
-      }
-      this.showLowderLivraisonFile = false;
-      console.log("this.dataSourceLivraison",this.dataSourceLivraison);
-      console.log("this.displayedColumnsLivraison",this.displayedColumnsLivraison);
-    });
+    var tableau_res = this.service.getDataSynchronous(data);
+    var dataSource = JSON.parse(tableau_res);
+    dataSource.rows.splice(0, 0, dataSource.columns);
+    for(var i = 0; i < dataSource.rows.length; i++){
+      dataSource.rows[i].splice(0,3);
+    }
+    if (dataSource.rows.length > 1 ){
+      this.dataSourceLivraison = this.convertToArrayOfObjects(dataSource.rows);
+      this.displayedColumnsLivraison =Object.keys(this.dataSourceLivraison[0]);
+    }else{
+      this.dataSourceLivraison = [];
+      this.displayedColumnsLivraison = dataSource.columns;
+    }
+    this.showLowderLivraisonFile = false;
   }
   getExceptionFile()
   {
@@ -114,22 +113,20 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       "fileType": "exception",
       "transaction_id": this.transaction.transaction_id,
     }
-    this.service.seeFileContent(data).subscribe(res => {
-      var tableau_res = res;
-      //create a copy array of object from the res and an array of displayed column
-      var dataSource = JSON.parse(JSON.stringify(tableau_res));
-      dataSource.rows.splice(0, 0, dataSource.columns);
-      if (tableau_res.rows.length > 0 ){
-        this.dataSourceException = this.convertToArrayOfObjects(dataSource.rows);
-        this.displayedColumnsException =Object.keys(this.dataSourceException[0]);
-      }else{
-        this.dataSourceException = [];
-        this.displayedColumnsException = tableau_res.columns;
-      }
-      this.showLowderExceptionFile = false;
-      console.log("this.dataSourceException",this.dataSourceException);
-      console.log("this.displayedColumnsException",this.displayedColumnsException);
-    });
+    var tableau_res = this.service.getDataSynchronous(data);
+    var dataSource = JSON.parse(tableau_res);
+    dataSource.rows.splice(0, 0, dataSource.columns);
+    for(var i = 0; i < dataSource.rows.length; i++){
+      dataSource.rows[i].splice(0,3);
+    }
+    if (dataSource.rows.length > 1 ){
+      this.dataSourceException = this.convertToArrayOfObjects(dataSource.rows);
+      this.displayedColumnsException =Object.keys(this.dataSourceException[0]);
+    }else{
+      this.dataSourceException = [];
+      this.displayedColumnsException = dataSource.columns;
+    }
+    this.showLowderExceptionFile = false;
   }
   getMetadataFile()
   {
@@ -137,23 +134,20 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       "fileType": "metadata",
       "transaction_id": this.transaction.transaction_id,
     }
-    this.service.seeFileContent(data).subscribe(res => {
-      var tableau_res = res;
-      console.log(res);
-      //create a copy array of object from the res and an array of displayed column
-      var dataSource = JSON.parse(JSON.stringify(tableau_res));
-      dataSource.rows.splice(0, 0, dataSource.columns);
-      if (tableau_res.rows.length > 0 ){
-        this.dataSourceMetadata = this.convertToArrayOfObjects(dataSource.rows);
-        this.displayedColumnsMetadata = Object.keys(this.dataSourceMetadata[0]);
-      }else{
-        this.dataSourceMetadata = [];
-        this.displayedColumnsMetadata = tableau_res.columns;
-      }
-      this.showLowderMetadataFile = false;
-      console.log("this.dataSourceMetadata",this.dataSourceMetadata);
-      console.log("this.displayedColumnsMetadata",this.displayedColumnsMetadata);
-    });
+    var tableau_res = this.service.getDataSynchronous(data);
+    var dataSource = JSON.parse(tableau_res);
+    dataSource.rows.splice(0, 0, dataSource.columns);
+    for(var i = 0; i < dataSource.rows.length; i++){
+      dataSource.rows[i].splice(0,3);
+    }
+    if (dataSource.rows.length > 1 ){
+      this.dataSourceMetadata = this.convertToArrayOfObjects(dataSource.rows);
+      this.displayedColumnsMetadata = Object.keys(this.dataSourceMetadata[0]);
+    }else{
+      this.dataSourceMetadata = [];
+      this.displayedColumnsMetadata = dataSource.columns;
+    }
+    this.showLowderMetadataFile = false;
   }
   getMadFile()
   {
@@ -161,22 +155,20 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       "fileType": "mad",
       "transaction_id": this.transaction.transaction_id,
     }
-    this.service.seeFileContent(data).subscribe(res => {
-      var tableau_res = res;
-      //create a copy array of object from the res and an array of displayed column
-      var dataSource = JSON.parse(JSON.stringify(tableau_res));
-      dataSource.rows.splice(0, 0, dataSource.columns);
-      if (tableau_res.rows.length > 0 ){
-        this.dataSourceMad = this.convertToArrayOfObjects(dataSource.rows);
-        this.displayedColumnsMad =Object.keys(this.dataSourceMad[0]);
-      }else{
-        this.dataSourceMad = [];
-        this.displayedColumnsMad = tableau_res.columns;
-      }
-      this.showLowderMadFile = false;
-      console.log("this.dataSourceMad",this.dataSourceMad);
-      console.log("this.displayedColumnsMad",this.displayedColumnsMad);
-    });
+    var tableau_res = this.service.getDataSynchronous(data);
+    var dataSource = JSON.parse(tableau_res);
+    dataSource.rows.splice(0, 0, dataSource.columns);
+    for(var i = 0; i < dataSource.rows.length; i++){
+      dataSource.rows[i].splice(0,3);
+    }
+    if (dataSource.rows.length > 1 ){
+      this.dataSourceMad = this.convertToArrayOfObjects(dataSource.rows);
+      this.displayedColumnsMad =Object.keys(this.dataSourceMad[0]);
+    }else{
+      this.dataSourceMad = [];
+      this.displayedColumnsMad = dataSource.columns;
+    }
+    this.showLowderMadFile = false;
   }
 }
 

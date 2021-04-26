@@ -76,8 +76,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         }else{
           dataCopy = this.copyFileWrong.data.slice();// copy and mutate
         }
-        
-        
+
+
         let startCol: number;
         let endCol: number;
         let startRow: number;
@@ -261,7 +261,15 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       "fileName": this.file.wrongCommands,
     }
     this.fileService.getFileEdi(data).subscribe(res => {
-      console.warn(res)
+      var dataSource = res;
+      dataSource.rows.splice(0, 0, dataSource.columns);
+      for(var i = 0; i < dataSource.rows.length; i++){
+        dataSource.rows[i].splice(29,1);
+      }
+      res.columns = dataSource.columns;
+      res.rows = dataSource.rows;
+      console.log("res.rows",res.rows);
+      console.log("res.columns",res.columns);
       this.fileWrong = res;
       this.MoveLastElementToTheStart();
       //create a copy array of object from the res and an array of displayed column
@@ -277,7 +285,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.displayedColumns=Object.keys(this.dataSource[0]);
       this.displayedColumns.splice(29, 2);  /****not display remarque id */
       this.displayedColumns.splice(1, 0, "select"); // add column select
-      
+
       //
       this.showWrong = false;
       this.LAST_EDITABLE_ROW = this.copyFileWrong.data.length - 1;
@@ -387,17 +395,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       value.modelValue = undefined;
     })
     this.filterValues=[];
-    
+
     this.copyFileWrong.data = this.testFile;
-    
+
     this.copyFileWrong = this.copyFileWrong.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
     // console.warn(this.filterValues)
   }
 
   convertToArrayOfObjects(data) {
-   
+
     var keys = data.shift(),
-    
+
       i = 0, k = 0,
       obj = null,
       output = [];
@@ -475,7 +483,7 @@ keys.push('rowId');
     else{
       columns = Object.keys(this.copyFileWrong.data[0]);
     }
-   
+
     let rows = [];
     // console.log("copyFileWrong",this.copyFileWrong.data.length);
     if(this.testFile.length == this.copyFileWrong.data)
@@ -497,8 +505,8 @@ keys.push('rowId');
             arrayFileToCorrect.push(element)
           }
         }
-      
-        
+
+
       });
 
       /********* to check .data */
@@ -508,11 +516,11 @@ keys.push('rowId');
       else if (this.copyFileWrong.data == undefined) {
         arrayFileToCorrect = arrayFileToCorrect.concat(this.copyFileWrong);
       }
-    
+
       rows = arrayFileToCorrect.map(Object.values);
 
     }
-    
+
     this.fileWrongUpdated = {
       columns: columns,
       rows: rows
@@ -522,11 +530,11 @@ keys.push('rowId');
     {
       document.querySelector('.selected').classList.remove('selected');
     }
-    
+
     this._fileWrong.rows.forEach(element => {
       // console.warn('//**/*///*element',element[el])
       element.shift(); // remove remarque
-     
+
 
       // element.pop();
       if(this.selection.selected.includes(element[element.length-1])){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
@@ -536,11 +544,11 @@ keys.push('rowId');
       }
       element.splice(element.length-3,2); // remove rows remarque_id & rowId
     });
-    
+
     this._fileWrong.columns.push('selected'); //add column selected
     this._fileWrong.columns.splice(this._fileWrong.columns.length-3,2);// remove column row id
 
-    
+
     if (this.fileWrong && this.fileValid) {
       // boucle pour ajouter false à toutes les lignes du tableau fileValid
       this.fileValid.rows.forEach(element => {

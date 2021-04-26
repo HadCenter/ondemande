@@ -17,11 +17,6 @@ export class ListTransactionService {
   public getAdvancedHeaders() {
     return [
       {
-        name: 'Transaction',
-        sort: 0,
-
-      },
-      {
         name: 'Date Début',
         sort: 0,
 

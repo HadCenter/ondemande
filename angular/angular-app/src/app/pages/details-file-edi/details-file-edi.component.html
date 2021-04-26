@@ -1,5 +1,4 @@
 <div class="container mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-  <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
   <div class="content-file-edi">
     <div class="content-labels">
       <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--5-col-phone">
@@ -51,7 +50,6 @@
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showValid"></app-loader>
               <div *ngIf="fileValid?.columns" class="content-table">
-
                 <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                   <thead>
                     <tr>
@@ -79,8 +77,8 @@
           </mat-accordion>
         </base-card-body>
       </base-card>
-
     </div>
+
     <div>
       <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
         <base-card-title>
@@ -106,32 +104,6 @@
               <div *ngIf="copyFileWrong" class="content-table">
                 <table mat-table [dataSource]="copyFileWrong"
                   class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
-                  <!-- <thead>
-                                        <tr>
-                                            <th *ngFor="let row of fileWrong?.columns ; let i = index"
-                                                class="details-line mdl-data-table__cell--non-numeric">
-                                                <span>{{row}}</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of fileWrong?.rows ; let i=index">
-                                            <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
-                                            (mousedown)="onMouseDown(i, j, fileWrong?.columns[j])"
-                                            (mouseup)="onMouseUp(i, j, fileWrong?.columns[j])"
-        [ngClass]="{'selected': selectedCellsState[i][j], 'unselected': !selectedCellsState[i][j+1]}"
-
-                                                class="details-line mdl-data-table__cell--non-numeric">
-                                                <label *ngIf="j==0" class="label-remarque">{{item[j]}}</label>
-
-
-                                                <input *ngIf="j!==0" name='{{item[j]}}'
-                                                    [ngClass]="( j==1 || j==5 ||j==6 || j==8||j==9|| j==13 )?'mini-column':'full-column'"
-                                                    type="text" [(ngModel)]="item[j]" class="mdl-textfield__input">
-                                            </td>
-                                        </tr>
-                                    </tbody> -->
-
                   <ng-container matColumnDef="Remarque">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Remarque
                       <!-- <select class="filter-column" matNativeControl name="{{options[0].columnProp}}"

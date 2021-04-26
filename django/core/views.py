@@ -198,7 +198,7 @@ def fileCreate(request,format=None):
     extension = get_extension(file_name)
     path = "media/files/"
     file = fs.save(file_name, request_file)
-    path_file = path + os.listdir(path)[0]
+    path_file = path + file
     df = pd.read_excel(path_file)
     df = df.fillna(value={'Expediteur': ''})
     os.remove(path_file)
@@ -313,7 +313,7 @@ def fileCreate(request,format=None):
 
 @api_view(['GET'])
 def fileList(request):
-    files = EDIfile.objects.select_related('client').filter(archived = False).order_by('-id')
+    files = EDIfile.objects.select_related('client').filter(archived = False).order_by('-created_at')
     listFiles = list()
     for fileDB  in files :
         clientDB = fileDB.client
@@ -508,7 +508,7 @@ def seeFileContentMADFile(request):
     fileType = request.data['fileType']
     transaction_id = request.data['transaction_id']
     try :
-        # os.chdir("media/files/UrbantzToHub/")
+        os.chdir("media/files/UrbantzToHub/")
         transaction = TransactionsLivraison.objects.get(id=transaction_id)
         remotefilePath = ""
         fileName = ""

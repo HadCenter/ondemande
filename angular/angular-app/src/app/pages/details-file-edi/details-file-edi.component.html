@@ -128,9 +128,10 @@
                     </th>
                     <td mat-cell *matCellDef="let row; let i = index" >
                       <mat-checkbox (click)="$event.stopPropagation()"
+                      [disabled]="row.selected ==1 "
                                     (change)="onCheckboxStateChange($event, row.rowId)"
                                     [checked]="selection.isSelected(row)"
-                                    *ngIf="row.Remarque_id == 6">
+                                    *ngIf="row.Remarque_id == 6 || row.selected ==1">
                       </mat-checkbox>
                     </td>
                   </ng-container>

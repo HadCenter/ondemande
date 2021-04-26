@@ -262,13 +262,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
     this.fileService.getFileEdi(data).subscribe(res => {
       var dataSource = res;
-      dataSource.rows.splice(0, 0, dataSource.columns);
-      for(var i = 0; i < dataSource.rows.length; i++){
-        dataSource.rows[i].splice(29,1);
-      }
-      res.columns = dataSource.columns;
-      res.rows = dataSource.rows;
+      // dataSource.rows.splice(0, 0, dataSource.columns);
+      // for(var i = 0; i < dataSource.rows.length; i++){
+      //   dataSource.rows[i].splice(29,1);
+      // }
+      // res.columns = dataSource.columns;
+      // res.rows = dataSource.rows;
       console.log("res.rows",res.rows);
+      
       console.log("res.columns",res.columns);
       this.fileWrong = res;
       this.MoveLastElementToTheStart();
@@ -278,14 +279,20 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   // this.dataSource.columns.push('rowId');
       this.dataSource = this.convertToArrayOfObjects(this.dataSource.rows);
+      console.warn("xxxx",this.dataSource);
+
+      
       this.copyFileWrong = new MatTableDataSource<any>(this.dataSource); // copyFileWrong doit etre de type MatTableDataSource pour ajouter checkbox
       this.testFile = this.dataSource;
       this.copyFileWrong.data = this.dataSource.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); /*****sort by remaque id  */
       this.files = this.dataSource;
       this.displayedColumns=Object.keys(this.dataSource[0]);
-      this.displayedColumns.splice(29, 2);  /****not display remarque id */
+      this.displayedColumns.splice(29, 3);  /****not display remarque id */
+      // this.displayedColumns.splice(30, 1); 
+      // this.displayedColumns.splice(31,1)
       this.displayedColumns.splice(1, 0, "select"); // add column select
-
+      // console.error(this.displayedColumns);
+      // console.error(this.dataSource);
       //
       this.showWrong = false;
       this.LAST_EDITABLE_ROW = this.copyFileWrong.data.length - 1;
@@ -530,24 +537,27 @@ keys.push('rowId');
     {
       document.querySelector('.selected').classList.remove('selected');
     }
-
+    console.warn("cooolei", this._fileWrong.columns)
     this._fileWrong.rows.forEach(element => {
       // console.warn('//**/*///*element',element[el])
       element.shift(); // remove remarque
 
-
+     
       // element.pop();
-      if(this.selection.selected.includes(element[element.length-1])){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
+      console.log("rlrmrnt",element)
+      if(this.selection.selected.includes(element[element.length-1])|| element.selected==1){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
         element.push(1); // add true (c'est à dire la ligne du tableau est séléctionnées)
       }else{
         element.push(0); // add fales (c'est à dire la ligne du tableau n'est pas séléctionnées)
       }
+      console.error("***",element)
       element.splice(element.length-3,2); // remove rows remarque_id & rowId
+      element.splice(28,1)
     });
 
     this._fileWrong.columns.push('selected'); //add column selected
     this._fileWrong.columns.splice(this._fileWrong.columns.length-3,2);// remove column row id
-
+    this._fileWrong.columns.splice(29,1);
 
     if (this.fileWrong && this.fileValid) {
       // boucle pour ajouter false à toutes les lignes du tableau fileValid

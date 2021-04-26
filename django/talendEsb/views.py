@@ -41,7 +41,8 @@ madPlanJobList = ["ECOLOTRANS_URBANTZ_TO_HUB_SANS_MAD_OTHERS_ONDEMAND",
 def integrerMADFile(request):
 	transaction_id = request.data['transaction_id']
 	transaction = TransactionsLivraison.objects.get(id=transaction_id)
-
+	transaction.statut = "En attente"
+	transaction.save()
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[0])
 	jobs_to_start.append(madPlanJobList[1])
@@ -56,7 +57,7 @@ def integrerMADFile(request):
 
 @api_view(['POST'])
 def genererMADFile(request):
-	transactionToInsert = TransactionsLivraison(start_date= request.data['start_date'] , end_date =request.data['end_date'] , statut="")
+	transactionToInsert = TransactionsLivraison(start_date= request.data['start_date'] , end_date =request.data['end_date'] , statut="En attente")
 	transactionToInsert.save()
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[0])
@@ -77,6 +78,8 @@ def correctExceptionFile(request):
 	fileName = "Livraisons_Exception.xlsx"
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
 	transaction = TransactionsLivraison.objects.get(id=transaction_id)
+	transaction.statut = "En attente"
+	transaction.save()
 	df.to_excel(fileName, index=False)
 	sftp.put(localpath =  fileName ,remotepath= transaction.fichier_exception_sftp )
 
@@ -92,6 +95,8 @@ def correctExceptionFile(request):
 def correctMetadataFile(request):
 	transaction_id = request.data['transaction_id']
 	transaction = TransactionsLivraison.objects.get(id=transaction_id)
+	transaction.statut = "En attente"
+	transaction.save()
 	fileReplacement = request.data['fileReplacement']
 	fileName = "ExceptionFacturationValue_Livraisons.xlsx"
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])

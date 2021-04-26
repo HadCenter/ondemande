@@ -508,11 +508,9 @@ def seeFileContentMADFile(request):
     fileType = request.data['fileType']
     transaction_id = request.data['transaction_id']
     try :
-        os.chdir("media")
-        os.chdir("files")
-        if "UrbantzToHub" not in os.listdir() :
-            os.mkdir("UrbantzToHub")
-        chr("UrbantzToHub")
+        osCreateMediaFiles(os)
+        os.chdir("media/files/UrbantzToHub/")
+
         transaction = TransactionsLivraison.objects.get(id=transaction_id)
         remotefilePath = ""
         fileName = ""
@@ -632,3 +630,19 @@ def getNumberOfAnomaliesWithFilters(request):
 
 
     return HttpResponse(jsonpickle.encode(getNumberOfAnomaliesWithFiltersDTO(mapIdToNumberOfAnomalies,mapDateToNumberOfAnomalies),unpicklable=False),content_type='applicaiton/json')
+
+
+
+def osCreateMediaFiles(os):
+    osOriginalPath = os.getcwd()
+    if "media" not in os.listdir():
+        os.mkdir("media")
+    os.chdir("media")
+    if "files" not in os.listdir():
+        os.mkdir("files")
+    os.chdir("files")
+    if "UrbantzToHub" not in os.listdir():
+        os.mkdir("UrbantzToHub")
+    os.chdir("UrbantzToHub")
+
+    os.chdir(osOriginalPath)

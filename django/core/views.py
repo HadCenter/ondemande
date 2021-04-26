@@ -508,7 +508,11 @@ def seeFileContentMADFile(request):
     fileType = request.data['fileType']
     transaction_id = request.data['transaction_id']
     try :
-        os.chdir("media/files/UrbantzToHub/")
+        os.chdir("media")
+        os.chdir("files")
+        if "UrbantzToHub" not in os.listdir() :
+            os.mkdir("UrbantzToHub")
+        chr("UrbantzToHub")
         transaction = TransactionsLivraison.objects.get(id=transaction_id)
         remotefilePath = ""
         fileName = ""

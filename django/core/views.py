@@ -361,11 +361,21 @@ def seeFileContent(request):
         excelfile = excelfile.fillna('')
         columns = list(excelfile.columns)
 
+        columns.remove("selected")
+        columns.insert(0 , "selected")
+
+
         if "Remarque_id" in columns :
             annuaireAnomalies = pd.DataFrame(list(AnomaliesEdiFileAnnuaire.objects.all().values()))
             annuaireAnomaliesColumnName = annuaireAnomalies.rename(columns={"id_anomalie": "Remarque_id" , "label" : "Remarque"})
             excelfile = pd.merge(excelfile, annuaireAnomaliesColumnName, on="Remarque_id" )
+            columns = list(excelfile.columns)
+            columns.remove("selected")
+            columns.insert(0, "selected")
+            columns.remove("Remarque")
+            columns.insert(0, "Remarque")
 
+        excelfile = excelfile.reindex(columns=columns)
         excelfile.insert(loc =len(excelfile.columns) , column='rowId', value=np.arange(len(excelfile)))
         columns = list(excelfile.columns)
         rows = excelfile.values.tolist()

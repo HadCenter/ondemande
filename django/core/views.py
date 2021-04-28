@@ -9,7 +9,7 @@ from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from .models import Client ,AnomaliesEdiFileAnnuaire , HistoryAnomaliesEdiFiles
 from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie ,getNumberOfAnomaliesPerDateDTO , getNumberOfAnomaliesWithFiltersDTO
-from .models import Client
+from .models import Client,AllMadFileContent
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
@@ -511,11 +511,9 @@ def kpi3(request):
         listAnomaliesToReturn.append(kpi3SchemaSingleAnomalie(anomalie_id=anomaly.id,number_of_anomalies= anomaly.number_of_anomalies,execution_time = anomaly.execution_time,edi_file_id =anomaly.edi_file.id ,client_id = anomaly.edi_file.client.id,client_name = anomaly.edi_file.client.nom_client,client_code = anomaly.edi_file.client.code_client , edi_file_name= anomaly.edi_file.file.name, anomalie_name=anomaly.anomalie.label))
     return HttpResponse(jsonpickle.encode(listAnomaliesToReturn,unpicklable=False),content_type='applicaiton/json')
 
-@api_view(['POST'])
-def seeFileContentMADFile(request):
+
+def seeFileContentMADFile(fileType,transaction_id):
     osOriginalPath = os.getcwd()
-    fileType = request.data['fileType']
-    transaction_id = request.data['transaction_id']
     try :
         osCreateMediaFiles(os)
         os.chdir("media/files/UrbantzToHub/")
@@ -553,6 +551,12 @@ def seeFileContentMADFile(request):
         os.chdir(osOriginalPath)
         print(e)
         return JsonResponse({'message': 'internal error'}, status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['POST'])
+def seeFileContentMADFile(request):
+    fileType = request.data['fileType']
+    transaction_id = request.data['transaction_id']
+    return seeFileContentMADFile(fileType,transaction_id)
 
 
 @api_view(['POST'])
@@ -655,3 +659,12 @@ def osCreateMediaFiles(os):
     os.chdir("UrbantzToHub")
 
     os.chdir(osOriginalPath)
+
+@api_view(['POST'])
+def seeAllFileContentMADFile(request):
+    transaction_id = request.data['transaction_id']
+    livraison = seeFileContentMADFile("livraison",transaction_id)
+    exception = seeFileContentMADFile("exception",transaction_id)
+    metadata = seeFileContentMADFile("metadata",transaction_id)
+    mad = seeFileContentMADFile("mad",transaction_id)
+    return HttpResponse(jsonpickle.encode(AllMadFileContent(livraison,exception,metadata,mad),unpicklable=False), content_type='applicaiton/json')

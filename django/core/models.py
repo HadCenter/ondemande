@@ -99,3 +99,10 @@ class getNumberOfAnomaliesWithFiltersDTO:
     def __init__(self,mapIdToNumberOfAnomalies,mapDateToNumberOfAnomalies):
         self.mapIdToNumberOfAnomalies = mapIdToNumberOfAnomalies
         self.mapDateToNumberOfAnomalies = mapDateToNumberOfAnomalies
+
+class AllMadFileContent:
+    def __init__(self,livraison,exception,metadata,mad):
+        self.livraison = livraison
+        self.exception = exception
+        self.metadata = metadata
+        self.mad = mad

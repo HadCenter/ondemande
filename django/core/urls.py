@@ -23,5 +23,6 @@ urlpatterns = [
     path('getNumberOfAnomaliesPerId',views.getNumberOfAnomaliesPerId , name = "getNumberOfAnomaliesPerId"),
     path('getNumberOfAnomaliesPerIdAll',views.getNumberOfAnomaliesPerIdAll , name = "getNumberOfAnomaliesPerIdAll"),
     path('getNumberOfAnomaliesWithFilters',views.getNumberOfAnomaliesWithFilters , name = "getNumberOfAnomaliesWithFilters"),
-    path('seeFileContentMADFile',views.seeFileContentMADFile , name= "seeFileContentMADFile")
+    path('seeFileContentMADFile',views.seeFileContentMADFile , name= "seeFileContentMADFile"),
+    path('seeAllFileContentMADFile',views.seeAllFileContentMADFile , name= "seeAllFileContentMADFile")
 ]

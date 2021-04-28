@@ -512,7 +512,7 @@ def kpi3(request):
     return HttpResponse(jsonpickle.encode(listAnomaliesToReturn,unpicklable=False),content_type='applicaiton/json')
 
 
-def seeFileContentMADFile(fileType,transaction_id):
+def seeFileContentMADFileCore(fileType,transaction_id):
     osOriginalPath = os.getcwd()
     try :
         osCreateMediaFiles(os)
@@ -543,21 +543,23 @@ def seeFileContentMADFile(fileType,transaction_id):
         rows = excelfile.values.tolist()
         os.remove(fileName)
         responseObject = FileExcelContent(columns, rows)
-        responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
 
         os.chdir(osOriginalPath)
-        return HttpResponse(responseObjectText, content_type="application/json")
+        return responseObject
     except Exception as e :
         os.chdir(osOriginalPath)
         print(e)
-        return JsonResponse({'message': 'internal error'}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST'])
 def seeFileContentMADFile(request):
     fileType = request.data['fileType']
     transaction_id = request.data['transaction_id']
-    return seeFileContentMADFile(fileType,transaction_id)
-
+    try :
+        responseObject = seeFileContentMADFileCore(fileType,transaction_id)
+        responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
+        return HttpResponse(responseObjectText, content_type="application/json")
+    except Exception as e :
+        return JsonResponse({'message': 'internal error'}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST'])
 def getNumberOfAnomaliesPerDate(request):
@@ -663,8 +665,8 @@ def osCreateMediaFiles(os):
 @api_view(['POST'])
 def seeAllFileContentMADFile(request):
     transaction_id = request.data['transaction_id']
-    livraison = seeFileContentMADFile("livraison",transaction_id)
-    exception = seeFileContentMADFile("exception",transaction_id)
-    metadata = seeFileContentMADFile("metadata",transaction_id)
-    mad = seeFileContentMADFile("mad",transaction_id)
+    livraison = seeFileContentMADFileCore("livraison",transaction_id)
+    exception = seeFileContentMADFileCore("exception",transaction_id)
+    metadata = seeFileContentMADFileCore("metadata",transaction_id)
+    mad = seeFileContentMADFileCore("mad",transaction_id)
     return HttpResponse(jsonpickle.encode(AllMadFileContent(livraison,exception,metadata,mad),unpicklable=False), content_type='applicaiton/json')

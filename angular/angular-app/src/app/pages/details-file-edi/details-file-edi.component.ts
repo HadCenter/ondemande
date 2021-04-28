@@ -249,6 +249,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
       // initialize all selectedCellsState to false
       this.copyFileWrong.forEach(element => {
+        //get checkbox selected by default
+        if (element.selected == 1) {
+          this.selection.push(element.rowId);
+        }
         this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
       });
       // get select options
@@ -449,9 +453,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     });
   }
 
-/**
-  * Hide ui selection red rectangle 
-  */
+  /**
+    * Hide ui selection red rectangle 
+    */
   hideUiSelectionOnCorrection() {
     if (document.querySelector('.selected')) {
       var inputs = document.querySelectorAll(".selected");
@@ -519,8 +523,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    * @param row
    */
   public onCheckboxStateChange(row) {
+    //check
     if (row.selected !== 1) {
       this.selection.push(row.rowId);
+      row.selected = 1;
+    }
+    //uncheck
+    else {
+      row.selected = 0;
+      this.selection = this.selection.filter(function (item) {
+        return item !== row.rowId
+      })
     }
   }
 

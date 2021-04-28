@@ -13,13 +13,21 @@
         </div>
         <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
         </base-pagination>
-        <button (click)='openDialog()'
-          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Générer une transaction
-        </button>
-        &nbsp;
+        <div id="conteneurDesBoutonsHeaderBaseCard">
+          <div class="boutonGenererTransaction">
+            <button (click)='openDialog()'
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Générer une transaction
+            </button>
+          </div>
+          <div>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+            (click)="actualiser()">Actualiser
+            </button>
+          </div>
+        </div>
       </base-card-title>
-      <base-card-body class="no-padding">
-        <table  class="table-list mdl-data-table mdl-js-data-table sorting-table">
+      <base-card-body *ngIf="advancedTable.length > 0" class="no-padding">
+        <table class="table-list mdl-data-table mdl-js-data-table sorting-table">
           <thead>
             <tr>
               <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
@@ -29,17 +37,17 @@
                   [class.asc]="header.sort === sortOrder.asc"
                   [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</i>
               </th>
-
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
               <td class="mdl-data-table__cell--non-numeric">{{ row.start_date | date:"yyyy-MM-dd"}}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.end_date | date:"yyyy-MM-dd"}}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.statut }}
+              <td class="mdl-data-table__cell--non-numeric">
+                <span class="label label--mini color--{{getColor(row.statut)}} ">{{ row.statut}}</span>
               </td>
               <td class="column-actions mdl-data-table__cell--non-numeric">
-                <button (click)="gotoDetails(row)"
+                <button (click)="gotoDetails(row)" [disabled] = "row.statut !== 'Terminé'"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                 >Détails
                 </button>

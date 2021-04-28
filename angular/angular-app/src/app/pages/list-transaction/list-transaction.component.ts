@@ -28,6 +28,17 @@ export class ListTransactionComponent implements OnInit {
   ngOnInit(): void {
      this.getTransactions();
   }
+  getColor(ch) {
+    if (ch === 'En attente') {
+      return 'blue';
+    } else if (ch === 'Terminé') {
+      return 'green';
+    } else if (ch === 'En cours') {
+      return 'orange';
+    } else {
+      return 'red';
+    }
+  }
   public gotoDetails(row) {
     this.router.navigate(['/details-transaction', row.transaction_id])
   }
@@ -42,7 +53,9 @@ export class ListTransactionComponent implements OnInit {
     });
   }
   public actualiser() {
+    this.advancedTable = [];
     this.transactions = [];
+    this.showLowderListTransaction = true;
     this.getTransactions();
   }
   public getTransactions() {
@@ -167,6 +180,7 @@ export class ListTransactionComponent implements OnInit {
   styleUrls: ['dialog/generer-transaction.component.scss']
 })
 export class DailogGenerateTransaction {
+  maxDate: Date;
   showloader = false;
   clicked = false;
   range = new FormGroup({
@@ -178,7 +192,8 @@ export class DailogGenerateTransaction {
     public dialogRef: MatDialogRef<DailogGenerateTransaction>,
     private service_genererTransaction : GenererTransactionService
   ) {
-
+    this.maxDate = new Date();
+    this.maxDate.setDate(this.maxDate.getDate() - 1);
   }
   ngOnInit(): void {
   }

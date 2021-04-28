@@ -163,10 +163,6 @@ export class ListFileEDIComponent extends UpgradableComponent {
         for (var i = 0; i < this.advancedTable.length; i++) {
           this.clicked.push(false);
         }
-        /****initialiser les selects */
-        // this.advancedHeaders.forEach(item => {
-        //   this.getOption(item);
-        // })
       },
         error => console.log(error));
   }

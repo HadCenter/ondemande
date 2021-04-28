@@ -8,9 +8,9 @@
     <base-card-body class="card-content">
       <mat-form-field class="field-date" appearance="fill">
         <mat-label class="title-form">Entrez une plage de dates</mat-label>
-        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [max]="maxDate">
           <input matStartDate formControlName="start_date" placeholder="Date de début">
-          <input matEndDate formControlName="end_date" placeholder="Date de fin">
+          <input matEndDate formControlName="end_date"  placeholder="Date de fin">
         </mat-date-range-input>
         <mat-datepicker-toggle class="icon-date" matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>

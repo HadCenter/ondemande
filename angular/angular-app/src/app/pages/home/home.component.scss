@@ -298,6 +298,7 @@ base-card.bloc-type base-card-body{
 }
 .select-filter{
   width: fit-content;
+  color : white;
 }
 .select-label{
   margin-left: 11px;
@@ -306,6 +307,7 @@ base-card.bloc-type base-card-body{
 }
 .all-selection{
   display: flex;
+  justify-content: space-around;
 }
 .field-date-kpi{
   display: inline-block!important;
@@ -349,3 +351,4 @@ span.mat-date-range-input-separator{
 .select-option .mat-pseudo-checkbox-checked{
   background: #00bcd4 ;
 }
+

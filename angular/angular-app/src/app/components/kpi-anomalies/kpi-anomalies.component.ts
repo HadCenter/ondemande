@@ -27,7 +27,7 @@ export class KpiAnomaliesComponent implements OnInit {
   @Input('fileSelected') fileSelected: any;
   @Input('nameSelected') nameSelected: any;
   @Input('rangeDate') rangeDate: any;
- 
+
 
 
   constructor(public anomalieService: KpiAnomaliesService) {
@@ -36,11 +36,13 @@ export class KpiAnomaliesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log("ngOnChanges")
     const isFirstChange = Object.values(changes).some(c => c.isFirstChange());
 
     if (isFirstChange == false) {
       if ((this.typeAnomaliesSelected?.length > 0 && this.typeAnomaliesSelected != null) || (this.rangeDate?.startDate != null || this.rangeDate?.endDate != null) ||
         (this.nameSelected?.length > 0 && this.nameSelected != null) || (this.fileSelected?.length > 0 && this.fileSelected != null)) {
+        console.log("this.nameSelected",this.fileSelected);
         var filters = {
           "dateFilter": this.rangeDate,
           "clientFilter": this.nameSelected,
@@ -50,8 +52,8 @@ export class KpiAnomaliesComponent implements OnInit {
         this.anomalieService.getNumberOfAnomaliesWithFilters(filters).subscribe(res => {
           this.anomaliesByFiltres = res;
           this.getNumberOfAnomalies();
-          
-        
+
+
         })
       }
       else {
@@ -63,23 +65,23 @@ export class KpiAnomaliesComponent implements OnInit {
           Object.values(nbrAnomaliesByDate);
           this.anomaliesBydates = Object.entries(nbrAnomaliesByDate);
 
-          
+
           this.anomaliesBydates.forEach(element => {
             //   var date = new Date(element[0]);
             element[0] = (new Date(element[0])).getTime();
             //   element[0] = xAxisDate;
             this.anomaliesBydates_copy = [...this.anomaliesBydates];
-           
+
           });
           this.redrawChartNbAnomalieParDate();
         })
-       
+
         this.anomalieService.getNumberOfAnomaliesPerIdAll().subscribe(res => {
           const nbrAnomaliesByType = res;
           this.typesAnomalies = Object.keys(nbrAnomaliesByType);
-    
+
           this.nbAnomaliesByTypes = Object.values(nbrAnomaliesByType);
-    
+
           this.redrawChartNbAnomalieParType();
         })
        // this.getNumberOfAnomaliesPerType();
@@ -112,7 +114,7 @@ export class KpiAnomaliesComponent implements OnInit {
   }
 
   getNumberOfAnomaliesPerDateAll() {
-    // if (this.anomaliesByFiltres.length == 0) { 
+    // if (this.anomaliesByFiltres.length == 0) {
     this.anomalieService.getNumberOfAnomaliesPerDateAll().subscribe(res => {
       const nbrAnomaliesByDate = res;
       Object.keys(nbrAnomaliesByDate);
@@ -330,7 +332,7 @@ export class KpiAnomaliesComponent implements OnInit {
 
   loadChart() {
     this.options.series = [
-      { 
+      {
         name: "Nb anomalie",
         data: this.anomaliesBydates,
         color: 'rgb(0, 188, 212)',

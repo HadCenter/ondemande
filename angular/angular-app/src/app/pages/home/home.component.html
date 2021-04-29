@@ -40,59 +40,65 @@
         <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
         <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
       </mat-form-field>
-      <!-- 
+      <!--
       <p>Selected range: {{range.value | json}}</p> -->
     </div>
     <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--6-col-phone">
       <label class="select-label">Client</label>
       <mat-form-field class="select-filter" appearance="fill">
-        <!-- <mat-label>Tout</mat-label> -->
-        <mat-select placeholder="Tout"  [formControl]="nameSelected" multiple>
-          <mat-select-trigger>
-            {{nameSelected.value ? nameSelected.value[0] : ''}}
-            <span *ngIf="nameSelected.value?.length > 1" class="example-additional-selection">
-              (+{{nameSelected.value.length - 1}} {{nameSelected.value?.length === 2 ? 'autre' : 'autres'}})
-            </span>
-          </mat-select-trigger>
-          <mat-option class="select-option" (onSelectionChange)="changeSelection()"  *ngFor="let topping of listClientsNames" [value]="topping">{{topping}}</mat-option>
-        </mat-select>
+        <mat-label>Tout</mat-label>
+        <input  type="text"  aria-label="clients" matInput [matAutocomplete]="auto" [formControl]="clientControl">
+        <mat-hint style="color:white;"> {{ selectedClients?.length }} clients sélectionnés</mat-hint>
       </mat-form-field>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayClientFn">
+        <mat-option *ngFor="let client of filteredClients | async" [value]="selectedClients">
+          <div (click)="optionClickedClient($event, client)">
+            <mat-checkbox [checked]="client.selected" (change)="toggleSelectionClient(client)" (click)="$event.stopPropagation()">
+              {{ client.clientName }}
+            </mat-checkbox>
+          </div>
+        </mat-option>
+      </mat-autocomplete>
     </div>
 
     <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--6-col-phone">
-      <label class="select-label">Fichier</label>
+      <label class="select-label">File</label>
       <mat-form-field class="select-filter" appearance="fill">
-        <!-- <mat-label>Tout</mat-label> -->
-        <mat-select placeholder="Tout"  [formControl]="fileSelected" multiple>
-          <mat-select-trigger>
-            {{fileSelected.value ? fileSelected.value[0] : ''}}
-            <span *ngIf="fileSelected.value?.length > 1" class="example-additional-selection">
-              (+{{fileSelected.value.length - 1}} {{fileSelected.value?.length === 2 ? 'autre' : 'autres'}})
-            </span>
-          </mat-select-trigger>
-          <mat-option class="select-option"  (onSelectionChange)="changeSelection()"  *ngFor="let topping of listFilesNames" [value]="topping">{{topping}}</mat-option>
-        </mat-select>
+        <mat-label>Tout</mat-label>
+        <input  type="text"  aria-label="files" matInput [matAutocomplete]="file" [formControl]="fileControl">
+        <mat-hint style="color:white;"> {{ selectedFiles?.length }} fichiers sélectionnés</mat-hint>
       </mat-form-field>
+      <mat-autocomplete #file="matAutocomplete" [displayWith]="displayFileFn">
+        <mat-option *ngFor="let file of filteredFiles | async" [value]="selectedFiles">
+          <div (click)="optionClickedFile($event, file)">
+            <mat-checkbox [checked]="file.selected" (change)="toggleSelectionFile(file)" (click)="$event.stopPropagation()">
+              {{ file.fileName }}
+            </mat-checkbox>
+          </div>
+        </mat-option>
+      </mat-autocomplete>
     </div>
     <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--32-col-tablet mdl-cell--6-col-phone">
       <label class="select-label">Type d'anomalie</label>
-      <mat-form-field style="width: 300px;" class="select-filter" floatLabel="never">
-        <!-- <mat-label>Tout</mat-label> -->
-        <mat-select  placeholder="Tout" [formControl]="typeAnomaliesSelected" multiple>
-          <mat-select-trigger>
-            {{typeAnomaliesSelected.value ? typeAnomaliesSelected.value[0] : ''}}
-            <span *ngIf="typeAnomaliesSelected.value?.length > 1" class="example-additional-selection">
-              (+{{typeAnomaliesSelected.value.length - 1}} {{typeAnomaliesSelected.value?.length === 2 ? 'autre' : 'autres'}})
-            </span>
-          </mat-select-trigger>
-          <mat-option class="select-option"  (onSelectionChange)="changeSelection()"  *ngFor="let topping of listTypesAnomaliesNames" [value]="topping">{{topping}}</mat-option>
-        </mat-select>
+      <mat-form-field class="select-filter" appearance="fill">
+        <mat-label>Tout</mat-label>
+        <input  type="text"  aria-label="typesAnomalies" matInput [matAutocomplete]="typeanomalie" [formControl]="typesAnomaliesControl">
+        <mat-hint style="color:white;"> {{ selectedtypesAnomalies?.length }} types d'anomalies sélectionnés</mat-hint>
       </mat-form-field>
+      <mat-autocomplete #typeanomalie="matAutocomplete" [displayWith]="displaytypesAnomaliesFn">
+        <mat-option *ngFor="let typeAnomalie of filteredtypesAnomalies | async" [value]="selectedtypesAnomalies">
+          <div (click)="optionClickedtypeAnomalie($event, typeAnomalie)">
+            <mat-checkbox [checked]="typeAnomalie.selected" (change)="toggleSelectiontypesAnomalies(typeAnomalie)" (click)="$event.stopPropagation()">
+              {{ typeAnomalie.anomalieName }}
+            </mat-checkbox>
+          </div>
+        </mat-option>
+      </mat-autocomplete>
     </div>
   </div>
-<div>
-  <app-kpi-anomalies [rangeDate]="rangeDate" [nameSelected]="nameSelected.value" [fileSelected]="fileSelected.value" [typeAnomaliesSelected]="typeAnomaliesSelected.value"></app-kpi-anomalies>
-</div>
+  <div>
+    <app-kpi-anomalies [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" [fileSelected]="selectedFilesNames" [typeAnomaliesSelected]="selectedtypesAnomaliesNames"></app-kpi-anomalies>
+  </div>
 
 
 </div>

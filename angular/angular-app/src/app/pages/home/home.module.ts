@@ -16,6 +16,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { KpiAnomaliesComponent } from 'app/components/kpi-anomalies/kpi-anomalies.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+
+
 
 @NgModule({
   declarations: [BrowserStatisticsChartComponent, KPInombreDeFichiersImorteParClientComponent, KPIEvolutionNombreDeFichiersImorteParClientComponent,HomeComponent,KpiAnomaliesComponent ],
@@ -29,7 +33,9 @@ import { KpiAnomaliesComponent } from 'app/components/kpi-anomalies/kpi-anomalie
     MatInputModule,
     MatMomentDateModule,
     HighchartsChartModule,
-    FormsModule, ReactiveFormsModule
+    FormsModule, ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatCheckboxModule
   ],
   providers: [
     HomeService,

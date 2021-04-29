@@ -3,9 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material/table';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 
 export interface MouseEvent {
   rowId: number;
@@ -19,8 +16,6 @@ export interface MouseEvent {
   styleUrls: ['./details-file-edi.component.scss']
 })
 export class DetailsFileEdiComponent extends UpgradableComponent implements OnInit {
-  selection = new SelectionModel<any>(true, []);
-  dataSource :any;
   file: any;
   fileWrong: any = [];
   fileValid: any;
@@ -41,7 +36,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   showWrong: boolean = true; testFile: any;
   options: any = [];
   files: any;
-  ;
+  selection: any = [];
   displayedColumns = [];
   filterValues: any = [];
   clickCorrection: boolean = false;
@@ -51,10 +46,13 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   constructor(private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
-    private router: Router,
+    public router: Router,
     private fileService: DetailsFileEdiService) {
     super();
+  }
 
+  ngOnInit(): void {
+    this.getFile(this.route.snapshot.params.id);
   }
 
   /**
@@ -68,16 +66,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     if (this.tableMouseDown && this.tableMouseUp) {
       if (this.tableMouseDown.cellsType === this.tableMouseUp.cellsType) {
         //convert every rows to object
-        console.log(this.copyFileWrong);
-        let dataCopy = [];
-        if (this.copyFileWrong.data == undefined)
-        {
-          dataCopy = this.copyFileWrong.slice();// copy and mutate
-        }else{
-          dataCopy = this.copyFileWrong.data.slice();// copy and mutate
-        }
-
-
+        const dataCopy = this.copyFileWrong.slice();// copy and mutate
         let startCol: number;
         let endCol: number;
         let startRow: number;
@@ -118,9 +107,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         }
         console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
-        this.copyFileWrong.data = dataCopy;
-        console.warn('****result', this.copyFileWrong.data)
-
+        this.copyFileWrong = dataCopy;
       } else {
         this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'OK');
       }
@@ -168,14 +155,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    * @param mouseUpRowId
    */
   private updateSelectedCellsState(mouseDownColId: number, mouseUpColId: number, mouseDownRowId: number, mouseUpRowId: number) {
-
     // init selected cells
-    for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-      for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-        this.selectedCellsState[i][j] = false;
-
-      }
-    }
+    this.initSelectedCells();
     // update selected cells
     let startCol: number;
     let endCol: number;
@@ -238,22 +219,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     return index;
   }
 
-  ngOnInit(): void {
-    this.getFile(this.route.snapshot.params.id);
-  }
-
   customTrackBy(index: number, obj: any) {
     return index;
   }
-  public onCheckboxStateChange(changeEvent: MatCheckboxChange, id) {
-    if(changeEvent.checked === true)
-    {
-      this.selection.select(id);
-    }else{
-      this.selection.deselect(id);
-    }
-    console.log("selection",this.selection.selected);
-}
 
   getWrongFile() {
     var data = {
@@ -261,46 +229,33 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       "fileName": this.file.wrongCommands,
     }
     this.fileService.getFileEdi(data).subscribe(res => {
-      var dataSource = res;
-      // dataSource.rows.splice(0, 0, dataSource.columns);
-      // for(var i = 0; i < dataSource.rows.length; i++){
-      //   dataSource.rows[i].splice(29,1);
-      // }
-      // res.columns = dataSource.columns;
-      // res.rows = dataSource.rows;
-      console.log("res.rows",res.rows);
-      
-      console.log("res.columns",res.columns);
+      console.warn(res)
       this.fileWrong = res;
-      this.MoveLastElementToTheStart();
+
       //create a copy array of object from the res and an array of displayed column
-      this.dataSource = JSON.parse(JSON.stringify(this.fileWrong));
-      this.dataSource.rows.splice(0, 0, this.dataSource.columns);
+      this.copyFileWrong = JSON.parse(JSON.stringify(this.fileWrong));
 
-  // this.dataSource.columns.push('rowId');
-      this.dataSource = this.convertToArrayOfObjects(this.dataSource.rows);
-      console.warn("xxxx",this.dataSource);
+      this.copyFileWrong.rows.splice(0, 0, this.copyFileWrong.columns);
+      this.copyFileWrong = this.convertToArrayOfObjects(this.copyFileWrong.rows);
+      this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); //sort by remaque id  
+      this.testFile = this.copyFileWrong;   //copy to use on selection
+      this.files = this.copyFileWrong;    // copy to filter *
 
-      
-      this.copyFileWrong = new MatTableDataSource<any>(this.dataSource); // copyFileWrong doit etre de type MatTableDataSource pour ajouter checkbox
-      this.testFile = this.dataSource;
-      this.copyFileWrong.data = this.dataSource.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); /*****sort by remaque id  */
-      this.files = this.dataSource;
-      this.displayedColumns=Object.keys(this.dataSource[0]);
-      this.displayedColumns.splice(29, 3);  /****not display remarque id */
-      // this.displayedColumns.splice(30, 1); 
-      // this.displayedColumns.splice(31,1)
-      this.displayedColumns.splice(1, 0, "select"); // add column select
-      // console.error(this.displayedColumns);
-      // console.error(this.dataSource);
+      this.displayedColumns = (Object.keys(this.copyFileWrong[0])).slice((Object.keys(this.copyFileWrong[0]).indexOf("Remarque")), (Object.keys(this.copyFileWrong[0]).indexOf("Remarque_id")));  //not display unecessery column
       //
       this.showWrong = false;
-      this.LAST_EDITABLE_ROW = this.copyFileWrong.data.length - 1;
+      this.LAST_EDITABLE_ROW = this.copyFileWrong.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
+
       // initialize all selectedCellsState to false
-      this.copyFileWrong.data.forEach(element => {
-        this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 2 }, () => false))
+      this.copyFileWrong.forEach(element => {
+        //get checkbox selected by default
+        if (element.selected == 1) {
+          this.selection.push(element.rowId);
+        }
+        this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
       });
+      // get select options
       this.displayedColumns.forEach(item => {
         this.getOption(item);
       })
@@ -321,7 +276,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     });
 
     this.displayedColumns.forEach((item, key) => {
-      if (item == filter && item != 'select') {
+      if (item == filter) {
         var obj = {
           columnProp: item,
           options: options
@@ -329,9 +284,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         this.options.push(obj)
       }
     })
-    console.log(this.options);
   }
-
 
   setFilteredItemsOptions(filter) {
     // check if filter is already selected
@@ -340,23 +293,18 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     // if only one select is selected
     if (this.filterValues.length == 1) {
       this.copyFileWrong = this.filterChange(filter);
-      // this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
     }
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-      this.copyFileWrong = [...this.copyFileWrong, ...this.filterChange(filter)];
-      this.copyFileWrong= this.copyFileWrong.filter((v,i,a)=>a.findIndex(t=>(t.rowId === v.rowId))===i);
-     /******* */
-      this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+        this.copyFileWrong = [...this.copyFileWrong, ...this.filterChange(filter)];
+        this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
       }
-      else{
-        this.copyFileWrong=[];
+      else {
+        this.copyFileWrong = [];
         this.filterValues.forEach(element => {
           this.copyFileWrong = this.copyFileWrong.concat(this.filterChange(element));
-          this.copyFileWrong= this.copyFileWrong.filter((v,i,a)=>a.findIndex(t=>(t.rowId === v.rowId))===i);
         });
-
       }
     }
 
@@ -369,19 +317,24 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       else {
         this.filterValues = this.filterValues.filter(function (item) {
           return item.columnProp !== filter.columnProp;
-
         })
         this.filterValues.forEach(element => {
-          this.copyFileWrong = this.filterChange(element);
+          this.copyFileWrong = this.filterChange(element)
         });
-
       }
-
     }
-    /*******modif en masse intialise seletion */
-    this.copyFileWrong.forEach(element => {
-      this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 2 }, () => false))
-    });
+
+  }
+
+  /**
+ * Initialise the selected cells
+ */
+  initSelectedCells() {
+    for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+      for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+        this.selectedCellsState[i][j] = false;
+      }
+    }
   }
 
   /**
@@ -389,62 +342,35 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    * @param filter
    */
   filterChange(filter) {
+    this.initSelectedCells();     // init selected cells
     this.files = this.files.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
     return this.files.filter(function (item) {
       return item[filter.columnProp] == String(filter.modelValue);
     });
-
   }
 
-  resetFiltre(){
-    // deselectionner all select
-    this.filterValues.forEach((value, key) => {
-      value.modelValue = undefined;
-    })
-    this.filterValues=[];
-
-    this.copyFileWrong.data = this.testFile;
-
-    this.copyFileWrong = this.copyFileWrong.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
-    // console.warn(this.filterValues)
+  /**
+  * Reset filter
+  */
+  resetFiltre() {
+    this.initSelectedCells();    // init selected cells
+    this.copyFileWrong = this.testFile;
+    this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
   }
 
   convertToArrayOfObjects(data) {
-
     var keys = data.shift(),
-
       i = 0, k = 0,
       obj = null,
       output = [];
-keys.push('rowId');
     for (i = 0; i < data.length; i++) {
       obj = {};
       for (k = 0; k < keys.length; k++) {
         obj[keys[k]] = data[i][k];
       }
-
       output.push(obj);
     }
-
     return output;
-  }
-
-  MoveLastElementToTheStart() {
-    //Deplace column
-    const prevColumn = [...this.fileWrong.columns];
-    prevColumn.unshift(prevColumn.splice(this.fileWrong.columns.length-2,  1)[0]);
-    // const prevColumn = [...this.fileWrong.columns]
-   prevColumn.pop()
-  this.fileWrong.columns = prevColumn;
-    // //Deplace rows
-     this.fileWrong.rows.forEach((element, index) => {
-       const prevRows = [...element];
-      prevRows.unshift(prevRows.splice(prevRows.length-2,  1)[0])
-    //  prevRows.unshift(prevRows.splice(prevRows.length-2,  1)[0])
-        // prevRows.pop()
-   this.fileWrong.rows[index] = prevRows;
-     });
-    console.warn('***filewrong', this.fileWrong);
   }
 
   getValidFile() {
@@ -455,6 +381,7 @@ keys.push('rowId');
     this.fileService.getFileEdi(data).subscribe(res => {
       this.fileValid = res;
       this.showValid = false;
+      console.warn('File valid', this.fileValid)
     })
   }
 
@@ -481,101 +408,82 @@ keys.push('rowId');
         });
   }
 
-  correctionFile() {
-    this.clickCorrection = true;
-    let columns=[];
-    if (this.copyFileWrong.data == undefined){
-      columns = Object.keys(this.copyFileWrong[0]);
-    }
-    else{
-      columns = Object.keys(this.copyFileWrong.data[0]);
-    }
-
-    let rows = [];
-    // console.log("copyFileWrong",this.copyFileWrong.data.length);
-    if(this.testFile.length == this.copyFileWrong.data)
-    {
-      rows = this.copyFileWrong.data.map(Object.values);
-    }else
-    {
-      let arrayFileToCorrect = [];
-      this.testFile.forEach((element) => {
-        if (this.copyFileWrong.data !== undefined){
-          if(this.copyFileWrong.data.indexOf(element) === -1)
-          {
-            arrayFileToCorrect.push(element)
-          }
-        }
-        else {
-          if(this.copyFileWrong.indexOf(element) === -1)
-          {
-            arrayFileToCorrect.push(element)
-          }
-        }
-
-
-      });
-
-      /********* to check .data */
-      if(this.copyFileWrong.data !== undefined){
-        arrayFileToCorrect = arrayFileToCorrect.concat(this.copyFileWrong.data);
+  /**
+    * Rearrange the wrong file ; 
+    * take the value of the selected checkboxes
+    * moving selected column 
+    * removing unnecessary columns
+    */
+  rearrangeAttributes() {
+    //Fix selected attribute 
+    this.copyFileWrong.forEach(element => {
+      if (element.selected == 1) { this.selection.push(element.rowId) } //push element already checked on selection
+      if (this.selection.includes(element.rowId)) { //if rowId exist on selection
+        element.selected = 1; // change attribute to 1
+      } else {
+        element.selected = 0;  // change attribute to 0
       }
-      else if (this.copyFileWrong.data == undefined) {
-        arrayFileToCorrect = arrayFileToCorrect.concat(this.copyFileWrong);
-      }
+    });
+    //remove column remarque & put selected on last column 
+    let columns = this.displayedColumns.slice(1);
+    columns.push(columns.shift());
+    //remove unessecerry column from rows (remarque,rowId,remarqueId)& put selected on last column 
+    let rows = this.copyFileWrong.map(Object.values);
+    rows.forEach(element => {
+      element.shift();   // remove remarque from rows
+      element.splice(element.length - 2, 2); // remove rowId & remarqueId column from rows
+      element.push(element.shift()); // put selected on last column of rows
 
-      rows = arrayFileToCorrect.map(Object.values);
-
-    }
-
+    });
+    //
     this.fileWrongUpdated = {
       columns: columns,
       rows: rows
     }
     this._fileWrong = JSON.parse(JSON.stringify(this.fileWrongUpdated));
-    if(document.querySelector('.selected'))
-    {
-      document.querySelector('.selected').classList.remove('selected');
-    }
-    console.warn("cooolei", this._fileWrong.columns)
-    this._fileWrong.rows.forEach(element => {
-      // console.warn('//**/*///*element',element[el])
-      element.shift(); // remove remarque
+  }
 
-     
-      // element.pop();
-      console.log("rlrmrnt",element)
-      if(this.selection.selected.includes(element[element.length-1])|| element.selected==1){ // this.selection.selected est un array qui contient les indices des lignes du tableau séléctionnées.
-        element.push(1); // add true (c'est à dire la ligne du tableau est séléctionnées)
-      }else{
-        element.push(0); // add fales (c'est à dire la ligne du tableau n'est pas séléctionnées)
-      }
-      console.error("***",element)
-      element.splice(element.length-3,2); // remove rows remarque_id & rowId
-      element.splice(28,1)
+  /**
+   * Rearrange the valid file ; 
+   * removing last column
+   */
+  rearrangeAttributesValidFile() {
+    this.fileValid.rows.forEach(element => {
+      element.pop();
     });
+  }
 
-    this._fileWrong.columns.push('selected'); //add column selected
-    this._fileWrong.columns.splice(this._fileWrong.columns.length-3,2);// remove column row id
-    this._fileWrong.columns.splice(29,1);
+  /**
+    * Hide ui selection red rectangle 
+    */
+  hideUiSelectionOnCorrection() {
+    if (document.querySelector('.selected')) {
+      var inputs = document.querySelectorAll(".selected");
+      for (var i = 0; i < inputs.length; i++) {
+        inputs[i].classList.remove('selected');
+      }
+    }
+  }
 
+  /**
+  * Correct the wrong file 
+  */
+  correctionFile() {
+    this.clickCorrection = true;
+    this.rearrangeAttributes();  //Remove unecessey columns 
+    this.hideUiSelectionOnCorrection();  //hide ui selection on correction
     if (this.fileWrong && this.fileValid) {
-      // boucle pour ajouter false à toutes les lignes du tableau fileValid
-      this.fileValid.rows.forEach(element => {
-        element.push(0);
-      });
+      this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
       this.fileTocheck = {
         fileId: this.file.idFile,
-      //  columns: this._fileWrong.columns.splice(this._fileWrong.columns.length-2, 1),
-       columns: this._fileWrong.columns.splice(1),
+        columns: this._fileWrong.columns,
         rows: this.fileValid.rows.concat(this._fileWrong.rows),
       }
     }
     else {
       this.fileTocheck = {
         fileId: this.file.idFile,
-       // columns: this._fileWrong.columns.splice(this._fileWrong.columns.length-2, 1),
-        columns: this._fileWrong.columns.splice(1),
+        columns: this._fileWrong.columns,
         rows: this._fileWrong.rows,
       }
     }
@@ -587,9 +495,11 @@ keys.push('rowId');
         this.router.navigate(['/list-file-edi']);
       }
     })
-
   }
 
+  /**
+  * Send file edi to Urbantz
+  */
   sendFileToUrbantz() {
     let data = {
       clientCode: this.file.contact.codeClient,
@@ -605,9 +515,26 @@ keys.push('rowId');
       duration: 4500,
       verticalPosition: 'top',
       horizontalPosition: 'center',
-      // panelClass: ['blue-snackbar']
     });
   }
 
+  /**
+   * Event onChange of checkbox value
+   * @param row
+   */
+  public onCheckboxStateChange(row) {
+    //check
+    if (row.selected !== 1) {
+      this.selection.push(row.rowId);
+      row.selected = 1;
+    }
+    //uncheck
+    else {
+      row.selected = 0;
+      this.selection = this.selection.filter(function (item) {
+        return item !== row.rowId
+      })
+    }
+  }
 
 }

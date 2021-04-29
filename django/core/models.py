@@ -1,5 +1,6 @@
 from django.db import models
 import os
+from datetime import datetime
 # Create your models here.
 def upload_to(instance, filename):
     return 'files/{filename}'.format(filename=filename)
@@ -99,3 +100,41 @@ class getNumberOfAnomaliesWithFiltersDTO:
     def __init__(self,mapIdToNumberOfAnomalies,mapDateToNumberOfAnomalies):
         self.mapIdToNumberOfAnomalies = mapIdToNumberOfAnomalies
         self.mapDateToNumberOfAnomalies = mapDateToNumberOfAnomalies
+
+class AllMadFileContent:
+    def __init__(self,livraison,exception,metadata,mad):
+        self.livraison = livraison
+        self.exception = exception
+        self.metadata = metadata
+        self.mad = mad
+
+class AccountsAccount(models.Model):
+    password = models.CharField(max_length=128)
+    last_login = models.DateTimeField(blank=True, null=True)
+    is_superuser = models.IntegerField()
+    email = models.CharField(unique=True, max_length=254)
+    username = models.CharField(max_length=255)
+    is_active = models.IntegerField()
+    is_staff = models.IntegerField()
+    created_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+    role = models.CharField(max_length=200)
+
+    class Meta:
+        managed = False
+        db_table = 'accounts_account'
+
+
+class InterventionAdmin(models.Model):
+    id = models.IntegerField(primary_key=True)
+    id_admin = models.ForeignKey(AccountsAccount ,db_column="id_admin", on_delete= models.DO_NOTHING )
+    id_file_edi = models.ForeignKey(EDIfile ,db_column="id_file_edi", on_delete= models.DO_NOTHING )
+    execution_time = models.DateTimeField(blank=True, default=datetime.now())
+
+    class Meta:
+        managed = False
+        db_table = 'intervention_admin'
+
+
+
+

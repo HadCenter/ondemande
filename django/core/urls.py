@@ -17,11 +17,14 @@ urlpatterns = [
     path('seeFileContent', views.seeFileContent, name="seeFileContent"),
     path('getNumberOfFilesPerClient/', views.numberOfFilesPerClient, name="numberOfFilesPerClient"),
     path('createFileFromColumnAndRowsAndUpdate/', views.createFileFromColumnAndRowsAndUpdate, name="createFileFromColumnAndRowsAndUpdate"),
+    path('DoInterventionAsAdminForEdiFileAndCorrectFile/', views.DoInterventionAsAdminForEdiFileAndCorrectFile, name="DoInterventionAsAdminForEdiFileAndCorrectFile"),
     path('kpi3/',views.kpi3 , name = "kpi3"),
     path('getNumberOfAnomaliesPerDate',views.getNumberOfAnomaliesPerDate , name = "getNumberOfAnomaliesPerDate"),
     path('getNumberOfAnomaliesPerDateAll',views.getNumberOfAnomaliesPerDateAll , name = "getNumberOfAnomaliesPerDate"),
     path('getNumberOfAnomaliesPerId',views.getNumberOfAnomaliesPerId , name = "getNumberOfAnomaliesPerId"),
     path('getNumberOfAnomaliesPerIdAll',views.getNumberOfAnomaliesPerIdAll , name = "getNumberOfAnomaliesPerIdAll"),
     path('getNumberOfAnomaliesWithFilters',views.getNumberOfAnomaliesWithFilters , name = "getNumberOfAnomaliesWithFilters"),
-    path('seeFileContentMADFile',views.seeFileContentMADFile , name= "seeFileContentMADFile")
+    path('getNumberOfInterventionsWithFilters',views.getNumberOfInterventionsWithFilters , name = "getNumberOfInterventionsWithFilters"),
+    path('seeFileContentMADFile',views.seeFileContentMADFile , name= "seeFileContentMADFile"),
+    path('seeAllFileContentMADFile',views.seeAllFileContentMADFile , name= "seeAllFileContentMADFile")
 ]

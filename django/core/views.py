@@ -9,7 +9,7 @@ from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from .models import Client ,AnomaliesEdiFileAnnuaire , HistoryAnomaliesEdiFiles
 from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie ,getNumberOfAnomaliesPerDateDTO , getNumberOfAnomaliesWithFiltersDTO
-from .models import Client
+from .models import Client,AllMadFileContent , InterventionAdmin
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
@@ -421,16 +421,13 @@ def get_extension(filename):
     basename = os.path.basename(filename)  # os independent
     ext = '.'.join(basename.split('.')[1:])
     return '.' + ext if ext else None
-@api_view(['POST'])
-def createFileFromColumnAndRowsAndUpdate(request):
-    columns = request.data['columns']
-    rows = request.data['rows']
-    fileId = request.data['fileId']
-    fileDB = EDIfile.objects.select_related('client').get(pk = fileId)
+
+def createFileFromColumnAndRowsAndUpdate(columns,rows,fileId) :
+    fileDB = EDIfile.objects.select_related('client').get(pk=fileId)
     clientDB = fileDB.client
-    df = pd.DataFrame(rows, columns = columns)
+    df = pd.DataFrame(rows, columns=columns)
     fileName = fileDB.file.name
-    df.to_excel(fileName , index= False)
+    df.to_excel(fileName, index=False)
     ftp = connect()
     ftp.cwd(path_racine_input + clientDB.code_client)
     file = open(fileName, 'rb')
@@ -444,9 +441,16 @@ def createFileFromColumnAndRowsAndUpdate(request):
     fileDB.number_correct_commands = 0
     fileDB.number_wrong_commands = 0
     fileDB.save()
-    data = [{"filePath":fileName,"ClientOwner":clientDB.code_client,"fileId":fileDB.id}]
+    data = [{"filePath": fileName, "ClientOwner": clientDB.code_client, "fileId": fileDB.id}]
     startEngineOnEdiFilesWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
+@api_view(['POST'])
+def createFileFromColumnAndRowsAndUpdate(request):
+    columns = request.data['columns']
+    rows = request.data['rows']
+    fileId = request.data['fileId']
+    return createFileFromColumnAndRowsAndUpdate(columns,rows,fileId)
+
 def desarchive_client(client: Client):
     client.archived = False
     client.save()
@@ -511,11 +515,9 @@ def kpi3(request):
         listAnomaliesToReturn.append(kpi3SchemaSingleAnomalie(anomalie_id=anomaly.id,number_of_anomalies= anomaly.number_of_anomalies,execution_time = anomaly.execution_time,edi_file_id =anomaly.edi_file.id ,client_id = anomaly.edi_file.client.id,client_name = anomaly.edi_file.client.nom_client,client_code = anomaly.edi_file.client.code_client , edi_file_name= anomaly.edi_file.file.name, anomalie_name=anomaly.anomalie.label))
     return HttpResponse(jsonpickle.encode(listAnomaliesToReturn,unpicklable=False),content_type='applicaiton/json')
 
-@api_view(['POST'])
-def seeFileContentMADFile(request):
+
+def seeFileContentMADFileCore(fileType,transaction_id):
     osOriginalPath = os.getcwd()
-    fileType = request.data['fileType']
-    transaction_id = request.data['transaction_id']
     try :
         osCreateMediaFiles(os)
         os.chdir("media/files/UrbantzToHub/")
@@ -545,15 +547,23 @@ def seeFileContentMADFile(request):
         rows = excelfile.values.tolist()
         os.remove(fileName)
         responseObject = FileExcelContent(columns, rows)
-        responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
 
         os.chdir(osOriginalPath)
-        return HttpResponse(responseObjectText, content_type="application/json")
+        return responseObject
     except Exception as e :
         os.chdir(osOriginalPath)
         print(e)
-        return JsonResponse({'message': 'internal error'}, status=status.HTTP_403_FORBIDDEN)
 
+@api_view(['POST'])
+def seeFileContentMADFile(request):
+    fileType = request.data['fileType']
+    transaction_id = request.data['transaction_id']
+    try :
+        responseObject = seeFileContentMADFileCore(fileType,transaction_id)
+        responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
+        return HttpResponse(responseObjectText, content_type="application/json")
+    except Exception as e :
+        return JsonResponse({'message': 'internal error'}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST'])
 def getNumberOfAnomaliesPerDate(request):
@@ -655,3 +665,53 @@ def osCreateMediaFiles(os):
     os.chdir("UrbantzToHub")
 
     os.chdir(osOriginalPath)
+
+@api_view(['POST'])
+def seeAllFileContentMADFile(request):
+    transaction_id = request.data['transaction_id']
+    livraison = seeFileContentMADFileCore("livraison",transaction_id)
+    exception = seeFileContentMADFileCore("exception",transaction_id)
+    metadata = seeFileContentMADFileCore("metadata",transaction_id)
+    mad = seeFileContentMADFileCore("mad",transaction_id)
+    return HttpResponse(jsonpickle.encode(AllMadFileContent(livraison,exception,metadata,mad),unpicklable=False), content_type='applicaiton/json')
+
+
+@api_view(['POST'])
+def DoInterventionAsAdminForEdiFileAndCorrectFile(request):
+    id_admin = request.data['account_id']
+    columns = request.data['columns']
+    rows = request.data['rows']
+    fileId = request.data['fileId']
+
+    interventionToSave = InterventionAdmin()
+    interventionToSave.id_admin_id = id_admin
+    interventionToSave.id_file_edi_id = fileId
+    interventionToSave.save()
+
+    return createFileFromColumnAndRowsAndUpdate(columns, rows, fileId)
+
+
+
+@api_view(['POST'])
+def getNumberOfInterventionsWithFilters(request):
+    dateFilter = request.data["dateFilter"]
+    clientFilter = request.data["clientFilter"]
+
+
+    interventionAdmin = InterventionAdmin.objects.all().prefetch_related("id_admin").prefetch_related("id_file_edi").prefetch_related("id_file_edi__client")
+
+    if dateFilter != None :
+        startDate : datetime = dateFilter['startDate']
+        endDate : datetime= dateFilter['endDate']
+        if startDate != None :
+            interventionAdmin = interventionAdmin.filter(execution_time__gte = startDate)
+        if endDate != None :
+            interventionAdmin = interventionAdmin.filter(execution_time__lte = endDate)
+    if (clientFilter != None) and (len(clientFilter) > 0 ):
+        interventionAdmin = interventionAdmin.filter(id_file_edi__client__nom_client__in=clientFilter)
+
+
+
+
+    return HttpResponse(jsonpickle.encode(interventionAdmin.count(),unpicklable=False),content_type='applicaiton/json')
+

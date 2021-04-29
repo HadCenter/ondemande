@@ -278,6 +278,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       this.selectedClients.splice(i, 1);
     }
     this.selectedClientsNames = this.selectedClients.map(client => client.clientName);
+    this.clientControl.setValue('');
     console.warn("Fin *********** toggleSelectionClient")
   }
   optionClickedtypeAnomalie(event: Event, anomalie: Anomalie) {
@@ -299,6 +300,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       this.selectedtypesAnomalies.splice(i, 1);
     }
     this.selectedtypesAnomaliesNames = this.selectedtypesAnomalies.map(anomalie => anomalie.anomalieName);
+    this.typesAnomaliesControl.setValue('');
     console.warn("Fin *********** toggleSelectiontypesAnomalies")
   }
   optionClickedFile(event: Event, file: File) {
@@ -320,6 +322,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       this.selectedFiles.splice(i, 1);
     }
     this.selectedClientsNames = this.selectedFiles.map(file => file.fileName);
+    this.fileControl.setValue('');
     console.warn("Fin *********** toggleSelectionFile")
   }
 }

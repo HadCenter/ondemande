@@ -422,7 +422,7 @@ def get_extension(filename):
     ext = '.'.join(basename.split('.')[1:])
     return '.' + ext if ext else None
 
-def createFileFromColumnAndRowsAndUpdate(columns,rows,fileId) :
+def createFileFromColumnAndRowsAndUpdateCore(columns,rows,fileId) :
     fileDB = EDIfile.objects.select_related('client').get(pk=fileId)
     clientDB = fileDB.client
     df = pd.DataFrame(rows, columns=columns)
@@ -449,7 +449,8 @@ def createFileFromColumnAndRowsAndUpdate(request):
     columns = request.data['columns']
     rows = request.data['rows']
     fileId = request.data['fileId']
-    return createFileFromColumnAndRowsAndUpdate(columns,rows,fileId)
+    response =  createFileFromColumnAndRowsAndUpdateCore(columns,rows,fileId)
+    return response
 
 def desarchive_client(client: Client):
     client.archived = False
@@ -688,7 +689,7 @@ def DoInterventionAsAdminForEdiFileAndCorrectFile(request):
     interventionToSave.id_file_edi_id = fileId
     interventionToSave.save()
 
-    return createFileFromColumnAndRowsAndUpdate(columns, rows, fileId)
+    return createFileFromColumnAndRowsAndUpdateCore(columns, rows, fileId)
 
 
 

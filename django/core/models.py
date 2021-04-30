@@ -136,5 +136,9 @@ class InterventionAdmin(models.Model):
         db_table = 'intervention_admin'
 
 
-
-
+class kpi4WithFiltersDto:
+    def __init__(self,date,fileName,clientName,AdminName):
+        self.date = date
+        self.fileName = fileName
+        self.clientName = clientName
+        self.AdminName = AdminName

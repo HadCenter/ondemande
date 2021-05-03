@@ -46,52 +46,39 @@
     <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--6-col-phone">
       <label class="select-label">Client</label>
       <mat-form-field class="select-filter" appearance="fill">
-        <mat-label>Tout</mat-label>
-        <input  type="text"  aria-label="clients" matInput [matAutocomplete]="auto" [formControl]="clientControl">
-        <mat-hint style="color:white;"> {{ selectedClients?.length }} clients sélectionnés</mat-hint>
+        <input  type="text" placeholder="{{selectedClients?.length >0 ? selectedClients?.length + ' clients séléctionnés' :'Tout'}}" aria-label="clients" matInput [matAutocomplete]="auto"  [formControl]="clientControl">
       </mat-form-field>
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayClientFn">
+      <mat-autocomplete #auto="matAutocomplete">
         <mat-option *ngFor="let client of filteredClients | async" [value]="selectedClients">
-          <div (click)="optionClickedClient($event, client)">
-            <mat-checkbox [checked]="client.selected" (change)="toggleSelectionClient(client)" (click)="$event.stopPropagation()">
+            <mat-checkbox [checked]="client.selected" (change)="toggleSelection(client)" (click)="$event.stopPropagation()">
               {{ client.clientName }}
             </mat-checkbox>
-          </div>
         </mat-option>
       </mat-autocomplete>
     </div>
-
     <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--6-col-phone">
-      <label class="select-label">File</label>
+      <label class="select-label">Fichier</label>
       <mat-form-field class="select-filter" appearance="fill">
-        <mat-label>Tout</mat-label>
-        <input  type="text"  aria-label="files" matInput [matAutocomplete]="file" [formControl]="fileControl">
-        <mat-hint style="color:white;"> {{ selectedFiles?.length }} fichiers sélectionnés</mat-hint>
+        <input  type="text"  placeholder="{{selectedFiles?.length >0 ? selectedFiles?.length + ' fichiers séléctionnés' :'Tout'}}"aria-label="files" matInput [matAutocomplete]="file" [formControl]="fileControl">
       </mat-form-field>
-      <mat-autocomplete #file="matAutocomplete" [displayWith]="displayFileFn">
+      <mat-autocomplete #file="matAutocomplete">
         <mat-option *ngFor="let file of filteredFiles | async" [value]="selectedFiles">
-          <div (click)="optionClickedFile($event, file)">
-            <mat-checkbox [checked]="file.selected" (change)="toggleSelectionFile(file)" (click)="$event.stopPropagation()">
+            <mat-checkbox [checked]="file.selected" (change)="toggleSelection(file)" (click)="$event.stopPropagation()">
               {{ file.fileName }}
             </mat-checkbox>
-          </div>
         </mat-option>
       </mat-autocomplete>
     </div>
     <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--32-col-tablet mdl-cell--6-col-phone">
-      <label class="select-label">Type d'anomalie</label>
+      <label class="select-label">Types d'anomalies</label>
       <mat-form-field class="select-filter" appearance="fill">
-        <mat-label>Tout</mat-label>
-        <input  type="text"  aria-label="typesAnomalies" matInput [matAutocomplete]="typeanomalie" [formControl]="typesAnomaliesControl">
-        <mat-hint style="color:white;"> {{ selectedtypesAnomalies?.length }} types d'anomalies sélectionnés</mat-hint>
+        <input  type="text"  placeholder="{{selectedtypesAnomalies?.length >0 ? selectedtypesAnomalies?.length + ' types d\'anomalies sélectionnés' :'Tout'}}" aria-label="typesAnomalies" matInput [matAutocomplete]="typeanomalie" [formControl]="typesAnomaliesControl">
       </mat-form-field>
-      <mat-autocomplete #typeanomalie="matAutocomplete" [displayWith]="displaytypesAnomaliesFn">
+      <mat-autocomplete #typeanomalie="matAutocomplete">
         <mat-option *ngFor="let typeAnomalie of filteredtypesAnomalies | async" [value]="selectedtypesAnomalies">
-          <div (click)="optionClickedtypeAnomalie($event, typeAnomalie)">
-            <mat-checkbox [checked]="typeAnomalie.selected" (change)="toggleSelectiontypesAnomalies(typeAnomalie)" (click)="$event.stopPropagation()">
+            <mat-checkbox [checked]="typeAnomalie.selected" (change)="toggleSelection(typeAnomalie)" (click)="$event.stopPropagation()">
               {{ typeAnomalie.anomalieName }}
             </mat-checkbox>
-          </div>
         </mat-option>
       </mat-autocomplete>
     </div>

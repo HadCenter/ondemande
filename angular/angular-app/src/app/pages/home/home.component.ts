@@ -72,11 +72,18 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       this.getAllClients();
       this.getAllFiles();
       this.getAllTypesANomalie();
-      this.initializeFiltredClients();
-      this.initializeFiltredFiles();
-      this.initializeFiltredTypesAnomalies();
     });
     console.warn("Fin *********** ngOnInit")
+  }
+  initializeFiltredClients()
+  {
+    console.warn("Début ********* initializeFiltredClients")
+    this.filteredClients = this.clientControl.valueChanges.pipe(
+        startWith<string | Client[]>(""),
+        map(value => (typeof value === "string" ? value : this.lastFilter_client)),
+        map(filter => this.filter_client(filter))
+      );
+    console.warn("Fin ********* initializeFiltredClients")
   }
   initializeFiltredFiles() {
     console.warn("Début ********* initializeFiltredFiles")
@@ -86,6 +93,30 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
         map(filter => this.filter_file(filter))
       );
     console.warn("Fin ********* initializeFiltredFiles")
+  }
+  initializeFiltredTypesAnomalies() {
+    console.warn("Début ********* initializeFiltredTypesAnomalies")
+    this.filteredtypesAnomalies = this.typesAnomaliesControl.valueChanges.pipe(
+        startWith<string | Anomalie[]>(""),
+        map(value => (typeof value === "string" ? value : this.lastFilter_typeanomalie)),
+        map(filter => this.filter_TypesAnomalies(filter))
+      );
+    console.warn("Fin ********* initializeFiltredTypesAnomalies")
+  }
+  filter_client(filter: string): Client[] {
+    console.warn("Début *********** filter_client")
+    this.lastFilter_client = filter;
+    if (filter) {
+      console.warn("Fin *********** filter_client")
+      return this.listClientsNames.filter(option => {
+        return (
+          option.clientName.toLowerCase().indexOf(filter.toLowerCase()) === 0
+        );
+      });
+    } else {
+      console.warn("Fin *********** filter_client")
+      return this.listClientsNames.slice();
+    }
   }
   filter_file(filter: string): File[] {
     console.warn("Début *********** filter_file")
@@ -102,15 +133,6 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       return this.listFilesNames.slice();
     }
   }
-  initializeFiltredTypesAnomalies() {
-    console.warn("Début ********* initializeFiltredTypesAnomalies")
-    this.filteredtypesAnomalies = this.typesAnomaliesControl.valueChanges.pipe(
-        startWith<string | Anomalie[]>(""),
-        map(value => (typeof value === "string" ? value : this.lastFilter_typeanomalie)),
-        map(filter => this.filter_TypesAnomalies(filter))
-      );
-    console.warn("Fin ********* initializeFiltredTypesAnomalies")
-  }
   filter_TypesAnomalies(filter: string): Anomalie[] {
     console.warn("Début *********** filter_TypesAnomalies")
     this.lastFilter_typeanomalie = filter;
@@ -126,15 +148,61 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       return this.listTypesAnomaliesNames.slice();
     }
   }
-  initializeFiltredClients()
+  toggleSelection(selected )
   {
-    console.warn("Début ********* initializeFiltredClients")
-    this.filteredClients = this.clientControl.valueChanges.pipe(
-        startWith<string | Client[]>(""),
-        map(value => (typeof value === "string" ? value : this.lastFilter_client)),
-        map(filter => this.filter_client(filter))
-      );
-    console.warn("Fin ********* initializeFiltredClients")
+    if(selected instanceof Client)
+    {
+      console.warn("Début *********** toggleSelectionClient")
+      selected.selected = !selected.selected;
+      if (selected.selected) {
+        this.selectedClients.push(selected);
+      } else {
+        const i = this.selectedClients.findIndex(
+          value =>
+            value.clientName === selected.clientName
+        );
+        this.selectedClients.splice(i, 1);
+      }
+      this.selectedClientsNames = this.selectedClients.map(client => client.clientName);
+      this.clientControl.setValue('');
+      console.warn("Fin *********** toggleSelectionClient")
+    }else{
+      if(selected instanceof File)
+      {
+        console.warn("Début *********** toggleSelectionFile")
+        selected.selected = !selected.selected;
+        if (selected.selected) {
+          this.selectedFiles.push(selected);
+        } else {
+          const i = this.selectedFiles.findIndex(
+            value =>
+              value.fileName === selected.fileName
+          );
+          this.selectedFiles.splice(i, 1);
+        }
+        this.selectedClientsNames = this.selectedFiles.map(file => file.fileName);
+        this.fileControl.setValue('');
+        console.warn("Fin *********** toggleSelectionFile")
+      }else{
+        if (selected instanceof Anomalie)
+        {
+          console.warn("Début *********** toggleSelectiontypesAnomalies")
+          selected.selected = !selected.selected;
+          if (selected.selected) {
+            this.selectedtypesAnomalies.push(selected);
+          } else {
+            const i = this.selectedtypesAnomalies.findIndex(
+              value =>
+                value.anomalieName === selected.anomalieName
+            );
+            this.selectedtypesAnomalies.splice(i, 1);
+          }
+          this.selectedtypesAnomaliesNames = this.selectedtypesAnomalies.map(anomalie => anomalie.anomalieName);
+          this.typesAnomaliesControl.setValue('');
+          console.warn("Fin *********** toggleSelectiontypesAnomalies")
+        }
+      }
+    }
   }
   getAllClients() {
     const uniqueClients = this.allAnomalies_copy.filter((v, i, a) => a.findIndex(t => (t.client_id === v.client_id)) === i);
@@ -142,25 +210,25 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       var client = new Client(element.client_name);
       this.listClientsNames.push(client);
     });
+    this.initializeFiltredClients();
+
   }
-
-
   getAllFiles() {
     const uniqueFiles = this.allAnomalies_copy.filter((v, i, a) => a.findIndex(t => (t.edi_file_id === v.edi_file_id)) === i);
     uniqueFiles.forEach(element => {
       var file = new File(element.edi_file_name);
       this.listFilesNames.push(file);
     });
+    this.initializeFiltredFiles();
   }
-
   getAllTypesANomalie() {
     const uniqueTypesAnomalie = this.allAnomalies_copy.filter((v, i, a) => a.findIndex(t => (t.anomalie_name === v.anomalie_name)) === i);
     uniqueTypesAnomalie.forEach(element => {
       var anomalie = new Anomalie(element.anomalie_name);
       this.listTypesAnomaliesNames.push(anomalie);
     });
+    this.initializeFiltredTypesAnomalies();
   }
-
   getDate() {
     var start_date: any;
     var end_date: any;
@@ -181,7 +249,6 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       'endDate': end_date
     }
   }
-
   // convertir les dates en une chaîne de date conviviale MySQL
   toJSONLocal(date) {
     var local = new Date(date);
@@ -189,142 +256,6 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
     return (local.toJSON().replace("T", " ")).slice(0, 19)
   }
 
-
-  filter_client(filter: string): Client[] {
-    console.warn("Début *********** filter_client")
-    this.lastFilter_client = filter;
-    if (filter) {
-      console.warn("Fin *********** filter_client")
-      return this.listClientsNames.filter(option => {
-        return (
-          option.clientName.toLowerCase().indexOf(filter.toLowerCase()) === 0
-        );
-      });
-    } else {
-      console.warn("Fin *********** filter_client")
-      return this.listClientsNames.slice();
-    }
-
-  }
-
-  displayClientFn(value: Client[] | string): string | undefined {
-    console.warn("Début *********** displayClientFn")
-    let displayValue: string;
-    if (Array.isArray(value)) {
-      value.forEach((client, index) => {
-        if (index === 0) {
-          displayValue = client.clientName;
-        } else {
-          displayValue += ", " + client.clientName;
-        }
-      });
-    } else {
-      displayValue = value;
-    }
-    console.warn("Fin *********** displayClientFn")
-    return displayValue;
-  }
-  displayFileFn(value: File[] | string): string | undefined {
-    console.warn("Début *********** displayFileFn")
-    let displayValue: string;
-    if (Array.isArray(value)) {
-      value.forEach((file, index) => {
-        if (index === 0) {
-          displayValue = file.fileName;
-        } else {
-          displayValue += ", " + file.fileName;
-        }
-      });
-    } else {
-      displayValue = value;
-    }
-    console.warn("Fin *********** displayFileFn")
-    return displayValue;
-  }
-  displaytypesAnomaliesFn(value: Anomalie[] | string): string | undefined {
-    console.warn("Début *********** displaytypesAnomaliesFn")
-    let displayValue: string;
-    if (Array.isArray(value)) {
-      value.forEach((anomalie, index) => {
-        if (index === 0) {
-          displayValue = anomalie.anomalieName;
-        } else {
-          displayValue += ", " + anomalie.anomalieName;
-        }
-      });
-    } else {
-      displayValue = value;
-    }
-    console.warn("Fin *********** displaytypesAnomaliesFn")
-    return displayValue;
-  }
-
-  optionClickedClient(event: Event, client: Client) {
-    console.warn("Début *********** optionClickedClient")
-    event.stopPropagation();
-    this.toggleSelectionClient(client);
-    console.warn("Fin *********** optionClickedClient")
-  }
-  toggleSelectionClient(client: Client) {
-    console.warn("Début *********** toggleSelectionClient")
-    client.selected = !client.selected;
-    if (client.selected) {
-      this.selectedClients.push(client);
-    } else {
-      const i = this.selectedClients.findIndex(
-        value =>
-          value.clientName === client.clientName
-      );
-      this.selectedClients.splice(i, 1);
-    }
-    this.selectedClientsNames = this.selectedClients.map(client => client.clientName);
-    this.clientControl.setValue('');
-    console.warn("Fin *********** toggleSelectionClient")
-  }
-  optionClickedtypeAnomalie(event: Event, anomalie: Anomalie) {
-    console.warn("Début *********** optionClickedtypeAnomalie")
-    event.stopPropagation();
-    this.toggleSelectiontypesAnomalies(anomalie);
-    console.warn("Fin *********** optionClickedtypeAnomalie")
-  }
-  toggleSelectiontypesAnomalies(anomalie: Anomalie) {
-    console.warn("Début *********** toggleSelectiontypesAnomalies")
-    anomalie.selected = !anomalie.selected;
-    if (anomalie.selected) {
-      this.selectedtypesAnomalies.push(anomalie);
-    } else {
-      const i = this.selectedtypesAnomalies.findIndex(
-        value =>
-          value.anomalieName === anomalie.anomalieName
-      );
-      this.selectedtypesAnomalies.splice(i, 1);
-    }
-    this.selectedtypesAnomaliesNames = this.selectedtypesAnomalies.map(anomalie => anomalie.anomalieName);
-    this.typesAnomaliesControl.setValue('');
-    console.warn("Fin *********** toggleSelectiontypesAnomalies")
-  }
-  optionClickedFile(event: Event, file: File) {
-    console.warn("Début *********** optionClickedFile")
-    event.stopPropagation();
-    this.toggleSelectionFile(file);
-    console.warn("Fin *********** optionClickedFile")
-  }
-  toggleSelectionFile(file: File) {
-    console.warn("Début *********** toggleSelectionFile")
-    file.selected = !file.selected;
-    if (file.selected) {
-      this.selectedFiles.push(file);
-    } else {
-      const i = this.selectedFiles.findIndex(
-        value =>
-          value.fileName === file.fileName
-      );
-      this.selectedFiles.splice(i, 1);
-    }
-    this.selectedClientsNames = this.selectedFiles.map(file => file.fileName);
-    this.fileControl.setValue('');
-    console.warn("Fin *********** toggleSelectionFile")
-  }
 }
 
 

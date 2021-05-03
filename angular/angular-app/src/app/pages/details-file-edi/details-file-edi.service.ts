@@ -26,7 +26,7 @@ export class DetailsFileEdiService {
   }
 
   public corretFile (data): Observable<any> {
-    return  this.http.post(`${this.url}/createFileFromColumnAndRowsAndUpdate/`,data);
+    return  this.http.post(`${this.url}/DoInterventionAsAdminForEdiFileAndCorrectFile/`,data);
   }
 
   public sendFileToUrbantz(data): Observable<any> {

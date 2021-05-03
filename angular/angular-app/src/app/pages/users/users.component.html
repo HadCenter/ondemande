@@ -31,7 +31,6 @@
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
               <td class="mdl-data-table__cell--non-numeric">{{ row.username }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.email }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.last_login | date:"yyyy-MM-dd" }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.role }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.status }}</td>
               <td class="mdl-data-table__cell--non-numeric">

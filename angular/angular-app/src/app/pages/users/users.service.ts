@@ -22,10 +22,6 @@ export class UsersService {
 
         },
         {
-            name: 'Dernière connexion',
-
-        },
-        {
             name: 'Profile',
 
         },

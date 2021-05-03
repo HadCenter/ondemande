@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'knox',
     'accounts',
     'core',
     'salesforceEsb',
@@ -64,9 +63,8 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
 
-        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'knox.auth.TokenAuthentication',
 
     ],
     'UNICODE_JSON': False
@@ -100,9 +98,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ondemand',
-        'USER': 'ondemand',
-        'PASSWORD': 'ondemand',
-        'HOST': '172.17.0.1',
+        'USER': 'root',
+        'PASSWORD': 'Terminus0000',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

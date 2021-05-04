@@ -9,7 +9,7 @@ from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from .models import Client ,AnomaliesEdiFileAnnuaire , HistoryAnomaliesEdiFiles
 from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie ,getNumberOfAnomaliesPerDateDTO , getNumberOfAnomaliesWithFiltersDTO
-from .models import Client,AllMadFileContent , InterventionAdmin
+from .models import Client,AllMadFileContent , InterventionAdmin , kpi4WithFiltersDto
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
@@ -711,8 +711,13 @@ def getNumberOfInterventionsWithFilters(request):
     if (clientFilter != None) and (len(clientFilter) > 0 ):
         interventionAdmin = interventionAdmin.filter(id_file_edi__client__nom_client__in=clientFilter)
 
-
-
-
-    return HttpResponse(jsonpickle.encode(interventionAdmin.count(),unpicklable=False),content_type='applicaiton/json')
+    result= []
+    for intervention in interventionAdmin :
+        execution_time = intervention.execution_time.strftime("%Y-%m-%d %H:%M:%S")
+        adminUserName = intervention.id_admin.username
+        fileName = intervention.id_file_edi.file.name
+        clientName = intervention.id_file_edi.client.nom_client
+        item = kpi4WithFiltersDto(date = execution_time,fileName = fileName,clientName = clientName,AdminName = adminUserName)
+        result.append(item)
+    return HttpResponse(jsonpickle.encode(result,unpicklable=False),content_type='applicaiton/json')
 

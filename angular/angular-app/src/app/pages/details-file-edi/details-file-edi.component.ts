@@ -21,7 +21,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   fileValid: any;
   column: string;
   public snackAction = 'Ok';
-  fileTocheck: { fileId: any; columns: any; rows: any; };
+  fileTocheck: { fileId: any; account_id:any; columns: any; rows: any; };
   _fileWrong: any;
   tableMouseDown: MouseEvent;
   tableMouseUp: MouseEvent;
@@ -470,19 +470,23 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   */
   correctionFile() {
     this.clickCorrection = true;
+    var user = JSON.parse(localStorage.getItem('currentUser'));
     this.rearrangeAttributes();  //Remove unecessey columns 
     this.hideUiSelectionOnCorrection();  //hide ui selection on correction
     if (this.fileWrong && this.fileValid) {
       this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
       this.fileTocheck = {
         fileId: this.file.idFile,
+        account_id:user.id,
         columns: this._fileWrong.columns,
         rows: this.fileValid.rows.concat(this._fileWrong.rows),
+        
       }
     }
     else {
       this.fileTocheck = {
         fileId: this.file.idFile,
+        account_id:user.id,
         columns: this._fileWrong.columns,
         rows: this._fileWrong.rows,
       }

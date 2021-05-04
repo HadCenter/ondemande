@@ -1,6 +1,8 @@
 import pytz
 from datetime import datetime
 import secrets
+
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import smart_bytes
 from django.utils.encoding import smart_str
 from rest_framework.response import Response
@@ -104,7 +106,9 @@ def forgetPassword(request):
     token = secrets.token_hex(16) + str(id)
     encodeToken = urlsafe_base64_encode(smart_bytes(token))
     base64_message = encodeToken.decode('ascii')
-    absurl = f'http://52.47.208.8/#/forgot-password?token={base64_message}'
+    current_site = get_current_site(request)
+    current_site_domain = current_site.domain.split(':')[0]
+    absurl = f'http://{current_site_domain}/#/forgot-password?token={base64_message}'
     email_body = f'Bonjour,\n\n' \
                  'Vous avez oublié votre mot de passe pour accéder à votre espace onDemand . Pour définir un nouveau mot de passe, il vous suffit de cliquer sur le lien ci-dessous : \n' + \
                  absurl + '.\n\n' + \

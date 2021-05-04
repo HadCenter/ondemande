@@ -351,4 +351,8 @@ span.mat-date-range-input-separator{
 .select-option .mat-pseudo-checkbox-checked{
   background: #00bcd4 ;
 }
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: gray!important;
+  opacity: 1; /* Firefox */
+}
 

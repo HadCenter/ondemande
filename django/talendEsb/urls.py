@@ -8,8 +8,8 @@ urlpatterns = [
     path('genererMADFile', views.genererMADFile),
     path('correctExceptionFile', views.correctExceptionFile),
     path('correctMetadataFile', views.correctMetadataFile),
-    #TODO MAD FILE AFTER ZIED TALEND JOB IS DONE
-    #path('correctMADFile', views.correctMetadataFile),
+    path('correctMADFile', views.correctMADFile),
+    path('correctLivraisonFile', views.correctLivraisonFile),
 
     path('getAllTransactionMadLivraison', views.getAllTransactionMadLivraison),
     path('getSingleTransactionMadLivraison/<int:pk>', views.getSingleTransactionMadLivraison)

@@ -58,7 +58,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   copySelectionMad: any = [];
   copyFilterMad: any = [];
   rowsFichierLivraison: any = [];
-  fileTocheck: { transaction_id: any; fileReplacement:{columns: any; rows: any;} };
+  fileTocheck: { transaction_id: any; fileReplacement: { columns: any; rows: any; } };
   arrayException: any = [];
   arrayMetaData: any = [];
   arrayMad: any = [];
@@ -95,106 +95,106 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   rearrangeFileLivraison() {
-    if (this.fichierLivraison.rows.length>0){
-    this.fichierLivraison.rows.splice(0, 0, this.fichierLivraison.columns);
-    for (var i = 0; i < this.fichierLivraison.rows.length; i++) {
-      this.fichierLivraison.rows[i].splice(0, 3);
+    if (this.fichierLivraison.rows.length > 0) {
+      this.fichierLivraison.rows.splice(0, 0, this.fichierLivraison.columns);
+      for (var i = 0; i < this.fichierLivraison.rows.length; i++) {
+        this.fichierLivraison.rows[i].splice(0, 3);
+      }
+      this.fichierLivraison = this.convertToArrayOfObjects(this.fichierLivraison.rows);
+      this.fichierLivraison = this.fichierLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+      this.copySelectionLivraison = this.fichierLivraison;   //copy to use on selection
+      this.copyFilterLivraison = this.fichierLivraison;    // copy to filter *
+      this.displayedColumnsLivraison = Object.keys(this.fichierLivraison[0]);
+      // initialize all selectedCellsState to false
+      this.fichierLivraison.forEach(element => {
+        this.selectedCellsState.push(Array.from({ length: this.displayedColumnsLivraison.length - 1 }, () => false))
+      });
+      // get select options
+      this.displayedColumnsLivraison.forEach(item => {
+        this.getOption(item);
+      })
+      this.showLoaderLivraisonFile = false;
     }
-    this.fichierLivraison = this.convertToArrayOfObjects(this.fichierLivraison.rows);
-    this.fichierLivraison = this.fichierLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-    this.copySelectionLivraison = this.fichierLivraison;   //copy to use on selection
-    this.copyFilterLivraison = this.fichierLivraison;    // copy to filter *
-    this.displayedColumnsLivraison = Object.keys(this.fichierLivraison[0]);
-    // initialize all selectedCellsState to false
-    this.fichierLivraison.forEach(element => {
-      this.selectedCellsState.push(Array.from({ length: this.displayedColumnsLivraison.length - 1 }, () => false))
-    });
-    // get select options
-    this.displayedColumnsLivraison.forEach(item => {
-      this.getOption(item);
-    })
-    this.showLoaderLivraisonFile = false;
-  }
-  else {
-    this.showLoaderLivraisonFile = false;
-  }
+    else {
+      this.showLoaderLivraisonFile = false;
+    }
   }
 
   rearrangeFileException() {
-    if (this.fichierException.rows.length>0){
-    this.fichierException.rows.splice(0, 0, this.fichierException.columns);
-    for (var i = 0; i < this.fichierException.rows.length; i++) {
-      this.fichierException.rows[i].splice(0, 3);
+    if (this.fichierException.rows.length > 0) {
+      this.fichierException.rows.splice(0, 0, this.fichierException.columns);
+      for (var i = 0; i < this.fichierException.rows.length; i++) {
+        this.fichierException.rows[i].splice(0, 3);
+      }
+      this.fichierException = this.convertToArrayOfObjects(this.fichierException.rows);
+      this.copySelectionException = this.fichierException;   //copy to use on selection
+      this.copyFilterException = this.fichierException;    // copy to filter *
+      this.displayedColumnsException = Object.keys(this.fichierException[0]);
+      // initialize all selectedCellsState to false
+      this.fichierException.forEach(element => {
+        this.selectedCellsStateException.push(Array.from({ length: this.displayedColumnsException.length - 1 }, () => false))
+      });
+      // get select options
+      this.displayedColumnsException.forEach(item => {
+        this.getOptionException(item);
+      })
+      this.showLoaderExceptionFile = false;
     }
-    this.fichierException = this.convertToArrayOfObjects(this.fichierException.rows);
-    this.copySelectionException = this.fichierException;   //copy to use on selection
-    this.copyFilterException = this.fichierException;    // copy to filter *
-    this.displayedColumnsException = Object.keys(this.fichierException[0]);
-    // initialize all selectedCellsState to false
-    this.fichierException.forEach(element => {
-      this.selectedCellsStateException.push(Array.from({ length: this.displayedColumnsException.length - 1 }, () => false))
-    });
-    // get select options
-    this.displayedColumnsException.forEach(item => {
-      this.getOptionException(item);
-    })
-    this.showLoaderExceptionFile = false;
-  }
-  else {
-    this.showLoaderExceptionFile = false;
-  }
+    else {
+      this.showLoaderExceptionFile = false;
+    }
   }
 
   rearrangeFileMAD() {
-    if (this.fichierMad.rows.length>0){
+    if (this.fichierMad.rows.length > 0) {
 
-    this.fichierMad.rows.splice(0, 0, this.fichierMad.columns);
-    for (var i = 0; i < this.fichierMad.rows.length; i++) {
-      this.fichierMad.rows[i].splice(0, 3);
+      this.fichierMad.rows.splice(0, 0, this.fichierMad.columns);
+      for (var i = 0; i < this.fichierMad.rows.length; i++) {
+        this.fichierMad.rows[i].splice(0, 3);
+      }
+      this.fichierMad = this.convertToArrayOfObjects(this.fichierMad.rows);
+      this.copySelectionMad = this.fichierMad;   //copy to use on selection
+      this.copyFilterMad = this.fichierMad;    // copy to filter *
+      this.displayedColumnsMad = Object.keys(this.fichierMad[0]);
+      // initialize all selectedCellsState to false
+      this.fichierMad.forEach(element => {
+        this.selectedCellsStateMad.push(Array.from({ length: this.displayedColumnsMad.length - 1 }, () => false))
+      });
+      // get select options
+      this.displayedColumnsMad.forEach(item => {
+        this.getOptionMad(item);
+      })
+      this.showLoaderMadFile = false;
     }
-    this.fichierMad = this.convertToArrayOfObjects(this.fichierMad.rows);
-    this.copySelectionMad = this.fichierMad;   //copy to use on selection
-    this.copyFilterMad = this.fichierMad;    // copy to filter *
-    this.displayedColumnsMad = Object.keys(this.fichierMad[0]);
-    // initialize all selectedCellsState to false
-    this.fichierMad.forEach(element => {
-      this.selectedCellsStateMad.push(Array.from({ length: this.displayedColumnsMad.length - 1 }, () => false))
-    });
-    // get select options
-    this.displayedColumnsMad.forEach(item => {
-      this.getOptionMad(item);
-    })
-    this.showLoaderMadFile = false;
-  }
-  else {
-    this.showLoaderMadFile = false;
-  }
+    else {
+      this.showLoaderMadFile = false;
+    }
   }
 
 
   rearrangeFileMetadata() {
-    if (this.fichierMetadata.rows.length>0){
-    this.fichierMetadata.rows.splice(0, 0, this.fichierMetadata.columns);
-    for (var i = 0; i < this.fichierMetadata.rows.length; i++) {
-      this.fichierMetadata.rows[i].splice(0, 3);
+    if (this.fichierMetadata.rows.length > 0) {
+      this.fichierMetadata.rows.splice(0, 0, this.fichierMetadata.columns);
+      for (var i = 0; i < this.fichierMetadata.rows.length; i++) {
+        this.fichierMetadata.rows[i].splice(0, 3);
+      }
+      this.fichierMetadata = this.convertToArrayOfObjects(this.fichierMetadata.rows);
+      this.copySelectionMetaData = this.fichierMetadata;   //copy to use on selection
+      this.copyFilterMetaData = this.fichierMetadata;    // copy to filter *
+      this.displayedColumnsMetadata = Object.keys(this.fichierMetadata[0]);
+      // initialize all selectedCellsState to false
+      this.fichierMetadata.forEach(element => {
+        this.selectedCellsStateMetaData.push(Array.from({ length: this.displayedColumnsMetadata.length - 1 }, () => false))
+      });
+      // get select options
+      this.displayedColumnsMetadata.forEach(item => {
+        this.getOptionMetaData(item);
+      })
+      this.showLoaderMetadataFile = false;
     }
-    this.fichierMetadata = this.convertToArrayOfObjects(this.fichierMetadata.rows);
-    this.copySelectionMetaData = this.fichierMetadata;   //copy to use on selection
-    this.copyFilterMetaData = this.fichierMetadata;    // copy to filter *
-    this.displayedColumnsMetadata = Object.keys(this.fichierMetadata[0]);
-    // initialize all selectedCellsState to false
-    this.fichierMetadata.forEach(element => {
-      this.selectedCellsStateMetaData.push(Array.from({ length: this.displayedColumnsMetadata.length - 1 }, () => false))
-    });
-    // get select options
-    this.displayedColumnsMetadata.forEach(item => {
-      this.getOptionMetaData(item);
-    })
-    this.showLoaderMetadataFile = false;
-  }
-  else {
-    this.showLoaderMetadataFile = false;
-  }
+    else {
+      this.showLoaderMetadataFile = false;
+    }
   }
 
   /**
@@ -304,6 +304,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 * Initialise the selected cells
 */
   initSelectedCells() {
+    console.error(this.fileSelected)
     if (this.fileSelected == "livraison") {
       this.LAST_EDITABLE_ROW = this.fichierLivraison.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumnsLivraison.length - 1;
@@ -738,6 +739,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 * @param filter
 */
   filterMadChange(filter) {
+    this.fileSelected = "mad";
     this.initSelectedCells();     // init selected cells
     this.copySelectionMad = this.copySelectionMad.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
     return this.copySelectionMad.filter(function (item) {
@@ -750,6 +752,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 * @param filter
 */
   filterMetaDataChange(filter) {
+    this.fileSelected = "metadata";
     this.initSelectedCells();     // init selected cells
     this.copySelectionMetaData = this.copySelectionMetaData.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
     return this.copySelectionMetaData.filter(function (item) {
@@ -761,6 +764,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
  * @param filter
  */
   filterExceptionChange(filter) {
+    this.fileSelected = "exception";
     this.initSelectedCells();     // init selected cells
     this.copySelectionException = this.copySelectionException.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
     return this.copySelectionException.filter(function (item) {
@@ -773,6 +777,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
    * @param filter
    */
   filterChange(filter) {
+    this.fileSelected = "livraison";
     this.initSelectedCells();     // init selected cells
     this.copySelectionLivraison = this.copySelectionLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
     return this.copySelectionLivraison.filter(function (item) {
@@ -784,10 +789,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 * Reset filter
 */
   resetFiltre(file) {
+    console.error(file)
     // this.initSelectedCells();    // init selected cells
     if (file == "livraison") {
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          console.warn(this.FIRST_EDITABLE_ROW, this.LAST_EDITABLE_ROW);
           this.selectedCellsState[i][j] = false;
         }
 
@@ -806,6 +813,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          console.warn(this.FIRST_EDITABLE_ROW, this.LAST_EDITABLE_ROW, this.selectedCellsStateException[i][j], i, j)
           this.selectedCellsStateException[i][j] = false;
         }
 
@@ -824,6 +832,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          console.warn(this.FIRST_EDITABLE_ROW, this.LAST_EDITABLE_ROW);
           this.selectedCellsStateMetaData[i][j] = false;
         }
 
@@ -842,6 +851,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     else { //MAD
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          console.warn(this.FIRST_EDITABLE_ROW, this.LAST_EDITABLE_ROW);
           this.selectedCellsStateMad[i][j] = false;
         }
       }
@@ -899,7 +909,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       this.fileTocheck = {
         transaction_id: this.transaction.transaction_id,
-        fileReplacement:{
+        fileReplacement: {
           columns: this.arrayLivraison.columns,
           rows: this.fichierLivraison.map(Object.values),
         }
@@ -927,10 +937,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       this.fileTocheck = {
         transaction_id: this.transaction.transaction_id,
-        fileReplacement:{
-        columns: this.arrayException.columns,
-        rows: this.fichierException.map(Object.values),
-      }}
+        fileReplacement: {
+          columns: this.arrayException.columns,
+          rows: this.fichierException.map(Object.values),
+        }
+      }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
         console.log('resultat correction exception', res);
@@ -952,9 +963,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       this.fileTocheck = {
         transaction_id: this.transaction.transaction_id,
-        fileReplacement:{
-        columns: this.arrayMetaData.columns,
-        rows: this.fichierMetadata.map(Object.values),
+        fileReplacement: {
+          columns: this.arrayMetaData.columns,
+          rows: this.fichierMetadata.map(Object.values),
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
@@ -979,9 +990,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       this.fileTocheck = {
         transaction_id: this.transaction.transaction_id,
-        fileReplacement:{
-        columns: this.arrayMad.columns,
-        rows: this.fichierMad.map(Object.values),
+        fileReplacement: {
+          columns: this.arrayMad.columns,
+          rows: this.fichierMad.map(Object.values),
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);

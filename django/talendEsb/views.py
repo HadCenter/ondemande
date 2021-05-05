@@ -12,9 +12,9 @@ from .models import SendMadPostProcessPostObject , TransactionsLivraison , Trans
 import pandas as pd
 import jsonpickle
 
-talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/onDemandPipeline/f370e80809334a5499c2b7bc8d58a746'
+talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev/750137b1abc34995959f89a19a9aa489'
 
-talendUrlMADFileWebHook ='https://webhooks.eu.cloud.talend.com/urbantz_to_hub_WH/6c07cf469ee9412e9f6c432d7749b51a'
+talendUrlMADFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDev/0920e59cd9e54e43b0b11ca072a02850'
 
 
 @api_view(['POST'])
@@ -36,7 +36,9 @@ madPlanJobList = ["ECOLOTRANS_URBANTZ_TO_HUB_SANS_MAD_OTHERS_ONDEMAND",
 				  "ECOLOTRANS_ROUND_CALCULATE_NEW_RULE_QUANTITY_ONDEMAND",
 				  "ROUND_ECOLOTRANS_DIAGNOSTIC_LIVRAISON_QUANTITY_ONDEMAND",
 				  "ECOLOTRANS_URBANTZ_CORRECTION_EXCEPTIONS_ONDEMAND",
-				  "ECOLOTRANS_URBANTZ_CORRECTION_FACTURATION_VALUES_ONDEMAND"]
+				  "ECOLOTRANS_URBANTZ_CORRECTION_FACTURATION_VALUES_ONDEMAND",
+				  "ECOLOTRANS_URBANTZ_TO_HUB_MAD_CORRECTION",
+				  "ECOLOTRANS_URBANTZ_LIVRAISON_FILE_CORRECTION" ]
 @api_view(['POST'])
 def integrerMADFile(request):
 	transaction_id = request.data['transaction_id']
@@ -108,6 +110,53 @@ def correctMetadataFile(request):
 
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[6])
+
+	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
+
+	startEngineOnMadFiles(madObjectToPost)
+	return Response({"message": "ok"}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def correctMADFile(request):
+	transaction_id = request.data['transaction_id']
+	transaction = TransactionsLivraison.objects.get(id=transaction_id)
+	transaction.statut = "En attente"
+	transaction.save()
+	fileReplacement = request.data['fileReplacement']
+	fileName = "ToVerifyQTE_MAD_Livraisons.xlsx"
+	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
+
+	df.to_excel(fileName, index=False)
+	sftp.put(localpath=fileName, remotepath=transaction.fichier_mad_sftp)
+
+
+
+	jobs_to_start = []
+	jobs_to_start.append(madPlanJobList[7])
+
+	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
+
+	startEngineOnMadFiles(madObjectToPost)
+	return Response({"message": "ok"}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def correctLivraisonFile(request):
+	transaction_id = request.data['transaction_id']
+	transaction = TransactionsLivraison.objects.get(id=transaction_id)
+	transaction.statut = "En attente"
+	transaction.save()
+	fileReplacement = request.data['fileReplacement']
+	fileName = "Livraisons.xlsx"
+	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
+
+	df.to_excel(fileName, index=False)
+	sftp.put(localpath=fileName, remotepath=transaction.fichier_livraison_sftp)
+
+
+
+	jobs_to_start = []
+	jobs_to_start.append(madPlanJobList[8])
 
 	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
 

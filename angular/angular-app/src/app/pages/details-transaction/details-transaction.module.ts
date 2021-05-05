@@ -6,10 +6,12 @@ import { DetailsTransactionComponent } from './details-transaction.component';
 import { ThemeModule } from 'theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { DetailsTransactionService } from './details-transaction.service';
 import { MatTableModule } from '@angular/material/table';
 import { LoaderModule } from 'app/components/loader/loader.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [DetailsTransactionComponent],
@@ -17,7 +19,10 @@ import { LoaderModule } from 'app/components/loader/loader.module';
     CommonModule,
     DetailsTransactionRoutingModule,
     ThemeModule,
+    MatSelectModule,
     FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
     ReactiveFormsModule,
     MatExpansionModule,
     MatSnackBarModule,

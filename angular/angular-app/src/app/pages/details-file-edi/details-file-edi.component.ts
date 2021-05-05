@@ -299,12 +299,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       if (filterExists == false) {
         this.copyFileWrong = [...this.copyFileWrong, ...this.filterChange(filter)];
         this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+        this.copyFileWrong = this.copyFileWrong.filter((object, index) => index === this.copyFileWrong.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
       }
       else {
         this.copyFileWrong = [];
         this.filterValues.forEach(element => {
           this.copyFileWrong = this.copyFileWrong.concat(this.filterChange(element));
         });
+        this.copyFileWrong = this.copyFileWrong.filter((object, index) => index === this.copyFileWrong.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
       }
     }
 
@@ -354,6 +356,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   */
   resetFiltre() {
     this.initSelectedCells();    // init selected cells
+      // reset the selected filtre
+      this.options.forEach(element => {
+        if (element.hasOwnProperty("modelValue")) {
+          element.modelValue = ""
+        }
+      });
     this.copyFileWrong = this.testFile;
     this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
   }

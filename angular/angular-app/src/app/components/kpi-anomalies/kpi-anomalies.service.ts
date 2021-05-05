@@ -10,9 +10,6 @@ export class KpiAnomaliesService {
   private url = `${environment.apiBaseUrl}/api`;
   constructor(private http: HttpClient) { }
   
-  public getAllAnomalies() : Observable<any> {
-    return this.http.get(`${this.url}/kpi3/`);
-  }
   public getNumberOfAnomaliesPerDateAll() : Observable<any> {
     return this.http.get(`${this.url}/getNumberOfAnomaliesPerDateAll`);
   }
@@ -20,9 +17,6 @@ export class KpiAnomaliesService {
     return this.http.get(`${this.url}/getNumberOfAnomaliesPerIdAll`);
   }
   
-  public getAnomaliesByDate(date) : Observable<any> {
-    return this.http.post(`${this.url}/getNumberOfAnomaliesPerDate`, date);
-  }
 
   public getNumberOfAnomaliesWithFilters(data) : Observable<any> {
     return this.http.post(`${this.url}/getNumberOfAnomaliesWithFilters`, data);

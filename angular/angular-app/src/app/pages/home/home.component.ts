@@ -180,7 +180,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
           );
           this.selectedFiles.splice(i, 1);
         }
-        this.selectedClientsNames = this.selectedFiles.map(file => file.fileName);
+        this.selectedFilesNames = this.selectedFiles.map(file => file.fileName);
         this.fileControl.setValue('');
         console.warn("Fin *********** toggleSelectionFile")
       }else{

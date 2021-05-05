@@ -83,8 +83,13 @@
       </mat-autocomplete>
     </div>
   </div>
+
   <div>
     <app-kpi-anomalies [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" [fileSelected]="selectedFilesNames" [typeAnomaliesSelected]="selectedtypesAnomaliesNames"></app-kpi-anomalies>
+  </div>
+
+  <div>
+    <app-kpi-intervention-admin [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" ></app-kpi-intervention-admin>
   </div>
 
 

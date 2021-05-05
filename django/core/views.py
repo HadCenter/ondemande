@@ -589,6 +589,19 @@ def getNumberOfAnomaliesPerDateAll(request):
 
     return HttpResponse(jsonpickle.encode(mapDateToNumberOfAnomalies,unpicklable=False),content_type='applicaiton/json')
 
+@api_view(['GET'])
+def getNumberOfInterventionsPerDateAll(request):
+
+    interventionAdmin = InterventionAdmin.objects.all().prefetch_related("id_admin").prefetch_related("id_file_edi")
+    mapDateToNumberOfInterventions = {}
+    for intervention in interventionAdmin:
+        if intervention.execution_time.strftime("%m-%d-%Y %H:%M:%S") not in mapDateToNumberOfInterventions.keys():
+            mapDateToNumberOfInterventions[intervention.execution_time.strftime("%m-%d-%Y %H:%M:%S")] = 0
+
+        mapDateToNumberOfInterventions[intervention.execution_time.strftime("%m-%d-%Y %H:%M:%S")] += 1
+
+    return HttpResponse(jsonpickle.encode(mapDateToNumberOfInterventions,unpicklable=False),content_type='applicaiton/json')
+
 
 @api_view(['POST'])
 def getNumberOfAnomaliesPerId(request):
@@ -713,7 +726,7 @@ def getNumberOfInterventionsWithFilters(request):
 
     result= []
     for intervention in interventionAdmin :
-        execution_time = intervention.execution_time.strftime("%Y-%m-%d %H:%M:%S")
+        execution_time = intervention.execution_time.strftime("%m-%d-%Y %H:%M:%S")
         adminUserName = intervention.id_admin.username
         fileName = intervention.id_file_edi.file.name
         clientName = intervention.id_file_edi.client.nom_client

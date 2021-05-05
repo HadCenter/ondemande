@@ -18,11 +18,13 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { KpiAnomaliesComponent } from 'app/components/kpi-anomalies/kpi-anomalies.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { KpiInterventionAdminComponent } from 'app/components/kpi-intervention-admin/kpi-intervention-admin.component';
+
 
 
 
 @NgModule({
-  declarations: [BrowserStatisticsChartComponent, KPInombreDeFichiersImorteParClientComponent, KPIEvolutionNombreDeFichiersImorteParClientComponent,HomeComponent,KpiAnomaliesComponent ],
+  declarations: [BrowserStatisticsChartComponent, KPInombreDeFichiersImorteParClientComponent, KPIEvolutionNombreDeFichiersImorteParClientComponent,HomeComponent,KpiAnomaliesComponent, KpiInterventionAdminComponent ],
   imports: [
     CommonModule,
     HomeRoutingModule,

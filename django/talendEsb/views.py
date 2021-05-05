@@ -12,9 +12,9 @@ from .models import SendMadPostProcessPostObject , TransactionsLivraison , Trans
 import pandas as pd
 import jsonpickle
 
-talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev/750137b1abc34995959f89a19a9aa489'
+talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/DiagnosticEdiWebhookProd/cea1eff3f8404fcebda806957a0ed2bd'
 
-talendUrlMADFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDev/0920e59cd9e54e43b0b11ca072a02850'
+talendUrlMADFileWebHook ='https://webhooks.eu.cloud.talend.com/urbantzTOHubWebhookProd/35204d3ed002461dab7374289c666034'
 
 
 @api_view(['POST'])

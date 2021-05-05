@@ -6,11 +6,11 @@ def upload_to(instance, filename):
     return 'files/{filename}'.format(filename=filename)
 
 class Client(models.Model):
-    code_client = models.CharField(max_length=200)
-    nom_client = models.CharField(max_length=200, unique=True)
-    email = models.EmailField(max_length=100 , blank= True)
+    code_client = models.CharField(max_length=200, blank=True, null= True)
+    nom_client = models.CharField(max_length=200, blank=True, null= True)
+    email = models.EmailField(max_length=100 , blank= True, null= True)
     archived = models.BooleanField(default= False)
-    id_salesforce = models.CharField( max_length=200)
+    id_salesforce = models.CharField( max_length=200, blank=True, null= True)
     token = models.CharField( max_length=250,blank=True, null=True)
 
     def __str__(self):

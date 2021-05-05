@@ -794,7 +794,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (file == "livraison") {
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          console.warn(this.FIRST_EDITABLE_ROW, this.LAST_EDITABLE_ROW);
           this.selectedCellsState[i][j] = false;
         }
 
@@ -813,7 +812,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          console.warn(this.FIRST_EDITABLE_ROW, this.LAST_EDITABLE_ROW, this.selectedCellsStateException[i][j], i, j)
           this.selectedCellsStateException[i][j] = false;
         }
 
@@ -832,7 +830,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          console.warn(this.FIRST_EDITABLE_ROW, this.LAST_EDITABLE_ROW);
           this.selectedCellsStateMetaData[i][j] = false;
         }
 
@@ -851,7 +848,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     else { //MAD
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          console.warn(this.FIRST_EDITABLE_ROW, this.LAST_EDITABLE_ROW);
           this.selectedCellsStateMad[i][j] = false;
         }
       }

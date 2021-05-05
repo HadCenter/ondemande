@@ -1,567 +1,1266 @@
 <div class="container-transaction mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-    <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
-    <div class="content-file-edi" >
-        <div style="text-align: left;padding-left: inherit;"
-        class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--2-col-phone">
-            <label class="number-transaction ">Transaction {{transaction.transaction}}</label>
-        </div>
-        <div class="content-labels" id="conteneur">
-<!--            <div class="element 1">-->
-              <base-card class="element 1" class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--2-col-phone">
-                <base-card-body class="content-card">
-                    <div class="content-label">
-                        <label class="details-label">Statut</label>
-                        <label class="details-label">{{transaction.statut}}</label>
-                    </div>
-                    <div class="content-label">
-                        <label class="details-label">Date Début </label>
-                        <label class="details-label">{{transaction.start_date | date:"yyyy-MM-dd"}}</label>
-                    </div>
-                    <div class="content-label">
-                        <label class="details-label">Date Fin</label>
-                        <label class="details-label">{{transaction.end_date | date:"yyyy-MM-dd"}}</label>
-                    </div>
-                </base-card-body>
-              </base-card>
-<!--            </div>-->
-
-            <div class="element 2">
-              <button
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer transaction
-              </button>
-            </div>
-
-        </div>
-
-        <div class="content-labels">
-
-            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-            <base-card-title>
-                <label>Fichier de livraison </label>
-            </base-card-title>
-            <base-card-body class="content-file-line">
-                <mat-accordion>
-                    <mat-expansion-panel hideToggle  >
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Afficher Log
-                            </mat-panel-title>
-                            <mat-panel-description class="description">
-                                <button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-                                </button>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <!--<app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
-                          [show]="showLowderLivraisonFile"></app-loader>-->
-                        <div *ngIf="dataSourceLivraison" class="content-table">
-                          <table mat-table [dataSource]="dataSourceLivraison"
-                            class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
-                            <!-- Tournee Column -->
-                            <ng-container matColumnDef="Tournee">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Tournee </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Tournee}} </td>
-                            </ng-container>
-
-                            <!-- taskId Column -->
-                            <ng-container matColumnDef="taskId">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> taskId </th>
-                              <td mat-cell *matCellDef="let element"> {{element.taskId}} </td>
-                            </ng-container>
-
-                            <!-- itemId Column -->
-                            <ng-container matColumnDef="itemId">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> itemId </th>
-                              <td mat-cell *matCellDef="let element"> {{element.itemId}} </td>
-                            </ng-container>
-
-                            <!-- Date Column -->
-                            <ng-container matColumnDef="Date">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Date </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Date}} </td>
-                            </ng-container>
-
-                            <!-- Expediteur Column -->
-                            <ng-container matColumnDef="Expediteur">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Expediteur}} </td>
-                            </ng-container>
-
-                            <!-- Activite Column -->
-                            <ng-container matColumnDef="Activite">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Activite}} </td>
-                            </ng-container>
-
-                            <!-- Categorie Column -->
-                            <ng-container matColumnDef="Categorie">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Categorie}} </td>
-                            </ng-container>
-
-                            <!-- Type_de_Service Column -->
-                            <ng-container matColumnDef="Type_de_Service">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Type_de_Service}} </td>
-                            </ng-container>
-
-                            <!-- ID_de_la_tache Column -->
-                            <ng-container matColumnDef="ID_de_la_tache">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache </th>
-                              <td mat-cell *matCellDef="let element"> {{element.ID_de_la_tache}} </td>
-                            </ng-container>
-
-                            <!-- Item___Nom_sous_categorie Column -->
-                            <ng-container matColumnDef="Item___Nom_sous_categorie">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Nom_sous_categorie}} </td>
-                            </ng-container>
-
-                            <!-- Item___Type_unite_manutention Column -->
-                            <ng-container matColumnDef="Item___Type_unite_manutention">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Type_unite_manutention}} </td>
-                            </ng-container>
-
-                            <!-- Item___Quantite Column -->
-                            <ng-container matColumnDef="Item___Quantite">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Quantite}} </td>
-                            </ng-container>
-
-                            <!-- Code_postal Column -->
-                            <ng-container matColumnDef="Code_postal">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Code_postal}} </td>
-                            </ng-container>
-
-                            <!-- sourceHubName Column -->
-                            <ng-container matColumnDef="sourceHubName">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName </th>
-                              <td mat-cell *matCellDef="let element"> {{element.sourceHubName}} </td>
-                            </ng-container>
-
-                            <!-- Round_Name Column -->
-                            <ng-container matColumnDef="Round_Name">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Round_Name}} </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsLivraison"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsLivraison;"></tr>
-                          </table>
-                        </div>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </base-card-body>
-            </base-card>
-
-
-        </div>
-        <div class="content-labels">
-
-            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-            <base-card-title>
-                <label>Fichier d'exception </label>
-            </base-card-title>
-            <base-card-body class="content-file-line">
-                <mat-accordion>
-                    <mat-expansion-panel hideToggle  >
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Afficher Log
-                            </mat-panel-title>
-                            <mat-panel-description class="description">
-                                <button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-                                </button>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <!--<app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
-                          [show]="showLowderExceptionFile"></app-loader>-->
-                        <div *ngIf="dataSourceException" class="content-table">
-                          <table mat-table [dataSource]="dataSourceException"
-                            class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
-                            <!-- Tournee Column -->
-                            <ng-container matColumnDef="Tournee">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Tournee </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Tournee}} </td>
-                            </ng-container>
-
-                            <!-- taskId Column -->
-                            <ng-container matColumnDef="taskId">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> taskId </th>
-                              <td mat-cell *matCellDef="let element"> {{element.taskId}} </td>
-                            </ng-container>
-
-                            <!-- itemId Column -->
-                            <ng-container matColumnDef="itemId">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> itemId </th>
-                              <td mat-cell *matCellDef="let element"> {{element.itemId}} </td>
-                            </ng-container>
-
-                            <!-- Date Column -->
-                            <ng-container matColumnDef="Date">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Date </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Date}} </td>
-                            </ng-container>
-
-                            <!-- Expediteur Column -->
-                            <ng-container matColumnDef="Expediteur">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Expediteur}} </td>
-                            </ng-container>
-
-                            <!-- Activite Column -->
-                            <ng-container matColumnDef="Activite">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Activite}} </td>
-                            </ng-container>
-
-                            <!-- Categorie Column -->
-                            <ng-container matColumnDef="Categorie">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Categorie}} </td>
-                            </ng-container>
-
-                            <!-- Type_de_Service Column -->
-                            <ng-container matColumnDef="Type_de_Service">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Type_de_Service}} </td>
-                            </ng-container>
-
-                            <!-- ID_de_la_tache Column -->
-                            <ng-container matColumnDef="ID_de_la_tache">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache </th>
-                              <td mat-cell *matCellDef="let element"> {{element.ID_de_la_tache}} </td>
-                            </ng-container>
-
-                            <!-- Item___Nom Column -->
-                            <ng-container matColumnDef="Item___Nom">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Nom}} </td>
-                            </ng-container>
-
-                            <!-- Item___Type Column -->
-                            <ng-container matColumnDef="Item___Type">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Type}} </td>
-                            </ng-container>
-
-                            <!-- Item___Quantite Column -->
-                            <ng-container matColumnDef="Item___Quantite">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Quantite}} </td>
-                            </ng-container>
-
-                            <!-- Code_postal Column -->
-                            <ng-container matColumnDef="Code_postal">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Code_postal}} </td>
-                            </ng-container>
-
-                            <!-- Round_Name Column -->
-                            <ng-container matColumnDef="Round_Name">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Round_Name}} </td>
-                            </ng-container>
-
-                            <!-- Remarque Column -->
-                            <ng-container matColumnDef="Remarque">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Remarque </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Remarque}} </td>
-                            </ng-container>
-
-                            <!-- isDeleted Column -->
-                            <ng-container matColumnDef="isDeleted">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> isDeleted </th>
-                              <td mat-cell *matCellDef="let element"> {{element.isDeleted}} </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsException"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsException;"></tr>
-                          </table>
-                        </div>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </base-card-body>
-            </base-card>
-
-
-        </div>
-        <div class="content-labels">
-
-            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-            <base-card-title>
-                <label>Fichier Metadata </label>
-            </base-card-title>
-            <base-card-body class="content-file-line">
-                <mat-accordion>
-                    <mat-expansion-panel hideToggle  >
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Afficher Log
-                            </mat-panel-title>
-                            <mat-panel-description class="description">
-                                <button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
-                                </button>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <!--<app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
-                          [show]="showLowderMetadataFile"></app-loader>-->
-                        <div *ngIf="dataSourceMetadata" class="content-table">
-                          <table mat-table [dataSource]="dataSourceMetadata"
-                            class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
-                            <!-- Tournee Column -->
-                            <ng-container matColumnDef="Tournee">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Tournee </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Tournee}} </td>
-                            </ng-container>
-
-                            <!-- taskId Column -->
-                            <ng-container matColumnDef="taskId">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> taskId </th>
-                              <td mat-cell *matCellDef="let element"> {{element.taskId}} </td>
-                            </ng-container>
-
-                            <!-- itemId Column -->
-                            <ng-container matColumnDef="itemId">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> itemId </th>
-                              <td mat-cell *matCellDef="let element"> {{element.itemId}} </td>
-                            </ng-container>
-
-                            <!-- Date Column -->
-                            <ng-container matColumnDef="Date">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Date </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Date}} </td>
-                            </ng-container>
-
-                            <!-- Expediteur Column -->
-                            <ng-container matColumnDef="Expediteur">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Expediteur}} </td>
-                            </ng-container>
-
-                            <!-- Activite Column -->
-                            <ng-container matColumnDef="Activite">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Activite}} </td>
-                            </ng-container>
-
-                            <!-- Categorie Column -->
-                            <ng-container matColumnDef="Categorie">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Categorie}} </td>
-                            </ng-container>
-
-                            <!-- Type_de_Service Column -->
-                            <ng-container matColumnDef="Type_de_Service">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Type_de_Service}} </td>
-                            </ng-container>
-
-                            <!-- ID_de_la_tache Column -->
-                            <ng-container matColumnDef="ID_de_la_tache">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache </th>
-                              <td mat-cell *matCellDef="let element"> {{element.ID_de_la_tache}} </td>
-                            </ng-container>
-
-                            <!-- Item___Nom_sous_categorie Column -->
-                            <ng-container matColumnDef="Item___Nom_sous_categorie">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Nom_sous_categorie}} </td>
-                            </ng-container>
-
-                            <!-- Item___Type_unite_manutention Column -->
-                            <ng-container matColumnDef="Item___Type_unite_manutention">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Type_unite_manutention}} </td>
-                            </ng-container>
-
-                            <!-- Item___Quantite Column -->
-                            <ng-container matColumnDef="Item___Quantite">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Quantite}} </td>
-                            </ng-container>
-
-                            <!-- Code_postal Column -->
-                            <ng-container matColumnDef="Code_postal">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Code_postal}} </td>
-                            </ng-container>
-
-                            <!-- sourceHubName Column -->
-                            <ng-container matColumnDef="sourceHubName">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName </th>
-                              <td mat-cell *matCellDef="let element"> {{element.sourceHubName}} </td>
-                            </ng-container>
-
-                            <!-- Round_Name Column -->
-                            <ng-container matColumnDef="Round_Name">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Round_Name}} </td>
-                            </ng-container>
-
-                            <!-- sourceClosureDate Column -->
-                            <ng-container matColumnDef="sourceClosureDate">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceClosureDate </th>
-                              <td mat-cell *matCellDef="let element"> {{element.sourceClosureDate}} </td>
-                            </ng-container>
-
-                            <!-- realInfoHasPrepared Column -->
-                            <ng-container matColumnDef="realInfoHasPrepared">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> realInfoHasPrepared </th>
-                              <td mat-cell *matCellDef="let element"> {{element.realInfoHasPrepared}} </td>
-                            </ng-container>
-
-                            <!-- status Column -->
-                            <ng-container matColumnDef="status">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> status </th>
-                              <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-                            </ng-container>
-
-                            <!-- metadataFACTURATION Column -->
-                            <ng-container matColumnDef="metadataFACTURATION">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> metadataFACTURATION </th>
-                              <td mat-cell *matCellDef="let element"> {{element.metadataFACTURATION}} </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsMetadata"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsMetadata;"></tr>
-                          </table>
-                        </div>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </base-card-body>
-            </base-card>
-
-
-        </div>
-        <div class="content-labels">
-
-            <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-            <base-card-title>
-                <label>Fichier MAD </label>
-            </base-card-title>
-            <base-card-body class="content-file-line">
-                <mat-accordion>
-                    <mat-expansion-panel hideToggle  >
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Afficher Log
-                            </mat-panel-title>
-                            <mat-panel-description class="description">
-                                <button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-                                </button>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <!--<app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
-                          [show]="showLowderMadFile"></app-loader>-->
-                        <div *ngIf="dataSourceMad" class="content-table">
-                          <table mat-table [dataSource]="dataSourceMad"
-                            class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
-                            <!-- Tournee Column -->
-                            <ng-container matColumnDef="Tournee">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Tournee </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Tournee}} </td>
-                            </ng-container>
-
-                            <!-- taskId Column -->
-                            <ng-container matColumnDef="taskId">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> taskId </th>
-                              <td mat-cell *matCellDef="let element"> {{element.taskId}} </td>
-                            </ng-container>
-
-                            <!-- itemId Column -->
-                            <ng-container matColumnDef="itemId">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> itemId </th>
-                              <td mat-cell *matCellDef="let element"> {{element.itemId}} </td>
-                            </ng-container>
-
-                            <!-- Date Column -->
-                            <ng-container matColumnDef="Date">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Date </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Date}} </td>
-                            </ng-container>
-
-                            <!-- Expediteur Column -->
-                            <ng-container matColumnDef="Expediteur">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Expediteur}} </td>
-                            </ng-container>
-
-                            <!-- Activite Column -->
-                            <ng-container matColumnDef="Activite">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Activite}} </td>
-                            </ng-container>
-
-                            <!-- Categorie Column -->
-                            <ng-container matColumnDef="Categorie">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Categorie}} </td>
-                            </ng-container>
-
-                            <!-- Type_de_Service Column -->
-                            <ng-container matColumnDef="Type_de_Service">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Type_de_Service}} </td>
-                            </ng-container>
-
-                            <!-- ID_de_la_tache Column -->
-                            <ng-container matColumnDef="ID_de_la_tache">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache </th>
-                              <td mat-cell *matCellDef="let element"> {{element.ID_de_la_tache}} </td>
-                            </ng-container>
-
-                            <!-- Item___Nom_sous_categorie Column -->
-                            <ng-container matColumnDef="Item___Nom_sous_categorie">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Nom_sous_categorie}} </td>
-                            </ng-container>
-
-                            <!-- Item___Type_unite_manutention Column -->
-                            <ng-container matColumnDef="Item___Type_unite_manutention">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Type_unite_manutention}} </td>
-                            </ng-container>
-
-                            <!-- Item___Quantite Column -->
-                            <ng-container matColumnDef="Item___Quantite">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Item___Quantite}} </td>
-                            </ng-container>
-
-                            <!-- Code_postal Column -->
-                            <ng-container matColumnDef="Code_postal">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Code_postal}} </td>
-                            </ng-container>
-
-                            <!-- sourceHubName Column -->
-                            <ng-container matColumnDef="sourceHubName">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName </th>
-                              <td mat-cell *matCellDef="let element"> {{element.sourceHubName}} </td>
-                            </ng-container>
-
-                            <!-- Round_Name Column -->
-                            <ng-container matColumnDef="Round_Name">
-                              <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name </th>
-                              <td mat-cell *matCellDef="let element"> {{element.Round_Name}} </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsMad"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsMad;"></tr>
-                          </table>
-                        </div>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </base-card-body>
-            </base-card>
-
-
-        </div>
+  <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
+  <div  class="content-file-edi">
+    <div style="text-align: left;padding-left: inherit;"
+      class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--2-col-phone">
+      <label class="number-transaction ">Transaction {{transaction?.transaction_id}}</label>
     </div>
+    <div class="content-labels" id="conteneur">
+      <!--            <div class="element 1">-->
+      <base-card class="element 1"
+        class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--2-col-phone">
+        <base-card-body class="content-card">
+          <div class="content-label">
+            <label class="details-label">Statut</label>
+            <label class="details-label">{{transaction?.statut}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Date Début </label>
+            <label class="details-label">{{transaction?.start_date | date:"yyyy-MM-dd"}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Date Fin</label>
+            <label class="details-label">{{transaction?.end_date | date:"yyyy-MM-dd"}}</label>
+          </div>
+        </base-card-body>
+      </base-card>
+      <!--            </div>-->
+
+      <div class="element 2">
+        <button
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
+          transaction
+        </button>
+      </div>
+
+    </div>
+
+    <div class="content-labels">
+
+      <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+        <base-card-title>
+          <label>Fichier de livraison </label>
+        </base-card-title>
+        <base-card-body class="content-file-line">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Afficher Log
+                </mat-panel-title>
+                <mat-panel-description class="description">
+                  <button (click)='correctionFile("livraison");$event.stopPropagation();'
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
+                  </button>
+                  <button (click)='resetFiltre("livraison");$event.stopPropagation();' style="margin-left: 5px;"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                    les filtres
+                  </button>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
+                [show]="showLoaderLivraisonFile"></app-loader>
+              <div *ngIf="fichierLivraison.length>0" class="content-table">
+                <table mat-table [dataSource]="fichierLivraison"
+                  class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
+
+                  <!-- Date Column -->
+                  <ng-container matColumnDef="Date">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[0].columnProp}}"
+                          [(ngModel)]="options[0].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+                          <mat-option value="">-- Select {{options[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[0].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
+                      (mouseup)="onMouseUp(i, 0, 'Date','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][0], 'unselected': !selectedCellsState[i][0]}">
+                      {{element.Date}} </td>
+                  </ng-container>
+
+                  <!-- Expediteur Column -->
+                  <ng-container matColumnDef="Expediteur">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[1].columnProp}}"
+                          [(ngModel)]="options[1].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                          <mat-option value="">-- Select {{options[1].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[1].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
+                      (mouseup)="onMouseUp(i, 1, 'Expediteur','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
+                      {{element.Expediteur}} </td>
+                  </ng-container>
+
+                  <!-- Activite Column -->
+                  <ng-container matColumnDef="Activite">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[2].columnProp}}"
+                          [(ngModel)]="options[2].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+                          <mat-option value="">-- Select {{options[2].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[2].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
+                      (mouseup)="onMouseUp(i, 2, 'Activite','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
+                      {{element.Activite}} </td>
+                  </ng-container>
+
+                  <!-- Categorie Column -->
+                  <ng-container matColumnDef="Categorie">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[3].columnProp}}"
+                          [(ngModel)]="options[3].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+                          <mat-option value="">-- Select {{options[3].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[3].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
+                      (mouseup)="onMouseUp(i, 3, 'Categorie','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
+                      {{element.Categorie}} </td>
+                  </ng-container>
+
+                  <!-- Type_de_Service Column -->
+                  <ng-container matColumnDef="Type_de_Service">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[4].columnProp}}"
+                          [(ngModel)]="options[4].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+                          <mat-option value="">-- Select {{options[4].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[4].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
+                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
+                      {{element.Type_de_Service}} </td>
+                  </ng-container>
+
+                  <!-- ID_de_la_tache Column -->
+                  <ng-container matColumnDef="ID_de_la_tache">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[5].columnProp}}"
+                          [(ngModel)]="options[5].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+                          <mat-option value="">-- Select {{options[5].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[5].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
+                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
+                      {{element.ID_de_la_tache}} </td>
+                  </ng-container>
+
+                  <!-- Item___Nom_sous_categorie Column -->
+                  <ng-container matColumnDef="Item___Nom_sous_categorie">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[6].columnProp}}"
+                          [(ngModel)]="options[6].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+                          <mat-option value="">-- Select {{options[6].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[6].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie')"
+                      (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
+                      {{element.Item___Nom_sous_categorie}} </td>
+                  </ng-container>
+
+                  <!-- Item___Type_unite_manutention Column -->
+                  <ng-container matColumnDef="Item___Type_unite_manutention">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[7].columnProp}}"
+                          [(ngModel)]="options[7].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+                          <mat-option value="">-- Select {{options[7].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[7].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention')"
+                      (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
+                      {{element.Item___Type_unite_manutention}} </td>
+                  </ng-container>
+
+                  <!-- Item___Quantite Column -->
+                  <ng-container matColumnDef="Item___Quantite">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[8].columnProp}}"
+                          [(ngModel)]="options[8].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[8],$event)">
+                          <mat-option value="">-- Select {{options[8].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[8].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
+                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}">
+                      {{element.Item___Quantite}} </td>
+                  </ng-container>
+
+                  <!-- Code_postal Column -->
+                  <ng-container matColumnDef="Code_postal">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[9].columnProp}}"
+                          [(ngModel)]="options[9].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[9],$event)">
+                          <mat-option value="">-- Select {{options[9].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[9].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 9, 'Code_postal')"
+                      (mouseup)="onMouseUp(i, 9, 'Code_postal','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9]}">
+                      {{element.Code_postal}} </td>
+                  </ng-container>
+
+                  <!-- sourceHubName Column -->
+                  <ng-container matColumnDef="sourceHubName">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[10].columnProp}}"
+                          [(ngModel)]="options[10].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[10],$event)">
+                          <mat-option value="">-- Select {{options[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[10].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 10, 'sourceHubName')"
+                      (mouseup)="onMouseUp(i, 10, 'sourceHubName','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10]}">
+                      {{element.sourceHubName}} </td>
+                  </ng-container>
+
+                  <!-- Round_Name Column -->
+                  <ng-container matColumnDef="Round_Name">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{options[11].columnProp}}"
+                          [(ngModel)]="options[11].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[11],$event)">
+                          <mat-option value="">-- Select {{options[11].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[11].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 11, 'Round_Name')"
+                      (mouseup)="onMouseUp(i, 11, 'Round_Name','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}">
+                      {{element.Round_Name}} </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsLivraison; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsLivraison;"></tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </base-card-body>
+      </base-card>
+
+
+    </div>
+    <div class="content-labels">
+
+      <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+        <base-card-title>
+          <label>Fichier d'exception </label>
+        </base-card-title>
+        <base-card-body class="content-file-line">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Afficher Log
+                </mat-panel-title>
+                <mat-panel-description class="description">
+                  <button (click)='correctionFile("exception");$event.stopPropagation();'
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
+                  </button>
+                  <button (click)='resetFiltre("exception");$event.stopPropagation();' style="margin-left: 5px;"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                    les filtres
+                  </button>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
+                          [show]="showLoaderExceptionFile"></app-loader>
+              <div *ngIf="fichierException.length>0" class="content-table">
+                <table mat-table [dataSource]="fichierException"
+                  class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
+
+                  <!-- Date Column -->
+                  <ng-container matColumnDef="Date">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[0].columnProp}}"
+                          [(ngModel)]="optionsException[0].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[0],$event)">
+                          <mat-option value="">-- Select {{optionsException[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[0].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
+                      (mouseup)="onMouseUp(i, 0, 'Date','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][0], 'unselected': !selectedCellsStateException[i][0]}">
+                      {{element.Date}} </td>
+                  </ng-container>
+
+                  <!-- Expediteur Column -->
+                  <ng-container matColumnDef="Expediteur">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[1].columnProp}}"
+                          [(ngModel)]="optionsException[1].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[1],$event)">
+                          <mat-option value="">-- Select {{options[1].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[1].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
+                      (mouseup)="onMouseUp(i, 1, 'Expediteur','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][1], 'unselected': !selectedCellsStateException[i][1]}">
+                      {{element.Expediteur}} </td>
+                  </ng-container>
+
+                  <!-- Activite Column -->
+                  <ng-container matColumnDef="Activite">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[2].columnProp}}"
+                          [(ngModel)]="optionsException[2].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[2],$event)">
+                          <mat-option value="">-- Select {{optionsException[2].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[2].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
+                      (mouseup)="onMouseUp(i, 2, 'Activite','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][2], 'unselected': !selectedCellsStateException[i][2]}">
+                      {{element.Activite}} </td>
+                  </ng-container>
+
+                  <!-- Categorie Column -->
+                  <ng-container matColumnDef="Categorie">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[3].columnProp}}"
+                          [(ngModel)]="optionsException[3].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[3],$event)">
+                          <mat-option value="">-- Select {{optionsException[3].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[3].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
+                      (mouseup)="onMouseUp(i, 3, 'Categorie','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][3], 'unselected': !selectedCellsStateException[i][3]}">
+                      {{element.Categorie}} </td>
+                  </ng-container>
+
+                  <!-- Type_de_Service Column -->
+                  <ng-container matColumnDef="Type_de_Service">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[4].columnProp}}"
+                          [(ngModel)]="optionsException[4].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[4],$event)">
+                          <mat-option value="">-- Select {{optionsException[4].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[4].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
+                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][4], 'unselected': !selectedCellsStateException[i][4]}">
+                      {{element.Type_de_Service}} </td>
+                  </ng-container>
+
+                  <!-- ID_de_la_tache Column -->
+                  <ng-container matColumnDef="ID_de_la_tache">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[5].columnProp}}"
+                          [(ngModel)]="optionsException[5].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[5],$event)">
+                          <mat-option value="">-- Select {{optionsException[5].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[5].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
+                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][5], 'unselected': !selectedCellsStateException[i][5]}">
+                      {{element.ID_de_la_tache}} </td>
+                  </ng-container>
+
+                  <!-- Item___Nom Column -->
+                  <ng-container matColumnDef="Item___Nom">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[6].columnProp}}"
+                          [(ngModel)]="optionsException[6].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[6],$event)">
+                          <mat-option value="">-- Select {{optionsException[6].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[6].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 6, 'Item___Nom')"
+                      (mouseup)="onMouseUp(i, 6, 'Item___Nom','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][6], 'unselected': !selectedCellsStateException[i][6]}">
+                      {{element.Item___Nom}} </td>
+                  </ng-container>
+
+                  <!-- Item___Type Column -->
+                  <ng-container matColumnDef="Item___Type">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[7].columnProp}}"
+                          [(ngModel)]="optionsException[7].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[7],$event)">
+                          <mat-option value="">-- Select {{optionsException[7].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[7].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 7, 'Item___Type')"
+                      (mouseup)="onMouseUp(i, 7, 'Item___Type','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][7], 'unselected': !selectedCellsStateException[i][7]}">
+                      {{element.Item___Type}} </td>
+                  </ng-container>
+
+                  <!-- Item___Quantite Column -->
+                  <ng-container matColumnDef="Item___Quantite">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[8].columnProp}}"
+                          [(ngModel)]="optionsException[8].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[8],$event)">
+                          <mat-option value="">-- Select {{optionsException[8].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[8].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
+                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][8], 'unselected': !selectedCellsStateException[i][8]}">
+                      {{element.Item___Quantite}} </td>
+                  </ng-container>
+
+                  <!-- Code_postal Column -->
+                  <ng-container matColumnDef="Code_postal">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[9].columnProp}}"
+                          [(ngModel)]="optionsException[9].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[9],$event)">
+                          <mat-option value="">-- Select {{optionsException[9].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[9].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 9, 'Code_postal')"
+                      (mouseup)="onMouseUp(i, 9, 'Code_postal','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][9], 'unselected': !selectedCellsStateException[i][9]}">
+                      {{element.Code_postal}} </td>
+                  </ng-container>
+
+                  <!-- Round_Name Column -->
+                  <ng-container matColumnDef="Round_Name">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[10].columnProp}}"
+                          [(ngModel)]="optionsException[10].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[10],$event)">
+                          <mat-option value="">-- Select {{optionsException[10].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[10].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 10, 'Round_Name')"
+                      (mouseup)="onMouseUp(i, 10, 'Round_Name','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][10], 'unselected': !selectedCellsStateException[i][10]}">
+                      {{element.Round_Name}} </td>
+                  </ng-container>
+
+                  <!-- Remarque Column -->
+                  <ng-container matColumnDef="Remarque">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Remarque
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[11].columnProp}}"
+                          [(ngModel)]="optionsException[11].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[11],$event)">
+                          <mat-option value="">-- Select {{optionsException[11].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[11].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 11, 'Remarque')"
+                      (mouseup)="onMouseUp(i, 11, 'Remarque','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][11], 'unselected': !selectedCellsStateException[i][11]}">
+                      {{element.Remarque}} </td>
+                  </ng-container>
+
+                  <!-- isDeleted Column -->
+                  <ng-container matColumnDef="isDeleted">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> isDeleted
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[12].columnProp}}"
+                          [(ngModel)]="optionsException[12].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[12],$event)">
+                          <mat-option value="">-- Select {{optionsException[12].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[12].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 12, 'isDeleted')"
+                      (mouseup)="onMouseUp(i, 12, 'isDeleted','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i][12], 'unselected': !selectedCellsStateException[i][12]}">
+                      {{element.isDeleted}} </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsException; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsException;"></tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </base-card-body>
+      </base-card>
+
+
+    </div>
+    <div class="content-labels">
+
+      <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+        <base-card-title>
+          <label>Fichier Metadata </label>
+        </base-card-title>
+        <base-card-body class="content-file-line">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Afficher Log
+                </mat-panel-title>
+                <mat-panel-description class="description">
+                  <button (click)='correctionFile("metadata");$event.stopPropagation();'
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
+                  </button>
+                  <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                    les filtres
+                  </button>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
+                          [show]="showLoaderMetadataFile"></app-loader>
+              <div *ngIf="fichierMetadata.length>0" class="content-table">
+                <table mat-table [dataSource]="fichierMetadata"
+                  class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
+                  <!-- Date Column -->
+                  <ng-container matColumnDef="Date">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[0].columnProp}}"
+                          [(ngModel)]="optionsMetaData[0].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[0],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[0].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
+                      (mouseup)="onMouseUp(i, 0, 'Date','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][0], 'unselected': !selectedCellsStateMetaData[i][0]}">
+                      {{element.Date}} </td>
+                  </ng-container>
+
+                  <!-- Expediteur Column -->
+                  <ng-container matColumnDef="Expediteur">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[1].columnProp}}"
+                          [(ngModel)]="optionsMetaData[1].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[1],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[1].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[1].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
+                      (mouseup)="onMouseUp(i, 1, 'Expediteur','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][1], 'unselected': !selectedCellsStateMetaData[i][1]}">
+                      {{element.Expediteur}} </td>
+                  </ng-container>
+
+                  <!-- Activite Column -->
+                  <ng-container matColumnDef="Activite">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[2].columnProp}}"
+                          [(ngModel)]="optionsMetaData[2].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[2],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[2].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[2].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
+                      (mouseup)="onMouseUp(i, 2, 'Activite','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][2], 'unselected': !selectedCellsStateMetaData[i][2]}">
+                      {{element.Activite}} </td>
+                  </ng-container>
+
+                  <!-- Categorie Column -->
+                  <ng-container matColumnDef="Categorie">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[3].columnProp}}"
+                          [(ngModel)]="optionsMetaData[3].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[3],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[3].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[3].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
+                      (mouseup)="onMouseUp(i, 3, 'Categorie','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][3], 'unselected': !selectedCellsStateMetaData[i][3]}">
+                      {{element.Categorie}} </td>
+                  </ng-container>
+
+                  <!-- Type_de_Service Column -->
+                  <ng-container matColumnDef="Type_de_Service">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[4].columnProp}}"
+                          [(ngModel)]="optionsMetaData[4].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[4],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[4].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[4].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
+                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][4], 'unselected': !selectedCellsStateMetaData[i][4]}">
+                      {{element.Type_de_Service}} </td>
+                  </ng-container>
+
+                  <!-- ID_de_la_tache Column -->
+                  <ng-container matColumnDef="ID_de_la_tache">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[5].columnProp}}"
+                          [(ngModel)]="optionsMetaData[5].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[5],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[5].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[5].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
+                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][5], 'unselected': !selectedCellsStateMetaData[i][5]}">
+                      {{element.ID_de_la_tache}} </td>
+                  </ng-container>
+
+                  <!-- Item___Nom_sous_categorie Column -->
+                  <ng-container matColumnDef="Item___Nom_sous_categorie">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[6].columnProp}}"
+                          [(ngModel)]="optionsMetaData[6].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[6],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[6].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[6].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie')"
+                      (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][6], 'unselected': !selectedCellsStateMetaData[i][6]}">
+                      {{element.Item___Nom_sous_categorie}} </td>
+                  </ng-container>
+
+                  <!-- Item___Type_unite_manutention Column -->
+                  <ng-container matColumnDef="Item___Type_unite_manutention">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[7].columnProp}}"
+                          [(ngModel)]="optionsMetaData[7].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[7],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[7].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[7].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention')"
+                      (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][7], 'unselected': !selectedCellsStateMetaData[i][7]}">
+                      {{element.Item___Type_unite_manutention}} </td>
+                  </ng-container>
+
+                  <!-- Item___Quantite Column -->
+                  <ng-container matColumnDef="Item___Quantite">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[8].columnProp}}"
+                          [(ngModel)]="optionsMetaData[8].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[8],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[8].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[8].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
+                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][8], 'unselected': !selectedCellsStateMetaData[i][8]}">
+                      {{element.Item___Quantite}} </td>
+                  </ng-container>
+
+                  <!-- Code_postal Column -->
+                  <ng-container matColumnDef="Code_postal">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[9].columnProp}}"
+                          [(ngModel)]="optionsMetaData[9].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[9],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[9].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[9].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 9, 'Code_postal')"
+                      (mouseup)="onMouseUp(i, 9, 'Code_postal','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][9], 'unselected': !selectedCellsStateMetaData[i][9]}">
+                      {{element.Code_postal}} </td>
+                  </ng-container>
+
+                  <!-- sourceHubName Column -->
+                  <ng-container matColumnDef="sourceHubName">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[10].columnProp}}"
+                          [(ngModel)]="optionsMetaData[10].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[10],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[10].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[10].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 10, 'sourceHubName')"
+                      (mouseup)="onMouseUp(i, 10, 'sourceHubName','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][10], 'unselected': !selectedCellsStateMetaData[i][10]}">
+                      {{element.sourceHubName}} </td>
+                  </ng-container>
+
+                  <!-- Round_Name Column -->
+                  <ng-container matColumnDef="Round_Name">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[11].columnProp}}"
+                          [(ngModel)]="optionsMetaData[11].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[11],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[11].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[11].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 11, 'Round_Name')"
+                      (mouseup)="onMouseUp(i, 11, 'Round_Name','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][11], 'unselected': !selectedCellsStateMetaData[i][11]}">
+                      {{element.Round_Name}} </td>
+                  </ng-container>
+
+                  <!-- sourceClosureDate Column -->
+                  <ng-container matColumnDef="sourceClosureDate">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceClosureDate
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[12].columnProp}}"
+                          [(ngModel)]="optionsMetaData[12].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[12],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[12].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[12].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 12, 'sourceClosureDate')"
+                      (mouseup)="onMouseUp(i, 12, 'sourceClosureDate','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][12], 'unselected': !selectedCellsStateMetaData[i][12]}">
+                      {{element.sourceClosureDate}} </td>
+                  </ng-container>
+
+                  <!-- realInfoHasPrepared Column -->
+                  <ng-container matColumnDef="realInfoHasPrepared">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> realInfoHasPrepared
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[13].columnProp}}"
+                          [(ngModel)]="optionsMetaData[13].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[13],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[13].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[13].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 13, 'realInfoHasPrepared')"
+                      (mouseup)="onMouseUp(i, 13, 'realInfoHasPrepared','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][13], 'unselected': !selectedCellsStateMetaData[i][13]}">
+                      {{element.realInfoHasPrepared}} </td>
+                  </ng-container>
+
+                  <!-- status Column -->
+                  <ng-container matColumnDef="status">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> status
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[14].columnProp}}"
+                          [(ngModel)]="optionsMetaData[14].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[14],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[14].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[14].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 14, 'status')"
+                      (mouseup)="onMouseUp(i, 14, 'status','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][14], 'unselected': !selectedCellsStateMetaData[i][14]}">
+                      {{element.status}} </td>
+                  </ng-container>
+
+                  <!-- metadataFACTURATION Column -->
+                  <ng-container matColumnDef="metadataFACTURATION">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> metadataFACTURATION
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[15].columnProp}}"
+                          [(ngModel)]="optionsMetaData[15].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[15],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[15].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[15].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 15, 'metadataFACTURATION')"
+                      (mouseup)="onMouseUp(i, 15, 'metadataFACTURATION','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i][15], 'unselected': !selectedCellsStateMetaData[i][15]}">
+                      {{element.metadataFACTURATION}} </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsMetadata; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsMetadata;"></tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </base-card-body>
+      </base-card>
+
+
+    </div>
+    <div class="content-labels">
+
+      <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+        <base-card-title>
+          <label>Fichier MAD </label>
+        </base-card-title>
+        <base-card-body class="content-file-line">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Afficher Log
+                </mat-panel-title>
+                <mat-panel-description class="description">
+                  <button (click)='correctionFile("mad");$event.stopPropagation();'
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
+                  </button>
+                  <button (click)='resetFiltre("mad");$event.stopPropagation();' style="margin-left: 5px;"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                    les filtres
+                  </button>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
+                          [show]="showLoaderMadFile"></app-loader>
+              <div *ngIf="fichierMad.length>0" class="content-table">
+                <table mat-table [dataSource]="fichierMad"
+                  class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
+
+                  <!-- Date Column -->
+                  <ng-container matColumnDef="Date">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[0].columnProp}}"
+                          [(ngModel)]="optionsMad[0].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[0],$event)">
+                          <mat-option value="">-- Select {{optionsMad[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[0].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
+                      (mouseup)="onMouseUp(i, 0, 'Date','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][0], 'unselected': !selectedCellsStateMad[i][0]}">
+                      {{element.Date}} </td>
+                  </ng-container>
+
+                  <!-- Expediteur Column -->
+                  <ng-container matColumnDef="Expediteur">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[1].columnProp}}"
+                          [(ngModel)]="optionsMad[1].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[1],$event)">
+                          <mat-option value="">-- Select {{optionsMad[1].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[1].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
+                      (mouseup)="onMouseUp(i, 1, 'Expediteur','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][1], 'unselected': !selectedCellsStateMad[i][1]}">
+                      {{element.Expediteur}} </td>
+                  </ng-container>
+
+                  <!-- Activite Column -->
+                  <ng-container matColumnDef="Activite">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[2].columnProp}}"
+                          [(ngModel)]="optionsMad[2].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[2],$event)">
+                          <mat-option value="">-- Select {{optionsMad[2].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[2].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
+                      (mouseup)="onMouseUp(i, 2, 'Activite','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][2], 'unselected': !selectedCellsStateMad[i][2]}">
+                      {{element.Activite}} </td>
+                  </ng-container>
+
+                  <!-- Categorie Column -->
+                  <ng-container matColumnDef="Categorie">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[3].columnProp}}"
+                          [(ngModel)]="optionsMad[3].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[3],$event)">
+                          <mat-option value="">-- Select {{optionsMad[3].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[3].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
+                      (mouseup)="onMouseUp(i, 3, 'Categorie','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][3], 'unselected': !selectedCellsStateMad[i][3]}">
+                      {{element.Categorie}} </td>
+                  </ng-container>
+
+                  <!-- Type_de_Service Column -->
+                  <ng-container matColumnDef="Type_de_Service">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[4].columnProp}}"
+                          [(ngModel)]="optionsMad[4].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[4],$event)">
+                          <mat-option value="">-- Select {{optionsMad[4].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[4].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
+                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][4], 'unselected': !selectedCellsStateMad[i][4]}">
+                      {{element.Type_de_Service}} </td>
+                  </ng-container>
+
+                  <!-- ID_de_la_tache Column -->
+                  <ng-container matColumnDef="ID_de_la_tache">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[5].columnProp}}"
+                          [(ngModel)]="optionsMad[5].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[5],$event)">
+                          <mat-option value="">-- Select {{optionsMad[5].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[5].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
+                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][5], 'unselected': !selectedCellsStateMad[i][5]}">
+                      {{element.ID_de_la_tache}} </td>
+                  </ng-container>
+
+                  <!-- Item___Nom_sous_categorie Column -->
+                  <ng-container matColumnDef="Item___Nom_sous_categorie">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[6].columnProp}}"
+                          [(ngModel)]="optionsMad[6].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[6],$event)">
+                          <mat-option value="">-- Select {{optionsMad[6].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[6].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie')"
+                      (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][6], 'unselected': !selectedCellsStateMad[i][6]}">
+                      {{element.Item___Nom_sous_categorie}} </td>
+                  </ng-container>
+
+                  <!-- Item___Type_unite_manutention Column -->
+                  <ng-container matColumnDef="Item___Type_unite_manutention">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[7].columnProp}}"
+                          [(ngModel)]="optionsMad[7].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[7],$event)">
+                          <mat-option value="">-- Select {{optionsMad[7].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[7].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention')"
+                      (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][7], 'unselected': !selectedCellsStateMad[i][7]}">
+                      {{element.Item___Type_unite_manutention}} </td>
+                  </ng-container>
+
+                  <!-- Item___Quantite Column -->
+                  <ng-container matColumnDef="Item___Quantite">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[8].columnProp}}"
+                          [(ngModel)]="optionsMad[8].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[8],$event)">
+                          <mat-option value="">-- Select {{optionsMad[8].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[8].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
+                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][8], 'unselected': !selectedCellsStateMad[i][8]}">
+                      {{element.Item___Quantite}} </td>
+                  </ng-container>
+
+                  <!-- Code_postal Column -->
+                  <ng-container matColumnDef="Code_postal">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[9].columnProp}}"
+                          [(ngModel)]="optionsMad[9].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[9],$event)">
+                          <mat-option value="">-- Select {{optionsMad[9].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[9].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 9, 'Code_postal')" (mouseup)="onMouseUp(i, 9, 'Code_postal','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][9], 'unselected': !selectedCellsStateMad[i][9]}">
+                      {{element.Code_postal}} </td>
+                  </ng-container>
+
+                  <!-- sourceHubName Column -->
+                  <ng-container matColumnDef="sourceHubName">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[10].columnProp}}"
+                          [(ngModel)]="optionsMad[10].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[10],$event)">
+                          <mat-option value="">-- Select {{optionsMad[10].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[10].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 10, 'sourceHubName')"
+                      (mouseup)="onMouseUp(i, 10, 'sourceHubName','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][10], 'unselected': !selectedCellsStateMad[i][10]}">
+                      {{element.sourceHubName}} </td>
+                  </ng-container>
+
+                  <!-- Round_Name Column -->
+                  <ng-container matColumnDef="Round_Name">
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[11].columnProp}}"
+                          [(ngModel)]="optionsMad[11].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[11],$event)">
+                          <mat-option value="">-- Select {{optionsMad[11].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[11].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 11, 'Round_Name')" (mouseup)="onMouseUp(i, 11, 'Round_Name','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i][11], 'unselected': !selectedCellsStateMad[i][11]}">
+                      {{element.Round_Name}} </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsMad; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsMad;"></tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </base-card-body>
+      </base-card>
+
+
+    </div>
+  </div>
 </div>

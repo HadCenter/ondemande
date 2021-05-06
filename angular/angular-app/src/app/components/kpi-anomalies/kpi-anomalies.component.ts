@@ -21,6 +21,8 @@ export class KpiAnomaliesComponent implements OnInit {
   nbAnomaliesByTypes: any = [];
   typesAnomalies: any = [];
   anomaliesByFiltres: any = [];
+  showChartAnomaliesByDates: boolean = true;
+  showChartAnomaliesByType: boolean = true;
 
   @Input('typeAnomaliesSelected') typeAnomaliesSelected: any;
   @Input('fileSelected') fileSelected: any;
@@ -30,11 +32,15 @@ export class KpiAnomaliesComponent implements OnInit {
   constructor(public anomalieService: KpiAnomaliesService) {
     this.initChart();
     this.initChart_nbAnomaliesByType();
+    this.anomaliesByFiltres = [];
+  }
+  ngOnInit(): void {
+    this.getNumberOfAnomaliesPerDateAll();
+    this.getNumberOfAnomaliesPerType();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     const isFirstChange = Object.values(changes).some(c => c.isFirstChange());
-
     if (isFirstChange == false) {
       if ((this.typeAnomaliesSelected?.length > 0 && this.typeAnomaliesSelected != null) || (this.rangeDate?.startDate != null || this.rangeDate?.endDate != null) ||
         (this.nameSelected?.length > 0 && this.nameSelected != null) || (this.fileSelected?.length > 0 && this.fileSelected != null)) {
@@ -50,36 +56,8 @@ export class KpiAnomaliesComponent implements OnInit {
 
         })
       }
-      else {
-        this.anomaliesByFiltres = [];
-        // this.anomaliesBydates=[...this.anomaliesBydates_copy];
-        this.anomalieService.getNumberOfAnomaliesPerDateAll().subscribe(res => {
-          const nbrAnomaliesByDate = res;
-          Object.keys(nbrAnomaliesByDate);
-          Object.values(nbrAnomaliesByDate);
-          this.anomaliesBydates = Object.entries(nbrAnomaliesByDate);
-          this.anomaliesBydates.forEach(element => {
-            element[0] = (new Date(element[0])).getTime();
-            this.anomaliesBydates_copy = [...this.anomaliesBydates];
-          });
-          this.redrawChartNbAnomalieParDate();
-        })
-
-        this.anomalieService.getNumberOfAnomaliesPerIdAll().subscribe(res => {
-          const nbrAnomaliesByType = res;
-          this.typesAnomalies = Object.keys(nbrAnomaliesByType);
-          this.nbAnomaliesByTypes = Object.values(nbrAnomaliesByType);
-          this.redrawChartNbAnomalieParType();
-        })
-        // this.getNumberOfAnomaliesPerType();
-        // this.getNumberOfAnomaliesPerDateAll
-      }
     }
 
-  }
-  ngOnInit(): void {
-    this.getNumberOfAnomaliesPerDateAll();
-    this.getNumberOfAnomaliesPerType();
   }
 
   getNumberOfAnomalies() {
@@ -104,8 +82,9 @@ export class KpiAnomaliesComponent implements OnInit {
       this.anomaliesBydates.forEach(element => {
         element[0] = (new Date(element[0])).getTime();
         this.anomaliesBydates_copy = [...this.anomaliesBydates];
-        this.loadChart();
+
       });
+      this.loadChart();
     })
   }
 
@@ -242,6 +221,7 @@ export class KpiAnomaliesComponent implements OnInit {
       },
     ]
     this.chart = Highcharts.stockChart('container-anomalies-by-date', this.options);
+    this.showChartAnomaliesByDates = false;
   }
 
   initChart_nbAnomaliesByType() {
@@ -334,6 +314,8 @@ export class KpiAnomaliesComponent implements OnInit {
     }]
 
     this.chartnbAnomaliesByType = Highcharts.chart('container-options-anomalies-by-type', this.options_type);
+    this.chartnbAnomaliesByType.xAxis[0].update({ categories: this.typesAnomalies });
+    this.showChartAnomaliesByType = false;
   }
 
 }

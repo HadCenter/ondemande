@@ -128,15 +128,16 @@ def token_rest_status(request):
     decode = jwt.decode(token, SECRET_KEY, algorithms="HS256")
     now = datetime.datetime.utcnow()
     print("now",now)
+    print("decode_iat",decode['iat'])
     print(datetime.datetime.fromtimestamp(decode['iat']))
-    c = datetime.datetime.fromtimestamp(decode['iat']) - now
+    c =  now - datetime.datetime.fromtimestamp(decode['iat'])
     minutes = c.total_seconds() / 60
-    print(minutes)
+    print("minutes", minutes)
     try:
         token_object = Tokensforgetpassword.objects.get(token=token)
     except :
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
-    if minutes < 30 :
+    if minutes > 30 :
         token_object.delete()
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:

@@ -110,15 +110,13 @@ class AllMadFileContent:
 
 class AccountsAccount(models.Model):
     password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.IntegerField()
     email = models.CharField(unique=True, max_length=254)
     username = models.CharField(max_length=255)
     is_active = models.IntegerField()
-    is_staff = models.IntegerField()
     created_at = models.DateTimeField(blank=True, null=True)
-    updated_at = models.DateTimeField(blank=True, null=True)
     role = models.CharField(max_length=200)
+    is_superuser = None
+    last_login = None
 
     class Meta:
         managed = False

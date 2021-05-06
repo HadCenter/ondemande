@@ -12,12 +12,16 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)
     role = models.CharField(max_length=200)
     created_at = models.DateTimeField(null=True)
-    updated_at = models.DateTimeField(null=True)
     is_superuser = None
     last_login = None
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username',]
     objects = CustomUserManager()
+
+class Tokensforgetpassword(models.Model):
+    token = models.CharField(max_length= 255)
+    account = models.ForeignKey(Account,db_column="account_id",on_delete=models.DO_NOTHING , blank=True, null=True)
+
 
 
 

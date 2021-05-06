@@ -4,7 +4,7 @@ import jwt
 SECRET_KEY = 'o87w7g(!mb8o8fs^&7=w9prsjnwkt05azo8#bpg6_r=p*yt#)%'
 from django.utils.encoding import smart_str
 from rest_framework.response import Response
-from .models import Account
+from .models import Account, Tokensforgetpassword
 from rest_framework.decorators import api_view
 from .serializers import UserSerializer
 from django.http import JsonResponse
@@ -67,6 +67,8 @@ def update_reset_user_password(request):
         else:
             account.set_password(request.data['password1'])
             account.save()
+            token_object = Tokensforgetpassword.objects.get(token=token,account=account)
+            token_object.delete()
             return JsonResponse(user_serializer.data)
 
 @api_view(['POST'])
@@ -97,6 +99,8 @@ def forgetPassword(request):
         'iat': datetime.datetime.utcnow()
     }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+    token_forget_password = Tokensforgetpassword(token = token,account = account)
+    token_forget_password.save()
     absurl = f'http://52.47.208.8/#/forgot-password?token={token}'
     email_body = f'Bonjour,\n\n' \
                  'Vous avez oublié votre mot de passe pour accéder à votre espace onDemand . Pour définir un nouveau mot de passe, il vous suffit de cliquer sur le lien ci-dessous : \n' + \
@@ -124,7 +128,12 @@ def token_rest_status(request):
     c = datetime.datetime.fromtimestamp(decode['iat']) - now
     minutes = c.total_seconds() / 60
     print(minutes)
+    try:
+        token_object = Tokensforgetpassword.objects.get(token=token)
+    except :
+        return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     if minutes < 30 :
+        token_object.delete()
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'message': 'token est encore valide'}, status=status.HTTP_200_OK)

@@ -137,8 +137,8 @@ def token_rest_status(request):
         token_object = Tokensforgetpassword.objects.get(token=token)
     except :
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
-    if minutes > 30 :
+    if minutes < 30 :
+        return Response({'message': 'token est encore valide'}, status=status.HTTP_200_OK)
+    else:
         token_object.delete()
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return Response({'message': 'token est encore valide'}, status=status.HTTP_200_OK)

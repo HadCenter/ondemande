@@ -1,16 +1,14 @@
-import pytz
-from django.contrib.sites.shortcuts import get_current_site
 
+from django.contrib.sites.shortcuts import get_current_site
+import jwt
+import datetime
 from .models import Account
 from rest_framework.response import Response
 from .serializers import LoginSerializer, UserSerializer, RegisterSerializer
-from knox.models import AuthToken
 from rest_framework import generics, permissions
-from django.contrib.auth import login
 from rest_framework import status
 import string
 from django.core.mail import EmailMessage
-from datetime import datetime
 import secrets
 from django.utils.encoding import smart_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -23,10 +21,14 @@ class LoginAPI(generics.GenericAPIView):
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		user = serializer.validated_data
-		login(request, user)
+		payload = {
+			'id': user.id,
+			'iat' : datetime.datetime.utcnow()
+		}
+		token = jwt.encode(payload,'secret',algorithm='HS256').decode('utf-8')
 		return Response({
 			'user': UserSerializer(user).data,
-			'token': AuthToken.objects.create(user)[1]
+			'token': token
 		})
 class RegisterAPI(generics.GenericAPIView):
 	serializer_class = RegisterSerializer
@@ -35,14 +37,14 @@ class RegisterAPI(generics.GenericAPIView):
 			(secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(8)))
 		_mutable = request.data._mutable
 		request.data._mutable = True
-		request.data['created_at'] = datetime.utcnow().replace(tzinfo=pytz.utc)
+		request.data['created_at'] = datetime.datetime.utcnow()
 		request.data['password'] = password
 		request.data._mutable = _mutable
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		user = serializer.save()
-		now = datetime.now()
-		date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
+		now = datetime.datetime.now()
+		date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
 		id = user.id
 		token = secrets.token_hex(16) + str(id)
 		encodeToken = urlsafe_base64_encode(smart_bytes(token))

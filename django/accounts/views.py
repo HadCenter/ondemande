@@ -1,18 +1,18 @@
 import pytz
-from datetime import datetime
-import secrets
+import datetime
+import jwt
+SECRET_KEY = 'o87w7g(!mb8o8fs^&7=w9prsjnwkt05azo8#bpg6_r=p*yt#)%'
 
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import smart_bytes
 from django.utils.encoding import smart_str
 from rest_framework.response import Response
-from .models import Account
+from .models import Account, Tokensforgetpassword
 from rest_framework.decorators import api_view
 from .serializers import UserSerializer
 from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
-from rest_framework import generics, status
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from rest_framework import status
+from django.utils.http import urlsafe_base64_decode
 from django.core.mail import EmailMessage
 @api_view(['GET'])
 def userList(request):
@@ -59,21 +59,19 @@ def update_user_password (request):
 @api_view(['PUT'])
 def update_reset_user_password(request):
     token = request.data['token']
-    message = smart_str(urlsafe_base64_decode(token))
-    id = message[32:]
+    decode = jwt.decode(token, SECRET_KEY, algorithms="HS256")
+    id = decode['id']
     account = Account.objects.get(pk=id)
     if request.method == 'PUT':
         user_serializer = UserSerializer(account)
         if (request.data['password1'] != request.data['password2']):
             return JsonResponse({"message": "erreur"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            account.is_staff = True
             account.set_password(request.data['password1'])
             account.save()
+            token_object = Tokensforgetpassword.objects.get(token=token,account=account)
+            token_object.delete()
             return JsonResponse(user_serializer.data)
-class PasswordTokenCheckAPI(generics.GenericAPIView):
-    def get(self, request, uidb64, token):
-        pass
 
 @api_view(['POST'])
 def token_status (request):
@@ -81,11 +79,9 @@ def token_status (request):
     message = smart_str(urlsafe_base64_decode(token))
     id = message[32:]
     account = Account.objects.get(pk=id)
-    now = datetime.utcnow().replace(tzinfo=pytz.utc)
-    print(account.created_at)
+    now = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
     c = now - account.created_at
     minutes = c.total_seconds() / 60
-    print(minutes)
     if minutes > 2880 or account.is_active == True:
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:
@@ -100,15 +96,16 @@ def forgetPassword(request):
         return Response({'message':'Utilisateur n\'est pas actif/n\'existe pas'},status.HTTP_200_OK)
     if(account.is_active == False):
         return Response({'message':'Utilisateur n\'est pas actif/n\'existe pas'},status.HTTP_200_OK)
-    account.updated_at = datetime.utcnow().replace(tzinfo=pytz.utc)
-    account.save()
-    id = account.id
-    token = secrets.token_hex(16) + str(id)
-    encodeToken = urlsafe_base64_encode(smart_bytes(token))
-    base64_message = encodeToken.decode('ascii')
+    payload = {
+        'id': account.id,
+        'iat': datetime.datetime.utcnow()
+    }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+    token_forget_password = Tokensforgetpassword(token = token,account = account)
+    token_forget_password.save()
     current_site = get_current_site(request)
     current_site_domain = current_site.domain.split(':')[0]
-    absurl = f'http://{current_site_domain}/#/forgot-password?token={base64_message}'
+    absurl = f'http://{current_site_domain}/#/forgot-password?token={token}'
     email_body = f'Bonjour,\n\n' \
                  'Vous avez oublié votre mot de passe pour accéder à votre espace onDemand . Pour définir un nouveau mot de passe, il vous suffit de cliquer sur le lien ci-dessous : \n' + \
                  absurl + '.\n\n' + \
@@ -128,13 +125,19 @@ def forgetPassword(request):
 @api_view(['POST'])
 def token_rest_status(request):
     token = request.data['token']
-    message = smart_str(urlsafe_base64_decode(token))
-    id = message[32:]
-    account = Account.objects.get(pk=id)
-    now = datetime.utcnow().replace(tzinfo=pytz.utc)
-    c = now - account.updated_at
+    decode = jwt.decode(token, SECRET_KEY, algorithms="HS256")
+    now = datetime.datetime.utcnow()
+    print("now",now)
+    print(datetime.datetime.fromtimestamp(decode['iat']))
+    c = datetime.datetime.fromtimestamp(decode['iat']) - now
     minutes = c.total_seconds() / 60
-    if minutes > 30 or account.is_staff == True:
+    print(minutes)
+    try:
+        token_object = Tokensforgetpassword.objects.get(token=token)
+    except :
+        return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
+    if minutes < 30 :
+        token_object.delete()
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'message': 'token est encore valide'}, status=status.HTTP_200_OK)

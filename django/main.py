@@ -1,9 +1,4 @@
-# import time
-# import datetime
-# s = "2021-04-05"
-# time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d").timetuple())
-# print(time)
-
 import datetime
-stime = "2021-04-05T02:13:40"
-print(datetime.datetime.strptime(stime, "%Y-%m-%dT%H:%M:%S").timestamp())
+
+print('2021-05-03 01:04:47.254046' - '2021-06-03 01:04:47.254046')
+

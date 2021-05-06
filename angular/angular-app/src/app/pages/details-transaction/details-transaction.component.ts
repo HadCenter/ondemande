@@ -97,14 +97,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   rearrangeFileLivraison() {
     if (this.fichierLivraison.rows.length > 0) {
       this.fichierLivraison.rows.splice(0, 0, this.fichierLivraison.columns);
-      for (var i = 0; i < this.fichierLivraison.rows.length; i++) {
-        this.fichierLivraison.rows[i].splice(0, 3);
-      }
       this.fichierLivraison = this.convertToArrayOfObjects(this.fichierLivraison.rows);
       this.fichierLivraison = this.fichierLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
       this.copySelectionLivraison = this.fichierLivraison;   //copy to use on selection
       this.copyFilterLivraison = this.fichierLivraison;    // copy to filter *
       this.displayedColumnsLivraison = Object.keys(this.fichierLivraison[0]);
+      this.displayedColumnsLivraison.splice(0,3);
       // initialize all selectedCellsState to false
       this.fichierLivraison.forEach(element => {
         this.selectedCellsState.push(Array.from({ length: this.displayedColumnsLivraison.length - 1 }, () => false))
@@ -123,13 +121,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   rearrangeFileException() {
     if (this.fichierException.rows.length > 0) {
       this.fichierException.rows.splice(0, 0, this.fichierException.columns);
-      for (var i = 0; i < this.fichierException.rows.length; i++) {
-        this.fichierException.rows[i].splice(0, 3);
-      }
       this.fichierException = this.convertToArrayOfObjects(this.fichierException.rows);
       this.copySelectionException = this.fichierException;   //copy to use on selection
       this.copyFilterException = this.fichierException;    // copy to filter *
       this.displayedColumnsException = Object.keys(this.fichierException[0]);
+      this.displayedColumnsException.splice(0,3);
       // initialize all selectedCellsState to false
       this.fichierException.forEach(element => {
         this.selectedCellsStateException.push(Array.from({ length: this.displayedColumnsException.length - 1 }, () => false))
@@ -149,13 +145,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (this.fichierMad.rows.length > 0) {
 
       this.fichierMad.rows.splice(0, 0, this.fichierMad.columns);
-      for (var i = 0; i < this.fichierMad.rows.length; i++) {
-        this.fichierMad.rows[i].splice(0, 3);
-      }
       this.fichierMad = this.convertToArrayOfObjects(this.fichierMad.rows);
       this.copySelectionMad = this.fichierMad;   //copy to use on selection
       this.copyFilterMad = this.fichierMad;    // copy to filter *
       this.displayedColumnsMad = Object.keys(this.fichierMad[0]);
+      this.displayedColumnsMad.splice(0,3);
       // initialize all selectedCellsState to false
       this.fichierMad.forEach(element => {
         this.selectedCellsStateMad.push(Array.from({ length: this.displayedColumnsMad.length - 1 }, () => false))
@@ -175,13 +169,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   rearrangeFileMetadata() {
     if (this.fichierMetadata.rows.length > 0) {
       this.fichierMetadata.rows.splice(0, 0, this.fichierMetadata.columns);
-      for (var i = 0; i < this.fichierMetadata.rows.length; i++) {
-        this.fichierMetadata.rows[i].splice(0, 3);
-      }
       this.fichierMetadata = this.convertToArrayOfObjects(this.fichierMetadata.rows);
       this.copySelectionMetaData = this.fichierMetadata;   //copy to use on selection
       this.copyFilterMetaData = this.fichierMetadata;    // copy to filter *
       this.displayedColumnsMetadata = Object.keys(this.fichierMetadata[0]);
+      this.displayedColumnsMetadata.splice(0,3);
       // initialize all selectedCellsState to false
       this.fichierMetadata.forEach(element => {
         this.selectedCellsStateMetaData.push(Array.from({ length: this.displayedColumnsMetadata.length - 1 }, () => false))
@@ -239,6 +231,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.optionsException.push(obj)
       }
     })
+    console.warn(this.optionsException);
   }
 
   /**
@@ -913,12 +906,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
 
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
-        console.log('resultat correction exception', res);
-        if (res.message == "success") {
-          this.router.navigate(['/list-transaction']);
-        }
-      })
+      // this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
+      //   console.log('resultat correction exception', res);
+      //   if (res.message == "success") {
+      //     this.router.navigate(['/list-transaction']);
+      //   }
+      // })
     }
     else if (index == "exception") {  // correction file exception
       this.LAST_EDITABLE_ROW = this.fichierException.length - 1;
@@ -939,12 +932,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
-        console.log('resultat correction exception', res);
-        if (res.message == "success") {
-          this.router.navigate(['/list-transaction']);
-        }
-      })
+      // this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
+      //   console.log('resultat correction exception', res);
+      //   if (res.message == "success") {
+      //     this.router.navigate(['/list-transaction']);
+      //   }
+      // })
     }
     else if (index == "metadata") { // correction file metadata
       this.LAST_EDITABLE_ROW = this.fichierMetadata.length - 1;
@@ -965,12 +958,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
-        console.log('resultat correction metadata', res);
-        if (res.message == "success") {
-          this.router.navigate(['/list-transaction']);
-        }
-      })
+      // this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
+      //   console.log('resultat correction metadata', res);
+      //   if (res.message == "success") {
+      //     this.router.navigate(['/list-transaction']);
+      //   }
+      // })
     }
 
     else {  // correction file MAD
@@ -992,12 +985,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctMadFile(this.fileTocheck).subscribe(res => {
-        console.log('resultat correction mad', res);
-        if (res.message == "success") {
-          this.router.navigate(['/list-transaction']);
-        }
-      })
+      // this.service.correctMadFile(this.fileTocheck).subscribe(res => {
+      //   console.log('resultat correction mad', res);
+      //   if (res.message == "success") {
+      //     this.router.navigate(['/list-transaction']);
+      //   }
+      // })
     }
     console.warn("**file to check**", this.fileTocheck)
   }

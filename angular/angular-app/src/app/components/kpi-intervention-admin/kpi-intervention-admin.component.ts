@@ -35,21 +35,22 @@ export class KpiInterventionAdminComponent implements OnInit {
           console.warn("this.InterventionsByFiltres : ", this.InterventionsByFiltres);
           this.getNumberOfInterventions();
         })
-      }else{
-        this.InterventionsByFiltres = [];
-        this.interventionService.getNumberOfInterventionsPerDateAll().subscribe(res => {
-          const nbrInterventionsByDate = res;
-          console.log("nbrInterventionsByDate ngOnchanges",res);
-          Object.keys(nbrInterventionsByDate);
-          Object.values(nbrInterventionsByDate);
-          this.interventionsBydates = Object.entries(nbrInterventionsByDate);
-          this.interventionsBydates.forEach(element => {
-            element[0] = (new Date(element[0])).getTime();
-            this.interventionsBydates_copy = [...this.interventionsBydates];
-          });
-          this.redrawChartNbInterventionsParDate();
-        })
       }
+      // }else{
+      //   this.InterventionsByFiltres = [];
+      //   this.interventionService.getNumberOfInterventionsPerDateAll().subscribe(res => {
+      //     const nbrInterventionsByDate = res;
+      //     console.log("nbrInterventionsByDate ngOnchanges",res);
+      //     Object.keys(nbrInterventionsByDate);
+      //     Object.values(nbrInterventionsByDate);
+      //     this.interventionsBydates = Object.entries(nbrInterventionsByDate);
+      //     this.interventionsBydates.forEach(element => {
+      //       element[0] = (new Date(element[0])).getTime();
+      //       this.interventionsBydates_copy = [...this.interventionsBydates];
+      //     });
+      //     this.redrawChartNbInterventionsParDate();
+      //   })
+      // }
     // }
   }
   getNumberOfInterventions() {
@@ -86,8 +87,9 @@ export class KpiInterventionAdminComponent implements OnInit {
       this.interventionsBydates.forEach(element => {
         element[0] = (new Date(element[0])).getTime();
         this.interventionsBydates_copy = [...this.interventionsBydates];
-        this.loadChart();
+       
       });
+      this.loadChart();
     })
   }
   loadChart() {

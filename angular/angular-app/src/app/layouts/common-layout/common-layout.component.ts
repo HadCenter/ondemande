@@ -8,7 +8,7 @@ import { AuthService } from '@services/*';
   templateUrl: './common-layout.component.html',
 })
 export class CommonLayoutComponent implements OnInit {
-  @Input() public title = 'onDemend';
+  @Input() public title = 'onDemand';
   public user : any;
 
   constructor(private authService: AuthService,

@@ -40,8 +40,8 @@ export class KpiInterventionAdminComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     const isFirstChange = Object.values(changes).some(c => c.isFirstChange());
     if (isFirstChange == false) {
-      if ((this.rangeDate?.startDate != null || this.rangeDate?.endDate != null) ||
-        (this.nameSelected?.length > 0 && this.nameSelected != null)) {
+      // if ((this.rangeDate?.startDate != null || this.rangeDate?.endDate != null) ||
+      //   (this.nameSelected?.length > 0 && this.nameSelected != null)) {
         var filters = {
           "dateFilter": this.rangeDate,
           "clientFilter": this.nameSelected,
@@ -52,7 +52,7 @@ export class KpiInterventionAdminComponent implements OnInit {
           this.getNumberOfInterventions();
         })
       }
-    }
+    // }
   }
   getNumberOfInterventions() {
     var mapDateToNumberOfInterventions = {}

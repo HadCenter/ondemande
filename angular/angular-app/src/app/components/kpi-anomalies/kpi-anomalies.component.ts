@@ -40,27 +40,31 @@ export class KpiAnomaliesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    
     const isFirstChange = Object.values(changes).some(c => c.isFirstChange());
+    console.warn(isFirstChange)
     if (isFirstChange == false) {
-      if ((this.typeAnomaliesSelected?.length > 0 && this.typeAnomaliesSelected != null) || (this.rangeDate?.startDate != null || this.rangeDate?.endDate != null) ||
-        (this.nameSelected?.length > 0 && this.nameSelected != null) || (this.fileSelected?.length > 0 && this.fileSelected != null)) {
+    //  if ((this.typeAnomaliesSelected?.length > 0 && this.typeAnomaliesSelected != null) || (this.rangeDate?.startDate != null || this.rangeDate?.endDate != null) ||
+     //   (this.nameSelected?.length > 0 && this.nameSelected != null) || (this.fileSelected?.length > 0 && this.fileSelected != null)) {
         var filters = {
           "dateFilter": this.rangeDate,
           "clientFilter": this.nameSelected,
           "anomalieFilter": this.typeAnomaliesSelected,
           "fileFilter": this.fileSelected,
         }
+        console.warn("filters",filters)
         this.anomalieService.getNumberOfAnomaliesWithFilters(filters).subscribe(res => {
           this.anomaliesByFiltres = res;
           this.getNumberOfAnomalies();
 
         })
       }
-    }
+ //   }
 
   }
 
   getNumberOfAnomalies() {
+    console.warn('******')
     var mapDateToNumberOfAnomaliestoArray = Object.keys(this.anomaliesByFiltres.mapDateToNumberOfAnomalies).map((key) => [key, this.anomaliesByFiltres.mapDateToNumberOfAnomalies[key]]);
     var mapDateToNumberOfAnomaliesParTypetoArray = Object.keys(this.anomaliesByFiltres.mapIdToNumberOfAnomalies).map((key) => [key, this.anomaliesByFiltres.mapIdToNumberOfAnomalies[key]]);
     this.typesAnomalies = Object.keys(this.anomaliesByFiltres.mapIdToNumberOfAnomalies);

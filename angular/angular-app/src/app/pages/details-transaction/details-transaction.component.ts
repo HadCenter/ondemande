@@ -906,12 +906,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
 
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      // this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
-      //   console.log('resultat correction exception', res);
-      //   if (res.message == "success") {
-      //     this.router.navigate(['/list-transaction']);
-      //   }
-      // })
+      this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
+        console.log('resultat correction exception', res);
+        if (res.message == "success") {
+          this.router.navigate(['/list-transaction']);
+        }
+      })
     }
     else if (index == "exception") {  // correction file exception
       this.LAST_EDITABLE_ROW = this.fichierException.length - 1;
@@ -932,12 +932,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      // this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
-      //   console.log('resultat correction exception', res);
-      //   if (res.message == "success") {
-      //     this.router.navigate(['/list-transaction']);
-      //   }
-      // })
+      this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
+        console.log('resultat correction exception', res);
+        if (res.message == "success") {
+          this.router.navigate(['/list-transaction']);
+        }
+      })
     }
     else if (index == "metadata") { // correction file metadata
       this.LAST_EDITABLE_ROW = this.fichierMetadata.length - 1;
@@ -958,12 +958,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      // this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
-      //   console.log('resultat correction metadata', res);
-      //   if (res.message == "success") {
-      //     this.router.navigate(['/list-transaction']);
-      //   }
-      // })
+      this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
+        console.log('resultat correction metadata', res);
+        if (res.message == "success") {
+          this.router.navigate(['/list-transaction']);
+        }
+      })
     }
 
     else {  // correction file MAD
@@ -985,12 +985,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      // this.service.correctMadFile(this.fileTocheck).subscribe(res => {
-      //   console.log('resultat correction mad', res);
-      //   if (res.message == "success") {
-      //     this.router.navigate(['/list-transaction']);
-      //   }
-      // })
+      this.service.correctMadFile(this.fileTocheck).subscribe(res => {
+        console.log('resultat correction mad', res);
+        if (res.message == "success") {
+          this.router.navigate(['/list-transaction']);
+        }
+      })
     }
     console.warn("**file to check**", this.fileTocheck)
   }

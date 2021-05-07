@@ -907,7 +907,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
         console.log('resultat correction exception', res);
-        if (res.message == "success") {
+        if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }
       })
@@ -933,7 +933,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
         console.log('resultat correction exception', res);
-        if (res.message == "success") {
+        if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }
       })
@@ -959,7 +959,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
         console.log('resultat correction metadata', res);
-        if (res.message == "success") {
+        if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }
       })
@@ -986,7 +986,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctMadFile(this.fileTocheck).subscribe(res => {
         console.log('resultat correction mad', res);
-        if (res.message == "success") {
+        if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }
       })

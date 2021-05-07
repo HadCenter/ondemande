@@ -19,23 +19,7 @@ export class KpiInterventionAdminComponent implements OnInit {
 
   constructor(public interventionService: KpiInterventionAdminService) {
     this.initChart();
-    this.InterventionsByFiltres = [];
-    // this.loadDataChart();
 
-  }
-  loadDataChart() {
-
-    this.interventionService.getNumberOfInterventionsPerDateAll().subscribe(res => {
-      const nbrInterventionsByDate = res;
-      Object.keys(nbrInterventionsByDate);
-      Object.values(nbrInterventionsByDate);
-      this.interventionsBydates = Object.entries(nbrInterventionsByDate);
-      this.interventionsBydates.forEach(element => {
-        element[0] = (new Date(element[0])).getTime();
-        this.interventionsBydates_copy = [...this.interventionsBydates];
-      });
-      this.loadChart();
-    })
   }
   ngOnChanges(changes: SimpleChanges) {
     const isFirstChange = Object.values(changes).some(c => c.isFirstChange());
@@ -50,6 +34,20 @@ export class KpiInterventionAdminComponent implements OnInit {
           this.InterventionsByFiltres = res;
           console.warn("this.InterventionsByFiltres : ", this.InterventionsByFiltres);
           this.getNumberOfInterventions();
+        })
+      }else{
+        this.InterventionsByFiltres = [];
+        this.interventionService.getNumberOfInterventionsPerDateAll().subscribe(res => {
+          const nbrInterventionsByDate = res;
+          console.log("nbrInterventionsByDate ngOnchanges",res);
+          Object.keys(nbrInterventionsByDate);
+          Object.values(nbrInterventionsByDate);
+          this.interventionsBydates = Object.entries(nbrInterventionsByDate);
+          this.interventionsBydates.forEach(element => {
+            element[0] = (new Date(element[0])).getTime();
+            this.interventionsBydates_copy = [...this.interventionsBydates];
+          });
+          this.redrawChartNbInterventionsParDate();
         })
       }
     }
@@ -80,9 +78,11 @@ export class KpiInterventionAdminComponent implements OnInit {
   getNumberOfInterventionsPerDateAll() {
     this.interventionService.getNumberOfInterventionsPerDateAll().subscribe(res => {
       const nbrInterventionsByDate = res;
+      console.log("nbrInterventionsByDate ngOnInit",res);
       Object.keys(nbrInterventionsByDate);
       Object.values(nbrInterventionsByDate);
       this.interventionsBydates = Object.entries(nbrInterventionsByDate);
+      console.log("this.interventionsBydates",this.interventionsBydates);
       this.interventionsBydates.forEach(element => {
         element[0] = (new Date(element[0])).getTime();
         this.interventionsBydates_copy = [...this.interventionsBydates];

@@ -102,11 +102,13 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.copySelectionLivraison = this.fichierLivraison;   //copy to use on selection
       this.copyFilterLivraison = this.fichierLivraison;    // copy to filter *
       this.displayedColumnsLivraison = Object.keys(this.fichierLivraison[0]);
-      this.displayedColumnsLivraison.splice(0,3);
-      // initialize all selectedCellsState to false
-      this.fichierLivraison.forEach(element => {
-        this.selectedCellsState.push(Array.from({ length: this.displayedColumnsLivraison.length - 1 }, () => false))
+      console.error(Object.keys(this.fichierLivraison[0]))
+       // initialize all selectedCellsState to false
+       this.fichierLivraison.forEach(element => {
+        this.selectedCellsState.push(Array.from({ length: Object.keys(this.fichierLivraison[0]).length - 1 }, () => false))
       });
+      this.displayedColumnsLivraison.splice(0,3);
+
       // get select options
       this.displayedColumnsLivraison.forEach(item => {
         this.getOption(item);
@@ -125,11 +127,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.copySelectionException = this.fichierException;   //copy to use on selection
       this.copyFilterException = this.fichierException;    // copy to filter *
       this.displayedColumnsException = Object.keys(this.fichierException[0]);
-      this.displayedColumnsException.splice(0,3);
+   
       // initialize all selectedCellsState to false
       this.fichierException.forEach(element => {
         this.selectedCellsStateException.push(Array.from({ length: this.displayedColumnsException.length - 1 }, () => false))
       });
+      this.displayedColumnsException.splice(0,3);
       // get select options
       this.displayedColumnsException.forEach(item => {
         this.getOptionException(item);
@@ -299,6 +302,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   initSelectedCells() {
     console.error(this.fileSelected)
     if (this.fileSelected == "livraison") {
+      console.warn("file liv",this.fichierLivraison,this.arrayLivraison)
       this.LAST_EDITABLE_ROW = this.fichierLivraison.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumnsLivraison.length - 1;
     }
@@ -427,18 +431,20 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           console.log('--Edit cells from the same column');
           console.log("fichier livraison", this.fichierLivraison)
           for (let i = startRow; i <= endRow; i++) {
-            console.log(dataCopy[i], [this.arrayLivraison.columns[startCol]])
+            console.warn("***",this.arrayLivraison.columns);
+            console.log(dataCopy[i], [this.displayedColumnsLivraison[startCol]])
             if (this.fileSelected == "livraison") {
-              dataCopy[i][this.arrayLivraison.columns[startCol]] = text;
+
+              dataCopy[i][this.displayedColumnsLivraison[startCol]] = text;
             }
             else if (this.fileSelected == "exception") {
-              dataCopy[i][this.arrayException.columns[startCol]] = text;
+              dataCopy[i][this.displayedColumnsException[startCol]] = text;
             }
             else if (this.fileSelected == "metadata") {
-              dataCopy[i][this.arrayMetaData.columns[startCol]] = text;
+              dataCopy[i][this.displayedColumnsMetadata[startCol]] = text;
             }
             else {
-              dataCopy[i][this.arrayMad.columns[startCol]] = text;
+              dataCopy[i][this.displayedColumnsMetadata[startCol]] = text;
             }
           }
         } else {
@@ -447,16 +453,16 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           for (let i = startRow; i <= endRow; i++) {
             for (let j = startCol; j <= endCol; j++) {
               if (this.fileSelected == "livraison") {
-                dataCopy[i][this.arrayLivraison.columns[j]] = text;
+                dataCopy[i][this.displayedColumnsLivraison[j]] = text;
               }
               else if (this.fileSelected == "exception") {
-                dataCopy[i][this.arrayException.columns[j]] = text;
+                dataCopy[i][this.displayedColumnsException[j]] = text;
               }
               else if (this.fileSelected == "metadata") {
-                dataCopy[i][this.arrayMetaData.columns[j]] = text;
+                dataCopy[i][this.displayedColumnsMetadata[j]] = text;
               }
               else {
-                dataCopy[i][this.arrayMad.columns[j]] = text;
+                dataCopy[i][this.displayedColumnsMad[j]] = text;
               }
             }
           }
@@ -530,6 +536,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
    * @param cellsType
    */
   onMouseUp(rowId: number, colId: number, cellsType: string, file) {
+    console.error(rowId,colId)
     this.fileSelected = file;  // update the file selected
     if (this.clickCorrection == false) {
       this.tableMouseUp = { rowId: rowId, colId: colId, cellsType: cellsType };
@@ -866,7 +873,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   /**
-   * Hide ui selection red rectangle 
+   * Hide ui selection red rectangle
    */
   hideUiSelectionOnCorrection() {
     if (document.querySelector('.selected')) {
@@ -878,7 +885,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   /**
-* Correct the file 
+* Correct the file
 */
   correctionFile(index) {
     this.clickCorrection = true;

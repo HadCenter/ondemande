@@ -43,6 +43,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   selectedCellsState: boolean[][] = [
     // [false, false, false],
   ];
+  correctedFilerows: any;
 
   constructor(private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -483,20 +484,22 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.hideUiSelectionOnCorrection();  //hide ui selection on correction
     if (this.fileWrong && this.fileValid) {
       this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
+      this.removeUnecesseryColumns(); // from rows filewrong
       this.fileTocheck = {
         fileId: this.file.idFile,
         account_id:user.id,
         columns: this._fileWrong.columns,
-        rows: this.fileValid.rows.concat(this._fileWrong.rows),
+        rows: this.fileValid.rows.concat(this.correctedFilerows),
         
       }
     }
     else {
+      this.removeUnecesseryColumns();  //from rows filewrong
       this.fileTocheck = {
         fileId: this.file.idFile,
         account_id:user.id,
         columns: this._fileWrong.columns,
-        rows: this._fileWrong.rows,
+        rows: this.correctedFilerows,
       }
     }
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
@@ -507,6 +510,16 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         this.router.navigate(['/list-file-edi']);
       }
     })
+  }
+
+  removeUnecesseryColumns(){
+    this.correctedFilerows = this.files.map(Object.values);
+    this.correctedFilerows.forEach(element => {
+      element.shift();   // remove remarque from rows
+      element.splice(element.length - 2, 2); // remove rowId & remarqueId column from rows
+      element.push(element.shift()); // put selected on last column of rows
+
+    });
   }
 
   /**

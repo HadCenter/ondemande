@@ -13,47 +13,50 @@ export class KpiInterventionAdminComponent implements OnInit {
   interventionsBydates: any = [];
   interventionsBydates_copy: any = [];
   InterventionsByFiltres: any = [];
+  showLoaderInterventionBydate: boolean = true;
   @Input('nameSelected') nameSelected: any;
   @Input('rangeDate') rangeDate: any;
 
   constructor(public interventionService: KpiInterventionAdminService) {
     this.initChart();
-   }
+
+  }
   ngOnChanges(changes: SimpleChanges) {
     const isFirstChange = Object.values(changes).some(c => c.isFirstChange());
     if (isFirstChange == false) {
-      if ((this.rangeDate?.startDate != null || this.rangeDate?.endDate != null) ||
-        (this.nameSelected?.length > 0 && this.nameSelected != null)){
-          var filters = {
-            "dateFilter": this.rangeDate,
-            "clientFilter": this.nameSelected,
-          }
-          this.interventionService.getNumberOfInterventionsWithFilters(filters).subscribe(res => {
-            this.InterventionsByFiltres = res;
-            console.warn("this.InterventionsByFiltres : ",this.InterventionsByFiltres);
-            this.getNumberOfInterventions();
-          })
-        }else{
-          this.InterventionsByFiltres = [];
-          this.interventionService.getNumberOfInterventionsPerDateAll().subscribe(res => {
-            const nbrInterventionsByDate = res;
-            Object.keys(nbrInterventionsByDate);
-            Object.values(nbrInterventionsByDate);
-            this.interventionsBydates = Object.entries(nbrInterventionsByDate);
-            this.interventionsBydates.forEach(element => {
-              element[0] = (new Date(element[0])).getTime();
-              this.interventionsBydates_copy = [...this.interventionsBydates];
-            });
-            this.redrawChartNbInterventionsParDate();
-          })
-
+      // if ((this.rangeDate?.startDate != null || this.rangeDate?.endDate != null) ||
+      //   (this.nameSelected?.length > 0 && this.nameSelected != null)) {
+        var filters = {
+          "dateFilter": this.rangeDate,
+          "clientFilter": this.nameSelected,
         }
-    }
+        this.interventionService.getNumberOfInterventionsWithFilters(filters).subscribe(res => {
+          this.InterventionsByFiltres = res;
+          console.warn("this.InterventionsByFiltres : ", this.InterventionsByFiltres);
+          this.getNumberOfInterventions();
+        })
+      }
+      // }else{
+      //   this.InterventionsByFiltres = [];
+      //   this.interventionService.getNumberOfInterventionsPerDateAll().subscribe(res => {
+      //     const nbrInterventionsByDate = res;
+      //     console.log("nbrInterventionsByDate ngOnchanges",res);
+      //     Object.keys(nbrInterventionsByDate);
+      //     Object.values(nbrInterventionsByDate);
+      //     this.interventionsBydates = Object.entries(nbrInterventionsByDate);
+      //     this.interventionsBydates.forEach(element => {
+      //       element[0] = (new Date(element[0])).getTime();
+      //       this.interventionsBydates_copy = [...this.interventionsBydates];
+      //     });
+      //     this.redrawChartNbInterventionsParDate();
+      //   })
+      // }
+    // }
   }
   getNumberOfInterventions() {
     var mapDateToNumberOfInterventions = {}
     this.InterventionsByFiltres.forEach(element => {
-      if ( ! Object.keys(mapDateToNumberOfInterventions).includes(element.date)){
+      if (!Object.keys(mapDateToNumberOfInterventions).includes(element.date)) {
         mapDateToNumberOfInterventions[element.date] = 0;
       }
       mapDateToNumberOfInterventions[element.date] += 1;
@@ -76,14 +79,17 @@ export class KpiInterventionAdminComponent implements OnInit {
   getNumberOfInterventionsPerDateAll() {
     this.interventionService.getNumberOfInterventionsPerDateAll().subscribe(res => {
       const nbrInterventionsByDate = res;
+      console.log("nbrInterventionsByDate ngOnInit",res);
       Object.keys(nbrInterventionsByDate);
       Object.values(nbrInterventionsByDate);
       this.interventionsBydates = Object.entries(nbrInterventionsByDate);
+      console.log("this.interventionsBydates",this.interventionsBydates);
       this.interventionsBydates.forEach(element => {
         element[0] = (new Date(element[0])).getTime();
         this.interventionsBydates_copy = [...this.interventionsBydates];
-        this.loadChart();
+       
       });
+      this.loadChart();
     })
   }
   loadChart() {
@@ -95,6 +101,7 @@ export class KpiInterventionAdminComponent implements OnInit {
       },
     ]
     this.chart = Highcharts.stockChart('container-interventions-by-date', this.options);
+    this.showLoaderInterventionBydate = false;
   }
   initChart() {
     this.options = {

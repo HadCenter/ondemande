@@ -4,7 +4,9 @@
           <h2 class="mdl-card__title-text">Nb intervention par Date</h2>
         </base-card-title>
         <base-card-body>
-          <div id="container-interventions-by-date" style="height: auto"></div>
+        <app-loader [width]="'100%'" [position]="'initial'" [height]="'390px'" [bg]="'transparant'"
+        [show]="showLoaderInterventionBydate"></app-loader>
+          <div id="container-interventions-by-date" style="height: 390px"></div>
         </base-card-body>
     </base-card>
 </div>

@@ -45,12 +45,12 @@
 
             <!-- <td *ngIf="row.wrongCommands !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
                 [matTooltip]=row.wrongCommands matTooltipClass="tooltip-custom">{{row.wrongCommands }}</a></td> -->
-            <td class="mdl-data-table__cell--non-numeric">{{ row.number_wrong_commands }}
+            <td class="label-wrong mdl-data-table__cell--non-numeric">{{ row.number_wrong_commands }}
             </td>
 
             <!-- <td *ngIf="row.validatedOrders !== '_'" class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;"><a
                 [matTooltip]=row.validatedOrders matTooltipClass="tooltip-custom">{{row.validatedOrders}}</a></td> -->
-            <td class="mdl-data-table__cell--non-numeric">{{ row.number_correct_commands }}
+            <td class="label-correct mdl-data-table__cell--non-numeric">{{ row.number_correct_commands }}
             </td>
             <td class="mdl-data-table__cell--non-numeric">
               <span class="label label--mini color--{{getColor(row.status)}} ">{{ row.status }}</span>

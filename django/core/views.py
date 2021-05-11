@@ -9,7 +9,7 @@ from .models import Client, FileInfo,Contact
 from .serializers import FileSerializer
 from .models import Client ,AnomaliesEdiFileAnnuaire , HistoryAnomaliesEdiFiles
 from .models import FileInfo,Contact,kpi3SchemaSingleAnomalie ,getNumberOfAnomaliesPerDateDTO , getNumberOfAnomaliesWithFiltersDTO
-from .models import Client,AllMadFileContent , InterventionAdmin , kpi4WithFiltersDto
+from .models import Client,AllMadFileContent , InterventionAdmin , kpi4WithFiltersDto,kpi2WithFiltersDto
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
@@ -589,18 +589,33 @@ def getNumberOfAnomaliesPerDateAll(request):
 
     return HttpResponse(jsonpickle.encode(mapDateToNumberOfAnomalies,unpicklable=False),content_type='applicaiton/json')
 
+
 @api_view(['GET'])
 def getNumberOfInterventionsPerDateAll(request):
 
-    interventionAdmin = InterventionAdmin.objects.all().prefetch_related("id_admin").prefetch_related("id_file_edi")
+    interventionAdmin = InterventionAdmin.objects.order_by('execution_time').prefetch_related("id_admin").prefetch_related("id_file_edi")
     mapDateToNumberOfInterventions = {}
     for intervention in interventionAdmin:
-        if intervention.execution_time.strftime("%m-%d-%Y %H:%M:%S") not in mapDateToNumberOfInterventions.keys():
-            mapDateToNumberOfInterventions[intervention.execution_time.strftime("%m-%d-%Y %H:%M:%S")] = 0
+        if intervention.execution_time.strftime("%m-%d-%Y") not in mapDateToNumberOfInterventions.keys():
+            mapDateToNumberOfInterventions[intervention.execution_time.strftime("%m-%d-%Y")] = 0
 
-        mapDateToNumberOfInterventions[intervention.execution_time.strftime("%m-%d-%Y %H:%M:%S")] += 1
+        mapDateToNumberOfInterventions[intervention.execution_time.strftime("%m-%d-%Y")] += 1
 
     return HttpResponse(jsonpickle.encode(mapDateToNumberOfInterventions,unpicklable=False),content_type='applicaiton/json')
+
+@api_view(['GET'])
+def getNumberOfFilesPerDateAll(request):
+
+    ediFiles = EDIfile.objects.order_by('created_at').prefetch_related("client")
+    mapDateToNumberOfFiles = {}
+    for edifile in ediFiles:
+        if edifile.created_at.strftime("%m-%d-%Y") not in mapDateToNumberOfFiles.keys():
+            mapDateToNumberOfFiles[edifile.created_at.strftime("%m-%d-%Y")] = 0
+
+        mapDateToNumberOfFiles[edifile.created_at.strftime("%m-%d-%Y")] += 1
+
+    return HttpResponse(jsonpickle.encode(mapDateToNumberOfFiles,unpicklable=False),content_type='applicaiton/json')
+
 
 
 @api_view(['POST'])
@@ -726,11 +741,37 @@ def getNumberOfInterventionsWithFilters(request):
 
     result= []
     for intervention in interventionAdmin :
-        execution_time = intervention.execution_time.strftime("%m-%d-%Y %H:%M:%S")
+        execution_time = intervention.execution_time.strftime("%m-%d-%Y")
         adminUserName = intervention.id_admin.username
         fileName = intervention.id_file_edi.file.name
         clientName = intervention.id_file_edi.client.nom_client
         item = kpi4WithFiltersDto(date = execution_time,fileName = fileName,clientName = clientName,AdminName = adminUserName)
+        result.append(item)
+    return HttpResponse(jsonpickle.encode(result,unpicklable=False),content_type='applicaiton/json')
+
+@api_view(['POST'])
+def getNumberOfFilesWithFilters(request):
+    dateFilter = request.data["dateFilter"]
+    clientFilter = request.data["clientFilter"]
+
+
+    ediFiles = EDIfile.objects.order_by('created_at').prefetch_related("client")
+    if dateFilter != None :
+        startDate : datetime = dateFilter['startDate']
+        endDate : datetime= dateFilter['endDate']
+        if startDate != None :
+            ediFiles = ediFiles.filter(created_at__gte = startDate)
+        if endDate != None :
+            ediFiles = ediFiles.filter(created_at__lte = endDate)
+    if (clientFilter != None) and (len(clientFilter) > 0 ):
+        ediFiles = ediFiles.filter(client__nom_client__in=clientFilter)
+
+    result= []
+    for edifile in ediFiles :
+        execution_time = edifile.created_at.strftime("%m-%d-%Y")
+        fileName = edifile.file.name
+        clientName = edifile.client.nom_client
+        item = kpi2WithFiltersDto(date = execution_time,fileName = fileName,clientName = clientName)
         result.append(item)
     return HttpResponse(jsonpickle.encode(result,unpicklable=False),content_type='applicaiton/json')
 

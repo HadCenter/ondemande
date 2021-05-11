@@ -140,3 +140,9 @@ class kpi4WithFiltersDto:
         self.fileName = fileName
         self.clientName = clientName
         self.AdminName = AdminName
+
+class kpi2WithFiltersDto:
+    def __init__(self,date,fileName,clientName):
+        self.date = date
+        self.fileName = fileName
+        self.clientName = clientName

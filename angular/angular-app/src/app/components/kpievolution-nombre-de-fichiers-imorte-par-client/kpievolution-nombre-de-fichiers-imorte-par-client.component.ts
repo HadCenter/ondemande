@@ -1,265 +1,190 @@
-declare var require: any;
-import { Component, OnInit, AfterViewInit } from "@angular/core";
-import * as Highcharts from "highcharts/highstock";
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { KPIEvolutionNombreDeFichiersImorteParClientService } from './kpievolution-nombre-de-fichiers-imorte-par-client.service';
+import * as Highcharts from 'highcharts/highstock';
 
 @Component({
   selector: 'app-kpievolution-nombre-de-fichiers-imorte-par-client',
   templateUrl: './kpievolution-nombre-de-fichiers-imorte-par-client.component.html',
-  styleUrls: ['../../../theme/components/pie-chart/pie-chart.component.scss', './kpievolution-nombre-de-fichiers-imorte-par-client.component.css'],
-  providers: [KPIEvolutionNombreDeFichiersImorteParClientService,],
+  styleUrls: ['./kpievolution-nombre-de-fichiers-imorte-par-client.component.css'],
 })
 export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnInit {
-  data : any [] = [];
-  data2 : any [] = [];
-  selected = undefined;
-  show = true;
-/*********************************************************************************************/
+  options: any;
   chart;
-  updateFromInput = false;
-  chartCallback;
-  Highcharts = Highcharts;
+  filesBydates: any = [];
+  filesBydates_copy: any = [];
+  FilesByFiltres: any = [];
+  showLoaderFilesBydate: boolean = true;
+  @Input('nameSelected') nameSelected: any;
+  @Input('rangeDate') rangeDate: any;
 
-  ohlc = [];
-  chartOptions = {
+  constructor(public fileService: KPIEvolutionNombreDeFichiersImorteParClientService) {
+    this.initChart();
 
-    rangeSelector: {
-      buttons: [{
-    type: 'month',
-    count: 1,
-    text: '1m',
-    title: 'Voir 1 mois'
-}, {
-    type: 'month',
-    count: 3,
-    text: '3m',
-    title: 'Voir 3 mois'
-}, {
-    type: 'month',
-    count: 6,
-    text: '6m',
-    title: 'Voir 6 mois'
-}, {
-    type: 'ytd',
-    text: 'YTD',
-    title: 'Voir l\'année à ce jour'
-}, {
-    type: 'year',
-    count: 1,
-    text: '1a',
-    title: 'Voir 1 an'
-}, {
-    type: 'all',
-    text: 'Tous',
-    title: 'Voir tout'
-}],
-      labelStyle: {
-         display: 'none'
-      },
-      selected: 1,
-      inputDateFormat: '%Y-%m-%d',
-      inputEditDateFormat: '%Y-%m-%d'
-    },
-    credits: {
-      enabled: false,
-    },
-    xAxis: {
-        type: 'datetime',
-        //tickInterval: 24 * 3600 * 1000, // one day
-        labels:
-        {
-          formatter: function()
-          {
-            return Highcharts.dateFormat('%Y-%m-%d', this.value);
-          }
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    const isFirstChange = Object.values(changes).some(c => c.isFirstChange());
+    if (isFirstChange == false) {
+      // if ((this.rangeDate?.startDate != null || this.rangeDate?.endDate != null) ||
+      //   (this.nameSelected?.length > 0 && this.nameSelected != null)) {
+        var filters = {
+          "dateFilter": this.rangeDate,
+          "clientFilter": this.nameSelected,
         }
-    },
-    tooltip: {
-        xDateFormat: '%Y-%m-%d',
-        shared: true
-    },
-    series: [
-      {
-        name: "Nombre de fichiers",
-        data: this.ohlc,
+        this.fileService.getNumberOfFilesWithFilters(filters).subscribe(res => {
+          this.FilesByFiltres = res;
+          this.getNumberOfFiles();
+        })
+      }
 
-      },
-
-    ],
-    responsive: {
-      rules: [
-        {
-          condition: {
-            maxWidth: 400,
-          },
-          chartOptions: {
-            rangeSelector: {
-              inputEnabled: false
-            }
-          }
-        }
-      ]
-    }
-  };
-
-  /********************************************************************************************/
-  constructor(public serviceKPI : KPIEvolutionNombreDeFichiersImorteParClientService,)
-  {
-    const self = this;
-    // saving chart reference using chart callback
-    this.chartCallback = chart => {
-      self.chart = chart;
-    };
   }
-  ngOnInit()
-  {
-    this.getData();  // liste des clients
-    this.getData2();
-     var dates_uniques = [...new Set(this.data2.map(item => item.createdAt.substring(0,10)))];
-     var resultat = [];
-     for (var i=0;i< dates_uniques.length; i++)
-     {
-       var count =0;
-       this.data2.forEach(element => {
-          if(element.createdAt.includes(dates_uniques[i])){count +=1}
-       });
-       var object = [dates_uniques[i], count]
-       resultat.push(object);
-     }
-     for (var j=0; j< resultat.length;j++)
-     {
-       resultat[j][0] = Math.round(new Date(resultat[j][0]).getTime())
-     }
-     for (let z = 0; z < resultat.length; z += 1)
-     {
-        this.ohlc.push([
-          resultat[z][0], // the date
-          resultat[z][1], // number of files
-        ]);
-     }
-  }
-  ngAfterViewInit()
-  {
-    const comp = this;
-  }
-  /******************************liste des clients **************************************************************/
-  public getData() {
-    this.serviceKPI.getNumberOfFilesPerClient()
-      .subscribe(res => {
-        this.data = res;
-        this.data = this.alphabeticalOrder(this.data);
-        this.show = false;
-      },
-        error => console.log(error));
-  }
-  /**********************************************************************************************/
-  public getData2() {
-    this.serviceKPI.getAllFiles()
-      .subscribe(res => {
-        this.data2 = res.reverse();
-        var dates_uniques = [...new Set(this.data2.map(item => item.createdAt.substring(0,10)))];
-        var resultat = [];
-        for (var i=0;i< dates_uniques.length; i++)
-        {
-          var count =0;
-          this.data2.forEach(element => {
-              if(element.createdAt.includes(dates_uniques[i])){count +=1}
-          });
-          var object = [dates_uniques[i], count]
-          resultat.push(object);
-        }
-        for (var j=0; j< resultat.length;j++)
-        {
-          resultat[j][0] = Math.round(new Date(resultat[j][0]).getTime())
-        }
-          const self = this,
-          chart = this.chart;
-          self.chartOptions.series = [
-          {
-            name: "Nombre de fichiers",
-            data: resultat
-          },
-          ];
-        self.updateFromInput = true;
-
-      },
-        error => console.log(error));
-  }
-  /*******************************************************************************************/
-   alphabeticalOrder(arr :any[] )
-  {
-    return arr.sort((a : any,b : any) =>{
-        return a.nom_client === b.nom_client ? 0 : a.nom_client > b.nom_client ? 1 : -1;
+  getNumberOfFiles() {
+    var mapDateToNumberOfFiles = {}
+    this.FilesByFiltres.forEach(element => {
+      if (!Object.keys(mapDateToNumberOfFiles).includes(element.date)) {
+        mapDateToNumberOfFiles[element.date] = 0;
+      }
+      mapDateToNumberOfFiles[element.date] += 1;
     });
+    var mapDateToNumberOfFilestoArray = Object.keys(mapDateToNumberOfFiles).map((key) => [key, mapDateToNumberOfFiles[key]]);
+    mapDateToNumberOfFilestoArray.forEach(el => {
+      el[0] = (new Date(el[0]+" GMT")).getTime();
+    })
+    this.filesBydates = mapDateToNumberOfFilestoArray;
+    this.redrawChartNbInterventionsParDate();
   }
-  /******************************************************************************************/
-  onChangeClient(ob) {
-       this.selected = ob.value;
-       this.onChangeClientOrDate();
+  redrawChartNbInterventionsParDate() {
+    this.chart.series[0].update({
+      data: this.filesBydates
+    }, true); //
   }
-  /*******************************************************************************************/
-//
-  onChangeClientOrDate()
-  {
-    if(this.selected !== undefined) // select single client
-    {
-      var tableau = this.data.find(element => element.nom_client === this.selected).files;
-      var dates_uniques = [...new Set(tableau.map(item => item.created_at.substring(0,10)))];
-      var resultat = [];
-      for (var i=0;i< dates_uniques.length; i++)
+  ngOnInit(): void {
+    this.getNumberOfFilesPerDateAll();
+  }
+  getNumberOfFilesPerDateAll() {
+    this.fileService.getNumberOfFilesPerDateAll().subscribe(res => {
+      const nbrFilesByDate = res;
+      Object.keys(nbrFilesByDate);
+      Object.values(nbrFilesByDate);
+      this.filesBydates = Object.entries(nbrFilesByDate);
+      this.filesBydates.forEach(element => {
+        element[0] = (new Date(element[0]+" GMT")).getTime();
+        this.filesBydates_copy = [...this.filesBydates];
+      });
+      this.loadChart();
+    })
+  }
+  loadChart() {
+    this.options.series = [
       {
-         var count =0;
-         tableau.forEach(element => {
-              if(element.created_at.includes(dates_uniques[i])){count +=1}
-         });
-         var object = [dates_uniques[i], count]
-         resultat.push(object);
-      }
-      for (var j=0; j< resultat.length;j++)
-      {
-        resultat[j][0] = Math.round(new Date(resultat[j][0]).getTime())
-      }
-
-      const self = this,
-      chart = this.chart;
-      self.chartOptions.series = [
-        {
-        name: "Nombre de fichiers",
-        data: resultat
+        name: "Nb fichier",
+        data: this.filesBydates,
+        color: 'rgb(0, 188, 212)',
       },
-      ];
+    ]
+    this.chart = Highcharts.stockChart('container-evolutions-by-date', this.options);
+    this.showLoaderFilesBydate = false;
+  }
+  initChart() {
+    this.options = {
+      chart: {
+        spacingLeft: 2,
+        spacingRight: 20,
+        // zoomType: 'xy',
+        backgroundColor: '#444',
 
-      self.updateFromInput = true;
-    }else //select all
-    {
-
-        var dates = [...new Set(this.data2.map(item => item.createdAt.substring(0,10)))];
-        var resultat = [];
-        for (var i=0;i< dates.length; i++)
-        {
-          var count =0;
-          this.data2.forEach(element => {
-              if(element.createdAt.includes(dates[i])){count +=1}
-          });
-          var objet = [dates[i], count]
-          resultat.push(objet);
-        }
-        for (var j=0; j< resultat.length;j++)
-        {
-          resultat[j][0] = Math.round(new Date(resultat[j][0]).getTime())
-        }
-          const self = this,
-          chart = this.chart;
-          self.chartOptions.series = [
-          {
-            name: "Nombre de fichiers",
-            data: resultat
+      },
+      xAxis: {
+        title: {
+          gridLineWidth: 0,
+          style: {
+            color: "hsla(0,0%,100%,.5)"
+          }
+        },
+        type: 'datetime',
+        // min: Date.UTC(2015, 1, 1, 0),
+        dateTimeLabelFormats: {
+          day: '%Y/%m/%d',
+          month: '%Y/%m/%d',
+          year: '%Y/%m/%d'
+        },
+        endOnTick: true,
+        // showFirstLabel: false,
+        // showLastLabel: false,
+        startOnTick: true,
+        labels: {
+          style: {
+            color: "hsla(0,0%,100%,.5)"
           },
-          ];
+        },
+      },
+      yAxis: [{ // Primary yAxis
+        labels: {
+          style: {
+            color: "hsla(0,0%,100%,.5)"
+          }
+        },
+        title: {
+          text: "Nb fichier",
+          gridLineWidth: 0,
+          style: {
+            color: "hsla(0,0%,100%,.5)"
+          }
+        },
+        endOnTick: true,
+        showFirstLabel: true,
+        showLastLabel: true,
+        startOnTick: true,
+        opposite: false
+      },
+      ],
+      tooltip: {
+        shared: true,
+        xDateFormat: '%e-%m-%Y',
+        //xDateFormat: '%Y-%m-%d, %H:%m:%S',
+        valueDecimals: 2,
+        positioner: function () {
+          return { x: 20, y: 20 };
+        },
+        shadow: false,
+        borderWidth: 0,
+        backgroundColor: 'rgba(255,255,255,0.8)'
+      },
+      navigator: {
+        enabled: true,
+        adaptToUpdatedData: false,   /**navigator update xx */
+        series: {
+          lineWidth: 0
+        }
+      },
+      scrollbar: { enabled: false },
+      rangeSelector: {
+        enabled: false
+      },
+      legend: {
+        enabled: true,
+        align: 'center',
+        //  x: 150,
+        verticalAlign: 'top',
+        floating: true,
+        backgroundColor: 'transparent',
+        itemStyle: {
+          color: '#A0A0A0'
+        },
+      },
+      credits: {
+        enabled: false
+      },
+      plotOptions: {
+        series: {
+          // stacking: 'normal',
+          //  lineWidth: 1
+        }
+      },
+      series: [
+      ],
 
-        self.updateFromInput = true;
     }
   }
-}
 
+}
 

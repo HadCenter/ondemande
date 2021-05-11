@@ -9,6 +9,7 @@ urlpatterns = [
 	path("getClients/",views.clientList, name = "client-list"),
     path('file/', views.fileCreate, name='file-create'),
     path("getFiles/", views.fileList, name = "file-list"),
+    path("getFilesByClient/", views.getFilesByClient, name = "file-list"),
     url(r'^getClient/(?P<pk>[0-9]+)$', views.client_detail),
     url(r'^getFile/(?P<pk>[0-9]+)$', views.file_detail),
     url(r'^updateClient/(?P<pk>[0-9]+)$', views.client_detail),

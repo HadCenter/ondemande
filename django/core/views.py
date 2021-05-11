@@ -324,6 +324,21 @@ def fileList(request):
  #   return Response(serializer.data)
 
     return HttpResponse( jsonpickle.encode(listFiles,unpicklable=False),content_type="application/json")
+
+@api_view(['POST'])
+def getFilesByClient(request):
+    clientCode= request.data['client_code']
+    files = EDIfile.objects.select_related('client').filter(archived = False).filter(code_client = clientCode ).order_by('-created_at')
+    listFiles = list()
+    for fileDB  in files :
+        clientDB = fileDB.client
+        clientResponse = Contact(idContact=clientDB.id , codeClient=clientDB.code_client , nomClient=clientDB.nom_client, email=clientDB.email ,archived=clientDB.archived)
+        fileReponse = FileInfo(idFile= fileDB.id,fileName=fileDB.file.name,createdAt=fileDB.created_at,status=fileDB.status ,wrongCommands=fileDB.wrong_commands,validatedOrders=fileDB.validated_orders,archived=fileDB.archived,cliqued=fileDB.cliqued,contact=clientResponse , number_correct_commands= fileDB.number_correct_commands , number_wrong_commands= fileDB.number_wrong_commands )
+        listFiles.append(fileReponse)
+  #  serializer = FileSerializer(files, many= True)
+ #   return Response(serializer.data)
+
+    return HttpResponse( jsonpickle.encode(listFiles,unpicklable=False),content_type="application/json")
 @api_view(['POST'])
 def downloadFileName(request):
         fileName = request.data['fileName']

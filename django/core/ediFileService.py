@@ -230,7 +230,7 @@ def getFilesEdiByClient(clientCode):
     return listFiles
 
 def getSingleEdiFileDetail(key):
-    fileDB = EDIfile.objects.select_related('client').get(pk=pk)
+    fileDB = EDIfile.objects.select_related('client').get(pk=key)
     clientDB = fileDB.client
     clientResponse = Contact(idContact=clientDB.id, codeClient=clientDB.code_client, nomClient=clientDB.nom_client,
                              email=clientDB.email, archived=clientDB.archived)

@@ -420,7 +420,8 @@ def DoInterventionAsAdminForEdiFileAndChangeFile(request):
     interventionToSave.id_file_edi_id = fileId
     interventionToSave.save()
 
-    return createFileEdiFromColumnAndRows(columns, rows, fileId)
+    createFileEdiFromColumnAndRows(columns, rows, fileId)
+    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])

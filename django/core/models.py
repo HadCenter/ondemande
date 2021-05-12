@@ -48,7 +48,7 @@ class Contact:
 
 
 class FileInfo:
-    def __init__(self,idFile : int ,fileName : str,createdAt :models.DateTimeField,status : str,wrongCommands : str,validatedOrders :str,archived : int,cliqued : int , contact : Contact ,  number_wrong_commands : int , number_correct_commands : int  ):
+    def __init__(self, idFile: int, fileName: str, createdAt: models.DateTimeField, status: str, wrongCommands: str, validatedOrders: str, archived: int, cliqued: int, contact: Contact, number_wrong_commands: int, number_correct_commands: int):
         self.idFile = idFile
         self.fileName = fileName
         self.createdAt = createdAt
@@ -140,3 +140,9 @@ class kpi4WithFiltersDto:
         self.fileName = fileName
         self.clientName = clientName
         self.AdminName = AdminName
+
+class kpi2WithFiltersDto:
+    def __init__(self,date,fileName,clientName):
+        self.date = date
+        self.fileName = fileName
+        self.clientName = clientName

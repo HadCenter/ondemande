@@ -1,28 +1,4 @@
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-  <div class="information-file mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-    <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-      <base-card style="height:auto" class="bloc-type">
-        <base-card-title class="card-title">
-          <h2 class="mdl-card__title-text">Nombre de fichiers importés</h2>
-        </base-card-title>
-        <base-card-body>
-          <app-kpinombre-de-fichiers-imorte-par-client></app-kpinombre-de-fichiers-imorte-par-client>
-        </base-card-body>
-      </base-card>
-    </div>
-
-    <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-      <base-card class="bloc-type">
-        <base-card-title class="card-title">
-          <h2 class="mdl-card__title-text">Evolution de nombre de fichiers importés</h2>
-        </base-card-title>
-        <base-card-body>
-          <app-kpievolution-nombre-de-fichiers-imorte-par-client>
-          </app-kpievolution-nombre-de-fichiers-imorte-par-client>
-        </base-card-body>
-      </base-card>
-    </div>
-  </div>
 
   <div class="all-selection mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
     <div style="display: grid"
@@ -90,6 +66,13 @@
 
   <div>
     <app-kpi-intervention-admin [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" ></app-kpi-intervention-admin>
+  </div>
+  <div >
+    <app-kpievolution-nombre-de-fichiers-imorte-par-client [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" ></app-kpievolution-nombre-de-fichiers-imorte-par-client>
+  </div>
+
+  <div >
+    <app-kpinombre-de-fichiers-imorte-par-client [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" ></app-kpinombre-de-fichiers-imorte-par-client>
   </div>
 
 

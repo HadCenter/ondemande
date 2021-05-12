@@ -9,8 +9,8 @@ import { BrowserStatisticsChartComponent } from 'app/components/browser-statisti
 import {MatSelectModule} from '@angular/material/select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LoaderModule } from 'app/components/loader/loader.module';
-import { KPInombreDeFichiersImorteParClientComponent } from 'app/components/kpinombre-de-fichiers-imorte-par-client';
-import { KPIEvolutionNombreDeFichiersImorteParClientComponent } from 'app/components/kpievolution-nombre-de-fichiers-imorte-par-client';
+import { KPInombreDeFichiersImorteParClientComponent } from 'app/components/kpinombre-de-fichiers-imorte-par-client/kpinombre-de-fichiers-imorte-par-client.component';
+import { KPIEvolutionNombreDeFichiersImorteParClientComponent } from 'app/components/kpievolution-nombre-de-fichiers-imorte-par-client/kpievolution-nombre-de-fichiers-imorte-par-client.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';

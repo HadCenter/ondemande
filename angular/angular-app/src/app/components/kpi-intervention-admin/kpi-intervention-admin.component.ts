@@ -56,16 +56,17 @@ export class KpiInterventionAdminComponent implements OnInit {
   getNumberOfInterventions() {
     var mapDateToNumberOfInterventions = {}
     this.InterventionsByFiltres.forEach(element => {
+      console.log(typeof element.date);
       if (!Object.keys(mapDateToNumberOfInterventions).includes(element.date)) {
         mapDateToNumberOfInterventions[element.date] = 0;
       }
       mapDateToNumberOfInterventions[element.date] += 1;
     });
-    var mapDateToNumberOfAnomaliestoArray = Object.keys(mapDateToNumberOfInterventions).map((key) => [key, mapDateToNumberOfInterventions[key]]);
-    mapDateToNumberOfAnomaliestoArray.forEach(el => {
-      el[0] = (new Date(el[0])).getTime();
+    var mapDateToNumberOfInterventionstoArray = Object.keys(mapDateToNumberOfInterventions).map((key) => [key, mapDateToNumberOfInterventions[key]]);
+    mapDateToNumberOfInterventionstoArray.forEach(el => {
+      el[0] = (new Date(el[0]+" GMT")).getTime();
     })
-    this.interventionsBydates = mapDateToNumberOfAnomaliestoArray;
+    this.interventionsBydates = mapDateToNumberOfInterventionstoArray;
     this.redrawChartNbInterventionsParDate();
   }
   redrawChartNbInterventionsParDate() {
@@ -85,10 +86,11 @@ export class KpiInterventionAdminComponent implements OnInit {
       this.interventionsBydates = Object.entries(nbrInterventionsByDate);
       console.log("this.interventionsBydates",this.interventionsBydates);
       this.interventionsBydates.forEach(element => {
-        element[0] = (new Date(element[0])).getTime();
+        console.log(element[0]);
+        element[0] = (new Date(element[0]+" GMT")).getTime();
         this.interventionsBydates_copy = [...this.interventionsBydates];
-       
       });
+      console.log("this.interventionsBydates",this.interventionsBydates)
       this.loadChart();
     })
   }
@@ -158,7 +160,7 @@ export class KpiInterventionAdminComponent implements OnInit {
       ],
       tooltip: {
         shared: true,
-        xDateFormat: '%e-%m-%Y %H:%M:%S',
+        xDateFormat: '%e-%m-%Y',
         //xDateFormat: '%Y-%m-%d, %H:%m:%S',
         valueDecimals: 2,
         positioner: function () {

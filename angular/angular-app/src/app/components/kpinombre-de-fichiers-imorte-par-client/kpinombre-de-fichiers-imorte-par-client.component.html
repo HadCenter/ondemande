@@ -1,28 +1,13 @@
-<div id="conteneur" >
-<!--  <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'100px'" [bg]="'transparant'" [show]="show"></app-loader>-->
-        <div *ngIf = "data.length > 0">
-          <h6>Choisir un client </h6>
-          <mat-form-field appearance="fill" >
-            <mat-label>Tous</mat-label>
-            <mat-select [(value)]="selected" (selectionChange)="onChangeClient($event)">
-              <mat-option>Tous</mat-option>
-              <mat-option *ngFor="let object of data" [value]="object.nom_client">
-                {{object.nom_client}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div *ngIf = "data.length > 0">
-          <h6>Choisir une date </h6>
-          <mat-form-field >
-            <mat-label>Tous</mat-label>
-            <input #input matInput [matDatepicker]="picker"  (dateChange)="addEvent('change', $event)" >
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div *ngIf = "data.length > 0">
-          <h6 >Nombre de fichiers importés : </h6>
-          <div class="centrage"><h4> {{count}}</h4></div>
-        </div>
+
+<div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--3-col-phone">
+    <base-card class="bloc-type">
+        <base-card-title class='card-title'>
+          <h2 class="mdl-card__title-text">Nombre de fichiers importés</h2>
+        </base-card-title>
+        <base-card-body>
+          <div>
+            <h4>{{count}}</h4>
+          </div>
+        </base-card-body>
+    </base-card>
 </div>

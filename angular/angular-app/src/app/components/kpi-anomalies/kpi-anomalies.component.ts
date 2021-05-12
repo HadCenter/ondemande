@@ -165,7 +165,7 @@ export class KpiAnomaliesComponent implements OnInit {
       ],
       tooltip: {
         shared: true,
-        xDateFormat: '%e-%m-%Y %H:%M:%S',
+        xDateFormat: '%e-%m-%Y',
         //xDateFormat: '%Y-%m-%d, %H:%m:%S',
         valueDecimals: 2,
         positioner: function () {

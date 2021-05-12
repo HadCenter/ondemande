@@ -41,8 +41,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-              <td class="mdl-data-table__cell--non-numeric">{{ row.start_date | date:"yyyy-MM-dd 'à' HH:mm"}}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.end_date | date:"yyyy-MM-dd 'à' HH:mm"}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.start_date | date:"yyyy/MM/dd"}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.end_date | date:"yyyy/MM/dd"}}</td>
               <td class="mdl-data-table__cell--non-numeric">
                 <span class="label label--mini color--{{getColor(row.statut)}} ">{{ row.statut}}</span>
               </td>

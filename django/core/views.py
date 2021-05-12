@@ -34,7 +34,7 @@ from .models import FileInfo, Contact, kpi3SchemaSingleAnomalie, getNumberOfAnom
 from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
-from core.ediFileService import saveUploadedEdiFile , getAllFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore
+from core.ediFileService import saveUploadedEdiFile , getAllFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -169,6 +169,13 @@ def createFileFromColumnAndRowsAndUpdate(request):
     response = createFileFromColumnAndRowsAndUpdateCore(columns, rows, fileId)
     return response
 
+@api_view(['POST'])
+def createFileFromColumnAndRows(request):
+    columns = request.data['columns']
+    rows = request.data['rows']
+    fileId = request.data['fileId']
+    response = createFileEdiFromColumnAndRows(columns, rows, fileId)
+    return response
 
 
 
@@ -400,6 +407,20 @@ def DoInterventionAsAdminForEdiFileAndCorrectFile(request):
     interventionToSave.save()
 
     return createFileFromColumnAndRowsAndUpdateCore(columns, rows, fileId)
+
+@api_view(['POST'])
+def DoInterventionAsAdminForEdiFileAndChangeFile(request):
+    id_admin = request.data['account_id']
+    columns = request.data['columns']
+    rows = request.data['rows']
+    fileId = request.data['fileId']
+
+    interventionToSave = InterventionAdmin()
+    interventionToSave.id_admin_id = id_admin
+    interventionToSave.id_file_edi_id = fileId
+    interventionToSave.save()
+
+    return createFileEdiFromColumnAndRows(columns, rows, fileId)
 
 
 @api_view(['POST'])

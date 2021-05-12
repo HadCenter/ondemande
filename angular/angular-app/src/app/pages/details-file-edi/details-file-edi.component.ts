@@ -126,12 +126,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
     }
     console.error("filel to checkkkkk after delete", this.fileTocheck)
-    this.fileService.corretFile(this.fileTocheck).subscribe(res => {
+    this.fileService.updateFile(this.fileTocheck).subscribe(res => {
       console.log('resultat correction', res);
       if (res.message == "success") {
         this.rowsToDelete = [];
         this.alreadyClicked = false;
-        this.getFile(this.route.snapshot.params.id);  //refresh data after delete 
+     //   this.getFile(this.route.snapshot.params.id);  //refresh data after delete 
         // this.router.navigate(['/list-file-edi']); 
       }
     })

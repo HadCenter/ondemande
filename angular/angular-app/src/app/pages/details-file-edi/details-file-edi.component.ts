@@ -1,8 +1,9 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ɵConsole } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface MouseEvent {
   rowId: number;
@@ -21,13 +22,13 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   fileValid: any;
   column: string;
   public snackAction = 'Ok';
-  fileTocheck: { fileId: any; account_id:any; columns: any; rows: any; };
+  fileTocheck: { fileId: any; account_id: any; columns: any; rows: any; };
   _fileWrong: any;
   tableMouseDown: MouseEvent;
   tableMouseUp: MouseEvent;
   FIRST_EDITABLE_ROW: number = 0;
   LAST_EDITABLE_ROW: number = 0;
-  FIRST_EDITABLE_COL: number = 1;                       // first column is not editable --> so start from index 1
+  FIRST_EDITABLE_COL: number = 3;                       // first column is not editable --> so start from index 1
   LAST_EDITABLE_COL: number = 0;
   newCellValue: string = '';
   showValid = true;
@@ -44,10 +45,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     // [false, false, false],
   ];
   correctedFilerows: any;
+  rowsToDelete: any = [];
+  rowsToDeleteValid: any = [];
+  alreadyClicked: boolean = false;
 
   constructor(private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     public router: Router,
+    public dialog: MatDialog,
     private fileService: DetailsFileEdiService) {
     super();
   }
@@ -56,6 +61,109 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.getFile(this.route.snapshot.params.id);
   }
 
+  // /******Open dialog Delete Row */
+  // openDialog(i) {
+  //   const dialogRef = this.dialog.open(DialogDeleteRowFile);
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log("result", result);
+
+  //     if (result == true) {
+  //       this.copyFileWrong.splice(i, 1);
+  //       console.error(this.copyFileWrong);
+  //       // this.actualiser();
+  //     }
+  //     console.error(this.copyFileWrong);
+
+  //   });
+  // }
+
+  deleteRows(optionFile) {
+    this.alreadyClicked = true;
+    if (optionFile == "valid") {
+      for (var i = this.fileValid.rows.length - 1; i >= 0; i--) {
+        for (var j = 0; j < this.rowsToDeleteValid.length; j++) {
+          if (this.fileValid.rows[i] && (this.fileValid.rows[i][this.fileValid.rows[i].length - 1] === this.rowsToDeleteValid[j])) {
+            this.fileValid.rows.splice(i, 1);
+          }
+        }
+      }
+    }
+    else {
+      for (var i = this.fileWrong.rows.length - 1; i >= 0; i--) {
+        for (var j = 0; j < this.rowsToDelete.length; j++) {
+          if (this.fileWrong.rows[i] && (this.fileWrong.rows[i][this.fileWrong.rows[i].length - 1] === this.rowsToDelete[j])) {
+            this.fileWrong.rows.splice(i, 1);
+            this.files = this.files.filter((el) => !this.rowsToDelete.includes(el.rowId));
+            this.testFile = this.testFile.filter((el) => !this.rowsToDelete.includes(el.rowId));
+            this.copyFileWrong = this.copyFileWrong.filter((el) => !this.rowsToDelete.includes(el.rowId));
+          }
+        }
+      }
+    }
+    var user = JSON.parse(localStorage.getItem('currentUser'));
+    this.rearrangeAttributes();  //Remove unecessey columns 
+    this.hideUiSelectionOnCorrection();  //hide ui selection on correction
+
+    if (this.fileWrong && this.fileValid) {
+      this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
+      this.removeUnecesseryColumns(); // from rows filewrong
+      this.fileTocheck = {
+        fileId: this.file.idFile,
+        account_id: user.id,
+        columns: this._fileWrong.columns,
+        rows: this.fileValid.rows.concat(this.correctedFilerows),
+
+      }
+    }
+    else {
+      this.removeUnecesseryColumns(); // from rows filewrong
+      this.fileTocheck = {
+        fileId: this.file.idFile,
+        account_id: user.id,
+        columns: this._fileWrong.columns,
+        rows: this.correctedFilerows,
+
+      }
+    }
+    console.error("filel to checkkkkk after delete", this.fileTocheck)
+    this.fileService.corretFile(this.fileTocheck).subscribe(res => {
+      console.log('resultat correction', res);
+      if (res.message == "success") {
+        this.rowsToDelete = [];
+        this.alreadyClicked = false;
+        this.getFile(this.route.snapshot.params.id);  //refresh data after delete 
+        // this.router.navigate(['/list-file-edi']); 
+      }
+    })
+
+  }
+  selectDeleteRowValidFile(rowId) {
+    //uncheck delete rowId from rowstoDelete
+    if (this.rowsToDeleteValid.includes(rowId)) {
+      this.rowsToDeleteValid.splice(this.rowsToDeleteValid.indexOf(rowId), 1);
+    }
+    //check add to rowTodelete
+    else {
+      this.rowsToDeleteValid.push(rowId);
+
+    }
+    console.error(this.rowsToDeleteValid);
+  }
+
+  selectDeleteRow(rowId) {
+    //uncheck delete rowId from rowstoDelete
+    if (this.rowsToDelete.includes(rowId)) {
+      this.rowsToDelete.splice(this.rowsToDelete.indexOf(rowId), 1);
+    }
+    //check add to rowTodelete
+    else {
+      this.rowsToDelete.push(rowId);
+
+    }
+    console.error(this.rowsToDelete);
+    //  this.openDialog(i);
+
+  }
   /**
      * Update table's dataSource
      * @param text
@@ -74,11 +182,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         let endRow: number;
 
         if (this.tableMouseDown.colId <= this.tableMouseUp.colId) {
-          startCol = this.tableMouseDown.colId;
-          endCol = this.tableMouseUp.colId;
+          startCol = this.tableMouseDown.colId - 1;
+          endCol = this.tableMouseUp.colId - 1;
         } else {
-          endCol = this.tableMouseDown.colId;
-          startCol = this.tableMouseUp.colId;
+          endCol = this.tableMouseDown.colId - 1;
+          startCol = this.tableMouseUp.colId - 1;
         }
 
         if (this.tableMouseDown.rowId <= this.tableMouseUp.rowId) {
@@ -91,7 +199,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
         //--Edit cells from the same column
         if (startCol === endCol) {
-          console.log('--Edit cells from the same column');
+          console.log('--Edit cells from the same column', startCol);
           for (let i = startRow; i <= endRow; i++) {
             console.log(dataCopy[i], [this.fileWrong.columns[startCol]])
             dataCopy[i][this.fileWrong.columns[startCol]] = text;
@@ -233,6 +341,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       console.warn(res)
       this.fileWrong = res;
 
+
       //create a copy array of object from the res and an array of displayed column
       this.copyFileWrong = JSON.parse(JSON.stringify(this.fileWrong));
 
@@ -243,6 +352,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.files = this.copyFileWrong;    // copy to filter *
 
       this.displayedColumns = (Object.keys(this.copyFileWrong[0])).slice((Object.keys(this.copyFileWrong[0]).indexOf("Remarque")), (Object.keys(this.copyFileWrong[0]).indexOf("Remarque_id")));  //not display unecessery column
+
+      this.displayedColumns.unshift("Delete");  //add column Delete
       //
       this.showWrong = false;
       this.LAST_EDITABLE_ROW = this.copyFileWrong.length - 1;
@@ -333,6 +444,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
  * Initialise the selected cells
  */
   initSelectedCells() {
+    console.warn('FIRST EDITABLE', this.FIRST_EDITABLE_ROW);
+    console.warn('FIRST col', this.FIRST_EDITABLE_COL);
+    console.warn("selected state", this.selectedCellsState)
     for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
       for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
         this.selectedCellsState[i][j] = false;
@@ -357,12 +471,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   */
   resetFiltre() {
     this.initSelectedCells();    // init selected cells
-      // reset the selected filtre
-      this.options.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
-        }
-      });
+    // reset the selected filtre
+    this.options.forEach(element => {
+      if (element.hasOwnProperty("modelValue")) {
+        element.modelValue = ""
+      }
+    });
     this.copyFileWrong = this.testFile;
     this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
   }
@@ -390,8 +504,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.fileService.getFileEdi(data).subscribe(res => {
       this.fileValid = res;
       this.showValid = false;
+      this.fileValid.columns.unshift("Delete");  //add column Delete
       console.warn('File valid', this.fileValid)
     })
+
   }
 
   getFile(id: string) {
@@ -433,9 +549,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         element.selected = 0;  // change attribute to 0
       }
     });
-    //remove column remarque & put selected on last column 
-    let columns = this.displayedColumns.slice(1);
+    //remove column remarque & delete column & put selected on last column 
+    let columns = this.displayedColumns.slice(2);
     columns.push(columns.shift());
+    console.error(columns)
     //remove unessecerry column from rows (remarque,rowId,remarqueId)& put selected on last column 
     let rows = this.copyFileWrong.map(Object.values);
     rows.forEach(element => {
@@ -487,17 +604,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.removeUnecesseryColumns(); // from rows filewrong
       this.fileTocheck = {
         fileId: this.file.idFile,
-        account_id:user.id,
+        account_id: user.id,
         columns: this._fileWrong.columns,
         rows: this.fileValid.rows.concat(this.correctedFilerows),
-        
+
       }
     }
     else {
       this.removeUnecesseryColumns();  //from rows filewrong
       this.fileTocheck = {
         fileId: this.file.idFile,
-        account_id:user.id,
+        account_id: user.id,
         columns: this._fileWrong.columns,
         rows: this.correctedFilerows,
       }
@@ -512,7 +629,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     })
   }
 
-  removeUnecesseryColumns(){
+  removeUnecesseryColumns() {
+    console.log("files", this.files)
     this.correctedFilerows = this.files.map(Object.values);
     this.correctedFilerows.forEach(element => {
       element.shift();   // remove remarque from rows
@@ -563,3 +681,29 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
 }
+
+// @Component({
+//   templateUrl: 'dialog/delete-row.component.html',
+//   styleUrls: ['dialog/delete-row.component.scss']
+// })
+// export class DialogDeleteRowFile {
+
+//   showloader = false;
+//   clicked = false;
+//   public snackAction = 'voir plus +';
+//   snackActionExpediteur = "ok";
+//   minWidth: number = 250;
+//   width: number = this.minWidth;
+
+//   constructor(
+//     public dialogRef: MatDialogRef<DialogDeleteRowFile>,
+//     private _snackBar: MatSnackBar
+//   ) {
+//   }
+//   ngOnInit(): void {
+
+//   }
+//   onNoclick() {
+//     this.dialogRef.close();
+//   }
+// }

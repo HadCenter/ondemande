@@ -1,0 +1,18 @@
+<div class="dialog-content">
+    <app-loader [position]="'absolute'" [width]="'296px'" [height]="'296px'" [bg]="'transparant'" [show]="showloader">
+    </app-loader>
+    <base-card class="card-dialog">
+        <base-card-title>
+            <h1 class="mdl-card__title-text">Effacer la ligne</h1>
+        </base-card-title>
+        <base-card-body class="card-content">
+            <div mat-dialog-content style="display: grid;"><label class="mssg-content">Etes vous sur de voulour supprimer
+                </label><label class="mssg-content">cette ligne du fichier edi ?</label></div>
+            <div mat-dialog-actions class="btn-actions">
+                <button mat-button  [mat-dialog-close]=true>Oui</button>
+                <button mat-button mat-dialog-close>Non</button>
+            </div>
+        </base-card-body>
+    </base-card>
+
+</div>

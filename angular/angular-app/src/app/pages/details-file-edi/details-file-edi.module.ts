@@ -16,7 +16,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
+import {MatIconModule} from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [DetailsFileEdiComponent],
   imports: [
@@ -34,8 +36,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatTableModule,
     MatSelectModule,
     MatFormFieldModule,
-
-
+    MatIconModule,
+    MatDialogModule,
+    MatButtonModule
   ],
   providers: [
     DetailsFileEdiService,

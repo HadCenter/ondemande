@@ -1,5 +1,5 @@
 from core.models import Client
-from core.views import archive_client , desarchive_client
+from core.clientService import archive_client , desarchive_client
 import jsonpickle
 
 

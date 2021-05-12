@@ -307,9 +307,3 @@ def createFileEdiFromColumnAndRows(columns, rows, fileId):
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)
     file.close()
     os.remove(fileName)
-    fileDB.validated_orders = "_"
-    fileDB.wrong_commands = "_"
-    fileDB.status = "En attente"
-    fileDB.number_correct_commands = 0
-    fileDB.number_wrong_commands = 0
-    fileDB.save()

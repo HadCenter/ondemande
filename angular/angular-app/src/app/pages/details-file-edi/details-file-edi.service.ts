@@ -28,6 +28,9 @@ export class DetailsFileEdiService {
   public corretFile (data): Observable<any> {
     return  this.http.post(`${this.url}/DoInterventionAsAdminForEdiFileAndCorrectFile/`,data);
   }
+  public updateFile (data): Observable<any> {
+    return  this.http.post(`${this.url}/DoInterventionAsAdminForEdiFileAndChangeFile/`,data);
+  }
 
   public sendFileToUrbantz(data): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}/urbantzEsb/SendFromFileToUrbantzAsTasks/`,data);

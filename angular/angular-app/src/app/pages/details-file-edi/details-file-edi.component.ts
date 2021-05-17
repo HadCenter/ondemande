@@ -4,6 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { throwIfEmpty } from 'rxjs/operators';
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 export interface MouseEvent {
   rowId: number;
@@ -59,6 +63,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   ngOnInit(): void {
     this.getFile(this.route.snapshot.params.id);
+    
   }
 
   // /******Open dialog Delete Row */
@@ -125,14 +130,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
       }
     }
-    console.error("filel to checkkkkk after delete", this.fileTocheck)
     this.fileService.updateFile(this.fileTocheck).subscribe(res => {
-      console.log('resultat correction', res);
-      if (res.message == "success") {
+      // console.warn('res',res)
+      if (res.message == "done") {
         this.rowsToDelete = [];
+        this.rowsToDeleteValid = [];
         this.alreadyClicked = false;
-     //   this.getFile(this.route.snapshot.params.id);  //refresh data after delete 
-        // this.router.navigate(['/list-file-edi']); 
       }
     })
 
@@ -147,7 +150,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.rowsToDeleteValid.push(rowId);
 
     }
-    console.error(this.rowsToDeleteValid);
   }
 
   selectDeleteRow(rowId) {
@@ -160,7 +162,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.rowsToDelete.push(rowId);
 
     }
-    console.error(this.rowsToDelete);
     //  this.openDialog(i);
 
   }
@@ -201,7 +202,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         if (startCol === endCol) {
           console.log('--Edit cells from the same column', startCol);
           for (let i = startRow; i <= endRow; i++) {
-            console.log(dataCopy[i], [this.fileWrong.columns[startCol]])
+            //change color after modify value
+            this.copyFileWrong.forEach((element, index) => {
+              if (index == i) {
+                if (element[element.startCol] !== dataCopy[i][this.fileWrong.columns[startCol]]) {    // TO IMPROVE
+                  console.warn('THERE IS A CHANGE');
+                  var column = this.fileWrong.columns[startCol];
+                  var container = document.querySelectorAll<HTMLElement>("#" + column);
+                  container[index].style.setProperty("color", "green", "important");
+                }
+              }
+            });
             dataCopy[i][this.fileWrong.columns[startCol]] = text;
           }
         } else {
@@ -399,6 +410,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   setFilteredItemsOptions(filter) {
+    console.warn('filter',filter)
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
     if (filterExists == false) { this.filterValues.push(filter) }
@@ -444,9 +456,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
  * Initialise the selected cells
  */
   initSelectedCells() {
-    console.warn('FIRST EDITABLE', this.FIRST_EDITABLE_ROW);
-    console.warn('FIRST col', this.FIRST_EDITABLE_COL);
-    console.warn("selected state", this.selectedCellsState)
     for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
       for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
         this.selectedCellsState[i][j] = false;
@@ -552,7 +561,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     //remove column remarque & delete column & put selected on last column 
     let columns = this.displayedColumns.slice(2);
     columns.push(columns.shift());
-    console.error(columns)
     //remove unessecerry column from rows (remarque,rowId,remarqueId)& put selected on last column 
     let rows = this.copyFileWrong.map(Object.values);
     rows.forEach(element => {
@@ -630,7 +638,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   removeUnecesseryColumns() {
-    console.log("files", this.files)
     this.correctedFilerows = this.files.map(Object.values);
     this.correctedFilerows.forEach(element => {
       element.shift();   // remove remarque from rows

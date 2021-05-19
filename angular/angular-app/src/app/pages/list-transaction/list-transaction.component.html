@@ -44,7 +44,7 @@
               <td class="mdl-data-table__cell--non-numeric">{{ row.start_date | date:"yyyy/MM/dd"}}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.end_date | date:"yyyy/MM/dd"}}</td>
               <td class="mdl-data-table__cell--non-numeric">
-                <span class="label label--mini color--{{getColor(row.statut)}} ">{{ row.statut}}</span>
+                <span class="label label--mini color--{{getColor(row.statut)}} border ">{{ row.statut}}</span>
               </td>
               <td class="column-actions mdl-data-table__cell--non-numeric">
                 <button (click)="gotoDetails(row)" [disabled] = "row.statut !== 'Terminé'"

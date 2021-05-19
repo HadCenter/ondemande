@@ -96,8 +96,17 @@
 
     <div>
       <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-        <base-card-title>
-          <label class="label-wrong">Prestations erronées</label>
+        <base-card-title class="reorder">
+          <div id="conteneur">
+            <label class="label-wrong">Prestations erronées</label>
+          </div>
+          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+            <div class="mdl-textfield label-search">
+              <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+              <label class="mdl-textfield__label" for="search2"></label>
+            </div>
+          </div>
         </base-card-title>
         <base-card-body class="content-file-line">
           <mat-accordion>

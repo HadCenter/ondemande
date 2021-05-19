@@ -53,7 +53,7 @@
             <td *ngIf="row.status !== 'Terminé'" class="label-correct mdl-data-table__cell--non-numeric">-
             </td>
             <td class="mdl-data-table__cell--non-numeric">
-              <span class="label label--mini color--{{getColor(row.status)}} ">{{ row.status }}</span>
+              <span class="label label--mini color--{{getColor(row.status)}} border">{{ row.status }}</span>
             </td>
             <td class="column-actions mdl-data-table__cell--non-numeric">
               <button [disabled]="clicked[i] || row.cliqued"

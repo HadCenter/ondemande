@@ -364,3 +364,16 @@ button.delete-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-e
   color: red !important;
   // background-color: red;
 }
+
+.reorder
+{
+  display: flex;
+  justify-content: space-between;
+}
+
+#conteneur
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

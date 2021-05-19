@@ -38,8 +38,17 @@
     <div class="content-labels">
 
       <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-        <base-card-title>
-          <label>Fichier de livraison </label>
+        <base-card-title class="reorder">
+          <div>
+            <label>Fichier de livraison </label>
+          </div>
+          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+            <div class="mdl-textfield label-search">
+              <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsLivraison()"
+                     [(ngModel)]="filterValueLivraison" placeholder="Rechercher" autocomplete="off" />
+              <label class="mdl-textfield__label" for="search2"></label>
+            </div>
+          </div>
         </base-card-title>
         <base-card-body class="content-file-line">
           <mat-accordion>
@@ -314,8 +323,17 @@
     <div class="content-labels">
 
       <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-        <base-card-title>
-          <label>Fichier d'exception </label>
+        <base-card-title class="reorder">
+          <div>
+            <label>Fichier d'exception </label>
+          </div>
+          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+            <div class="mdl-textfield label-search">
+              <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsException()"
+                     [(ngModel)]="filterValueException" placeholder="Rechercher" autocomplete="off" />
+              <label class="mdl-textfield__label" for="search2"></label>
+            </div>
+          </div>
         </base-card-title>
         <base-card-body class="content-file-line">
           <mat-accordion>
@@ -620,8 +638,17 @@
     <div class="content-labels">
 
       <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-        <base-card-title>
-          <label>Fichier Metadata </label>
+        <base-card-title class="reorder">
+          <div>
+            <label>Fichier Metadata </label>
+          </div>
+          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+            <div class="mdl-textfield label-search">
+              <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsMetadata()"
+                     [(ngModel)]="filterValuemetadata" placeholder="Rechercher" autocomplete="off" />
+              <label class="mdl-textfield__label" for="search2"></label>
+            </div>
+          </div>
         </base-card-title>
         <base-card-body class="content-file-line">
           <mat-accordion>
@@ -990,8 +1017,17 @@
     <div class="content-labels">
 
       <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-        <base-card-title>
-          <label>Fichier MAD </label>
+        <base-card-title class="reorder">
+          <div>
+            <label>Fichier MAD </label>
+          </div>
+          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+            <div class="mdl-textfield label-search">
+              <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsMAD()"
+                     [(ngModel)]="filterValueMad" placeholder="Rechercher" autocomplete="off" />
+              <label class="mdl-textfield__label" for="search2"></label>
+            </div>
+          </div>
         </base-card-title>
         <base-card-body class="content-file-line">
           <mat-accordion>

@@ -67,6 +67,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   showLoaderExceptionFile = true;
   showLoaderMetadataFile = true;
   showLoaderMadFile = true;
+  public filterValueLivraison: any;
+  public filterValueException: any;
+  public filterValueMad: any;
+  public filterValuemetadata: any;
 
   constructor(private route: ActivatedRoute,
     public service: DetailsTransactionService,
@@ -93,7 +97,58 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.rearrangeFileMAD();
     })
   }
-
+    /**** Filter items */
+  setFilteredItemsLivraison() {
+    this.fichierLivraison = this.filterItemsLivraison(this.filterValueLivraison);
+    if (this.filterValueLivraison === '') {
+      this.fichierLivraison = this.fichierLivraison;
+    }
+  }
+  
+  filterItemsLivraison(filterValueLivraison : string) {
+    return this.copyFilterLivraison.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterValueLivraison.toLowerCase());
+    });
+  }
+    /**** Filter items */
+  setFilteredItemsException() {
+    this.fichierException = this.filterItemsException(this.filterValueException);
+    if (this.filterValueException === '') {
+      this.fichierException = this.fichierException;
+    }
+  }
+  
+  filterItemsException(filterItemsException : string) {
+    return this.copyFilterException.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterItemsException.toLowerCase());
+    });
+  }
+    /**** Filter items */
+  setFilteredItemsMetadata() {
+    this.fichierMetadata = this.filterItemsMetadata(this.filterValuemetadata);
+    if (this.filterValuemetadata === '') {
+      this.fichierMetadata = this.fichierMetadata;
+    }
+  }
+  
+  filterItemsMetadata(filterItemsMetadata : string) {
+    return this.copyFilterMetaData.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterItemsMetadata.toLowerCase());
+    });
+  }
+    /**** Filter items */
+  setFilteredItemsMAD() {
+    this.fichierMad = this.filterItemsMAD(this.filterValueMad);
+    if (this.filterValueMad === '') {
+      this.fichierMad = this.fichierMad;
+    }
+  }
+  
+  filterItemsMAD(filterItemsMAD : string) {
+    return this.copyFilterMad.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterItemsMAD.toLowerCase());
+    });
+  }
   rearrangeFileLivraison() {
     if (this.fichierLivraison.rows.length > 0) {
       this.fichierLivraison.rows.splice(0, 0, this.fichierLivraison.columns);

@@ -232,3 +232,10 @@ option {
   -o-user-select: none; /* Currently not supported in Opera but will be soon */
   user-select: none;
 }
+
+.reorder
+{
+  display: flex;
+  justify-content: space-between;
+}
+

@@ -21,6 +21,7 @@ export interface MouseEvent {
   styleUrls: ['./details-file-edi.component.scss']
 })
 export class DetailsFileEdiComponent extends UpgradableComponent implements OnInit {
+  public filterValue: any;
   file: any;
   fileWrong: any = [];
   fileValid: any;
@@ -60,10 +61,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     private fileService: DetailsFileEdiService) {
     super();
   }
-
   ngOnInit(): void {
     this.getFile(this.route.snapshot.params.id);
-    
+
   }
 
   // /******Open dialog Delete Row */
@@ -106,7 +106,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
     }
     var user = JSON.parse(localStorage.getItem('currentUser'));
-    this.rearrangeAttributes();  //Remove unecessey columns 
+    this.rearrangeAttributes();  //Remove unecessey columns
     this.hideUiSelectionOnCorrection();  //hide ui selection on correction
 
     if (this.fileWrong && this.fileValid) {
@@ -358,7 +358,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
       this.copyFileWrong.rows.splice(0, 0, this.copyFileWrong.columns);
       this.copyFileWrong = this.convertToArrayOfObjects(this.copyFileWrong.rows);
-      this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); //sort by remaque id  
+      this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); //sort by remaque id
       this.testFile = this.copyFileWrong;   //copy to use on selection
       this.files = this.copyFileWrong;    // copy to filter *
 
@@ -543,13 +543,13 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   /**
-    * Rearrange the wrong file ; 
+    * Rearrange the wrong file ;
     * take the value of the selected checkboxes
-    * moving selected column 
+    * moving selected column
     * removing unnecessary columns
     */
   rearrangeAttributes() {
-    //Fix selected attribute 
+    //Fix selected attribute
     this.copyFileWrong.forEach(element => {
       if (element.selected == 1) { this.selection.push(element.rowId) } //push element already checked on selection
       if (this.selection.includes(element.rowId)) { //if rowId exist on selection
@@ -558,10 +558,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         element.selected = 0;  // change attribute to 0
       }
     });
-    //remove column remarque & delete column & put selected on last column 
+    //remove column remarque & delete column & put selected on last column
     let columns = this.displayedColumns.slice(2);
     columns.push(columns.shift());
-    //remove unessecerry column from rows (remarque,rowId,remarqueId)& put selected on last column 
+    //remove unessecerry column from rows (remarque,rowId,remarqueId)& put selected on last column
     let rows = this.copyFileWrong.map(Object.values);
     rows.forEach(element => {
       element.shift();   // remove remarque from rows
@@ -578,7 +578,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   /**
-   * Rearrange the valid file ; 
+   * Rearrange the valid file ;
    * removing last column
    */
   rearrangeAttributesValidFile() {
@@ -588,7 +588,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   /**
-    * Hide ui selection red rectangle 
+    * Hide ui selection red rectangle
     */
   hideUiSelectionOnCorrection() {
     if (document.querySelector('.selected')) {
@@ -600,12 +600,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   /**
-  * Correct the wrong file 
+  * Correct the wrong file
   */
   correctionFile() {
     this.clickCorrection = true;
     var user = JSON.parse(localStorage.getItem('currentUser'));
-    this.rearrangeAttributes();  //Remove unecessey columns 
+    this.rearrangeAttributes();  //Remove unecessey columns
     this.hideUiSelectionOnCorrection();  //hide ui selection on correction
     if (this.fileWrong && this.fileValid) {
       this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
@@ -685,6 +685,19 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         return item !== row.rowId
       })
     }
+  }
+    /**** Filter items */
+  setFilteredItems() {
+    this.copyFileWrong = this.filterItems(this.filterValue);
+    if (this.filterValue === '') {
+      this.copyFileWrong = this.copyFileWrong;
+    }
+  }
+  
+  filterItems(filterValue : string) {
+    return this.files.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
+    });
   }
 
 }

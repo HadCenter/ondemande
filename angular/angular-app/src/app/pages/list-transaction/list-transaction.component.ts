@@ -168,9 +168,10 @@ export class ListTransactionComponent implements OnInit {
       this.advancedTable = this.advancedTable;
     }
   }
-  filterItems(filterValue) {
+  filterItems(filterValue : string) {
+    let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
     return this.transactions.filter((item) => {
-      return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
+      return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
     });
   }
 }

@@ -130,10 +130,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
 
       var user = JSON.parse(localStorage.getItem('currentUser'));
-      this.rearrangeAttributes();  //Remove unecessey columns
+      this.rearrangeAttributesDelete();  //Remove unecessey columns
       this.hideUiSelectionOnCorrection();  //hide ui selection on correction
 
-      this.removeUnecesseryColumns(); // from rows filewrong
+      this.removeUnecesseryColumnsDelete(); // from rows filewrong
       this.fileTocheck = {
         fileId: this.file.idFile,
         account_id: user.id,
@@ -597,6 +597,37 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this._fileWrong = JSON.parse(JSON.stringify(this.fileWrongUpdated));
   }
 
+  rearrangeAttributesDelete() {
+    //Fix selected attribute
+    console.error("copyfilewrong", this.copyFileWrong)
+    //Fix selected attribute
+    this.copyFileWrong.forEach(element => {
+      if (element.selected == 1) { this.selection.push(element.rowId) } //push element already checked on selection
+      if (this.selection.includes(element.rowId)) { //if rowId exist on selection
+        element.selected = 1; // change attribute to 1
+      } else {
+        element.selected = 0;  // change attribute to 0
+      }
+    });
+    //remove column remarque & delete column & put selected on last column
+    let columns = this.displayedColumns.slice(2);
+    columns.push(columns.shift());
+    //remove unessecerry column from rows (remarque,rowId,remarqueId)& put selected on last column
+    let rows = this.copyFileWrong.map(Object.values);
+    rows.forEach(element => {
+      element.shift();   // remove remarque from rows
+      element.splice(element.length - 2, 1); // remove rowId & remarqueId column from rows
+      element.push(element.shift()); // put selected on last column of rows
+
+    });
+    //
+    this.fileWrongUpdated = {
+      columns: columns,
+      rows: rows
+    }
+    this._fileWrong = JSON.parse(JSON.stringify(this.fileWrongUpdated));
+  }
+
   /**
    * Rearrange the valid file ;
    * removing last column
@@ -662,6 +693,16 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.correctedFilerows.forEach(element => {
       element.shift();   // remove remarque from rows
       element.splice(element.length - 2, 2); // remove rowId & remarqueId column from rows
+      element.push(element.shift()); // put selected on last column of rows
+
+    });
+  }
+
+  removeUnecesseryColumnsDelete(){
+    this.correctedFilerows = this.files.map(Object.values);
+    this.correctedFilerows.forEach(element => {
+      element.shift();   // remove remarque from rows
+      element.splice(element.length - 2, 1); // remove rowId & remarqueId column from rows
       element.push(element.shift()); // put selected on last column of rows
 
     });

@@ -617,16 +617,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     //remove column remarque & delete column & put selected on last column
     console.warn("this.dis",this.displayedColumns)
     let columns = this.fileWrong.columns.slice(1);
-    columns.splice(columns.length - 1, 1); // remove rowId & remarqueId column from rows
+    columns.splice(columns.length - 1, 1); // remove rowId from rows
     columns.push(columns.shift());
     console.warn("this.dis",columns)
     //remove unessecerry column from rows (remarque,rowId,remarqueId)& put selected on last column
     let rows = this.copyFileWrong.map(Object.values);
     rows.forEach(element => {
+      
       element.shift();   // remove remarque from rows
-      element.splice(element.length - 2, 1); // remove rowId & remarqueId column from rows
+      element.splice(element.length - 1, 1); // remove rowId & remarqueId column from rows
       element.push(element.shift()); // put selected on last column of rows
-
+      console.error(element)
     });
     //
     this.fileWrongUpdated = {
@@ -713,10 +714,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   removeUnecesseryColumnsDelete(){
     this.correctedFilerows = this.files.map(Object.values);
     this.correctedFilerows.forEach(element => {
+      console.error("***",element)
       element.shift();   // remove remarque from rows
-      element.splice(element.length - 2, 1); // remove rowId & remarqueId column from rows
+   //   element.splice(element.length - 2, 1); // remove rowId 
       element.push(element.shift()); // put selected on last column of rows
-
+      element.splice(element.length - 2, 1); // remove rowId 
+      console.error("remove",element)
     });
   }
 

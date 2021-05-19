@@ -301,14 +301,17 @@ def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
     fileName : str
     if fileType == "correct" :
         fileName = fileDB.validated_orders
+        path_base = path_racine_output
     elif fileType == "error" :
         fileName = fileDB.wrong_commands
+        path_base = path_racine_output
     else :
         fileName = fileDB.file.name
+        path_base = path_racine_input
 
     df.to_excel(fileName, index=False)
     ftp = connect()
-    ftp.cwd(path_racine_input + clientDB.code_client)
+    ftp.cwd(path_base + clientDB.code_client)
     file = open(fileName, 'rb')
     print(os.path.basename(fileName))
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)

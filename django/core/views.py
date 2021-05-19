@@ -276,11 +276,13 @@ def DoInterventionAsAdminForEdiFileAndChangeFile(request):
     rows = request.data['rows']
     fileId = request.data['fileId']
 
+    fileType = request.data['fileType']
+
     interventionToSave = InterventionAdmin()
     interventionToSave.id_admin_id = id_admin
     interventionToSave.id_file_edi_id = fileId
     interventionToSave.save()
 
-    createFileEdiFromColumnAndRows(columns, rows, fileId)
+    createFileEdiFromColumnAndRows(columns, rows, fileId ,fileType)
     return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
 

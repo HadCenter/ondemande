@@ -289,16 +289,23 @@ def createFileFromColumnAndRowsAndUpdateCore(columns, rows, fileId):
     fileDB = EDIfile.objects.select_related('client').get(pk=fileId)
     clientDB = fileDB.client
     fileName = fileDB.file.name
-    createFileEdiFromColumnAndRows(columns, rows, fileId)
+    createFileEdiFromColumnAndRows(columns, rows, fileId , "edi")
     data = [{"filePath": fileName, "ClientOwner": clientDB.code_client, "fileId": fileDB.id}]
     startEngineOnEdiFilesWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 
-def createFileEdiFromColumnAndRows(columns, rows, fileId):
+def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
     fileDB = EDIfile.objects.select_related('client').get(pk=fileId)
     clientDB = fileDB.client
     df = pd.DataFrame(rows, columns=columns)
-    fileName = fileDB.file.name
+    fileName : str
+    if fileType == "correct" :
+        fileName = fileDB.validated_orders
+    elif fileType == "error" :
+        fileName = fileDB.wrong_commands
+    else :
+        fileName = fileDB.file.name
+
     df.to_excel(fileName, index=False)
     ftp = connect()
     ftp.cwd(path_racine_input + clientDB.code_client)

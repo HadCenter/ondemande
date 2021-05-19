@@ -49,6 +49,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   rowsToDelete: any = [];
   rowsToDeleteValid: any = [];
   alreadyClicked: boolean = false;
+  displayedColumnsValid: any;
 
   constructor(private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -92,15 +93,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
 
       var user = JSON.parse(localStorage.getItem('currentUser'));
-      this.rearrangeAttributes();  //Remove unecessey columns
+   //   this.rearrangeAttributesDelete();  //Remove unecessey columns
       this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-
+      
+      let columns = this.fileValid.columns.slice(1);
+      columns.splice(columns.length - 1, 1); 
+  
       this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
-      // this.removeUnecesseryColumns(); // from rows filewrong
       this.fileTocheck = {
         fileId: this.file.idFile,
         account_id: user.id,
-        columns: this._fileWrong.columns,
+        columns: columns,
         fileType: 'correct',
         rows: this.fileValid.rows,
 
@@ -532,6 +535,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.fileValid = res;
       this.showValid = false;
       this.fileValid.columns.unshift("Delete");  //add column Delete
+      // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
+     console.log("displayedColumnsValid",this.displayedColumnsValid)
       console.warn('File valid', this.fileValid)
     })
 
@@ -610,8 +615,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
     });
     //remove column remarque & delete column & put selected on last column
-    let columns = this.displayedColumns.slice(2);
+    console.warn("this.dis",this.displayedColumns)
+    let columns = this.fileWrong.columns.slice(1);
+    columns.splice(columns.length - 1, 1); // remove rowId & remarqueId column from rows
     columns.push(columns.shift());
+    console.warn("this.dis",columns)
     //remove unessecerry column from rows (remarque,rowId,remarqueId)& put selected on last column
     let rows = this.copyFileWrong.map(Object.values);
     rows.forEach(element => {
@@ -633,9 +641,13 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    * removing last column
    */
   rearrangeAttributesValidFile() {
+    console.warn('valid',this.fileValid.rows);
     this.fileValid.rows.forEach(element => {
       element.pop();
+      // element.splice(element.length - 1, 1); // remove rowId & remarqueId column from rows
+      // element.push(element.shift());
     });
+    console.warn('kkk',this.fileValid.rows);
   }
 
   /**

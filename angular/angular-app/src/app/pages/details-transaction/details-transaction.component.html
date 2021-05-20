@@ -1,13 +1,13 @@
 <div class="container-transaction mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
   <!-- <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader> -->
-  <div  class="content-file-edi">
+  <div class="content-file-edi">
     <!-- <div style="text-align: left;padding-left: inherit;"
       class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--2-col-phone">
       <label class="number-transaction ">Transaction {{transaction?.transaction_id}}</label>
     </div> -->
     <div class="content-labels" id="conteneur">
       <!--            <div class="element 1">-->
-      <base-card class="element 1"
+      <base-card class="element-1"
         class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--2-col-phone">
         <base-card-body class="content-card">
           <div class="content-label">
@@ -26,10 +26,13 @@
       </base-card>
       <!--            </div>-->
 
-      <div class="element 2">
-        <button
+      <div class="element-2">
+        <button style="margin-right: 5px;"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
           transaction
+        </button>
+        <button (click)='correctionAllFile();$event.stopPropagation();'
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
         </button>
       </div>
 
@@ -45,7 +48,7 @@
           <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
             <div class="mdl-textfield label-search">
               <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsLivraison()"
-                     [(ngModel)]="filterValueLivraison" placeholder="Rechercher" autocomplete="off" />
+                [(ngModel)]="filterValueLivraison" placeholder="Rechercher" autocomplete="off" />
               <label class="mdl-textfield__label" for="search2"></label>
             </div>
           </div>
@@ -330,7 +333,7 @@
           <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
             <div class="mdl-textfield label-search">
               <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsException()"
-                     [(ngModel)]="filterValueException" placeholder="Rechercher" autocomplete="off" />
+                [(ngModel)]="filterValueException" placeholder="Rechercher" autocomplete="off" />
               <label class="mdl-textfield__label" for="search2"></label>
             </div>
           </div>
@@ -353,7 +356,7 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
-                          [show]="showLoaderExceptionFile"></app-loader>
+                [show]="showLoaderExceptionFile"></app-loader>
               <div *ngIf="fichierException.length>0" class="content-table">
                 <table mat-table [dataSource]="fichierException"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
@@ -645,7 +648,7 @@
           <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
             <div class="mdl-textfield label-search">
               <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsMetadata()"
-                     [(ngModel)]="filterValuemetadata" placeholder="Rechercher" autocomplete="off" />
+                [(ngModel)]="filterValuemetadata" placeholder="Rechercher" autocomplete="off" />
               <label class="mdl-textfield__label" for="search2"></label>
             </div>
           </div>
@@ -668,7 +671,7 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
-                          [show]="showLoaderMetadataFile"></app-loader>
+                [show]="showLoaderMetadataFile"></app-loader>
               <div *ngIf="fichierMetadata.length>0" class="content-table">
                 <table mat-table [dataSource]="fichierMetadata"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
@@ -1024,7 +1027,7 @@
           <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
             <div class="mdl-textfield label-search">
               <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsMAD()"
-                     [(ngModel)]="filterValueMad" placeholder="Rechercher" autocomplete="off" />
+                [(ngModel)]="filterValueMad" placeholder="Rechercher" autocomplete="off" />
               <label class="mdl-textfield__label" for="search2"></label>
             </div>
           </div>
@@ -1047,7 +1050,7 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
-                          [show]="showLoaderMadFile"></app-loader>
+                [show]="showLoaderMadFile"></app-loader>
               <div *ngIf="fichierMad.length>0" class="content-table">
                 <table mat-table [dataSource]="fichierMad"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">

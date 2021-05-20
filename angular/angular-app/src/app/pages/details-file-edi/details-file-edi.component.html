@@ -61,7 +61,7 @@
                     <tr>
                       <th *ngFor="let row of fileValid?.columns ; let i = index"
                         class="details-line mdl-data-table__cell--non-numeric">
-                        <span *ngIf="row !=='Delete'">{{row}}</span>
+                        <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
                       </th>
                     </tr>
@@ -79,7 +79,7 @@
                       <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
                         [ngClass]="(j==9 || j==10 || j==11 ||j==16 || j==21)?'remarque-column':'full-column'"
                         class="details-line mdl-data-table__cell--non-numeric">
-                        <label
+                        <label *ngIf="j!==28 && j!==29"
                           [ngClass]="(j==4 || j==5|| j==6||j==7 || j==12  )?'mini-column':'full-column'">{{column}}</label>
                       </td>
                     </tr>
@@ -150,7 +150,7 @@
 
                   <ng-container matColumnDef="Remarque">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Remarque
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[1].columnProp}}"
                           [(ngModel)]="options[1].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[1],$event)">
@@ -158,7 +158,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[1].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[1].modelValue" (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[1].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
 
                     </th>
                     <td mat-cell *matCellDef="let element" class="label-remarque"> {{element.Remarque}} </td>
@@ -177,7 +184,7 @@
                   </ng-container>
                   <ng-container matColumnDef="RefClient">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> RefClient
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[3].columnProp}}"
                           [(ngModel)]="options[3].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[3],$event)">
@@ -185,7 +192,16 @@
                           <mat-option [value]="item" *ngFor="let item of options[3].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[3].modelValue" (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[3].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+
                     </th>
                     <td mat-cell id="RefClient" (mousedown)="onMouseDown(i, 3, 'RefClient')"
                       (mouseup)="onMouseUp(i, 3, 'RefClient')" *matCellDef="let element; let i = index"
@@ -196,7 +212,7 @@
 
                   <ng-container matColumnDef="Expediteur">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[4].columnProp}}"
                           [(ngModel)]="options[4].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[4],$event)">
@@ -204,7 +220,16 @@
                           <mat-option [value]="item" *ngFor="let item of options[4].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[4].modelValue" (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[4].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+
                     </th>
                     <td mat-cell id="Expediteur" (mousedown)="onMouseDown(i, 4, 'Expediteur')"
                       (mouseup)="onMouseUp(i, 4, 'Expediteur')" *matCellDef="let element; let i = index"
@@ -215,7 +240,7 @@
 
                   <ng-container matColumnDef="Type">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Type
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[5].columnProp}}"
                           [(ngModel)]="options[5].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[5],$event)">
@@ -223,7 +248,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[5].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[5].modelValue" (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[5].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
 
                     </th>
                     <td mat-cell id="Type" (mousedown)="onMouseDown(i, 5, 'Type')" (mouseup)="onMouseUp(i, 5, 'Type')"
@@ -234,7 +266,7 @@
 
                   <ng-container matColumnDef="Date_livraison">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Date_livraison
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[6].columnProp}}"
                           [(ngModel)]="options[6].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[6],$event)">
@@ -242,7 +274,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[6].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[6].modelValue" (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[6].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Date_livraison" (mousedown)="onMouseDown(i, 6, 'Date_livraison')"
                       (mouseup)="onMouseUp(i, 6, 'Date_livraison')" *matCellDef="let element; let i = index"
@@ -252,7 +291,7 @@
 
                   <ng-container matColumnDef="Start">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Start
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[7].columnProp}}"
                           [(ngModel)]="options[7].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[7],$event)">
@@ -260,7 +299,15 @@
                           <mat-option [value]="item" *ngFor="let item of options[7].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[7].modelValue" (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[7].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+
                     </th>
                     <td mat-cell id="Start" (mousedown)="onMouseDown(i, 7, 'Start')"
                       (mouseup)="onMouseUp(i, 7, 'Start')" *matCellDef="let element; let i = index"
@@ -270,7 +317,7 @@
 
                   <ng-container matColumnDef="End">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> End
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[8].columnProp}}"
                           [(ngModel)]="options[8].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[8],$event)">
@@ -278,7 +325,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[8].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[8].modelValue" (selectionChange)="setFilteredItemsOptions(options[8],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[8].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
 
                     </th>
                     <td mat-cell id="End" (mousedown)="onMouseDown(i, 8, 'End')" (mouseup)="onMouseUp(i, 8, 'End')"
@@ -289,7 +343,7 @@
 
                   <ng-container matColumnDef="Labels">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Labels
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[9].columnProp}}"
                           [(ngModel)]="options[9].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[9],$event)">
@@ -297,7 +351,15 @@
                           <mat-option [value]="item" *ngFor="let item of options[9].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[9].modelValue" (selectionChange)="setFilteredItemsOptions(options[9],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[9].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
 
                     </th>
                     <td mat-cell id="Labels" (mousedown)="onMouseDown(i, 9, 'Labels')"
@@ -307,7 +369,7 @@
                   </ng-container>
                   <ng-container matColumnDef="Quantite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Quantite
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[10].columnProp}}"
                           [(ngModel)]="options[10].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[10],$event)">
@@ -315,7 +377,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[10].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[10].modelValue" (selectionChange)="setFilteredItemsOptions(options[10],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[10].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Quantite" (mousedown)="onMouseDown(i, 10, 'Quantite')"
                       (mouseup)="onMouseUp(i, 10, 'Quantite')" *matCellDef="let element; let i = index"
@@ -325,7 +394,7 @@
 
                   <ng-container matColumnDef="CodeArticle">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> CodeArticle
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[11].columnProp}}"
                           [(ngModel)]="options[11].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[11],$event)">
@@ -333,7 +402,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[11].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[11].modelValue" (selectionChange)="setFilteredItemsOptions(options[11],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[11].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="CodeArticle" (mousedown)="onMouseDown(i, 11, 'CodeArticle')"
                       (mouseup)="onMouseUp(i, 11, 'CodeArticle')" *matCellDef="let element; let i = index"
@@ -343,7 +419,7 @@
 
                   <ng-container matColumnDef="Nom_destinataire">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Nom_destinataire
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[12].columnProp}}"
                           [(ngModel)]="options[12].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[12],$event)">
@@ -351,7 +427,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[12].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[12].modelValue" (selectionChange)="setFilteredItemsOptions(options[12],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[12].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Nom_destinataire" (mousedown)="onMouseDown(i, 12, 'Nom_destinataire')"
                       (mouseup)="onMouseUp(i, 12, 'Nom_destinataire')" *matCellDef="let element; let i = index"
@@ -361,7 +444,7 @@
 
                   <ng-container matColumnDef="rue">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> rue
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[13].columnProp}}"
                           [(ngModel)]="options[13].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[13],$event)">
@@ -369,7 +452,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[13].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[13].modelValue" (selectionChange)="setFilteredItemsOptions(options[13],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[13].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="rue" (mousedown)="onMouseDown(i, 13, 'rue')" (mouseup)="onMouseUp(i, 13, 'rue')"
                       *matCellDef="let element; let i = index"
@@ -379,7 +469,7 @@
 
                   <ng-container matColumnDef="ville">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> ville
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[14].columnProp}}"
                           [(ngModel)]="options[14].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[14],$event)">
@@ -387,7 +477,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[14].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[14].modelValue" (selectionChange)="setFilteredItemsOptions(options[14],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[14].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="ville" (mousedown)="onMouseDown(i, 14, 'ville')"
                       (mouseup)="onMouseUp(i, 14, 'ville')" *matCellDef="let element; let i = index"
@@ -397,7 +494,7 @@
 
                   <ng-container matColumnDef="CP">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> CP
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[15].columnProp}}"
                           [(ngModel)]="options[15].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[15],$event)">
@@ -405,7 +502,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[15].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[15].modelValue" (selectionChange)="setFilteredItemsOptions(options[15],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[15].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="CP" (mousedown)="onMouseDown(i, 15, 'CP')" (mouseup)="onMouseUp(i, 15, 'CP')"
                       *matCellDef="let element; let i = index"
@@ -414,7 +518,7 @@
                   </ng-container>
                   <ng-container matColumnDef="Adresse2">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Adresse2
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[16].columnProp}}"
                           [(ngModel)]="options[16].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[16],$event)">
@@ -422,7 +526,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[16].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[16].modelValue" (selectionChange)="setFilteredItemsOptions(options[16],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[16].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Adresse2" (mousedown)="onMouseDown(i, 16, 'Adresse2')"
                       (mouseup)="onMouseUp(i, 16, 'Adresse2')" *matCellDef="let element; let i = index"
@@ -432,7 +543,7 @@
 
                   <ng-container matColumnDef="CODE_interphone">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> CODE_interphone
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[17].columnProp}}"
                           [(ngModel)]="options[17].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[17],$event)">
@@ -440,7 +551,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[17].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[17].modelValue" (selectionChange)="setFilteredItemsOptions(options[17],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[17].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="CODE_interphone" (mousedown)="onMouseDown(i, 17, 'CODE_interphone')"
                       (mouseup)="onMouseUp(i, 17, 'CODE_interphone')" *matCellDef="let element; let i = index"
@@ -449,7 +567,7 @@
                   </ng-container>
                   <ng-container matColumnDef="Etage">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Etage
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[18].columnProp}}"
                           [(ngModel)]="options[18].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[18],$event)">
@@ -457,7 +575,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[18].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[18].modelValue" (selectionChange)="setFilteredItemsOptions(options[18],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[18].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Etage" (mousedown)="onMouseDown(i, 18, 'Etage')"
                       (mouseup)="onMouseUp(i, 18, 'CODE_interphone')" *matCellDef="let element; let i = index"
@@ -466,7 +591,7 @@
                   </ng-container>
                   <ng-container matColumnDef="Porte">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Porte
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[19].columnProp}}"
                           [(ngModel)]="options[19].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[19],$event)">
@@ -474,7 +599,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[19].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[19].modelValue" (selectionChange)="setFilteredItemsOptions(options[19],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[19].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Porte" (mousedown)="onMouseDown(i, 19, 'Porte')"
                       (mouseup)="onMouseUp(i, 19, 'Porte')" *matCellDef="let element; let i = index"
@@ -484,7 +616,7 @@
 
                   <ng-container matColumnDef="Instructions">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Instructions
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[20].columnProp}}"
                           [(ngModel)]="options[20].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[20],$event)">
@@ -492,7 +624,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[20].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[20].modelValue" (selectionChange)="setFilteredItemsOptions(options[20],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[20].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Instructions" (mousedown)="onMouseDown(i, 20, 'Instructions')"
                       (mouseup)="onMouseUp(i, 20, 'Instructions')" *matCellDef="let element; let i = index"
@@ -502,7 +641,7 @@
 
                   <ng-container matColumnDef="Telephone">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Telephone
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[21].columnProp}}"
                           [(ngModel)]="options[21].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[21],$event)">
@@ -510,7 +649,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[21].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[21].modelValue" (selectionChange)="setFilteredItemsOptions(options[21],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[21].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Telephone" (mousedown)="onMouseDown(i, 21, 'Telephone')"
                       (mouseup)="onMouseUp(i, 21, 'Telephone')" *matCellDef="let element; let i = index"
@@ -520,7 +666,7 @@
 
                   <ng-container matColumnDef="Tel2">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Tel2
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[22].columnProp}}"
                           [(ngModel)]="options[22].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[22],$event)">
@@ -528,7 +674,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[22].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[22].modelValue" (selectionChange)="setFilteredItemsOptions(options[22],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[22].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Tel2" (mousedown)="onMouseDown(i, 22, 'Tel2')" (mouseup)="onMouseUp(i, 22, 'Tel2')"
                       *matCellDef="let element; let i = index"
@@ -538,7 +691,7 @@
 
                   <ng-container matColumnDef="Tel3">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Tel3
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[23].columnProp}}"
                           [(ngModel)]="options[23].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[23],$event)">
@@ -546,7 +699,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[23].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[23].modelValue" (selectionChange)="setFilteredItemsOptions(options[23],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[23].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Tel3" (mousedown)="onMouseDown(i, 23, 'Tel3')" (mouseup)="onMouseUp(i, 23, 'Tel3')"
                       *matCellDef="let element; let i = index"
@@ -556,7 +716,7 @@
 
                   <ng-container matColumnDef="email">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> email
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[24].columnProp}}"
                           [(ngModel)]="options[24].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[24],$event)">
@@ -564,7 +724,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[24].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[24].modelValue" (selectionChange)="setFilteredItemsOptions(options[24],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[24].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="email" (mousedown)="onMouseDown(i, 24, 'email')"
                       (mouseup)="onMouseUp(i, 24, 'email')" *matCellDef="let element; let i = index"
@@ -574,7 +741,7 @@
 
                   <ng-container matColumnDef="Ref_commande">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Ref_commande
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[25].columnProp}}"
                           [(ngModel)]="options[25].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[25],$event)">
@@ -582,7 +749,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[25].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[25].modelValue" (selectionChange)="setFilteredItemsOptions(options[25],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[25].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Ref_commande" (mousedown)="onMouseDown(i, 25, 'Ref_commande')"
                       (mouseup)="onMouseUp(i, 25, 'Ref_commande')" *matCellDef="let element; let i = index"
@@ -592,7 +766,7 @@
 
                   <ng-container matColumnDef="Ref2">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Ref2
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[26].columnProp}}"
                           [(ngModel)]="options[26].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[26],$event)">
@@ -600,7 +774,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[26].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[26].modelValue" (selectionChange)="setFilteredItemsOptions(options[26],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[26].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Ref2" (mousedown)="onMouseDown(i, 26, 'Ref2')" (mouseup)="onMouseUp(i, 26, 'Ref2')"
                       *matCellDef="let element; let i = index"
@@ -611,14 +792,12 @@
                   <ng-container matColumnDef="Ref3">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Ref3
                       <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{options[27].columnProp}}"
-                          [(ngModel)]="options[27].modelValue"
-                          (selectionChange)="setFilteredItemsOptions(options[27],$event)">
-                          <mat-option value="">-- Select {{options[27].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of options[27].options"><label>{{item}}</label>
-                          </mat-option>
+                        <mat-select multiple [(ngModel)]="options[27].modelValue" (selectionChange)="setFilteredItemsOptions(options[27],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[27].options" [value]="item">{{item}}</mat-option>
                         </mat-select>
-                      </mat-form-field>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Ref3" (mousedown)="onMouseDown(i, 27, 'Ref3')" (mouseup)="onMouseUp(i, 27, 'Ref3')"
                       *matCellDef="let element; let i = index"
@@ -629,14 +808,12 @@
                   <ng-container matColumnDef="Code_barres">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_barres
                       <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{options[28].columnProp}}"
-                          [(ngModel)]="options[28].modelValue"
-                          (selectionChange)="setFilteredItemsOptions(options[28],$event)">
-                          <mat-option value="">-- Select {{options[28].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of options[28].options"><label>{{item}}</label>
-                          </mat-option>
+                        <mat-select multiple [(ngModel)]="options[28].modelValue" (selectionChange)="setFilteredItemsOptions(options[28],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[28].options" [value]="item">{{item}}</mat-option>
                         </mat-select>
-                      </mat-form-field>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Code_barres" (mousedown)="onMouseDown(i, 28, 'Code_barres')"
                       (mouseup)="onMouseUp(i, 28, 'Code_barres')" *matCellDef="let element; let i = index"
@@ -647,14 +824,12 @@
                   <ng-container matColumnDef="Nom_tournee">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Nom_tournee
                       <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{options[29].columnProp}}"
-                          [(ngModel)]="options[29].modelValue"
-                          (selectionChange)="setFilteredItemsOptions(options[29],$event)">
-                          <mat-option value="">-- Select {{options[29].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of options[29].options"><label>{{item}}</label>
-                          </mat-option>
+                        <mat-select multiple [(ngModel)]="options[29].modelValue" (selectionChange)="setFilteredItemsOptions(options[29],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[29].options" [value]="item">{{item}}</mat-option>
                         </mat-select>
-                      </mat-form-field>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Nom_tournee" (mousedown)="onMouseDown(i, 29, 'Nom_tournee')"
                       (mouseup)="onMouseUp(i, 29, 'Nom_tournee')" *matCellDef="let element; let i = index"
@@ -664,7 +839,7 @@
 
                   <ng-container matColumnDef="Arret">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Arret
-                      <mat-form-field class="form-column" appearance="fill">
+                      <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[30].columnProp}}"
                           [(ngModel)]="options[30].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[30],$event)">
@@ -672,7 +847,14 @@
                           <mat-option [value]="item" *ngFor="let item of options[30].options"><label>{{item}}</label>
                           </mat-option>
                         </mat-select>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select multiple [(ngModel)]="options[30].modelValue" (selectionChange)="setFilteredItemsOptions(options[30],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options[30].options" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
                     </th>
                     <td mat-cell id="Arret" (mousedown)="onMouseDown(i, 30, 'Arret')"
                       (mouseup)="onMouseUp(i, 30, 'Arret')" *matCellDef="let element; let i = index"

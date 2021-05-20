@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('accounts.urls')),
     path('api/', include('core.urls')),
+    path('api/', include('kpi.urls')),
     path('talendEsb/', include('talendEsb.urls')),
     path('salesforceEsb/', include('salesforceEsb.urls')),
     path('urbantzEsb/', include('urbantzEsb.urls')),

@@ -11,6 +11,7 @@ from sftpConnectionToExecutionServer.views import sftp
 from .models import SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto
 import pandas as pd
 import jsonpickle
+import os
 
 talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev/750137b1abc34995959f89a19a9aa489'
 
@@ -163,6 +164,59 @@ def correctLivraisonFile(request):
 	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
+
+
+@api_view(['POST'])
+def correctAllFiles(request):
+	transaction_id = request.data['transaction_id']
+	transaction = TransactionsLivraison.objects.get(id=transaction_id)
+	transaction.statut = "En attente"
+	transaction.save()
+	fileReplacementLivraison = request.data['fileReplacementLivraison']
+	fileReplacementMAD = request.data['fileReplacementMAD']
+	fileReplacementMetadata = request.data['fileReplacementMetadata']
+	fileReplacementException = request.data['fileReplacementException']
+
+	fileNameLivraison = "Livraisons.xlsx"
+	fileNameMAD = "ToVerifyQTE_MAD_Livraisons.xlsx"
+	fileNameMetadata = "ExceptionFacturationValue_Livraisons.xlsx"
+	fileNameException = "Livraisons_Exception.xlsx"
+	jobs_to_start = []
+
+
+	if fileReplacementLivraison != None :
+		df = pd.DataFrame(fileReplacementLivraison['rows'], columns=fileReplacementLivraison['columns'])
+
+		df.to_excel(fileNameLivraison, index=False)
+		sftp.put(localpath=fileNameLivraison, remotepath=transaction.fichier_livraison_sftp)
+		jobs_to_start.append(madPlanJobList[8])
+
+	if fileReplacementMAD != None :
+		df = pd.DataFrame(fileReplacementMAD['rows'], columns=fileReplacementMAD['columns'])
+
+		df.to_excel(fileNameMAD, index=False)
+		sftp.put(localpath=fileNameMAD, remotepath=transaction.fichier_mad_sftp)
+		jobs_to_start.append(madPlanJobList[7])
+
+	if fileReplacementMetadata != None :
+		df = pd.DataFrame(fileReplacementMetadata['rows'], columns=fileReplacementMetadata['columns'])
+
+		df.to_excel(fileNameMetadata, index=False)
+		sftp.put(localpath=fileNameMetadata, remotepath=transaction.fichier_metadata_sftp)
+		jobs_to_start.append(madPlanJobList[6])
+
+	if fileReplacementException != None :
+		df = pd.DataFrame(fileReplacementException['rows'], columns=fileReplacementException['columns'])
+
+		df.to_excel(fileNameException, index=False)
+		sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
+		jobs_to_start.append(madPlanJobList[5])
+
+
+	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
+
+	startEngineOnMadFiles(madObjectToPost)
+	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):
 	requests.post(talendUrlMADFileWebHook, json=jsonpickle.encode(madObjectToPost,unpicklable=False))

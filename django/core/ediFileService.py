@@ -289,19 +289,36 @@ def createFileFromColumnAndRowsAndUpdateCore(columns, rows, fileId):
     fileDB = EDIfile.objects.select_related('client').get(pk=fileId)
     clientDB = fileDB.client
     fileName = fileDB.file.name
-    createFileEdiFromColumnAndRows(columns, rows, fileId)
+    fileDB.status = "En attente"
+    fileDB.save()
+    createFileEdiFromColumnAndRows(columns, rows, fileId , "edi")
     data = [{"filePath": fileName, "ClientOwner": clientDB.code_client, "fileId": fileDB.id}]
     startEngineOnEdiFilesWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 
-def createFileEdiFromColumnAndRows(columns, rows, fileId):
+def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
     fileDB = EDIfile.objects.select_related('client').get(pk=fileId)
+
     clientDB = fileDB.client
     df = pd.DataFrame(rows, columns=columns)
-    fileName = fileDB.file.name
+    fileName : str
+    if fileType == "correct" :
+        fileName = fileDB.validated_orders
+        path_base = path_racine_output
+        fileDB.number_correct_commands = len(rows)
+        fileDB.save()
+    elif fileType == "error" :
+        fileName = fileDB.wrong_commands
+        path_base = path_racine_output
+        fileDB.number_wrong_commands = len(rows)
+        fileDB.save()
+    else :
+        fileName = fileDB.file.name
+        path_base = path_racine_input
+
     df.to_excel(fileName, index=False)
     ftp = connect()
-    ftp.cwd(path_racine_input + clientDB.code_client)
+    ftp.cwd(path_base + clientDB.code_client)
     file = open(fileName, 'rb')
     print(os.path.basename(fileName))
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)

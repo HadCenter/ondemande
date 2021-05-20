@@ -11,6 +11,7 @@ from sftpConnectionToExecutionServer.views import sftp
 from .models import SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto
 import pandas as pd
 import jsonpickle
+import os
 
 talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev/750137b1abc34995959f89a19a9aa489'
 
@@ -187,7 +188,7 @@ def correctAllFiles(request):
 		df = pd.DataFrame(fileReplacementLivraison['rows'], columns=fileReplacementLivraison['columns'])
 
 		df.to_excel(fileNameLivraison, index=False)
-		sftp.put(localpath=fileReplacementLivraison, remotepath=transaction.fichier_livraison_sftp)
+		sftp.put(localpath=fileNameLivraison, remotepath=transaction.fichier_livraison_sftp)
 		jobs_to_start.append(madPlanJobList[8])
 
 	if fileReplacementMAD != None :

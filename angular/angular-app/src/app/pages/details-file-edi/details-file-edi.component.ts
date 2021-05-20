@@ -696,7 +696,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   
   filterItems(filterValue : string) {
     return this.files.filter((item) => {
-      return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
+      return JSON.stringify(Object.values(item)).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
 

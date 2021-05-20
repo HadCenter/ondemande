@@ -289,6 +289,8 @@ def createFileFromColumnAndRowsAndUpdateCore(columns, rows, fileId):
     fileDB = EDIfile.objects.select_related('client').get(pk=fileId)
     clientDB = fileDB.client
     fileName = fileDB.file.name
+    fileDB.status = "En attente"
+    fileDB.save()
     createFileEdiFromColumnAndRows(columns, rows, fileId , "edi")
     data = [{"filePath": fileName, "ClientOwner": clientDB.code_client, "fileId": fileDB.id}]
     startEngineOnEdiFilesWithData(data)
@@ -296,15 +298,20 @@ def createFileFromColumnAndRowsAndUpdateCore(columns, rows, fileId):
 
 def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
     fileDB = EDIfile.objects.select_related('client').get(pk=fileId)
+
     clientDB = fileDB.client
     df = pd.DataFrame(rows, columns=columns)
     fileName : str
     if fileType == "correct" :
         fileName = fileDB.validated_orders
         path_base = path_racine_output
+        fileDB.number_correct_commands = len(rows)
+        fileDB.save()
     elif fileType == "error" :
         fileName = fileDB.wrong_commands
         path_base = path_racine_output
+        fileDB.number_wrong_commands = len(rows)
+        fileDB.save()
     else :
         fileName = fileDB.file.name
         path_base = path_racine_input

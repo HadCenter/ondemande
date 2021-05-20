@@ -58,7 +58,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   copySelectionMad: any = [];
   copyFilterMad: any = [];
   rowsFichierLivraison: any = [];
-  fileTocheck: { transaction_id: any; fileReplacement: { columns: any; rows: any; } };
+  fileTocheck: any;
   arrayException: any = [];
   arrayMetaData: any = [];
   arrayMad: any = [];
@@ -932,6 +932,40 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     }
   }
 
+  /**
+   * Correct all transaction files
+   */
+  correctionAllFile(){
+    this.fileTocheck = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacementLivraison: {
+        columns: this.arrayLivraison.columns,
+        rows: this.copyFilterLivraison.map(Object.values),
+      },
+      fileReplacementMAD: {
+        columns: this.arrayMad.columns,
+        rows: this.copyFilterMad.map(Object.values),
+      },
+      fileReplacementMetadata: {
+        columns: this.arrayMetaData.columns,
+        rows: this.copyFilterMetaData.map(Object.values),
+      },
+      fileReplacementException: {
+        columns: this.arrayException.columns,
+        rows: this.copyFilterException.map(Object.values),
+      },
+
+    }
+    console.error(this.fileTocheck)
+    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+    this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
+      console.log('resultat correction all', res);
+      if (res.message == "ok") {
+        this.router.navigate(['/list-transaction']);
+      }
+    })
+  
+  }
   /**
 * Correct the file
 */

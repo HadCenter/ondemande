@@ -536,7 +536,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.showValid = false;
       this.fileValid.columns.unshift("Delete");  //add column Delete
       // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
-     console.log("displayedColumnsValid",this.displayedColumnsValid)
       console.warn('File valid', this.fileValid)
     })
 
@@ -573,8 +572,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     */
   rearrangeAttributes() {
     //Fix selected attribute
-    console.error("copyfilewrong", this.copyFileWrong)
-    //Fix selected attribute
     this.copyFileWrong.forEach(element => {
       if (element.selected == 1) { this.selection.push(element.rowId) } //push element already checked on selection
       if (this.selection.includes(element.rowId)) { //if rowId exist on selection
@@ -604,8 +601,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   rearrangeAttributesDelete() {
     //Fix selected attribute
-    console.error("copyfilewrong", this.copyFileWrong)
-    //Fix selected attribute
     this.copyFileWrong.forEach(element => {
       if (element.selected == 1) { this.selection.push(element.rowId) } //push element already checked on selection
       if (this.selection.includes(element.rowId)) { //if rowId exist on selection
@@ -625,9 +620,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     rows.forEach(element => {
       
       element.shift();   // remove remarque from rows
-      element.splice(element.length - 1, 1); // remove rowId & remarqueId column from rows
+      element.splice(element.length - 1, 1); // remove rowId column from rows
       element.push(element.shift()); // put selected on last column of rows
-      console.error(element)
+
     });
     //
     this.fileWrongUpdated = {
@@ -714,12 +709,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   removeUnecesseryColumnsDelete(){
     this.correctedFilerows = this.files.map(Object.values);
     this.correctedFilerows.forEach(element => {
-      console.error("***",element)
       element.shift();   // remove remarque from rows
    //   element.splice(element.length - 2, 1); // remove rowId 
       element.push(element.shift()); // put selected on last column of rows
       element.splice(element.length - 2, 1); // remove rowId 
-      console.error("remove",element)
     });
   }
 

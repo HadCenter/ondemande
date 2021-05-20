@@ -61,7 +61,7 @@
                     <tr>
                       <th *ngFor="let row of fileValid?.columns ; let i = index"
                         class="details-line mdl-data-table__cell--non-numeric">
-                        <span *ngIf="row !=='Delete'">{{row}}</span>
+                        <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
                       </th>
                     </tr>
@@ -79,7 +79,7 @@
                       <td *ngFor="let column of item; let j=index; trackBy:customTrackBy"
                         [ngClass]="(j==9 || j==10 || j==11 ||j==16 || j==21)?'remarque-column':'full-column'"
                         class="details-line mdl-data-table__cell--non-numeric">
-                        <label
+                        <label *ngIf="j!==28 && j!==29"
                           [ngClass]="(j==4 || j==5|| j==6||j==7 || j==12  )?'mini-column':'full-column'">{{column}}</label>
                       </td>
                     </tr>

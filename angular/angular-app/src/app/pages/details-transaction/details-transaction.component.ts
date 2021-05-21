@@ -82,7 +82,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     })
     var data = { "transaction_id": parseInt(this.route.snapshot.params.id) };
     this.service.seeAllFileTransaction(data).subscribe(res => {
-      console.warn(res);
       this.fichierLivraison = res.livraison;
       this.arrayLivraison = res.livraison;
       this.fichierException = res.exception;
@@ -104,7 +103,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.fichierLivraison = this.fichierLivraison;
     }
   }
-  
+
   filterItemsLivraison(filterValueLivraison : string) {
     return this.copyFilterLivraison.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValueLivraison.toLowerCase());
@@ -117,7 +116,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.fichierException = this.fichierException;
     }
   }
-  
+
   filterItemsException(filterItemsException : string) {
     return this.copyFilterException.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterItemsException.toLowerCase());
@@ -130,7 +129,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.fichierMetadata = this.fichierMetadata;
     }
   }
-  
+
   filterItemsMetadata(filterItemsMetadata : string) {
     return this.copyFilterMetaData.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterItemsMetadata.toLowerCase());
@@ -143,7 +142,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.fichierMad = this.fichierMad;
     }
   }
-  
+
   filterItemsMAD(filterItemsMAD : string) {
     return this.copyFilterMad.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterItemsMAD.toLowerCase());
@@ -181,7 +180,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.copySelectionException = this.fichierException;   //copy to use on selection
       this.copyFilterException = this.fichierException;    // copy to filter *
       this.displayedColumnsException = Object.keys(this.fichierException[0]);
-   
+
       // initialize all selectedCellsState to false
       this.fichierException.forEach(element => {
         this.selectedCellsStateException.push(Array.from({ length: this.displayedColumnsException.length - 1 }, () => false))
@@ -288,7 +287,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.optionsException.push(obj)
       }
     })
-    console.warn(this.optionsException);
   }
 
   /**
@@ -480,8 +478,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
         //--Edit cells from the same column
         if (startCol === endCol) {
-          console.log('--Edit cells from the same column');
-          console.log("fichier livraison", this.fichierLivraison)
           for (let i = startRow; i <= endRow; i++) {
             if (this.fileSelected == "livraison") {
 
@@ -499,7 +495,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           }
         } else {
           //--Edit cells starting and ending not on the same column
-          console.log('--Edit cells starting and ending not on the same column');
           for (let i = startRow; i <= endRow; i++) {
             for (let j = startCol; j <= endCol; j++) {
               if (this.fileSelected == "livraison") {
@@ -517,7 +512,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             }
           }
         }
-        console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
         if (this.fileSelected == "livraison") {
           this.fichierLivraison = dataCopy;
@@ -956,15 +950,13 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       },
 
     }
-    console.error(this.fileTocheck)
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
-      console.log('resultat correction all', res);
       if (res.message == "ok") {
         this.router.navigate(['/list-transaction']);
       }
     })
-  
+
   }
   /**
 * Correct the file
@@ -995,7 +987,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
-        console.log('resultat correction exception', res);
         if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }
@@ -1021,7 +1012,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
-        console.log('resultat correction exception', res);
         if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }
@@ -1047,7 +1037,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
-        console.log('resultat correction metadata', res);
         if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }
@@ -1074,13 +1063,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctMadFile(this.fileTocheck).subscribe(res => {
-        console.log('resultat correction mad', res);
         if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }
       })
     }
-    console.warn("**file to check**", this.fileTocheck)
   }
 
 

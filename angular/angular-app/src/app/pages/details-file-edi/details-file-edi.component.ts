@@ -93,12 +93,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
 
       var user = JSON.parse(localStorage.getItem('currentUser'));
-   //   this.rearrangeAttributesDelete();  //Remove unecessey columns
+      //   this.rearrangeAttributesDelete();  //Remove unecessey columns
       this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-      
+
       let columns = this.fileValid.columns.slice(1);
-      columns.splice(columns.length - 1, 1); 
-  
+      columns.splice(columns.length - 1, 1);
+
       this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
       this.fileTocheck = {
         fileId: this.file.idFile,
@@ -423,6 +423,15 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     })
   }
 
+  getIntersection(filter) {
+    return this.copyFileWrong.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+
+
   setFilteredItemsOptions(filter) {
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
@@ -434,14 +443,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-        this.copyFileWrong = [...this.copyFileWrong, ...this.filterChange(filter)];
-        this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
-        this.copyFileWrong = this.copyFileWrong.filter((object, index) => index === this.copyFileWrong.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.copyFileWrong = this.getIntersection(filter)
       }
       else {
-        this.copyFileWrong = [];
+        this.copyFileWrong = this.files;
         this.filterValues.forEach(element => {
-          this.copyFileWrong = this.copyFileWrong.concat(this.filterChange(element));
+          this.copyFileWrong = this.copyFileWrong.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
         this.copyFileWrong = this.copyFileWrong.filter((object, index) => index === this.copyFileWrong.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
       }
@@ -460,11 +467,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
       else {
         this.filterValues = this.filterValues.filter(function (item) {
-          console.log('item', item)
+
           return item.columnProp !== filter.columnProp;
         })
+        this.copyFileWrong = this.testFile;
         this.filterValues.forEach(element => {
-          this.copyFileWrong = this.filterChange(element)
+          this.copyFileWrong = this.copyFileWrong.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
       }
     }
@@ -507,6 +515,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         element.modelValue = ""
       }
     });
+    this.filterValues = [];
     this.copyFileWrong = this.testFile;
     this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
   }
@@ -610,15 +619,13 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
     });
     //remove column remarque & delete column & put selected on last column
-    console.warn("this.dis",this.displayedColumns)
     let columns = this.fileWrong.columns.slice(1);
     columns.splice(columns.length - 1, 1); // remove rowId from rows
     columns.push(columns.shift());
-    console.warn("this.dis",columns)
     //remove unessecerry column from rows (remarque,rowId,remarqueId)& put selected on last column
     let rows = this.copyFileWrong.map(Object.values);
     rows.forEach(element => {
-      
+
       element.shift();   // remove remarque from rows
       element.splice(element.length - 1, 1); // remove rowId column from rows
       element.push(element.shift()); // put selected on last column of rows
@@ -637,13 +644,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    * removing last column
    */
   rearrangeAttributesValidFile() {
-    console.warn('valid',this.fileValid.rows);
     this.fileValid.rows.forEach(element => {
       element.pop();
       // element.splice(element.length - 1, 1); // remove rowId & remarqueId column from rows
       // element.push(element.shift());
     });
-    console.warn('kkk',this.fileValid.rows);
   }
 
   /**
@@ -706,11 +711,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     });
   }
 
-  removeUnecesseryColumnsDelete(){
+  removeUnecesseryColumnsDelete() {
     this.correctedFilerows = this.files.map(Object.values);
     this.correctedFilerows.forEach(element => {
       element.shift();   // remove remarque from rows
-   //   element.splice(element.length - 2, 1); // remove rowId 
+      //   element.splice(element.length - 2, 1); // remove rowId 
       element.push(element.shift()); // put selected on last column of rows
       element.splice(element.length - 2, 1); // remove rowId 
     });
@@ -755,7 +760,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       })
     }
   }
-    /**** Filter items */
+  /**** Filter items */
   setFilteredItems() {
     this.copyFileWrong = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
@@ -763,7 +768,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
   }
 
-  filterItems(filterValue : string) {
+  filterItems(filterValue: string) {
     return this.files.filter((item) => {
       return JSON.stringify(Object.values(item)).toLowerCase().includes(filterValue.toLowerCase());
     });

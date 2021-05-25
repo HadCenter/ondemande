@@ -339,3 +339,41 @@ span.mat-option-text {
 th.titre-column{
   padding: 0 8px 0 8px !important;
 }
+.btn-delete{
+  background-color: transparent;
+  border-width: 0px;
+}
+.btn-delete .mat-icon {
+  color: white;
+  cursor: pointer;
+}
+td.icon-delete{
+  padding-bottom: 0px !important ;
+}
+.btn-delete .mat-icon:hover { color: red !important; }
+.mat-dialog-container {
+  background-color: #444;
+}
+button.delete-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.button--colored-teal:not([disabled])
+ {
+  margin-right: 5px;
+  background-color: #f44336 ;
+  color:white ;
+}
+.error {
+  color: red !important;
+  // background-color: red;
+}
+
+.reorder
+{
+  display: flex;
+  justify-content: space-between;
+}
+
+#conteneur
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

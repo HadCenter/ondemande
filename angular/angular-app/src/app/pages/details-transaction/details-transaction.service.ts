@@ -15,6 +15,10 @@ export class DetailsTransactionService {
 public seeAllFileTransaction (data): Observable<any> {
   return  this.http.post(`${this.url2}/seeAllFileContentMADFile`,data);
 }
+
+public correctAllFiles(data): Observable<any> {
+  return  this.http.post(`${this.url1}/correctAllFiles`,data);
+}
 public correctMadFile(data): Observable<any> {
   return  this.http.post(`${this.url1}/correctMADFile`,data);
 }

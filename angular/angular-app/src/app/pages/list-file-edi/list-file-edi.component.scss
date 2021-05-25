@@ -288,4 +288,16 @@ a{
   option {
     color: black;
 }
+.label-wrong{
+  font-weight: 400;
+  color: #f44336;
+}
+.label-correct{
+  color: #00d45a;
+  font-weight: 400;
+}
+
+span.border{
+  border-radius: 10px 10px 10px 10px;
+}
 

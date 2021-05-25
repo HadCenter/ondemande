@@ -10,6 +10,7 @@ urlpatterns = [
     path('correctMetadataFile', views.correctMetadataFile),
     path('correctMADFile', views.correctMADFile),
     path('correctLivraisonFile', views.correctLivraisonFile),
+    path('correctAllFiles', views.correctAllFiles),
 
     path('getAllTransactionMadLivraison', views.getAllTransactionMadLivraison),
     path('getSingleTransactionMadLivraison/<int:pk>', views.getSingleTransactionMadLivraison)

@@ -1,0 +1,27 @@
+body {
+    padding-top: 20px;
+    padding-left: 20px;
+    box-sizing: border-box;
+  }
+  base-card.card-dialog {
+    box-shadow: none;
+  }
+  .title-form{
+    color: white;
+  }
+ 
+  .mat-form-field-ripple {
+    background-color: #00bcd4!important;
+  }
+ 
+  
+  .card-content{
+  padding: 20px 16px !important;
+  }
+  .mssg-content{
+    text-align: center;
+    font-size: initial;
+  }
+  .btn-actions{
+    justify-content: flex-end;
+  }

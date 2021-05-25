@@ -72,7 +72,7 @@
               </mat-expansion-panel-header>
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderLivraisonFile"></app-loader>
-              <div *ngIf="fichierLivraison.length>0" class="content-table">
+              <div *ngIf="fichierLivraison !==null && fichierLivraison.length>0" class="content-table">
                 <table mat-table [dataSource]="fichierLivraison"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 
@@ -357,7 +357,7 @@
               </mat-expansion-panel-header>
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderExceptionFile"></app-loader>
-              <div *ngIf="fichierException.length>0" class="content-table">
+              <div *ngIf="fichierException !==null && fichierException.length>0" class="content-table">
                 <table mat-table [dataSource]="fichierException"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
                   <!-- Date Column -->
@@ -672,7 +672,7 @@
               </mat-expansion-panel-header>
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderMetadataFile"></app-loader>
-              <div *ngIf="fichierMetadata.length>0" class="content-table">
+              <div *ngIf="fichierMetadata !==null && fichierMetadata.length>0" class="content-table">
                 <table mat-table [dataSource]="fichierMetadata"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
                   <!-- Date Column -->
@@ -1051,7 +1051,7 @@
               </mat-expansion-panel-header>
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderMadFile"></app-loader>
-              <div *ngIf="fichierMad.length>0" class="content-table">
+              <div *ngIf="fichierMad !==null && fichierMad.length>0" class="content-table">
                 <table mat-table [dataSource]="fichierMad"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 

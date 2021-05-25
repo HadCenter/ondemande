@@ -149,7 +149,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     });
   }
   rearrangeFileLivraison() {
-    if (this.fichierLivraison.rows.length > 0) {
+    if (this.fichierLivraison!==null && this.fichierLivraison.rows.length > 0) {
       this.fichierLivraison.rows.splice(0, 0, this.fichierLivraison.columns);
       this.fichierLivraison = this.convertToArrayOfObjects(this.fichierLivraison.rows);
       this.fichierLivraison = this.fichierLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
@@ -174,7 +174,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   rearrangeFileException() {
-    if (this.fichierException.rows.length > 0) {
+    if (this.fichierException!==null &&this.fichierException.rows.length > 0) {
       this.fichierException.rows.splice(0, 0, this.fichierException.columns);
       this.fichierException = this.convertToArrayOfObjects(this.fichierException.rows);
       this.copySelectionException = this.fichierException;   //copy to use on selection
@@ -198,7 +198,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   rearrangeFileMAD() {
-    if (this.fichierMad.rows.length > 0) {
+    if (this.fichierMad!==null && this.fichierMad.rows.length > 0) {
 
       this.fichierMad.rows.splice(0, 0, this.fichierMad.columns);
       this.fichierMad = this.convertToArrayOfObjects(this.fichierMad.rows);
@@ -223,7 +223,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
 
   rearrangeFileMetadata() {
-    if (this.fichierMetadata.rows.length > 0) {
+    if (this.fichierMetadata!==null && this.fichierMetadata.rows.length > 0) {
       this.fichierMetadata.rows.splice(0, 0, this.fichierMetadata.columns);
       this.fichierMetadata = this.convertToArrayOfObjects(this.fichierMetadata.rows);
       this.copySelectionMetaData = this.fichierMetadata;   //copy to use on selection

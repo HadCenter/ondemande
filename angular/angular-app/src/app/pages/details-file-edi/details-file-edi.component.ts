@@ -18,9 +18,12 @@ export interface MouseEvent {
 })
 export class DetailsFileEdiComponent extends UpgradableComponent implements OnInit {
   public filterValue: any;
+  public filterValueValid:any;
   file: any;
   fileWrong: any = [];
   fileValid: any;
+  copyFileValid:any;
+  copyFromFileValid:any;
   column: string;
   public snackAction = 'Ok';
   fileTocheck: any;
@@ -542,10 +545,12 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
     this.fileService.getFileEdi(data).subscribe(res => {
       this.fileValid = res;
+      this.copyFileValid=res.rows;
+      this.copyFromFileValid=res.rows;
       this.showValid = false;
       this.fileValid.columns.unshift("Delete");  //add column Delete
       // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
-      console.warn('File valid', this.fileValid)
+      console.warn('File valid', this.fileValid);
     })
 
   }
@@ -644,7 +649,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    * removing last column
    */
   rearrangeAttributesValidFile() {
-    this.fileValid.rows.forEach(element => {
+    this.copyFromFileValid.forEach(element => {
       element.pop();
       // element.splice(element.length - 1, 1); // remove rowId & remarqueId column from rows
       // element.push(element.shift());
@@ -678,7 +683,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         fileId: this.file.idFile,
         account_id: user.id,
         columns: this._fileWrong.columns,
-        rows: this.fileValid.rows.concat(this.correctedFilerows),
+        rows: this.copyFileValid.concat(this.correctedFilerows),
 
       }
     }
@@ -771,6 +776,21 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   filterItems(filterValue: string) {
     return this.files.filter((item) => {
       return JSON.stringify(Object.values(item)).toLowerCase().includes(filterValue.toLowerCase());
+    });
+  }
+
+  /**** Filter items on valid file */
+  setFilteredItemsValid() {
+    this.fileValid.rows = this.filterItemsValid(this.filterValueValid);
+    if (this.filterValueValid === '') {
+      this.fileValid.rows = this.fileValid.rows;
+    }
+  }
+
+  filterItemsValid(filterValueValid: string) {
+
+    return this.copyFileValid.filter((item) => {
+      return JSON.stringify(Object.values(item)).toLowerCase().indexOf(filterValueValid.toLowerCase()) != -1
     });
   }
 

@@ -36,8 +36,17 @@
 
     <div class="content-labels">
       <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-        <base-card-title>
+        <base-card-title class="reorder">
+        <div id="conteneur">
           <label class="label-success">Prestations validées</label>
+          </div>
+          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+            <div class="mdl-textfield label-search">
+              <input class="mdl-textfield__input" type="text" id="search1" (input)="setFilteredItemsValid()"
+                     [(ngModel)]="filterValueValid" placeholder="Rechercher" autocomplete="off" />
+              <label class="mdl-textfield__label" for="search1"></label>
+            </div>
+          </div>
         </base-card-title>
         <base-card-body class="content-file-line">
           <mat-accordion>

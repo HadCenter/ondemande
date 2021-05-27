@@ -54,6 +54,16 @@ def client_detail(request, pk):
     client_serializer = ClientSerializer(client)
     return JsonResponse(client_serializer.data)
 
+@api_view(['PUT'])
+def client_detail_update(request, pk):
+
+
+    client = getClientInfo(pk)
+    client.token = request.data['token']
+    client.save()
+    client_serializer = ClientSerializer(client)
+    return JsonResponse(client_serializer.data)
+
 
 
 @api_view(['GET'])

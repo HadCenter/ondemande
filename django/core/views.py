@@ -59,7 +59,8 @@ def client_detail_update(request, pk):
 
 
     client = getClientInfo(pk)
-    client.token = request.data['token']
+
+    client.update(token = request.data['token'])
     client_serializer = ClientSerializer(client)
     return JsonResponse(client_serializer.data)
 

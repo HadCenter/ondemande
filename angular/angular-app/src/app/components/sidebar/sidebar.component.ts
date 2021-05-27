@@ -29,7 +29,13 @@ export class SidebarComponent extends BaseSidebarComponent {
       this.menu = [
     { name : "Accueil" , link: '/home', icon: 'list' },
     { name: 'Clients', link: '/list-client', icon: 'list' },
-    { name: 'Fichiers EDI', link: '/list-file-edi', icon: 'list' },
+    {
+      name: 'Intégration', children: [
+      { name: 'Transport', link: '/list-file-edi' },
+      { name: 'Logistique', link: '/logistique' },
+      ],
+      icon: 'list',
+    },
     { name : "Fichiers livraisons" , link: '/list-transaction', icon: 'list' },
     { name : "Utilisateurs" , link: '/users', icon: 'list' },
     ];
@@ -37,7 +43,13 @@ export class SidebarComponent extends BaseSidebarComponent {
       this.menu = [
     { name : "Accueil" , link: '/home', icon: 'list' },
     { name: 'Clients', link: '/list-client', icon: 'list' },
-    { name: 'Fichiers EDI', link: '/list-file-edi', icon: 'list' },
+    {
+      name: 'Intégration', children: [
+      { name: 'Transport', link: '/list-file-edi' },
+      { name: 'Logistique', link: '/logistique' },
+      ],
+      icon: 'list',
+    },
     { name : "Fichiers livraisons" , link: '/list-transaction', icon: 'list' },
     ];
     }

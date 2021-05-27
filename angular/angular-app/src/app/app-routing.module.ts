@@ -11,6 +11,7 @@ const routes: Routes = [
   {
     path: '', component: CommonLayoutComponent, children: [
       { path: 'list-file-edi', loadChildren: () => import('./pages/list-file-edi/list-file-edi.module').then(m => m.ListFileEdiModule), canActivate: [AuthGuard] },
+      { path: 'logistique', loadChildren: () => import('./pages/magistor/magistor.module').then(m => m.MagistorModule), canActivate: [AuthGuard] },
       { path: 'list-client', loadChildren: () => import('./pages/list-clients/list-clients.module').then(m => m.ListClientsModule), canActivate: [AuthGuard] },
       // { path: 'create-client', loadChildren: () => import('./pages/create-client/create-client.module').then(m => m.CreateClientModule), canActivate: [AuthGuard] },
       // { path: 'import-file-edi', loadChildren: () => import('./pages/import-file-edi/import-file-edi.module').then(m => m.ImportFileEdiModule), canActivate: [AuthGuard] },

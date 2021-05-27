@@ -10,7 +10,7 @@ urlpatterns = [
     path("getFilesByClient/", views.getFilesByClient, name = "file-list"),
     path('getClient/<int:pk>', views.client_detail),
     path('getFile/<int:pk>', views.file_detail),
-    path('updateClient/<int:pk>', views.client_detail),
+    path('updateClient/<int:pk>', views.client_detail_update),
     path('downloadFile/', views.downloadFileName, name = "upload-file"),
     path('seeFileContent', views.seeFileContent, name="seeFileContent"),
     path('createFileFromColumnAndRowsAndUpdate/', views.createFileFromColumnAndRowsAndUpdate, name="createFileFromColumnAndRowsAndUpdate"),

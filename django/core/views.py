@@ -105,11 +105,11 @@ def fileList(request):
     return HttpResponse(jsonpickle.encode(listFiles, unpicklable=False), content_type="application/json")
 
 
-@api_view(['POST'])
-def getFilesByClient(request):
-    clientCode = request.data['client_code']
+@api_view(['GET'])
+def getFilesByClient(request,pk):
 
-    listFiles = getFilesEdiByClient(clientCode)
+
+    listFiles = getFilesEdiByClient(pk)
 
     return HttpResponse(jsonpickle.encode(listFiles, unpicklable=False), content_type="application/json")
 

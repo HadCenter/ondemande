@@ -40,6 +40,7 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   clients = [];
+  copyClientsPerPagination = [];
   show = true;
   public constructor(private authService: AuthService,private tablesService: ListClientsService,
     private router: Router,
@@ -78,14 +79,17 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
   public numPage = 0;
   public advancedTable = [];
   public getAdvancedTablePage(page, countPerPage) {
-    return this.clients.slice((page - 1) * countPerPage, page * countPerPage);
+    return this.copyClientsPerPagination.slice((page - 1) * countPerPage, page * countPerPage);
   }
 
   setFilteredItems() {
-    this.advancedTable = this.filterItems(this.filterValue);
+    this.copyClientsPerPagination = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
     }
+    this.currentPage = this.copyClientsPerPagination.length > 0 ? 1 : 0;
+    this.numPage = Math.ceil(this.copyClientsPerPagination.length / this.countPerPage);
+    this.advancedTable = this.copyClientsPerPagination.slice(0,this.countPerPage);
   }
   filterItems(filterValue) {
     return this.clients.filter((item) => {
@@ -96,12 +100,11 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
     this.tablesService.getAllClients()
       .subscribe(res => {
         this.clients = res;
+        this.copyClientsPerPagination = this.clients;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.show = false;
         this.addStatusForSearch();
-        console.log("clients", this.clients)
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
-        console.log("clients",this.advancedTable);
       },
         error => console.log(error));
   }

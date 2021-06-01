@@ -33,6 +33,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   files = [];
+  copyFilesPerPagination = [];
   show = true;
   copy_advancedTable: any[];
   allTable: any[];
@@ -71,7 +72,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   public numPage = 0;
   public advancedTable = [];
   public getAdvancedTablePage(page, countPerPage) {
-    return this.files.slice((page - 1) * countPerPage, page * countPerPage);
+    return this.copyFilesPerPagination.slice((page - 1) * countPerPage, page * countPerPage);
   }
   /* available sort value:
 -1 - desc; 	0 - no sorting; 1 - asc; null - disabled */
@@ -87,7 +88,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     }
   }
   public changeAdvanceSorting(order, index) {
-    this.files = this.sortByAttributeObject(this.files, order, index);
+    this.copyFilesPerPagination = this.sortByAttributeObject(this.copyFilesPerPagination, order, index);
   }
 
   /***Sort by diff column */
@@ -137,10 +138,13 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
   /**** Filter items */
   setFilteredItems() {
-    this.advancedTable = this.filterItems(this.filterValue);
+    this.copyFilesPerPagination = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
     }
+    this.currentPage = this.copyFilesPerPagination.length > 0 ? 1 : 0;
+    this.numPage = Math.ceil(this.copyFilesPerPagination.length / this.countPerPage);
+    this.advancedTable = this.copyFilesPerPagination.slice(0,this.countPerPage);
   }
 
   filterItems(filterValue : string) {
@@ -154,6 +158,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.getAllFiles()
       .subscribe(res => {
         this.files = res;
+        this.copyFilesPerPagination = this.files;
         console.log('files', this.files)
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);

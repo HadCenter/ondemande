@@ -12,6 +12,7 @@ import { GenererTransactionService } from './dialog/generer-transaction.service'
 export class ListTransactionComponent implements OnInit {
   showLowderListTransaction = false;
   transactions: any = [];
+  copyTransactionsPerPagination = [];
   public filterValue: any;
   public readonly sortOrder = {
     asc: 1,
@@ -64,6 +65,7 @@ export class ListTransactionComponent implements OnInit {
       .subscribe(res => {
         this.showLowderListTransaction = false;
         this.transactions = res;
+        this.copyTransactionsPerPagination = this.transactions;
         console.log(this.transactions);
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
@@ -88,7 +90,7 @@ export class ListTransactionComponent implements OnInit {
     );
   }
   public getAdvancedTablePage(page, countPerPage) {
-    return this.transactions.slice((page - 1) * countPerPage, page * countPerPage);
+    return this.copyTransactionsPerPagination.slice((page - 1) * countPerPage, page * countPerPage);
   }
   /* available sort value:
 -1 - desc; 	0 - no sorting; 1 - asc; null - disabled */
@@ -104,7 +106,7 @@ export class ListTransactionComponent implements OnInit {
     }
   }
   public changeAdvanceSorting(order, index) {
-    this.advancedTable = this.sortByAttributeObject(this.transactions, order, index);
+    this.copyTransactionsPerPagination = this.sortByAttributeObject(this.copyTransactionsPerPagination, order, index);
   }
   public sortByAttributeObject(transactions, order, index) {
     if (index == 0) {
@@ -163,10 +165,13 @@ export class ListTransactionComponent implements OnInit {
     }
   }
   setFilteredItems() {
-    this.advancedTable = this.filterItems(this.filterValue);
+    this.copyTransactionsPerPagination = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
     }
+    this.currentPage = this.copyTransactionsPerPagination.length > 0 ? 1 : 0;
+    this.numPage = Math.ceil(this.copyTransactionsPerPagination.length / this.countPerPage);
+    this.advancedTable = this.copyTransactionsPerPagination.slice(0,this.countPerPage);
   }
   filterItems(filterValue : string) {
     let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');

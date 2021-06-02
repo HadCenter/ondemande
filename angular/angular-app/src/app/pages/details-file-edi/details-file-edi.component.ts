@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ɵConsole } from '@angular/core';
+import { Component, OnInit, HostListener} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
@@ -66,6 +66,60 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.getFile(this.route.snapshot.params.id);
 
   }
+  getRefClient(element)
+  {
+    return element.Remarque_id==13 && !element.RefClient ? 'Introuvable' : element.RefClient;
+  }
+  getExpediteur(element)
+  {
+    return element.Remarque_id==1 && !element.Expediteur ? 'Introuvable' : element.Expediteur;
+  }
+  getType(element)
+  {
+    return element.Remarque_id==17 && !element.Type ? 'Introuvable' : element.Type;
+  }
+  getStart(element)
+  {
+    return element.Remarque_id==5 && !element.Start ? 'Introuvable' : element.Start;
+  }
+  getEnd(element)
+  {
+    return element.Remarque_id==7 && !element.End ? 'Introuvable' : element.End;
+  }
+  getLabels(element)
+  {
+    return element.Remarque_id==18 && !element.Labels ? 'Introuvable' : element.Labels;
+  }
+  getQuantite(element)
+  {
+    return element.Remarque_id==4 && !element.Quantite ? 'Introuvable' : element.Quantite;
+  }
+  getNomDestinataire(element)
+  {
+    return element.Remarque_id==8 && !element.Nom_destinataire ? 'Introuvable' : element.Nom_destinataire;
+  }
+  getRue(element)
+  {
+    return element.Remarque_id==9 && !element.rue ? 'Introuvable' : element.rue;
+  }
+  getVille(element)
+  {
+    return element.Remarque_id==10 && !element.ville ? 'Introuvable' : element.ville;
+  }
+  getCP(element)
+  {
+    return element.Remarque_id==2 && !element.CP ? 'Introuvable' : element.CP;
+  }
+  getRef2(element)
+  {
+    return (element.Remarque_id==19||element.Remarque_id==11) && !element.Ref2 ? 'Introuvable' : element.Ref2;
+  }
+  getRef3(element)
+  {
+    return element.Remarque_id==12 && !element.Ref3 ? 'Introuvable' : element.Ref3;
+  }
+
+
 
   // /******Open dialog Delete Row */
   // openDialog(i) {

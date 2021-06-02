@@ -229,11 +229,13 @@ th.mat-header-cell{
 }
 td.mat-cell{
   padding: 0 8px 12px 8px !important;
-  text-align: left;
   font-size: 16px;
   font-family: "Helvetica", "Arial", sans-serif;
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+td.mat-cell.center-cell-prestationsErronnees{
+  text-align: center !important;
 }
 
 label.mini-column {

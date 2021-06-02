@@ -89,7 +89,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
                       (mouseup)="onMouseUp(i, 0, 'Date','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][0], 'unselected': !selectedCellsState[i][0]}">
                       {{element.Date}} </td>
@@ -108,7 +108,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
                       (mouseup)="onMouseUp(i, 1, 'Expediteur','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
                       {{element.Expediteur}} </td>
@@ -127,7 +127,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
                       (mouseup)="onMouseUp(i, 2, 'Activite','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
                       {{element.Activite}} </td>
@@ -146,7 +146,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
                       (mouseup)="onMouseUp(i, 3, 'Categorie','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
                       {{element.Categorie}} </td>
@@ -165,7 +165,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
                       (mouseup)="onMouseUp(i, 4, 'Type_de_Service','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
@@ -185,7 +185,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
                       (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
@@ -205,7 +205,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie')"
                       (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
@@ -225,7 +225,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention')"
                       (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
@@ -245,7 +245,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
                       (mouseup)="onMouseUp(i, 8, 'Item___Quantite','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}">
@@ -265,7 +265,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 9, 'Code_postal')"
                       (mouseup)="onMouseUp(i, 9, 'Code_postal','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9]}">
@@ -285,7 +285,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 10, 'sourceHubName')"
                       (mouseup)="onMouseUp(i, 10, 'sourceHubName','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10]}">
@@ -305,7 +305,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 11, 'Round_Name')"
                       (mouseup)="onMouseUp(i, 11, 'Round_Name','livraison')"
                       [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}">
@@ -374,7 +374,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
                       (mouseup)="onMouseUp(i, 0, 'Date','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][0], 'unselected': !selectedCellsStateException[i][0]}">
                       {{element.Date}} </td>
@@ -394,7 +394,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
                       (mouseup)="onMouseUp(i, 1, 'Expediteur','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][1], 'unselected': !selectedCellsStateException[i][1]}">
                       {{element.Expediteur}} </td>
@@ -414,7 +414,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
                       (mouseup)="onMouseUp(i, 2, 'Activite','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][2], 'unselected': !selectedCellsStateException[i][2]}">
                       {{element.Activite}} </td>
@@ -434,7 +434,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
                       (mouseup)="onMouseUp(i, 3, 'Categorie','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][3], 'unselected': !selectedCellsStateException[i][3]}">
                       {{element.Categorie}} </td>
@@ -454,7 +454,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
                       (mouseup)="onMouseUp(i, 4, 'Type_de_Service','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][4], 'unselected': !selectedCellsStateException[i][4]}">
@@ -475,7 +475,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
                       (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][5], 'unselected': !selectedCellsStateException[i][5]}">
@@ -496,7 +496,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 6, 'Item___Nom')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 6, 'Item___Nom')"
                       (mouseup)="onMouseUp(i, 6, 'Item___Nom','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][6], 'unselected': !selectedCellsStateException[i][6]}">
                       {{element.Item___Nom}} </td>
@@ -516,7 +516,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 7, 'Item___Type')"
                       (mouseup)="onMouseUp(i, 7, 'Item___Type','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][7], 'unselected': !selectedCellsStateException[i][7]}">
@@ -537,7 +537,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
                       (mouseup)="onMouseUp(i, 8, 'Item___Quantite','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][8], 'unselected': !selectedCellsStateException[i][8]}">
@@ -558,7 +558,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 9, 'Code_postal')"
                       (mouseup)="onMouseUp(i, 9, 'Code_postal','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][9], 'unselected': !selectedCellsStateException[i][9]}">
@@ -580,7 +580,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 10, 'Round_Name')"
                       (mouseup)="onMouseUp(i, 10, 'Round_Name','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][10], 'unselected': !selectedCellsStateException[i][10]}">
@@ -601,7 +601,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 11, 'Remarque')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 11, 'Remarque')"
                       (mouseup)="onMouseUp(i, 11, 'Remarque','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][11], 'unselected': !selectedCellsStateException[i][11]}">
                       {{element.Remarque}} </td>
@@ -621,7 +621,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 12, 'isDeleted')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 12, 'isDeleted')"
                       (mouseup)="onMouseUp(i, 12, 'isDeleted','exception')"
                       [ngClass]="{'selected': selectedCellsStateException[i][12], 'unselected': !selectedCellsStateException[i][12]}">
                       {{element.isDeleted}} </td>
@@ -689,7 +689,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
                       (mouseup)="onMouseUp(i, 0, 'Date','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][0], 'unselected': !selectedCellsStateMetaData[i][0]}">
                       {{element.Date}} </td>
@@ -709,7 +709,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
                       (mouseup)="onMouseUp(i, 1, 'Expediteur','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][1], 'unselected': !selectedCellsStateMetaData[i][1]}">
                       {{element.Expediteur}} </td>
@@ -729,7 +729,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
                       (mouseup)="onMouseUp(i, 2, 'Activite','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][2], 'unselected': !selectedCellsStateMetaData[i][2]}">
                       {{element.Activite}} </td>
@@ -749,7 +749,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
                       (mouseup)="onMouseUp(i, 3, 'Categorie','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][3], 'unselected': !selectedCellsStateMetaData[i][3]}">
                       {{element.Categorie}} </td>
@@ -769,7 +769,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
                       (mouseup)="onMouseUp(i, 4, 'Type_de_Service','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][4], 'unselected': !selectedCellsStateMetaData[i][4]}">
@@ -790,7 +790,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
                       (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][5], 'unselected': !selectedCellsStateMetaData[i][5]}">
@@ -811,7 +811,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie')"
                       (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][6], 'unselected': !selectedCellsStateMetaData[i][6]}">
@@ -832,7 +832,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention')"
                       (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][7], 'unselected': !selectedCellsStateMetaData[i][7]}">
@@ -853,7 +853,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
                       (mouseup)="onMouseUp(i, 8, 'Item___Quantite','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][8], 'unselected': !selectedCellsStateMetaData[i][8]}">
@@ -874,7 +874,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 9, 'Code_postal')"
                       (mouseup)="onMouseUp(i, 9, 'Code_postal','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][9], 'unselected': !selectedCellsStateMetaData[i][9]}">
@@ -895,7 +895,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 10, 'sourceHubName')"
                       (mouseup)="onMouseUp(i, 10, 'sourceHubName','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][10], 'unselected': !selectedCellsStateMetaData[i][10]}">
@@ -916,7 +916,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 11, 'Round_Name')"
                       (mouseup)="onMouseUp(i, 11, 'Round_Name','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][11], 'unselected': !selectedCellsStateMetaData[i][11]}">
@@ -937,7 +937,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 12, 'sourceClosureDate')"
                       (mouseup)="onMouseUp(i, 12, 'sourceClosureDate','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][12], 'unselected': !selectedCellsStateMetaData[i][12]}">
@@ -958,7 +958,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 13, 'realInfoHasPrepared')"
                       (mouseup)="onMouseUp(i, 13, 'realInfoHasPrepared','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][13], 'unselected': !selectedCellsStateMetaData[i][13]}">
@@ -979,7 +979,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 14, 'status')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 14, 'status')"
                       (mouseup)="onMouseUp(i, 14, 'status','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][14], 'unselected': !selectedCellsStateMetaData[i][14]}">
                       {{element.status}} </td>
@@ -999,7 +999,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 15, 'metadataFACTURATION')"
                       (mouseup)="onMouseUp(i, 15, 'metadataFACTURATION','metadata')"
                       [ngClass]="{'selected': selectedCellsStateMetaData[i][15], 'unselected': !selectedCellsStateMetaData[i][15]}">
@@ -1068,7 +1068,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
                       (mouseup)="onMouseUp(i, 0, 'Date','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][0], 'unselected': !selectedCellsStateMad[i][0]}">
                       {{element.Date}} </td>
@@ -1087,7 +1087,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
                       (mouseup)="onMouseUp(i, 1, 'Expediteur','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][1], 'unselected': !selectedCellsStateMad[i][1]}">
                       {{element.Expediteur}} </td>
@@ -1106,7 +1106,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
                       (mouseup)="onMouseUp(i, 2, 'Activite','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][2], 'unselected': !selectedCellsStateMad[i][2]}">
                       {{element.Activite}} </td>
@@ -1125,7 +1125,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
                       (mouseup)="onMouseUp(i, 3, 'Categorie','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][3], 'unselected': !selectedCellsStateMad[i][3]}">
                       {{element.Categorie}} </td>
@@ -1144,7 +1144,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
                       (mouseup)="onMouseUp(i, 4, 'Type_de_Service','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][4], 'unselected': !selectedCellsStateMad[i][4]}">
@@ -1164,7 +1164,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
                       (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][5], 'unselected': !selectedCellsStateMad[i][5]}">
@@ -1184,7 +1184,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie')"
                       (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][6], 'unselected': !selectedCellsStateMad[i][6]}">
@@ -1204,7 +1204,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention')"
                       (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][7], 'unselected': !selectedCellsStateMad[i][7]}">
@@ -1224,7 +1224,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
                       (mouseup)="onMouseUp(i, 8, 'Item___Quantite','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][8], 'unselected': !selectedCellsStateMad[i][8]}">
@@ -1244,7 +1244,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 9, 'Code_postal')" (mouseup)="onMouseUp(i, 9, 'Code_postal','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][9], 'unselected': !selectedCellsStateMad[i][9]}">
                       {{element.Code_postal}} </td>
@@ -1263,7 +1263,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 10, 'sourceHubName')"
                       (mouseup)="onMouseUp(i, 10, 'sourceHubName','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][10], 'unselected': !selectedCellsStateMad[i][10]}">
@@ -1283,7 +1283,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell *matCellDef="let element ; let i = index"
+                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
                       (mousedown)="onMouseDown(i, 11, 'Round_Name')" (mouseup)="onMouseUp(i, 11, 'Round_Name','mad')"
                       [ngClass]="{'selected': selectedCellsStateMad[i][11], 'unselected': !selectedCellsStateMad[i][11]}">
                       {{element.Round_Name}} </td>

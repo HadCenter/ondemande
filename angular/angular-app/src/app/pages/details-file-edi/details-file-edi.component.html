@@ -177,7 +177,7 @@
                         </mat-form-field>
 
                     </th>
-                    <td mat-cell *matCellDef="let element" class="label-remarque"> {{element.Remarque}} </td>
+                    <td mat-cell *matCellDef="let element" class="center-cell-prestationsErronnees label-remarque"> {{element.Remarque}} </td>
                   </ng-container>
                   <ng-container matColumnDef="selected">
                     <th  mat-header-cell *matHeaderCellDef>
@@ -212,7 +212,7 @@
                         </mat-form-field>
 
                     </th>
-                    <td mat-cell id="RefClient" (mousedown)="onMouseDown(i, 3, 'RefClient')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="RefClient" (mousedown)="onMouseDown(i, 3, 'RefClient')"
                       (mouseup)="onMouseUp(i, 3, 'RefClient')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3],'error': (element.Remarque_id==13 ||element.Remarque_id==14 || !element.RefClient)}">
                       {{element.RefClient || 'Introuvable'}} </td>
@@ -240,7 +240,7 @@
                         </mat-form-field>
 
                     </th>
-                    <td mat-cell id="Expediteur" (mousedown)="onMouseDown(i, 4, 'Expediteur')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Expediteur" (mousedown)="onMouseDown(i, 4, 'Expediteur')"
                       (mouseup)="onMouseUp(i, 4, 'Expediteur')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4], 'error': element.Remarque_id==1 || !element.Expediteur}">
                       {{element.Expediteur || 'Introuvable'}} </td>
@@ -267,7 +267,7 @@
                         </mat-form-field>
 
                     </th>
-                    <td mat-cell id="Type" (mousedown)="onMouseDown(i, 5, 'Type')" (mouseup)="onMouseUp(i, 5, 'Type')"
+                    <td mat-cell id="Type" class="center-cell-prestationsErronnees" (mousedown)="onMouseDown(i, 5, 'Type')" (mouseup)="onMouseUp(i, 5, 'Type')"
                       *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5], 'error': element.Remarque_id==17 || !element.Type}">
                       {{element.Type || 'Introuvable'}} </td>
@@ -292,7 +292,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Date_livraison" (mousedown)="onMouseDown(i, 6, 'Date_livraison')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Date_livraison" (mousedown)="onMouseDown(i, 6, 'Date_livraison')"
                       (mouseup)="onMouseUp(i, 6, 'Date_livraison')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6], 'error': (element.Remarque_id==3 ||element.Remarque_id==20 || !element.Date_livraison)}">
                       {{element.Date_livraison || 'Introuvable'}} </td>
@@ -318,7 +318,7 @@
                         </mat-form-field>
 
                     </th>
-                    <td mat-cell id="Start" (mousedown)="onMouseDown(i, 7, 'Start')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Start" (mousedown)="onMouseDown(i, 7, 'Start')"
                       (mouseup)="onMouseUp(i, 7, 'Start')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7], 'error': (element.Remarque_id==5 ||element.Remarque_id==6 || !element.Start)}">
                       {{element.Start || 'Introuvable'}} </td>
@@ -344,7 +344,7 @@
                         </mat-form-field>
 
                     </th>
-                    <td mat-cell id="End" (mousedown)="onMouseDown(i, 8, 'End')" (mouseup)="onMouseUp(i, 8, 'End')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="End" (mousedown)="onMouseDown(i, 8, 'End')" (mouseup)="onMouseUp(i, 8, 'End')"
                       *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8], 'error': element.Remarque_id==7 || !element.End}">
                       {{element.End || 'Introuvable'}} </td>
@@ -371,7 +371,7 @@
                         </mat-form-field>
 
                     </th>
-                    <td mat-cell id="Labels" (mousedown)="onMouseDown(i, 9, 'Labels')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Labels" (mousedown)="onMouseDown(i, 9, 'Labels')"
                       (mouseup)="onMouseUp(i, 9, 'Labels')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9], 'error': element.Remarque_id==18 || !element.Labels}">
                       {{element.Labels || 'Introuvable'}} </td>
@@ -395,7 +395,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Quantite" (mousedown)="onMouseDown(i, 10, 'Quantite')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Quantite" (mousedown)="onMouseDown(i, 10, 'Quantite')"
                       (mouseup)="onMouseUp(i, 10, 'Quantite')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10], 'error': element.Remarque_id==4 || !element.Quantite}">
                       {{element.Quantite || 'Introuvable'}} </td>
@@ -420,7 +420,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="CodeArticle" (mousedown)="onMouseDown(i, 11, 'CodeArticle')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="CodeArticle" (mousedown)="onMouseDown(i, 11, 'CodeArticle')"
                       (mouseup)="onMouseUp(i, 11, 'CodeArticle')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11], 'error': !element.CodeArticle}">
                       {{element.CodeArticle || 'Introuvable'}} </td>
@@ -445,7 +445,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Nom_destinataire" (mousedown)="onMouseDown(i, 12, 'Nom_destinataire')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Nom_destinataire" (mousedown)="onMouseDown(i, 12, 'Nom_destinataire')"
                       (mouseup)="onMouseUp(i, 12, 'Nom_destinataire')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12], 'error': element.Remarque_id==8 || !element.Nom_destinataire}">
                       {{element.Nom_destinataire || 'Introuvable'}} </td>
@@ -470,7 +470,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="rue" (mousedown)="onMouseDown(i, 13, 'rue')" (mouseup)="onMouseUp(i, 13, 'rue')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="rue" (mousedown)="onMouseDown(i, 13, 'rue')" (mouseup)="onMouseUp(i, 13, 'rue')"
                       *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13], 'error': element.Remarque_id==9 || !element.rue}">
                       {{element.rue || 'Introuvable'}} </td>
@@ -495,7 +495,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="ville" (mousedown)="onMouseDown(i, 14, 'ville')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="ville" (mousedown)="onMouseDown(i, 14, 'ville')"
                       (mouseup)="onMouseUp(i, 14, 'ville')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][14], 'unselected': !selectedCellsState[i][14], 'error': element.Remarque_id==10 || !element.ville}">
                       {{element.ville || 'Introuvable'}} </td>
@@ -520,7 +520,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="CP" (mousedown)="onMouseDown(i, 15, 'CP')" (mouseup)="onMouseUp(i, 15, 'CP')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="CP" (mousedown)="onMouseDown(i, 15, 'CP')" (mouseup)="onMouseUp(i, 15, 'CP')"
                       *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][15], 'error': element.Remarque_id==2 ||element.Remarque_id==21 || !element.CP}">
                       {{element.CP || 'Introuvable'}} </td>
@@ -544,7 +544,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Adresse2" (mousedown)="onMouseDown(i, 16, 'Adresse2')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Adresse2" (mousedown)="onMouseDown(i, 16, 'Adresse2')"
                       (mouseup)="onMouseUp(i, 16, 'Adresse2')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][16], 'unselected': !selectedCellsState[i][16], 'error': !element.Adresse2}">
                       {{element.Adresse2 || 'Introuvable'}} </td>
@@ -569,7 +569,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="CODE_interphone" (mousedown)="onMouseDown(i, 17, 'CODE_interphone')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="CODE_interphone" (mousedown)="onMouseDown(i, 17, 'CODE_interphone')"
                       (mouseup)="onMouseUp(i, 17, 'CODE_interphone')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][17], 'unselected': !selectedCellsState[i][17], 'error': !element.CODE_interphone}">
                       {{element.CODE_interphone || 'Introuvable'}} </td>
@@ -593,7 +593,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Etage" (mousedown)="onMouseDown(i, 18, 'Etage')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Etage" (mousedown)="onMouseDown(i, 18, 'Etage')"
                       (mouseup)="onMouseUp(i, 18, 'CODE_interphone')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][18], 'unselected': !selectedCellsState[i][18], 'error': !element.Etage}">
                       {{element.Etage || 'Introuvable'}} </td>
@@ -617,7 +617,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Porte" (mousedown)="onMouseDown(i, 19, 'Porte')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Porte" (mousedown)="onMouseDown(i, 19, 'Porte')"
                       (mouseup)="onMouseUp(i, 19, 'Porte')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][19], 'unselected': !selectedCellsState[i][19], 'error': !element.Porte}">
                       {{element.Porte || 'Introuvable'}} </td>
@@ -642,7 +642,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Instructions" (mousedown)="onMouseDown(i, 20, 'Instructions')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Instructions" (mousedown)="onMouseDown(i, 20, 'Instructions')"
                       (mouseup)="onMouseUp(i, 20, 'Instructions')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][20], 'unselected': !selectedCellsState[i][20], 'error': !element.Instructions}">
                       {{element.Instructions || 'Introuvable'}} </td>
@@ -667,7 +667,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Telephone" (mousedown)="onMouseDown(i, 21, 'Telephone')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Telephone" (mousedown)="onMouseDown(i, 21, 'Telephone')"
                       (mouseup)="onMouseUp(i, 21, 'Telephone')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][21], 'unselected': !selectedCellsState[i][21], 'error': !element.Telephone}">
                       {{element.Telephone || 'Introuvable'}} </td>
@@ -692,7 +692,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Tel2" (mousedown)="onMouseDown(i, 22, 'Tel2')" (mouseup)="onMouseUp(i, 22, 'Tel2')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Tel2" (mousedown)="onMouseDown(i, 22, 'Tel2')" (mouseup)="onMouseUp(i, 22, 'Tel2')"
                       *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][22], 'unselected': !selectedCellsState[i][22], 'error': !element.Tel2}">
                       {{element.Tel2 || 'Introuvable'}} </td>
@@ -717,7 +717,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Tel3" (mousedown)="onMouseDown(i, 23, 'Tel3')" (mouseup)="onMouseUp(i, 23, 'Tel3')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Tel3" (mousedown)="onMouseDown(i, 23, 'Tel3')" (mouseup)="onMouseUp(i, 23, 'Tel3')"
                       *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][23], 'unselected': !selectedCellsState[i][23], 'error': !element.Tel3}">
                       {{element.Tel3 || 'Introuvable'}} </td>
@@ -742,7 +742,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="email" (mousedown)="onMouseDown(i, 24, 'email')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="email" (mousedown)="onMouseDown(i, 24, 'email')"
                       (mouseup)="onMouseUp(i, 24, 'email')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][24], 'unselected': !selectedCellsState[i][24], 'error': !element.email}">
                       {{element.email || 'Introuvable'}} </td>
@@ -767,7 +767,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Ref_commande" (mousedown)="onMouseDown(i, 25, 'Ref_commande')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Ref_commande" (mousedown)="onMouseDown(i, 25, 'Ref_commande')"
                       (mouseup)="onMouseUp(i, 25, 'Ref_commande')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][25], 'unselected': !selectedCellsState[i][25], 'error': !element.Ref_commande}">
                       {{element.Ref_commande || 'Introuvable'}} </td>
@@ -792,7 +792,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Ref2" (mousedown)="onMouseDown(i, 26, 'Ref2')" (mouseup)="onMouseUp(i, 26, 'Ref2')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Ref2" (mousedown)="onMouseDown(i, 26, 'Ref2')" (mouseup)="onMouseUp(i, 26, 'Ref2')"
                       *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][26], 'unselected': !selectedCellsState[i][26], 'error': (element.Remarque_id==19||element.Remarque_id==11 || !element.Ref2)}">
                       {{element.Ref2 || 'Introuvable'}} </td>
@@ -808,7 +808,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Ref3" (mousedown)="onMouseDown(i, 27, 'Ref3')" (mouseup)="onMouseUp(i, 27, 'Ref3')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Ref3" (mousedown)="onMouseDown(i, 27, 'Ref3')" (mouseup)="onMouseUp(i, 27, 'Ref3')"
                       *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][27], 'unselected': !selectedCellsState[i][27], 'error': element.Remarque_id==12 || !element.Ref3}">
                       {{element.Ref3 || 'Introuvable'}} </td>
@@ -824,7 +824,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Code_barres" (mousedown)="onMouseDown(i, 28, 'Code_barres')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Code_barres" (mousedown)="onMouseDown(i, 28, 'Code_barres')"
                       (mouseup)="onMouseUp(i, 28, 'Code_barres')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][28], 'unselected': !selectedCellsState[i][28], 'error': !element.Code_barres}">
                       {{element.Code_barres || 'Introuvable'}} </td>
@@ -840,7 +840,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Nom_tournee" (mousedown)="onMouseDown(i, 29, 'Nom_tournee')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Nom_tournee" (mousedown)="onMouseDown(i, 29, 'Nom_tournee')"
                       (mouseup)="onMouseUp(i, 29, 'Nom_tournee')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][29], 'unselected': !selectedCellsState[i][29], 'error': !element.Nom_tournee}">
                       {{element.Nom_tournee || 'Introuvable'}} </td>
@@ -865,7 +865,7 @@
                         </mat-select>
                         </mat-form-field>
                     </th>
-                    <td mat-cell id="Arret" (mousedown)="onMouseDown(i, 30, 'Arret')"
+                    <td mat-cell class="center-cell-prestationsErronnees" id="Arret" (mousedown)="onMouseDown(i, 30, 'Arret')"
                       (mouseup)="onMouseUp(i, 30, 'Arret')" *matCellDef="let element; let i = index"
                       [ngClass]="{'selected': selectedCellsState[i][30], 'unselected': !selectedCellsState[i][30], 'error': !element.Arret}">
                       {{element.Arret || 'Introuvable'}} </td>

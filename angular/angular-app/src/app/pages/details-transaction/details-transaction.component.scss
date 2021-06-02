@@ -145,11 +145,14 @@ th.titre-column {
 }
 td.mat-cell {
   padding: 0 11px 12px 11px !important;
-  text-align: left;
   font-size: 16px;
   font-family: "Helvetica", "Arial", sans-serif;
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+td.mat-cell.center-cell-transactionsFiles{
+  text-align: center !important;
 }
 
 .form-column {

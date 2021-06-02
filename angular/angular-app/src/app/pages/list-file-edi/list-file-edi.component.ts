@@ -205,8 +205,10 @@ export class ListFileEDIComponent extends UpgradableComponent {
       clientCode: codeClient,
       fileName: validatedOrders,
     }
+    this.openSnackBar("Envoyé avec succès", this.snackAction);
     this.tablesService.sendFileToUrbantz(data).subscribe(res => {
       console.log("res urbantz", res);
+      this.openSnackBar("Envoyé avec succès", this.snackAction);
     })
   }
 

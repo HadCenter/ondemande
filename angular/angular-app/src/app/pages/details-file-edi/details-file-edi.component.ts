@@ -774,9 +774,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.correctedFilerows = this.files.map(Object.values);
     this.correctedFilerows.forEach(element => {
       element.shift();   // remove remarque from rows
-      //   element.splice(element.length - 2, 1); // remove rowId 
+      //   element.splice(element.length - 2, 1); // remove rowId
       element.push(element.shift()); // put selected on last column of rows
-      element.splice(element.length - 2, 1); // remove rowId 
+      element.splice(element.length - 2, 1); // remove rowId
     });
   }
 
@@ -788,8 +788,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       clientCode: this.file.contact.codeClient,
       fileName: this.file.validatedOrders,
     }
+    this.openSnackBar("Envoyé avec succès", this.snackAction);
     this.fileService.sendFileToUrbantz(data).subscribe(res => {
       console.log("res urbantz", res);
+      this.openSnackBar("Envoyé avec succès", this.snackAction);
     })
   }
 

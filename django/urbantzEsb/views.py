@@ -35,9 +35,9 @@ def SendFromFileToUrbantzAsTasks(request):
 			break
 	excelfile = pd.read_excel(request.data['fileName'])
 
-	token = Client.objects.get(code_client = request.data['clientCode'])
+	clientDB = Client.objects.get(code_client = request.data['clientCode'])
 	headers = {
-		'x-api-key' : token,
+		'x-api-key' : clientDB.token,
 		'x-api-secret' : 'E_K709uo00TO3X1Glqm4A7NOyQ88PBRwRv',
 		'Content-Type' : 'application/json'
 				}

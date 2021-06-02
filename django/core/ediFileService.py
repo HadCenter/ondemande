@@ -213,7 +213,7 @@ def getAllFileEdiData():
     return listFiles
 
 def getFilesEdiByClient(clientCode):
-    files = EDIfile.objects.select_related('client').filter(archived=False).filter(code_client=clientCode).order_by(
+    files = EDIfile.objects.select_related('client').filter(archived=False).filter(client__code_client=clientCode).order_by(
         '-created_at')
     listFiles = list()
     for fileDB in files:

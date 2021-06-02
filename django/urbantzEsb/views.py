@@ -12,6 +12,7 @@ from django.core import serializers
 import jsonpickle
 import json
 import pandas as pd
+from core.models import Client
 
 urbantzUrl = "https://api.urbantz.com/v2/task"
 path_racine_talend_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
@@ -34,8 +35,9 @@ def SendFromFileToUrbantzAsTasks(request):
 			break
 	excelfile = pd.read_excel(request.data['fileName'])
 
+	token = Client.objects.get(code_client = request.data['clientCode'])
 	headers = {
-		'x-api-key' : '0OCDfeE0zXfOjWYnV9rBaXepnJFnoPJngNLGSaGhhBCpCU6U',
+		'x-api-key' : token,
 		'x-api-secret' : 'E_K709uo00TO3X1Glqm4A7NOyQ88PBRwRv',
 		'Content-Type' : 'application/json'
 				}

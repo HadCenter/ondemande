@@ -27,7 +27,7 @@
       </base-card>
       <div style='text-align: center;'
         class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-        <button [disabled]="fileWrong?.rows?.length>0 || file?.wrongCommands !== '_'" (click)="sendFileToUrbantz()"
+        <button [disabled]="fileWrong?.rows?.length>0 || file?.wrongCommands !== '_' || file?.sendedToUrbantz || sendedToUrbantz" (click)="sendFileToUrbantz(); sendedToUrbantz = true;"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
           à Urbantz
         </button>

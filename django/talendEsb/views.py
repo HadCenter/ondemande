@@ -23,9 +23,9 @@ def startEngineOnEdiFiles(request):
 	return startEngineOnEdiFilesWithData(request.data)
 
 def startEngineOnEdiFilesWithData(data):
-	fileEdi = EDIfile.objects.get(pk=data[0]["fileId"])
-	fileEdi.cliqued = True
-	fileEdi.save()
+
+	EDIfile.objects.filter(pk=data[0]["fileId"]).update(cliqued=True)
+
 	requests.post(talendUrlEDIFileWebHook, json=data)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 

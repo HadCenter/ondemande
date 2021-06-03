@@ -63,8 +63,8 @@
               <button style="margin-left: 3px;" [disabled]="row.status!=='Terminé'" (click)="gotoDetails(row)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Détails
               </button>
-              <button style="margin-left: 3px;" [disabled]=" row.number_wrong_commands>0 || row.status!=='Terminé' "
-               (click)="sendFileToUrbantz(row.contact.codeClient, row.validatedOrders);$event.stopPropagation();"
+              <button style="margin-left: 3px;" [disabled]=" row.number_wrong_commands>0 || row.status!=='Terminé'  || row.sendedToUrbantz || sendedToUrbantz[i] "
+               (click)="sendFileToUrbantz(row);sendedToUrbantz[i] = true;$event.stopPropagation();"
               class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer à Urbantz
             </button>
               <span (click)="downloadFileInput(row.contact.codeClient, row.fileName);$event.stopPropagation();"

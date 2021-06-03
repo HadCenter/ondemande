@@ -21,6 +21,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   public completeTable: any = [];
   public filterValue: any;
   clicked = new Array();
+  sendedToUrbantz = new this.Array()
   limit = 15;
   actions: any[] = [
     { value: 'analyser', viewValue: 'Analyser' },
@@ -168,6 +169,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
         this.allTable = this.advancedTable; /****all content */
         for (var i = 0; i < this.advancedTable.length; i++) {
           this.clicked.push(false);
+          this.sendedToUrbantz.push(false);
         }
       },
         error => console.log(error));
@@ -200,12 +202,12 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.router.navigate(['/details-file-edi', row.idFile])
   }
 
-  sendFileToUrbantz(codeClient, validatedOrders) {
+  sendFileToUrbantz(row) {
     let data = {
-      clientCode: codeClient,
-      fileName: validatedOrders,
+      clientCode: row.codeClient,
+      fileName: row.validatedOrders,
+      fileId : row.idFile
     }
-    this.openSnackBar("Envoyé avec succès", this.snackAction);
     this.tablesService.sendFileToUrbantz(data).subscribe(res => {
       console.log("res urbantz", res);
       this.openSnackBar("Envoyé avec succès", this.snackAction);

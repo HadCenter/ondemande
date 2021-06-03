@@ -53,6 +53,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   rowsToDeleteValid: any = [];
   alreadyClicked: boolean = false;
   displayedColumnsValid: any;
+  sendedToUrbantz = false;
 
   constructor(private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -614,6 +615,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       .subscribe(
         data => {
           this.file = data;
+          console.log("file",this.file);
           if (this.file.validatedOrders != '_') {
             this.getValidFile();
           }
@@ -787,8 +789,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     let data = {
       clientCode: this.file.contact.codeClient,
       fileName: this.file.validatedOrders,
+      fileId : this.file.idFile
     }
-    this.openSnackBar("Envoyé avec succès", this.snackAction);
     this.fileService.sendFileToUrbantz(data).subscribe(res => {
       console.log("res urbantz", res);
       this.openSnackBar("Envoyé avec succès", this.snackAction);

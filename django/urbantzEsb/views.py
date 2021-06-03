@@ -14,6 +14,8 @@ import json
 import pandas as pd
 from core.models import Client
 
+from core.models import EDIfile
+
 urbantzUrl = "https://api.urbantz.com/v2/task"
 path_racine_talend_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
 
@@ -22,6 +24,7 @@ path_racine_talend_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
 
 def SendFromFileToUrbantzAsTasks(request):
 
+	EDIfile.objects.filter(pk=request.data["fileId"]).update(sendedToUrbantz=True)
 
 	ftp = connect()
 

@@ -204,7 +204,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
   sendFileToUrbantz(row) {
     let data = {
-      clientCode: row.codeClient,
+      clientCode: row.contact.codeClient,
       fileName: row.validatedOrders,
       fileId : row.idFile
     }

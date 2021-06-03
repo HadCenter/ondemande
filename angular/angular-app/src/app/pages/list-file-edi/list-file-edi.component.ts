@@ -208,11 +208,19 @@ export class ListFileEDIComponent extends UpgradableComponent {
       fileName: row.validatedOrders,
       fileId : row.idFile
     }
-    this.tablesService.sendFileToUrbantz(data).subscribe(res => {
-      this.sendedToUrbantz[index] = true;
-      console.log("res urbantz", res);
-      this.openSnackBar("Envoyé avec succès", this.snackAction);
-    })
+    this.tablesService.sendFileToUrbantz(data).subscribe(
+      result => {
+        // Handle result
+        console.log("res urbantz",result)
+      },
+      error => {
+        this.openSnackBar("Erreur d’envoi", this.snackAction);
+      },
+      () => {
+        // No errors
+        this.sendedToUrbantz[index] = true;
+        this.openSnackBar("Envoyé avec succès", this.snackAction);
+      })
   }
 
   /******Open dialog Import File */

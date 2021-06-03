@@ -791,11 +791,19 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       fileName: this.file.validatedOrders,
       fileId : this.file.idFile
     }
-    this.fileService.sendFileToUrbantz(data).subscribe(res => {
-      console.log("res urbantz", res);
-      this.sendedToUrbantz = true;
-      this.openSnackBar("Envoyé avec succès", this.snackAction);
-    })
+    this.fileService.sendFileToUrbantz(data).subscribe(
+      result => {
+        // Handle result
+        console.log("res urbantz",result)
+      },
+      error => {
+        this.openSnackBar("Erreur d’envoi", this.snackAction);
+      },
+      () => {
+        // No errors
+        this.sendedToUrbantz = true;
+        this.openSnackBar("Envoyé avec succès", this.snackAction);
+      })
   }
 
   openSnackBar(message: string, action: string) {

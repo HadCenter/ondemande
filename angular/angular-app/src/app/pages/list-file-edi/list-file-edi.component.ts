@@ -202,13 +202,14 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.router.navigate(['/details-file-edi', row.idFile])
   }
 
-  sendFileToUrbantz(row) {
+  sendFileToUrbantz(row,index) {
     let data = {
       clientCode: row.contact.codeClient,
       fileName: row.validatedOrders,
       fileId : row.idFile
     }
     this.tablesService.sendFileToUrbantz(data).subscribe(res => {
+      this.sendedToUrbantz[index] = true;
       console.log("res urbantz", res);
       this.openSnackBar("Envoyé avec succès", this.snackAction);
     })

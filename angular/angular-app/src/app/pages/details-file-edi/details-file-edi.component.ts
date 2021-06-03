@@ -793,6 +793,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
     this.fileService.sendFileToUrbantz(data).subscribe(res => {
       console.log("res urbantz", res);
+      this.sendedToUrbantz = true;
       this.openSnackBar("Envoyé avec succès", this.snackAction);
     })
   }

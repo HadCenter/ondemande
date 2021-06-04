@@ -12,6 +12,7 @@ class Client(models.Model):
     archived = models.BooleanField(default= False)
     id_salesforce = models.CharField( max_length=200, blank=True, null= True)
     token = models.CharField( max_length=250,blank=True, null=True)
+    token_for_flux = models.CharField( max_length=250,blank=True, null=True)
 
     def __str__(self):
         return self.nom_client

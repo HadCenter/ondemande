@@ -40,7 +40,7 @@ def SendFromFileToUrbantzAsTasks(request):
 
 	clientDB = Client.objects.get(code_client = request.data['clientCode'])
 	headers = {
-		'x-api-key' : '0OCDfeE0zXfOjWYnV9rBaXepnJFnoPJngNLGSaGhhBCpCU6U',
+		'x-api-key' : clientDB.token_for_flux,
 		'x-api-secret' : clientDB.token,
 		'Content-Type' : 'application/json'
 				}

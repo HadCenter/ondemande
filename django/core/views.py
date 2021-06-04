@@ -60,6 +60,7 @@ def client_detail_update(request, pk):
 
     client = getClientInfo(pk)
     client.token = request.data['token']
+    client.token_for_flux = request.data['token_for_flux']
     client.save()
     client_serializer = ClientSerializer(client)
     return JsonResponse(client_serializer.data)

@@ -225,7 +225,7 @@ def getFilesEdiByClient(clientCode):
                                validatedOrders=fileDB.validated_orders, archived=fileDB.archived,
                                cliqued=fileDB.cliqued, contact=clientResponse,
                                number_correct_commands=fileDB.number_correct_commands,
-                               number_wrong_commands=fileDB.number_wrong_commands)
+                               number_wrong_commands=fileDB.number_wrong_commands, sendedToUrbantz=fileDB.sendedToUrbantz)
         listFiles.append(fileReponse)
     return listFiles
 

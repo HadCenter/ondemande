@@ -40,6 +40,7 @@
     "ngx-mat-select-search": "^3.2.0",
     "nvd3": "1.8.6",
     "rxjs": "6.5.4",
+    "rxjs-compat": "^6.6.7",
     "zone.js": "0.10.3"
   },
   "devDependencies": {

@@ -47,6 +47,15 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.completeTable = this.tablesService.advanceTableData;
   }
   ngOnInit() {
+    this.tablesService.messages.subscribe(msg => {
+     // console.log("Response from websocket: " +msg);
+      if (msg !== "you are connected"){
+      //  console.warn(JSON.parse(msg))
+      location.reload();
+      }
+      
+    });
+  
     this.getFiles();
   }
 

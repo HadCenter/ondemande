@@ -1,17 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable,Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { FileNameAndClientCode } from 'app/models/FileNameAndClientCode.model';
+import { WebsocketService } from '../../services/websocket.service';
 
 @Injectable()
 export class ListFileEdiService {
 
-//   private url = 'http://127.0.0.1:8000/api'
   private url = `${environment.apiBaseUrl}/api`;
   private urlJobTalend = `${environment.apiBaseUrl}/talendEsb`;
-
-  constructor(private http: HttpClient) { }
+   public WS_URL = "ws://52.47.208.8:8000/ws/notifications"
+   public messages: Subject<any>;
+   
+  constructor(private http: HttpClient,private wsService: WebsocketService) {
+    this.messages = <Subject<any>>wsService.connect(this.WS_URL).map(
+      (response: MessageEvent): any => {
+        console.warn('resp from websocket',response)
+        let data = response.data;
+        return data;
+      }
+    );
+  }
+   
 
   public executeJob(row) : Observable<any> {
    // var fileName = decodeURIComponent(row.file);

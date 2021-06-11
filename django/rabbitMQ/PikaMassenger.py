@@ -89,4 +89,5 @@ def start_consumer():
         else:
             print("listen to job ended channel")
             consumer.consumeEndJob(keys=[''], callback=callbackForEndedJob)
+            time.sleep(1)
             consumer.listenToJobStart = True

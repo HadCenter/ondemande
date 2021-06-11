@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     'core',
     'salesforceEsb',
     'rest_framework_swagger',
-    'talendEsb'
+    'talendEsb',
+    'channels',
+    'websocket'
 ]
 
 MIDDLEWARE = [
@@ -192,3 +194,10 @@ LOGGING ={
 }
 
 
+ASGI_APPLICATION = 'API.wsgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}

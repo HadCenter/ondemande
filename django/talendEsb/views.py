@@ -6,9 +6,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp
+
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
-from .models import SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto
+from .models import SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
 import pandas as pd
 import jsonpickle
 import os
@@ -25,10 +26,19 @@ def startEngineOnEdiFiles(request):
 def startEngineOnEdiFilesWithData(data):
 
 	EDIfile.objects.filter(pk=data[0]["fileId"]).update(cliqued=True)
-
-	requests.post(talendUrlEDIFileWebHook, json=data)
+	from rabbitMQ.views import sendMessageRabbitMqToStartJob
+	#requests.post(talendUrlEDIFileWebHook, json=data)
+	messageMQ= RabbitMqMessagesForJobToStart(webhook= talendUrlEDIFileWebHook , payloadToSendToTalend= data , environnement= "dev")
+	sendMessageRabbitMqToStartJob(jsonpickle.encode(messageMQ,unpicklable=False))
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
+
+def startEngineWithLinkAndData(link:str,data):
+
+	EDIfile.objects.filter(pk=data[0]["fileId"]).update(cliqued=True)
+
+	requests.post(link, json=data)
+	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
 madPlanJobList = ["ECOLOTRANS_URBANTZ_TO_HUB_SANS_MAD_OTHERS_ONDEMAND",

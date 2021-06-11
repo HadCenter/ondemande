@@ -67,7 +67,7 @@ def start_consumer():
     def startTheTalendJob(rabbitMqMessageSent : str):
         objectSentOnRabbitMQ = jsonpickle.decode(rabbitMqMessageSent)
 
-        startEngineWithLinkAndData(objectSentOnRabbitMQ.webhook,objectSentOnRabbitMQ.payloadToSendToTalend)
+        startEngineWithLinkAndData(objectSentOnRabbitMQ['webhook'],objectSentOnRabbitMQ['payloadToSendToTalend'])
 
     def callbackForStartingJob(ch, method, properties, body):
         print(" [x] %r:%r consumed" % (method.routing_key, body))

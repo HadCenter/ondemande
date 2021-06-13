@@ -41,11 +41,7 @@ class PikaMassenger():
     def consumeEndJob(self, keys, callback):
         result = self.channel.queue_declare('converge.queue.job.ended', durable=True)
         queue_name = result.method.queue
-        for key in keys:
-            self.channel.queue_bind(
-                exchange=self.exchange_name,
-                queue=queue_name,
-                routing_key=key)
+
 
         self.channel.basic_consume(
             queue=queue_name,
@@ -77,7 +73,7 @@ def start_consumer():
     def callbackForEndedJob(ch, method, properties, body):
         print(" [x] %r:%r consumed" % (method.routing_key, body))
         ch.basic_cancel(ch.consumer_tags[0])
-        time.sleep(1)
+
 
     consumer =  PikaMassenger()
     #   print("was here")
@@ -89,4 +85,5 @@ def start_consumer():
         else:
             print("listen to job ended channel")
             consumer.consumeEndJob(keys=[''], callback=callbackForEndedJob)
+            time.sleep(3)
             consumer.listenToJobStart = True

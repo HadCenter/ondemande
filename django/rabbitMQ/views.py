@@ -45,11 +45,17 @@ consumer_thread2.start()
 def sendMessageRabbitMqToStartJob(message : str):
     global connection
     global channel
-    if connection.is_closed :
-        connection.connect()
-    if channel.is_closed:
-        channel = connection.channel()
-    channel.basic_publish(exchange='job.to.start',
-                      routing_key='',
-                      body=message)
+    try:
+        channel.basic_publish(exchange='job.to.start',
+                              routing_key='',
+                              body=message)
+    except :
+
+        if connection.is_closed :
+            connection = pika.BlockingConnection(pika.URLParameters('amqps://ucuvenkg:g8SXY-tERqixsWjG1PL6N-BP98jsU5fH@rat.rmq2.cloudamqp.com/ucuvenkg'))
+        if channel.is_closed:
+            channel = connection.channel()
+        channel.basic_publish(exchange='job.to.start',
+                          routing_key='',
+                          body=message)
 

@@ -31,7 +31,7 @@ from rabbitMQ.EnvironnementJobEnded import start_JobEnded_consumer
 credentials = pika.PlainCredentials('admin', 'password')
 #connection = pika.BlockingConnection(pika.ConnectionParameters(host='52.47.208.8',port= 5672 ,credentials = credentials) )
 #connection = pika.BlockingConnection(pika.URLParameters('amqp://admin:password@52.47.208.8:5672/%2F') )
-connection = pika.BlockingConnection(pika.URLParameters('amqps://ucuvenkg:g8SXY-tERqixsWjG1PL6N-BP98jsU5fH@rat.rmq2.cloudamqp.com/ucuvenkg'))
+connection = pika.BlockingConnection(pika.URLParameters('amqps://ucuvenkg:g8SXY-tERqixsWjG1PL6N-BP98jsU5fH@rat.rmq2.cloudamqp.com/ucuvenkg?blocked_connection_timeout=86400'))
 
 channel = connection.channel()
 

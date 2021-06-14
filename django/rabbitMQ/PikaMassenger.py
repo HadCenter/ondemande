@@ -33,7 +33,7 @@ class PikaMassenger():
         self.channel.basic_consume(
             queue=queue_name,
             on_message_callback=callback,
-            auto_ack=False)
+            auto_ack=True)
 
         self.channel.start_consuming()
 
@@ -46,7 +46,7 @@ class PikaMassenger():
         self.channel.basic_consume(
             queue=queue_name,
             on_message_callback=callback,
-            auto_ack=False)
+            auto_ack=True)
 
         self.channel.start_consuming()
 

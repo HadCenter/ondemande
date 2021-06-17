@@ -48,14 +48,14 @@ export class ListFileEDIComponent extends UpgradableComponent {
   }
   ngOnInit() {
     this.tablesService.messages.subscribe(msg => {
-     // console.log("Response from websocket: " +msg);
-      if (msg !== "you are connected"){
-      //  console.warn(JSON.parse(msg))
-      location.reload();
+      // console.log("Response from websocket: " +msg);
+      if (msg !== "you are connected") {
+        //  console.warn(JSON.parse(msg))
+        this.actualiser();
       }
-      
+
     });
-  
+
     this.getFiles();
   }
 
@@ -154,10 +154,10 @@ export class ListFileEDIComponent extends UpgradableComponent {
     }
     this.currentPage = this.copyFilesPerPagination.length > 0 ? 1 : 0;
     this.numPage = Math.ceil(this.copyFilesPerPagination.length / this.countPerPage);
-    this.advancedTable = this.copyFilesPerPagination.slice(0,this.countPerPage);
+    this.advancedTable = this.copyFilesPerPagination.slice(0, this.countPerPage);
   }
 
-  filterItems(filterValue : string) {
+  filterItems(filterValue: string) {
     let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
     return this.files.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
@@ -173,7 +173,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage); /****to display */
-        console.log("advanced",this.advancedTable)
+        console.log("advanced", this.advancedTable)
         this.copy_advancedTable = this.advancedTable; /***copy for filter */
         this.allTable = this.advancedTable; /****all content */
         for (var i = 0; i < this.advancedTable.length; i++) {
@@ -211,16 +211,16 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.router.navigate(['/details-file-edi', row.idFile])
   }
 
-  sendFileToUrbantz(row,index) {
+  sendFileToUrbantz(row, index) {
     let data = {
       clientCode: row.contact.codeClient,
       fileName: row.validatedOrders,
-      fileId : row.idFile
+      fileId: row.idFile
     }
     this.tablesService.sendFileToUrbantz(data).subscribe(
       result => {
         // Handle result
-        console.log("res urbantz",result)
+        console.log("res urbantz", result)
       },
       error => {
         this.openSnackBar("Erreur d’envoi", this.snackAction);

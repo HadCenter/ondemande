@@ -425,6 +425,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.fileService.getFileEdi(data).subscribe(res => {
       console.warn(res)
       this.fileWrong = res;
+      if (this.fileWrong.rows.length>0){
       //create a copy array of object from the res and an array of displayed column
       this.copyFileWrong = JSON.parse(JSON.stringify(this.fileWrong));
 
@@ -454,6 +455,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.displayedColumns.forEach(item => {
         this.getOption(item);
       })
+    }
     })
 
 

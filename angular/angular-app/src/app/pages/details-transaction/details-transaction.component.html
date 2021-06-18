@@ -75,8 +75,8 @@
               </mat-expansion-panel-header>
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderLivraisonFile"></app-loader>
-              <div *ngIf="fichierLivraison !==null && fichierLivraison.length>0" class="content-table">
-                <table mat-table [dataSource]="fichierLivraison"
+              <div class="content-table">
+                <table mat-table [dataSource]="dataSource"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 
                   <!-- Tournee Column -->
@@ -245,6 +245,7 @@
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsLivraison; sticky: true"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsLivraison;"></tr>
                 </table>
+                <mat-paginator [pageSizeOptions] = "[100,200,300]" showFirstLastButtons></mat-paginator>
               </div>
             </mat-expansion-panel>
           </mat-accordion>

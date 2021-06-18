@@ -17,11 +17,15 @@ export interface MouseEvent {
 })
 export class DetailsTransactionComponent extends UpgradableComponent implements OnInit, AfterViewInit {
   fichierException: any = [];
+  displayedColumnsLivraison: string[] = ['Tournee', 'taskId', 'itemId', 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'];
+  //displayedColumnsException: string[] = ['position', 'name', 'weight', 'symbol'];
+  //displayedColumnsMetadata: string[] = ['position', 'name', 'weight', 'symbol'];
+  //displayedColumnsMad: string[] = ['position', 'name', 'weight', 'symbol'];
   fichierMad: any = [];
   fichierMetadata: any = [];
   fichierLivraison: any = [];
   arrayLivraison: any = [];
-  displayedColumnsLivraison: any = [];
+  //displayedColumnsLivraison: any = [];
   transaction: any;
   displayedColumnsException: any = [];
   displayedColumnsMad: any = [];
@@ -80,20 +84,27 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     this.service.getDetailTransaction(this.route.snapshot.params.id).subscribe(res => {
       this.transaction = res;
     })
+
+  }
+  ngAfterViewInit(): void
+  {
     var data = { "transaction_id": parseInt(this.route.snapshot.params.id) };
     this.service.seeAllFileTransaction(data).subscribe(res => {
+      //console.log("getDetailTransaction",res);
       this.fichierLivraison = res.livraison;
-      this.arrayLivraison = res.livraison;
-      this.fichierException = res.exception;
-      this.arrayException = res.exception;
-      this.fichierMad = res.mad;
-      this.arrayMad = res.mad;
-      this.fichierMetadata = res.metadata;
-      this.arrayMetaData = res.metadata;
-      this.rearrangeFileLivraison();
-      this.rearrangeFileException();
-      this.rearrangeFileMetadata();
-      this.rearrangeFileMAD();
+      this.showLoaderLivraisonFile = false;
+      //this.displayedColumnsLivraison = Object.keys(this.fichierLivraison);
+      //this.arrayLivraison = res.livraison;
+      //this.fichierException = res.exception;
+      //this.arrayException = res.exception;
+      //this.fichierMad = res.mad;
+      //this.arrayMad = res.mad;
+      //this.fichierMetadata = res.metadata;
+      //this.arrayMetaData = res.metadata;
+      //this.rearrangeFileLivraison();
+      //this.rearrangeFileException();
+      //this.rearrangeFileMetadata();
+      //this.rearrangeFileMAD();
     })
   }
     /**** Filter items */

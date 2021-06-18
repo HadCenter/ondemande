@@ -628,9 +628,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         data => {
           this.file = data;
           console.log("file",this.file);
-          console.error(this.file.number_wrong_commands>0 );
-          console.error(this.file.sendedToUrbantz );
-          console.error(this.sendedToUrbantz );
+
           if (this.file.validatedOrders != '_') {
             this.getValidFile();
           }

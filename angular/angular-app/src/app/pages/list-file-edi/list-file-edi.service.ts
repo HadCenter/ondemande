@@ -104,7 +104,7 @@ export class ListFileEdiService {
       "Status" : "en attente"
      },
    ];
-  public getAdvancedHeaders() {
+   public getAdvancedHeaders() {
     return [
         {
             name: 'Fichier EDI',

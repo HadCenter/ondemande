@@ -12,15 +12,18 @@
         <base-card-body class="content-card">
           <div class="content-label">
             <label class="details-label">Statut</label>
-            <label class="details-label">{{transaction?.statut}}</label>
+            <label *ngIf="transaction" class="details-label">{{transaction?.statut}}</label>
+            <label *ngIf="!transaction" class="details-label">-</label>
           </div>
           <div class="content-label">
-            <label class="details-label">Date Début </label>
-            <label class="details-label">{{transaction?.start_date | date:"yyyy-MM-dd"}}</label>
+            <label  class="details-label">Date Début </label>
+            <label *ngIf="transaction" class="details-label">{{transaction?.start_date | date:"yyyy-MM-dd"}}</label>
+            <label *ngIf="!transaction" class="details-label">-</label>
           </div>
           <div class="content-label">
             <label class="details-label">Date Fin</label>
-            <label class="details-label">{{transaction?.end_date | date:"yyyy-MM-dd"}}</label>
+            <label *ngIf="transaction" class="details-label">{{transaction?.end_date | date:"yyyy-MM-dd"}}</label>
+            <label *ngIf="!transaction" class="details-label">-</label>
           </div>
         </base-card-body>
       </base-card>

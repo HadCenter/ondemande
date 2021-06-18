@@ -456,6 +456,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         this.getOption(item);
       })
     }
+    else {
+      this.fileWrong.rows=[];
+      console.warn(this.fileWrong.rows.length)
+    }
     })
 
 
@@ -602,12 +606,18 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
     this.fileService.getFileEdi(data).subscribe(res => {
       this.fileValid = res;
+      if (this.fileValid.rows.length>0){
       this.copyFileValid=res.rows;
       this.copyFromFileValid=res.rows;
       this.showValid = false;
       this.fileValid.columns.unshift("Delete");  //add column Delete
       // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
-      console.warn('File valid', this.fileValid);
+      console.warn('File valid', this.fileValid);}
+      else {
+       
+          this.fileValid.rows=[];
+       
+      }
     })
 
   }
@@ -618,11 +628,15 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         data => {
           this.file = data;
           console.log("file",this.file);
+          console.error(this.file.number_wrong_commands>0 );
+          console.error(this.file.sendedToUrbantz );
+          console.error(this.sendedToUrbantz );
           if (this.file.validatedOrders != '_') {
             this.getValidFile();
           }
           else {
             this.showValid = false;
+            
           }
           if (this.file.wrongCommands != '_') {
             this.getWrongFile();

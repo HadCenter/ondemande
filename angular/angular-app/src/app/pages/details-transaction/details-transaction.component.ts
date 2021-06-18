@@ -1,8 +1,10 @@
-import { AfterViewInit, Component, OnInit, HostListener } from '@angular/core';
+import { AfterViewInit, Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsTransactionService } from './details-transaction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UpgradableComponent } from 'theme/components/upgradable';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 export interface MouseEvent {
   rowId: number;
@@ -17,13 +19,16 @@ export interface MouseEvent {
 })
 export class DetailsTransactionComponent extends UpgradableComponent implements OnInit, AfterViewInit {
   fichierException: any = [];
+  fichierLivraison: any = [];
   displayedColumnsLivraison: string[] = ['Tournee', 'taskId', 'itemId', 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'];
+  dataSource = new MatTableDataSource<any>(this.fichierLivraison);
   //displayedColumnsException: string[] = ['position', 'name', 'weight', 'symbol'];
   //displayedColumnsMetadata: string[] = ['position', 'name', 'weight', 'symbol'];
   //displayedColumnsMad: string[] = ['position', 'name', 'weight', 'symbol'];
+  @ViewChild(MatPaginator, {static : true}) paginator : MatPaginator;
   fichierMad: any = [];
   fichierMetadata: any = [];
-  fichierLivraison: any = [];
+  
   arrayLivraison: any = [];
   //displayedColumnsLivraison: any = [];
   transaction: any;
@@ -84,14 +89,15 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     this.service.getDetailTransaction(this.route.snapshot.params.id).subscribe(res => {
       this.transaction = res;
     })
-
-  }
-  ngAfterViewInit(): void
-  {
+    this.dataSource.paginator = this.paginator;
+    
     var data = { "transaction_id": parseInt(this.route.snapshot.params.id) };
     this.service.seeAllFileTransaction(data).subscribe(res => {
+      this.dataSource.data = res.livraison;
       //console.log("getDetailTransaction",res);
-      this.fichierLivraison = res.livraison;
+      //this.arrayLivraison = res.livraison;
+      //console.log(this.arrayLivraison.slice(0,10));
+      //this.fichierLivraison = this.arrayLivraison.slice(0,100);
       this.showLoaderLivraisonFile = false;
       //this.displayedColumnsLivraison = Object.keys(this.fichierLivraison);
       //this.arrayLivraison = res.livraison;
@@ -106,6 +112,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       //this.rearrangeFileMetadata();
       //this.rearrangeFileMAD();
     })
+
+  }
+  ngAfterViewInit(): void
+  {
+
   }
     /**** Filter items */
   setFilteredItemsLivraison() {

@@ -30,7 +30,7 @@
       </base-card>
       <div *ngIf="file" style='text-align: center;'
         class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-        <button [disabled]="file?.number_wrong_commands>0 || sendedToUrbantz" (click)="sendFileToUrbantz();"
+        <button [disabled]="file?.number_wrong_commands>0||fileWrong?.rows?.length>0 || sendedToUrbantz" id="sendToUrbantz" (click)="sendFileToUrbantz();"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
           à Urbantz
         </button>
@@ -61,7 +61,7 @@
                 <mat-panel-description>
                   <button (click)='deleteRows("valid");$event.stopPropagation();' style="margin-right: 5px;"
                     [disabled]=" rowsToDeleteValid?.length==0 || alreadyClicked==true" color="warn"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal delete-button">Effacer
+               class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal delete-button">Effacer
                   </button>
                 </mat-panel-description>
               </mat-expansion-panel-header>
@@ -129,7 +129,7 @@
                 </mat-panel-title>
                 <mat-panel-description>
                   <button (click)='deleteRows("wrong");$event.stopPropagation();'
-                    [disabled]=" rowsToDelete?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
+                id="deleteWrongBtn"    [disabled]=" rowsToDelete?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
                     class=" delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Effacer
                   </button>
                   <button (click)='correctionFile();$event.stopPropagation();'

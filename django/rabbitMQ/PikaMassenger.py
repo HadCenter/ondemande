@@ -78,7 +78,7 @@ def start_consumer():
     consumer =  PikaMassenger()
 
     while True :
-        print("CONSUMER BOOLEAN STATE : " + consumer.listenToJobStart )
+        print("CONSUMER BOOLEAN STATE : " + str(consumer.listenToJobStart) )
         if consumer.listenToJobStart == True :
             print("listen to job to start channel")
             consumer.consumeStartJob(keys=[''], callback=callbackForStartingJob)

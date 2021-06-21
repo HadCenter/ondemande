@@ -23,12 +23,11 @@ talendUrlMADFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandUrbantzTo
 
 @api_view(['POST'])
 def startEngineOnEdiFiles(request):
-	EDIfile.objects.filter(pk=request.data[0]["fileId"]).update(cliqued=True)
 	return startEngineOnEdiFilesWithData(request.data)
 
 def startEngineOnEdiFilesWithData(data):
 
-
+	EDIfile.objects.filter(pk=data[0]["fileId"]).update(cliqued=True)
 	from rabbitMQ.views import sendMessageRabbitMqToStartJob
 	#requests.post(talendUrlEDIFileWebHook, json=data)
 	from websocket.consumers import ChatConsumer
@@ -48,7 +47,6 @@ def startEngineOnEdiFilesWithData(data):
 
 def startEngineWithLinkAndData(link:str,data):
 
-	EDIfile.objects.filter(pk=data[0]["fileId"]).update(cliqued=True)
 
 	requests.post(link, json=data)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)

@@ -241,10 +241,22 @@ def correctAllFiles(request):
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):
-	requests.post(talendUrlMADFileWebHook, json=jsonpickle.encode(madObjectToPost,unpicklable=False))
+	from rabbitMQ.views import sendMessageRabbitMqToStartJob
+	# requests.post(talendUrlEDIFileWebHook, json=data)
+	from websocket.consumers import ChatConsumer
+	ChatConsumer.state['Running_Jobs'].append("Talend Job Mad Transaction")
+	channel_layer = get_channel_layer()
+	async_to_sync(channel_layer.group_send)(
+		'notifications_room_group',
+		{
+			'type': 'send_message_to_frontend',
+			'message': ChatConsumer.state
+		}
+	)
+	messageMQ = RabbitMqMessagesForJobToStart(webhook=talendUrlMADFileWebHook, payloadToSendToTalend=madObjectToPost,
+											  environnement="dev")
+	sendMessageRabbitMqToStartJob(jsonpickle.encode(messageMQ, unpicklable=False))
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
-
-
 
 
 @api_view(['get'])

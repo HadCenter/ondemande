@@ -208,6 +208,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           this.rowsToDelete = [];
           // this.rowsToDeleteValid = [];
           this.alreadyClicked = false;
+          if (this.fileWrong.rows.length==0){
+            (document.getElementById('sendToUrbantz') as HTMLButtonElement).disabled = false;
+            // document.getElementById("myBtn").disabled = true;
+          }
+         
         }
       })
 
@@ -235,6 +240,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     else {
       this.rowsToDelete.push(rowId);
 
+    }
+    if (this.rowsToDelete.length>0){
+      (document.getElementById('deleteWrongBtn') as HTMLButtonElement).disabled = false;
     }
     //  this.openDialog(i);
 
@@ -280,7 +288,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
             this.copyFileWrong.forEach((element, index) => {
               if (index == i) {
                 if (element[element.startCol] !== dataCopy[i][this.fileWrong.columns[startCol]]) {    // TO IMPROVE
-                  console.warn('THERE IS A CHANGE');
                   var column = this.fileWrong.columns[startCol];
                   var container = document.querySelectorAll<HTMLElement>("#" + column);
                   container[index].style.setProperty("color", "green", "important");

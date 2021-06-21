@@ -31,7 +31,7 @@ def startEngineOnEdiFilesWithData(data):
 	from rabbitMQ.views import sendMessageRabbitMqToStartJob
 	#requests.post(talendUrlEDIFileWebHook, json=data)
 	from websocket.consumers import ChatConsumer
-	ChatConsumer.state['Running_Jobs'].append(data)
+	ChatConsumer.state['Running_Jobs'].append("Talend Job Edi")
 	channel_layer = get_channel_layer()
 	async_to_sync(channel_layer.group_send)(
 		'notifications_room_group',

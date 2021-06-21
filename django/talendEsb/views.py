@@ -13,6 +13,8 @@ from .models import SendMadPostProcessPostObject , TransactionsLivraison , Trans
 import pandas as pd
 import jsonpickle
 import os
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev/750137b1abc34995959f89a19a9aa489'
 
@@ -28,6 +30,16 @@ def startEngineOnEdiFilesWithData(data):
 	EDIfile.objects.filter(pk=data[0]["fileId"]).update(cliqued=True)
 	from rabbitMQ.views import sendMessageRabbitMqToStartJob
 	#requests.post(talendUrlEDIFileWebHook, json=data)
+	from websocket.consumers import ChatConsumer
+	ChatConsumer.state['Running_Jobs'].append(data)
+	channel_layer = get_channel_layer()
+	async_to_sync(channel_layer.group_send)(
+		'notifications_room_group',
+		{
+			'type': 'send_message_to_frontend',
+			'message': ChatConsumer.state
+		}
+	)
 	messageMQ= RabbitMqMessagesForJobToStart(webhook= talendUrlEDIFileWebHook , payloadToSendToTalend= data , environnement= "dev")
 	sendMessageRabbitMqToStartJob(jsonpickle.encode(messageMQ,unpicklable=False))
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)

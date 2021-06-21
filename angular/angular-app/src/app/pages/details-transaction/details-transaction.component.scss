@@ -247,4 +247,13 @@ div.element-2{
   margin: auto;
   margin-left: 20px;
 }
+div.mat-paginator-container{
+  background-color: #444;
+  display: flex;
+  justify-content: flex-start;
+}
+.mat-paginator, .mat-paginator-page-size .mat-select-trigger{
+  color: white;
+  font-size: 13px;
+}
 

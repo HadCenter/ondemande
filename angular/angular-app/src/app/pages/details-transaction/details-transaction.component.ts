@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, HostListener, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsTransactionService } from './details-transaction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,28 +18,25 @@ export interface MouseEvent {
   styleUrls: ['./details-transaction.component.scss']
 })
 export class DetailsTransactionComponent extends UpgradableComponent implements OnInit, AfterViewInit {
+  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   fichierException: any = [];
   fichierLivraison: any = [];
-  displayedColumnsLivraison: string[] = ['Tournee', 'taskId', 'itemId', 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'];
-  dataSource = new MatTableDataSource<any>(this.fichierLivraison);
-  //displayedColumnsException: string[] = ['position', 'name', 'weight', 'symbol'];
-  //displayedColumnsMetadata: string[] = ['position', 'name', 'weight', 'symbol'];
-  //displayedColumnsMad: string[] = ['position', 'name', 'weight', 'symbol'];
-  @ViewChild(MatPaginator, {static : true}) paginator : MatPaginator;
   fichierMad: any = [];
   fichierMetadata: any = [];
-  
+  displayedColumnsLivraison: string[] = ['Tournee', 'taskId', 'itemId', 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'];
+  displayedColumnsException: string[] = ['Tournee', 'taskId', 'itemId', 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom','Item___Type','Item___Quantite','Code_postal','Round_Name','Remarque','isDeleted'];
+  displayedColumnsMetadata: string[] = ['Tournee', 'taskId', 'itemId', 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name','sourceClosureDate','realInfoHasPrepared','status','metadataFACTURATION'];
+  displayedColumnsMad: string[] = ['Tournee', 'taskId', 'itemId', 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'];
+  dataSource = new MatTableDataSource<any>(this.fichierLivraison);
+  dataSourceException = new MatTableDataSource<any>(this.fichierException);
+  dataSourceMetaData = new MatTableDataSource<any>(this.fichierMetadata);
+  dataSourceMAD = new MatTableDataSource<any>(this.fichierMad);
   arrayLivraison: any = [];
-  //displayedColumnsLivraison: any = [];
   transaction: any;
-  displayedColumnsException: any = [];
-  displayedColumnsMad: any = [];
-  displayedColumnsMetadata: any = [];
   options: any = [];
   optionsException: any = [];
   optionsMetaData: any = [];
   optionsMad: any = [];
-
   tableMouseDown: MouseEvent;
   tableMouseUp: MouseEvent;
   FIRST_EDITABLE_ROW: number = 0;
@@ -89,28 +86,21 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     this.service.getDetailTransaction(this.route.snapshot.params.id).subscribe(res => {
       this.transaction = res;
     })
-    this.dataSource.paginator = this.paginator;
+    
+    
     
     var data = { "transaction_id": parseInt(this.route.snapshot.params.id) };
     this.service.seeAllFileTransaction(data).subscribe(res => {
+      this.dataSource.paginator = this.paginator.toArray()[0];
       this.dataSource.data = res.livraison;
-      //console.log("getDetailTransaction",res);
-      //this.arrayLivraison = res.livraison;
-      //console.log(this.arrayLivraison.slice(0,10));
-      //this.fichierLivraison = this.arrayLivraison.slice(0,100);
+      this.dataSourceException.paginator = this.paginator.toArray()[1];
+      this.dataSourceException.data = res.exception;
+      this.dataSourceMetaData.paginator = this.paginator.toArray()[2];
+      this.dataSourceMetaData.data = res.metadata;
       this.showLoaderLivraisonFile = false;
-      //this.displayedColumnsLivraison = Object.keys(this.fichierLivraison);
-      //this.arrayLivraison = res.livraison;
-      //this.fichierException = res.exception;
-      //this.arrayException = res.exception;
-      //this.fichierMad = res.mad;
-      //this.arrayMad = res.mad;
-      //this.fichierMetadata = res.metadata;
-      //this.arrayMetaData = res.metadata;
-      //this.rearrangeFileLivraison();
-      //this.rearrangeFileException();
-      //this.rearrangeFileMetadata();
-      //this.rearrangeFileMAD();
+      this.showLoaderExceptionFile = false;
+      this.showLoaderMetadataFile = false;
+      this.showLoaderMadFile = false;
     })
 
   }

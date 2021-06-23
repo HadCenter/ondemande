@@ -210,5 +210,19 @@ class transactionFileColumnsMetadata:
         self.status = status
         self.metadataFACTURATION = metadataFACTURATION
 class transactionFileColumnsMad:
-    def __init__(self,a):
-        self.a = a
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name):
+        self.Tournee = Tournee
+        self.taskId = taskId
+        self.itemId = itemId
+        self.Date = Date
+        self.Expediteur = Expediteur
+        self.Activite = Activite
+        self.Categorie = Categorie
+        self.Type_de_Service = Type_de_Service
+        self.ID_de_la_tache = ID_de_la_tache
+        self.Item___Nom_sous_categorie = Item___Nom_sous_categorie
+        self.Item___Type_unite_manutention = Item___Type_unite_manutention
+        self.Item___Quantite = Item___Quantite
+        self.Code_postal = Code_postal
+        self.sourceHubName = sourceHubName
+        self.Round_Name = Round_Name

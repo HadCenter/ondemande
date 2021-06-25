@@ -75,7 +75,7 @@
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Détails
               </button>
               <button style="margin-left: 3px;"
-                [disabled]=" row.number_wrong_commands>0 || row.status!=='Terminé'  || row.sendedToUrbantz || sendedToUrbantz[i] "
+                [disabled]=" row.number_wrong_commands>=1 || row.status!=='Terminé' || sendedToUrbantz[i] "
                 (click)="sendFileToUrbantz(row,i);$event.stopPropagation();"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
                 à Urbantz

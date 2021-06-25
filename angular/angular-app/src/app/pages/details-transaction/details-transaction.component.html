@@ -77,51 +77,20 @@
                 [show]="showLoaderLivraisonFile"></app-loader>
               <div class="content-table">
                 <div class="pagination">
-                  <mat-paginator [hidden]="!dataSource.data.length" [pageSizeOptions] = "[100,200,300]" showFirstLastButtons></mat-paginator>
+                  <mat-paginator [hidden]="!dataSource.data.length" [pageSizeOptions] = "[100,200,300]" showFirstLastButtons ></mat-paginator>
                 </div>
                 <table  mat-table [dataSource]="dataSource" *ngIf = "dataSource.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
-
-                  <!-- Tournee Column -->
-                  <ng-container matColumnDef="Tournee">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Tournee
-
-                    </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index" 
-
-                    >
-                      {{element.Tournee}} </td>
-                  </ng-container>
-
-                  <!-- taskId Column -->
-                  <ng-container matColumnDef="taskId">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> taskId
-
-                    </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
-
-                    >
-                      {{element.taskId}} </td>
-                  </ng-container>
-
-                  <!-- itemId Column -->
-                  <ng-container matColumnDef="itemId">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> itemId
-
-                    </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
-
-                    >
-                      {{element.itemId}} </td>
-                  </ng-container>
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
 
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
-                      (mouseup)="onMouseUp(i, 0, 'Date','livraison')"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
+                        (mouseup)="onMouseUp()"
+                        (mousedown)="select($event,cell)"
+                        [ngClass]="{'selected':isSelected(i,0)}"
                     >
                       {{element.Date}} </td>
                   </ng-container>
@@ -131,8 +100,11 @@
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
 
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
-                      (mouseup)="onMouseUp(i, 1, 'Expediteur','livraison')">
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
+                        (mouseup)="onMouseUp()"
+                        (mousedown)="select($event,cell)"
+                        [ngClass]="{'selected':isSelected(i,1)}"
+                    >
                       {{element.Expediteur}} </td>
                   </ng-container>
 
@@ -140,8 +112,11 @@
                   <ng-container matColumnDef="Activite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
-                      (mouseup)="onMouseUp(i, 2, 'Activite','livraison')">
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUp()"
+                        (mousedown)="select($event,cell)"
+                        [ngClass]="{'selected':isSelected(i,2)}"
+                    >
                       {{element.Activite}} </td>
                   </ng-container>
 
@@ -149,9 +124,10 @@
                   <ng-container matColumnDef="Categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
-                      (mouseup)="onMouseUp(i, 3, 'Categorie','livraison')"
-                    >
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                            (mouseup)="onMouseUp()"
+                            (mousedown)="select($event,cell)"
+                            [ngClass]="{'selected':isSelected(i,3)}">
                       {{element.Categorie}} </td>
                   </ng-container>
 
@@ -159,9 +135,9 @@
                   <ng-container matColumnDef="Type_de_Service">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
-                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','livraison')"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUp()"
+                        (mousedown)="select($event,cell)" [ngClass]="{'selected':isSelected(i,4)}"
                     >
                       {{element.Type_de_Service}} </td>
                   </ng-container>
@@ -171,9 +147,10 @@
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
 
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
-                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','livraison')"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                          (mouseup)="onMouseUp()"
+                          (mousedown)="select($event,cell)"
+                          [ngClass]="{'selected':isSelected(i,5)}"
                     >
                       {{element.ID_de_la_tache}} </td>
                   </ng-container>
@@ -182,9 +159,10 @@
                   <ng-container matColumnDef="Item___Nom_sous_categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie')"
-                      (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','livraison')"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                          (mouseup)="onMouseUp()"
+                          (mousedown)="select($event,cell)"
+                          [ngClass]="{'selected':isSelected(i,6)}"
                     >
                       {{element.Item___Nom_sous_categorie}} </td>
                   </ng-container>
@@ -193,9 +171,10 @@
                   <ng-container matColumnDef="Item___Type_unite_manutention">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention')"
-                      (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','livraison')"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                          (mouseup)="onMouseUp()"
+                          (mousedown)="select($event,cell)"
+                          [ngClass]="{'selected':isSelected(i,7)}"
                     >
                       {{element.Item___Type_unite_manutention}} </td>
                   </ng-container>
@@ -204,9 +183,10 @@
                   <ng-container matColumnDef="Item___Quantite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
-                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','livraison')"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                          (mouseup)="onMouseUp()"
+                          (mousedown)="select($event,cell)"
+                          [ngClass]="{'selected':isSelected(i,8)}"
                     >
                       {{element.Item___Quantite}} </td>
                   </ng-container>
@@ -214,11 +194,12 @@
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
-         
+
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 9, 'Code_postal')"
-                      (mouseup)="onMouseUp(i, 9, 'Code_postal','livraison')"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                          (mouseup)="onMouseUp()"
+                          (mousedown)="select($event,cell)"
+                          [ngClass]="{'selected':isSelected(i,9)}"
                     >
                       {{element.Code_postal}} </td>
                   </ng-container>
@@ -227,9 +208,10 @@
                   <ng-container matColumnDef="sourceHubName">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 10, 'sourceHubName')"
-                      (mouseup)="onMouseUp(i, 10, 'sourceHubName','livraison')"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUp()"
+                        (mousedown)="select($event,cell)"
+                        [ngClass]="{'selected':isSelected(i,10)}"
                     >
                       {{element.sourceHubName}} </td>
                   </ng-container>
@@ -238,9 +220,10 @@
                   <ng-container matColumnDef="Round_Name">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 11, 'Round_Name')"
-                      (mouseup)="onMouseUp(i, 11, 'Round_Name','livraison')"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                          (mouseup)="onMouseUp()"
+                          (mousedown)="select($event,cell)"
+                          [ngClass]="{'selected':isSelected(i,11)}"
                     >
                       {{element.Round_Name}} </td>
                   </ng-container>
@@ -279,7 +262,7 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='correctionFile("exception");$event.stopPropagation();'
+                  <button (click)='correctionFileException("exception");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                   </button>
                   <button (click)='resetFiltre("exception");$event.stopPropagation();' style="margin-left: 5px;"
@@ -297,45 +280,15 @@
                 <table mat-table [dataSource]="dataSourceException" *ngIf = "dataSourceException.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 
-                  <!-- Tournee Column -->
-                  <ng-container matColumnDef="Tournee">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Tournee
-
-                    </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index" 
-
-                    >
-                      {{element.Tournee}} </td>
-                  </ng-container>
-
-                  <!-- taskId Column -->
-                  <ng-container matColumnDef="taskId">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> taskId
-
-                    </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
-
-                    >
-                      {{element.taskId}} </td>
-                  </ng-container>
-
-                  <!-- itemId Column -->
-                  <ng-container matColumnDef="itemId">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> itemId
-
-                    </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
-
-                    >
-                      {{element.itemId}} </td>
-                  </ng-container>
-
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
 
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,0)}">
                       {{element.Date}} </td>
                   </ng-container>
 
@@ -343,7 +296,10 @@
                   <ng-container matColumnDef="Expediteur">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,1)}">
                       {{element.Expediteur}} </td>
                   </ng-container>
 
@@ -351,7 +307,10 @@
                   <ng-container matColumnDef="Activite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,2)}">
                       {{element.Activite}} </td>
                   </ng-container>
 
@@ -359,7 +318,10 @@
                   <ng-container matColumnDef="Categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,3)}">
                       {{element.Categorie}} </td>
                   </ng-container>
 
@@ -367,7 +329,10 @@
                   <ng-container matColumnDef="Type_de_Service">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,4)}">
                       {{element.Type_de_Service}} </td>
                   </ng-container>
 
@@ -375,7 +340,10 @@
                   <ng-container matColumnDef="ID_de_la_tache">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,5)}">
                       {{element.ID_de_la_tache}} </td>
                   </ng-container>
 
@@ -383,7 +351,10 @@
                   <ng-container matColumnDef="Item___Nom">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,6)}">
                       {{element.Item___Nom}} </td>
                   </ng-container>
 
@@ -391,7 +362,10 @@
                   <ng-container matColumnDef="Item___Type">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,7)}">
                       {{element.Item___Type}} </td>
                   </ng-container>
 
@@ -399,7 +373,10 @@
                   <ng-container matColumnDef="Item___Quantite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,8)}">
                       {{element.Item___Quantite}} </td>
                   </ng-container>
 
@@ -407,7 +384,10 @@
                   <ng-container matColumnDef="Code_postal">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,9)}">
                       {{element.Code_postal}} </td>
                   </ng-container>
 
@@ -415,7 +395,10 @@
                   <ng-container matColumnDef="Round_Name">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,10)}">
                       {{element.Round_Name}} </td>
                   </ng-container>
 
@@ -423,7 +406,10 @@
                   <ng-container matColumnDef="Remarque">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Remarque
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,11)}">
                       {{element.Remarque}} </td>
                   </ng-container>
 
@@ -431,7 +417,10 @@
                   <ng-container matColumnDef="isDeleted">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> isDeleted
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpException()"
+                        (mousedown)="selectException($event,cell)"
+                        [ngClass]="{'selected':isSelectedException(i,12)}">
                       {{element.isDeleted}} </td>
                   </ng-container>
 
@@ -469,7 +458,7 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='correctionFile("metadata");$event.stopPropagation();'
+                  <button (click)='correctionFileMetadata("metadata");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
                   </button>
                   <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
@@ -486,44 +475,15 @@
                 </div>
                 <table mat-table [dataSource]="dataSourceMetaData" *ngIf = "dataSourceMetaData.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
-                  <!-- Tournee Column -->
-                  <ng-container matColumnDef="Tournee">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Tournee
-
-                    </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index" 
-
-                    >
-                      {{element.Tournee}} </td>
-                  </ng-container>
-
-                  <!-- taskId Column -->
-                  <ng-container matColumnDef="taskId">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> taskId
-
-                    </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
-
-                    >
-                      {{element.taskId}} </td>
-                  </ng-container>
-
-                  <!-- itemId Column -->
-                  <ng-container matColumnDef="itemId">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> itemId
-
-                    </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
-
-                    >
-                      {{element.itemId}} </td>
-                  </ng-container>
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,0)}">
                       {{element.Date}} </td>
                   </ng-container>
 
@@ -531,7 +491,10 @@
                   <ng-container matColumnDef="Expediteur">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,1)}">
                       {{element.Expediteur}} </td>
                   </ng-container>
 
@@ -539,7 +502,10 @@
                   <ng-container matColumnDef="Activite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,2)}">
                       {{element.Activite}} </td>
                   </ng-container>
 
@@ -547,7 +513,10 @@
                   <ng-container matColumnDef="Categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,3)}">
                       {{element.Categorie}} </td>
                   </ng-container>
 
@@ -555,7 +524,10 @@
                   <ng-container matColumnDef="Type_de_Service">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,4)}">
                       {{element.Type_de_Service}} </td>
                   </ng-container>
 
@@ -564,7 +536,10 @@
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
 
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,5)}">
                       {{element.ID_de_la_tache}} </td>
                   </ng-container>
 
@@ -573,7 +548,10 @@
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
 
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,6)}">
                       {{element.Item___Nom_sous_categorie}} </td>
                   </ng-container>
 
@@ -581,7 +559,10 @@
                   <ng-container matColumnDef="Item___Type_unite_manutention">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,7)}">
                       {{element.Item___Type_unite_manutention}} </td>
                   </ng-container>
 
@@ -589,7 +570,10 @@
                   <ng-container matColumnDef="Item___Quantite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,8)}">
                       {{element.Item___Quantite}} </td>
                   </ng-container>
 
@@ -597,7 +581,10 @@
                   <ng-container matColumnDef="Code_postal">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,9)}">
                       {{element.Code_postal}} </td>
                   </ng-container>
 
@@ -605,7 +592,10 @@
                   <ng-container matColumnDef="sourceHubName">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,10)}">
                       {{element.sourceHubName}} </td>
                   </ng-container>
 
@@ -613,7 +603,10 @@
                   <ng-container matColumnDef="Round_Name">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,11)}">
                       {{element.Round_Name}} </td>
                   </ng-container>
 
@@ -621,7 +614,10 @@
                   <ng-container matColumnDef="sourceClosureDate">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceClosureDate
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,12)}">
                       {{element.sourceClosureDate}} </td>
                   </ng-container>
 
@@ -629,7 +625,10 @@
                   <ng-container matColumnDef="realInfoHasPrepared">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> realInfoHasPrepared
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,13)}">
                       {{element.realInfoHasPrepared}} </td>
                   </ng-container>
 
@@ -637,7 +636,10 @@
                   <ng-container matColumnDef="status">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> status
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,14)}">
                       {{element.status}} </td>
                   </ng-container>
 
@@ -645,7 +647,10 @@
                   <ng-container matColumnDef="metadataFACTURATION">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> metadataFACTURATION
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMetadata()"
+                        (mousedown)="selectMetadata($event,cell)"
+                        [ngClass]="{'selected':isSelectedMetadata(i,15)}">
                       {{element.metadataFACTURATION}} </td>
                   </ng-container>
 
@@ -683,7 +688,7 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='correctionFile("mad");$event.stopPropagation();'
+                  <button (click)='correctionFileMad("mad");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                   </button>
                   <button (click)='resetFiltre("mad");$event.stopPropagation();' style="margin-left: 5px;"
@@ -694,241 +699,142 @@
               </mat-expansion-panel-header>
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderMadFile"></app-loader>
-              <div *ngIf="fichierMad !==null && fichierMad.length>0" class="content-table">
-                <table mat-table [dataSource]="fichierMad"
+              <div class="content-table">
+                <div class="pagination">
+                  <mat-paginator [hidden]="!dataSourceMAD.data.length" [pageSizeOptions] = "[100,200,300]" showFirstLastButtons></mat-paginator>
+                </div>
+                <table mat-table [dataSource]="dataSourceMAD" *ngIf = "dataSourceMAD.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[0].columnProp}}"
-                          [(ngModel)]="optionsMad[0].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[0],$event)">
-                          <mat-option value="">-- Select {{optionsMad[0].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[0].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'Date')"
-                      (mouseup)="onMouseUp(i, 0, 'Date','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][0], 'unselected': !selectedCellsStateMad[i][0]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,0)}">
                       {{element.Date}} </td>
                   </ng-container>
 
                   <!-- Expediteur Column -->
                   <ng-container matColumnDef="Expediteur">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[1].columnProp}}"
-                          [(ngModel)]="optionsMad[1].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[1],$event)">
-                          <mat-option value="">-- Select {{optionsMad[1].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[1].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 1, 'Expediteur')"
-                      (mouseup)="onMouseUp(i, 1, 'Expediteur','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][1], 'unselected': !selectedCellsStateMad[i][1]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,1)}">
                       {{element.Expediteur}} </td>
                   </ng-container>
 
                   <!-- Activite Column -->
                   <ng-container matColumnDef="Activite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[2].columnProp}}"
-                          [(ngModel)]="optionsMad[2].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[2],$event)">
-                          <mat-option value="">-- Select {{optionsMad[2].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[2].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 2, 'Activite')"
-                      (mouseup)="onMouseUp(i, 2, 'Activite','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][2], 'unselected': !selectedCellsStateMad[i][2]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,2)}">
                       {{element.Activite}} </td>
                   </ng-container>
 
                   <!-- Categorie Column -->
                   <ng-container matColumnDef="Categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[3].columnProp}}"
-                          [(ngModel)]="optionsMad[3].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[3],$event)">
-                          <mat-option value="">-- Select {{optionsMad[3].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[3].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'Categorie')"
-                      (mouseup)="onMouseUp(i, 3, 'Categorie','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][3], 'unselected': !selectedCellsStateMad[i][3]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,3)}">
                       {{element.Categorie}} </td>
                   </ng-container>
 
                   <!-- Type_de_Service Column -->
                   <ng-container matColumnDef="Type_de_Service">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[4].columnProp}}"
-                          [(ngModel)]="optionsMad[4].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[4],$event)">
-                          <mat-option value="">-- Select {{optionsMad[4].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[4].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service')"
-                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][4], 'unselected': !selectedCellsStateMad[i][4]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,4)}">
                       {{element.Type_de_Service}} </td>
                   </ng-container>
 
                   <!-- ID_de_la_tache Column -->
                   <ng-container matColumnDef="ID_de_la_tache">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[5].columnProp}}"
-                          [(ngModel)]="optionsMad[5].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[5],$event)">
-                          <mat-option value="">-- Select {{optionsMad[5].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[5].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache')"
-                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][5], 'unselected': !selectedCellsStateMad[i][5]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,5)}">
                       {{element.ID_de_la_tache}} </td>
                   </ng-container>
 
                   <!-- Item___Nom_sous_categorie Column -->
                   <ng-container matColumnDef="Item___Nom_sous_categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[6].columnProp}}"
-                          [(ngModel)]="optionsMad[6].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[6],$event)">
-                          <mat-option value="">-- Select {{optionsMad[6].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[6].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie')"
-                      (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][6], 'unselected': !selectedCellsStateMad[i][6]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,6)}">
                       {{element.Item___Nom_sous_categorie}} </td>
                   </ng-container>
 
                   <!-- Item___Type_unite_manutention Column -->
                   <ng-container matColumnDef="Item___Type_unite_manutention">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[7].columnProp}}"
-                          [(ngModel)]="optionsMad[7].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[7],$event)">
-                          <mat-option value="">-- Select {{optionsMad[7].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[7].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention')"
-                      (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][7], 'unselected': !selectedCellsStateMad[i][7]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,7)}">
                       {{element.Item___Type_unite_manutention}} </td>
                   </ng-container>
 
                   <!-- Item___Quantite Column -->
                   <ng-container matColumnDef="Item___Quantite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[8].columnProp}}"
-                          [(ngModel)]="optionsMad[8].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[8],$event)">
-                          <mat-option value="">-- Select {{optionsMad[8].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[8].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite')"
-                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][8], 'unselected': !selectedCellsStateMad[i][8]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,8)}">
                       {{element.Item___Quantite}} </td>
                   </ng-container>
 
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[9].columnProp}}"
-                          [(ngModel)]="optionsMad[9].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[9],$event)">
-                          <mat-option value="">-- Select {{optionsMad[9].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[9].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 9, 'Code_postal')" (mouseup)="onMouseUp(i, 9, 'Code_postal','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][9], 'unselected': !selectedCellsStateMad[i][9]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,9)}">
                       {{element.Code_postal}} </td>
                   </ng-container>
 
                   <!-- sourceHubName Column -->
                   <ng-container matColumnDef="sourceHubName">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[10].columnProp}}"
-                          [(ngModel)]="optionsMad[10].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[10],$event)">
-                          <mat-option value="">-- Select {{optionsMad[10].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[10].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 10, 'sourceHubName')"
-                      (mouseup)="onMouseUp(i, 10, 'sourceHubName','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][10], 'unselected': !selectedCellsStateMad[i][10]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,10)}">
                       {{element.sourceHubName}} </td>
                   </ng-container>
 
                   <!-- Round_Name Column -->
                   <ng-container matColumnDef="Round_Name">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
-                      <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[11].columnProp}}"
-                          [(ngModel)]="optionsMad[11].modelValue"
-                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[11],$event)">
-                          <mat-option value="">-- Select {{optionsMad[11].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of optionsMad[11].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
                     </th>
-                    <td mat-cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 11, 'Round_Name')" (mouseup)="onMouseUp(i, 11, 'Round_Name','mad')"
-                      [ngClass]="{'selected': selectedCellsStateMad[i][11], 'unselected': !selectedCellsStateMad[i][11]}">
+                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                        (mouseup)="onMouseUpMad()"
+                        (mousedown)="selectMad($event,cell)"
+                        [ngClass]="{'selected':isSelectedMad(i,11)}">
                       {{element.Round_Name}} </td>
                   </ng-container>
 

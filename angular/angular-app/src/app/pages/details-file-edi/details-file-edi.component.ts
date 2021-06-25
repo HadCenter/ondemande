@@ -210,7 +210,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           this.alreadyClicked = false;
           if (this.fileWrong.rows.length==0){
             (document.getElementById('sendToUrbantz') as HTMLButtonElement).disabled = false;
-            if (!this.fileValid) // en plus on a 0 prestations valides
+            console.log("this.fileValid.length",this.fileValid.rows.length);
+            if (this.fileValid.rows.length==0) // en plus on a 0 prestations valides
             {
               var data = {
                 idFile : this.file.idFile

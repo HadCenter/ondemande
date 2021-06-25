@@ -47,6 +47,11 @@ path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
 
 
 
+@api_view([ 'PUT'])
+def archive_fileEDI(request):
+    idFile = request.data['idFile']
+    EDIfile.objects.filter(pk=idFile).update(archived=True)
+    return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def client_detail(request, pk):

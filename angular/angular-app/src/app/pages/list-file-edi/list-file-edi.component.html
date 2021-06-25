@@ -1,4 +1,11 @@
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+  <!-- <mat-progress-spinner
+  class="example-margin"
+  [color]="color"
+  [mode]="mode"
+  [value]="value">
+</mat-progress-spinner> -->
+ 
   <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
   <base-card>
     <base-card-title>
@@ -37,18 +44,22 @@
           </tr>
         </thead>
         <tbody>
+         
           <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-            <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;max-width: 150px;cursor: pointer;"><a [matTooltip]=row.fileName
-                matTooltipClass="tooltip-custom">{{row.fileName}} </a></td>
-            <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"yyyy/MM/dd 'à' HH:mm"  }}</td>
+        
+            <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;max-width: 150px;cursor: pointer;"><a
+                [matTooltip]=row.fileName matTooltipClass="tooltip-custom">{{row.fileName}} </a></td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"yyyy/MM/dd 'à' HH:mm" }}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.contact.nomClient}}</td>
 
-            <td *ngIf="row.status === 'Terminé'" class="label-wrong mdl-data-table__cell--non-numeric">{{ row.number_wrong_commands }}
+            <td *ngIf="row.status === 'Terminé'" class="label-wrong mdl-data-table__cell--non-numeric">{{
+              row.number_wrong_commands }}
             </td>
             <td *ngIf="row.status !== 'Terminé'" class="label-wrong mdl-data-table__cell--non-numeric">-
             </td>
 
-            <td *ngIf="row.status === 'Terminé'" class="label-correct mdl-data-table__cell--non-numeric">{{ row.number_correct_commands }}
+            <td *ngIf="row.status === 'Terminé'" class="label-correct mdl-data-table__cell--non-numeric">{{
+              row.number_correct_commands }}
             </td>
             <td *ngIf="row.status !== 'Terminé'" class="label-correct mdl-data-table__cell--non-numeric">-
             </td>
@@ -63,15 +74,19 @@
               <button style="margin-left: 3px;" [disabled]="row.status!=='Terminé'" (click)="gotoDetails(row)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Détails
               </button>
-              <button style="margin-left: 3px;" [disabled]=" row.number_wrong_commands>0 || row.status!=='Terminé'  || row.sendedToUrbantz || sendedToUrbantz[i] "
-               (click)="sendFileToUrbantz(row,i);$event.stopPropagation();"
-              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer à Urbantz
-            </button>
+              <button style="margin-left: 3px;"
+                [disabled]=" row.number_wrong_commands>=1 || row.status!=='Terminé' || sendedToUrbantz[i] "
+                (click)="sendFileToUrbantz(row,i);$event.stopPropagation();"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
+                à Urbantz
+              </button>
               <span (click)="downloadFileInput(row.contact.codeClient, row.fileName);$event.stopPropagation();"
                 class="download material-icons">
                 download
               </span>
             </td>
+            <app-loader *ngIf="showJobRun==true && row.status== 'En attente' && row.cliqued==true" class="loader" [width]="'100%'" [position]="'sticky'"
+            [height]="'182px'" [bg]="'transparant'" [show]="showJobRun"></app-loader>
           </tr>
         </tbody>
       </table>

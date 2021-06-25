@@ -22,11 +22,24 @@ export class ListTransactionComponent implements OnInit {
   private countPerPage = 8;
   public numPage = 0;
   public advancedTable = [];
+  showJobRun=false;
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   constructor(private tablesService: ListTransactionService,
     private router: Router,
     public dialog: MatDialog) { }
   ngOnInit(): void {
+    this.tablesService.messages.subscribe(msg => {
+      console.log("Response from websocket: ", JSON.parse(msg));
+      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
+        // console.error("ws running jobs", JSON.parse(msg).Running_Jobs)
+        this.showJobRun = true;
+      }
+      else if ((JSON.parse(msg).jobEnded) == "Talend Job Transaction Mad Ended") {
+        this.showJobRun = false;
+        this.actualiser();
+
+      }
+    });
      this.getTransactions();
   }
   getColor(ch) {

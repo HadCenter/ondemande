@@ -20,7 +20,8 @@ import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { LoaderModule } from 'app/components/loader/loader.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarComponent } from './customSnackBar/snackbar/snackbar.component';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [ListFileEDIComponent,DialogImportFile, SnackbarComponent,],
@@ -42,7 +43,9 @@ import { SnackbarComponent } from './customSnackBar/snackbar/snackbar.component'
     MatAutocompleteModule,
     LoaderModule,
     MatSnackBarModule,
-    FormsModule, ReactiveFormsModule
+    FormsModule, ReactiveFormsModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule
   ],
 
   entryComponents: [

@@ -650,13 +650,16 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           }
           else {
             this.showValid = false;
-
+            this.fileValid={};
+            this.fileValid.rows=[];
           }
           if (this.file.wrongCommands != '_') {
             this.getWrongFile();
           }
           else {
             this.showWrong = false;
+            this.fileWrong={};
+            this.fileWrong.rows=[];
           }
         },
         error => {

@@ -36,9 +36,9 @@ connection = pika.BlockingConnection(pika.URLParameters('amqps://ucuvenkg:g8SXY-
 channel = connection.channel()
 
 channel.queue_declare(queue='converge.queue.job.start',durable=True)
-#consumer_thread = threading.Thread(target=start_consumer)
+consumer_thread = threading.Thread(target=start_consumer)
 consumer_thread2 = threading.Thread(target=start_JobEnded_consumer)
-#consumer_thread.start()
+consumer_thread.start()
 consumer_thread2.start()
 
 

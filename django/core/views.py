@@ -229,11 +229,10 @@ def seeFileContentMADFileCore(fileType, transaction_id):
         excelfile = pd.read_excel(fileName)
         excelfile = excelfile.fillna('')
 
-
-        #columns = list(excelfile.columns)
-        #rows = excelfile.values.tolist()
+        columns = list(excelfile.columns)
+        rows = excelfile.values.tolist()
         os.remove(fileName)
-        responseObject = functionToUse(excelfile)
+        responseObject = FileExcelContent(columns, rows)
 
         os.chdir(osOriginalPath)
         return responseObject

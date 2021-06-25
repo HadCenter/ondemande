@@ -156,7 +156,7 @@ mat-panel-description.mat-expansion-panel-header-description{
   flex-grow: 0;
 }
 td.details-line.mdl-data-table__cell--non-numeric {
-  text-align: left;
+  text-align: center !important;
   // max-width: initial;
     max-width: 143px;
   text-overflow: ellipsis;
@@ -164,7 +164,7 @@ td.details-line.mdl-data-table__cell--non-numeric {
   white-space: nowrap;
 }
 th.details-line.mdl-data-table__cell--non-numeric {
-  text-align: left;
+  text-align: center !important;
   // max-width: initial;
   max-width: 143px;
   text-overflow: ellipsis;
@@ -226,15 +226,16 @@ td.label-remarque{
 /*--------End Editable Cells--------*/
 th.mat-header-cell{
   padding: 0 8px 12px 8px !important;
-
 }
 td.mat-cell{
   padding: 0 8px 12px 8px !important;
-  text-align: left;
   font-size: 16px;
   font-family: "Helvetica", "Arial", sans-serif;
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+td.mat-cell.center-cell-prestationsErronnees{
+  text-align: center !important;
 }
 
 label.mini-column {
@@ -338,6 +339,7 @@ span.mat-option-text {
 
 th.titre-column{
   padding: 0 8px 0 8px !important;
+  text-align: center !important;
 }
 .btn-delete{
   background-color: transparent;
@@ -377,3 +379,4 @@ button.delete-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-e
     flex-direction: column;
     justify-content: center;
 }
+

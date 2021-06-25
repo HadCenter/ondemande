@@ -21,6 +21,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   public completeTable: any = [];
   public filterValue: any;
   clicked = new Array();
+  sendedToUrbantz = new this.Array()
   limit = 15;
   actions: any[] = [
     { value: 'analyser', viewValue: 'Analyser' },
@@ -33,10 +34,12 @@ export class ListFileEDIComponent extends UpgradableComponent {
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   files = [];
+  copyFilesPerPagination = [];
   show = true;
   copy_advancedTable: any[];
   allTable: any[];
-  // filterValues: any=[];
+  showJobRun = false;
+
   constructor(private tablesService: ListFileEdiService,
     private router: Router,
     private _snackBar: MatSnackBar,
@@ -45,6 +48,22 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.completeTable = this.tablesService.advanceTableData;
   }
   ngOnInit() {
+    this.tablesService.messages.subscribe(msg => {
+      console.log("Response from websocket: ", JSON.parse(msg));
+      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
+        // console.error("ws running jobs", JSON.parse(msg).Running_Jobs)
+        this.showJobRun = true;
+
+        //  console.warn(JSON.parse(msg))
+        // this.actualiser();
+      }
+      else if ((JSON.parse(msg).jobEnded) == "Talend Job EDI Ended") {
+        this.showJobRun = false;
+        this.actualiser();
+
+      }
+    });
+
     this.getFiles();
   }
 
@@ -71,7 +90,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   public numPage = 0;
   public advancedTable = [];
   public getAdvancedTablePage(page, countPerPage) {
-    return this.files.slice((page - 1) * countPerPage, page * countPerPage);
+    return this.copyFilesPerPagination.slice((page - 1) * countPerPage, page * countPerPage);
   }
   /* available sort value:
 -1 - desc; 	0 - no sorting; 1 - asc; null - disabled */
@@ -87,7 +106,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     }
   }
   public changeAdvanceSorting(order, index) {
-    this.files = this.sortByAttributeObject(this.files, order, index);
+    this.copyFilesPerPagination = this.sortByAttributeObject(this.copyFilesPerPagination, order, index);
   }
 
   /***Sort by diff column */
@@ -137,13 +156,16 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
   /**** Filter items */
   setFilteredItems() {
-    this.advancedTable = this.filterItems(this.filterValue);
+    this.copyFilesPerPagination = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
     }
+    this.currentPage = this.copyFilesPerPagination.length > 0 ? 1 : 0;
+    this.numPage = Math.ceil(this.copyFilesPerPagination.length / this.countPerPage);
+    this.advancedTable = this.copyFilesPerPagination.slice(0, this.countPerPage);
   }
 
-  filterItems(filterValue : string) {
+  filterItems(filterValue: string) {
     let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
     return this.files.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
@@ -154,15 +176,17 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.getAllFiles()
       .subscribe(res => {
         this.files = res;
+        this.copyFilesPerPagination = this.files;
         console.log('files', this.files)
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage); /****to display */
-        console.log("advanced",this.advancedTable)
+        console.log("advanced", this.advancedTable)
         this.copy_advancedTable = this.advancedTable; /***copy for filter */
         this.allTable = this.advancedTable; /****all content */
         for (var i = 0; i < this.advancedTable.length; i++) {
           this.clicked.push(false);
+          this.sendedToUrbantz.push(false);
         }
       },
         error => console.log(error));
@@ -172,8 +196,9 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.executeJob(row)
       .subscribe(res => {
         console.log("success");
+        row.cliqued=true;
         this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction)
-        this.router.navigate(['/list-file-edi']);
+      //  this.router.navigate(['/list-file-edi']);
       }, error => console.log(error));
   }
 
@@ -195,14 +220,25 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.router.navigate(['/details-file-edi', row.idFile])
   }
 
-  sendFileToUrbantz(codeClient, validatedOrders) {
+  sendFileToUrbantz(row, index) {
     let data = {
-      clientCode: codeClient,
-      fileName: validatedOrders,
+      clientCode: row.contact.codeClient,
+      fileName: row.validatedOrders,
+      fileId: row.idFile
     }
-    this.tablesService.sendFileToUrbantz(data).subscribe(res => {
-      console.log("res urbantz", res);
-    })
+    this.tablesService.sendFileToUrbantz(data).subscribe(
+      result => {
+        // Handle result
+        console.log("res urbantz", result)
+      },
+      error => {
+        this.openSnackBar("Erreur d’envoi", this.snackAction);
+      },
+      () => {
+        // No errors
+        this.sendedToUrbantz[index] = true;
+        this.openSnackBar("Envoyé avec succès", this.snackAction);
+      })
   }
 
   /******Open dialog Import File */

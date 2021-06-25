@@ -5,9 +5,14 @@
       </base-card-title>
       <base-card-body class="no-padding">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
-              <label  for="token" style="color:gray; font: 13px Arial, sans-serif;"  >API expediteur</label>
+              <label  for="token" style="color:gray; font: 13px Arial, sans-serif;" >API expediteur</label>
               <br>
               <input [(ngModel)]="currentClient.token" name="token" class="mdl-textfield__input" type="text" id="token">
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+              <label  for="token" style="color:gray; font: 13px Arial, sans-serif;" >API flux</label>
+              <br>
+              <input [(ngModel)]="currentClient.token_for_flux" name="token" class="mdl-textfield__input" type="text" id="token_for_flux">
         </div>
         <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
             <button (click)="sauvegarder()" type="submit" class="mdl-button mdl-js-button mdl-button--raised color--light-blue" >sauvegarder</button>

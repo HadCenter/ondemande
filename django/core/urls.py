@@ -7,7 +7,7 @@ urlpatterns = [
 	path("getClients/",views.clientList, name = "client-list"),
     path('file/', views.fileCreate, name='file-create'),
     path("getFiles/", views.fileList, name = "file-list"),
-    path("getFilesByClient/", views.getFilesByClient, name = "file-list"),
+    path("getFilesByClient/<str:pk>", views.getFilesByClient, name = "file-list"),
     path('getClient/<int:pk>', views.client_detail),
     path('getFile/<int:pk>', views.file_detail),
     path('updateClient/<int:pk>', views.client_detail_update),

@@ -25,6 +25,7 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
   @HostBinding('class.mdl-cell--top') private readonly mdlCellTop = true;
   @HostBinding('class.ui-tables') private readonly uiTables = true;
   users = [];
+  copyUsersPerPagination = [];
   show = true;
   public currentPage = 1;
   private countPerPage = 8;
@@ -33,7 +34,7 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
   public filterValue: any;
   limit = 15;
   public getAdvancedTablePage(page, countPerPage) {
-    return this.users.slice((page - 1) * countPerPage, page * countPerPage);
+    return this.copyUsersPerPagination.slice((page - 1) * countPerPage, page * countPerPage);
   }
   public advancedHeaders = this.usersService.getAdvancedHeaders();
   constructor(private usersService: UsersService,
@@ -51,10 +52,13 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
     }
   }
   setFilteredItems() {
-    this.advancedTable = this.filterItems(this.filterValue);
+    this.copyUsersPerPagination = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
     }
+    this.currentPage = this.copyUsersPerPagination.length > 0 ? 1 : 0;
+    this.numPage = Math.ceil(this.copyUsersPerPagination.length / this.countPerPage);
+    this.advancedTable = this.copyUsersPerPagination.slice(0,this.countPerPage);
   }
   filterItems(filterValue) {
     return this.users.filter((item) => {
@@ -75,6 +79,7 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
             res[i].status = "Non actif"
           }
         }
+        this.copyUsersPerPagination = this.users;
         this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },

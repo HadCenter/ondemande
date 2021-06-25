@@ -140,14 +140,19 @@ mat-panel-description.description.mat-expansion-panel-header-description {
 }
 th.titre-column {
   padding: 0 11px 0 11px !important;
+  text-align: center !important;
+
 }
 td.mat-cell {
   padding: 0 11px 12px 11px !important;
-  text-align: left;
   font-size: 16px;
   font-family: "Helvetica", "Arial", sans-serif;
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+td.mat-cell.center-cell-transactionsFiles{
+  text-align: center !important;
 }
 
 .form-column {
@@ -241,5 +246,19 @@ option {
 div.element-2{
   margin: auto;
   margin-left: 20px;
+}
+div.mat-paginator-container{
+  background-color: #444;
+  display: flex;
+  justify-content: flex-start;
+}
+.mat-paginator, .mat-paginator-page-size .mat-select-trigger{
+  color: white;
+  font-size: 13px;
+}
+
+.selected
+{
+  border:1px solid red;
 }
 

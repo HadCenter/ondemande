@@ -6,12 +6,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp
+
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
-from .models import SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto
+from .models import SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
 import pandas as pd
 import jsonpickle
 import os
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/DiagnosticEdiWebhookProd/cea1eff3f8404fcebda806957a0ed2bd'
 
@@ -23,12 +26,30 @@ def startEngineOnEdiFiles(request):
 	return startEngineOnEdiFilesWithData(request.data)
 
 def startEngineOnEdiFilesWithData(data):
-	fileEdi = EDIfile.objects.get(pk=data[0]["fileId"])
-	fileEdi.cliqued = True
-	fileEdi.save()
-	requests.post(talendUrlEDIFileWebHook, json=data)
+
+	EDIfile.objects.filter(pk=data[0]["fileId"]).update(cliqued=True)
+	from rabbitMQ.views import sendMessageRabbitMqToStartJob
+	#requests.post(talendUrlEDIFileWebHook, json=data)
+	from websocket.consumers import ChatConsumer
+	ChatConsumer.state['Running_Jobs'].append("Talend Job Edi")
+	channel_layer = get_channel_layer()
+	async_to_sync(channel_layer.group_send)(
+		'notifications_room_group',
+		{
+			'type': 'send_message_to_frontend',
+			'message': ChatConsumer.state
+		}
+	)
+	messageMQ= RabbitMqMessagesForJobToStart(webhook= talendUrlEDIFileWebHook , payloadToSendToTalend= data , environnement= "dev")
+	sendMessageRabbitMqToStartJob(jsonpickle.encode(messageMQ,unpicklable=False))
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
+
+def startEngineWithLinkAndData(link:str,data):
+
+
+	requests.post(link, json=data)
+	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
 madPlanJobList = ["ECOLOTRANS_URBANTZ_TO_HUB_SANS_MAD_OTHERS_ONDEMAND",
@@ -219,10 +240,22 @@ def correctAllFiles(request):
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):
-	requests.post(talendUrlMADFileWebHook, json=jsonpickle.encode(madObjectToPost,unpicklable=False))
+	from rabbitMQ.views import sendMessageRabbitMqToStartJob
+	# requests.post(talendUrlEDIFileWebHook, json=data)
+	from websocket.consumers import ChatConsumer
+	ChatConsumer.state['Running_Jobs'].append("Talend Job Mad Transaction")
+	channel_layer = get_channel_layer()
+	async_to_sync(channel_layer.group_send)(
+		'notifications_room_group',
+		{
+			'type': 'send_message_to_frontend',
+			'message': ChatConsumer.state
+		}
+	)
+	messageMQ = RabbitMqMessagesForJobToStart(webhook=talendUrlMADFileWebHook, payloadToSendToTalend=madObjectToPost,
+											  environnement="dev")
+	sendMessageRabbitMqToStartJob(jsonpickle.encode(messageMQ, unpicklable=False))
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
-
-
 
 
 @api_view(['get'])

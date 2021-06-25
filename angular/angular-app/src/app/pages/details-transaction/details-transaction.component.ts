@@ -1,77 +1,62 @@
-import { AfterViewInit, Component, OnInit, HostListener } from '@angular/core';
+import { AfterViewInit, Component, OnInit, HostListener, ViewChild, QueryList, ViewChildren, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsTransactionService } from './details-transaction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UpgradableComponent } from 'theme/components/upgradable';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
-export interface MouseEvent {
-  rowId: number;
-  colId: number;
-  cellsType: string;
-}
+
 
 @Component({
   selector: 'app-details-transaction',
   templateUrl: './details-transaction.component.html',
   styleUrls: ['./details-transaction.component.scss']
 })
-export class DetailsTransactionComponent extends UpgradableComponent implements OnInit, AfterViewInit {
+export class DetailsTransactionComponent extends UpgradableComponent implements OnInit{
+  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   fichierException: any = [];
+  fichierLivraison: any = [];
   fichierMad: any = [];
   fichierMetadata: any = [];
-  fichierLivraison: any = [];
-  arrayLivraison: any = [];
-  displayedColumnsLivraison: any = [];
-  transaction: any;
-  displayedColumnsException: any = [];
-  displayedColumnsMad: any = [];
-  displayedColumnsMetadata: any = [];
-  options: any = [];
-  optionsException: any = [];
-  optionsMetaData: any = [];
-  optionsMad: any = [];
-
-  tableMouseDown: MouseEvent;
-  tableMouseUp: MouseEvent;
-  FIRST_EDITABLE_ROW: number = 0;
-  LAST_EDITABLE_ROW: number = 0;
-  FIRST_EDITABLE_COL: number = 0;                       // first column is not editable --> so start from index 1
-  LAST_EDITABLE_COL: number = 0;
+  displayedColumnsLivraison: string[] = [ 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'];
+  displayedColumnsException: string[] = [ 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom','Item___Type','Item___Quantite','Code_postal','Round_Name','Remarque','isDeleted'];
+  displayedColumnsMetadata: string[] = [ 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name','sourceClosureDate','realInfoHasPrepared','status','metadataFACTURATION'];
+  displayedColumnsMad: string[] = [ 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'];
+  dataSource = new MatTableDataSource<any>(this.fichierLivraison);
+  dataSourceException = new MatTableDataSource<any>(this.fichierException);
+  dataSourceMetaData = new MatTableDataSource<any>(this.fichierMetadata);
+  dataSourceMAD = new MatTableDataSource<any>(this.fichierMad);
+  selection: any[]=[];
+  selectionEception: any[]=[];
+  selectionMetadata: any[]=[];
+  selectionMad: any[]=[];
+  @ViewChildren("cell", { read: ElementRef }) cells: QueryList<ElementRef>;
+  @ViewChildren("cellException", { read: ElementRef }) cellsException: QueryList<ElementRef>;
+  @ViewChildren("cellMetadata", { read: ElementRef }) cellsMetadata: QueryList<ElementRef>;
+  @ViewChildren("cellMad", { read: ElementRef }) cellsMad: QueryList<ElementRef>;
   newCellValue: string = '';
-  clickCorrection: boolean = false;
-  selectedCellsState: boolean[][] = [];
-  selectedCellsStateException: boolean[][] = [];
-  selectedCellsStateMetaData: boolean[][] = [];
-  selectedCellsStateMad: boolean[][] = [];
-
-  public snackAction = 'Ok';
-  filterValues: any = [];
-  filterExceptionValues: any = [];
-  filterMetaDataValues: any = [];
-  filterMadValues: any = [];
-  copySelectionLivraison: any = [];
-  copyFilterLivraison: any = [];
-  copySelectionException: any = [];
-  copyFilterException: any = [];
-  copySelectionMetaData: any = [];
-  copyFilterMetaData: any = [];
-  copySelectionMad: any = [];
-  copyFilterMad: any = [];
-  rowsFichierLivraison: any = [];
-  fileTocheck: any;
+  newCellValueException: string = '';
+  newCellValueMetadata: string = '';
+  newCellValueMad: string = '';
+  arrayLivraison: any = [];
   arrayException: any = [];
   arrayMetaData: any = [];
   arrayMad: any = [];
-  fileSelected: any;
   showLoaderLivraisonFile = true;
   showLoaderExceptionFile = true;
   showLoaderMetadataFile = true;
   showLoaderMadFile = true;
-  public filterValueLivraison: any;
-  public filterValueException: any;
-  public filterValueMad: any;
-  public filterValuemetadata: any;
-
+  public snackAction = 'Ok';
+  copyFilterLivraison: any = [];
+  copyFilterException: any = [];
+  copyFilterMetaData: any = [];
+  copyFilterMad: any = [];
+  fileTocheck: any;
+  fileTocheckException : any;
+  fileTocheckMetadata : any;
+  fileTocheckMad : any;
+  transaction: any;
   constructor(private route: ActivatedRoute,
     public service: DetailsTransactionService,
     private _snackBar: MatSnackBar, private router: Router,) { super(); }
@@ -82,517 +67,25 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     })
     var data = { "transaction_id": parseInt(this.route.snapshot.params.id) };
     this.service.seeAllFileTransaction(data).subscribe(res => {
-      this.fichierLivraison = res.livraison;
+      this.dataSource.paginator = this.paginator.toArray()[0];
       this.arrayLivraison = res.livraison;
-      this.fichierException = res.exception;
+      this.dataSource.data = this.arrayLivraison;
+      this.dataSourceException.paginator = this.paginator.toArray()[1];
       this.arrayException = res.exception;
-      this.fichierMad = res.mad;
-      this.arrayMad = res.mad;
-      this.fichierMetadata = res.metadata;
+      this.dataSourceException.data = this.arrayException;
+      this.dataSourceMetaData.paginator = this.paginator.toArray()[2];
       this.arrayMetaData = res.metadata;
-      this.rearrangeFileLivraison();
-      this.rearrangeFileException();
-      this.rearrangeFileMetadata();
-      this.rearrangeFileMAD();
-    })
-  }
-    /**** Filter items */
-  setFilteredItemsLivraison() {
-    this.fichierLivraison = this.filterItemsLivraison(this.filterValueLivraison);
-    if (this.filterValueLivraison === '') {
-      this.fichierLivraison = this.fichierLivraison;
-    }
-  }
-
-  filterItemsLivraison(filterValueLivraison : string) {
-    return this.copyFilterLivraison.filter((item) => {
-      return JSON.stringify(item).toLowerCase().includes(filterValueLivraison.toLowerCase());
-    });
-  }
-    /**** Filter items */
-  setFilteredItemsException() {
-    this.fichierException = this.filterItemsException(this.filterValueException);
-    if (this.filterValueException === '') {
-      this.fichierException = this.fichierException;
-    }
-  }
-
-  filterItemsException(filterItemsException : string) {
-    return this.copyFilterException.filter((item) => {
-      return JSON.stringify(item).toLowerCase().includes(filterItemsException.toLowerCase());
-    });
-  }
-    /**** Filter items */
-  setFilteredItemsMetadata() {
-    this.fichierMetadata = this.filterItemsMetadata(this.filterValuemetadata);
-    if (this.filterValuemetadata === '') {
-      this.fichierMetadata = this.fichierMetadata;
-    }
-  }
-
-  filterItemsMetadata(filterItemsMetadata : string) {
-    return this.copyFilterMetaData.filter((item) => {
-      return JSON.stringify(item).toLowerCase().includes(filterItemsMetadata.toLowerCase());
-    });
-  }
-    /**** Filter items */
-  setFilteredItemsMAD() {
-    this.fichierMad = this.filterItemsMAD(this.filterValueMad);
-    if (this.filterValueMad === '') {
-      this.fichierMad = this.fichierMad;
-    }
-  }
-
-  filterItemsMAD(filterItemsMAD : string) {
-    return this.copyFilterMad.filter((item) => {
-      return JSON.stringify(item).toLowerCase().includes(filterItemsMAD.toLowerCase());
-    });
-  }
-  rearrangeFileLivraison() {
-    if (this.fichierLivraison!==null && this.fichierLivraison.rows.length > 0) {
-      this.fichierLivraison.rows.splice(0, 0, this.fichierLivraison.columns);
-      this.fichierLivraison = this.convertToArrayOfObjects(this.fichierLivraison.rows);
-      this.fichierLivraison = this.fichierLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      this.copySelectionLivraison = this.fichierLivraison;   //copy to use on selection
-      this.copyFilterLivraison = this.fichierLivraison;    // copy to filter *
-      this.displayedColumnsLivraison = Object.keys(this.fichierLivraison[0]);
-       // initialize all selectedCellsState to false
-       this.fichierLivraison.forEach(element => {
-        this.selectedCellsState.push(Array.from({ length: Object.keys(this.fichierLivraison[0]).length - 1 }, () => false))
-      });
-      this.displayedColumnsLivraison.splice(0,3);
-
-      // get select options
-      this.displayedColumnsLivraison.forEach(item => {
-        this.getOption(item);
-      })
+      this.dataSourceMetaData.data = this.arrayMetaData;
+      this.dataSourceMAD.paginator = this.paginator.toArray()[3];
+      this.arrayMad = res.mad;
+      this.dataSourceMAD.data = this.arrayMad;
       this.showLoaderLivraisonFile = false;
-    }
-    else {
-      this.showLoaderLivraisonFile = false;
-    }
-  }
-
-  rearrangeFileException() {
-    if (this.fichierException!==null &&this.fichierException.rows.length > 0) {
-      this.fichierException.rows.splice(0, 0, this.fichierException.columns);
-      this.fichierException = this.convertToArrayOfObjects(this.fichierException.rows);
-      this.copySelectionException = this.fichierException;   //copy to use on selection
-      this.copyFilterException = this.fichierException;    // copy to filter *
-      this.displayedColumnsException = Object.keys(this.fichierException[0]);
-
-      // initialize all selectedCellsState to false
-      this.fichierException.forEach(element => {
-        this.selectedCellsStateException.push(Array.from({ length: this.displayedColumnsException.length - 1 }, () => false))
-      });
-      this.displayedColumnsException.splice(0,3);
-      // get select options
-      this.displayedColumnsException.forEach(item => {
-        this.getOptionException(item);
-      })
       this.showLoaderExceptionFile = false;
-    }
-    else {
-      this.showLoaderExceptionFile = false;
-    }
-  }
-
-  rearrangeFileMAD() {
-    if (this.fichierMad!==null && this.fichierMad.rows.length > 0) {
-
-      this.fichierMad.rows.splice(0, 0, this.fichierMad.columns);
-      this.fichierMad = this.convertToArrayOfObjects(this.fichierMad.rows);
-      this.copySelectionMad = this.fichierMad;   //copy to use on selection
-      this.copyFilterMad = this.fichierMad;    // copy to filter *
-      this.displayedColumnsMad = Object.keys(this.fichierMad[0]);
-      // initialize all selectedCellsState to false
-      this.fichierMad.forEach(element => {
-        this.selectedCellsStateMad.push(Array.from({ length: this.displayedColumnsMad.length - 1 }, () => false))
-      });
-      this.displayedColumnsMad.splice(0,3);
-      // get select options
-      this.displayedColumnsMad.forEach(item => {
-        this.getOptionMad(item);
-      })
-      this.showLoaderMadFile = false;
-    }
-    else {
-      this.showLoaderMadFile = false;
-    }
-  }
-
-
-  rearrangeFileMetadata() {
-    if (this.fichierMetadata!==null && this.fichierMetadata.rows.length > 0) {
-      this.fichierMetadata.rows.splice(0, 0, this.fichierMetadata.columns);
-      this.fichierMetadata = this.convertToArrayOfObjects(this.fichierMetadata.rows);
-      this.copySelectionMetaData = this.fichierMetadata;   //copy to use on selection
-      this.copyFilterMetaData = this.fichierMetadata;    // copy to filter *
-      this.displayedColumnsMetadata = Object.keys(this.fichierMetadata[0]);
-      // initialize all selectedCellsState to false
-      this.fichierMetadata.forEach(element => {
-        this.selectedCellsStateMetaData.push(Array.from({ length: this.displayedColumnsMetadata.length - 1 }, () => false))
-      });
-      this.displayedColumnsMetadata.splice(0,3);
-      // get select options
-      this.displayedColumnsMetadata.forEach(item => {
-        this.getOptionMetaData(item);
-      })
       this.showLoaderMetadataFile = false;
-    }
-    else {
-      this.showLoaderMetadataFile = false;
-    }
-  }
-
-  /**
-   * Get options inside selects for Livraison
-   * @param filter
-   */
-  getOption(filter) {
-    let options = [];
-    options = this.fichierLivraison.map((item) => item[filter]);
-    options = options.filter(function (value, index, options) {
-      return options.indexOf(value) == index && value != "";
-    });
-
-    this.displayedColumnsLivraison.forEach((item, key) => {
-      if (item == filter) {
-        var obj = {
-          columnProp: item,
-          options: options
-        };
-        this.options.push(obj)
-      }
+      this.showLoaderMadFile = false;
     })
-  }
-
-  /**
-  * Get options inside selects for Exception
-  * @param filter
-  */
-  getOptionException(filter) {
-    let optionsException = [];
-    optionsException = this.fichierException.map((item) => item[filter]);
-    optionsException = optionsException.filter(function (value, index, optionsException) {
-      return optionsException.indexOf(value) == index && value != "";
-    });
-
-    this.displayedColumnsException.forEach((item, key) => {
-      if (item == filter) {
-        var obj = {
-          columnProp: item,
-          options: optionsException
-        };
-        this.optionsException.push(obj)
-      }
-    })
-  }
-
-  /**
-   * Get options inside selects for MetaData
-   * @param filter
-   */
-  getOptionMetaData(filter) {
-    let optionsMetaData = [];
-    optionsMetaData = this.fichierMetadata.map((item) => item[filter]);
-    optionsMetaData = optionsMetaData.filter(function (value, index, optionsMetaData) {
-      return optionsMetaData.indexOf(value) == index && value != "";
-    });
-
-    this.displayedColumnsMetadata.forEach((item, key) => {
-      if (item == filter) {
-        var obj = {
-          columnProp: item,
-          options: optionsMetaData
-        };
-        this.optionsMetaData.push(obj)
-      }
-    })
-  }
-
-  /**
-    * Get options inside selects for MAD
-    * @param filter
-    */
-  getOptionMad(filter) {
-    let optionsMad = [];
-    optionsMad = this.fichierMad.map((item) => item[filter]);
-    optionsMad = optionsMad.filter(function (value, index, optionsMad) {
-      return optionsMad.indexOf(value) == index && value != "";
-    });
-
-    this.displayedColumnsMad.forEach((item, key) => {
-      if (item == filter) {
-        var obj = {
-          columnProp: item,
-          options: optionsMad
-        };
-        this.optionsMad.push(obj)
-      }
-    })
-  }
-
-  convertToArrayOfObjects(data) {
-    var keys = data.shift(),
-      i = 0, k = 0,
-      obj = null,
-      output = [];
-    for (i = 0; i < data.length; i++) {
-      obj = {};
-      for (k = 0; k < keys.length; k++) {
-        obj[keys[k]] = data[i][k];
-      }
-      output.push(obj);
-    }
-    return output;
-  }
-
-  /**
-* Initialise the selected cells
-*/
-  initSelectedCells() {
-    if (this.fileSelected == "livraison") {
-      this.LAST_EDITABLE_ROW = this.fichierLivraison.length - 1;
-      this.LAST_EDITABLE_COL = this.displayedColumnsLivraison.length - 1;
-    }
-    else if (this.fileSelected == "exception") {
-      this.LAST_EDITABLE_ROW = this.fichierException.length - 1;
-      this.LAST_EDITABLE_COL = this.displayedColumnsException.length - 1;
-    }
-    else if (this.fileSelected == "metadata") {
-      this.LAST_EDITABLE_ROW = this.fichierMetadata.length - 1;
-      this.LAST_EDITABLE_COL = this.displayedColumnsMetadata.length - 1;
-    }
-    else {   // Fichier MAD
-      this.LAST_EDITABLE_ROW = this.fichierMad.length - 1;
-      this.LAST_EDITABLE_COL = this.displayedColumnsMad.length - 1;
-    }
-
-    for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-      for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-        if (this.fileSelected == "livraison") {
-          this.selectedCellsState[i][j] = false;
-        }
-        else if (this.fileSelected == "exception") {
-          this.selectedCellsStateException[i][j] = false;
-        }
-        else if (this.fileSelected == "metadata") {
-          this.selectedCellsStateMetaData[i][j] = false;
-        }
-        else {   //Fichier MAD
-          this.selectedCellsStateMad[i][j] = false;
-        }
-      }
-    }
 
   }
-  /**
-   * Update selectedCols && selectedRows arrays
-   * @param mouseDownColId
-   * @param mouseUpColId
-   * @param mouseDownRowId
-   * @param mouseUpRowId
-   */
-  private updateSelectedCellsState(mouseDownColId: number, mouseUpColId: number, mouseDownRowId: number, mouseUpRowId: number) {
-    // init selected cells
-    this.initSelectedCells();
-    // update selected cells
-    let startCol: number;
-    let endCol: number;
-    let startRow: number;
-    let endRow: number;
-    if (mouseDownColId <= mouseUpColId) {
-      startCol = mouseDownColId;
-      endCol = mouseUpColId;
-    } else {
-      endCol = mouseDownColId;
-      startCol = mouseUpColId;
-    }
-
-    if (mouseDownRowId <= mouseUpRowId) {
-      startRow = mouseDownRowId;
-      endRow = mouseUpRowId;
-    } else {
-      endRow = mouseDownRowId;
-      startRow = mouseUpRowId;
-    }
-    for (let i = startRow; i <= endRow; i++) {
-      for (let j = startCol; j <= endCol; j++) {
-        if (this.fileSelected == "livraison") {
-          this.selectedCellsState[i][j] = true;
-        }
-        else if (this.fileSelected == "exception") {
-          this.selectedCellsStateException[i][j] = true;
-        }
-        else if (this.fileSelected == "metadata") {
-          this.selectedCellsStateMetaData[i][j] = true;
-        }
-        else {
-          this.selectedCellsStateMad[i][j] = true;
-        }
-      }
-    }
-  }
-
-  updateSelectedCellsValues(text: string) {
-    let dataCopy;
-    if (text == null) { return; }
-
-    if (this.tableMouseDown && this.tableMouseUp) {
-      if (this.tableMouseDown.cellsType === this.tableMouseUp.cellsType) {
-        //convert every rows to object
-        if (this.fileSelected == "livraison") {
-          dataCopy = this.fichierLivraison.slice();// copy and mutate
-        }
-        else if (this.fileSelected == "exception") {
-          dataCopy = this.fichierException.slice();// copy and mutate
-        }
-        else if (this.fileSelected == "metadata") {
-          dataCopy = this.fichierMetadata.slice();// copy and mutate
-        }
-        else {
-          dataCopy = this.fichierMad.slice();// copy and mutate
-        }
-
-        let startCol: number;
-        let endCol: number;
-        let startRow: number;
-        let endRow: number;
-
-        if (this.tableMouseDown.colId <= this.tableMouseUp.colId) {
-          startCol = this.tableMouseDown.colId;
-          endCol = this.tableMouseUp.colId;
-        } else {
-          endCol = this.tableMouseDown.colId;
-          startCol = this.tableMouseUp.colId;
-        }
-
-        if (this.tableMouseDown.rowId <= this.tableMouseUp.rowId) {
-          startRow = this.tableMouseDown.rowId;
-          endRow = this.tableMouseUp.rowId;
-        } else {
-          endRow = this.tableMouseDown.rowId;
-          startRow = this.tableMouseUp.rowId;
-        }
-
-        //--Edit cells from the same column
-        if (startCol === endCol) {
-          for (let i = startRow; i <= endRow; i++) {
-            if (this.fileSelected == "livraison") {
-
-              dataCopy[i][this.displayedColumnsLivraison[startCol]] = text;
-            }
-            else if (this.fileSelected == "exception") {
-              dataCopy[i][this.displayedColumnsException[startCol]] = text;
-            }
-            else if (this.fileSelected == "metadata") {
-              dataCopy[i][this.displayedColumnsMetadata[startCol]] = text;
-            }
-            else {
-              dataCopy[i][this.displayedColumnsMetadata[startCol]] = text;
-            }
-          }
-        } else {
-          //--Edit cells starting and ending not on the same column
-          for (let i = startRow; i <= endRow; i++) {
-            for (let j = startCol; j <= endCol; j++) {
-              if (this.fileSelected == "livraison") {
-                dataCopy[i][this.displayedColumnsLivraison[j]] = text;
-              }
-              else if (this.fileSelected == "exception") {
-                dataCopy[i][this.displayedColumnsException[j]] = text;
-              }
-              else if (this.fileSelected == "metadata") {
-                dataCopy[i][this.displayedColumnsMetadata[j]] = text;
-              }
-              else {
-                dataCopy[i][this.displayedColumnsMad[j]] = text;
-              }
-            }
-          }
-        }
-
-        if (this.fileSelected == "livraison") {
-          this.fichierLivraison = dataCopy;
-        }
-        else if (this.fileSelected == "exception") {
-          this.fichierException = dataCopy;
-        }
-        else if (this.fileSelected == "metadata") {
-          this.fichierMetadata = dataCopy;
-        }
-        else {
-          this.fichierMad = dataCopy;
-        }
-      } else {
-        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'OK');
-      }
-    }
-  }
-
-  /**
-  * After the user enters a new value, all selected cells must be updated
-  * document:keyup
-  * @param event
-  */
-  @HostListener('document:keyup', ['$event'])
-  onKeyUp(event: KeyboardEvent): void {
-
-    // If no cell is selected then ignore keyUp event
-    if (this.tableMouseDown && this.tableMouseUp) {
-
-      let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
-        'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
-        'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
-        'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
-
-      if (event.key === 'Backspace') { // 'delete' key is pressed
-        const end: number = this.newCellValue.length - 1;
-        this.newCellValue = this.newCellValue.slice(0, end);
-
-      } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
-        this.newCellValue += event.key;
-      }
-      this.updateSelectedCellsValues(this.newCellValue);
-
-    }
-  }
-
-  /**
-   * @param rowId
-   * @param colId
-   * @param cellsType
-   */
-  onMouseDown(rowId: number, colId: number, cellsType: string) {
-    if (this.clickCorrection == false) {
-      this.tableMouseDown = { rowId: rowId, colId: colId, cellsType: cellsType };
-    }
-    else {  //disable click after click correction
-      return false;
-    }
-
-  }
-
-  /**
-   * @param rowId
-   * @param colId
-   * @param cellsType
-   */
-  onMouseUp(rowId: number, colId: number, cellsType: string, file) {
-    this.fileSelected = file;  // update the file selected
-    if (this.clickCorrection == false) {
-      this.tableMouseUp = { rowId: rowId, colId: colId, cellsType: cellsType };
-      if (this.tableMouseDown) {
-        this.newCellValue = '';
-        this.updateSelectedCellsState(this.tableMouseDown.colId, this.tableMouseUp.colId, this.tableMouseDown.rowId, this.tableMouseUp.rowId);
-      }
-    }
-    else {  //disable click after click correction
-      return false;
-    }
-  }
-
   indexOfInArray(item: string, array: string[]): number {
     let index: number = -1;
     for (let i = 0; i < array.length; i++) {
@@ -601,320 +94,530 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     return index;
   }
 
-  setFilteredItemsMetaDataOptions(filter) {
-    // check if filter is already selected
-    const filterExists = this.filterMetaDataValues.some(f => f.columnProp === filter.columnProp);
-    if (filterExists == false) { this.filterMetaDataValues.push(filter) }
-    // if only one select is selected
-    if (this.filterMetaDataValues.length == 1) {
-      this.fichierMetadata = this.filterMetaDataChange(filter);
-    }
-    else {
-      // if already another select is active merge the results
-      if (filterExists == false) {
-        this.fichierMetadata = [...this.fichierMetadata, ...this.filterMetaDataChange(filter)];
-        //delete doublon
-        this.fichierMetadata = this.fichierMetadata.filter((object, index) => index === this.fichierMetadata.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.fichierMetadata = this.fichierMetadata.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      }
-      else {
-        this.fichierMetadata = [];
-        this.filterMetaDataValues.forEach(element => {
-          this.fichierMetadata = this.fichierMetadata.concat(this.filterMetaDataChange(element));
-        });
-        //delete doublon
-        this.fichierMetadata = this.fichierMetadata.filter((object, index) => index === this.fichierMetadata.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-      }
-    }
-
-    // if selected is deactivate
-    if (filter.modelValue == "") {
-      if (this.filterMetaDataValues.length == 1) {
-        this.fichierMetadata = this.copySelectionMetaData;
-        this.fichierMetadata = this.fichierMetadata.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      }
-      else {
-        this.filterMetaDataValues = this.filterMetaDataValues.filter(function (item) {
-          return item.columnProp !== filter.columnProp;
-        })
-        this.filterMetaDataValues.forEach(element => {
-          this.fichierMetadata = this.filterMetaDataChange(element)
-        });
-      }
-    }
-
+  select(event : MouseEvent, cell: any) {
+    const cellClick = this.cells.find(x => x.nativeElement == event.target);
+    
+    let indexSelected = -1;
+    this.cells.forEach((x, i) => {
+      if (x == cellClick) indexSelected = i + this.paginator.toArray()[0].pageIndex * this.displayedColumnsLivraison.length * this.paginator.toArray()[0].pageSize;
+    });
+    //console.log(cellClick);
+    this.selection = [indexSelected]
+    //console.log("this.selection",this.selection);
+  }
+  selectMetadata(event : MouseEvent, cell: any) {
+    const cellClick = this.cellsMetadata.find(x => x.nativeElement == event.target);
+    let indexSelected = -1;
+    this.cellsMetadata.forEach((x, i) => {
+      if (x == cellClick) indexSelected = i + this.paginator.toArray()[2].pageIndex * this.displayedColumnsMetadata.length * this.paginator.toArray()[2].pageSize;
+    });
+    this.selectionMetadata = [indexSelected]
+    //console.log("this.selectionMetadata",this.selectionMetadata);
+  }
+  selectException(event : MouseEvent, cell: any) {
+    const cellClick = this.cellsException.find(x => x.nativeElement == event.target);
+    let indexSelected = -1;
+    this.cellsException.forEach((x, i) => {
+      if (x == cellClick) indexSelected = i + this.paginator.toArray()[1].pageIndex * this.displayedColumnsException.length * this.paginator.toArray()[1].pageSize;
+    });
+    this.selectionEception = [indexSelected];
+  }
+  selectMad(event : MouseEvent, cell: any) {
+    const cellClick = this.cellsMad.find(x => x.nativeElement == event.target);
+    
+    let indexSelected = -1;
+    this.cellsMad.forEach((x, i) => {
+      if (x == cellClick) indexSelected = i + this.paginator.toArray()[3].pageIndex * this.displayedColumnsMad.length * this.paginator.toArray()[3].pageSize;
+    });
+    //console.log(cellClick);
+    this.selectionMad = [indexSelected]
+    //console.log("this.selection",this.selection);
   }
 
-  setFilteredItemsMadOptions(filter) {
-    // check if filter is already selected
-    const filterExists = this.filterMadValues.some(f => f.columnProp === filter.columnProp);
-    if (filterExists == false) { this.filterMadValues.push(filter) }
-    // if only one select is selected
-    if (this.filterMadValues.length == 1) {
-      this.fichierMad = this.filterMadChange(filter);
-    }
-    else {
-      // if already another select is active merge the results
-      if (filterExists == false) {
-        this.fichierMad = [...this.fichierMad, ...this.filterMadChange(filter)];
-        //delete doublon
-        this.fichierMad = this.fichierMad.filter((object, index) => index === this.fichierMad.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.fichierMad = this.fichierMad.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      }
-      else {
-        this.fichierMad = [];
-        this.filterMadValues.forEach(element => {
-          this.fichierMad = this.fichierMad.concat(this.filterMadChange(element));
-        });
-        //delete doublon
-        this.fichierMad = this.fichierMad.filter((object, index) => index === this.fichierMad.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-      }
-    }
-
-    // if selected is deactivate
-    if (filter.modelValue == "") {
-      if (this.filterMadValues.length == 1) {
-        this.fichierMad = this.copySelectionMad;
-        this.fichierMad = this.fichierMad.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      }
-      else {
-        this.filterMadValues = this.filterMadValues.filter(function (item) {
-          return item.columnProp !== filter.columnProp;
-        })
-        this.filterMadValues.forEach(element => {
-          this.fichierMad = this.filterMadChange(element)
-        });
-      }
-    }
-
+  onMouseUp() {
+    this.newCellValue = '';
+    this.selectionEception = [];
+    this.selectionMetadata = [];
+    this.selectionMad = [];
+  }
+  onMouseUpMetadata() {
+    this.newCellValueMetadata = '';
+    this.selection = [];
+    this.selectionEception = [];
+    this.selectionMad = [];
+  }
+  onMouseUpException() {
+    this.newCellValueException = '';
+    this.selection = [];
+    this.selectionMetadata = [];
+    this.selectionMad = [];
+  }
+  onMouseUpMad() {
+    this.newCellValueMad = '';
+    this.selection = [];
+    this.selectionEception = [];
+    this.selectionMetadata = [];
   }
 
-  setFilteredItemsExceptionOptions(filter) {
-    // check if filter is already selected
-    const filterExists = this.filterExceptionValues.some(f => f.columnProp === filter.columnProp);
-    if (filterExists == false) { this.filterExceptionValues.push(filter) }
-    // if only one select is selected
-    if (this.filterExceptionValues.length == 1) {
-      this.fichierException = this.filterExceptionChange(filter);
-    }
-    else {
-      // if already another select is active merge the results
-      if (filterExists == false) {
-        this.fichierException = [...this.fichierException, ...this.filterExceptionChange(filter)];
-        //delete doublon
-        this.fichierException = this.fichierException.filter((object, index) => index === this.fichierException.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.fichierException = this.fichierException.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      }
-      else {
-        this.fichierException = [];
-        this.filterExceptionValues.forEach(element => {
-          this.fichierException = this.fichierException.concat(this.filterExceptionChange(element));
-        });
-        //delete doublon
-        this.fichierException = this.fichierException.filter((object, index) => index === this.fichierException.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-      }
-    }
-
-    // if selected is deactivate
-    if (filter.modelValue == "") {
-      if (this.filterExceptionValues.length == 1) {
-        this.fichierException = this.copySelectionException;
-        this.fichierException = this.fichierException.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      }
-      else {
-        this.filterExceptionValues = this.filterExceptionValues.filter(function (item) {
-          return item.columnProp !== filter.columnProp;
-        })
-        this.filterExceptionValues.forEach(element => {
-          this.fichierException = this.filterExceptionChange(element)
-        });
-      }
-    }
-
+  isSelected(row,column)
+  {
+      const index=column*(this.cells.length/this.displayedColumnsLivraison.length)+row+this.paginator.toArray()[0].pageIndex * this.displayedColumnsLivraison.length * this.paginator.toArray()[0].pageSize
+      return this.selection.indexOf(index)>=0
+  }
+  isSelectedException(row,column)
+  {
+    const index=column*(this.cellsException.length/this.displayedColumnsException.length)+row+this.paginator.toArray()[1].pageIndex * this.displayedColumnsException.length * this.paginator.toArray()[1].pageSize
+    return this.selectionEception.indexOf(index)>=0
+  }
+  isSelectedMetadata(row,column)
+  {
+    const index=column*(this.cellsMetadata.length/this.displayedColumnsMetadata.length)+row+this.paginator.toArray()[2].pageIndex * this.displayedColumnsMetadata.length * this.paginator.toArray()[2].pageSize
+    return this.selectionMetadata.indexOf(index)>=0
+  }
+  isSelectedMad(row,column)
+  {
+      const index=column*(this.cellsMad.length/this.displayedColumnsMad.length)+row+this.paginator.toArray()[3].pageIndex * this.displayedColumnsMad.length * this.paginator.toArray()[3].pageSize
+      return this.selectionMad.indexOf(index)>=0
   }
 
-  setFilteredItemsOptions(filter) {
-    // check if filter is already selected
-    const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
-    if (filterExists == false) { this.filterValues.push(filter) }
-    // if only one select is selected
-    if (this.filterValues.length == 1) {
-      this.fichierLivraison = this.filterChange(filter);
-    }
-    else {
-      // if already another select is active merge the results
-      if (filterExists == false) {
-        this.fichierLivraison = [...this.fichierLivraison, ...this.filterChange(filter)];
-        //delete doublon
-        this.fichierLivraison = this.fichierLivraison.filter((object, index) => index === this.fichierLivraison.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.fichierLivraison = this.fichierLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      }
-      else {
-        this.fichierLivraison = [];
-        this.filterValues.forEach(element => {
-          this.fichierLivraison = this.fichierLivraison.concat(this.filterChange(element));
-        });
-        //delete doublon
-        this.fichierLivraison = this.fichierLivraison.filter((object, index) => index === this.fichierLivraison.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-      }
-    }
 
-    // if selected is deactivate
-    if (filter.modelValue == "") {
-      if (this.filterValues.length == 1) {
-        this.fichierLivraison = this.copySelectionLivraison;
-        this.fichierLivraison = this.fichierLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      }
-      else {
-        this.filterValues = this.filterValues.filter(function (item) {
-          return item.columnProp !== filter.columnProp;
-        })
-        this.filterValues.forEach(element => {
-          this.fichierLivraison = this.filterChange(element)
+    /**
+  * After the user enters a new value, all selected cells must be updated
+  * document:keyup
+  * @param event
+  */
+  @HostListener('document:keyup', ['$event'])
+  onKeyUp(event: KeyboardEvent): void {
+     // If no cell is selected then ignore keyUp event
+     if (this.selection.length > 0)
+     {
+        let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
+        'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
+        'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
+        'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
+        if (event.key === 'Backspace') { // 'delete' key is pressed
+            const end: number = this.newCellValue.length - 1;
+            this.newCellValue = this.newCellValue.slice(0, end);
+        } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
+            this.newCellValue += event.key;
+        }
+        this.updateSelectedCellsValues(this.newCellValue);
+     }else{
+        if (this.selectionEception.length > 0)
+        {
+          let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
+          'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
+          'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
+          'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
+          if (event.key === 'Backspace') { // 'delete' key is pressed
+              const end: number = this.newCellValueException.length - 1;
+              this.newCellValueException = this.newCellValueException.slice(0, end);
+          } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
+              this.newCellValueException += event.key;
+          }
+          this.updateSelectedCellsValuesExceptions(this.newCellValueException);
+
+        }else{
+          if (this.selectionMetadata.length > 0)
+          {
+            let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
+            'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
+            'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
+            'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
+            if (event.key === 'Backspace') { // 'delete' key is pressed
+                const end: number = this.newCellValueMetadata.length - 1;
+                this.newCellValueMetadata = this.newCellValueMetadata.slice(0, end);
+            } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
+                this.newCellValueMetadata += event.key;
+            }
+            this.updateSelectedCellsValuesMetadata(this.newCellValueMetadata);
+          }else{
+            if(this.selectionMad.length > 0)
+            {
+              let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
+              'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
+              'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
+              'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
+              if (event.key === 'Backspace') { // 'delete' key is pressed
+                  const end: number = this.newCellValueMad.length - 1;
+                  this.newCellValueMad = this.newCellValueMad.slice(0, end);
+              } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
+                  this.newCellValueMad += event.key;
+              }
+              this.updateSelectedCellsValuesMad(this.newCellValueMad);
+            }
+          }
+        }
+     } 
+  }
+  updateSelectedCellsValues(text: string) {
+    if (text == null) { return; }
+    this.fichierLivraison = this.dataSource.data;
+    //console.log("1-this.dataSource.data",this.dataSource.data);
+    this.fichierLivraison.forEach(function(obj){
+      const {Tournee,taskId,itemId, ...newObj} = obj;
+      obj = newObj;
+      /*delete obj.Tournee;
+      delete obj.taskId;
+      delete obj.itemId;*/
+    });
+    var tableauOfCells = [];
+    //console.log("this.fichierLivraison",this.fichierLivraison);
+    for (let i=0; i< this.fichierLivraison.length; i=i+this.paginator.toArray()[0].pageSize)
+    {
+      for(let j=0 ; j< this.displayedColumnsLivraison.length; j++)
+      {
+        var column = this.displayedColumnsLivraison[j];
+        var finalArray = this.fichierLivraison.slice(i,i+this.paginator.toArray()[0].pageSize).map(function (obj) {
+          return obj[column];
         });
+        tableauOfCells = tableauOfCells.concat(finalArray);
       }
     }
-
+    tableauOfCells[this.selection[0]] = text;
+    var ArrayOfObjectsAfterUpdate = [];
+    for (let i=0;i<tableauOfCells.length;i = i+this.displayedColumnsLivraison.length*this.paginator.toArray()[0].pageSize)
+    {
+      var tableau_slice = tableauOfCells.slice(i,i+this.displayedColumnsLivraison.length*this.paginator.toArray()[0].pageSize);
+      //console.log(tableau_slice);
+      var round = tableau_slice.length/this.displayedColumnsLivraison.length;
+      for(let j=0;j<round;j++)
+      {
+        var objetTransaction = new Object();
+        for(let k=0;k<this.displayedColumnsLivraison.length;k++)
+        {
+          objetTransaction[this.displayedColumnsLivraison[k]] = tableau_slice[j+k*round];
+        }
+        ArrayOfObjectsAfterUpdate.push(objetTransaction);
+      }
+    }
+    this.dataSource.data = ArrayOfObjectsAfterUpdate;
+    this.copyFilterLivraison = this.dataSource.data;
+    //console.log("this.dataSource.data",this.dataSource.data);
+  }
+  updateSelectedCellsValuesExceptions(text: string) {
+    console.log(text);
+    if (text == null) { return; }
+    this.fichierException = this.dataSourceException.data;
+    //console.log("1-this.dataSourceException.data",this.dataSourceException.data);
+    this.fichierException.forEach(function(obj){
+      const {Tournee,taskId,itemId, ...newObj} = obj;
+      obj = newObj;
+      /*delete obj.Tournee;
+      delete obj.taskId;
+      delete obj.itemId;*/
+    });
+    var tableauOfCells = [];
+    //console.log("this.fichierLivraison",this.fichierLivraison);
+    for (let i=0; i< this.fichierException.length; i=i+this.paginator.toArray()[1].pageSize)
+    {
+      for(let j=0 ; j< this.displayedColumnsException.length; j++)
+      {
+        var column = this.displayedColumnsException[j];
+        var finalArray = this.fichierException.slice(i,i+this.paginator.toArray()[1].pageSize).map(function (obj) {
+          return obj[column];
+        });
+        tableauOfCells = tableauOfCells.concat(finalArray);
+      }
+    }
+    //console.log("tableauOfCells",tableauOfCells);
+    //console.log(this.selectException[0]);
+    tableauOfCells[this.selectionEception[0]] = text;
+    var ArrayOfObjectsAfterUpdate = [];
+    for (let i=0;i<tableauOfCells.length;i = i+this.displayedColumnsException.length*this.paginator.toArray()[1].pageSize)
+    {
+      var tableau_slice = tableauOfCells.slice(i,i+this.displayedColumnsException.length*this.paginator.toArray()[1].pageSize);
+      //console.log(tableau_slice);
+      var round = tableau_slice.length/this.displayedColumnsException.length;
+      for(let j=0;j<round;j++)
+      {
+        var objetTransaction = new Object();
+        for(let k=0;k<this.displayedColumnsException.length;k++)
+        {
+          objetTransaction[this.displayedColumnsException[k]] = tableau_slice[j+k*round];
+        }
+        ArrayOfObjectsAfterUpdate.push(objetTransaction);
+      }
+    }
+    this.dataSourceException.data = ArrayOfObjectsAfterUpdate;
+    this.copyFilterException = this.dataSourceException.data;
+    //console.log("this.dataSource.data",this.dataSource.data);
+  }
+  updateSelectedCellsValuesMetadata(text: string) {
+    if (text == null) { return; }
+    this.fichierMetadata = this.dataSourceMetaData.data;
+    //console.log("this.fichierMetadata",this.fichierMetadata);
+    //console.log("1-this.dataSource.data",this.dataSource.data);
+    this.fichierMetadata.forEach(function(obj){
+      const {Tournee,taskId,itemId, ...newObj} = obj;
+      obj = newObj;
+      /*delete obj.Tournee;
+      delete obj.taskId;
+      delete obj.itemId;*/
+    });
+    var tableauOfCells = [];
+    //console.log("this.fichierLivraison",this.fichierLivraison);
+    for (let i=0; i< this.fichierMetadata.length; i=i+this.paginator.toArray()[2].pageSize)
+    {
+      for(let j=0 ; j< this.displayedColumnsMetadata.length; j++)
+      {
+        var column = this.displayedColumnsMetadata[j];
+        var finalArray = this.fichierMetadata.slice(i,i+this.paginator.toArray()[2].pageSize).map(function (obj) {
+          return obj[column];
+        });
+        tableauOfCells = tableauOfCells.concat(finalArray);
+      }
+    }
+    tableauOfCells[this.selectionMetadata[0]] = text;
+    var ArrayOfObjectsAfterUpdate = [];
+    for (let i=0;i<tableauOfCells.length;i = i+this.displayedColumnsMetadata.length*this.paginator.toArray()[2].pageSize)
+    {
+      var tableau_slice = tableauOfCells.slice(i,i+this.displayedColumnsMetadata.length*this.paginator.toArray()[2].pageSize);
+      //console.log(tableau_slice);
+      var round = tableau_slice.length/this.displayedColumnsMetadata.length;
+      for(let j=0;j<round;j++)
+      {
+        var objetTransaction = new Object();
+        for(let k=0;k<this.displayedColumnsMetadata.length;k++)
+        {
+          objetTransaction[this.displayedColumnsMetadata[k]] = tableau_slice[j+k*round];
+        }
+        ArrayOfObjectsAfterUpdate.push(objetTransaction);
+      }
+    }
+    this.dataSourceMetaData.data = ArrayOfObjectsAfterUpdate;
+    this.copyFilterMetaData = this.dataSourceMetaData.data;
+    //console.log("this.dataSource.data",this.dataSource.data);
+  }
+  updateSelectedCellsValuesMad(text: string) {
+    if (text == null) { return; }
+    this.fichierMad = this.dataSourceMAD.data;
+    //console.log("1-this.dataSource.data",this.dataSource.data);
+    this.fichierMad.forEach(function(obj){
+      const {Tournee,taskId,itemId, ...newObj} = obj;
+      obj = newObj;
+      /*delete obj.Tournee;
+      delete obj.taskId;
+      delete obj.itemId;*/
+    });
+    var tableauOfCells = [];
+    //console.log("this.fichierLivraison",this.fichierLivraison);
+    for (let i=0; i< this.fichierMad.length; i=i+this.paginator.toArray()[3].pageSize)
+    {
+      for(let j=0 ; j< this.displayedColumnsMad.length; j++)
+      {
+        var column = this.displayedColumnsMad[j];
+        var finalArray = this.fichierMad.slice(i,i+this.paginator.toArray()[3].pageSize).map(function (obj) {
+          return obj[column];
+        });
+        tableauOfCells = tableauOfCells.concat(finalArray);
+      }
+    }
+    tableauOfCells[this.selectionMad[0]] = text;
+    var ArrayOfObjectsAfterUpdate = [];
+    for (let i=0;i<tableauOfCells.length;i = i+this.displayedColumnsMad.length*this.paginator.toArray()[3].pageSize)
+    {
+      var tableau_slice = tableauOfCells.slice(i,i+this.displayedColumnsMad.length*this.paginator.toArray()[3].pageSize);
+      //console.log(tableau_slice);
+      var round = tableau_slice.length/this.displayedColumnsMad.length;
+      for(let j=0;j<round;j++)
+      {
+        var objetTransaction = new Object();
+        for(let k=0;k<this.displayedColumnsMad.length;k++)
+        {
+          objetTransaction[this.displayedColumnsMad[k]] = tableau_slice[j+k*round];
+        }
+        ArrayOfObjectsAfterUpdate.push(objetTransaction);
+      }
+    }
+    this.dataSourceMAD.data = ArrayOfObjectsAfterUpdate;
+    this.copyFilterMad = this.dataSourceMAD.data;
+    //console.log("this.dataSource.data",this.dataSource.data);
   }
 
-  /**
-* Get lignes when filter mad change
-* @param filter
+    /**
+* Correct the file
 */
-  filterMadChange(filter) {
-    this.fileSelected = "mad";
-    this.initSelectedCells();     // init selected cells
-    this.copySelectionMad = this.copySelectionMad.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-    return this.copySelectionMad.filter(function (item) {
-      return item[filter.columnProp] == String(filter.modelValue);
-    });
-  }
+  correctionFile(index) {
+    //this.clickCorrection = true;
+    //console.log("this.arrayLivraison",this.arrayLivraison);
+    // this.initSelectedCells();
+    this.hideUiSelectionOnCorrection();  //hide ui selection on correction
+    if (index == "livraison") {  // correction file livraison
 
-  /**
-* Get lignes when filter metadata change
-* @param filter
-*/
-  filterMetaDataChange(filter) {
-    this.fileSelected = "metadata";
-    this.initSelectedCells();     // init selected cells
-    this.copySelectionMetaData = this.copySelectionMetaData.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-    return this.copySelectionMetaData.filter(function (item) {
-      return item[filter.columnProp] == String(filter.modelValue);
-    });
-  }
-  /**
- * Get lignes when filter exception change
- * @param filter
- */
-  filterExceptionChange(filter) {
-    this.fileSelected = "exception";
-    this.initSelectedCells();     // init selected cells
-    this.copySelectionException = this.copySelectionException.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-    return this.copySelectionException.filter(function (item) {
-      return item[filter.columnProp] == String(filter.modelValue);
-    });
-  }
-
-  /**
-   * Get lignes when filter livraison change
-   * @param filter
-   */
-  filterChange(filter) {
-    this.fileSelected = "livraison";
-    this.initSelectedCells();     // init selected cells
-    this.copySelectionLivraison = this.copySelectionLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-    return this.copySelectionLivraison.filter(function (item) {
-      return item[filter.columnProp] == String(filter.modelValue);
-    });
-  }
-
-  /**
-* Reset filter
-*/
-  resetFiltre(file) {
-    // this.initSelectedCells();    // init selected cells
-    if (file == "livraison") {
-      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          this.selectedCellsState[i][j] = false;
+      for (let i=0;i<this.arrayLivraison.length;i++)
+      { var Tournee = this.arrayLivraison[i].Tournee;
+        var taskId = this.arrayLivraison[i].taskId;
+        var itemId = this.arrayLivraison[i].itemId;
+        this.copyFilterLivraison[i].Tournee = Tournee;
+        this.copyFilterLivraison[i].taskId = taskId;
+        this.copyFilterLivraison[i].itemId = itemId;
+      }
+      var arrayOfArray = this.copyFilterLivraison.map(Object.values);
+      for(let indice=0;indice<arrayOfArray.length;indice++)
+      {
+        for(let k=0;k<3;k++)
+        {
+          var element = arrayOfArray[indice].pop();
+          arrayOfArray[indice].unshift(element);
+        }
+      }
+      console.log("arrayOfArray",arrayOfArray);
+      this.fileTocheck = {
+        transaction_id: this.transaction.transaction_id,
+        fileReplacement: {
+          columns: [ 'Tournee','taskId','itemId','Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'],
+          rows: arrayOfArray,
         }
 
       }
-      // reset the selected filtre
-      this.options.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
-        }
-      });
-      this.fichierLivraison = this.copySelectionLivraison;
-      this.filterValues = [];
-      this.fichierLivraison = this.fichierLivraison.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-    }
-    else if (file == "exception") {
 
-      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          this.selectedCellsStateException[i][j] = false;
-        }
-
-      }
-      // reset the selected filtre
-      this.optionsException.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
+      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+      this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
+        //console.log('resultat correction exception', res);
+        if (res.message == "ok") {
+          this.router.navigate(['/list-transaction']);
         }
       })
-      this.fichierException = this.copySelectionException;
-      this.filterExceptionValues = [];
-      this.fichierException = this.fichierException.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
     }
-    else if (file == "metadata") {
-
-      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          this.selectedCellsStateMetaData[i][j] = false;
-        }
-
-      }
-      // reset the selected filtre
-      this.optionsMetaData.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
-        }
-      })
-      this.fichierMetadata = this.copySelectionMetaData;
-      this.filterMetaDataValues = [];
-      this.fichierMetadata = this.fichierMetadata.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-    }
-
-    else { //MAD
-      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          this.selectedCellsStateMad[i][j] = false;
-        }
-      }
-      // reset the selected filtre
-      this.optionsMad.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
-        }
-      })
-      this.fichierMad = this.copySelectionMad;
-      this.filterMadValues = [];
-      this.fichierMad = this.fichierMad.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-    }
-
   }
+    /**
+* Correct the file
+*/
+correctionFileException(index) 
+{
+  //this.clickCorrection = true;
+  //console.log("this.arrayException",this.arrayException);
+  // this.initSelectedCells();
+  this.hideUiSelectionOnCorrection();  //hide ui selection on correction
+  if (index == "exception") {  // correction file livraison
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 4500,
-      verticalPosition: 'top',
-      horizontalPosition: 'center',
-    });
+    for (let i=0;i<this.arrayException.length;i++)
+    { var Tournee = this.arrayException[i].Tournee;
+      var taskId = this.arrayException[i].taskId;
+      var itemId = this.arrayException[i].itemId;
+      this.copyFilterException[i].Tournee = Tournee;
+      this.copyFilterException[i].taskId = taskId;
+      this.copyFilterException[i].itemId = itemId;
+    }
+    var arrayOfArray = this.copyFilterException.map(Object.values);
+    for(let indice=0;indice<arrayOfArray.length;indice++)
+    {
+      for(let k=0;k<3;k++)
+      {
+        var element = arrayOfArray[indice].pop();
+        arrayOfArray[indice].unshift(element);
+      }
+    }
+    //console.log("arrayOfArray",arrayOfArray);
+    this.fileTocheckException = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacement: {
+        columns: [ 'Tournee','taskId','itemId','Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom','Item___Type','Item___Quantite','Code_postal','Round_Name','Remarque','isDeleted'],
+        rows: arrayOfArray,
+      }
+
+    }
+
+    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+    this.service.correctExceptionFile(this.fileTocheckException).subscribe(res => {
+      //console.log('resultat correction exception', res);
+      if (res.message == "ok") {
+        this.router.navigate(['/list-transaction']);
+      }
+    })
   }
+}
+correctionFileMetadata(index) {
+  //this.clickCorrection = true;
+  //console.log("this.arrayMetadata",this.arrayMetaData);
+  // this.initSelectedCells();
+  this.hideUiSelectionOnCorrection();  //hide ui selection on correction
+  if (index == "metadata") {  // correction file livraison
 
-  /**
+    for (let i=0;i<this.arrayMetaData.length;i++)
+    { var Tournee = this.arrayMetaData[i].Tournee;
+      var taskId = this.arrayMetaData[i].taskId;
+      var itemId = this.arrayMetaData[i].itemId;
+      this.copyFilterMetaData[i].Tournee = Tournee;
+      this.copyFilterMetaData[i].taskId = taskId;
+      this.copyFilterMetaData[i].itemId = itemId;
+    }
+    var arrayOfArray = this.copyFilterMetaData.map(Object.values);
+    for(let indice=0;indice<arrayOfArray.length;indice++)
+    {
+      for(let k=0;k<3;k++)
+      {
+        var element = arrayOfArray[indice].pop();
+        arrayOfArray[indice].unshift(element);
+      }
+    }
+    //console.log("arrayOfArray",arrayOfArray);
+    this.fileTocheckMetadata = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacement: {
+        columns: [ 'Tournee','taskId','itemId','Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name','sourceClosureDate','realInfoHasPrepared','status','metadataFACTURATION'],
+        rows: arrayOfArray,
+      }
+
+    }
+
+    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+    this.service.correctMetaDataFile(this.fileTocheckMetadata).subscribe(res => {
+      //console.log('resultat correction exception', res);
+      if (res.message == "ok") {
+        this.router.navigate(['/list-transaction']);
+      }
+    })
+  }
+}
+    /**
+* Correct the file
+*/
+correctionFileMad(index) {
+  //this.clickCorrection = true;
+  //console.log("this.arrayLivraison",this.arrayLivraison);
+  // this.initSelectedCells();
+  this.hideUiSelectionOnCorrection();  //hide ui selection on correction
+  if (index == "mad") {  // correction file livraison
+
+    for (let i=0;i<this.arrayMad.length;i++)
+    { var Tournee = this.arrayMad[i].Tournee;
+      var taskId = this.arrayMad[i].taskId;
+      var itemId = this.arrayMad[i].itemId;
+      this.copyFilterMad[i].Tournee = Tournee;
+      this.copyFilterMad[i].taskId = taskId;
+      this.copyFilterMad[i].itemId = itemId;
+    }
+    var arrayOfArray = this.copyFilterMad.map(Object.values);
+    for(let indice=0;indice<arrayOfArray.length;indice++)
+    {
+      for(let k=0;k<3;k++)
+      {
+        var element = arrayOfArray[indice].pop();
+        arrayOfArray[indice].unshift(element);
+      }
+    }
+    //console.log("arrayOfArray",arrayOfArray);
+    this.fileTocheckMad = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacement: {
+        columns: [ 'Tournee','taskId','itemId','Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'],
+        rows: arrayOfArray,
+      }
+
+    }
+
+    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+    this.service.correctMadFile(this.fileTocheckMad).subscribe(res => {
+      //console.log('resultat correction exception', res);
+      if (res.message == "ok") {
+        this.router.navigate(['/list-transaction']);
+      }
+    })
+  }
+}
+    /**
    * Hide ui selection red rectangle
    */
   hideUiSelectionOnCorrection() {
@@ -925,152 +628,13 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
     }
   }
-
-  /**
-   * Correct all transaction files
-   */
-  correctionAllFile(){
-    this.fileTocheck = {
-      transaction_id: this.transaction.transaction_id,
-      fileReplacementLivraison: {
-        columns: this.arrayLivraison.columns,
-        rows: this.copyFilterLivraison.map(Object.values),
-      },
-      fileReplacementMAD: {
-        columns: this.arrayMad.columns,
-        rows: this.copyFilterMad.map(Object.values),
-      },
-      fileReplacementMetadata: {
-        columns: this.arrayMetaData.columns,
-        rows: this.copyFilterMetaData.map(Object.values),
-      },
-      fileReplacementException: {
-        columns: this.arrayException.columns,
-        rows: this.copyFilterException.map(Object.values),
-      },
-
-    }
-    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-    this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
-      if (res.message == "ok") {
-        this.router.navigate(['/list-transaction']);
-      }
-    })
-
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 4500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
   }
-  /**
-* Correct the file
-*/
-  correctionFile(index) {
-    this.clickCorrection = true;
-
-    // this.initSelectedCells();
-    this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-    if (index == "livraison") {  // correction file livraison
-      this.LAST_EDITABLE_ROW = this.fichierLivraison.length - 1;
-      this.LAST_EDITABLE_COL = this.displayedColumnsLivraison.length - 1;
-
-      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          this.selectedCellsState[i][j] = false;
-
-        }
-      }
-      this.fileTocheck = {
-        transaction_id: this.transaction.transaction_id,
-        fileReplacement: {
-          columns: this.arrayLivraison.columns,
-          rows: this.copyFilterLivraison.map(Object.values),
-        }
-
-      }
-
-      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
-        if (res.message == "ok") {
-          this.router.navigate(['/list-transaction']);
-        }
-      })
-    }
-    else if (index == "exception") {  // correction file exception
-      this.LAST_EDITABLE_ROW = this.fichierException.length - 1;
-      this.LAST_EDITABLE_COL = this.displayedColumnsException.length - 1;
-
-      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          this.selectedCellsStateException[i][j] = false;
-
-        }
-      }
-
-      this.fileTocheck = {
-        transaction_id: this.transaction.transaction_id,
-        fileReplacement: {
-          columns: this.arrayException.columns,
-          rows: this.copyFilterException.map(Object.values),
-        }
-      }
-      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
-        if (res.message == "ok") {
-          this.router.navigate(['/list-transaction']);
-        }
-      })
-    }
-    else if (index == "metadata") { // correction file metadata
-      this.LAST_EDITABLE_ROW = this.fichierMetadata.length - 1;
-      this.LAST_EDITABLE_COL = this.displayedColumnsMetadata.length - 1;
-
-      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          this.selectedCellsStateMetaData[i][j] = false;
-
-        }
-      }
-
-      this.fileTocheck = {
-        transaction_id: this.transaction.transaction_id,
-        fileReplacement: {
-          columns: this.arrayMetaData.columns,
-          rows: this.copyFilterMetaData.map(Object.values),
-        }
-      }
-      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
-        if (res.message == "ok") {
-          this.router.navigate(['/list-transaction']);
-        }
-      })
-    }
-
-    else {  // correction file MAD
-      this.LAST_EDITABLE_ROW = this.fichierMad.length - 1;
-      this.LAST_EDITABLE_COL = this.displayedColumnsMad.length - 1;
-
-      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          this.selectedCellsStateMad[i][j] = false;
-
-        }
-      }
-
-      this.fileTocheck = {
-        transaction_id: this.transaction.transaction_id,
-        fileReplacement: {
-          columns: this.arrayMad.columns,
-          rows: this.copyFilterMad.map(Object.values),
-        }
-      }
-      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctMadFile(this.fileTocheck).subscribe(res => {
-        if (res.message == "ok") {
-          this.router.navigate(['/list-transaction']);
-        }
-      })
-    }
-  }
-
-
 }
 
 

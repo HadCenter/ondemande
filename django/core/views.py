@@ -31,6 +31,7 @@ from .models import EDIfile
 from .models import FileExcelContent
 from .models import FileInfo, Contact, kpi3SchemaSingleAnomalie, getNumberOfAnomaliesPerDateDTO, \
     getNumberOfAnomaliesWithFiltersDTO
+from .models import transactionFileColumnsException , transactionFileColumnsLivraison,transactionFileColumnsMetadata, transactionFileColumnsMad
 from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
@@ -60,6 +61,7 @@ def client_detail_update(request, pk):
 
     client = getClientInfo(pk)
     client.token = request.data['token']
+    client.token_for_flux = request.data['token_for_flux']
     client.save()
     client_serializer = ClientSerializer(client)
     return JsonResponse(client_serializer.data)
@@ -105,11 +107,11 @@ def fileList(request):
     return HttpResponse(jsonpickle.encode(listFiles, unpicklable=False), content_type="application/json")
 
 
-@api_view(['POST'])
-def getFilesByClient(request):
-    clientCode = request.data['client_code']
+@api_view(['GET'])
+def getFilesByClient(request,pk):
 
-    listFiles = getFilesEdiByClient(clientCode)
+
+    listFiles = getFilesEdiByClient(pk)
 
     return HttpResponse(jsonpickle.encode(listFiles, unpicklable=False), content_type="application/json")
 
@@ -183,40 +185,55 @@ def createFileFromColumnAndRows(request):
     return response
 
 
+def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> list:
+    return list(map(lambda x: transactionFileColumnsException(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15]), df.values.tolist()))
 
+def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> list:
+    return list(map(lambda x: transactionFileColumnsLivraison(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14]), df.values.tolist()))
 
+def reading_list_transactionFileColumnsMetadata(df: pd.DataFrame) -> list:
+    return list(map(lambda x: transactionFileColumnsMetadata(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15],x[16],x[17],x[18]), df.values.tolist()))
+
+def reading_list_transactionFileColumnsMad(df: pd.DataFrame) -> list:
+    return list(map(lambda x: transactionFileColumnsMad(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14]), df.values.tolist()))
 
 def seeFileContentMADFileCore(fileType, transaction_id):
     osOriginalPath = os.getcwd()
     try:
         osCreateMediaFiles(os)
         os.chdir("media/files/UrbantzToHub/")
-
         transaction = TransactionsLivraison.objects.get(id=transaction_id)
         remotefilePath = ""
         fileName = ""
+        functionToUse= None
         if fileType == "livraison":
             remotefilePath = transaction.fichier_livraison_sftp
             fileName = "Livraisons.xlsx"
+            functionToUse = reading_list_transactionFileColumnsLivraison
         elif fileType == "exception":
             remotefilePath = transaction.fichier_exception_sftp
             fileName = "Livraisons_Exception.xlsx"
+            functionToUse = reading_list_transactionFileColumnsException
         elif fileType == "metadata":
             remotefilePath = transaction.fichier_metadata_sftp
             fileName = "ExceptionFacturationValue_Livraisons.xlsx"
+            functionToUse = reading_list_transactionFileColumnsMetadata
         elif fileType == "mad":
             remotefilePath = transaction.fichier_mad_sftp
             fileName = "ToVerifyQTE_MAD_Livraisons.xlsx"
+            functionToUse = reading_list_transactionFileColumnsMad
         else:
             raise Exception("fileType not supported by server")
         sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
 
         excelfile = pd.read_excel(fileName)
         excelfile = excelfile.fillna('')
-        columns = list(excelfile.columns)
-        rows = excelfile.values.tolist()
+
+
+        #columns = list(excelfile.columns)
+        #rows = excelfile.values.tolist()
         os.remove(fileName)
-        responseObject = FileExcelContent(columns, rows)
+        responseObject = functionToUse(excelfile)
 
         os.chdir(osOriginalPath)
         return responseObject

@@ -45,26 +45,4 @@ body {
 table.table-list {
   width: 100%;
 }
-.mat-dialog-container {
-  background-color: #444;
-}
 
-#conteneurDesBoutonsHeaderBaseCard
-{
-    display: flex;
-}
-.boutonGenererTransaction{
-  margin-right: 3px; /* Marge extérieure de 50px */
-}
-
-span.border{
-  border-radius: 10px 10px 10px 10px;
-}
-app-loader.loader{
-     z-index: 99999;
-     left: 45%;
-     position: absolute;
- }
- app-loader.loader div div.child{
-   top:17%
- }

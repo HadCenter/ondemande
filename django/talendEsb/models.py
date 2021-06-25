@@ -35,3 +35,10 @@ class TransactionsLivraison(models.Model):
     class Meta:
         managed = False
         db_table = 'transactions_livraison'
+
+
+class RabbitMqMessagesForJobToStart:
+    def __init__(self,webhook,payloadToSendToTalend,environnement):
+        self.webhook = webhook
+        self.payloadToSendToTalend = payloadToSendToTalend
+        self.environnement = environnement

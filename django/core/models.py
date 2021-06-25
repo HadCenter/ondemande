@@ -12,6 +12,7 @@ class Client(models.Model):
     archived = models.BooleanField(default= False)
     id_salesforce = models.CharField( max_length=200, blank=True, null= True)
     token = models.CharField( max_length=250,blank=True, null=True)
+    token_for_flux = models.CharField( max_length=250,blank=True, null=True)
 
     def __str__(self):
         return self.nom_client
@@ -23,6 +24,7 @@ class EDIfile(models.Model):
     validated_orders = models.CharField(max_length=200, default="_")
     archived = models.BooleanField(default= False)
     cliqued = models.BooleanField(default= False)
+    sendedToUrbantz = models.BooleanField(default=False)
     client = models.ForeignKey(Client,related_name='files', on_delete=models.CASCADE, default=1)
     number_correct_commands = models.IntegerField(default=0)
     number_wrong_commands = models.IntegerField(default=0)
@@ -48,7 +50,7 @@ class Contact:
 
 
 class FileInfo:
-    def __init__(self, idFile: int, fileName: str, createdAt: models.DateTimeField, status: str, wrongCommands: str, validatedOrders: str, archived: int, cliqued: int, contact: Contact, number_wrong_commands: int, number_correct_commands: int):
+    def __init__(self, idFile: int, fileName: str, createdAt: models.DateTimeField, status: str, wrongCommands: str, validatedOrders: str, archived: int, cliqued: int, contact: Contact, number_wrong_commands: int, number_correct_commands: int, sendedToUrbantz: int):
         self.idFile = idFile
         self.fileName = fileName
         self.createdAt = createdAt
@@ -60,6 +62,7 @@ class FileInfo:
         self.contact = contact
         self.number_wrong_commands = number_wrong_commands
         self.number_correct_commands = number_correct_commands
+        self.sendedToUrbantz = sendedToUrbantz
 
 
 class AnomaliesEdiFileAnnuaire(models.Model):
@@ -146,3 +149,80 @@ class kpi2WithFiltersDto:
         self.date = date
         self.fileName = fileName
         self.clientName = clientName
+
+
+
+
+class transactionFileColumnsException:
+    def __init__(self, Tournee, taskId, itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom,Item___Type,Item___Quantite,Code_postal,Round_Name,Remarque,isDeleted):
+        self.Tournee = Tournee
+        self.taskId = taskId
+        self.itemId = itemId
+        self.Date = Date
+        self.Expediteur = Expediteur
+        self.Activite = Activite
+        self.Categorie = Categorie
+        self.Type_de_Service = Type_de_Service
+        self.ID_de_la_tache = ID_de_la_tache
+        self.Item___Nom = Item___Nom
+        self.Item___Type = Item___Type
+        self.Item___Quantite = Item___Quantite
+        self.Code_postal = Code_postal
+        self.Round_Name = Round_Name
+        self.Remarque = Remarque
+        self.isDeleted = isDeleted
+class transactionFileColumnsLivraison:
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name):
+        self.Tournee = Tournee
+        self.taskId = taskId
+        self.itemId = itemId
+        self.Date = Date
+        self.Expediteur = Expediteur
+        self.Activite = Activite
+        self.Categorie = Categorie
+        self.Type_de_Service = Type_de_Service
+        self.ID_de_la_tache = ID_de_la_tache
+        self.Item___Nom_sous_categorie = Item___Nom_sous_categorie
+        self.Item___Type_unite_manutention = Item___Type_unite_manutention
+        self.Item___Quantite = Item___Quantite
+        self.Code_postal = Code_postal
+        self.sourceHubName = sourceHubName
+        self.Round_Name = Round_Name
+class transactionFileColumnsMetadata:
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name,sourceClosureDate,realInfoHasPrepared,status,metadataFACTURATION):
+        self.Tournee = Tournee
+        self.taskId = taskId
+        self.itemId = itemId
+        self.Date = Date
+        self.Expediteur = Expediteur
+        self.Activite = Activite
+        self.Categorie = Categorie
+        self.Type_de_Service = Type_de_Service
+        self.ID_de_la_tache = ID_de_la_tache
+        self.Item___Nom_sous_categorie = Item___Nom_sous_categorie
+        self.Item___Type_unite_manutention = Item___Type_unite_manutention
+        self.Item___Quantite = Item___Quantite
+        self.Code_postal = Code_postal
+        self.sourceHubName = sourceHubName
+        self.Round_Name = Round_Name
+        self.sourceClosureDate = sourceClosureDate
+        self.realInfoHasPrepared = realInfoHasPrepared
+        self.status = status
+        self.metadataFACTURATION = metadataFACTURATION
+class transactionFileColumnsMad:
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name):
+        self.Tournee = Tournee
+        self.taskId = taskId
+        self.itemId = itemId
+        self.Date = Date
+        self.Expediteur = Expediteur
+        self.Activite = Activite
+        self.Categorie = Categorie
+        self.Type_de_Service = Type_de_Service
+        self.ID_de_la_tache = ID_de_la_tache
+        self.Item___Nom_sous_categorie = Item___Nom_sous_categorie
+        self.Item___Type_unite_manutention = Item___Type_unite_manutention
+        self.Item___Quantite = Item___Quantite
+        self.Code_postal = Code_postal
+        self.sourceHubName = sourceHubName
+        self.Round_Name = Round_Name

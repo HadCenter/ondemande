@@ -16,3 +16,5 @@ openpyxl
 django-rest-swagger
 paramiko
 pyjwt
+pika
+channels

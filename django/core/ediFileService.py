@@ -208,12 +208,12 @@ def getAllFileEdiData():
                                validatedOrders=fileDB.validated_orders, archived=fileDB.archived,
                                cliqued=fileDB.cliqued, contact=clientResponse,
                                number_correct_commands=fileDB.number_correct_commands,
-                               number_wrong_commands=fileDB.number_wrong_commands)
+                               number_wrong_commands=fileDB.number_wrong_commands, sendedToUrbantz=fileDB.sendedToUrbantz)
         listFiles.append(fileReponse)
     return listFiles
 
 def getFilesEdiByClient(clientCode):
-    files = EDIfile.objects.select_related('client').filter(archived=False).filter(code_client=clientCode).order_by(
+    files = EDIfile.objects.select_related('client').filter(archived=False).filter(client__code_client=clientCode).order_by(
         '-created_at')
     listFiles = list()
     for fileDB in files:
@@ -225,7 +225,7 @@ def getFilesEdiByClient(clientCode):
                                validatedOrders=fileDB.validated_orders, archived=fileDB.archived,
                                cliqued=fileDB.cliqued, contact=clientResponse,
                                number_correct_commands=fileDB.number_correct_commands,
-                               number_wrong_commands=fileDB.number_wrong_commands)
+                               number_wrong_commands=fileDB.number_wrong_commands, sendedToUrbantz=fileDB.sendedToUrbantz)
         listFiles.append(fileReponse)
     return listFiles
 
@@ -238,7 +238,8 @@ def getSingleEdiFileDetail(key):
                            status=fileDB.status, wrongCommands=fileDB.wrong_commands,
                            validatedOrders=fileDB.validated_orders, archived=fileDB.archived, cliqued=fileDB.cliqued,
                            contact=clientResponse, number_wrong_commands=fileDB.number_wrong_commands,
-                           number_correct_commands=fileDB.number_correct_commands)
+                           number_correct_commands=fileDB.number_correct_commands,
+                           sendedToUrbantz=fileDB.sendedToUrbantz)
     return fileReponse
 
 def connect():

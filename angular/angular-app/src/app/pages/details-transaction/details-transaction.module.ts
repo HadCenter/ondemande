@@ -12,6 +12,8 @@ import { MatTableModule } from '@angular/material/table';
 import { LoaderModule } from 'app/components/loader/loader.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import {MyCustomPaginatorIntl} from './paginator-frensh';
 
 @NgModule({
   declarations: [DetailsTransactionComponent],
@@ -27,11 +29,13 @@ import { MatSelectModule } from '@angular/material/select';
     MatExpansionModule,
     MatSnackBarModule,
     MatTableModule,
-    LoaderModule
+    LoaderModule,
+    MatPaginatorModule,
   ],
   providers: [
     DetailsTransactionService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+    { provide: MatPaginatorIntl, useClass: MyCustomPaginatorIntl}
   ],
 })
 export class DetailsTransactionModule { }

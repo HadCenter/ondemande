@@ -24,7 +24,7 @@ class EnvironnementJobEnded():
             exchange_type='topic',durable=True)
 
     def consumeQueue(self, keys, callback):
-        result = self.channel.queue_declare('job.ended.dev', durable=True)
+        result = self.channel.queue_declare('job.ended.preprod', durable=True)
         queue_name = result.method.queue
         for key in keys:
             self.channel.queue_bind(

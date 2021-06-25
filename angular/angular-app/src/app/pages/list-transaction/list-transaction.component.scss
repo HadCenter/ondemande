@@ -60,3 +60,11 @@ table.table-list {
 span.border{
   border-radius: 10px 10px 10px 10px;
 }
+app-loader.loader{
+     z-index: 99999;
+     left: 45%;
+     position: absolute;
+ }
+ app-loader.loader div div.child{
+   top:17%
+ }

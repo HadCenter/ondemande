@@ -5,6 +5,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from websocket.consumers import ChatConsumer
 
 class EnvironnementJobEnded():
 
@@ -52,13 +53,19 @@ def start_JobEnded_consumer():
 
     def callbackForMessageRecieved(ch, method, properties, body):
         print(" [x] %r:%r consumed" % (method.routing_key, body))
+        #ChatConsumer.state['Running_Jobs'].remove({}) is working
+        ChatConsumer.state['Running_Jobs'].pop(0)
+        messageToSend = {
+            "state" : ChatConsumer.state,
+            "jobEnded" : body.decode('utf-8')
 
+        }
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'notifications_room_group',
             {
                 'type': 'send_message_to_frontend',
-                'message': "event_trigered_from_views"
+                'message': messageToSend
             }
         )
 

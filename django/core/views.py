@@ -195,7 +195,7 @@ def reading_list_transactionFileColumnsMetadata(df: pd.DataFrame) -> list:
     return list(map(lambda x: transactionFileColumnsMetadata(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15],x[16],x[17],x[18]), df.values.tolist()))
 
 def reading_list_transactionFileColumnsMad(df: pd.DataFrame) -> list:
-    return list(map(lambda x: transactionFileColumnsMad(x[0]), df.values.tolist()))
+    return list(map(lambda x: transactionFileColumnsMad(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14]), df.values.tolist()))
 
 def seeFileContentMADFileCore(fileType, transaction_id):
     osOriginalPath = os.getcwd()

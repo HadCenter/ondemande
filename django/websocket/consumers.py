@@ -3,9 +3,11 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
+import jsonpickle
 
 
 class ChatConsumer(WebsocketConsumer):
+    state = { "Running_Jobs" : [] }
     def connect(self):
         self.room_name = 'notifications_room'
         self.room_group_name = self.room_name+"_group"
@@ -14,7 +16,7 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
-        self.send(text_data= "you are connected")
+        self.send(text_data= jsonpickle.encode(ChatConsumer.state,unpicklable=False))
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -38,6 +40,6 @@ class ChatConsumer(WebsocketConsumer):
         # Receive message from room group
         message = notification['message']
         # Send message to WebSocket
-        self.send(text_data=json.dumps({
-            'message': message
-        }))
+        self.send(text_data=json.dumps(
+            message
+        ))

@@ -218,6 +218,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
               };
               this.fileService.archiverFileEDI(data).subscribe(res =>{
                 console.log("succes archivage");
+                this.router.navigate(['/list-file-edi']);
+
               })
             }
             // document.getElementById("myBtn").disabled = true;

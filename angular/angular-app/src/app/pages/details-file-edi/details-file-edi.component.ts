@@ -210,9 +210,21 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           this.alreadyClicked = false;
           if (this.fileWrong.rows.length==0){
             (document.getElementById('sendToUrbantz') as HTMLButtonElement).disabled = false;
+            console.log("this.fileValid.length",this.fileValid.rows.length);
+            if (this.fileValid.rows.length==0) // en plus on a 0 prestations valides
+            {
+              var data = {
+                idFile : this.file.idFile
+              };
+              this.fileService.archiverFileEDI(data).subscribe(res =>{
+                console.log("succes archivage");
+                this.router.navigate(['/list-file-edi']);
+
+              })
+            }
             // document.getElementById("myBtn").disabled = true;
           }
-         
+
         }
       })
 
@@ -621,9 +633,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
       console.warn('File valid', this.fileValid);}
       else {
-       
+
           this.fileValid.rows=[];
-       
+
       }
     })
 

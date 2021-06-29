@@ -756,7 +756,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     var user = JSON.parse(localStorage.getItem('currentUser'));
     this.rearrangeAttributes();  //Remove unecessey columns
     this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-    if (this.fileWrong && this.fileValid) {
+    console.log(this.fileWrong,this.fileValid,this.fileValid.length)
+    if (this.fileWrong.rows.length>0 && this.fileValid.rows.length>0) {
       this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
       this.removeUnecesseryColumns(); // from rows filewrong
       this.fileTocheck = {

@@ -172,6 +172,19 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           // this.rowsToDelete = [];
           this.rowsToDeleteValid = [];
           this.alreadyClicked = false;
+          if (this.fileValid.rows.length==0){
+            if (this.fileWrong.rows.length==0) // en plus on a 0 prestations erronées
+            {
+              var data = {
+                idFile : this.file.idFile
+              };
+              this.fileService.archiverFileEDI(data).subscribe(res =>{
+                console.log("succes archivage");
+                this.router.navigate(['/list-file-edi']);
+
+              })
+            }
+          }
         }
       })
 

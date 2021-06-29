@@ -16,7 +16,7 @@
             <label *ngIf="!transaction" class="details-label">-</label>
           </div>
           <div class="content-label">
-            <label  class="details-label">Date Début </label>
+            <label class="details-label">Date Début </label>
             <label *ngIf="transaction" class="details-label">{{transaction?.start_date | date:"yyyy-MM-dd"}}</label>
             <label *ngIf="!transaction" class="details-label">-</label>
           </div>
@@ -77,154 +77,250 @@
                 [show]="showLoaderLivraisonFile"></app-loader>
               <div class="content-table">
                 <div class="pagination">
-                  <mat-paginator [hidden]="!dataSource.data.length" [pageSizeOptions] = "[100,200,300]" showFirstLastButtons ></mat-paginator>
+                  <mat-paginator [hidden]="!dataSource.data.length" [pageSizeOptions]="[100,200,300]"
+                    showFirstLastButtons></mat-paginator>
                 </div>
-                <table  mat-table [dataSource]="dataSource" *ngIf = "dataSource.data.length > 0"
+                <table mat-table [dataSource]="dataSource" *ngIf="dataSource.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
-
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[0].columnProp}}"
+                          [(ngModel)]="options[0].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+                          <mat-option value="">-- Select {{options[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[0].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
-                        (mouseup)="onMouseUp()"
-                        (mousedown)="select($event,cell)"
-                        [ngClass]="{'selected':isSelected(i,0)}"
-                    >
+                      (mousedown)="onMouseDown(i, 0, 'Date','livraison')"
+                      (mouseup)="onMouseUp(i, 0, 'Date','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][0], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][0]}">
                       {{element.Date}} </td>
                   </ng-container>
 
                   <!-- Expediteur Column -->
                   <ng-container matColumnDef="Expediteur">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
 
+                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[1].columnProp}}"
+                          [(ngModel)]="options[1].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                          <mat-option value="">-- Select {{options[1].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[1].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
-                        (mouseup)="onMouseUp()"
-                        (mousedown)="select($event,cell)"
-                        [ngClass]="{'selected':isSelected(i,1)}"
-                    >
+                      (mousedown)="onMouseDown(i, 1, 'Expediteur','livraison')"
+                      (mouseup)="onMouseUp(i, 1, 'Expediteur','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][1], 'unselected': !selectedCellsStateException[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][1]}">
                       {{element.Expediteur}} </td>
                   </ng-container>
 
                   <!-- Activite Column -->
                   <ng-container matColumnDef="Activite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[2].columnProp}}"
+                          [(ngModel)]="options[2].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+                          <mat-option value="">-- Select {{options[2].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[2].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUp()"
-                        (mousedown)="select($event,cell)"
-                        [ngClass]="{'selected':isSelected(i,2)}"
-                    >
+                      (mousedown)="onMouseDown(i, 2, 'Activite','livraison')"
+                      (mouseup)="onMouseUp(i, 2, 'Activite','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][2], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][2]}">
                       {{element.Activite}} </td>
                   </ng-container>
 
                   <!-- Categorie Column -->
                   <ng-container matColumnDef="Categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[3].columnProp}}"
+                          [(ngModel)]="options[3].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+                          <mat-option value="">-- Select {{options[3].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[3].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                            (mouseup)="onMouseUp()"
-                            (mousedown)="select($event,cell)"
-                            [ngClass]="{'selected':isSelected(i,3)}">
+                      (mousedown)="onMouseDown(i, 3, 'Categorie','livraison')"
+                      (mouseup)="onMouseUp(i, 3, 'Categorie','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][3], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][3]}">
                       {{element.Categorie}} </td>
                   </ng-container>
 
                   <!-- Type_de_Service Column -->
                   <ng-container matColumnDef="Type_de_Service">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[4].columnProp}}"
+                          [(ngModel)]="options[4].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+                          <mat-option value="">-- Select {{options[4].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[4].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUp()"
-                        (mousedown)="select($event,cell)" [ngClass]="{'selected':isSelected(i,4)}"
-                    >
+                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service','livraison')"
+                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][4], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][4]}">
                       {{element.Type_de_Service}} </td>
                   </ng-container>
 
                   <!-- ID_de_la_tache Column -->
                   <ng-container matColumnDef="ID_de_la_tache">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
-
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[5].columnProp}}"
+                          [(ngModel)]="options[5].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+                          <mat-option value="">-- Select {{options[5].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[5].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                          (mouseup)="onMouseUp()"
-                          (mousedown)="select($event,cell)"
-                          [ngClass]="{'selected':isSelected(i,5)}"
-                    >
+                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache','livraison')"
+                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][5], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][5]}">
                       {{element.ID_de_la_tache}} </td>
                   </ng-container>
 
                   <!-- Item___Nom_sous_categorie Column -->
                   <ng-container matColumnDef="Item___Nom_sous_categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
+                      <mat-form-field class="form-column" appearance="fill"  *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[6].columnProp}}"
+                          [(ngModel)]="options[6].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+                          <mat-option value="">-- Select {{options[6].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[6].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                          (mouseup)="onMouseUp()"
-                          (mousedown)="select($event,cell)"
-                          [ngClass]="{'selected':isSelected(i,6)}"
-                    >
+                      (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie','livraison')"
+                      (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][6], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][6]}">
                       {{element.Item___Nom_sous_categorie}} </td>
                   </ng-container>
 
                   <!-- Item___Type_unite_manutention Column -->
                   <ng-container matColumnDef="Item___Type_unite_manutention">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[7].columnProp}}"
+                          [(ngModel)]="options[7].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+                          <mat-option value="">-- Select {{options[7].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[7].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                          (mouseup)="onMouseUp()"
-                          (mousedown)="select($event,cell)"
-                          [ngClass]="{'selected':isSelected(i,7)}"
-                    >
+                      (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention','livraison')"
+                      (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][7], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][7]}">
                       {{element.Item___Type_unite_manutention}} </td>
                   </ng-container>
 
                   <!-- Item___Quantite Column -->
                   <ng-container matColumnDef="Item___Quantite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[8].columnProp}}"
+                          [(ngModel)]="options[8].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[8],$event)">
+                          <mat-option value="">-- Select {{options[8].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[8].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                          (mouseup)="onMouseUp()"
-                          (mousedown)="select($event,cell)"
-                          [ngClass]="{'selected':isSelected(i,8)}"
-                    >
+                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite','livraison')"
+                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][8], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][8]}">
                       {{element.Item___Quantite}} </td>
                   </ng-container>
 
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
-
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[9].columnProp}}"
+                          [(ngModel)]="options[9].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[9],$event)">
+                          <mat-option value="">-- Select {{options[9].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[9].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                          (mouseup)="onMouseUp()"
-                          (mousedown)="select($event,cell)"
-                          [ngClass]="{'selected':isSelected(i,9)}"
-                    >
+                      (mousedown)="onMouseDown(i, 9, 'Code_postal','livraison')"
+                      (mouseup)="onMouseUp(i, 9, 'Code_postal','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][9], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][9]}">
                       {{element.Code_postal}} </td>
                   </ng-container>
 
                   <!-- sourceHubName Column -->
                   <ng-container matColumnDef="sourceHubName">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[10].columnProp}}"
+                          [(ngModel)]="options[10].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[10],$event)">
+                          <mat-option value="">-- Select {{options[10].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[10].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUp()"
-                        (mousedown)="select($event,cell)"
-                        [ngClass]="{'selected':isSelected(i,10)}"
-                    >
+                      (mousedown)="onMouseDown(i, 10, 'sourceHubName','livraison')"
+                      (mouseup)="onMouseUp(i, 10, 'sourceHubName','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][10], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][10]}">
                       {{element.sourceHubName}} </td>
                   </ng-container>
 
                   <!-- Round_Name Column -->
                   <ng-container matColumnDef="Round_Name">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[11].columnProp}}"
+                          [(ngModel)]="options[11].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[11],$event)">
+                          <mat-option value="">-- Select {{options[11].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[11].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                          (mouseup)="onMouseUp()"
-                          (mousedown)="select($event,cell)"
-                          [ngClass]="{'selected':isSelected(i,11)}"
-                    >
+                      (mousedown)="onMouseDown(i, 11, 'Round_Name','livraison')"
+                      (mouseup)="onMouseUp(i, 11, 'Round_Name','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][11], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][11]}">
                       {{element.Round_Name}} </td>
                   </ng-container>
 
@@ -262,7 +358,7 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='correctionFileException("exception");$event.stopPropagation();'
+                  <button (click)='correctionFile("exception");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                   </button>
                   <button (click)='resetFiltre("exception");$event.stopPropagation();' style="margin-left: 5px;"
@@ -275,152 +371,282 @@
                 [show]="showLoaderExceptionFile"></app-loader>
               <div class="content-table">
                 <div class="pagination">
-                  <mat-paginator [hidden]="!dataSourceException.data.length" [pageSizeOptions] = "[100,200,300]" showFirstLastButtons></mat-paginator>
+                  <mat-paginator [hidden]="!dataSourceException.data.length" [pageSizeOptions]="[100,200,300]"
+                    showFirstLastButtons></mat-paginator>
                 </div>
-                <table mat-table [dataSource]="dataSourceException" *ngIf = "dataSourceException.data.length > 0"
+                <table mat-table [dataSource]="dataSourceException" *ngIf="dataSourceException.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
-
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[0].columnProp}}"
+                          [(ngModel)]="optionsException[0].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[0],$event)">
+                          <mat-option value="">-- Select {{optionsException[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[0].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,0)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 0, 'Date','exception')"
+                      (mouseup)="onMouseUp(i, 0, 'Date','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][0], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][0]}">
                       {{element.Date}} </td>
                   </ng-container>
 
                   <!-- Expediteur Column -->
                   <ng-container matColumnDef="Expediteur">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[1].columnProp}}"
+                          [(ngModel)]="optionsException[1].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[1],$event)">
+                          <mat-option value="">-- Select {{optionsException[1].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[1].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,1)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 1, 'Expediteur','exception')"
+                      (mouseup)="onMouseUp(i, 1, 'Expediteur','exception')" 
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][1], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][1]}">
                       {{element.Expediteur}} </td>
                   </ng-container>
 
                   <!-- Activite Column -->
                   <ng-container matColumnDef="Activite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[2].columnProp}}"
+                          [(ngModel)]="optionsException[2].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[2],$event)">
+                          <mat-option value="">-- Select {{optionsException[2].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[2].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,2)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 2, 'Activite','exception')"
+                      (mouseup)="onMouseUp(i, 2, 'Activite','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][2], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][2]}">
                       {{element.Activite}} </td>
                   </ng-container>
 
                   <!-- Categorie Column -->
                   <ng-container matColumnDef="Categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[3].columnProp}}"
+                          [(ngModel)]="optionsException[3].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[3],$event)">
+                          <mat-option value="">-- Select {{optionsException[3].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[3].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,3)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 3, 'Categorie','exception')"
+                      (mouseup)="onMouseUp(i, 3, 'Categorie','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][3], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][3]}">
                       {{element.Categorie}} </td>
                   </ng-container>
 
                   <!-- Type_de_Service Column -->
                   <ng-container matColumnDef="Type_de_Service">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[4].columnProp}}"
+                          [(ngModel)]="optionsException[4].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[4],$event)">
+                          <mat-option value="">-- Select {{optionsException[4].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[4].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,4)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service','exception')"
+                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][4], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][4]}">
                       {{element.Type_de_Service}} </td>
                   </ng-container>
 
                   <!-- ID_de_la_tache Column -->
                   <ng-container matColumnDef="ID_de_la_tache">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[5].columnProp}}"
+                          [(ngModel)]="optionsException[5].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[5],$event)">
+                          <mat-option value="">-- Select {{optionsException[5].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[5].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,5)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache','exception')"
+                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][5], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][5]}">
                       {{element.ID_de_la_tache}} </td>
                   </ng-container>
 
                   <!-- Item___Nom Column -->
                   <ng-container matColumnDef="Item___Nom">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[6].columnProp}}"
+                          [(ngModel)]="optionsException[6].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[6],$event)">
+                          <mat-option value="">-- Select {{optionsException[6].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[6].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,6)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 6, 'Item___Nom','exception')"
+                      (mouseup)="onMouseUp(i, 6, 'Item___Nom','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][6], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][6]}">
                       {{element.Item___Nom}} </td>
                   </ng-container>
 
                   <!-- Item___Type Column -->
                   <ng-container matColumnDef="Item___Type">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[7].columnProp}}"
+                          [(ngModel)]="optionsException[7].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[7],$event)">
+                          <mat-option value="">-- Select {{optionsException[7].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[7].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,7)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 7, 'Item___Type','exception')"
+                      (mouseup)="onMouseUp(i, 7, 'Item___Type','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][7], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][7]}">
                       {{element.Item___Type}} </td>
                   </ng-container>
 
                   <!-- Item___Quantite Column -->
                   <ng-container matColumnDef="Item___Quantite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[8].columnProp}}"
+                          [(ngModel)]="optionsException[8].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[8],$event)">
+                          <mat-option value="">-- Select {{optionsException[8].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[8].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,8)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite','exception')"
+                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][8], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][8]}">
                       {{element.Item___Quantite}} </td>
                   </ng-container>
 
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[9].columnProp}}"
+                          [(ngModel)]="optionsException[9].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[9],$event)">
+                          <mat-option value="">-- Select {{optionsException[9].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[9].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,9)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 9, 'Code_postal','exception')"
+                      (mouseup)="onMouseUp(i, 9, 'Code_postal','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][9], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][9]}">
                       {{element.Code_postal}} </td>
                   </ng-container>
 
                   <!-- Round_Name Column -->
                   <ng-container matColumnDef="Round_Name">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[10].columnProp}}"
+                          [(ngModel)]="optionsException[10].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[10],$event)">
+                          <mat-option value="">-- Select {{optionsException[10].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[10].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,10)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 10, 'Round_Name','exception')"
+                      (mouseup)="onMouseUp(i, 10, 'Round_Name','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][10], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][10]}">
                       {{element.Round_Name}} </td>
                   </ng-container>
 
                   <!-- Remarque Column -->
                   <ng-container matColumnDef="Remarque">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Remarque
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[11].columnProp}}"
+                          [(ngModel)]="optionsException[11].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[11],$event)">
+                          <mat-option value="">-- Select {{optionsException[11].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[11].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,11)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 11, 'Remarque','exception')"
+                      (mouseup)="onMouseUp(i, 11, 'Remarque','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][11], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][11]}">
                       {{element.Remarque}} </td>
                   </ng-container>
 
                   <!-- isDeleted Column -->
                   <ng-container matColumnDef="isDeleted">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> isDeleted
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[12].columnProp}}"
+                          [(ngModel)]="optionsException[12].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[12],$event)">
+                          <mat-option value="">-- Select {{optionsException[12].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[12].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpException()"
-                        (mousedown)="selectException($event,cell)"
-                        [ngClass]="{'selected':isSelectedException(i,12)}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 12, 'isDeleted','exception')"
+                      (mouseup)="onMouseUp(i, 12, 'isDeleted','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][12], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][12]}">
                       {{element.isDeleted}} </td>
                   </ng-container>
 
@@ -458,7 +684,7 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='correctionFileMetadata("metadata");$event.stopPropagation();'
+                  <button (click)='correctionFile("metadata");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                   </button>
                   <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
@@ -471,186 +697,345 @@
                 [show]="showLoaderMetadataFile"></app-loader>
               <div class="content-table">
                 <div class="pagination">
-                  <mat-paginator [hidden]="!dataSourceMetaData.data.length" [pageSizeOptions] = "[100,200,300]" showFirstLastButtons></mat-paginator>
+                  <mat-paginator [hidden]="!dataSourceMetaData.data.length" [pageSizeOptions]="[100,200,300]"
+                    showFirstLastButtons></mat-paginator>
                 </div>
-                <table mat-table [dataSource]="dataSourceMetaData" *ngIf = "dataSourceMetaData.data.length > 0"
+                <table mat-table [dataSource]="dataSourceMetaData" *ngIf="dataSourceMetaData.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[0].columnProp}}"
+                          [(ngModel)]="optionsMetaData[0].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[0],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[0].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,0)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 0, 'Date','metadata')"
+                      (mouseup)="onMouseUp(i, 0, 'Date','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0], 'unselected': !selectedCellsStateException[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0]}">
                       {{element.Date}} </td>
                   </ng-container>
 
                   <!-- Expediteur Column -->
                   <ng-container matColumnDef="Expediteur">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[1].columnProp}}"
+                          [(ngModel)]="optionsMetaData[1].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[1],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[1].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[1].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,1)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 1, 'Expediteur','metadata')"
+                      (mouseup)="onMouseUp(i, 1, 'Expediteur','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][1], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][1]}">
                       {{element.Expediteur}} </td>
                   </ng-container>
 
                   <!-- Activite Column -->
                   <ng-container matColumnDef="Activite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[2].columnProp}}"
+                          [(ngModel)]="optionsMetaData[2].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[2],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[2].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[2].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,2)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 2, 'Activite','metadata')"
+                      (mouseup)="onMouseUp(i, 2, 'Activite','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][2], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][2]}">
                       {{element.Activite}} </td>
                   </ng-container>
 
                   <!-- Categorie Column -->
                   <ng-container matColumnDef="Categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[3].columnProp}}"
+                          [(ngModel)]="optionsMetaData[3].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[3],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[3].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[3].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,3)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 3, 'Categorie','metadata')"
+                      (mouseup)="onMouseUp(i, 3, 'Categorie','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][3], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][3]}">
                       {{element.Categorie}} </td>
                   </ng-container>
 
                   <!-- Type_de_Service Column -->
                   <ng-container matColumnDef="Type_de_Service">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[4].columnProp}}"
+                          [(ngModel)]="optionsMetaData[4].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[4],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[4].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[4].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,4)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service','metadata')"
+                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][4], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][4]}">
                       {{element.Type_de_Service}} </td>
                   </ng-container>
 
                   <!-- ID_de_la_tache Column -->
                   <ng-container matColumnDef="ID_de_la_tache">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
-
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[5].columnProp}}"
+                          [(ngModel)]="optionsMetaData[5].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[5],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[5].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[5].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,5)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache','metadata')"
+                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][5], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][5]}">
                       {{element.ID_de_la_tache}} </td>
                   </ng-container>
 
                   <!-- Item___Nom_sous_categorie Column -->
                   <ng-container matColumnDef="Item___Nom_sous_categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
-
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[6].columnProp}}"
+                          [(ngModel)]="optionsMetaData[6].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[6],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[6].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[6].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,6)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie','metadata')"
+                      (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][6], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][6]}">
                       {{element.Item___Nom_sous_categorie}} </td>
                   </ng-container>
 
                   <!-- Item___Type_unite_manutention Column -->
                   <ng-container matColumnDef="Item___Type_unite_manutention">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[7].columnProp}}"
+                          [(ngModel)]="optionsMetaData[7].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[7],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[7].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[7].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,7)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                        (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention','metadata')"
+                        (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','metadata')"
+                        [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][7], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][7]}">
                       {{element.Item___Type_unite_manutention}} </td>
                   </ng-container>
 
                   <!-- Item___Quantite Column -->
                   <ng-container matColumnDef="Item___Quantite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[8].columnProp}}"
+                          [(ngModel)]="optionsMetaData[8].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[8],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[8].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[8].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,8)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite','metadata')"
+                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][8], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][8]}">
                       {{element.Item___Quantite}} </td>
                   </ng-container>
 
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[9].columnProp}}"
+                          [(ngModel)]="optionsMetaData[9].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[9],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[9].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[9].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,9)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 9, 'Code_postal','metadata')"
+                      (mouseup)="onMouseUp(i, 9, 'Code_postal','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][9], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][9]}">
                       {{element.Code_postal}} </td>
                   </ng-container>
 
                   <!-- sourceHubName Column -->
                   <ng-container matColumnDef="sourceHubName">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[10].columnProp}}"
+                          [(ngModel)]="optionsMetaData[10].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[10],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[10].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[10].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,10)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 10, 'sourceHubName','metadata')"
+                      (mouseup)="onMouseUp(i, 10, 'sourceHubName','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][10], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][10]}">
                       {{element.sourceHubName}} </td>
                   </ng-container>
 
                   <!-- Round_Name Column -->
                   <ng-container matColumnDef="Round_Name">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[11].columnProp}}"
+                          [(ngModel)]="optionsMetaData[11].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[11],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[11].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[11].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,11)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 11, 'Round_Name','metadata')"
+                      (mouseup)="onMouseUp(i, 11, 'Round_Name','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][11], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][11]}">
                       {{element.Round_Name}} </td>
                   </ng-container>
 
                   <!-- sourceClosureDate Column -->
                   <ng-container matColumnDef="sourceClosureDate">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceClosureDate
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[12].columnProp}}"
+                          [(ngModel)]="optionsMetaData[12].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[12],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[12].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[12].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,12)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 12, 'sourceClosureDate','metadata')"
+                      (mouseup)="onMouseUp(i, 12, 'sourceClosureDate','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][12], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][12]}">
                       {{element.sourceClosureDate}} </td>
                   </ng-container>
 
                   <!-- realInfoHasPrepared Column -->
                   <ng-container matColumnDef="realInfoHasPrepared">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> realInfoHasPrepared
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[13].columnProp}}"
+                          [(ngModel)]="optionsMetaData[13].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[13],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[13].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[13].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,13)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 13, 'realInfoHasPrepared','metadata')"
+                      (mouseup)="onMouseUp(i, 13, 'realInfoHasPrepared','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][13], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][13]}">
                       {{element.realInfoHasPrepared}} </td>
                   </ng-container>
 
                   <!-- status Column -->
                   <ng-container matColumnDef="status">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> status
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[14].columnProp}}"
+                          [(ngModel)]="optionsMetaData[14].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[14],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[14].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[14].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,14)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 14, 'status','metadata')"
+                      (mouseup)="onMouseUp(i, 14, 'status','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][14], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][14]}">
                       {{element.status}} </td>
                   </ng-container>
 
                   <!-- metadataFACTURATION Column -->
                   <ng-container matColumnDef="metadataFACTURATION">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> metadataFACTURATION
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[15].columnProp}}"
+                          [(ngModel)]="optionsMetaData[15].modelValue"
+                          (selectionChange)="setFilteredItemsMetaDataOptions(optionsMetaData[15],$event)">
+                          <mat-option value="">-- Select {{optionsMetaData[15].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMetaData[15].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMetadata()"
-                        (mousedown)="selectMetadata($event,cell)"
-                        [ngClass]="{'selected':isSelectedMetadata(i,15)}">
+                    <td mat-cell #cellMetadata class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" 
+                      (mousedown)="onMouseDown(i, 15, 'metadataFACTURATION','metadata')"
+                      (mouseup)="onMouseUp(i, 15, 'metadataFACTURATION','metadata')"
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][15], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][15]}">
                       {{element.metadataFACTURATION}} </td>
                   </ng-container>
 
@@ -688,7 +1073,7 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='correctionFileMad("mad");$event.stopPropagation();'
+                  <button (click)='correctionFile("mad");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                   </button>
                   <button (click)='resetFiltre("mad");$event.stopPropagation();' style="margin-left: 5px;"
@@ -701,140 +1086,249 @@
                 [show]="showLoaderMadFile"></app-loader>
               <div class="content-table">
                 <div class="pagination">
-                  <mat-paginator [hidden]="!dataSourceMAD.data.length" [pageSizeOptions] = "[100,200,300]" showFirstLastButtons></mat-paginator>
+                  <mat-paginator [hidden]="!dataSourceMAD.data.length" [pageSizeOptions]="[100,200,300]"
+                    showFirstLastButtons></mat-paginator>
                 </div>
-                <table mat-table [dataSource]="dataSourceMAD" *ngIf = "dataSourceMAD.data.length > 0"
+                <table mat-table [dataSource]="dataSourceMAD" *ngIf="dataSourceMAD.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[0].columnProp}}"
+                          [(ngModel)]="optionsMad[0].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[0],$event)">
+                          <mat-option value="">-- Select {{optionsMad[0].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[0].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
-                      <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,0)}">
+                    <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                    (mousedown)="onMouseDown(i, 0, 'Date','mad')"
+                    (mouseup)="onMouseUp(i, 0, 'Date','mad')"
+                    [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][0], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][0]}">
                       {{element.Date}} </td>
                   </ng-container>
 
-                  <!-- Expediteur Column -->
-                  <ng-container matColumnDef="Expediteur">
+                   <!-- Expediteur Column -->
+                   <ng-container matColumnDef="Expediteur">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[1].columnProp}}"
+                          [(ngModel)]="optionsMad[1].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[1],$event)">
+                          <mat-option value="">-- Select {{optionsMad[1].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[1].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,1)}">
+                      (mousedown)="onMouseDown(i, 1, 'Expediteur','mad')"
+                      (mouseup)="onMouseUp(i, 1, 'Expediteur','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][1], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][1]}">
                       {{element.Expediteur}} </td>
                   </ng-container>
 
                   <!-- Activite Column -->
                   <ng-container matColumnDef="Activite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[2].columnProp}}"
+                          [(ngModel)]="optionsMad[2].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[2],$event)">
+                          <mat-option value="">-- Select {{optionsMad[2].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[2].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,2)}">
+                      (mousedown)="onMouseDown(i, 2, 'Activite','mad')"
+                      (mouseup)="onMouseUp(i, 2, 'Activite','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][2], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][2]}">
                       {{element.Activite}} </td>
                   </ng-container>
 
                   <!-- Categorie Column -->
                   <ng-container matColumnDef="Categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[3].columnProp}}"
+                          [(ngModel)]="optionsMad[3].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[3],$event)">
+                          <mat-option value="">-- Select {{optionsMad[3].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[3].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,3)}">
+                      (mousedown)="onMouseDown(i, 3, 'Categorie','mad')"
+                      (mouseup)="onMouseUp(i, 3, 'Categorie','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][3], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][3]}">
                       {{element.Categorie}} </td>
                   </ng-container>
 
                   <!-- Type_de_Service Column -->
                   <ng-container matColumnDef="Type_de_Service">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[4].columnProp}}"
+                          [(ngModel)]="optionsMad[4].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[4],$event)">
+                          <mat-option value="">-- Select {{optionsMad[4].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[4].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,4)}">
+                      (mousedown)="onMouseDown(i, 4, 'Type_de_Service','mad')"
+                      (mouseup)="onMouseUp(i, 4, 'Type_de_Service','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][4], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][4]}">
                       {{element.Type_de_Service}} </td>
                   </ng-container>
 
                   <!-- ID_de_la_tache Column -->
                   <ng-container matColumnDef="ID_de_la_tache">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[5].columnProp}}"
+                          [(ngModel)]="optionsMad[5].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[5],$event)">
+                          <mat-option value="">-- Select {{optionsMad[5].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[5].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,5)}">
+                      (mousedown)="onMouseDown(i, 5, 'ID_de_la_tache','mad')"
+                      (mouseup)="onMouseUp(i, 5, 'ID_de_la_tache','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][5], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][5]}">
                       {{element.ID_de_la_tache}} </td>
                   </ng-container>
 
                   <!-- Item___Nom_sous_categorie Column -->
                   <ng-container matColumnDef="Item___Nom_sous_categorie">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[6].columnProp}}"
+                          [(ngModel)]="optionsMad[6].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[6],$event)">
+                          <mat-option value="">-- Select {{optionsMad[6].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[6].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,6)}">
+                      (mousedown)="onMouseDown(i, 6, 'Item___Nom_sous_categorie','mad')"
+                      (mouseup)="onMouseUp(i, 6, 'Item___Nom_sous_categorie','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][6], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][6]}">
                       {{element.Item___Nom_sous_categorie}} </td>
                   </ng-container>
 
                   <!-- Item___Type_unite_manutention Column -->
                   <ng-container matColumnDef="Item___Type_unite_manutention">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[7].columnProp}}"
+                          [(ngModel)]="optionsMad[7].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[7],$event)">
+                          <mat-option value="">-- Select {{optionsMad[7].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[7].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,7)}">
+                      (mousedown)="onMouseDown(i, 7, 'Item___Type_unite_manutention','mad')"
+                      (mouseup)="onMouseUp(i, 7, 'Item___Type_unite_manutention','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][7], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][7]}">
                       {{element.Item___Type_unite_manutention}} </td>
                   </ng-container>
 
                   <!-- Item___Quantite Column -->
                   <ng-container matColumnDef="Item___Quantite">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[8].columnProp}}"
+                          [(ngModel)]="optionsMad[8].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[8],$event)">
+                          <mat-option value="">-- Select {{optionsMad[8].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[8].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,8)}">
+                      (mousedown)="onMouseDown(i, 8, 'Item___Quantite','mad')"
+                      (mouseup)="onMouseUp(i, 8, 'Item___Quantite','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][8], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][8]}">
                       {{element.Item___Quantite}} </td>
                   </ng-container>
 
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[9].columnProp}}"
+                          [(ngModel)]="optionsMad[9].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[9],$event)">
+                          <mat-option value="">-- Select {{optionsMad[9].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[9].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,9)}">
+                      (mousedown)="onMouseDown(i, 9, 'Code_postal','mad')"
+                      (mouseup)="onMouseUp(i, 9, 'Code_postal','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][9], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][9]}">
                       {{element.Code_postal}} </td>
                   </ng-container>
 
                   <!-- sourceHubName Column -->
                   <ng-container matColumnDef="sourceHubName">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[10].columnProp}}"
+                          [(ngModel)]="optionsMad[10].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[10],$event)">
+                          <mat-option value="">-- Select {{optionsMad[10].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[10].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,10)}">
+                      (mousedown)="onMouseDown(i, 10, 'sourceHubName','mad')"
+                      (mouseup)="onMouseUp(i, 10, 'sourceHubName','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][10], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][10]}">
                       {{element.sourceHubName}} </td>
                   </ng-container>
 
                   <!-- Round_Name Column -->
                   <ng-container matColumnDef="Round_Name">
                     <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[11].columnProp}}"
+                          [(ngModel)]="optionsMad[11].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[11],$event)">
+                          <mat-option value="">-- Select {{optionsMad[11].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[11].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </th>
                       <td mat-cell #cellMad class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mouseup)="onMouseUpMad()"
-                        (mousedown)="selectMad($event,cell)"
-                        [ngClass]="{'selected':isSelectedMad(i,11)}">
+                      (mousedown)="onMouseDown(i, 11, 'Round_Name','mad')"
+                      (mouseup)="onMouseUp(i, 11, 'Round_Name','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][11], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][11]}">
                       {{element.Round_Name}} </td>
                   </ng-container>
 

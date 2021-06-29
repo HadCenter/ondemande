@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener} from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
@@ -18,12 +18,12 @@ export interface MouseEvent {
 })
 export class DetailsFileEdiComponent extends UpgradableComponent implements OnInit {
   public filterValue: any;
-  public filterValueValid:any;
+  public filterValueValid: any;
   file: any;
   fileWrong: any = [];
   fileValid: any;
-  copyFileValid:any;
-  copyFromFileValid:any;
+  copyFileValid: any;
+  copyFromFileValid: any;
   column: string;
   public snackAction = 'Ok';
   fileTocheck: any;
@@ -67,57 +67,44 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.getFile(this.route.snapshot.params.id);
 
   }
-  getRefClient(element)
-  {
-    return element.Remarque_id==13 && !element.RefClient ? 'Introuvable' : element.RefClient;
+  getRefClient(element) {
+    return element.Remarque_id == 13 && !element.RefClient ? 'Introuvable' : element.RefClient;
   }
-  getExpediteur(element)
-  {
-    return element.Remarque_id==1 && !element.Expediteur ? 'Introuvable' : element.Expediteur;
+  getExpediteur(element) {
+    return element.Remarque_id == 1 && !element.Expediteur ? 'Introuvable' : element.Expediteur;
   }
-  getType(element)
-  {
-    return element.Remarque_id==17 && !element.Type ? 'Introuvable' : element.Type;
+  getType(element) {
+    return element.Remarque_id == 17 && !element.Type ? 'Introuvable' : element.Type;
   }
-  getStart(element)
-  {
-    return element.Remarque_id==5 && !element.Start ? 'Introuvable' : element.Start;
+  getStart(element) {
+    return element.Remarque_id == 5 && !element.Start ? 'Introuvable' : element.Start;
   }
-  getEnd(element)
-  {
-    return element.Remarque_id==7 && !element.End ? 'Introuvable' : element.End;
+  getEnd(element) {
+    return element.Remarque_id == 7 && !element.End ? 'Introuvable' : element.End;
   }
-  getLabels(element)
-  {
-    return element.Remarque_id==18 && !element.Labels ? 'Introuvable' : element.Labels;
+  getLabels(element) {
+    return element.Remarque_id == 18 && !element.Labels ? 'Introuvable' : element.Labels;
   }
-  getQuantite(element)
-  {
-    return element.Remarque_id==4 && !element.Quantite ? 'Introuvable' : element.Quantite;
+  getQuantite(element) {
+    return element.Remarque_id == 4 && !element.Quantite ? 'Introuvable' : element.Quantite;
   }
-  getNomDestinataire(element)
-  {
-    return element.Remarque_id==8 && !element.Nom_destinataire ? 'Introuvable' : element.Nom_destinataire;
+  getNomDestinataire(element) {
+    return element.Remarque_id == 8 && !element.Nom_destinataire ? 'Introuvable' : element.Nom_destinataire;
   }
-  getRue(element)
-  {
-    return element.Remarque_id==9 && !element.rue ? 'Introuvable' : element.rue;
+  getRue(element) {
+    return element.Remarque_id == 9 && !element.rue ? 'Introuvable' : element.rue;
   }
-  getVille(element)
-  {
-    return element.Remarque_id==10 && !element.ville ? 'Introuvable' : element.ville;
+  getVille(element) {
+    return element.Remarque_id == 10 && !element.ville ? 'Introuvable' : element.ville;
   }
-  getCP(element)
-  {
-    return element.Remarque_id==2 && !element.CP ? 'Introuvable' : element.CP;
+  getCP(element) {
+    return element.Remarque_id == 2 && !element.CP ? 'Introuvable' : element.CP;
   }
-  getRef2(element)
-  {
-    return (element.Remarque_id==19||element.Remarque_id==11) && !element.Ref2 ? 'Introuvable' : element.Ref2;
+  getRef2(element) {
+    return (element.Remarque_id == 19 || element.Remarque_id == 11) && !element.Ref2 ? 'Introuvable' : element.Ref2;
   }
-  getRef3(element)
-  {
-    return element.Remarque_id==12 && !element.Ref3 ? 'Introuvable' : element.Ref3;
+  getRef3(element) {
+    return element.Remarque_id == 12 && !element.Ref3 ? 'Introuvable' : element.Ref3;
   }
 
 
@@ -172,13 +159,13 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           // this.rowsToDelete = [];
           this.rowsToDeleteValid = [];
           this.alreadyClicked = false;
-          if (this.fileValid.rows.length==0){
-            if (this.fileWrong.rows.length==0) // en plus on a 0 prestations erronées
+          if (this.fileValid.rows.length == 0) {
+            if (this.fileWrong.rows.length == 0) // en plus on a 0 prestations erronées
             {
               var data = {
-                idFile : this.file.idFile
+                idFile: this.file.idFile
               };
-              this.fileService.archiverFileEDI(data).subscribe(res =>{
+              this.fileService.archiverFileEDI(data).subscribe(res => {
                 console.log("succes archivage");
                 this.router.navigate(['/list-file-edi']);
 
@@ -221,15 +208,15 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           this.rowsToDelete = [];
           // this.rowsToDeleteValid = [];
           this.alreadyClicked = false;
-          if (this.fileWrong.rows.length==0){
+          if (this.fileWrong.rows.length == 0) {
             (document.getElementById('sendToUrbantz') as HTMLButtonElement).disabled = false;
-            console.log("this.fileValid.length",this.fileValid.rows.length);
-            if (this.fileValid.rows.length==0) // en plus on a 0 prestations valides
+            console.log("this.fileValid.length", this.fileValid.rows.length);
+            if (this.fileValid.rows.length == 0) // en plus on a 0 prestations valides
             {
               var data = {
-                idFile : this.file.idFile
+                idFile: this.file.idFile
               };
-              this.fileService.archiverFileEDI(data).subscribe(res =>{
+              this.fileService.archiverFileEDI(data).subscribe(res => {
                 console.log("succes archivage");
                 this.router.navigate(['/list-file-edi']);
 
@@ -266,7 +253,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.rowsToDelete.push(rowId);
 
     }
-    if (this.rowsToDelete.length>0){
+    if (this.rowsToDelete.length > 0) {
       (document.getElementById('deleteWrongBtn') as HTMLButtonElement).disabled = false;
     }
     //  this.openDialog(i);
@@ -457,41 +444,41 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.fileService.getFileEdi(data).subscribe(res => {
       console.warn(res)
       this.fileWrong = res;
-      if (this.fileWrong.rows.length>0){
-      //create a copy array of object from the res and an array of displayed column
-      this.copyFileWrong = JSON.parse(JSON.stringify(this.fileWrong));
+      if (this.fileWrong.rows.length > 0) {
+        //create a copy array of object from the res and an array of displayed column
+        this.copyFileWrong = JSON.parse(JSON.stringify(this.fileWrong));
 
-      this.copyFileWrong.rows.splice(0, 0, this.copyFileWrong.columns);
-      this.copyFileWrong = this.convertToArrayOfObjects(this.copyFileWrong.rows);
-      this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); //sort by remaque id
-      this.testFile = this.copyFileWrong;   //copy to use on selection
-      this.files = this.copyFileWrong;    // copy to filter *
+        this.copyFileWrong.rows.splice(0, 0, this.copyFileWrong.columns);
+        this.copyFileWrong = this.convertToArrayOfObjects(this.copyFileWrong.rows);
+        this.copyFileWrong = this.copyFileWrong.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1); //sort by remaque id
+        this.testFile = this.copyFileWrong;   //copy to use on selection
+        this.files = this.copyFileWrong;    // copy to filter *
 
-      this.displayedColumns = (Object.keys(this.copyFileWrong[0])).slice((Object.keys(this.copyFileWrong[0]).indexOf("Remarque")), (Object.keys(this.copyFileWrong[0]).indexOf("Remarque_id")));  //not display unecessery column
+        this.displayedColumns = (Object.keys(this.copyFileWrong[0])).slice((Object.keys(this.copyFileWrong[0]).indexOf("Remarque")), (Object.keys(this.copyFileWrong[0]).indexOf("Remarque_id")));  //not display unecessery column
 
-      this.displayedColumns.unshift("Delete");  //add column Delete
-      //
-      this.showWrong = false;
-      this.LAST_EDITABLE_ROW = this.copyFileWrong.length - 1;
-      this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
+        this.displayedColumns.unshift("Delete");  //add column Delete
+        //
+        this.showWrong = false;
+        this.LAST_EDITABLE_ROW = this.copyFileWrong.length - 1;
+        this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
 
-      // initialize all selectedCellsState to false
-      this.copyFileWrong.forEach(element => {
-        //get checkbox selected by default
-        if (element.selected == 1) {
-          this.selection.push(element.rowId);
-        }
-        this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
-      });
-      // get select options
-      this.displayedColumns.forEach(item => {
-        this.getOption(item);
-      })
-    }
-    else {
-      this.fileWrong.rows=[];
-      console.warn(this.fileWrong.rows.length)
-    }
+        // initialize all selectedCellsState to false
+        this.copyFileWrong.forEach(element => {
+          //get checkbox selected by default
+          if (element.selected == 1) {
+            this.selection.push(element.rowId);
+          }
+          this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
+        });
+        // get select options
+        this.displayedColumns.forEach(item => {
+          this.getOption(item);
+        })
+      }
+      else {
+        this.fileWrong.rows = [];
+        console.warn(this.fileWrong.rows.length)
+      }
     })
 
 
@@ -638,16 +625,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
     this.fileService.getFileEdi(data).subscribe(res => {
       this.fileValid = res;
-      if (this.fileValid.rows.length>0){
-      this.copyFileValid=res.rows;
-      this.copyFromFileValid=res.rows;
-      this.showValid = false;
-      this.fileValid.columns.unshift("Delete");  //add column Delete
-      // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
-      console.warn('File valid', this.fileValid);}
+      if (this.fileValid.rows.length > 0) {
+        this.copyFileValid = res.rows;
+        this.copyFromFileValid = res.rows;
+        this.showValid = false;
+        this.fileValid.columns.unshift("Delete");  //add column Delete
+        // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
+        console.warn('File valid', this.fileValid);
+      }
       else {
 
-          this.fileValid.rows=[];
+        this.fileValid.rows = [];
 
       }
     })
@@ -659,23 +647,23 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       .subscribe(
         data => {
           this.file = data;
-          console.log("file",this.file);
+          console.log("file", this.file);
 
           if (this.file.validatedOrders != '_') {
             this.getValidFile();
           }
           else {
             this.showValid = false;
-            this.fileValid={};
-            this.fileValid.rows=[];
+            this.fileValid = {};
+            this.fileValid.rows = [];
           }
           if (this.file.wrongCommands != '_') {
             this.getWrongFile();
           }
           else {
             this.showWrong = false;
-            this.fileWrong={};
-            this.fileWrong.rows=[];
+            this.fileWrong = {};
+            this.fileWrong.rows = [];
           }
         },
         error => {
@@ -781,8 +769,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     var user = JSON.parse(localStorage.getItem('currentUser'));
     this.rearrangeAttributes();  //Remove unecessey columns
     this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-    console.log(this.fileWrong,this.fileValid,this.fileValid.length)
-    if (this.fileWrong.rows.length>0 && this.fileValid.rows.length>0) {
+    console.log(this.fileWrong, this.fileValid, this.fileValid.length)
+    if (this.fileWrong.rows.length > 0 && this.fileValid.rows.length > 0) {
       this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
       this.removeUnecesseryColumns(); // from rows filewrong
       this.fileTocheck = {
@@ -836,23 +824,24 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   * Send file edi to Urbantz
   */
   sendFileToUrbantz() {
+    this.sendedToUrbantz = true;
     let data = {
       clientCode: this.file.contact.codeClient,
       fileName: this.file.validatedOrders,
-      fileId : this.file.idFile
+      fileId: this.file.idFile
     }
     this.fileService.sendFileToUrbantz(data).subscribe(
       result => {
-        // Handle result
-        console.log("res urbantz",result)
+        // Handle result 
+        console.log("res urbantz", result)
       },
       error => {
         this.openSnackBar("Erreur d’envoi", this.snackAction);
       },
       () => {
-        // No errors
-        this.sendedToUrbantz = true;
         this.openSnackBar("Envoyé avec succès", this.snackAction);
+        this.router.navigate(['/list-file-edi']);
+
       })
   }
 

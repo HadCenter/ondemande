@@ -31,7 +31,7 @@ def startEngineOnEdiFilesWithData(data):
 	from rabbitMQ.views import sendMessageRabbitMqToStartJob
 	#requests.post(talendUrlEDIFileWebHook, json=data)
 	from websocket.consumers import ChatConsumer
-	ChatConsumer.state['Running_Jobs'].append("Talend Job Edi " + data[0]["fileId"])
+	ChatConsumer.state['Running_Jobs'].append("Talend Job Edi " + str(data[0]["fileId"]))
 	channel_layer = get_channel_layer()
 	async_to_sync(channel_layer.group_send)(
 		'notifications_room_group',
@@ -243,7 +243,7 @@ def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):
 	from rabbitMQ.views import sendMessageRabbitMqToStartJob
 	# requests.post(talendUrlEDIFileWebHook, json=data)
 	from websocket.consumers import ChatConsumer
-	ChatConsumer.state['Running_Jobs'].append("Talend Job Mad Transaction " + madObjectToPost.transaction_id)
+	ChatConsumer.state['Running_Jobs'].append("Talend Job Mad Transaction " + str(madObjectToPost.transaction_id))
 	channel_layer = get_channel_layer()
 	async_to_sync(channel_layer.group_send)(
 		'notifications_room_group',

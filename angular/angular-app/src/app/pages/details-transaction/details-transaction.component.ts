@@ -109,11 +109,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.dataSource.data.forEach(element => {
         this.selectedCellsState.push(Array.from({ length: Object.keys(this.dataSource.data[0]).length - 1 }, () => false))
       });
-
       // get select options
       this.displayedColumnsLivraison.forEach(item => {
         this.getOption(item);
       })
+      
 
       this.dataSourceException.paginator = this.paginator.toArray()[1];
       this.arrayException = res.exception;
@@ -926,7 +926,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
+      this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
         if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }
@@ -951,7 +951,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-      this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
+      this.service.correctMadFile(this.fileTocheck).subscribe(res => {
         if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
         }

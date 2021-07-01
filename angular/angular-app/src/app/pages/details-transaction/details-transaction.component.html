@@ -120,7 +120,7 @@
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element; let i = index"
                       (mousedown)="onMouseDown(i, 1, 'Expediteur','livraison')"
                       (mouseup)="onMouseUp(i, 1, 'Expediteur','livraison')"
-                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][1], 'unselected': !selectedCellsStateException[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][1]}">
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][1], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][1]}">
                       {{element.Expediteur}} </td>
                   </ng-container>
 

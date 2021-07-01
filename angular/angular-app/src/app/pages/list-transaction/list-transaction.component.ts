@@ -34,12 +34,17 @@ export class ListTransactionComponent implements OnInit {
         // console.error("ws running jobs", JSON.parse(msg).Running_Jobs)
         this.showJobRun = true;
       }
-      else if ((JSON.parse(msg).jobEnded) == "Talend Job Transaction Mad Ended") {
+      else if (JSON.parse(msg).jobEnded &&(JSON.parse(msg).jobEnded).includes ("Talend Job Transaction Mad Ended")) {
         this.showJobRun = false;
         this.actualiser();
 
       }
     });
+    if((Object.keys(this.tablesService.data).length !== 0)){
+      if (JSON.parse(this.tablesService.data).Running_Jobs.length > 0){
+        this.showJobRun = true;
+      }
+    }
      this.getTransactions();
   }
   getColor(ch) {

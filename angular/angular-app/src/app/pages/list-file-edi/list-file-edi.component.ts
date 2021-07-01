@@ -49,21 +49,33 @@ export class ListFileEDIComponent extends UpgradableComponent {
   }
   ngOnInit() {
     this.tablesService.messages.subscribe(msg => {
-      console.log("Response from websocket: ", JSON.parse(msg));
-      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
+      console.log("Response from websocket: ", JSON.parse(msg),this.tablesService.data);
+      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0 ){
         // console.error("ws running jobs", JSON.parse(msg).Running_Jobs)
         this.showJobRun = true;
 
         //  console.warn(JSON.parse(msg))
         // this.actualiser();
       }
-      else if ((JSON.parse(msg).jobEnded) == "Talend Job EDI Ended") {
+      else if (JSON.parse(msg).jobEnded &&(JSON.parse(msg).jobEnded).includes("Talend Job EDI Ended")) {
         this.showJobRun = false;
         this.actualiser();
 
       }
     });
 
+    if((Object.keys(this.tablesService.data).length !== 0)){
+      if (JSON.parse(this.tablesService.data).Running_Jobs.length > 0){
+        this.showJobRun = true;
+      }
+    }
+  
+    // if (Object.keys(this.tablesService.data).length !== 0){
+    //   let data= JSON.parse(this.tablesService.data)
+    //   console.error(data, data.Running_Jobs.length);
+
+    // }
+    
     this.getFiles();
   }
 

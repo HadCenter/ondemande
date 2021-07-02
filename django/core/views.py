@@ -31,7 +31,7 @@ from .models import EDIfile
 from .models import FileExcelContent
 from .models import FileInfo, Contact, kpi3SchemaSingleAnomalie, getNumberOfAnomaliesPerDateDTO, \
     getNumberOfAnomaliesWithFiltersDTO
-from .models import transactionFileColumnsException , transactionFileColumnsLivraison,transactionFileColumnsMetadata, transactionFileColumnsMad
+from .models import transactionFileColumnsException , transactionFileColumnsLivraison,transactionFileColumnsMetadata, transactionFileColumnsMad , TransactionFileContentAndOptions
 from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
@@ -47,6 +47,11 @@ path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
 
 
 
+@api_view([ 'PUT'])
+def archive_fileEDI(request):
+    idFile = request.data['idFile']
+    EDIfile.objects.filter(pk=idFile).update(archived=True)
+    return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def client_detail(request, pk):
@@ -185,17 +190,111 @@ def createFileFromColumnAndRows(request):
     return response
 
 
-def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> list:
-    return list(map(lambda x: transactionFileColumnsException(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15]), df.values.tolist()))
+def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> TransactionFileContentAndOptions:
+    fileContentObjects = list()
+    options = transactionFileColumnsException(set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set())
+    for x in df.values.tolist():
+        fileContentObjects.append(transactionFileColumnsException(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15]))
+        options.Tournee.add(x[0])
+        options.taskId.add(x[1])
+        options.itemId.add(x[2])
+        options.Date.add(x[3])
+        options.Expediteur.add(x[4])
+        options.Activite.add(x[5])
+        options.Categorie.add(x[6])
+        options.Type_de_Service.add(x[7])
+        options.ID_de_la_tache.add(x[8])
+        options.Item___Nom.add(x[9])
+        options.Item___Type.add(x[10])
+        options.Item___Quantite.add(x[11])
+        options.Code_postal.add(x[12])
+        options.Round_Name.add(x[13])
+        options.Remarque.add(x[14])
+        options.isDeleted.add(x[15])
+    return TransactionFileContentAndOptions(fileContent = fileContentObjects , options = options )
 
-def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> list:
-    return list(map(lambda x: transactionFileColumnsLivraison(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14]), df.values.tolist()))
+def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> TransactionFileContentAndOptions:
+    fileContentObjects = list()
+    options = transactionFileColumnsLivraison(set(), set(), set(), set(), set(), set(), set(), set(), set(), set(),
+                                              set(), set(), set(), set(), set())
+    for x in df.values.tolist():
+        fileContentObjects.append(
+            transactionFileColumnsLivraison(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10], x[11],
+                                            x[12], x[13], x[14]))
+        options.Tournee.add(x[0])
+        options.taskId.add(x[1])
+        options.itemId.add(x[2])
+        options.Date.add(x[3])
+        options.Expediteur.add(x[4])
+        options.Activite.add(x[5])
+        options.Categorie.add(x[6])
+        options.Type_de_Service.add(x[7])
+        options.ID_de_la_tache.add(x[8])
+        options.Item___Nom_sous_categorie.add(x[9])
+        options.Item___Type_unite_manutention.add(x[10])
+        options.Item___Quantite.add(x[11])
+        options.Code_postal.add(x[12])
+        options.sourceHubName.add(x[13])
+        options.Round_Name.add(x[14])
 
-def reading_list_transactionFileColumnsMetadata(df: pd.DataFrame) -> list:
-    return list(map(lambda x: transactionFileColumnsMetadata(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15],x[16],x[17],x[18]), df.values.tolist()))
+    return TransactionFileContentAndOptions(fileContent=fileContentObjects, options=options)
 
-def reading_list_transactionFileColumnsMad(df: pd.DataFrame) -> list:
-    return list(map(lambda x: transactionFileColumnsMad(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14]), df.values.tolist()))
+
+def reading_list_transactionFileColumnsMetadata(df: pd.DataFrame) -> TransactionFileContentAndOptions:
+    fileContentObjects = list()
+    options = transactionFileColumnsMetadata(set(), set(), set(), set(), set(), set(), set(), set(), set(), set(),
+                                              set(), set(), set(), set(), set(), set(),set(),set(),set())
+    for x in df.values.tolist():
+        fileContentObjects.append(
+            transactionFileColumnsMetadata(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10], x[11],
+                                            x[12], x[13], x[14], x[15],x[16],x[17],x[18]))
+        options.Tournee.add(x[0])
+        options.taskId.add(x[1])
+        options.itemId.add(x[2])
+        options.Date.add(x[3])
+        options.Expediteur.add(x[4])
+        options.Activite.add(x[5])
+        options.Categorie.add(x[6])
+        options.Type_de_Service.add(x[7])
+        options.ID_de_la_tache.add(x[8])
+        options.Item___Nom_sous_categorie.add(x[9])
+        options.Item___Type_unite_manutention.add(x[10])
+        options.Item___Quantite.add(x[11])
+        options.Code_postal.add(x[12])
+        options.sourceHubName.add(x[13])
+        options.Round_Name.add(x[14])
+        options.sourceClosureDate.add(x[15])
+        options.realInfoHasPrepared.add(x[16])
+        options.status.add(x[17])
+        options.metadataFACTURATION.add(x[18])
+
+    return TransactionFileContentAndOptions(fileContent=fileContentObjects, options=options)
+
+
+def reading_list_transactionFileColumnsMad(df: pd.DataFrame) -> TransactionFileContentAndOptions:
+    fileContentObjects = list()
+    options = transactionFileColumnsMad(set(), set(), set(), set(), set(), set(), set(), set(), set(), set(),
+                                              set(), set(), set(), set(), set())
+    for x in df.values.tolist():
+        fileContentObjects.append(transactionFileColumnsMad(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10], x[11],x[12], x[13], x[14]))
+        options.Tournee.add(x[0])
+        options.taskId.add(x[1])
+        options.itemId.add(x[2])
+        options.Date.add(x[3])
+        options.Expediteur.add(x[4])
+        options.Activite.add(x[5])
+        options.Categorie.add(x[6])
+        options.Type_de_Service.add(x[7])
+        options.ID_de_la_tache.add(x[8])
+        options.Item___Nom_sous_categorie.add(x[9])
+        options.Item___Type_unite_manutention.add(x[10])
+        options.Item___Quantite.add(x[11])
+        options.Code_postal.add(x[12])
+        options.sourceHubName.add(x[13])
+        options.Round_Name.add(x[14])
+
+    return TransactionFileContentAndOptions(fileContent=fileContentObjects, options=options)
+
 
 def seeFileContentMADFileCore(fileType, transaction_id):
     osOriginalPath = os.getcwd()
@@ -229,9 +328,8 @@ def seeFileContentMADFileCore(fileType, transaction_id):
         excelfile = pd.read_excel(fileName)
         excelfile = excelfile.fillna('')
 
-
-        #columns = list(excelfile.columns)
-        #rows = excelfile.values.tolist()
+        # columns = list(excelfile.columns)
+        # rows = excelfile.values.tolist()
         os.remove(fileName)
         responseObject = functionToUse(excelfile)
 

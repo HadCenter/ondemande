@@ -30,7 +30,7 @@
       </base-card>
       <div *ngIf="file" style='text-align: center;'
         class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-        <button [disabled]="file?.number_wrong_commands>0||fileWrong?.rows?.length>0 || sendedToUrbantz" id="sendToUrbantz" (click)="sendFileToUrbantz();"
+        <button [disabled]="file?.number_wrong_commands>0||fileWrong?.rows?.length>0 || file?.sendedToUrbantz==true" id="sendToUrbantz" (click)="sendFileToUrbantz();"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
           à Urbantz
         </button>

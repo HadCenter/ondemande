@@ -7,34 +7,38 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 
-
+export interface MouseEvent {
+  rowId: number;
+  colId: number;
+  cellsType: string;
+}
 @Component({
   selector: 'app-details-transaction',
   templateUrl: './details-transaction.component.html',
   styleUrls: ['./details-transaction.component.scss']
 })
-export class DetailsTransactionComponent extends UpgradableComponent implements OnInit{
+export class DetailsTransactionComponent extends UpgradableComponent implements OnInit {
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   fichierException: any = [];
   fichierLivraison: any = [];
   fichierMad: any = [];
   fichierMetadata: any = [];
-  displayedColumnsLivraison: string[] = [ 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'];
-  displayedColumnsException: string[] = [ 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom','Item___Type','Item___Quantite','Code_postal','Round_Name','Remarque','isDeleted'];
-  displayedColumnsMetadata: string[] = [ 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name','sourceClosureDate','realInfoHasPrepared','status','metadataFACTURATION'];
-  displayedColumnsMad: string[] = [ 'Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'];
+  displayedColumnsLivraison: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name'];
+  displayedColumnsException: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque', 'isDeleted'];
+  displayedColumnsMetadata: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'sourceClosureDate', 'realInfoHasPrepared', 'status', 'metadataFACTURATION'];
+  displayedColumnsMad: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name'];
   dataSource = new MatTableDataSource<any>(this.fichierLivraison);
   dataSourceException = new MatTableDataSource<any>(this.fichierException);
   dataSourceMetaData = new MatTableDataSource<any>(this.fichierMetadata);
   dataSourceMAD = new MatTableDataSource<any>(this.fichierMad);
-  selection: any[]=[];
-  selectionEception: any[]=[];
-  selectionMetadata: any[]=[];
-  selectionMad: any[]=[];
-  @ViewChildren("cell", { read: ElementRef }) cells: QueryList<ElementRef>;
-  @ViewChildren("cellException", { read: ElementRef }) cellsException: QueryList<ElementRef>;
-  @ViewChildren("cellMetadata", { read: ElementRef }) cellsMetadata: QueryList<ElementRef>;
-  @ViewChildren("cellMad", { read: ElementRef }) cellsMad: QueryList<ElementRef>;
+  selection: any[] = [];
+  selectionEception: any[] = [];
+  selectionMetadata: any[] = [];
+  selectionMad: any[] = [];
+  // @ViewChildren("cell", { read: ElementRef }) cells: QueryList<ElementRef>;
+  // @ViewChildren("cellException", { read: ElementRef }) cellsException: QueryList<ElementRef>;
+  // @ViewChildren("cellMetadata", { read: ElementRef }) cellsMetadata: QueryList<ElementRef>;
+  // @ViewChildren("cellMad", { read: ElementRef }) cellsMad: QueryList<ElementRef>;
   newCellValue: string = '';
   newCellValueException: string = '';
   newCellValueMetadata: string = '';
@@ -53,10 +57,39 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   copyFilterMetaData: any = [];
   copyFilterMad: any = [];
   fileTocheck: any;
-  fileTocheckException : any;
-  fileTocheckMetadata : any;
-  fileTocheckMad : any;
+  fileTocheckException: any;
+  fileTocheckMetadata: any;
+  fileTocheckMad: any;
   transaction: any;
+  selectedCellsState: boolean[][] = [];
+  selectedCellsStateException: boolean[][] = [];
+  selectedCellsStateMetaData: boolean[][] = [];
+  selectedCellsStateMad: boolean[][] = [];
+  fileSelected: any;
+  options: any = [];
+  optionsException: any = [];
+  optionsMetaData: any = [];
+  optionsMad: any = [];
+  filterValues: any = [];
+  filterExceptionValues: any = [];
+  filterMetaDataValues: any = [];
+  filterMadValues: any = [];
+  tableMouseDown: MouseEvent;
+  tableMouseUp: MouseEvent;
+  FIRST_EDITABLE_ROW: number = 0;
+  LAST_EDITABLE_ROW: number = 0;
+  FIRST_EDITABLE_COL: number = 0;                       // first column is not editable --> so start from index 1
+  LAST_EDITABLE_COL: number = 0;
+  copySelectionLivraison: any = [];
+  copySelectionException: any = [];
+  copySelectionMetaData: any = [];
+  copySelectionMad: any = [];
+  clickCorrection: boolean = false;
+  public filterValueLivraison: any;
+  public filterValueException: any;
+  public filterValueMad: any;
+  public filterValuemetadata: any;
+
   constructor(private route: ActivatedRoute,
     public service: DetailsTransactionService,
     private _snackBar: MatSnackBar, private router: Router,) { super(); }
@@ -67,18 +100,71 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     })
     var data = { "transaction_id": parseInt(this.route.snapshot.params.id) };
     this.service.seeAllFileTransaction(data).subscribe(res => {
+
+      if (res.livrasion !==null && Object.keys(res.livraison).length !== 0 ){
       this.dataSource.paginator = this.paginator.toArray()[0];
       this.arrayLivraison = res.livraison;
-      this.dataSource.data = this.arrayLivraison;
+      this.dataSource.data = this.arrayLivraison.fileContent;
+      this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      this.copySelectionLivraison = this.dataSource.data  //copy to use on selection
+      this.copyFilterLivraison = this.dataSource.data ;
+      this.dataSource.data.forEach(element => {
+        this.selectedCellsState.push(Array.from({ length: Object.keys(this.dataSource.data[0]).length - 1 }, () => false))
+      });
+      // get select options
+      this.displayedColumnsLivraison.forEach(item => {
+        this.getOption(item);
+      })
+      
+    }
+    if (res.exception !==null && Object.keys(res.exception).length !== 0 ){
       this.dataSourceException.paginator = this.paginator.toArray()[1];
       this.arrayException = res.exception;
-      this.dataSourceException.data = this.arrayException;
+      this.dataSourceException.data = this.arrayException.fileContent;
+      this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      this.copySelectionException = this.dataSourceException.data  //copy to use on selection
+      this.copyFilterException= this.dataSourceException.data ;
+      this.dataSourceException.data.forEach(element => {
+        this.selectedCellsStateException.push(Array.from({ length: Object.keys(this.dataSourceException.data[0]).length - 1 }, () => false))
+      });
+      // get select options
+      this.displayedColumnsException.forEach(item => {
+        this.getOptionException(item);
+      })
+    }
+
+    if (res.metadata !==null && Object.keys(res.metadata).length !== 0 ){
       this.dataSourceMetaData.paginator = this.paginator.toArray()[2];
       this.arrayMetaData = res.metadata;
-      this.dataSourceMetaData.data = this.arrayMetaData;
+      this.dataSourceMetaData.data = this.arrayMetaData.fileContent;
+      this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      this.copySelectionMetaData = this.dataSourceMetaData.data  //copy to use on selection
+      this.copyFilterMetaData= this.dataSourceMetaData.data;
+      this.dataSourceMetaData.data.forEach(element => {
+        this.selectedCellsStateMetaData.push(Array.from({ length: Object.keys(this.dataSourceMetaData.data[0]).length - 1 }, () => false))
+      });
+      // get select options
+      this.displayedColumnsMetadata.forEach(item => {
+        this.getOptionMetaData(item);
+      })
+    }
+
+if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
       this.dataSourceMAD.paginator = this.paginator.toArray()[3];
       this.arrayMad = res.mad;
-      this.dataSourceMAD.data = this.arrayMad;
+      this.dataSourceMAD.data = this.arrayMad.fileContent;
+      this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      this.copySelectionMad = this.dataSourceMAD.data  //copy to use on selection
+      this.copyFilterMad= this.dataSourceMAD.data;
+      this.dataSourceMAD.data.forEach(element => {
+        this.selectedCellsStateMad.push(Array.from({ length: Object.keys(this.dataSourceMAD.data[0]).length - 1 }, () => false))
+      });
+      // get select options
+      this.displayedColumnsMad.forEach(item => {
+        this.getOptionMAD(item);
+      })
+    }
+
       this.showLoaderLivraisonFile = false;
       this.showLoaderExceptionFile = false;
       this.showLoaderMetadataFile = false;
@@ -86,6 +172,468 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     })
 
   }
+
+  /**
+  * Get options inside selects for MetaData
+  * @param filter
+  */
+  getOptionMetaData(filter) {
+    let optionsMetaData = [];
+    optionsMetaData = this.arrayMetaData.options[filter];
+    this.displayedColumnsMetadata.forEach((item, key) => {
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: optionsMetaData
+        };
+        this.optionsMetaData.push(obj)
+      }
+    })
+  }
+  /**
+* Get options inside selects for MAD
+* @param filter
+*/
+  getOptionMAD(filter) {
+    let optionsMad = [];
+    optionsMad = this.arrayMad.options[filter]
+    this.displayedColumnsMad.forEach((item, key) => {
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: optionsMad
+        };
+        this.optionsMad.push(obj)
+      }
+    })
+  }
+
+
+  /**
+* Reset filter
+*/
+  resetFiltre(file) {
+    if (file == "livraison") {
+      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          this.selectedCellsState[i][j] = false;
+        }
+      }
+      // reset the selected filtre
+      this.options.forEach(element => {
+        if (element.hasOwnProperty("modelValue")) {
+          element.modelValue = ""
+        }
+      });
+      this.dataSource.data = this.copySelectionLivraison;
+      this.filterValues = [];
+      this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+    }
+    else if (file == "exception") {
+
+      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          this.selectedCellsStateException[i][j] = false;
+        }
+
+      }
+      // reset the selected filtre
+      this.optionsException.forEach(element => {
+        if (element.hasOwnProperty("modelValue")) {
+          element.modelValue = ""
+        }
+      })
+      this.dataSourceException.data = this.copySelectionException;
+      this.filterExceptionValues = [];
+      this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+    }
+    else if (file == "metadata") {
+
+      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          this.selectedCellsStateMetaData[i][j] = false;
+        }
+
+      }
+      // reset the selected filtre
+      this.optionsMetaData.forEach(element => {
+        if (element.hasOwnProperty("modelValue")) {
+          element.modelValue = ""
+        }
+      })
+      this.dataSourceMetaData.data = this.copySelectionMetaData;
+      this.filterMetaDataValues = [];
+      this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+    }
+
+    else { //MAD
+      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          this.selectedCellsStateMad[i][j] = false;
+        }
+      }
+      // reset the selected filtre
+      this.optionsMad.forEach(element => {
+        if (element.hasOwnProperty("modelValue")) {
+          element.modelValue = ""
+        }
+      })
+      this.dataSourceMAD.data = this.copySelectionMad;
+      this.filterMadValues = [];
+      this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+    }
+
+  }
+  /**
+  * Get options inside selects for Livraison
+  * @param filter
+  */
+  getOption(filter) {
+    let options = [];
+    options = this.arrayLivraison.options[filter]
+    this.displayedColumnsLivraison.forEach((item, key) => {
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: options
+        };
+        this.options.push(obj)
+      }
+    })
+  }
+
+  getOptionException(filter) {
+    let optionsException = [];
+    optionsException = this.arrayException.options[filter]
+    this.displayedColumnsException.forEach((item, key) => {
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: optionsException
+        };
+        this.optionsException.push(obj)
+      }
+    })
+  }
+
+  /**
+ * Get lignes when filter livraison change
+ * @param filter
+ */
+  filterChange(filter) {
+    this.fileSelected = "livraison";
+    this.initSelectedCells();     // init selected cells
+    this.copySelectionLivraison = this.copySelectionLivraison.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+    return this.copySelectionLivraison.filter(function (item) {
+      return item[filter.columnProp] == String(filter.modelValue);
+    });
+  }
+
+
+    /**** Filter items */
+    setFilteredItemsLivraison() {
+      this.dataSource.data = this.filterItemsLivraison(this.filterValueLivraison);
+      if (this.filterValueLivraison === '') {
+        this.dataSource.data= this.dataSource.data;
+      }
+    }
+  
+    filterItemsLivraison(filterValueLivraison : string) {
+      return this.copyFilterLivraison.filter((item) => {
+        return JSON.stringify(item).toLowerCase().includes(filterValueLivraison.toLowerCase());
+      });
+    }
+
+     /**** Filter items */
+  setFilteredItemsException() {
+    this.dataSourceException.data = this.filterItemsException(this.filterValueException);
+    if (this.filterValueException === '') {
+      this.dataSourceException.data = this.dataSourceException.data;
+    }
+  }
+
+    /**** Filter items */
+    setFilteredItemsMetadata() {
+      this.dataSourceMetaData.data = this.filterItemsMetadata(this.filterValuemetadata);
+      if (this.filterValuemetadata === '') {
+        this.dataSourceMetaData.data = this.dataSourceMetaData.data;
+      }
+    }
+  
+    filterItemsMetadata(filterItemsMetadata : string) {
+      return this.copyFilterMetaData.filter((item) => {
+        return JSON.stringify(item).toLowerCase().includes(filterItemsMetadata.toLowerCase());
+      });
+    }
+      /**** Filter items */
+    setFilteredItemsMAD() {
+      this.dataSourceMAD.data = this.filterItemsMAD(this.filterValueMad);
+      if (this.filterValueMad === '') {
+        this.dataSourceMAD.data = this.dataSourceMAD.data;
+      }
+    }
+  
+    filterItemsMAD(filterItemsMAD : string) {
+      return this.copyFilterMad.filter((item) => {
+        return JSON.stringify(item).toLowerCase().includes(filterItemsMAD.toLowerCase());
+      });
+    }
+
+  filterItemsException(filterItemsException : string) {
+    return this.copyFilterException.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterItemsException.toLowerCase());
+    });
+  }
+  /**
+* Initialise the selected cells
+*/
+  initSelectedCells() {
+    if (this.fileSelected == "livraison") {
+      this.LAST_EDITABLE_ROW = this.dataSource.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumnsLivraison.length - 1;
+    }
+    else if (this.fileSelected == "exception") {
+      this.LAST_EDITABLE_ROW = this.dataSourceException.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumnsException.length - 1;
+    }
+    else if (this.fileSelected == "metadata") {
+      this.LAST_EDITABLE_ROW = this.dataSourceMetaData.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumnsMetadata.length - 1;
+    }
+    else {   // Fichier MAD
+      this.LAST_EDITABLE_ROW = this.dataSourceMAD.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumnsMad.length - 1;
+    }
+
+    for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+      for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+        if (this.fileSelected == "livraison") {
+          this.selectedCellsState[i][j] = false;
+        }
+        else if (this.fileSelected == "exception") {
+          this.selectedCellsStateException[i][j] = false;
+        }
+        else if (this.fileSelected == "metadata") {
+          this.selectedCellsStateMetaData[i][j] = false;
+        }
+        else {   //Fichier MAD
+          this.selectedCellsStateMad[i][j] = false;
+        }
+      }
+    }
+  }
+  setFilteredItemsOptions(filter) {
+    // check if filter is already selected
+    const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
+    if (filterExists == false) { this.filterValues.push(filter) }
+    // if only one select is selected
+    if (this.filterValues.length == 1) {
+      this.dataSource.data = this.filterChange(filter);
+    }
+    else {
+      // if already another select is active merge the results
+      if (filterExists == false) {
+        this.dataSource.data = [...this.dataSource.data, ...this.filterChange(filter)];
+        //delete doublon
+        this.dataSource.data = this.dataSource.data.filter((object, index) => index === this.dataSource.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      }
+      else {
+        this.dataSource.data = [];
+        this.filterValues.forEach(element => {
+          this.dataSource.data = this.dataSource.data.concat(this.filterChange(element));
+        });
+        //delete doublon
+        this.dataSource.data = this.dataSource.data.filter((object, index) => index === this.dataSource.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+      }
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "") {
+      if (this.filterValues.length == 1) {
+        this.dataSource.data = this.copySelectionLivraison;
+        this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      }
+      else {
+        this.filterValues = this.filterValues.filter(function (item) {
+          return item.columnProp !== filter.columnProp;
+        })
+        this.filterValues.forEach(element => {
+          this.dataSource.data = this.filterChange(element)
+        });
+      }
+    }
+
+  }
+
+
+  setFilteredItemsExceptionOptions(filter) {
+    // check if filter is already selected
+    const filterExists = this.filterExceptionValues.some(f => f.columnProp === filter.columnProp);
+    if (filterExists == false) { this.filterExceptionValues.push(filter) }
+    // if only one select is selected
+    if (this.filterExceptionValues.length == 1) {
+      this.dataSourceException.data = this.filterExceptionChange(filter);
+    }
+    else {
+      // if already another select is active merge the results
+      if (filterExists == false) {
+        this.dataSourceException.data = [...this.dataSourceException.data, ...this.filterExceptionChange(filter)];
+        //delete doublon
+        this.dataSourceException.data = this.dataSourceException.data.filter((object, index) => index === this.dataSourceException.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+      }
+      else {
+        this.dataSourceException.data = [];
+        this.filterExceptionValues.forEach(element => {
+          this.dataSourceException.data = this.dataSourceException.data.concat(this.filterExceptionChange(element));
+        });
+        //delete doublon
+        this.dataSourceException.data = this.dataSourceException.data.filter((object, index) => index === this.dataSourceException.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+      }
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "") {
+      if (this.filterExceptionValues.length == 1) {
+        this.dataSourceException.data = this.copySelectionException;
+        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+      }
+      else {
+        this.filterExceptionValues = this.filterExceptionValues.filter(function (item) {
+          return item.columnProp !== filter.columnProp;
+        })
+        this.filterExceptionValues.forEach(element => {
+          this.dataSourceException.data = this.filterExceptionChange(element)
+        });
+      }
+    }
+
+  }
+
+  setFilteredItemsMetaDataOptions(filter) {
+    // check if filter is already selected
+    const filterExists = this.filterMetaDataValues.some(f => f.columnProp === filter.columnProp);
+    if (filterExists == false) { this.filterMetaDataValues.push(filter) }
+    // if only one select is selected
+    if (this.filterMetaDataValues.length == 1) {
+      this.dataSourceMetaData.data = this.filterMetaDataChange(filter);
+    }
+    else {
+      // if already another select is active merge the results
+      if (filterExists == false) {
+        this.dataSourceMetaData.data = [...this.dataSourceMetaData.data, ...this.filterMetaDataChange(filter)];
+        //delete doublon
+        this.dataSourceMetaData.data = this.dataSourceMetaData.data.filter((object, index) => index === this.dataSourceMetaData.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+      }
+      else {
+        this.dataSourceMetaData.data = [];
+        this.filterMetaDataValues.forEach(element => {
+          this.dataSourceMetaData.data = this.dataSourceMetaData.data.concat(this.filterMetaDataChange(element));
+        });
+        //delete doublon
+        this.dataSourceMetaData.data = this.dataSourceMetaData.data.filter((object, index) => index === this.dataSourceMetaData.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+      }
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "") {
+      if (this.filterMetaDataValues.length == 1) {
+        this.dataSourceMetaData.data = this.copySelectionMetaData;
+        this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+      }
+      else {
+        this.filterMetaDataValues = this.filterMetaDataValues.filter(function (item) {
+          return item.columnProp !== filter.columnProp;
+        })
+        this.filterMetaDataValues.forEach(element => {
+          this.dataSourceMetaData.data = this.filterMetaDataChange(element)
+        });
+      }
+    }
+
+  }
+
+  setFilteredItemsMadOptions(filter) {
+    // check if filter is already selected
+    const filterExists = this.filterMadValues.some(f => f.columnProp === filter.columnProp);
+    if (filterExists == false) { this.filterMadValues.push(filter) }
+    // if only one select is selected
+    if (this.filterMadValues.length == 1) {
+      this.dataSourceMAD.data = this.filterMadChange(filter);
+    }
+    else {
+      // if already another select is active merge the results
+      if (filterExists == false) {
+        this.dataSourceMAD.data = [...this.dataSourceMAD.data, ...this.filterMadChange(filter)];
+        //delete doublon
+        this.dataSourceMAD.data = this.dataSourceMAD.data.filter((object, index) => index === this.dataSourceMAD.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+      }
+      else {
+        this.dataSourceMAD.data = [];
+        this.filterMadValues.forEach(element => {
+          this.dataSourceMAD.data = this.dataSourceMAD.data.concat(this.filterMadChange(element));
+        });
+        //delete doublon
+        this.dataSourceMAD.data = this.dataSourceMAD.data.filter((object, index) => index === this.dataSourceMAD.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+      }
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "") {
+      if (this.filterMadValues.length == 1) {
+        this.dataSourceMAD.data = this.copySelectionMad;
+        this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+      }
+      else {
+        this.filterMadValues = this.filterMadValues.filter(function (item) {
+          return item.columnProp !== filter.columnProp;
+        })
+        this.filterMadValues.forEach(element => {
+          this.dataSourceMAD.data = this.filterMadChange(element)
+        });
+      }
+    }
+  }
+
+  /**
+* Get lignes when filter mad change
+* @param filter
+*/
+  filterMadChange(filter) {
+    this.fileSelected = "mad";
+    this.initSelectedCells();     // init selected cells
+    this.copySelectionMad = this.copySelectionMad.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+    return this.copySelectionMad.filter(function (item) {
+      return item[filter.columnProp] == String(filter.modelValue);
+    });
+  }
+
+
+  /**
+* Get lignes when filter exception change
+* @param filter
+*/
+  filterExceptionChange(filter) {
+    this.fileSelected = "exception";
+    this.initSelectedCells();     // init selected cells
+    this.copySelectionException = this.copySelectionException.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+    return this.copySelectionException.filter(function (item) {
+      return item[filter.columnProp] == String(filter.modelValue);
+    });
+  }
+
+  filterMetaDataChange(filter) {
+    this.fileSelected = "metadata";
+    this.initSelectedCells();     // init selected cells
+    this.copySelectionMetaData = this.copySelectionMetaData.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+    return this.copySelectionMetaData.filter(function (item) {
+      return item[filter.columnProp] == String(filter.modelValue);
+    });
+  }
+
   indexOfInArray(item: string, array: string[]): number {
     let index: number = -1;
     for (let i = 0; i < array.length; i++) {
@@ -93,385 +641,246 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     }
     return index;
   }
+  /**
+ * @param rowId
+ * @param colId
+ * @param cellsType
+ */
+  onMouseDown(rowId: number, colId: number, cellsType: string, file) {
+    if (this.clickCorrection == false) {
+      if (file == "livraison") {
+        rowId = rowId + (this.paginator.toArray()[0].pageIndex * this.paginator.toArray()[0].pageSize)
+      }
+      else if (file == "exception") {
+        rowId = rowId + (this.paginator.toArray()[1].pageIndex * this.paginator.toArray()[1].pageSize)
+      }
+      else if (file == "metadata") {
+        rowId = rowId + (this.paginator.toArray()[2].pageIndex * this.paginator.toArray()[2].pageSize)
+      }
+      else {
+        rowId = rowId + (this.paginator.toArray()[3].pageIndex * this.paginator.toArray()[3].pageSize)
+      }
+      this.tableMouseDown = { rowId: rowId, colId: colId, cellsType: cellsType };
+    }
+    else {  //disable click after click correction
+      return false;
+    }
 
-  select(event : MouseEvent, cell: any) {
-    const cellClick = this.cells.find(x => x.nativeElement == event.target);
-    
-    let indexSelected = -1;
-    this.cells.forEach((x, i) => {
-      if (x == cellClick) indexSelected = i + this.paginator.toArray()[0].pageIndex * this.displayedColumnsLivraison.length * this.paginator.toArray()[0].pageSize;
-    });
-    //console.log(cellClick);
-    this.selection = [indexSelected]
-    //console.log("this.selection",this.selection);
-  }
-  selectMetadata(event : MouseEvent, cell: any) {
-    const cellClick = this.cellsMetadata.find(x => x.nativeElement == event.target);
-    let indexSelected = -1;
-    this.cellsMetadata.forEach((x, i) => {
-      if (x == cellClick) indexSelected = i + this.paginator.toArray()[2].pageIndex * this.displayedColumnsMetadata.length * this.paginator.toArray()[2].pageSize;
-    });
-    this.selectionMetadata = [indexSelected]
-    //console.log("this.selectionMetadata",this.selectionMetadata);
-  }
-  selectException(event : MouseEvent, cell: any) {
-    const cellClick = this.cellsException.find(x => x.nativeElement == event.target);
-    let indexSelected = -1;
-    this.cellsException.forEach((x, i) => {
-      if (x == cellClick) indexSelected = i + this.paginator.toArray()[1].pageIndex * this.displayedColumnsException.length * this.paginator.toArray()[1].pageSize;
-    });
-    this.selectionEception = [indexSelected];
-  }
-  selectMad(event : MouseEvent, cell: any) {
-    const cellClick = this.cellsMad.find(x => x.nativeElement == event.target);
-    
-    let indexSelected = -1;
-    this.cellsMad.forEach((x, i) => {
-      if (x == cellClick) indexSelected = i + this.paginator.toArray()[3].pageIndex * this.displayedColumnsMad.length * this.paginator.toArray()[3].pageSize;
-    });
-    //console.log(cellClick);
-    this.selectionMad = [indexSelected]
-    //console.log("this.selection",this.selection);
   }
 
-  onMouseUp() {
-    this.newCellValue = '';
-    this.selectionEception = [];
-    this.selectionMetadata = [];
-    this.selectionMad = [];
-  }
-  onMouseUpMetadata() {
-    this.newCellValueMetadata = '';
-    this.selection = [];
-    this.selectionEception = [];
-    this.selectionMad = [];
-  }
-  onMouseUpException() {
-    this.newCellValueException = '';
-    this.selection = [];
-    this.selectionMetadata = [];
-    this.selectionMad = [];
-  }
-  onMouseUpMad() {
-    this.newCellValueMad = '';
-    this.selection = [];
-    this.selectionEception = [];
-    this.selectionMetadata = [];
-  }
+  onMouseUp(rowId: number, colId: number, cellsType: string, file) {
+    this.fileSelected = file;  // update the file selected
+    if (this.clickCorrection == false) {
+      if (file == "livraison") {
+        rowId = rowId + (this.paginator.toArray()[0].pageIndex * this.paginator.toArray()[0].pageSize)
+      }
+      else if (file == "exception") {
+        rowId = rowId + (this.paginator.toArray()[1].pageIndex * this.paginator.toArray()[1].pageSize)
+      }
+      else if (file == "metadata") {
+        rowId = rowId + (this.paginator.toArray()[2].pageIndex * this.paginator.toArray()[2].pageSize)
+      }
+      else {
+        rowId = rowId + (this.paginator.toArray()[3].pageIndex * this.paginator.toArray()[3].pageSize)
+      }
 
-  isSelected(row,column)
-  {
-      const index=column*(this.cells.length/this.displayedColumnsLivraison.length)+row+this.paginator.toArray()[0].pageIndex * this.displayedColumnsLivraison.length * this.paginator.toArray()[0].pageSize
-      return this.selection.indexOf(index)>=0
-  }
-  isSelectedException(row,column)
-  {
-    const index=column*(this.cellsException.length/this.displayedColumnsException.length)+row+this.paginator.toArray()[1].pageIndex * this.displayedColumnsException.length * this.paginator.toArray()[1].pageSize
-    return this.selectionEception.indexOf(index)>=0
-  }
-  isSelectedMetadata(row,column)
-  {
-    const index=column*(this.cellsMetadata.length/this.displayedColumnsMetadata.length)+row+this.paginator.toArray()[2].pageIndex * this.displayedColumnsMetadata.length * this.paginator.toArray()[2].pageSize
-    return this.selectionMetadata.indexOf(index)>=0
-  }
-  isSelectedMad(row,column)
-  {
-      const index=column*(this.cellsMad.length/this.displayedColumnsMad.length)+row+this.paginator.toArray()[3].pageIndex * this.displayedColumnsMad.length * this.paginator.toArray()[3].pageSize
-      return this.selectionMad.indexOf(index)>=0
+
+      this.tableMouseUp = { rowId: rowId, colId: colId, cellsType: cellsType };
+      if (this.tableMouseDown) {
+        this.newCellValue = '';
+        this.updateSelectedCellsState(this.tableMouseDown.colId, this.tableMouseUp.colId, this.tableMouseDown.rowId, this.tableMouseUp.rowId);
+      }
+    }
+    else {  //disable click after click correction
+      return false;
+    }
   }
 
 
-    /**
-  * After the user enters a new value, all selected cells must be updated
-  * document:keyup
-  * @param event
-  */
+
+  private updateSelectedCellsState(mouseDownColId: number, mouseUpColId: number, mouseDownRowId: number, mouseUpRowId: number) {
+    // init selected cells
+    this.initSelectedCells();
+    // update selected cells
+    let startCol: number;
+    let endCol: number;
+    let startRow: number;
+    let endRow: number;
+    if (mouseDownColId <= mouseUpColId) {
+      startCol = mouseDownColId;
+      endCol = mouseUpColId;
+    } else {
+      endCol = mouseDownColId;
+      startCol = mouseUpColId;
+    }
+
+    if (mouseDownRowId <= mouseUpRowId) {
+      startRow = mouseDownRowId;
+      endRow = mouseUpRowId;
+    } else {
+      endRow = mouseDownRowId;
+      startRow = mouseUpRowId;
+    }
+    for (let i = startRow; i <= endRow; i++) {
+      for (let j = startCol; j <= endCol; j++) {
+        if (this.fileSelected == "livraison") {
+          this.selectedCellsState[i][j] = true;
+        }
+        else if (this.fileSelected == "exception") {
+          this.selectedCellsStateException[i][j] = true;
+        }
+        else if (this.fileSelected == "metadata") {
+          this.selectedCellsStateMetaData[i][j] = true;
+        }
+        else {
+          this.selectedCellsStateMad[i][j] = true;
+        }
+      }
+    }
+  }
+
+  updateSelectedCellsValues(text: string) {
+    let dataCopy;
+    if (text == null) { return; }
+
+    if (this.tableMouseDown && this.tableMouseUp) {
+      if (this.tableMouseDown.cellsType === this.tableMouseUp.cellsType) {
+        //convert every rows to object
+        if (this.fileSelected == "livraison") {
+          dataCopy = this.dataSource.data.slice();// copy and mutate
+        }
+        else if (this.fileSelected == "exception") {
+          dataCopy = this.dataSourceException.data.slice();// copy and mutate
+        }
+        else if (this.fileSelected == "metadata") {
+          dataCopy = this.dataSourceMetaData.data.slice();// copy and mutate
+        }
+        else {
+          dataCopy = this.dataSourceMAD.data.slice();// copy and mutate
+        }
+
+        let startCol: number;
+        let endCol: number;
+        let startRow: number;
+        let endRow: number;
+
+        if (this.tableMouseDown.colId <= this.tableMouseUp.colId) {
+          startCol = this.tableMouseDown.colId;
+          endCol = this.tableMouseUp.colId;
+        } else {
+          endCol = this.tableMouseDown.colId;
+          startCol = this.tableMouseUp.colId;
+        }
+
+        if (this.tableMouseDown.rowId <= this.tableMouseUp.rowId) {
+          startRow = this.tableMouseDown.rowId;
+          endRow = this.tableMouseUp.rowId;
+        } else {
+          endRow = this.tableMouseDown.rowId;
+          startRow = this.tableMouseUp.rowId;
+        }
+
+        //--Edit cells from the same column
+        if (startCol === endCol) {
+          for (let i = startRow; i <= endRow; i++) {
+            if (this.fileSelected == "livraison") {
+
+              dataCopy[i][this.displayedColumnsLivraison[startCol]] = text;
+            }
+            else if (this.fileSelected == "exception") {
+              dataCopy[i][this.displayedColumnsException[startCol]] = text;
+            }
+            else if (this.fileSelected == "metadata") {
+              dataCopy[i][this.displayedColumnsMetadata[startCol]] = text;
+            }
+            else {
+              dataCopy[i][this.displayedColumnsMad[startCol]] = text;
+            }
+          }
+        } else {
+          //--Edit cells starting and ending not on the same column
+          for (let i = startRow; i <= endRow; i++) {
+            for (let j = startCol; j <= endCol; j++) {
+              if (this.fileSelected == "livraison") {
+                dataCopy[i][this.displayedColumnsLivraison[j]] = text;
+              }
+              else if (this.fileSelected == "exception") {
+                dataCopy[i][this.displayedColumnsException[j]] = text;
+              }
+              else if (this.fileSelected == "metadata") {
+                dataCopy[i][this.displayedColumnsMetadata[j]] = text;
+              }
+              else {
+                dataCopy[i][this.displayedColumnsMad[j]] = text;
+              }
+            }
+          }
+        }
+
+        if (this.fileSelected == "livraison") {
+          this.dataSource.data = dataCopy;
+        }
+        else if (this.fileSelected == "exception") {
+          this.dataSourceException.data = dataCopy;
+        }
+        else if (this.fileSelected == "metadata") {
+          this.dataSourceMetaData.data = dataCopy;
+        }
+        else {
+          this.dataSourceMAD.data = dataCopy;
+        }
+      } else {
+        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'OK');
+      }
+    }
+  }
+  
+
+  /**
+* After the user enters a new value, all selected cells must be updated
+* document:keyup
+* @param event
+*/
   @HostListener('document:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent): void {
-     // If no cell is selected then ignore keyUp event
-     if (this.selection.length > 0)
-     {
-        let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
+    // If no cell is selected then ignore keyUp event
+    if (this.tableMouseDown && this.tableMouseUp) {
+      let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
         'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
         'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
         'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
-        if (event.key === 'Backspace') { // 'delete' key is pressed
-            const end: number = this.newCellValue.length - 1;
-            this.newCellValue = this.newCellValue.slice(0, end);
-        } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
-            this.newCellValue += event.key;
-        }
-        this.updateSelectedCellsValues(this.newCellValue);
-     }else{
-        if (this.selectionEception.length > 0)
-        {
-          let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
-          'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
-          'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
-          'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
-          if (event.key === 'Backspace') { // 'delete' key is pressed
-              const end: number = this.newCellValueException.length - 1;
-              this.newCellValueException = this.newCellValueException.slice(0, end);
-          } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
-              this.newCellValueException += event.key;
-          }
-          this.updateSelectedCellsValuesExceptions(this.newCellValueException);
-
-        }else{
-          if (this.selectionMetadata.length > 0)
-          {
-            let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
-            'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
-            'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
-            'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
-            if (event.key === 'Backspace') { // 'delete' key is pressed
-                const end: number = this.newCellValueMetadata.length - 1;
-                this.newCellValueMetadata = this.newCellValueMetadata.slice(0, end);
-            } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
-                this.newCellValueMetadata += event.key;
-            }
-            this.updateSelectedCellsValuesMetadata(this.newCellValueMetadata);
-          }else{
-            if(this.selectionMad.length > 0)
-            {
-              let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
-              'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
-              'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
-              'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
-              if (event.key === 'Backspace') { // 'delete' key is pressed
-                  const end: number = this.newCellValueMad.length - 1;
-                  this.newCellValueMad = this.newCellValueMad.slice(0, end);
-              } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
-                  this.newCellValueMad += event.key;
-              }
-              this.updateSelectedCellsValuesMad(this.newCellValueMad);
-            }
-          }
-        }
-     } 
+      if (event.key === 'Backspace') { // 'delete' key is pressed
+        const end: number = this.newCellValue.length - 1;
+        this.newCellValue = this.newCellValue.slice(0, end);
+      } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
+        this.newCellValue += event.key;
+      }
+      this.updateSelectedCellsValues(this.newCellValue);
+     
+    }
   }
-  updateSelectedCellsValues(text: string) {
-    if (text == null) { return; }
-    this.fichierLivraison = this.dataSource.data;
-    //console.log("1-this.dataSource.data",this.dataSource.data);
-    this.fichierLivraison.forEach(function(obj){
-      const {Tournee,taskId,itemId, ...newObj} = obj;
-      obj = newObj;
-      /*delete obj.Tournee;
-      delete obj.taskId;
-      delete obj.itemId;*/
-    });
-    var tableauOfCells = [];
-    //console.log("this.fichierLivraison",this.fichierLivraison);
-    for (let i=0; i< this.fichierLivraison.length; i=i+this.paginator.toArray()[0].pageSize)
-    {
-      for(let j=0 ; j< this.displayedColumnsLivraison.length; j++)
-      {
-        var column = this.displayedColumnsLivraison[j];
-        var finalArray = this.fichierLivraison.slice(i,i+this.paginator.toArray()[0].pageSize).map(function (obj) {
-          return obj[column];
-        });
-        tableauOfCells = tableauOfCells.concat(finalArray);
-      }
-    }
-    tableauOfCells[this.selection[0]] = text;
-    var ArrayOfObjectsAfterUpdate = [];
-    for (let i=0;i<tableauOfCells.length;i = i+this.displayedColumnsLivraison.length*this.paginator.toArray()[0].pageSize)
-    {
-      var tableau_slice = tableauOfCells.slice(i,i+this.displayedColumnsLivraison.length*this.paginator.toArray()[0].pageSize);
-      //console.log(tableau_slice);
-      var round = tableau_slice.length/this.displayedColumnsLivraison.length;
-      for(let j=0;j<round;j++)
-      {
-        var objetTransaction = new Object();
-        for(let k=0;k<this.displayedColumnsLivraison.length;k++)
-        {
-          objetTransaction[this.displayedColumnsLivraison[k]] = tableau_slice[j+k*round];
-        }
-        ArrayOfObjectsAfterUpdate.push(objetTransaction);
-      }
-    }
-    this.dataSource.data = ArrayOfObjectsAfterUpdate;
-    this.copyFilterLivraison = this.dataSource.data;
-    //console.log("this.dataSource.data",this.dataSource.data);
-  }
-  updateSelectedCellsValuesExceptions(text: string) {
-    console.log(text);
-    if (text == null) { return; }
-    this.fichierException = this.dataSourceException.data;
-    //console.log("1-this.dataSourceException.data",this.dataSourceException.data);
-    this.fichierException.forEach(function(obj){
-      const {Tournee,taskId,itemId, ...newObj} = obj;
-      obj = newObj;
-      /*delete obj.Tournee;
-      delete obj.taskId;
-      delete obj.itemId;*/
-    });
-    var tableauOfCells = [];
-    //console.log("this.fichierLivraison",this.fichierLivraison);
-    for (let i=0; i< this.fichierException.length; i=i+this.paginator.toArray()[1].pageSize)
-    {
-      for(let j=0 ; j< this.displayedColumnsException.length; j++)
-      {
-        var column = this.displayedColumnsException[j];
-        var finalArray = this.fichierException.slice(i,i+this.paginator.toArray()[1].pageSize).map(function (obj) {
-          return obj[column];
-        });
-        tableauOfCells = tableauOfCells.concat(finalArray);
-      }
-    }
-    //console.log("tableauOfCells",tableauOfCells);
-    //console.log(this.selectException[0]);
-    tableauOfCells[this.selectionEception[0]] = text;
-    var ArrayOfObjectsAfterUpdate = [];
-    for (let i=0;i<tableauOfCells.length;i = i+this.displayedColumnsException.length*this.paginator.toArray()[1].pageSize)
-    {
-      var tableau_slice = tableauOfCells.slice(i,i+this.displayedColumnsException.length*this.paginator.toArray()[1].pageSize);
-      //console.log(tableau_slice);
-      var round = tableau_slice.length/this.displayedColumnsException.length;
-      for(let j=0;j<round;j++)
-      {
-        var objetTransaction = new Object();
-        for(let k=0;k<this.displayedColumnsException.length;k++)
-        {
-          objetTransaction[this.displayedColumnsException[k]] = tableau_slice[j+k*round];
-        }
-        ArrayOfObjectsAfterUpdate.push(objetTransaction);
-      }
-    }
-    this.dataSourceException.data = ArrayOfObjectsAfterUpdate;
-    this.copyFilterException = this.dataSourceException.data;
-    //console.log("this.dataSource.data",this.dataSource.data);
-  }
-  updateSelectedCellsValuesMetadata(text: string) {
-    if (text == null) { return; }
-    this.fichierMetadata = this.dataSourceMetaData.data;
-    //console.log("this.fichierMetadata",this.fichierMetadata);
-    //console.log("1-this.dataSource.data",this.dataSource.data);
-    this.fichierMetadata.forEach(function(obj){
-      const {Tournee,taskId,itemId, ...newObj} = obj;
-      obj = newObj;
-      /*delete obj.Tournee;
-      delete obj.taskId;
-      delete obj.itemId;*/
-    });
-    var tableauOfCells = [];
-    //console.log("this.fichierLivraison",this.fichierLivraison);
-    for (let i=0; i< this.fichierMetadata.length; i=i+this.paginator.toArray()[2].pageSize)
-    {
-      for(let j=0 ; j< this.displayedColumnsMetadata.length; j++)
-      {
-        var column = this.displayedColumnsMetadata[j];
-        var finalArray = this.fichierMetadata.slice(i,i+this.paginator.toArray()[2].pageSize).map(function (obj) {
-          return obj[column];
-        });
-        tableauOfCells = tableauOfCells.concat(finalArray);
-      }
-    }
-    tableauOfCells[this.selectionMetadata[0]] = text;
-    var ArrayOfObjectsAfterUpdate = [];
-    for (let i=0;i<tableauOfCells.length;i = i+this.displayedColumnsMetadata.length*this.paginator.toArray()[2].pageSize)
-    {
-      var tableau_slice = tableauOfCells.slice(i,i+this.displayedColumnsMetadata.length*this.paginator.toArray()[2].pageSize);
-      //console.log(tableau_slice);
-      var round = tableau_slice.length/this.displayedColumnsMetadata.length;
-      for(let j=0;j<round;j++)
-      {
-        var objetTransaction = new Object();
-        for(let k=0;k<this.displayedColumnsMetadata.length;k++)
-        {
-          objetTransaction[this.displayedColumnsMetadata[k]] = tableau_slice[j+k*round];
-        }
-        ArrayOfObjectsAfterUpdate.push(objetTransaction);
-      }
-    }
-    this.dataSourceMetaData.data = ArrayOfObjectsAfterUpdate;
-    this.copyFilterMetaData = this.dataSourceMetaData.data;
-    //console.log("this.dataSource.data",this.dataSource.data);
-  }
-  updateSelectedCellsValuesMad(text: string) {
-    if (text == null) { return; }
-    this.fichierMad = this.dataSourceMAD.data;
-    //console.log("1-this.dataSource.data",this.dataSource.data);
-    this.fichierMad.forEach(function(obj){
-      const {Tournee,taskId,itemId, ...newObj} = obj;
-      obj = newObj;
-      /*delete obj.Tournee;
-      delete obj.taskId;
-      delete obj.itemId;*/
-    });
-    var tableauOfCells = [];
-    //console.log("this.fichierLivraison",this.fichierLivraison);
-    for (let i=0; i< this.fichierMad.length; i=i+this.paginator.toArray()[3].pageSize)
-    {
-      for(let j=0 ; j< this.displayedColumnsMad.length; j++)
-      {
-        var column = this.displayedColumnsMad[j];
-        var finalArray = this.fichierMad.slice(i,i+this.paginator.toArray()[3].pageSize).map(function (obj) {
-          return obj[column];
-        });
-        tableauOfCells = tableauOfCells.concat(finalArray);
-      }
-    }
-    tableauOfCells[this.selectionMad[0]] = text;
-    var ArrayOfObjectsAfterUpdate = [];
-    for (let i=0;i<tableauOfCells.length;i = i+this.displayedColumnsMad.length*this.paginator.toArray()[3].pageSize)
-    {
-      var tableau_slice = tableauOfCells.slice(i,i+this.displayedColumnsMad.length*this.paginator.toArray()[3].pageSize);
-      //console.log(tableau_slice);
-      var round = tableau_slice.length/this.displayedColumnsMad.length;
-      for(let j=0;j<round;j++)
-      {
-        var objetTransaction = new Object();
-        for(let k=0;k<this.displayedColumnsMad.length;k++)
-        {
-          objetTransaction[this.displayedColumnsMad[k]] = tableau_slice[j+k*round];
-        }
-        ArrayOfObjectsAfterUpdate.push(objetTransaction);
-      }
-    }
-    this.dataSourceMAD.data = ArrayOfObjectsAfterUpdate;
-    this.copyFilterMad = this.dataSourceMAD.data;
-    //console.log("this.dataSource.data",this.dataSource.data);
-  }
-
-    /**
+ 
+  /**
 * Correct the file
 */
   correctionFile(index) {
-    //this.clickCorrection = true;
-    //console.log("this.arrayLivraison",this.arrayLivraison);
-    // this.initSelectedCells();
     this.hideUiSelectionOnCorrection();  //hide ui selection on correction
     if (index == "livraison") {  // correction file livraison
+      this.LAST_EDITABLE_ROW = this.dataSource.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumnsLivraison.length - 1;
+      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          this.selectedCellsState[i][j] = false;
 
-      for (let i=0;i<this.arrayLivraison.length;i++)
-      { var Tournee = this.arrayLivraison[i].Tournee;
-        var taskId = this.arrayLivraison[i].taskId;
-        var itemId = this.arrayLivraison[i].itemId;
-        this.copyFilterLivraison[i].Tournee = Tournee;
-        this.copyFilterLivraison[i].taskId = taskId;
-        this.copyFilterLivraison[i].itemId = itemId;
-      }
-      var arrayOfArray = this.copyFilterLivraison.map(Object.values);
-      for(let indice=0;indice<arrayOfArray.length;indice++)
-      {
-        for(let k=0;k<3;k++)
-        {
-          var element = arrayOfArray[indice].pop();
-          arrayOfArray[indice].unshift(element);
         }
       }
-      console.log("arrayOfArray",arrayOfArray);
       this.fileTocheck = {
         transaction_id: this.transaction.transaction_id,
         fileReplacement: {
-          columns: [ 'Tournee','taskId','itemId','Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'],
-          rows: arrayOfArray,
+          columns: Object.keys(this.dataSource.data[0]),
+          rows: this.dataSource.data.map(Object.values),
         }
-
       }
-
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
       this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
         //console.log('resultat correction exception', res);
@@ -480,146 +889,120 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       })
     }
+    else if (index == "exception") {  // correction file exception
+      this.LAST_EDITABLE_ROW = this.dataSourceException.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumnsException.length - 1;
+
+      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          this.selectedCellsStateException[i][j] = false;
+
+        }
+      }
+
+      this.fileTocheck = {
+        transaction_id: this.transaction.transaction_id,
+        fileReplacement: {
+          columns: Object.keys(this.dataSourceException.data[0]),
+          rows: this.dataSourceException.data.map(Object.values),
+        }
+      }
+      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+      this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
+        if (res.message == "ok") {
+          this.router.navigate(['/list-transaction']);
+        }
+      })
+    }
+    else if (index == "metadata") {  // correction file metadata
+      this.LAST_EDITABLE_ROW = this.dataSourceMetaData.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumnsMetadata.length - 1;
+
+      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          this.selectedCellsStateMetaData[i][j] = false;
+
+        }
+      }
+
+      this.fileTocheck = {
+        transaction_id: this.transaction.transaction_id,
+        fileReplacement: {
+          columns: Object.keys(this.dataSourceMetaData.data[0]),
+          rows: this.dataSourceMetaData.data.map(Object.values),
+        }
+      }
+      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+      this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
+        if (res.message == "ok") {
+          this.router.navigate(['/list-transaction']);
+        }
+      })
+    }
+    else {  // correction file mad
+      this.LAST_EDITABLE_ROW = this.dataSourceMAD.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumnsMad.length - 1;
+
+      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          this.selectedCellsStateMad[i][j] = false;
+
+        }
+      }
+
+      this.fileTocheck = {
+        transaction_id: this.transaction.transaction_id,
+        fileReplacement: {
+          columns: Object.keys(this.dataSourceMAD.data[0]),
+          rows: this.dataSourceMAD.data.map(Object.values),
+        }
+      }
+      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+      this.service.correctMadFile(this.fileTocheck).subscribe(res => {
+        if (res.message == "ok") {
+          this.router.navigate(['/list-transaction']);
+        }
+      })
+    }
   }
-    /**
-* Correct the file
-*/
-correctionFileException(index) 
-{
-  //this.clickCorrection = true;
-  //console.log("this.arrayException",this.arrayException);
-  // this.initSelectedCells();
-  this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-  if (index == "exception") {  // correction file livraison
 
-    for (let i=0;i<this.arrayException.length;i++)
-    { var Tournee = this.arrayException[i].Tournee;
-      var taskId = this.arrayException[i].taskId;
-      var itemId = this.arrayException[i].itemId;
-      this.copyFilterException[i].Tournee = Tournee;
-      this.copyFilterException[i].taskId = taskId;
-      this.copyFilterException[i].itemId = itemId;
-    }
-    var arrayOfArray = this.copyFilterException.map(Object.values);
-    for(let indice=0;indice<arrayOfArray.length;indice++)
-    {
-      for(let k=0;k<3;k++)
-      {
-        var element = arrayOfArray[indice].pop();
-        arrayOfArray[indice].unshift(element);
-      }
-    }
-    //console.log("arrayOfArray",arrayOfArray);
-    this.fileTocheckException = {
+  /**
+ * Correct all transaction files
+ */
+  correctionAllFile() {
+    this.fileTocheck = {
       transaction_id: this.transaction.transaction_id,
-      fileReplacement: {
-        columns: [ 'Tournee','taskId','itemId','Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom','Item___Type','Item___Quantite','Code_postal','Round_Name','Remarque','isDeleted'],
-        rows: arrayOfArray,
-      }
+      fileReplacementLivraison: {
+        columns: Object.keys(this.dataSource.data[0]),
+        rows: this.dataSource.data.map(Object.values),
+      },
+      fileReplacementMAD: {
+        columns: Object.keys(this.dataSourceMAD.data[0]),
+        rows: this.dataSourceMAD.data.map(Object.values),
+      },
+      fileReplacementMetadata: {
+        columns: Object.keys(this.dataSourceMetaData.data[0]),
+        rows: this.dataSourceMetaData.data.map(Object.values),
+      },
+      fileReplacementException: {
+        columns: Object.keys(this.dataSourceException.data[0]),
+        rows: this.dataSourceException.data.map(Object.values),
+      },
 
     }
-
+    console.warn('file to check', this.fileTocheck)
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-    this.service.correctExceptionFile(this.fileTocheckException).subscribe(res => {
-      //console.log('resultat correction exception', res);
+    this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
         this.router.navigate(['/list-transaction']);
       }
     })
+
   }
-}
-correctionFileMetadata(index) {
-  //this.clickCorrection = true;
-  //console.log("this.arrayMetadata",this.arrayMetaData);
-  // this.initSelectedCells();
-  this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-  if (index == "metadata") {  // correction file livraison
 
-    for (let i=0;i<this.arrayMetaData.length;i++)
-    { var Tournee = this.arrayMetaData[i].Tournee;
-      var taskId = this.arrayMetaData[i].taskId;
-      var itemId = this.arrayMetaData[i].itemId;
-      this.copyFilterMetaData[i].Tournee = Tournee;
-      this.copyFilterMetaData[i].taskId = taskId;
-      this.copyFilterMetaData[i].itemId = itemId;
-    }
-    var arrayOfArray = this.copyFilterMetaData.map(Object.values);
-    for(let indice=0;indice<arrayOfArray.length;indice++)
-    {
-      for(let k=0;k<3;k++)
-      {
-        var element = arrayOfArray[indice].pop();
-        arrayOfArray[indice].unshift(element);
-      }
-    }
-    //console.log("arrayOfArray",arrayOfArray);
-    this.fileTocheckMetadata = {
-      transaction_id: this.transaction.transaction_id,
-      fileReplacement: {
-        columns: [ 'Tournee','taskId','itemId','Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name','sourceClosureDate','realInfoHasPrepared','status','metadataFACTURATION'],
-        rows: arrayOfArray,
-      }
-
-    }
-
-    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-    this.service.correctMetaDataFile(this.fileTocheckMetadata).subscribe(res => {
-      //console.log('resultat correction exception', res);
-      if (res.message == "ok") {
-        this.router.navigate(['/list-transaction']);
-      }
-    })
-  }
-}
-    /**
-* Correct the file
-*/
-correctionFileMad(index) {
-  //this.clickCorrection = true;
-  //console.log("this.arrayLivraison",this.arrayLivraison);
-  // this.initSelectedCells();
-  this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-  if (index == "mad") {  // correction file livraison
-
-    for (let i=0;i<this.arrayMad.length;i++)
-    { var Tournee = this.arrayMad[i].Tournee;
-      var taskId = this.arrayMad[i].taskId;
-      var itemId = this.arrayMad[i].itemId;
-      this.copyFilterMad[i].Tournee = Tournee;
-      this.copyFilterMad[i].taskId = taskId;
-      this.copyFilterMad[i].itemId = itemId;
-    }
-    var arrayOfArray = this.copyFilterMad.map(Object.values);
-    for(let indice=0;indice<arrayOfArray.length;indice++)
-    {
-      for(let k=0;k<3;k++)
-      {
-        var element = arrayOfArray[indice].pop();
-        arrayOfArray[indice].unshift(element);
-      }
-    }
-    //console.log("arrayOfArray",arrayOfArray);
-    this.fileTocheckMad = {
-      transaction_id: this.transaction.transaction_id,
-      fileReplacement: {
-        columns: [ 'Tournee','taskId','itemId','Date','Expediteur','Activite','Categorie','Type_de_Service','ID_de_la_tache','Item___Nom_sous_categorie','Item___Type_unite_manutention','Item___Quantite','Code_postal','sourceHubName','Round_Name'],
-        rows: arrayOfArray,
-      }
-
-    }
-
-    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-    this.service.correctMadFile(this.fileTocheckMad).subscribe(res => {
-      //console.log('resultat correction exception', res);
-      if (res.message == "ok") {
-        this.router.navigate(['/list-transaction']);
-      }
-    })
-  }
-}
-    /**
-   * Hide ui selection red rectangle
-   */
+  /**
+ * Hide ui selection red rectangle
+ */
   hideUiSelectionOnCorrection() {
     if (document.querySelector('.selected')) {
       var inputs = document.querySelectorAll(".selected");

@@ -226,3 +226,9 @@ class transactionFileColumnsMad:
         self.Code_postal = Code_postal
         self.sourceHubName = sourceHubName
         self.Round_Name = Round_Name
+
+
+class TransactionFileContentAndOptions:
+    def __init__(self,fileContent,options):
+        self.fileContent = fileContent
+        self.options = options

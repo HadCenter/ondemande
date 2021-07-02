@@ -824,7 +824,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   * Send file edi to Urbantz
   */
   sendFileToUrbantz() {
-    this.sendedToUrbantz = true;
+ 
     let data = {
       clientCode: this.file.contact.codeClient,
       fileName: this.file.validatedOrders,
@@ -839,6 +839,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         this.openSnackBar("Erreur d’envoi", this.snackAction);
       },
       () => {
+        this.sendedToUrbantz = true;
         this.openSnackBar("Envoyé avec succès", this.snackAction);
         this.router.navigate(['/list-file-edi']);
 

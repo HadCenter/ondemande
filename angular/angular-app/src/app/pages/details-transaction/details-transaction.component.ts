@@ -101,7 +101,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     var data = { "transaction_id": parseInt(this.route.snapshot.params.id) };
     this.service.seeAllFileTransaction(data).subscribe(res => {
 
-      if (res.livrasion !==null && Object.keys(res.livraison).length === 0 ){
+      if (res.livrasion !==null && Object.keys(res.livraison).length !== 0 ){
       this.dataSource.paginator = this.paginator.toArray()[0];
       this.arrayLivraison = res.livraison;
       this.dataSource.data = this.arrayLivraison.fileContent;
@@ -117,7 +117,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       })
       
     }
-    if (res.exception !==null && Object.keys(res.exception).length === 0 ){
+    if (res.exception !==null && Object.keys(res.exception).length !== 0 ){
       this.dataSourceException.paginator = this.paginator.toArray()[1];
       this.arrayException = res.exception;
       this.dataSourceException.data = this.arrayException.fileContent;
@@ -133,7 +133,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       })
     }
 
-    if (res.metadata !==null && Object.keys(res.metadata).length === 0 ){
+    if (res.metadata !==null && Object.keys(res.metadata).length !== 0 ){
       this.dataSourceMetaData.paginator = this.paginator.toArray()[2];
       this.arrayMetaData = res.metadata;
       this.dataSourceMetaData.data = this.arrayMetaData.fileContent;
@@ -149,7 +149,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       })
     }
 
-if (res.mad !==null && Object.keys(res.mad).length === 0 ){
+if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
       this.dataSourceMAD.paginator = this.paginator.toArray()[3];
       this.arrayMad = res.mad;
       this.dataSourceMAD.data = this.arrayMad.fileContent;

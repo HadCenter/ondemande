@@ -180,6 +180,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   getOptionMetaData(filter) {
     let optionsMetaData = [];
     optionsMetaData = this.arrayMetaData.options[filter];
+    optionsMetaData = optionsMetaData.filter(item => item !== "")
     this.displayedColumnsMetadata.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -197,6 +198,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   getOptionMAD(filter) {
     let optionsMad = [];
     optionsMad = this.arrayMad.options[filter]
+    optionsMad = optionsMad.filter(item => item !== "")
     this.displayedColumnsMad.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -290,7 +292,8 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   */
   getOption(filter) {
     let options = [];
-    options = this.arrayLivraison.options[filter]
+    options = this.arrayLivraison.options[filter];
+    options = options.filter(item => item !== "")
     this.displayedColumnsLivraison.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -305,6 +308,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   getOptionException(filter) {
     let optionsException = [];
     optionsException = this.arrayException.options[filter]
+    optionsException = optionsException.filter(item => item !== "")
     this.displayedColumnsException.forEach((item, key) => {
       if (item == filter) {
         var obj = {

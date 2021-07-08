@@ -73,7 +73,16 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       this.getAllFiles();
       this.getAllTypesANomalie();
     });
+    this.listenToWebSocket();
     console.warn("Fin *********** ngOnInit")
+  }
+
+  listenToWebSocket(){
+    this.tablesService.messages.subscribe(msg => {
+     if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0 ){
+        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
+      }
+    });
   }
   initializeFiltredClients()
   {

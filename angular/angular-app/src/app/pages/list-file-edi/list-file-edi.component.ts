@@ -48,34 +48,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.completeTable = this.tablesService.advanceTableData;
   }
   ngOnInit() {
-    this.tablesService.messages.subscribe(msg => {
-      console.log("Response from websocket: ", JSON.parse(msg),this.tablesService.data);
-      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0   ){
-        // console.error("ws running jobs", JSON.parse(msg).Running_Jobs)
-        this.showJobRun = true;
-
-        //  console.warn(JSON.parse(msg))
-        // this.actualiser();
-      }
-      else if (JSON.parse(msg).jobEnded &&(JSON.parse(msg).jobEnded).includes("Talend Job EDI Ended")) {
-        this.showJobRun = false;
-        this.actualiser();
-
-      }
-    });
-
-    if((Object.keys(this.tablesService.data).length !== 0)){
-      if (JSON.parse(this.tablesService.data).Running_Jobs.length > 0){
-        this.showJobRun = true;
-      }
-    }
-  
-    // if (Object.keys(this.tablesService.data).length !== 0){
-    //   let data= JSON.parse(this.tablesService.data)
-    //   console.error(data, data.Running_Jobs.length);
-
-    // }
-    
+    this.listenToWebSocket();
     this.getFiles();
   }
 
@@ -208,9 +181,9 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.executeJob(row)
       .subscribe(res => {
         console.log("success");
-        row.cliqued=true;
+        row.cliqued = true;
         this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction)
-      //  this.router.navigate(['/list-file-edi']);
+        //  this.router.navigate(['/list-file-edi']);
       }, error => console.log(error));
   }
 
@@ -271,6 +244,31 @@ export class ListFileEDIComponent extends UpgradableComponent {
       verticalPosition: 'top',
       horizontalPosition: 'center',
     });
+  }
+
+  listenToWebSocket() {
+    this.tablesService.messages.subscribe(msg => {
+      console.log("Response from websocket: ", JSON.parse(msg));
+      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0 && (JSON.parse(msg).Running_Jobs).filter(s => s.includes("Talend Job Edi")).length > 0) {
+        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
+        this.showJobRun = true;
+      }
+      else if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
+        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
+      }
+      else if (JSON.parse(msg).jobEnded && (JSON.parse(msg).jobEnded).includes("Talend Job EDI Ended")) {
+        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
+        this.showJobRun = false;
+        this.actualiser();
+
+      }
+    });
+
+    if (JSON.parse(localStorage.getItem('ws'))) {
+      if (JSON.parse(localStorage.getItem('ws')).Running_Jobs.length > 0 && (JSON.parse(localStorage.getItem('ws')).Running_Jobs).filter(s => s.includes("Talend Job Edi")).length > 0) {
+        this.showJobRun = true;
+      }
+    }
   }
 
 }

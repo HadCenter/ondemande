@@ -35,14 +35,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   selectionEception: any[] = [];
   selectionMetadata: any[] = [];
   selectionMad: any[] = [];
-  // @ViewChildren("cell", { read: ElementRef }) cells: QueryList<ElementRef>;
-  // @ViewChildren("cellException", { read: ElementRef }) cellsException: QueryList<ElementRef>;
-  // @ViewChildren("cellMetadata", { read: ElementRef }) cellsMetadata: QueryList<ElementRef>;
-  // @ViewChildren("cellMad", { read: ElementRef }) cellsMad: QueryList<ElementRef>;
   newCellValue: string = '';
-  newCellValueException: string = '';
-  newCellValueMetadata: string = '';
-  newCellValueMad: string = '';
+  // newCellValueException: string = '';
+  // newCellValueMetadata: string = '';
+  // newCellValueMad: string = '';
   arrayLivraison: any = [];
   arrayException: any = [];
   arrayMetaData: any = [];

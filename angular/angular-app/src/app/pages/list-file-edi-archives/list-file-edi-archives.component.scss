@@ -1,0 +1,223 @@
+body {
+  padding-top: 20px;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+.details-label {
+  line-height: 18px;
+}
+
+.content-label {
+  display: inline-grid;
+  align-items: center;
+}
+.content-file-edi {
+  display: list-item;
+  // display: inline;
+  text-align: center;
+  vertical-align: middle;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.content-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-auto-rows: 30px;
+  grid-gap: 10px;
+}
+.content-card > label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.content-card {
+  padding: 20px 16px !important;
+}
+
+@media (max-width: 479px) {
+  .content-file-edi {
+    display: list-item;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .container-transaction {
+    margin: auto;
+    position: absolute;
+    top: 1%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  .content-label {
+    display: contents;
+  }
+}
+@media (min-width: 480px) and (max-width: 839px) {
+  .container-transaction {
+    margin: auto;
+    position: absolute;
+    top: 1%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  .content-label {
+    display: inline-grid;
+  }
+}
+@media (min-width: 840px) {
+  .container-transaction {
+    margin: auto;
+    position: absolute;
+    top: 1%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  .content-label {
+    display: inline-grid;
+  }
+}
+.number-transaction {
+  color: white;
+  font-weight: bold;
+  font-size: larger;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.mat-expansion-panel {
+  background: transparent;
+}
+
+mat-panel-title.mat-expansion-panel-header-title {
+  color: white;
+}
+.mat-expansion-panel-body {
+  color: white;
+}
+mat-panel-description.description.mat-expansion-panel-header-description {
+  flex-grow: 0;
+}
+.content-file-line {
+  padding: 20px 16px !important;
+}
+.ui-tables {
+  .mdl-card,
+  .mdl-card__supporting-text {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    overflow-x: auto;
+
+    td {
+      font-size: 14px;
+    }
+  }
+
+  .no-padding {
+    padding: 0;
+    width: 100%;
+  }
+
+  .label__availability {
+    margin-right: 2px;
+  }
+}
+#conteneur {
+  display: flex;
+  justify-content: space-between;
+}
+.content-table {
+  overflow: auto;
+  overflow-y: scroll;
+  max-height: 358px;
+}
+th.titre-columnfileEDI {
+  padding: 0 15px 12px 15px !important;
+  text-align: center !important;
+}
+td.mat-cell {
+  padding: 0 15px 12px 15px !important;
+  font-size: 16px;
+  font-family: "Helvetica", "Arial", sans-serif;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+td.mat-cell.center-cell-ediFiles{
+  text-align: center !important;
+}
+
+.form-column {
+  width: 0px !important;
+}
+.form-column .mat-select-value {
+  color: transparent !important;
+}
+
+.form-column .mat-select-arrow {
+  /* color: rgba(0, 0, 0, 0.54); */
+  color: white !important;
+}
+.form-column .mat-select-arrow-wrapper {
+  transform: translateY(0%) !important;
+}
+
+.form-column .mat-form-field-wrapper .mat-form-field-flex {
+  padding: 0.75em 0.75em 0 0;
+}
+.mat-form-field-wrapper {
+  padding-bottom: 0.58em;
+}
+.mat-form-field-label {
+  color: #666 !important;
+}
+.mat-form-field-ripple {
+  background-color: #00bcd4;
+}
+.mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #00bcd4;
+}
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: #00bcd4;
+}
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.ng-trigger-transformPanel.mat-select-panel.mat-primary {
+  background-color: #666;
+}
+span.mat-option-text {
+  color: white;
+}
+.mat-option.mat-active {
+  color: #00bcd4;
+}
+.mat-form-field {
+  font-size: 15px;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: transparent;
+}
+
+.mat-select-value {
+  color: #00bcd4;
+}
+div.mat-paginator-container{
+  background-color: #333;
+  display: flex;
+  justify-content: flex-start;
+}
+.mat-paginator, .mat-paginator-page-size .mat-select-trigger{
+  color: white;
+  font-size: 13px;
+}
+
+span.border{
+  border-radius: 10px 10px 10px 10px;
+}
+

@@ -163,10 +163,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
             if (this.fileWrong.rows.length == 0) // en plus on a 0 prestations erronées
             {
               var data = {
-                idFile: this.file.idFile
+                idFile: this.file.idFile,
+                fileName : this.file.fileName,
+                clientCode : this.file.contact.codeClient,
+                validated_orders : this.file.validatedOrders,
+                wrong_commands : this.file.wrongCommands
               };
-              this.fileService.archiverFileEDI(data).subscribe(res => {
-                console.log("succes archivage");
+              this.fileService.deleteFileEDI(data).subscribe(res => {
+                console.log("delete succes");
                 this.router.navigate(['/list-file-edi']);
 
               })
@@ -214,10 +218,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
             if (this.fileValid.rows.length == 0) // en plus on a 0 prestations valides
             {
               var data = {
-                idFile: this.file.idFile
+                idFile: this.file.idFile,
+                fileName : this.file.fileName,
+                clientCode : this.file.contact.codeClient,
+                validated_orders : this.file.validatedOrders,
+                wrong_commands : this.file.wrongCommands
               };
-              this.fileService.archiverFileEDI(data).subscribe(res => {
-                console.log("succes archivage");
+              this.fileService.deleteFileEDI(data).subscribe(res => {
+                console.log("delete succes");
                 this.router.navigate(['/list-file-edi']);
 
               })
@@ -824,7 +832,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   * Send file edi to Urbantz
   */
   sendFileToUrbantz() {
- 
+
     let data = {
       clientCode: this.file.contact.codeClient,
       fileName: this.file.validatedOrders,
@@ -832,7 +840,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
     this.fileService.sendFileToUrbantz(data).subscribe(
       result => {
-        // Handle result 
+        // Handle result
         console.log("res urbantz", result)
       },
       error => {

@@ -38,6 +38,13 @@ export class SidebarComponent extends BaseSidebarComponent {
     },
     { name : "Fichiers livraisons" , link: '/list-transaction', icon: 'list' },
     { name : "Utilisateurs" , link: '/users', icon: 'list' },
+    {
+      name: 'Fichiers archivés', children: [
+      { name: 'Transport archivés', link: '/list-file-edi-archives' },
+      { name: 'Logistique archivés', link: '/logistique-archives' },
+      ],
+      icon: 'list',
+    },
     ];
     }else{
       this.menu = [
@@ -45,12 +52,19 @@ export class SidebarComponent extends BaseSidebarComponent {
     { name: 'Clients', link: '/list-client', icon: 'list' },
     {
       name: 'Intégration', children: [
+      { name: 'Transport archivés', link: '/list-file-edi-archives' },
+      { name: 'Logistique archivés', link: '/logistique-archives' },
+      ],
+      icon: 'list',
+    },
+    { name : "Fichiers livraisons" , link: '/list-transaction', icon: 'list' },
+    {
+      name: 'Fichiers archivés', children: [
       { name: 'Transport', link: '/list-file-edi' },
       { name: 'Logistique', link: '/logistique' },
       ],
       icon: 'list',
     },
-    { name : "Fichiers livraisons" , link: '/list-transaction', icon: 'list' },
     ];
     }
   }

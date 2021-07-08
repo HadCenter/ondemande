@@ -24,8 +24,8 @@ export class DetailsFileEdiService {
 
     return this.http.post(`${this.url}/seeFileContent`, data);
   }
-  public archiverFileEDI (data) : Observable<any> {
-    return this.http.put(`${this.url}/archiverFileEDI/`, data);
+  public deleteFileEDI (data) : Observable<any> {
+    return this.http.post(`${this.url}/deleteFileEDI/`, data);
   }
 
   public corretFile (data): Observable<any> {

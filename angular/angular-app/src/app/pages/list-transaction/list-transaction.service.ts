@@ -45,6 +45,11 @@ export class ListTransactionService {
 
       },
       {
+        name: ' ',
+        sort: null,
+
+      },
+      {
         name: 'Actions',
         sort: null,
 

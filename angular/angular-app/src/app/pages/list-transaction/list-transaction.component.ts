@@ -30,7 +30,7 @@ export class ListTransactionComponent implements OnInit {
   ngOnInit(): void {
     this.tablesService.messages.subscribe(msg => {
       console.log("Response from websocket: ", JSON.parse(msg));
-      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
+      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0 ) {
         // console.error("ws running jobs", JSON.parse(msg).Running_Jobs)
         this.showJobRun = true;
       }

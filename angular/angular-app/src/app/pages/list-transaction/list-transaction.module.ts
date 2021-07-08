@@ -11,6 +11,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { ListTransactionService } from './list-transaction.service';
 import { GenererTransactionService } from './dialog/generer-transaction.service';
 import { LoaderModule } from 'app/components/loader/loader.module';
+import {MatIconModule} from '@angular/material/icon';
 @NgModule({
   declarations: [ListTransactionComponent,DailogGenerateTransaction],
   imports: [
@@ -23,8 +24,8 @@ import { LoaderModule } from 'app/components/loader/loader.module';
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    LoaderModule
-
+    LoaderModule,
+    MatIconModule
 
   ],
   entryComponents: [

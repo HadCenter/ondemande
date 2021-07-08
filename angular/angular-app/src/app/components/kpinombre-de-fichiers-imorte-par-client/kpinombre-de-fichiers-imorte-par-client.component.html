@@ -4,8 +4,11 @@
         <base-card-title class='card-title'>
           <h2 class="mdl-card__title-text">Nombre de fichiers importés</h2>
         </base-card-title>
-        <base-card-body style="padding:0px 10px 0px 16px;">
+        <base-card-body class="content-nb-import" style="padding:0px 10px 0px 16px;">
+        
           <div>
+            <app-loader [width]="'100%'" [position]="'initial'" [height]="'250px'" [bg]="'transparant'"
+        [show]="showLoaderFilesByClient" class="loaderTitle"></app-loader>
             <h4 class="labelnbrTotaleFichiers">{{count}}</h4>
           </div>
         </base-card-body>

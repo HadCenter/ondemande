@@ -66,7 +66,8 @@ app-loader.loader{
      position: absolute;
  }
  app-loader.loader div div.child{
-   top:17%
+   top:17%;
+   transform: translate(-201%, -50%);
  }
  app-loader.loader div div.child img{
   width: 30px;

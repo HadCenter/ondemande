@@ -41,6 +41,13 @@
               <td class="mdl-data-table__cell--non-numeric">
                 <span class="label label--mini color--{{getColor(row.statut)}} border ">{{ row.statut}}</span>
               </td>
+              <td *ngIf="row.fichier_exception_sftp==null && row.statut=='Terminé'" class="mdl-data-table__cell--non-numeric">
+                <mat-icon aria-hidden="false" aria-label="Example home icon">warning</mat-icon>
+              </td>
+              <td *ngIf="row.fichier_exception_sftp!==null || row.statut!== 'Terminé'" class="mdl-data-table__cell--non-numeric">
+                <span ></span>
+              </td>
+
               <td class="column-actions mdl-data-table__cell--non-numeric">
                 <button (click)="gotoDetails(row)" [disabled] = "row.statut !== 'Terminé'"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"

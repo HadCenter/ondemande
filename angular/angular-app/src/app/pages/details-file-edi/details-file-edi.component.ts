@@ -193,7 +193,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           }
         }
       }
-
+      this.rowsToDelete = [];
+      // this.rowsToDeleteValid = [];
+      this.alreadyClicked = false;
       var user = JSON.parse(localStorage.getItem('currentUser'));
       this.rearrangeAttributesDelete();  //Remove unecessey columns
       this.hideUiSelectionOnCorrection();  //hide ui selection on correction
@@ -209,12 +211,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
       this.fileService.updateFile(this.fileTocheck).subscribe(res => {
         if (res.message == "done") {
-          this.rowsToDelete = [];
-          // this.rowsToDeleteValid = [];
-          this.alreadyClicked = false;
+         
           if (this.fileWrong.rows.length == 0) {
             (document.getElementById('sendToUrbantz') as HTMLButtonElement).disabled = false;
-            console.log("this.fileValid.length", this.fileValid.rows.length);
             if (this.fileValid.rows.length == 0) // en plus on a 0 prestations valides
             {
               var data = {
@@ -264,8 +263,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     if (this.rowsToDelete.length > 0) {
       (document.getElementById('deleteWrongBtn') as HTMLButtonElement).disabled = false;
     }
-    //  this.openDialog(i);
-
   }
   /**
      * Update table's dataSource

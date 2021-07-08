@@ -720,7 +720,7 @@
                       *matCellDef="let element ; let i = index" 
                       (mousedown)="onMouseDown(i, 0, 'Date','metadata')"
                       (mouseup)="onMouseUp(i, 0, 'Date','metadata')"
-                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0], 'unselected': !selectedCellsStateException[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0]}">
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0]}">
                       {{element.Date}} </td>
                   </ng-container>
 

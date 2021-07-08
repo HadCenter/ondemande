@@ -422,6 +422,36 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
       }
     }
   }
+  getIntersection(filter) {
+    return this.dataSource.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+  getIntersectionException(filter) {
+    return this.dataSourceException.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+
+  getIntersectionMetaData(filter) {
+    return this.dataSourceMetaData.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+  getIntersectionMad(filter) {
+    return this.dataSourceMAD.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+
   setFilteredItemsOptions(filter) {
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
@@ -433,34 +463,46 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-        this.dataSource.data = [...this.dataSource.data, ...this.filterChange(filter)];
-        //delete doublon
-        this.dataSource.data = this.dataSource.data.filter((object, index) => index === this.dataSource.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+        this.dataSource.data  = this.getIntersection(filter)
+        if (this.dataSource.data.length==0){
+          this.dataSource.data.push({})
+        }
       }
       else {
-        this.dataSource.data = [];
+        this.dataSource.data = this.copyFilterLivraison;
         this.filterValues.forEach(element => {
-          this.dataSource.data = this.dataSource.data.concat(this.filterChange(element));
+          this.dataSource.data  = this.dataSource.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        //delete doublon
-        this.dataSource.data = this.dataSource.data.filter((object, index) => index === this.dataSource.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.dataSource.data  = this.dataSource.data .filter((object, index) => index === this.dataSource.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        if (this.dataSource.data.length==0){
+          this.dataSource.data.push({})
+        }
       }
     }
 
     // if selected is deactivate
-    if (filter.modelValue == "") {
-      if (this.filterValues.length == 1) {
+     if (filter.modelValue == "" || filter.modelValue.length == 0) {
+
+      this.filterValues = this.filterValues.filter(item => item.columnProp != filter.columnProp);
+      if (this.filterValues.length == 0) {
         this.dataSource.data = this.copySelectionLivraison;
-        this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+        this.dataSource.data  = this.dataSource.data .sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      }
+      else if (this.filterValues.length == 1) {
+        this.dataSource.data  = this.filterChange(this.filterValues[0])
       }
       else {
         this.filterValues = this.filterValues.filter(function (item) {
+
           return item.columnProp !== filter.columnProp;
         })
+        this.dataSource.data  = this.copySelectionLivraison;
         this.filterValues.forEach(element => {
-          this.dataSource.data = this.filterChange(element)
+          this.dataSource.data = this.dataSource.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
+        if (this.dataSource.data.length==0){
+          this.dataSource.data.push({})
+        }
       }
     }
 
@@ -478,36 +520,48 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-        this.dataSourceException.data = [...this.dataSourceException.data, ...this.filterExceptionChange(filter)];
-        //delete doublon
-        this.dataSourceException.data = this.dataSourceException.data.filter((object, index) => index === this.dataSourceException.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+        this.dataSourceException.data  = this.getIntersectionException(filter)
+        if (this.dataSourceException.data.length==0){
+          this.dataSourceException.data.push({})
+        }
       }
       else {
-        this.dataSourceException.data = [];
+        this.dataSourceException.data = this.copyFilterException;
         this.filterExceptionValues.forEach(element => {
-          this.dataSourceException.data = this.dataSourceException.data.concat(this.filterExceptionChange(element));
+          this.dataSourceException.data  = this.dataSourceException.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        //delete doublon
-        this.dataSourceException.data = this.dataSourceException.data.filter((object, index) => index === this.dataSourceException.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.dataSourceException.data  = this.dataSourceException.data .filter((object, index) => index === this.dataSourceException.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        if (this.dataSourceException.data.length==0){
+          this.dataSourceException.data.push({})
+        }
       }
     }
 
-    // if selected is deactivate
-    if (filter.modelValue == "") {
-      if (this.filterExceptionValues.length == 1) {
-        this.dataSourceException.data = this.copySelectionException;
-        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
-      }
-      else {
-        this.filterExceptionValues = this.filterExceptionValues.filter(function (item) {
-          return item.columnProp !== filter.columnProp;
-        })
-        this.filterExceptionValues.forEach(element => {
-          this.dataSourceException.data = this.filterExceptionChange(element)
-        });
+   // if selected is deactivate
+   if (filter.modelValue == "" || filter.modelValue.length == 0) {
+
+    this.filterExceptionValues = this.filterExceptionValues.filter(item => item.columnProp != filter.columnProp);
+    if (this.filterExceptionValues.length == 0) {
+      this.dataSourceException.data = this.copySelectionException;
+      this.dataSourceException.data  = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+    }
+    else if (this.filterExceptionValues.length == 1) {
+      this.dataSourceException.data  = this.filterChange(this.filterExceptionValues[0])
+    }
+    else {
+      this.filterExceptionValues = this.filterExceptionValues.filter(function (item) {
+
+        return item.columnProp !== filter.columnProp;
+      })
+      this.dataSourceException.data  = this.copySelectionException;
+      this.filterExceptionValues.forEach(element => {
+        this.dataSourceException.data = this.dataSourceException.data.filter(x => element.modelValue.includes(x[element.columnProp]));
+      });
+      if (this.dataSourceException.data.length==0){
+        this.dataSourceException.data.push({})
       }
     }
+  }
 
   }
 
@@ -522,18 +576,20 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-        this.dataSourceMetaData.data = [...this.dataSourceMetaData.data, ...this.filterMetaDataChange(filter)];
-        //delete doublon
-        this.dataSourceMetaData.data = this.dataSourceMetaData.data.filter((object, index) => index === this.dataSourceMetaData.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+        this.dataSourceMetaData.data  = this.getIntersectionMetaData(filter)
+        if (this.dataSourceMetaData.data.length==0){
+          this.dataSourceMetaData.data.push({})
+        }
       }
       else {
-        this.dataSourceMetaData.data = [];
+        this.dataSourceMetaData.data = this.copyFilterMetaData;
         this.filterMetaDataValues.forEach(element => {
-          this.dataSourceMetaData.data = this.dataSourceMetaData.data.concat(this.filterMetaDataChange(element));
+          this.dataSourceMetaData.data  = this.dataSourceMetaData.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        //delete doublon
-        this.dataSourceMetaData.data = this.dataSourceMetaData.data.filter((object, index) => index === this.dataSourceMetaData.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.dataSourceMetaData.data  = this.dataSourceMetaData.data .filter((object, index) => index === this.dataSourceMetaData.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        if (this.dataSourceMetaData.data.length==0){
+          this.dataSourceMetaData.data.push({})
+        }
       }
     }
 
@@ -566,23 +622,24 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-        this.dataSourceMAD.data = [...this.dataSourceMAD.data, ...this.filterMadChange(filter)];
-        //delete doublon
-        this.dataSourceMAD.data = this.dataSourceMAD.data.filter((object, index) => index === this.dataSourceMAD.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+        this.dataSourceMAD.data  = this.getIntersectionMad(filter)
+        if (this.dataSourceMAD.data.length==0){
+          this.dataSourceMAD.data.push({})
+        }
       }
       else {
-        this.dataSourceMAD.data = [];
+        this.dataSourceMAD.data = this.copyFilterMad;
         this.filterMadValues.forEach(element => {
-          this.dataSourceMAD.data = this.dataSourceMAD.data.concat(this.filterMadChange(element));
+          this.dataSourceMAD.data  = this.dataSourceMAD.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        //delete doublon
-        this.dataSourceMAD.data = this.dataSourceMAD.data.filter((object, index) => index === this.dataSourceMAD.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.dataSourceMAD.data  = this.dataSourceMAD.data .filter((object, index) => index === this.dataSourceMAD.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        if (this.dataSourceMAD.data.length==0){
+          this.dataSourceMAD.data.push({})
+        }
       }
     }
-
-    // if selected is deactivate
-    if (filter.modelValue == "") {
+     // if selected is deactivate
+     if (filter.modelValue == "") {
       if (this.filterMadValues.length == 1) {
         this.dataSourceMAD.data = this.copySelectionMad;
         this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);

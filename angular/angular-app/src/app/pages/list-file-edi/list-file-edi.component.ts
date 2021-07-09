@@ -265,9 +265,19 @@ export class ListFileEDIComponent extends UpgradableComponent {
     });
 
     if (JSON.parse(localStorage.getItem('ws'))) {
-      if (JSON.parse(localStorage.getItem('ws')).Running_Jobs.length > 0 && (JSON.parse(localStorage.getItem('ws')).Running_Jobs).filter(s => s.includes("Talend Job Edi")).length > 0) {
-        this.showJobRun = true;
+      if (JSON.parse(localStorage.getItem('ws')).Running_Jobs){
+        if((JSON.parse(localStorage.getItem('ws')).Running_Jobs).filter(s => s.includes("Talend Job Edi")).length > 0){
+          this.showJobRun = true;
+        }
       }
+      else if (JSON.parse(localStorage.getItem('ws')).state.Running_Jobs){
+        if((JSON.parse(localStorage.getItem('ws')).state.Running_Jobs).filter(s => s.includes("Talend Job Edi")).length > 0){
+          this.showJobRun = true;
+        }
+      }
+   
+ 
+      
     }
   }
 

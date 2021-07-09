@@ -55,11 +55,23 @@ export class ListTransactionComponent implements OnInit {
       }
     });
     // check localstorage if the user come from another page 
+
     if (JSON.parse(localStorage.getItem('ws'))) {
-      if (JSON.parse(localStorage.getItem('ws')).Running_Jobs.length > 0 && ((JSON.parse(localStorage.getItem('ws')).Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction"))).length > 0) {
-        this.showJobRun = true;
+      if (JSON.parse(localStorage.getItem('ws')).Running_Jobs){
+        if((JSON.parse(localStorage.getItem('ws')).Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
+          this.showJobRun = true;
+        }
       }
+      else if (JSON.parse(localStorage.getItem('ws')).state.Running_Jobs){
+        if((JSON.parse(localStorage.getItem('ws')).state.Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
+          this.showJobRun = true;
+        }
+      }
+  
+      
     }
+
+
   }
   getColor(ch) {
     if (ch === 'En attente') {

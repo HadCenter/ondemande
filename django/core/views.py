@@ -109,6 +109,7 @@ def fileList(request):
 
     listFiles = getAllFileEdiData()
 
+    print("entred")
     return HttpResponse(jsonpickle.encode(listFiles, unpicklable=False), content_type="application/json")
 
 
@@ -186,7 +187,8 @@ def createFileFromColumnAndRows(request):
     columns = request.data['columns']
     rows = request.data['rows']
     fileId = request.data['fileId']
-    response = createFileEdiFromColumnAndRows(columns, rows, fileId)
+    fileType = request.data['fileType']
+    response = createFileEdiFromColumnAndRows(columns, rows, fileId,fileType)
     return response
 
 

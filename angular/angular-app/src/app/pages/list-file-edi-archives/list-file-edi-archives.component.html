@@ -1,0 +1,52 @@
+<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+  <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="showLoaderArchivedEdiFile"></app-loader>
+  <base-card>
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Liste des fichiers EDI archivés</h1>
+      <div class="mdl-layout-spacer"></div>
+      <mat-form-field appearance="fill">
+        <mat-label>Nom client</mat-label>
+        <mat-select #choosedValue (valueChange)="onChange(choosedValue.value)">
+          <mat-option value="">Tout</mat-option>
+          <mat-option *ngFor="let clientName of clientList" [value]="clientName">{{clientName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <mat-paginator [pageSizeOptions]="[10]" [hidePageSize]="true"></mat-paginator>
+      </div>
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <table *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" class="mdl-data-table mdl-js-data-table  sorting-table">
+
+          <!-- fileName Column -->
+          <ng-container matColumnDef="Fichier EDI">
+            <th mat-header-cell *matHeaderCellDef class="titre-columnfileEDI" > Fichier EDI </th>
+            <td mat-cell *matCellDef="let element" class="center-cell-ediFiles"> {{element.fileName}} </td>
+          </ng-container>
+
+          <!-- createdAt Column -->
+          <ng-container matColumnDef="Date création">
+            <th mat-header-cell *matHeaderCellDef class="titre-columnfileEDI"> Date création </th>
+            <td mat-cell *matCellDef="let element" class="center-cell-ediFiles"> {{element.createdAt | date:"yyyy/MM/dd 'à' HH:mm"}} </td>
+          </ng-container>
+
+          <!-- contact Column -->
+          <ng-container matColumnDef="Nom client">
+            <th mat-header-cell *matHeaderCellDef class="titre-columnfileEDI"> Nom client </th>
+            <td mat-cell *matCellDef="let element" class="center-cell-ediFiles"> {{element.contact.nomClient}} </td>
+          </ng-container>
+
+          <!-- status Column -->
+          <ng-container matColumnDef="Statut">
+            <th mat-header-cell *matHeaderCellDef class="titre-columnfileEDI"> Statut </th>
+            <td mat-cell *matCellDef="let element" class="center-cell-ediFiles">
+             <span class="label label--mini color--{{getColor(element.status)}} border">{{ element.status }}</span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </base-card-body>
+    </base-card>
+</div>

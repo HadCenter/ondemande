@@ -212,6 +212,22 @@ def getAllFileEdiData():
         listFiles.append(fileReponse)
     return listFiles
 
+def getAllArchivedFileEdiData():
+    files = EDIfile.objects.select_related('client').filter(archived=True).order_by('-created_at')
+    listFiles = list()
+    for fileDB in files:
+        clientDB = fileDB.client
+        clientResponse = Contact(idContact=clientDB.id, codeClient=clientDB.code_client, nomClient=clientDB.nom_client,
+                                 email=clientDB.email, archived=clientDB.archived)
+        fileReponse = FileInfo(idFile=fileDB.id, fileName=fileDB.file.name, createdAt=fileDB.created_at,
+                               status=fileDB.status, wrongCommands=fileDB.wrong_commands,
+                               validatedOrders=fileDB.validated_orders, archived=fileDB.archived,
+                               cliqued=fileDB.cliqued, contact=clientResponse,
+                               number_correct_commands=fileDB.number_correct_commands,
+                               number_wrong_commands=fileDB.number_wrong_commands, sendedToUrbantz=fileDB.sendedToUrbantz)
+        listFiles.append(fileReponse)
+    return listFiles
+
 def getFilesEdiByClient(clientCode):
     files = EDIfile.objects.select_related('client').filter(archived=False).filter(client__code_client=clientCode).order_by(
         '-created_at')

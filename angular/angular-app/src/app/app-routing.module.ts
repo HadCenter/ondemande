@@ -10,16 +10,14 @@ const routes: Routes = [
 
   {
     path: '', component: CommonLayoutComponent, children: [
+      { path: 'list-file-edi-archives', loadChildren: () => import('./pages/list-file-edi-archives/list-file-edi-archives.module').then(m => m.ListFileEdiArchivesModule), canActivate: [AuthGuard] },
+      { path: 'logistique-archives', loadChildren: () => import('./pages/logistique-archives/logistique-archives.module').then(m => m.LogistiqueArchivesModule), canActivate: [AuthGuard] },
       { path: 'list-file-edi', loadChildren: () => import('./pages/list-file-edi/list-file-edi.module').then(m => m.ListFileEdiModule), canActivate: [AuthGuard] },
       { path: 'logistique', loadChildren: () => import('./pages/magistor/magistor.module').then(m => m.MagistorModule), canActivate: [AuthGuard] },
       { path: 'list-client', loadChildren: () => import('./pages/list-clients/list-clients.module').then(m => m.ListClientsModule), canActivate: [AuthGuard] },
-      // { path: 'create-client', loadChildren: () => import('./pages/create-client/create-client.module').then(m => m.CreateClientModule), canActivate: [AuthGuard] },
-      // { path: 'import-file-edi', loadChildren: () => import('./pages/import-file-edi/import-file-edi.module').then(m => m.ImportFileEdiModule), canActivate: [AuthGuard] },
       { path: 'details-file-edi/:id', loadChildren: () => import('./pages/details-file-edi/details-file-edi.module').then(m => m.DetailsFileEdiModule), canActivate: [AuthGuard] },
       { path: 'details-transaction/:id', loadChildren: () => import('./pages/details-transaction/details-transaction.module').then(m => m.DetailsTransactionModule), canActivate: [AuthGuard] },
-      // { path: 'details-client/:id', loadChildren: () => import('./pages/details-client/details-client.module').then(m => m.DetailsClientModule), canActivate: [AuthGuard] },
       { path: 'users', loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule), canActivate: [AuthGuard] },
-    //  { path: 'list-file-delivery', loadChildren: () => import('./pages/list-file-delivery/list-file-delivery.module').then(m => m.ListFileDeliveryModule), canActivate: [AuthGuard] },
       { path: 'list-transaction', loadChildren: () => import('./pages/list-transaction/list-transaction.module').then(m => m.ListTransactionModule), canActivate: [AuthGuard] },
       { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule), canActivate: [AuthGuard] },
       { path: 'profil', loadChildren: () => import('./pages/profil/profil.module').then(m => m.ProfilModule), canActivate: [AuthGuard] },

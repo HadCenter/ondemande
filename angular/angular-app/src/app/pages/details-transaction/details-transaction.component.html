@@ -76,7 +76,7 @@
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderLivraisonFile"></app-loader>
               <div class="content-table">
-                <div class="pagination">
+                <div>
                   <mat-paginator [hidden]="!dataSource.data.length" [pageSizeOptions]="[100,200,300]"
                     showFirstLastButtons></mat-paginator>
                 </div>
@@ -85,7 +85,7 @@
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                    <th id="Date" class="titre-column" mat-header-cell *matHeaderCellDef> Date
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[0].columnProp}}"
                           [(ngModel)]="options[0].modelValue"
@@ -106,7 +106,7 @@
                   <!-- Expediteur Column -->
                   <ng-container matColumnDef="Expediteur">
 
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                    <th id="Expediteur" class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[1].columnProp}}"
                           [(ngModel)]="options[1].modelValue"
@@ -126,7 +126,7 @@
 
                   <!-- Activite Column -->
                   <ng-container matColumnDef="Activite">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                    <th id="Activite" class="titre-column" mat-header-cell *matHeaderCellDef> Activite
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[2].columnProp}}"
                           [(ngModel)]="options[2].modelValue"
@@ -146,7 +146,7 @@
 
                   <!-- Categorie Column -->
                   <ng-container matColumnDef="Categorie">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                    <th id="Categorie" class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[3].columnProp}}"
                           [(ngModel)]="options[3].modelValue"
@@ -166,7 +166,7 @@
 
                   <!-- Type_de_Service Column -->
                   <ng-container matColumnDef="Type_de_Service">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                    <th id="Type_de_Service" class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[4].columnProp}}"
                           [(ngModel)]="options[4].modelValue"
@@ -186,7 +186,7 @@
 
                   <!-- ID_de_la_tache Column -->
                   <ng-container matColumnDef="ID_de_la_tache">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                    <th id="ID_de_la_tache" class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[5].columnProp}}"
                           [(ngModel)]="options[5].modelValue"
@@ -206,7 +206,7 @@
 
                   <!-- Item___Nom_sous_categorie Column -->
                   <ng-container matColumnDef="Item___Nom_sous_categorie">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
+                    <th id="Item___Nom_sous_categorie" class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
                       <mat-form-field class="form-column" appearance="fill"  *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[6].columnProp}}"
                           [(ngModel)]="options[6].modelValue"
@@ -226,7 +226,7 @@
 
                   <!-- Item___Type_unite_manutention Column -->
                   <ng-container matColumnDef="Item___Type_unite_manutention">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
+                    <th id="Item___Type_unite_manutention" class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[7].columnProp}}"
                           [(ngModel)]="options[7].modelValue"
@@ -246,7 +246,7 @@
 
                   <!-- Item___Quantite Column -->
                   <ng-container matColumnDef="Item___Quantite">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                    <th id="Item___Quantite" class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[8].columnProp}}"
                           [(ngModel)]="options[8].modelValue"
@@ -266,7 +266,7 @@
 
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                    <th id="Code_postal" class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[9].columnProp}}"
                           [(ngModel)]="options[9].modelValue"
@@ -286,7 +286,7 @@
 
                   <!-- sourceHubName Column -->
                   <ng-container matColumnDef="sourceHubName">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
+                    <th id="sourceHubName" class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[10].columnProp}}"
                           [(ngModel)]="options[10].modelValue"
@@ -306,7 +306,7 @@
 
                   <!-- Round_Name Column -->
                   <ng-container matColumnDef="Round_Name">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                    <th id="Round_Name" class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
                       <mat-form-field class="form-column" appearance="fill" *ngIf="options">
                         <mat-select class="filter-column" matNativeControl name="{{options[11].columnProp}}"
                           [(ngModel)]="options[11].modelValue"
@@ -370,7 +370,7 @@
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderExceptionFile"></app-loader>
               <div class="content-table">
-                <div class="pagination">
+                <div>
                   <mat-paginator [hidden]="!dataSourceException.data.length" [pageSizeOptions]="[100,200,300]"
                     showFirstLastButtons></mat-paginator>
                 </div>
@@ -379,7 +379,7 @@
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                    <th id="DateException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Date
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[0].columnProp}}"
                           [(ngModel)]="optionsException[0].modelValue"
@@ -400,7 +400,7 @@
 
                   <!-- Expediteur Column -->
                   <ng-container matColumnDef="Expediteur">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                    <th id="ExpediteurException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Expediteur
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[1].columnProp}}"
                           [(ngModel)]="optionsException[1].modelValue"
@@ -421,7 +421,7 @@
 
                   <!-- Activite Column -->
                   <ng-container matColumnDef="Activite">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                    <th id="ActiviteException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Activite
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[2].columnProp}}"
                           [(ngModel)]="optionsException[2].modelValue"
@@ -442,7 +442,7 @@
 
                   <!-- Categorie Column -->
                   <ng-container matColumnDef="Categorie">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                    <th id="CategorieException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Categorie
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[3].columnProp}}"
                           [(ngModel)]="optionsException[3].modelValue"
@@ -463,7 +463,7 @@
 
                   <!-- Type_de_Service Column -->
                   <ng-container matColumnDef="Type_de_Service">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                    <th id ="Type_de_ServiceException"class="titre-column-exception" mat-header-cell *matHeaderCellDef> Type_de_Service
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[4].columnProp}}"
                           [(ngModel)]="optionsException[4].modelValue"
@@ -484,7 +484,7 @@
 
                   <!-- ID_de_la_tache Column -->
                   <ng-container matColumnDef="ID_de_la_tache">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                    <th id="ID_de_la_tacheException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> ID_de_la_tache
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[5].columnProp}}"
                           [(ngModel)]="optionsException[5].modelValue"
@@ -505,7 +505,7 @@
 
                   <!-- Item___Nom Column -->
                   <ng-container matColumnDef="Item___Nom">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom
+                    <th id="Item___NomException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Item___Nom
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[6].columnProp}}"
                           [(ngModel)]="optionsException[6].modelValue"
@@ -526,7 +526,7 @@
 
                   <!-- Item___Type Column -->
                   <ng-container matColumnDef="Item___Type">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type
+                    <th id="Item___TypeException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Item___Type
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[7].columnProp}}"
                           [(ngModel)]="optionsException[7].modelValue"
@@ -547,7 +547,7 @@
 
                   <!-- Item___Quantite Column -->
                   <ng-container matColumnDef="Item___Quantite">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                    <th id="Item___QuantiteException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Item___Quantite
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[8].columnProp}}"
                           [(ngModel)]="optionsException[8].modelValue"
@@ -568,7 +568,7 @@
 
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                    <th id="Code_postalException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Code_postal
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[9].columnProp}}"
                           [(ngModel)]="optionsException[9].modelValue"
@@ -589,7 +589,7 @@
 
                   <!-- Round_Name Column -->
                   <ng-container matColumnDef="Round_Name">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                    <th id="Round_NameException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Round_Name
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[10].columnProp}}"
                           [(ngModel)]="optionsException[10].modelValue"
@@ -610,7 +610,7 @@
 
                   <!-- Remarque Column -->
                   <ng-container matColumnDef="Remarque">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Remarque
+                    <th id="RemarqueException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> Remarque
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[11].columnProp}}"
                           [(ngModel)]="optionsException[11].modelValue"
@@ -631,7 +631,7 @@
 
                   <!-- isDeleted Column -->
                   <ng-container matColumnDef="isDeleted">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> isDeleted
+                    <th id="isDeletedException" class="titre-column-exception" mat-header-cell *matHeaderCellDef> isDeleted
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[12].columnProp}}"
                           [(ngModel)]="optionsException[12].modelValue"
@@ -696,7 +696,7 @@
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderMetadataFile"></app-loader>
               <div class="content-table">
-                <div class="pagination">
+                <div>
                   <mat-paginator [hidden]="!dataSourceMetaData.data.length" [pageSizeOptions]="[100,200,300]"
                     showFirstLastButtons></mat-paginator>
                 </div>
@@ -705,7 +705,7 @@
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                    <th id="DateMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Date
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[0].columnProp}}"
                           [(ngModel)]="optionsMetaData[0].modelValue"
@@ -720,13 +720,13 @@
                       *matCellDef="let element ; let i = index" 
                       (mousedown)="onMouseDown(i, 0, 'Date','metadata')"
                       (mouseup)="onMouseUp(i, 0, 'Date','metadata')"
-                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0], 'unselected': !selectedCellsStateException[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0]}">
+                      [ngClass]="{'selected': selectedCellsStateMetaData[i+ paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0], 'unselected': !selectedCellsStateMetaData[i+paginator.toArray()[2].pageIndex*paginator.toArray()[2].pageSize][0]}">
                       {{element.Date}} </td>
                   </ng-container>
 
                   <!-- Expediteur Column -->
                   <ng-container matColumnDef="Expediteur">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                    <th id="ExpediteurMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Expediteur
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[1].columnProp}}"
                           [(ngModel)]="optionsMetaData[1].modelValue"
@@ -747,7 +747,7 @@
 
                   <!-- Activite Column -->
                   <ng-container matColumnDef="Activite">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                    <th id="ActiviteMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Activite
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[2].columnProp}}"
                           [(ngModel)]="optionsMetaData[2].modelValue"
@@ -768,7 +768,7 @@
 
                   <!-- Categorie Column -->
                   <ng-container matColumnDef="Categorie">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                    <th id="CategorieMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Categorie
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[3].columnProp}}"
                           [(ngModel)]="optionsMetaData[3].modelValue"
@@ -789,7 +789,7 @@
 
                   <!-- Type_de_Service Column -->
                   <ng-container matColumnDef="Type_de_Service">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                    <th id="Type_de_ServiceMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Type_de_Service
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[4].columnProp}}"
                           [(ngModel)]="optionsMetaData[4].modelValue"
@@ -810,7 +810,7 @@
 
                   <!-- ID_de_la_tache Column -->
                   <ng-container matColumnDef="ID_de_la_tache">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                    <th id="ID_de_la_tacheMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> ID_de_la_tache
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[5].columnProp}}"
                           [(ngModel)]="optionsMetaData[5].modelValue"
@@ -831,7 +831,7 @@
 
                   <!-- Item___Nom_sous_categorie Column -->
                   <ng-container matColumnDef="Item___Nom_sous_categorie">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
+                    <th id="Item___Nom_sous_categorieMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[6].columnProp}}"
                           [(ngModel)]="optionsMetaData[6].modelValue"
@@ -852,7 +852,7 @@
 
                   <!-- Item___Type_unite_manutention Column -->
                   <ng-container matColumnDef="Item___Type_unite_manutention">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
+                    <th id="Item___Type_unite_manutentionMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[7].columnProp}}"
                           [(ngModel)]="optionsMetaData[7].modelValue"
@@ -873,7 +873,7 @@
 
                   <!-- Item___Quantite Column -->
                   <ng-container matColumnDef="Item___Quantite">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                    <th id="Item___QuantiteMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Item___Quantite
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[8].columnProp}}"
                           [(ngModel)]="optionsMetaData[8].modelValue"
@@ -894,7 +894,7 @@
 
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                    <th id="Code_postalMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Code_postal
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[9].columnProp}}"
                           [(ngModel)]="optionsMetaData[9].modelValue"
@@ -915,7 +915,7 @@
 
                   <!-- sourceHubName Column -->
                   <ng-container matColumnDef="sourceHubName">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
+                    <th id="sourceHubNameMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> sourceHubName
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[10].columnProp}}"
                           [(ngModel)]="optionsMetaData[10].modelValue"
@@ -936,7 +936,7 @@
 
                   <!-- Round_Name Column -->
                   <ng-container matColumnDef="Round_Name">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                    <th id="Round_NameMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> Round_Name
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[11].columnProp}}"
                           [(ngModel)]="optionsMetaData[11].modelValue"
@@ -957,7 +957,7 @@
 
                   <!-- sourceClosureDate Column -->
                   <ng-container matColumnDef="sourceClosureDate">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceClosureDate
+                    <th id="sourceClosureDateMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> sourceClosureDate
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[12].columnProp}}"
                           [(ngModel)]="optionsMetaData[12].modelValue"
@@ -978,7 +978,7 @@
 
                   <!-- realInfoHasPrepared Column -->
                   <ng-container matColumnDef="realInfoHasPrepared">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> realInfoHasPrepared
+                    <th id="realInfoHasPreparedMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> realInfoHasPrepared
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[13].columnProp}}"
                           [(ngModel)]="optionsMetaData[13].modelValue"
@@ -999,7 +999,7 @@
 
                   <!-- status Column -->
                   <ng-container matColumnDef="status">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> status
+                    <th id="statusMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> status
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[14].columnProp}}"
                           [(ngModel)]="optionsMetaData[14].modelValue"
@@ -1020,7 +1020,7 @@
 
                   <!-- metadataFACTURATION Column -->
                   <ng-container matColumnDef="metadataFACTURATION">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> metadataFACTURATION
+                    <th id="metadataFACTURATIONMetaData" class="titre-column-metadata" mat-header-cell *matHeaderCellDef> metadataFACTURATION
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMetaData[15].columnProp}}"
                           [(ngModel)]="optionsMetaData[15].modelValue"
@@ -1085,7 +1085,7 @@
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderMadFile"></app-loader>
               <div class="content-table">
-                <div class="pagination">
+                <div>
                   <mat-paginator [hidden]="!dataSourceMAD.data.length" [pageSizeOptions]="[100,200,300]"
                     showFirstLastButtons></mat-paginator>
                 </div>
@@ -1094,7 +1094,7 @@
 
                   <!-- Date Column -->
                   <ng-container matColumnDef="Date">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date
+                    <th id="DateMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Date
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[0].columnProp}}"
                           [(ngModel)]="optionsMad[0].modelValue"
@@ -1114,7 +1114,7 @@
 
                    <!-- Expediteur Column -->
                    <ng-container matColumnDef="Expediteur">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                    <th id="ExpediteurMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Expediteur
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[1].columnProp}}"
                           [(ngModel)]="optionsMad[1].modelValue"
@@ -1134,7 +1134,7 @@
 
                   <!-- Activite Column -->
                   <ng-container matColumnDef="Activite">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Activite
+                    <th id="ActiviteMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Activite
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[2].columnProp}}"
                           [(ngModel)]="optionsMad[2].modelValue"
@@ -1154,7 +1154,7 @@
 
                   <!-- Categorie Column -->
                   <ng-container matColumnDef="Categorie">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Categorie
+                    <th id="CategorieMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Categorie
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[3].columnProp}}"
                           [(ngModel)]="optionsMad[3].modelValue"
@@ -1174,7 +1174,7 @@
 
                   <!-- Type_de_Service Column -->
                   <ng-container matColumnDef="Type_de_Service">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type_de_Service
+                    <th id="Type_de_ServiceMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Type_de_Service
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[4].columnProp}}"
                           [(ngModel)]="optionsMad[4].modelValue"
@@ -1194,7 +1194,7 @@
 
                   <!-- ID_de_la_tache Column -->
                   <ng-container matColumnDef="ID_de_la_tache">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ID_de_la_tache
+                    <th id="ID_de_la_tacheMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> ID_de_la_tache
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[5].columnProp}}"
                           [(ngModel)]="optionsMad[5].modelValue"
@@ -1214,7 +1214,7 @@
 
                   <!-- Item___Nom_sous_categorie Column -->
                   <ng-container matColumnDef="Item___Nom_sous_categorie">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
+                    <th id="Item___Nom_sous_categorieMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Item___Nom_sous_categorie
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[6].columnProp}}"
                           [(ngModel)]="optionsMad[6].modelValue"
@@ -1234,7 +1234,7 @@
 
                   <!-- Item___Type_unite_manutention Column -->
                   <ng-container matColumnDef="Item___Type_unite_manutention">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
+                    <th id="Item___Type_unite_manutentionMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Item___Type_unite_manutention
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[7].columnProp}}"
                           [(ngModel)]="optionsMad[7].modelValue"
@@ -1254,7 +1254,7 @@
 
                   <!-- Item___Quantite Column -->
                   <ng-container matColumnDef="Item___Quantite">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Item___Quantite
+                    <th id="Item___QuantiteMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Item___Quantite
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[8].columnProp}}"
                           [(ngModel)]="optionsMad[8].modelValue"
@@ -1274,7 +1274,7 @@
 
                   <!-- Code_postal Column -->
                   <ng-container matColumnDef="Code_postal">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_postal
+                    <th id="Code_postalMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Code_postal
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[9].columnProp}}"
                           [(ngModel)]="optionsMad[9].modelValue"
@@ -1294,7 +1294,7 @@
 
                   <!-- sourceHubName Column -->
                   <ng-container matColumnDef="sourceHubName">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> sourceHubName
+                    <th id="sourceHubNameMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> sourceHubName
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[10].columnProp}}"
                           [(ngModel)]="optionsMad[10].modelValue"
@@ -1314,7 +1314,7 @@
 
                   <!-- Round_Name Column -->
                   <ng-container matColumnDef="Round_Name">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Round_Name
+                    <th id="Round_NameMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> Round_Name
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{optionsMad[11].columnProp}}"
                           [(ngModel)]="optionsMad[11].modelValue"

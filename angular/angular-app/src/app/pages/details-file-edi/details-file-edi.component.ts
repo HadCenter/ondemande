@@ -163,10 +163,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
             if (this.fileWrong.rows.length == 0) // en plus on a 0 prestations erronées
             {
               var data = {
-                idFile: this.file.idFile
+                idFile: this.file.idFile,
+                fileName : this.file.fileName,
+                clientCode : this.file.contact.codeClient,
+                validated_orders : this.file.validatedOrders,
+                wrong_commands : this.file.wrongCommands
               };
-              this.fileService.archiverFileEDI(data).subscribe(res => {
-                console.log("succes archivage");
+              this.fileService.deleteFileEDI(data).subscribe(res => {
+                console.log("delete succes");
                 this.router.navigate(['/list-file-edi']);
 
               })
@@ -189,7 +193,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           }
         }
       }
-
+      this.rowsToDelete = [];
+      // this.rowsToDeleteValid = [];
+      this.alreadyClicked = false;
       var user = JSON.parse(localStorage.getItem('currentUser'));
       this.rearrangeAttributesDelete();  //Remove unecessey columns
       this.hideUiSelectionOnCorrection();  //hide ui selection on correction
@@ -205,19 +211,20 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
       this.fileService.updateFile(this.fileTocheck).subscribe(res => {
         if (res.message == "done") {
-          this.rowsToDelete = [];
-          // this.rowsToDeleteValid = [];
-          this.alreadyClicked = false;
+         
           if (this.fileWrong.rows.length == 0) {
             (document.getElementById('sendToUrbantz') as HTMLButtonElement).disabled = false;
-            console.log("this.fileValid.length", this.fileValid.rows.length);
             if (this.fileValid.rows.length == 0) // en plus on a 0 prestations valides
             {
               var data = {
-                idFile: this.file.idFile
+                idFile: this.file.idFile,
+                fileName : this.file.fileName,
+                clientCode : this.file.contact.codeClient,
+                validated_orders : this.file.validatedOrders,
+                wrong_commands : this.file.wrongCommands
               };
-              this.fileService.archiverFileEDI(data).subscribe(res => {
-                console.log("succes archivage");
+              this.fileService.deleteFileEDI(data).subscribe(res => {
+                console.log("delete succes");
                 this.router.navigate(['/list-file-edi']);
 
               })
@@ -256,8 +263,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     if (this.rowsToDelete.length > 0) {
       (document.getElementById('deleteWrongBtn') as HTMLButtonElement).disabled = false;
     }
-    //  this.openDialog(i);
-
   }
   /**
      * Update table's dataSource
@@ -824,7 +829,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   * Send file edi to Urbantz
   */
   sendFileToUrbantz() {
- 
+
     let data = {
       clientCode: this.file.contact.codeClient,
       fileName: this.file.validatedOrders,
@@ -832,7 +837,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
     this.fileService.sendFileToUrbantz(data).subscribe(
       result => {
-        // Handle result 
+        // Handle result
         console.log("res urbantz", result)
       },
       error => {

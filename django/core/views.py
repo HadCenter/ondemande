@@ -35,7 +35,7 @@ from .models import transactionFileColumnsException , transactionFileColumnsLivr
 from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
-from core.ediFileService import saveUploadedEdiFile , getAllFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
+from core.ediFileService import saveUploadedEdiFile , getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -47,10 +47,26 @@ path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
 
 
 
-@api_view([ 'PUT'])
-def archive_fileEDI(request):
+@api_view([ 'POST'])
+def delete_fileEDI(request):
+    print("request",request.data)
     idFile = request.data['idFile']
-    EDIfile.objects.filter(pk=idFile).update(archived=True)
+    fileName = request.data['fileName']
+    clientCode = request.data['clientCode']
+    validated_orders = request.data['validated_orders']
+    wrong_commands = request.data['wrong_commands']
+    EDIfile.objects.filter(pk=idFile).delete()
+    ftp = connect()
+    path_client_input = path_racine_input + '/' + clientCode
+    ftp.cwd(path_client_input)
+    for name in ftp.nlst():
+        if name == fileName:
+            ftp.delete(fileName)
+    path_client_output = path_racine_output + '/' + clientCode
+    ftp.cwd(path_client_output)
+    for name in ftp.nlst():
+        if name == validated_orders or name == wrong_commands:
+            ftp.delete(name)
     return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -110,6 +126,13 @@ def fileList(request):
     listFiles = getAllFileEdiData()
 
     print("entred")
+    return HttpResponse(jsonpickle.encode(listFiles, unpicklable=False), content_type="application/json")
+
+@api_view(['GET'])
+def archivedFileList(request):
+
+    listFiles = getAllArchivedFileEdiData()
+
     return HttpResponse(jsonpickle.encode(listFiles, unpicklable=False), content_type="application/json")
 
 

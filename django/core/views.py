@@ -211,8 +211,8 @@ def createFileFromColumnAndRows(request):
     rows = request.data['rows']
     fileId = request.data['fileId']
     fileType = request.data['fileType']
-    response = createFileEdiFromColumnAndRows(columns, rows, fileId,fileType)
-    return response
+    createFileEdiFromColumnAndRows(columns, rows, fileId,fileType)
+    return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 
 
 def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> TransactionFileContentAndOptions:

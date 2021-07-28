@@ -35,7 +35,8 @@ from .models import transactionFileColumnsException , transactionFileColumnsLivr
 from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
-from core.ediFileService import saveUploadedEdiFile , getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
+from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
+from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -43,6 +44,10 @@ logger = logging.getLogger('django')
 
 path_racine_input = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/"
 path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
+
+CLIENT_TEST = "REDLEAN_T"
+
+KEY_TEST ="rV53PjKsu6JEJ22m"
 
 
 
@@ -105,7 +110,12 @@ def clientList(request):
 
     return HttpResponse(jsonpickle.encode(listClients, unpicklable=False), content_type="application/json")
 
+@api_view(['GET'])
+def logisticFileList(request):
 
+    listLogisticFiles = getAllLogisticFileList()
+
+    return HttpResponse(jsonpickle.encode(listLogisticFiles, unpicklable=False), content_type="application/json")
 
 
 
@@ -118,6 +128,17 @@ def fileCreate(request, format=None):
     json_data = JSONRenderer().render(response)
     logger.info('fin web service : génération automatique des fichiers EDI ')
     return HttpResponse(json_data, content_type='application/json')
+
+@api_view(['POST'])
+@parser_classes([MultiPartParser, FormParser])
+def LogisticFileCreate(request, format=None):
+    clientName = CLIENT_TEST
+    logisticFile = request.FILES['logisticFile']
+    typeLogisticFile = request.data['typeLogisticFile']
+    key = KEY_TEST
+    logger.info('***** Fin intégration du fichier logistic et type de fichier logistic ')
+    saveUploadedLogisticFile(logisticFile,typeLogisticFile)
+    return JsonResponse({'message': 'file saved successfully' }, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])

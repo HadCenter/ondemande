@@ -31,12 +31,20 @@ class EDIfile(models.Model):
     def __str__(self):
         return os.path.basename(self.file.name)
 
+class LogisticFile(models.Model):
+    logisticFile = models.FileField(blank = False, null = False)
+    logisticFileType = models.CharField(max_length=200, blank=True, null= True)
+    created_at = models.DateTimeField(auto_now =True)
+    status = models.CharField(max_length=200,default= 'En attente')
+    number_annomalies = models.IntegerField(default=0)
+    clientName = models.CharField(max_length=200,default= 'REDLEAN_T')
+    def __str__(self):
+        return os.path.basename(self.logisticFile.name)
+
 class FileExcelContent:
     def __init__(self,columns,rows):
         self.columns = columns
         self.rows =rows
-
-
 
 class Contact:
     def __init__(self, idContact : int, codeClient : str , nomClient: str , email : str , archived:  int):
@@ -46,8 +54,15 @@ class Contact:
         self.email = email
         self.archived = archived
 
-
-
+class LogisticFileInfo:
+    def __init__(self, idLogisticFile : int, logisticFileName: str, createdAt: models.DateTimeField, logisticFileType : str , status: str, number_annomalies: int, clientName: str):
+        self.idLogisticFile = idLogisticFile
+        self.logisticFileName = logisticFileName
+        self.createdAt = createdAt
+        self.logisticFileType = logisticFileType
+        self.status = status
+        self.number_annomalies = number_annomalies
+        self.clientName = clientName
 
 class FileInfo:
     def __init__(self, idFile: int, fileName: str, createdAt: models.DateTimeField, status: str, wrongCommands: str, validatedOrders: str, archived: int, cliqued: int, contact: Contact, number_wrong_commands: int, number_correct_commands: int, sendedToUrbantz: int):

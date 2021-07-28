@@ -21,5 +21,7 @@ urlpatterns = [
     path('DoInterventionAsAdminForEdiFileAndChangeFile/', views.DoInterventionAsAdminForEdiFileAndChangeFile, name="DoInterventionAsAdminForEdiFileAndChangeFile"),
     path('seeFileContentMADFile',views.seeFileContentMADFile , name= "seeFileContentMADFile"),
     path('seeAllFileContentMADFile',views.seeAllFileContentMADFile , name= "seeAllFileContentMADFile"),
+    path('logisticFile/', views.LogisticFileCreate, name='logistic-file-create'),
+    path("getLogisticFiles/", views.logisticFileList, name = "logistic-file-list"),
 
 ]

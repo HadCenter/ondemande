@@ -146,6 +146,7 @@ def fileList(request):
 
     listFiles = getAllFileEdiData()
 
+    print("entred")
     return HttpResponse(jsonpickle.encode(listFiles, unpicklable=False), content_type="application/json")
 
 @api_view(['GET'])
@@ -230,8 +231,9 @@ def createFileFromColumnAndRows(request):
     columns = request.data['columns']
     rows = request.data['rows']
     fileId = request.data['fileId']
-    response = createFileEdiFromColumnAndRows(columns, rows, fileId)
-    return response
+    fileType = request.data['fileType']
+    createFileEdiFromColumnAndRows(columns, rows, fileId,fileType)
+    return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 
 
 def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> TransactionFileContentAndOptions:

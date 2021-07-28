@@ -1,14 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
+import { Observable,Subject } from 'rxjs';
+import { WebsocketService } from 'app/services/websocket.service';
 
 @Injectable()
 export class HomeService {
 
   private url = `${environment.apiBaseUrl}/api`;
-  constructor(private http: HttpClient) { }
+  public WS_URL = "ws://52.47.208.8:8000/ws/notifications"
+  public messages: Subject<any>;
+  constructor(private http: HttpClient,private wsService: WebsocketService) { 
+    this.messages = <Subject<any>>wsService.connect(this.WS_URL).map(
+      (response: MessageEvent): any => {
+        console.warn('resp from websocket',response)
+        let data = response.data;
+        return data;
+      }
+    );
+  }
    public getNumberOfFilesPerClient () : Observable<any> {
     return this.http.get(`${this.url}/getNumberOfFilesPerClient/`);
   }

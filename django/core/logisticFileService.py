@@ -25,7 +25,7 @@ def saveUploadedLogisticFile(request_file, typeLogisticFile):
     file = fs.save(fileName, request_file)
     logger.info('fin upload Logistic File in Server & rename logistic File ')
     uploadLogisticFileInSFtpServer(fileName)
-    removeLogisticFileFromServer(fileName)
+    #removeLogisticFileFromServer(fileName)
     traceLogisticFileInDB(fileName, typeLogisticFile)
 
 def get_extension(filename):
@@ -34,6 +34,9 @@ def get_extension(filename):
     return '.' + ext if ext else None
 
 def uploadLogisticFileInSFtpServer(fileName):
+    logger.info('current working directory avant django directory ' + os.getcwd())
+    django_directory = os.getcwd()
+    logger.info('current working directory après django directory ' + os.getcwd())
     sftp_client = connect()
     logger.info('fin connect to SFTP server')
     sftp_client.chdir('.')
@@ -47,10 +50,14 @@ def uploadLogisticFileInSFtpServer(fileName):
     logger.info('fin verification de l''existance des 3 dossiers ARCHIVE, IN et OUT')
     sftp_client.chdir("/IN")
     logger.info('change directory to ' + sftp_client.getcwd())
+    logger.info('current working directory avant qu''on entre dans le media/files ' + os.getcwd())
     os.chdir("media/files")
-    logger.info('current working directory ' + os.getcwd())
+    logger.info('current working directory après qu''on entre dans le media/files' + os.getcwd())
     sftp_client.put(fileName, sftp_client.getcwd() +"/" + fileName)
     logger.info('fin upload logistic file ' + fileName + " in sftp server")
+    os.remove(fileName)
+    os.chdir(django_directory)
+    logger.info("current working directory après remove & os.chdir(django_directory) " + os.getcwd())
 
 def connect():
     ssh = paramiko.SSHClient()

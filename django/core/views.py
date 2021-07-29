@@ -36,7 +36,7 @@ from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
 from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
-from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList
+from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -80,6 +80,15 @@ def client_detail(request, pk):
     client = getClientInfo(pk)
     client_serializer = ClientSerializer(client)
     return JsonResponse(client_serializer.data)
+
+@api_view(['GET'])
+def logistic_file_detail(request, pk):
+
+    logisticFileReponse = getSingleLogisticFileDetail(pk)
+
+    return HttpResponse(jsonpickle.encode(logisticFileReponse, unpicklable=False), content_type="application/json")
+
+
 
 @api_view(['PUT'])
 def client_detail_update(request, pk):
@@ -197,6 +206,13 @@ def seeFileContent(request):
     responseObject = seeFileContentEdi(filename,clientCode)
     responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
     print(responseObjectText)
+    return HttpResponse(responseObjectText, content_type="application/json")
+
+@api_view(['POST'])
+def seeLogisticFileContent(request):
+    logisticFilename = request.data['logisticFileName']
+    responseObject = seeContentLogisticFile(logisticFilename)
+    responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
     return HttpResponse(responseObjectText, content_type="application/json")
 
 

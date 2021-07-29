@@ -23,5 +23,7 @@ urlpatterns = [
     path('seeAllFileContentMADFile',views.seeAllFileContentMADFile , name= "seeAllFileContentMADFile"),
     path('logisticFile/', views.LogisticFileCreate, name='logistic-file-create'),
     path("getLogisticFiles/", views.logisticFileList, name = "logistic-file-list"),
+    path('getLogisticFile/<int:pk>', views.logistic_file_detail),
+    path('seeLogisticFileContent', views.seeLogisticFileContent, name="seeLogisticFileContent"),
 
 ]

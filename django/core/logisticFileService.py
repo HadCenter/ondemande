@@ -4,7 +4,8 @@ import os
 import time
 import paramiko
 import logging
-from .models import LogisticFile, LogisticFileInfo
+import pandas as pd
+from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 logger = logging.getLogger('django')
 
 def removeLogisticFileFromServer(fileName):
@@ -79,4 +80,41 @@ def getAllLogisticFileList():
                                  clientName= logisticFileDB.clientName)
         listLogisticFiles.append(logisticFileResponse)
     return listLogisticFiles
+
+def getSingleLogisticFileDetail(key):
+    logisticFileDB = LogisticFile.objects.get(pk=key)
+    logisticFileResponse = LogisticFileInfo(idLogisticFile=logisticFileDB.id,
+                                            logisticFileName=logisticFileDB.logisticFile,
+                                            createdAt=logisticFileDB.created_at,
+                                            logisticFileType=logisticFileDB.logisticFileType,
+                                            status=logisticFileDB.status,
+                                            number_annomalies=logisticFileDB.number_annomalies,
+                                            clientName=logisticFileDB.clientName)
+    return logisticFileResponse
+
+def seeContentLogisticFile(logisticFileName):
+    django_directory = os.getcwd()
+    logger.info('current directory in server ' + django_directory)
+    sftp_client = connect()
+    logger.info('fin connect to SFTP server')
+    sftp_client.chdir('.')
+    logger.info('SFTP server directory : '+ sftp_client.getcwd())
+    sftp_client.chdir("/IN")
+    logger.info('change SFTP directory : ' + sftp_client.getcwd())
+    for name in sftp_client.listdir():
+        if name == logisticFileName:
+            os.chdir("media/files")
+            sftp_client.get(sftp_client.getcwd() + "/" + name,os.getcwd() + "/" + name)
+            logger.info(name + ' downloaded successufuly')
+            break
+    excelLogisticFile = pd.read_excel(logisticFileName)
+    excelfile = excelLogisticFile.fillna('')
+    columns = list(excelfile.columns)
+    rows = excelfile.values.tolist()
+    os.remove(logisticFileName)
+    responseObject = FileExcelContent(columns, rows)
+    os.chdir(django_directory)
+    logger.info("current working directory après remove & os.chdir(django_directory) " + os.getcwd())
+    return responseObject
+
 

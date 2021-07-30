@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DetailsFileMagistorService } from '../details-file-magistor.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-details-file-magistor',
@@ -11,10 +12,12 @@ export class DetailsFileMagistorComponent implements OnInit {
   fileMagistor: any;
   copyfileMagistor: any;
   displayedColumns:any;
-  constructor(private fileService: DetailsFileMagistorService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private fileService: DetailsFileMagistorService) { }
 
   ngOnInit(): void {
-    this.fileService.getFile(20).subscribe(
+    this.fileService.getFile(this.route.snapshot.params.id).subscribe(
       resp => {
         this.file = resp;
         var data = {

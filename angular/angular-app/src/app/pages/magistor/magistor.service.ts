@@ -1,36 +1,39 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MagistorService {
 
-    constructor() { }
+  private url = `${environment.apiBaseUrl}/api`;
+  constructor(private http: HttpClient)
+   { }
   public getAdvancedHeaders() {
     return [
       {
         name: 'Fichier',
-        sort: 0,
+        sort: null,
 
       },
       {
         name: 'Date création',
-        sort: 0,
+        sort: null,
 
       },
       {
         //             name: '# Code client',
         name: 'Nom client',
-        sort: 0,
-
-      },
-      {
-        name: 'Prestations erronées',
         sort: null,
 
       },
       {
-        name: 'Prestations validées',
+        name: 'Type',
+        sort: null,
+
+      },
+      {
+        name: 'Nombres Annomalies ',
         sort: null,
 
       },
@@ -62,5 +65,12 @@ export class MagistorService {
   public getAdvancedTablePage(page, countPerPage)
   {
     return this.advanceTableData.slice((page - 1) * countPerPage, page * countPerPage);
+  }
+  public uploadLogisticFile(formData) {
+    console.log("web service");
+    return this.http.post(`${this.url}/logisticFile/`, formData);
+  }
+  public getAllLogisticFiles () : Observable<any> {
+    return this.http.get(`${this.url}/getLogisticFiles/`);
   }
 }

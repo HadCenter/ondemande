@@ -1,0 +1,41 @@
+<div class="dialog-content">
+  <app-loader [position]="'absolute'" [width]="'480px'" [height]="'296px'" [bg]="'transparant'" [show]="showloader">
+  </app-loader>
+  <base-card class="card-dialog">
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Importer fichier</h1>
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <form [formGroup]="myForm" autocomplete="off">
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
+          <div class="espace">
+            <mat-form-field [ngStyle]="{'width.px': width}">
+              <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.name}}</mat-label>
+              <ng-template #newFile>
+                <mat-label>Choisir un fichier</mat-label>
+              </ng-template>
+              <input matInput disabled>
+              <button mat-icon-button matSuffix (click)="fileInput.click()" type='button'>
+                <mat-icon>attach_file</mat-icon>
+              </button>
+              <input hidden accept=".xlsx" (change)="selectFile($event)" #fileInput type="file" id="file" name="file">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Type</mat-label>
+              <mat-select [(value)]="selectedTypeLogisticFile">
+                <option value=""></option>
+                <mat-option [value]="option" *ngFor="let option of typesLogisticFile">{{ option }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone submit-cell mdl-grid center-items">
+          <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit"
+            [disabled]="myForm.invalid || clicked" (click)="submit();clicked = true;">Importer</button>
+        </div>
+      </form>
+    </base-card-body>
+  </base-card>
+
+</div>

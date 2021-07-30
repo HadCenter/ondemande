@@ -11,7 +11,10 @@ export class DetailsFileMagistorComponent implements OnInit {
   file: any;
   fileMagistor: any;
   copyfileMagistor: any;
-  displayedColumns:any;
+  displayedColumns: any;
+  typeFileART: boolean = false;
+  typeFileREC: boolean = false;
+  typeFileCDC: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private fileService: DetailsFileMagistorService) { }
@@ -23,18 +26,26 @@ export class DetailsFileMagistorComponent implements OnInit {
         var data = {
           "logisticFileName": this.file.logisticFileName.name,
         }
+        if (data.logisticFileName.startsWith("ART", 0)) {
+          this.typeFileART = true;
+        }
+        else if (data.logisticFileName.startsWith("REC", 0)) {
+          this.typeFileREC = true;
+        }
+        else if (data.logisticFileName.startsWith("CDC", 0)) {
+          this.typeFileCDC = true;
+        }
         this.fileService.getLogisticFileContent(data).subscribe(res => {
           this.fileMagistor = res;
+
           if (this.fileMagistor.rows.length > 0) {
             this.copyfileMagistor = JSON.parse(JSON.stringify(this.fileMagistor));
-
             this.copyfileMagistor.rows.splice(0, 0, this.copyfileMagistor.columns);
             this.copyfileMagistor = this.convertToArrayOfObjects(this.copyfileMagistor.rows);
             this.displayedColumns = (Object.keys(this.copyfileMagistor[0]))
           }
-          })
+        })
       })
-
   }
 
   convertToArrayOfObjects(data) {

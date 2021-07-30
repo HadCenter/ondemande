@@ -19,12 +19,6 @@
             <label class="details-label">Nombre des prestations erronées</label>
             <label class="label-wrong">{{file?.number_annomalies}} </label>
           </div>
-          <!-- <div class="content-label">
-              <label class="details-label">Nombre des prestations validées</label>
-              <label *ngIf='!fileValid?.rows' class="label-success">- </label>
-              <label *ngIf='fileValid?.rows' class="label-success">{{fileValid?.rows?.length || 0}} </label>
-          
-            </div> -->
         </base-card-body>
       </base-card>
       <!-- <div *ngIf="file" style='text-align: center;'
@@ -36,7 +30,8 @@
         </div> -->
     </div>
     <div *ngIf="copyfileMagistor" class="content-table" style="margin: 8px;">
-      <table mat-table id='mytable'  [dataSource]="copyfileMagistor"
+<!-------------------------------TYPE FILE ART--------------------------------------->      
+      <table mat-table id='mytable' *ngIf="typeFileART"  [dataSource]="copyfileMagistor"
         class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
         <!-- Delete Column -->
 
@@ -169,6 +164,273 @@
         </tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+
+<!-------------------------------TYPE FILE REC--------------------------------------->
+      <table mat-table id='mytable' *ngIf="typeFileREC"  [dataSource]="copyfileMagistor" style
+      class="table-rec mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
+
+      <ng-container matColumnDef="CODE_FRN">
+        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_FRN
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.CODE_FRN}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="CODE_SOC">
+        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
+          CODE_SOC
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.CODE_SOC}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="DATE_ATTENDUE">
+        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> DATE_ATTENDUE
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.DATE_ATTENDUE}}
+     </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="N_PIECE">
+        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> N_PIECE
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.N_PIECE}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="OP_ACTION">
+        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.OP_ACTION}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="OP_CODE">
+        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.OP_CODE}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="REF_COMMANDE">
+        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_COMMANDE
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.REF_COMMANDE}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="TYPE_RECEP">
+        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> TYPE_RECEP
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.TYPE_RECEP}} </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true">
+
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+<!-------------------------------TYPE FILE CDC--------------------------------------->
+    <table mat-table id='mytable' *ngIf="typeFileCDC"  [dataSource]="copyfileMagistor"
+    class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
+
+    <ng-container matColumnDef="AFAC_ADRESSE1">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_ADRESSE1
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_ADRESSE1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="AFAC_CP">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
+        AFAC_CP
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_CP}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="AFAC_INDIVIDU">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_INDIVIDU
+      </th>
+      <td mat-cell *matCellDef="let element">
+       {{element.AFAC_INDIVIDU}}
+   </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="AFAC_MAIL">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_MAIL
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_MAIL}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="AFAC_PAYS">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_PAYS
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_PAYS}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="AFAC_RAISON_SOCIALE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_RAISON_SOCIALE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_RAISON_SOCIALE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="AFAC_TEL">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_TEL
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_TEL}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="AFAC_VILLE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_VILLE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_VILLE}} </td>
+    </ng-container>
+    <ng-container matColumnDef="ALIV_ADRESSE1">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_ADRESSE1
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_ADRESSE1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_CP">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_CP
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_CP}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_INDIVIDU">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_INDIVIDU
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_INDIVIDU}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_MAIL">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_MAIL
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_MAIL}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_PAYS">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_PAYS
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_PAYS}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_RAISON_SOCIALE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_RAISON_SOCIALE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_RAISON_SOCIALE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_TEL">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_TEL
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_TEL}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_VILLE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_VILLE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_VILLE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="CODE_SOC">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_SOC
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.CODE_SOC}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="DATE_CDE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> DATE_CDE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.DATE_CDE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="DATE_DDEE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> DATE_DDEE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.DATE_DDEE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="HEURE_DDEE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> HEURE_DDEE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.HEURE_DDEE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="NO_CLIENT">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> NO_CLIENT
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.NO_CLIENT}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="N_CDE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> N_CDE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.N_CDE}} </td>
+    </ng-container>
+    <ng-container matColumnDef="OP_ACTION">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.OP_ACTION}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="OP_CODE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.OP_CODE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="REF_CLIENT">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_CLIENT
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.REF_CLIENT}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="TYPE_CDE">
+      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> TYPE_CDE
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.TYPE_CDE}} </td>
+    </ng-container>
+
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true">
+
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
     </div>
 
   </div>

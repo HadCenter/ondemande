@@ -37,6 +37,9 @@ base-card-body.content-first-card.mdl-card__supporting-text{
 .table-validator{
   width: max-content;
 }
+.table-rec{
+  width: -webkit-fill-available;
+}
 
 .ui-tables {
   .mdl-card,

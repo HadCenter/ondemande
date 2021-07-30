@@ -1,0 +1,175 @@
+<div class="container mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+  <div class="content-file-edi">
+    <div class="content-labels">
+      <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--5-col-phone">
+        <base-card-body class="content-first-card ">
+          <div class="content-label">
+            <label class="details-label">Statut</label>
+            <label class="details-label">{{file?.status}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Date</label>
+            <label class="details-label">{{file?.createdAt| date:"yyyy/MM/dd"}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Client name</label>
+            <label class="details-label">{{file?.clientName}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Nombre des prestations erronées</label>
+            <label class="label-wrong">{{file?.number_annomalies}} </label>
+          </div>
+          <!-- <div class="content-label">
+              <label class="details-label">Nombre des prestations validées</label>
+              <label *ngIf='!fileValid?.rows' class="label-success">- </label>
+              <label *ngIf='fileValid?.rows' class="label-success">{{fileValid?.rows?.length || 0}} </label>
+          
+            </div> -->
+        </base-card-body>
+      </base-card>
+      <!-- <div *ngIf="file" style='text-align: center;'
+          class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+          <button [disabled]="file?.number_wrong_commands>0||fileWrong?.rows?.length>0 || file?.sendedToUrbantz==true" id="sendToUrbantz" (click)="sendFileToUrbantz();"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
+            à Urbantz
+          </button>
+        </div> -->
+    </div>
+    <div *ngIf="copyfileMagistor" class="content-table" style="margin: 8px;">
+      <table mat-table id='mytable'  [dataSource]="copyfileMagistor"
+        class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
+        <!-- Delete Column -->
+
+
+        <ng-container matColumnDef="CODE_ARTICLE">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_ARTICLE
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.CODE_ARTICLE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CODE_SOC">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
+            CODE_SOC
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.CODE_SOC}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="EAN">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> EAN
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.EAN}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="FAMILLE">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> FAMILLE
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.FAMILLE}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="GESTION_DATE">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_DATE
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.GESTION_DATE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="GESTION_LOT">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_LOT
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.GESTION_LOT}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="GESTION_NS">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_NS
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.GESTION_NS}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="HAUTEUR_UNITAIRE">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> HAUTEUR_UNITAIRE
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.HAUTEUR_UNITAIRE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="IS_COUPE">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> IS_COUPE
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.IS_COUPE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="LARGEUR_UNITAIRE">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LARGEUR_UNITAIRE
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.LARGEUR_UNITAIRE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="LIBELLE_ARTICLE">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LIBELLE_ARTICLE
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.LIBELLE_ARTICLE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="LONGEUR_UNITAIRE">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LONGEUR_UNITAIRE
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.LONGEUR_UNITAIRE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="OP_ACTION">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.OP_ACTION}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="OP_CODE">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.OP_CODE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="REF_FOURNISSEUR">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_FOURNISSEUR
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.REF_FOURNISSEUR}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="SEUIL_BLOCAGE_PERIME">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> SEUIL_BLOCAGE_PERIME
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.SEUIL_BLOCAGE_PERIME}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="VALEUR">
+          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> VALEUR
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.VALEUR}} </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true">
+
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+  </div>
+</div>

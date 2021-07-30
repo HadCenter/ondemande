@@ -1,0 +1,388 @@
+body {
+    padding-top: 20px;
+    padding-left: 20px;
+    box-sizing: border-box;
+  }
+
+  .content-first-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-auto-rows: 30px;
+    grid-gap: 10px;
+  }
+  .content-first-card>label{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .content-labels{
+    display: flex;
+    align-items: center;
+  }
+
+  .mat-expansion-panel{
+      background: transparent;
+  }
+
+mat-panel-title.mat-expansion-panel-header-title {
+    color: white;
+}
+.mat-expansion-panel-body {
+    color: white;
+}
+base-card-body.content-first-card.mdl-card__supporting-text{
+    padding: 30px 16px;
+}
+.table-validator{
+  width: max-content;
+}
+
+.ui-tables {
+  .mdl-card,
+  .mdl-card__supporting-text {
+        overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    overflow-x: auto;
+
+    td {
+      font-size: 14px;
+    }
+  }
+
+  .no-padding {
+    padding: 0;
+    width: 100%;
+  }
+
+  .label__availability {
+    margin-right: 2px;
+  }
+}
+.file-input-text{
+  margin:0;
+  padding: 0;
+}
+.section-validation{
+  text-align: end;
+  margin: 8px;
+  margin-top: 31px;
+}
+.label-success{
+  color:#00d45a;
+
+}
+.label-wrong{
+color: #f44336;
+
+}
+.content-file-line{
+  padding: 20px 16px !important;
+}
+.content-file-edi{
+display: list-item;
+text-align: center;
+vertical-align: middle;padding-left: 20px;
+padding-right: 20px;
+}
+.container{
+// display: table-caption;
+display: initial;
+//height: 100%;
+}
+// input#firstName {
+//   text-align: center;
+// }
+@media (max-width: 479px) {
+  .content-file-edi{
+    display: list-item;
+    padding-left: 10px;
+     padding-right: 10px;
+  }
+  .container{
+    margin: auto;
+    position: absolute;
+    top: 5%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  .content-label {
+    display: contents;
+}
+base-card-body.content-first-card.mdl-card__supporting-text {
+  padding: 5px 16px;
+}
+}
+@media (min-width: 480px) and (max-width: 839px) {
+  .container{
+    margin: auto;
+    position: absolute;
+    top: 10%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  .content-label {
+    display: inline-grid;
+}
+}
+
+@media (min-width: 840px) {
+  .container{
+    margin: auto;
+    position: absolute;
+    top: 15%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  .content-label {
+    display: inline-grid;
+  }
+}
+
+.content-table{
+ // width: 1100px;
+  /* height: 50px; */
+  overflow: auto;
+  overflow-y: scroll;
+  max-height: 480px;
+}
+mat-panel-description.mat-expansion-panel-header-description{
+  flex-grow: 0;
+}
+td.details-line.mdl-data-table__cell--non-numeric {
+  text-align: center !important;
+  // max-width: initial;
+    max-width: 143px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+th.details-line.mdl-data-table__cell--non-numeric {
+  text-align: center !important;
+  // max-width: initial;
+  max-width: 143px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.mini-column{
+  width: 60px;
+}
+.full-column{
+  width: -webkit-fill-available;
+}
+td.details-line.mdl-data-table__cell--non-numeric.remarque-column.ng-star-inserted {
+  max-width: initial;
+  width: 250px;
+}
+
+
+.details-label{
+  line-height: 18px;
+}
+// .blue-snackbar {
+//   background: #00d45a;
+// }
+
+.mat-simple-snackbar span {
+  color: #FFFFFF ;
+}
+.mat-simple-snackbar-action button span {
+ color: #FF0000 ;
+}
+
+td.label-remarque{
+  color: #00bcd4 !important;
+  white-space: initial;
+  //  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 0;
+    width: 143px;
+    text-align:left;
+}
+
+
+.selected {
+  border: 2px solid red !important;
+}
+.unselected {
+  border-bottom-color: rgba(0, 0, 0, 0.12);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+/*---- Remove default browser behaviour after selecting cells ----*/
+.selected, .unselected {
+  -webkit-user-select: none; /* Webkit  */
+  -moz-user-select:    none; /* Firefox */
+  -ms-user-select:     none; /* IE 10   */
+  -o-user-select:      none; /* Currently not supported in Opera but will be soon */
+  user-select:         none;
+}
+/*--------End Editable Cells--------*/
+th.mat-header-cell{
+  padding: 0 8px 0px 8px !important;
+  text-align: center;
+  vertical-align: middle;
+}
+td.mat-cell{
+  text-align: center;
+  padding: 0 8px 0px 8px !important;
+  font-size: 16px;
+  font-family: "Helvetica", "Arial", sans-serif;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+td.mat-cell.center-cell-prestationsErronnees{
+  text-align: center !important;
+}
+
+label.mini-column {
+  font-size: 16px;
+  font-family: "Helvetica", "Arial", sans-serif;
+}
+label.full-column {
+  font-size: 16px;
+  font-family: "Helvetica", "Arial", sans-serif;
+}
+
+.filter-column{
+  width: 20px;
+  background-color: transparent;
+  border: none;
+  color: white !important
+}
+option {
+  color: black;
+}
+.mat-form-field {
+  font-size: 15px;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color:transparent;
+}
+
+.mat-select-value {
+  color: #00bcd4;
+}
+.mdl-card__title-text {
+  align-self: center;
+}
+.mat-form-field-flex {
+  border-radius: 3px 3px 0 0;
+  padding: .3em 0.2em 0 .5em;
+}
+
+.mat-form-field {
+    width: 150px;
+    margin-right: 0.4em !important;
+    margin-top: -1.1em;
+
+}
+mat-form-field.mat-form-field.ng-tns-c6-0.mat-primary.mat-form-field-type-mat-select.mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-has-label.mat-form-field-hide-placeholder._mat-animation-noopable.ng-star-inserted{
+  max-height: -webkit-fill-available !important;
+}
+.mdl-card__title {
+  align-items: top !important;
+}
+base-card-title.mdl-card__title {
+  align-items: initial;
+}
+.mat-form-field-wrapper {
+  padding-bottom: 0.58em;
+}
+.mat-form-field-label {
+  color: #666 !important;
+}
+.mat-form-field-ripple {
+  background-color: #00bcd4;
+}
+.mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #00bcd4;
+}
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: #00bcd4;
+}
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
+  background-color:rgba(255, 255, 255, 0.2)
+}
+.ng-trigger-transformPanel.mat-select-panel.mat-primary {
+  background-color: #666 ;
+}
+span.mat-option-text {
+  color: white;
+}
+.mat-option.mat-active {
+  color: #00bcd4;
+
+}
+.form-column{
+  width: 0px !important;
+}
+.form-column .mat-select-value {
+  color: transparent !important;
+}
+
+.form-column .mat-select-arrow {
+  /* color: rgba(0, 0, 0, 0.54); */
+  color: white !important;
+}
+.form-column .mat-select-arrow-wrapper{
+  transform: translateY(0%) !important;;
+}
+
+.form-column .mat-form-field-wrapper .mat-form-field-flex{
+  padding: .75em .75em 0 0;
+}
+
+th.titre-column-magistor{
+  padding: 0 8px 0 8px !important;
+  text-align: center !important;
+}
+h.titre-column-magistor.mat-header-cell {
+  text-align: center !important;
+}
+.btn-delete{
+  background-color: transparent;
+  border-width: 0px;
+}
+.btn-delete .mat-icon {
+  color: white;
+  cursor: pointer;
+}
+td.icon-delete{
+  padding-bottom: 0px !important ;
+}
+.btn-delete .mat-icon:hover { color: red !important; }
+.mat-dialog-container {
+  background-color: #444;
+}
+button.delete-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.button--colored-teal:not([disabled])
+ {
+  margin-right: 5px;
+  background-color: #f44336 ;
+  color:white ;
+}
+.error {
+  color: red !important;
+  // background-color: red;
+}
+
+.reorder
+{
+  display: flex;
+  justify-content: space-between;
+}
+
+#conteneur
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+

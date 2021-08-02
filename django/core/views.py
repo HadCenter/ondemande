@@ -145,9 +145,11 @@ def LogisticFileCreate(request, format=None):
     logisticFile = request.FILES['logisticFile']
     typeLogisticFile = request.data['typeLogisticFile']
     key = KEY_TEST
-    logger.info('***** Fin intégration du fichier logistic et type de fichier logistic ')
-    saveUploadedLogisticFile(logisticFile,typeLogisticFile)
-    return JsonResponse({'message': 'file saved successfully' }, status=status.HTTP_201_CREATED)
+    logisticFileSaved = saveUploadedLogisticFile(logisticFile,typeLogisticFile)
+    if(logisticFileSaved):
+        return JsonResponse({'message': 'file saved successfully'}, status=status.HTTP_201_CREATED)
+    else:
+        return JsonResponse({'message': 'file save echec'}, status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(['GET'])
@@ -212,6 +214,7 @@ def seeFileContent(request):
 def seeLogisticFileContent(request):
     logisticFilename = request.data['logisticFileName']
     responseObject = seeContentLogisticFile(logisticFilename)
+    print("responseObject", responseObject);
     responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
     return HttpResponse(responseObjectText, content_type="application/json")
 

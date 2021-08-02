@@ -9,12 +9,32 @@ from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 logger = logging.getLogger('django')
 
 def removeLogisticFileFromServer(fileName):
+    django_directory = os.getcwd()
+    os.chdir("media/files")
     os.remove(fileName)
+    os.chdir(django_directory)
 
 
 def traceLogisticFileInDB(fileName, typeLogisticFile):
     logisticFileObject = LogisticFile(logisticFile=fileName, logisticFileType=typeLogisticFile)
     logisticFileObject.save()
+
+
+def logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
+    sftp_client.chdir('.')
+    logisticClientFolders = ['ARCHIVE', 'IN', 'OUT']
+    for logisticClientFolder in logisticClientFolders:
+        if logisticClientFolder not in sftp_client.listdir():
+            sftp_client.mkdir(logisticClientFolder)
+    sftp_client.chdir("/IN")
+    typeLogistFileExist = False
+    for logisticFile in sftp_client.listdir():
+        fileType = logisticFile[0:5]
+        if (fileType == typeLogisticFile):
+            typeLogistFileExist = True
+    return typeLogistFileExist
+
+
 
 
 def saveUploadedLogisticFile(request_file, typeLogisticFile):
@@ -24,41 +44,26 @@ def saveUploadedLogisticFile(request_file, typeLogisticFile):
     extension = get_extension(logistic_file_name)
     fileName = typeLogisticFile + timestr + extension
     file = fs.save(fileName, request_file)
-    logger.info('fin upload Logistic File in Server & rename logistic File ')
-    uploadLogisticFileInSFtpServer(fileName)
-    #removeLogisticFileFromServer(fileName)
-    traceLogisticFileInDB(fileName, typeLogisticFile)
+    sftp_client = connect()
+    if logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
+        removeLogisticFileFromServer(fileName)
+        return False
+    else:
+        uploadLogisticFileInSFtpServer(sftp_client,fileName)
+        traceLogisticFileInDB(fileName, typeLogisticFile)
+        return True
 
 def get_extension(filename):
     basename = os.path.basename(filename)  # os independent
     ext = '.'.join(basename.split('.')[1:])
     return '.' + ext if ext else None
 
-def uploadLogisticFileInSFtpServer(fileName):
-    logger.info('current working directory avant django directory ' + os.getcwd())
+def uploadLogisticFileInSFtpServer(sftp_client,fileName):
     django_directory = os.getcwd()
-    logger.info('current working directory après django directory ' + os.getcwd())
-    sftp_client = connect()
-    logger.info('fin connect to SFTP server')
-    sftp_client.chdir('.')
-    logger.info('change directory to '+ sftp_client.getcwd())
-    logisticClientFolders = ['ARCHIVE', 'IN', 'OUT']
-    for logisticClientFolder in logisticClientFolders:
-        logger.info( logisticClientFolder + "exist")
-        if logisticClientFolder not in sftp_client.listdir():
-            logger.info('fin creation folder '+ logisticClientFolder)
-            sftp_client.mkdir(logisticClientFolder)
-    logger.info('fin verification de l''existance des 3 dossiers ARCHIVE, IN et OUT')
-    sftp_client.chdir("/IN")
-    logger.info('change directory to ' + sftp_client.getcwd())
-    logger.info('current working directory avant qu''on entre dans le media/files ' + os.getcwd())
     os.chdir("media/files")
-    logger.info('current working directory après qu''on entre dans le media/files' + os.getcwd())
     sftp_client.put(fileName, sftp_client.getcwd() +"/" + fileName)
-    logger.info('fin upload logistic file ' + fileName + " in sftp server")
     os.remove(fileName)
     os.chdir(django_directory)
-    logger.info("current working directory après remove & os.chdir(django_directory) " + os.getcwd())
 
 def connect():
     ssh = paramiko.SSHClient()
@@ -77,7 +82,7 @@ def getAllLogisticFileList():
         logisticFileResponse= LogisticFileInfo(idLogisticFile=logisticFileDB.id, logisticFileName=logisticFileDB.logisticFile,
                                  createdAt=logisticFileDB.created_at, logisticFileType=logisticFileDB.logisticFileType,
                                  status=logisticFileDB.status, number_annomalies=logisticFileDB.number_annomalies,
-                                 clientName= logisticFileDB.clientName)
+                                 clientName= logisticFileDB.clientName, archived = logisticFileDB.archived)
         listLogisticFiles.append(logisticFileResponse)
     return listLogisticFiles
 
@@ -89,7 +94,8 @@ def getSingleLogisticFileDetail(key):
                                             logisticFileType=logisticFileDB.logisticFileType,
                                             status=logisticFileDB.status,
                                             number_annomalies=logisticFileDB.number_annomalies,
-                                            clientName=logisticFileDB.clientName)
+                                            clientName=logisticFileDB.clientName,
+                                            archived = logisticFileDB.archived)
     return logisticFileResponse
 
 def seeContentLogisticFile(logisticFileName):

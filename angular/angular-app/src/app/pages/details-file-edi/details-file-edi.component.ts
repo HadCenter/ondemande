@@ -327,7 +327,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
         this.copyFileWrong = dataCopy;
       } else {
-        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'OK');
+        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'Fermé');
       }
     }
   }

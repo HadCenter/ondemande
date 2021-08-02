@@ -957,7 +957,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSourceMAD.data = dataCopy;
         }
       } else {
-        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'OK');
+        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'Fermé');
       }
     }
   }

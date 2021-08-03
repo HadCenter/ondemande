@@ -519,7 +519,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // check if filter is already selected
 
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
-    console.error("filtersExist", filter.columnProp, filter.modelValue);
     //  let selected=filter.columnProp;
     this.changeSelectedOptionColor(filter);
     if (filterExists == false) { this.filterValues.push(filter) }

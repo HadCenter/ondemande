@@ -7,6 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
 import { ThemeModule } from 'theme/theme.module';
 import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [DetailsFileMagistorComponent],
@@ -17,6 +19,8 @@ import { MatTableModule } from '@angular/material/table';
     DetailsFileMagistorRoutingModule,
     MatCardModule,
     MatTableModule,
+    MatSelectModule,
+    MatFormFieldModule,
     
   ]
 })

@@ -482,7 +482,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
       else {
         this.fileWrong.rows = [];
-        console.warn(this.fileWrong.rows.length)
       }
     })
 
@@ -636,7 +635,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         this.showValid = false;
         this.fileValid.columns.unshift("Delete");  //add column Delete
         // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
-        console.warn('File valid', this.fileValid);
       }
       else {
 
@@ -774,7 +772,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     var user = JSON.parse(localStorage.getItem('currentUser'));
     this.rearrangeAttributes();  //Remove unecessey columns
     this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-    console.log(this.fileWrong, this.fileValid, this.fileValid.length)
     if (this.fileWrong.rows.length > 0 && this.fileValid.rows.length > 0) {
       this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
       this.removeUnecesseryColumns(); // from rows filewrong

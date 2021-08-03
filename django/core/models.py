@@ -38,6 +38,7 @@ class LogisticFile(models.Model):
     status = models.CharField(max_length=200,default= 'En attente')
     number_annomalies = models.IntegerField(default=0)
     clientName = models.CharField(max_length=200,default= 'REDLEAN_T')
+    archived = models.BooleanField(default=False)
     def __str__(self):
         return os.path.basename(self.logisticFile.name)
 
@@ -55,7 +56,7 @@ class Contact:
         self.archived = archived
 
 class LogisticFileInfo:
-    def __init__(self, idLogisticFile : int, logisticFileName: str, createdAt: models.DateTimeField, logisticFileType : str , status: str, number_annomalies: int, clientName: str):
+    def __init__(self, idLogisticFile : int, logisticFileName: str, createdAt: models.DateTimeField, logisticFileType : str , status: str, number_annomalies: int, clientName: str, archived: int,):
         self.idLogisticFile = idLogisticFile
         self.logisticFileName = logisticFileName
         self.createdAt = createdAt
@@ -63,6 +64,7 @@ class LogisticFileInfo:
         self.status = status
         self.number_annomalies = number_annomalies
         self.clientName = clientName
+        self.archived = archived
 
 class FileInfo:
     def __init__(self, idFile: int, fileName: str, createdAt: models.DateTimeField, status: str, wrongCommands: str, validatedOrders: str, archived: int, cliqued: int, contact: Contact, number_wrong_commands: int, number_correct_commands: int, sendedToUrbantz: int):

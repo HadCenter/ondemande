@@ -38,7 +38,10 @@ channel = connection.channel()
 channel.queue_declare(queue='converge.queue.job.start',durable=True)
 #consumer_thread = threading.Thread(target=start_consumer)
 consumer_thread2 = threading.Thread(target=start_JobEnded_consumer)
+#thead 1 ordonnanceur
 #consumer_thread.start()
+#thread 2 actualisation automatique
+#desactiver thread 1 et 2 sur localhost
 consumer_thread2.start()
 
 

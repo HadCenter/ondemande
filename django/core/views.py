@@ -143,9 +143,8 @@ def fileCreate(request, format=None):
 def LogisticFileCreate(request, format=None):
     clientName = CLIENT_TEST
     logisticFile = request.FILES['logisticFile']
-    typeLogisticFile = request.data['typeLogisticFile']
     key = KEY_TEST
-    logisticFileSaved = saveUploadedLogisticFile(logisticFile,typeLogisticFile)
+    logisticFileSaved = saveUploadedLogisticFile(logisticFile)
     if(logisticFileSaved):
         return JsonResponse({'message': 'file saved successfully'}, status=status.HTTP_201_CREATED)
     else:

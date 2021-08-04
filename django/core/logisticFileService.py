@@ -5,6 +5,7 @@ import time
 import paramiko
 import logging
 import pandas as pd
+import numpy as np
 from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 logger = logging.getLogger('django')
 
@@ -37,13 +38,18 @@ def logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
 
 
 
-def saveUploadedLogisticFile(request_file, typeLogisticFile):
+def saveUploadedLogisticFile(request_file):
     fs = FileSystemStorage()
     logistic_file_name = request_file.name
     timestr = time.strftime("%d%m%Y")
     extension = get_extension(logistic_file_name)
+    logisticFile = fs.save(logistic_file_name, request_file)
+    path = "media/files/"
+    pathLogisticFile = path + logisticFile
+    dataFrameLogisticFile = pd.read_excel(pathLogisticFile)
+    typeLogisticFile = dataFrameLogisticFile["OP_CODE"].values[0]
     fileName = typeLogisticFile + timestr + extension
-    file = fs.save(fileName, request_file)
+    os.rename(r'media/files/{}'.format(logisticFile), r'media/files/{}'.format(fileName))
     sftp_client = connect()
     if logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
         removeLogisticFileFromServer(fileName)
@@ -116,6 +122,9 @@ def seeContentLogisticFile(logisticFileName):
     excelLogisticFile = pd.read_excel(logisticFileName)
     excelfile = excelLogisticFile.fillna('')
     columns = list(excelfile.columns)
+    for column in columns:
+        if (excelfile[column].dtype == np.dtype('datetime64[ns]')):
+            excelfile[column] = excelfile[column].dt.strftime("%d/%m/%Y")
     rows = excelfile.values.tolist()
     os.remove(logisticFileName)
     responseObject = FileExcelContent(columns, rows)

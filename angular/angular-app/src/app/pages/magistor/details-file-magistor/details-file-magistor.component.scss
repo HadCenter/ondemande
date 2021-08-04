@@ -329,6 +329,7 @@ span.mat-option-text {
 }
 .form-column .mat-select-value {
   color: transparent !important;
+  display: table-column;
 }
 
 .form-column .mat-select-arrow {

@@ -21,13 +21,12 @@
           </div>
         </base-card-body>
       </base-card>
-      <!-- <div *ngIf="file" style='text-align: center;'
+      <div *ngIf="file" style='text-align: center;'
           class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-          <button [disabled]="file?.number_wrong_commands>0||fileWrong?.rows?.length>0 || file?.sendedToUrbantz==true" id="sendToUrbantz" (click)="sendFileToUrbantz();"
-            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer
-            à Urbantz
+          <button [disabled]="file?.number_annomalies==0"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
           </button>
-        </div> -->
+        </div>
     </div>
     <div *ngIf="copyfileMagistor" class="content-table" style="margin: 8px;">
 <!-------------------------------TYPE FILE ART--------------------------------------->      
@@ -36,128 +35,305 @@
         <!-- Delete Column -->
 
 
-        <ng-container matColumnDef="CODE_ARTICLE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_ARTICLE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.CODE_ARTICLE}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="CODE_SOC">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
-            CODE_SOC
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.CODE_SOC}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="EAN">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> EAN
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.EAN}} </td>
-        </ng-container>
-
-
-        <ng-container matColumnDef="FAMILLE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> FAMILLE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.FAMILLE}} </td>
-        </ng-container>
-
-
-        <ng-container matColumnDef="GESTION_DATE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_DATE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.GESTION_DATE}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="GESTION_LOT">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_LOT
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.GESTION_LOT}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="GESTION_NS">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_NS
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.GESTION_NS}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="HAUTEUR_UNITAIRE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> HAUTEUR_UNITAIRE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.HAUTEUR_UNITAIRE}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="IS_COUPE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> IS_COUPE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.IS_COUPE}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="LARGEUR_UNITAIRE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LARGEUR_UNITAIRE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.LARGEUR_UNITAIRE}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="LIBELLE_ARTICLE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LIBELLE_ARTICLE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.LIBELLE_ARTICLE}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="LONGEUR_UNITAIRE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LONGEUR_UNITAIRE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.LONGEUR_UNITAIRE}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="OP_ACTION">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{element.OP_ACTION}} </td>
-        </ng-container>
-
         <ng-container matColumnDef="OP_CODE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
+          <th id="OP_CODE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[0].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[0].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
           </th>
           <td mat-cell *matCellDef="let element">
             {{element.OP_CODE}} </td>
         </ng-container>
 
+
+        <ng-container matColumnDef="OP_ACTION">
+          <th id="OP_ACTION" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[1].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[1].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.OP_ACTION}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CODE_SOC">
+          <th id="CODE_SOC" class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
+            CODE_SOC
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[2].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[2].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.CODE_SOC}}
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="CODE_ARTICLE">
+          <th id="CODE_ARTICLE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_ARTICLE
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[3].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[3].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.CODE_ARTICLE}} </td>
+        </ng-container>
+
+
         <ng-container matColumnDef="REF_FOURNISSEUR">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_FOURNISSEUR
+          <th id="REF_FOURNISSEUR" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_FOURNISSEUR
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[4].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[4].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
           </th>
           <td mat-cell *matCellDef="let element">
             {{element.REF_FOURNISSEUR}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="SEUIL_BLOCAGE_PERIME">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> SEUIL_BLOCAGE_PERIME
+        <ng-container matColumnDef="LIBELLE_ARTICLE">
+          <th id="LIBELLE_ARTICLE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LIBELLE_ARTICLE
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[5].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[5].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
           </th>
           <td mat-cell *matCellDef="let element">
-            {{element.SEUIL_BLOCAGE_PERIME}} </td>
+            {{element.LIBELLE_ARTICLE}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="FAMILLE">
+          <th id="FAMILLE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> FAMILLE
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[6].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[6].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.FAMILLE}} </td>
         </ng-container>
 
         <ng-container matColumnDef="VALEUR">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> VALEUR
+          <th id="VALEUR" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> VALEUR
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[7].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[7].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field> 
+
           </th>
           <td mat-cell *matCellDef="let element">
             {{element.VALEUR}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="GESTION_LOT">
+          <th id="GESTION_LOT" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_LOT
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[8].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[8],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[8].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.GESTION_LOT}} </td>
+        </ng-container>
+
+
+
+        <ng-container matColumnDef="GESTION_DATE">
+          <th id="GESTION_DATE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_DATE
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[9].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[9],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[9].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.GESTION_DATE}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="GESTION_NS">
+          <th id="GESTION_NS" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_NS
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[10].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[10],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[10].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.GESTION_NS}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="LONGEUR_UNITAIRE">
+          <th id="LONGEUR_UNITAIRE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LONGEUR_UNITAIRE
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[11].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[11],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[11].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.LONGEUR_UNITAIRE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="LARGEUR_UNITAIRE">
+          <th id="LARGEUR_UNITAIRE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LARGEUR_UNITAIRE
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[12].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[12],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[12].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.LARGEUR_UNITAIRE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="HAUTEUR_UNITAIRE">
+          <th id="HAUTEUR_UNITAIRE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> HAUTEUR_UNITAIRE
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[13].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[13],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[13].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.HAUTEUR_UNITAIRE}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="EAN">
+          <th id="EAN" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> EAN
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[14].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[14],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[14].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.EAN}} </td>
+        </ng-container>
+
+        
+        <ng-container matColumnDef="IS_COUPE">
+          <th id="IS_COUPE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> IS_COUPE
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[15].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[15],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[15].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.IS_COUPE}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="SEUIL_BLOCAGE_PERIME">
+          <th id="SEUIL_BLOCAGE_PERIME" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> SEUIL_BLOCAGE_PERIME
+
+            <mat-form-field class="form-column" appearance="fill">
+              <mat-select multiple [(ngModel)]="options[16].modelValue"
+                (selectionChange)="setFilteredItemsOptions(options[16],$event)">
+                <mat-select-trigger>
+                </mat-select-trigger>
+                <mat-option *ngFor="let item of options[16].options" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.SEUIL_BLOCAGE_PERIME}} </td>
+        </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true">
 
@@ -169,66 +345,149 @@
       <table mat-table id='mytable' *ngIf="typeFileREC"  [dataSource]="copyfileMagistor" style
       class="table-rec mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
 
-      <ng-container matColumnDef="CODE_FRN">
-        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_FRN
+      <ng-container matColumnDef="OP_CODE">
+        <th id="OP_CODE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
+
+
+          <mat-form-field class="form-column" appearance="fill">
+            <mat-select multiple [(ngModel)]="options[0].modelValue"
+              (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+              <mat-select-trigger>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of options[0].options" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
         </th>
         <td mat-cell *matCellDef="let element">
-          {{element.CODE_FRN}} </td>
+          {{element.OP_CODE}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="OP_ACTION">
+        <th id="OP_ACTION" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
+
+          <mat-form-field class="form-column" appearance="fill">
+            <mat-select multiple [(ngModel)]="options[1].modelValue"
+              (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+              <mat-select-trigger>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of options[1].options" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.OP_ACTION}} </td>
       </ng-container>
 
       <ng-container matColumnDef="CODE_SOC">
-        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
+        <th id="CODE_SOC" class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
           CODE_SOC
+
+          <mat-form-field class="form-column" appearance="fill">
+            <mat-select multiple [(ngModel)]="options[2].modelValue"
+              (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+              <mat-select-trigger>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of options[2].options" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
         </th>
         <td mat-cell *matCellDef="let element">
           {{element.CODE_SOC}}
         </td>
       </ng-container>
-      <ng-container matColumnDef="DATE_ATTENDUE">
-        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> DATE_ATTENDUE
+
+
+      <ng-container matColumnDef="CODE_FRN">
+        <th id="CODE_FRN" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_FRN
+
+          <mat-form-field class="form-column" appearance="fill">
+            <mat-select multiple [(ngModel)]="options[3].modelValue"
+              (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+              <mat-select-trigger>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of options[3].options" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
         </th>
         <td mat-cell *matCellDef="let element">
-          {{element.DATE_ATTENDUE}}
-     </td>
+          {{element.CODE_FRN}} </td>
       </ng-container>
 
 
       <ng-container matColumnDef="N_PIECE">
-        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> N_PIECE
+        <th id="N_PIECE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> N_PIECE
+
+          <mat-form-field class="form-column" appearance="fill">
+            <mat-select multiple [(ngModel)]="options[4].modelValue"
+              (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+              <mat-select-trigger>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of options[4].options" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
         </th>
         <td mat-cell *matCellDef="let element">
           {{element.N_PIECE}} </td>
       </ng-container>
 
 
-      <ng-container matColumnDef="OP_ACTION">
-        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
+      <ng-container matColumnDef="TYPE_RECEP">
+        <th id="TYPE_RECEP" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> TYPE_RECEP
+
+          <mat-form-field class="form-column" appearance="fill">
+            <mat-select multiple [(ngModel)]="options[5].modelValue"
+              (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+              <mat-select-trigger>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of options[5].options" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
         </th>
         <td mat-cell *matCellDef="let element">
-          {{element.OP_ACTION}} </td>
+          {{element.TYPE_RECEP}} </td>
       </ng-container>
-
-      <ng-container matColumnDef="OP_CODE">
-        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{element.OP_CODE}} </td>
-      </ng-container>
-
+    
       <ng-container matColumnDef="REF_COMMANDE">
-        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_COMMANDE
+        <th  id="REF_COMMANDE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_COMMANDE
+
+          <mat-form-field class="form-column" appearance="fill">
+            <mat-select multiple [(ngModel)]="options[6].modelValue"
+              (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+              <mat-select-trigger>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of options[6].options" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
         </th>
         <td mat-cell *matCellDef="let element">
           {{element.REF_COMMANDE}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="TYPE_RECEP">
-        <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> TYPE_RECEP
+
+      <ng-container matColumnDef="DATE_ATTENDUE">
+        <th id="DATE_ATTENDUE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> DATE_ATTENDUE
+
+          <mat-form-field class="form-column" appearance="fill">
+            <mat-select multiple [(ngModel)]="options[7].modelValue"
+              (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+              <mat-select-trigger>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of options[7].options" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
         </th>
         <td mat-cell *matCellDef="let element">
-          {{element.TYPE_RECEP}} </td>
+          {{element.DATE_ATTENDUE}}
+     </td>
       </ng-container>
-
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true">
 
@@ -240,190 +499,465 @@
     <table mat-table id='mytable' *ngIf="typeFileCDC"  [dataSource]="copyfileMagistor"
     class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
 
-    <ng-container matColumnDef="AFAC_ADRESSE1">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_ADRESSE1
+
+    <ng-container matColumnDef="OP_CODE">
+      <th id="OP_CODE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[0].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[0].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </th>
       <td mat-cell *matCellDef="let element">
-        {{element.AFAC_ADRESSE1}} </td>
+        {{element.OP_CODE}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="AFAC_CP">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
-        AFAC_CP
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.AFAC_CP}}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="AFAC_INDIVIDU">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_INDIVIDU
-      </th>
-      <td mat-cell *matCellDef="let element">
-       {{element.AFAC_INDIVIDU}}
-   </td>
-    </ng-container>
+    <ng-container matColumnDef="OP_ACTION">
+      <th id="OP_ACTION" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
 
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[1].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[1].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    <ng-container matColumnDef="AFAC_MAIL">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_MAIL
       </th>
       <td mat-cell *matCellDef="let element">
-        {{element.AFAC_MAIL}} </td>
-    </ng-container>
-
-
-    <ng-container matColumnDef="AFAC_PAYS">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_PAYS
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.AFAC_PAYS}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="AFAC_RAISON_SOCIALE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_RAISON_SOCIALE
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.AFAC_RAISON_SOCIALE}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="AFAC_TEL">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_TEL
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.AFAC_TEL}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="AFAC_VILLE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_VILLE
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.AFAC_VILLE}} </td>
-    </ng-container>
-    <ng-container matColumnDef="ALIV_ADRESSE1">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_ADRESSE1
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.ALIV_ADRESSE1}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="ALIV_CP">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_CP
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.ALIV_CP}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="ALIV_INDIVIDU">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_INDIVIDU
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.ALIV_INDIVIDU}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="ALIV_MAIL">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_MAIL
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.ALIV_MAIL}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="ALIV_PAYS">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_PAYS
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.ALIV_PAYS}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="ALIV_RAISON_SOCIALE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_RAISON_SOCIALE
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.ALIV_RAISON_SOCIALE}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="ALIV_TEL">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_TEL
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.ALIV_TEL}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="ALIV_VILLE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_VILLE
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.ALIV_VILLE}} </td>
+        {{element.OP_ACTION}} </td>
     </ng-container>
 
     <ng-container matColumnDef="CODE_SOC">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_SOC
+      <th id="CODE_SOC" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_SOC
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[2].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[2].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </th>
       <td mat-cell *matCellDef="let element">
         {{element.CODE_SOC}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="N_CDE">
+      <th id="N_CDE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> N_CDE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[3].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[3].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </th>
+
+      <td mat-cell *matCellDef="let element">
+        {{element.N_CDE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="TYPE_CDE">
+      <th id="TYPE_CDE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> TYPE_CDE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[4].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[4].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.TYPE_CDE}} </td>
+    </ng-container>
+
     <ng-container matColumnDef="DATE_CDE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> DATE_CDE
+      <th id="DATE_CDE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> DATE_CDE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[5].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[5].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </th>
       <td mat-cell *matCellDef="let element">
         {{element.DATE_CDE}} </td>
     </ng-container>
 
     <ng-container matColumnDef="DATE_DDEE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> DATE_DDEE
+      <th id="DATE_DDEE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> DATE_DDEE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[6].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[6].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </th>
       <td mat-cell *matCellDef="let element">
         {{element.DATE_DDEE}} </td>
     </ng-container>
 
+
     <ng-container matColumnDef="HEURE_DDEE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> HEURE_DDEE
+      <th id="HEURE_DDEE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> HEURE_DDEE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[7].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[7].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </th>
       <td mat-cell *matCellDef="let element">
         {{element.HEURE_DDEE}} </td>
     </ng-container>
 
+
+
     <ng-container matColumnDef="NO_CLIENT">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> NO_CLIENT
+      <th id="NO_CLIENT" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> NO_CLIENT
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[8].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[8],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[8].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </th>
       <td mat-cell *matCellDef="let element">
         {{element.NO_CLIENT}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="N_CDE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> N_CDE
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.N_CDE}} </td>
-    </ng-container>
-    <ng-container matColumnDef="OP_ACTION">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.OP_ACTION}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="OP_CODE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.OP_CODE}} </td>
-    </ng-container>
 
     <ng-container matColumnDef="REF_CLIENT">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_CLIENT
+      <th id="REF_CLIENT" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_CLIENT
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[9].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[9],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[9].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </th>
       <td mat-cell *matCellDef="let element">
         {{element.REF_CLIENT}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="TYPE_CDE">
-      <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> TYPE_CDE
+
+    <ng-container matColumnDef="AFAC_INDIVIDU">
+      <th id="AFAC_INDIVIDU" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_INDIVIDU
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[10].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[10],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[10].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </th>
       <td mat-cell *matCellDef="let element">
-        {{element.TYPE_CDE}} </td>
+       {{element.AFAC_INDIVIDU}}
+   </td>
     </ng-container>
 
+    <ng-container matColumnDef="AFAC_RAISON_SOCIALE">
+      <th id="AFAC_RAISON_SOCIALE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_RAISON_SOCIALE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[11].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[11],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[11].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_RAISON_SOCIALE}} </td>
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="AFAC_ADRESSE1">
+      <th id="AFAC_ADRESSE1" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_ADRESSE1
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[12].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[12],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[12].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_ADRESSE1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="AFAC_CP">
+      <th id="AFAC_CP" class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
+        AFAC_CP
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[13].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[13],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[13].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_CP}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="AFAC_VILLE">
+      <th id="AFAC_VILLE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_VILLE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[14].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[14],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[14].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_VILLE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="AFAC_PAYS">
+      <th id="AFAC_PAYS" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_PAYS
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[15].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[15],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[15].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_PAYS}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="AFAC_TEL">
+      <th id="AFAC_TEL" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_TEL
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[16].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[16],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[16].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_TEL}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="AFAC_MAIL">
+      <th id="AFAC_MAIL" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> AFAC_MAIL
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[17].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[17],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[17].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.AFAC_MAIL}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="ALIV_INDIVIDU">
+      <th id="ALIV_INDIVIDU" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_INDIVIDU
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[18].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[18],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[18].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_INDIVIDU}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_RAISON_SOCIALE">
+      <th id="ALIV_RAISON_SOCIALE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_RAISON_SOCIALE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[19].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[19],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[19].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_RAISON_SOCIALE}} </td>
+    </ng-container>
+
+  
+    <ng-container matColumnDef="ALIV_ADRESSE1">
+      <th id="ALIV_ADRESSE1" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_ADRESSE1
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[20].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[20],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[20].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_ADRESSE1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_CP">
+      <th id="ALIV_CP" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_CP
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[21].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[21],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[21].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_CP}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_VILLE">
+      <th id="ALIV_VILLE" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_VILLE
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[22].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[22],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[22].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_VILLE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ALIV_PAYS">
+      <th id="ALIV_PAYS" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_PAYS
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[23].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[23],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[23].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_PAYS}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="ALIV_TEL">
+      <th id="ALIV_TEL" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_TEL
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[24].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[24],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[24].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_TEL}} </td>
+    </ng-container>
+
+    
+    <ng-container matColumnDef="ALIV_MAIL">
+      <th id="ALIV_MAIL" class="titre-column-magistor" mat-header-cell *matHeaderCellDef> ALIV_MAIL
+
+        <mat-form-field class="form-column" appearance="fill">
+          <mat-select multiple [(ngModel)]="options[25].modelValue"
+            (selectionChange)="setFilteredItemsOptions(options[25],$event)">
+            <mat-select-trigger>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of options[25].options" [value]="item">{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.ALIV_MAIL}} </td>
+    </ng-container>
+
+    
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true">
 

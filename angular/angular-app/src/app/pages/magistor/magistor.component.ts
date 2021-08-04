@@ -205,7 +205,6 @@ export class DialogImportFile {
   myForm = new FormGroup({
     file: new FormControl('',),
     fileSource: new FormControl('', [Validators.required],),
-    typeLogisticFile : new FormControl('',),
   });
   selectedFiles: File = null;
   clients: any;
@@ -213,8 +212,6 @@ export class DialogImportFile {
   nbExpNotArchived: number;
   expediteurArray: any = [];
   expediteurArrayFiltred: any;
-  typesLogisticFile = ["ART01","CDC01","REC01"];
-  selectedTypeLogisticFile = this.typesLogisticFile[0];
 
   constructor(private tablesService: MagistorService,
     private router: Router,
@@ -277,7 +274,6 @@ export class DialogImportFile {
     this.showloader = true;
     const formData = new FormData();
     formData.append('logisticFile', this.myForm.get('fileSource').value);
-    formData.append('typeLogisticFile', this.selectedTypeLogisticFile);
     this.tablesService.uploadLogisticFile(formData).subscribe(
       (res) => {
         this.showloader = false;
@@ -285,7 +281,7 @@ export class DialogImportFile {
       },
       (err) => {
         this.showloader = false;
-        this.error = "Veuillez télécharger un fichier EDI";
+        this.error = "Veuillez télécharger un fichier";
       }
     );
   }

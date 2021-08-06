@@ -158,11 +158,11 @@ export class DetailsFileMagistorComponent implements OnInit {
         let endRow: number;
 
         if (this.tableMouseDown.colId <= this.tableMouseUp.colId) {
-          startCol = this.tableMouseDown.colId - 1;
-          endCol = this.tableMouseUp.colId - 1;
+          startCol = this.tableMouseDown.colId ;
+          endCol = this.tableMouseUp.colId ;
         } else {
-          endCol = this.tableMouseDown.colId - 1;
-          startCol = this.tableMouseUp.colId - 1;
+          endCol = this.tableMouseDown.colId ;
+          startCol = this.tableMouseUp.colId ;
         }
 
         if (this.tableMouseDown.rowId <= this.tableMouseUp.rowId) {
@@ -182,7 +182,7 @@ export class DetailsFileMagistorComponent implements OnInit {
               if (index == i) {
                 if (element[element.startCol] !== dataCopy[i][this.fileMagistor.columns[startCol]]) {    // TO IMPROVE
                   var column = this.fileMagistor.columns[startCol];
-                  var container = document.querySelectorAll<HTMLElement>("#" + column);
+                  var container = document.querySelectorAll<HTMLElement>("#" + column+"magistor");
                   container[index].style.setProperty("color", "green", "important");
                 }
               }
@@ -214,6 +214,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     * @param cellsType
     */
   onMouseDown(rowId: number, colId: number, cellsType: string) {
+    console.error(rowId,colId)
     if (this.clickCorrection == false) {
       this.tableMouseDown = { rowId: rowId, colId: colId, cellsType: cellsType };
     }

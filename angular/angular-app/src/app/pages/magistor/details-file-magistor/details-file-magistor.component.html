@@ -40,7 +40,7 @@
 
 
         <ng-container matColumnDef="OP_CODE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_CODE
+          <th class="titre-column-magistor" id="OP_CODE" mat-header-cell *matHeaderCellDef> OP_CODE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[0].modelValue"
@@ -52,7 +52,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="OP_CODE" (mousedown)="onMouseDown(i, 0, 'OP_CODE')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="OP_CODEmagistor" (mousedown)="onMouseDown(i, 0, 'OP_CODE')"
             (mouseup)="onMouseUp(i, 0, 'OP_CODE')"
             [ngClass]="{'selected': selectedCellsState[i][0], 'unselected': !selectedCellsState[i][0]}">
             {{element.OP_CODE}} </td>
@@ -60,7 +60,7 @@
 
 
         <ng-container matColumnDef="OP_ACTION">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> OP_ACTION
+          <th class="titre-column-magistor" id="OP_ACTION" mat-header-cell *matHeaderCellDef> OP_ACTION
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[1].modelValue"
@@ -72,14 +72,14 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="OP_ACTION"
+          <td mat-cell *matCellDef="let element ; let i = index" id="OP_ACTIONmagistor"
             (mousedown)="onMouseDown(i, 1, 'OP_ACTION')" (mouseup)="onMouseUp(i, 1, 'OP_ACTION')"
             [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
             {{element.OP_ACTION}} </td>
         </ng-container>
 
         <ng-container matColumnDef="CODE_SOC">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef>
+          <th class="titre-column-magistor" id="CODE_SOC" mat-header-cell *matHeaderCellDef>
             CODE_SOC
 
             <mat-form-field class="form-column" appearance="fill">
@@ -92,7 +92,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="CODE_SOC"
+          <td mat-cell *matCellDef="let element ; let i = index" id="CODE_SOCmagistor"
             (mousedown)="onMouseDown(i, 2, 'CODE_SOC')" (mouseup)="onMouseUp(i, 2, 'CODE_SOC')"
             [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
             {{element.CODE_SOC}}
@@ -100,7 +100,7 @@
         </ng-container>
 
         <ng-container matColumnDef="CODE_ARTICLE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> CODE_ARTICLE
+          <th class="titre-column-magistor" id="CODE_ARTICLE" mat-header-cell *matHeaderCellDef> CODE_ARTICLE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[3].modelValue"
@@ -112,7 +112,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="CODE_ARTICLE"
+          <td mat-cell *matCellDef="let element ; let i = index" id="CODE_ARTICLEmagistor"
             (mousedown)="onMouseDown(i, 3, 'CODE_ARTICLE')" (mouseup)="onMouseUp(i, 3, 'CODE_ARTICLE')"
             [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
             {{element.CODE_ARTICLE}} </td>
@@ -120,7 +120,7 @@
 
 
         <ng-container matColumnDef="REF_FOURNISSEUR">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> REF_FOURNISSEUR
+          <th class="titre-column-magistor" id="REF_FOURNISSEUR" mat-header-cell *matHeaderCellDef> REF_FOURNISSEUR
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[4].modelValue"
@@ -132,14 +132,14 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="REF_FOURNISSEUR"
+          <td mat-cell *matCellDef="let element ; let i = index" id="REF_FOURNISSEURmagistor"
             (mousedown)="onMouseDown(i, 4, 'REF_FOURNISSEUR')" (mouseup)="onMouseUp(i, 4, 'REF_FOURNISSEUR')"
             [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
             {{element.REF_FOURNISSEUR}} </td>
         </ng-container>
 
         <ng-container matColumnDef="LIBELLE_ARTICLE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LIBELLE_ARTICLE
+          <th class="titre-column-magistor" id="LIBELLE_ARTICLE" mat-header-cell *matHeaderCellDef> LIBELLE_ARTICLE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[5].modelValue"
@@ -151,7 +151,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="LIBELLE_ARTICLE"
+          <td mat-cell *matCellDef="let element ; let i = index" id="LIBELLE_ARTICLEmagistor"
             (mousedown)="onMouseDown(i, 5, 'LIBELLE_ARTICLE')" (mouseup)="onMouseUp(i, 5, 'LIBELLE_ARTICLE')"
             [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
             {{element.LIBELLE_ARTICLE}} </td>
@@ -159,7 +159,7 @@
 
 
         <ng-container matColumnDef="FAMILLE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> FAMILLE
+          <th class="titre-column-magistor" id="FAMILLE"  mat-header-cell *matHeaderCellDef> FAMILLE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[6].modelValue"
@@ -171,14 +171,14 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="FAMILLE" (mousedown)="onMouseDown(i, 6, 'FAMILLE')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="FAMILLEmagistor" (mousedown)="onMouseDown(i, 6, 'FAMILLE')"
             (mouseup)="onMouseUp(i, 6, 'FAMILLE')"
             [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
             {{element.FAMILLE}} </td>
         </ng-container>
 
         <ng-container matColumnDef="VALEUR">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> VALEUR
+          <th class="titre-column-magistor" id="VALEUR"  mat-header-cell *matHeaderCellDef> VALEUR
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[7].modelValue"
@@ -190,14 +190,14 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="VALEUR" (mousedown)="onMouseDown(i, 7, 'VALEUR')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="VALEURmagistor" (mousedown)="onMouseDown(i, 7, 'VALEUR')"
             (mouseup)="onMouseUp(i, 7, 'VALEUR')"
             [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
             {{element.VALEUR}} </td>
         </ng-container>
 
         <ng-container matColumnDef="GESTION_LOT">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_LOT
+          <th class="titre-column-magistor" id="GESTION_LOT" mat-header-cell *matHeaderCellDef> GESTION_LOT
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[8].modelValue"
@@ -209,7 +209,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="GESTION_LOT"
+          <td mat-cell *matCellDef="let element ; let i = index" id="GESTION_LOTmagistor"
             (mousedown)="onMouseDown(i, 8, 'GESTION_LOT')" (mouseup)="onMouseUp(i, 8, 'GESTION_LOT')"
             [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}">
             {{element.GESTION_LOT}} </td>
@@ -218,7 +218,7 @@
 
 
         <ng-container matColumnDef="GESTION_DATE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_DATE
+          <th class="titre-column-magistor" id="GESTION_DATE" mat-header-cell *matHeaderCellDef> GESTION_DATE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[9].modelValue"
@@ -230,7 +230,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="GESTION_DATE"
+          <td mat-cell *matCellDef="let element ; let i = index" id="GESTION_DATEmagistor"
             (mousedown)="onMouseDown(i, 9, 'GESTION_DATE')" (mouseup)="onMouseUp(i, 9, 'GESTION_DATE')"
             [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9]}">
             {{element.GESTION_DATE}} </td>
@@ -238,7 +238,7 @@
 
 
         <ng-container matColumnDef="GESTION_NS">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> GESTION_NS
+          <th class="titre-column-magistor" id="GESTION_NS" mat-header-cell *matHeaderCellDef> GESTION_NS
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[10].modelValue"
@@ -250,7 +250,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="GESTION_NS"
+          <td mat-cell *matCellDef="let element ; let i = index" id="GESTION_NSmagistor"
             (mousedown)="onMouseDown(i, 10, 'GESTION_NS')" (mouseup)="onMouseUp(i, 10, 'GESTION_NS')"
             [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10]}">
             {{element.GESTION_NS}} </td>
@@ -258,7 +258,7 @@
 
 
         <ng-container matColumnDef="LONGEUR_UNITAIRE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LONGEUR_UNITAIRE
+          <th class="titre-column-magistor" id="LONGEUR_UNITAIRE" mat-header-cell *matHeaderCellDef> LONGEUR_UNITAIRE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[11].modelValue"
@@ -270,14 +270,14 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="LONGEUR_UNITAIRE"
+          <td mat-cell *matCellDef="let element ; let i = index" id="LONGEUR_UNITAIREmagistor"
             (mousedown)="onMouseDown(i, 11, 'LONGEUR_UNITAIRE')" (mouseup)="onMouseUp(i, 11, 'LONGEUR_UNITAIRE')"
             [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}">
             {{element.LONGEUR_UNITAIRE}} </td>
         </ng-container>
 
         <ng-container matColumnDef="LARGEUR_UNITAIRE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> LARGEUR_UNITAIRE
+          <th class="titre-column-magistor" id="LARGEUR_UNITAIRE" mat-header-cell *matHeaderCellDef> LARGEUR_UNITAIRE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[12].modelValue"
@@ -289,14 +289,14 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="LARGEUR_UNITAIRE"
+          <td mat-cell *matCellDef="let element ; let i = index" id="LARGEUR_UNITAIREmagistor"
             (mousedown)="onMouseDown(i, 12, 'LARGEUR_UNITAIRE')" (mouseup)="onMouseUp(i, 12, 'LARGEUR_UNITAIRE')"
             [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}">
             {{element.LARGEUR_UNITAIRE}} </td>
         </ng-container>
 
         <ng-container matColumnDef="HAUTEUR_UNITAIRE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> HAUTEUR_UNITAIRE
+          <th class="titre-column-magistor" id="HAUTEUR_UNITAIRE" mat-header-cell *matHeaderCellDef> HAUTEUR_UNITAIRE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[13].modelValue"
@@ -308,14 +308,14 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let elemen ; let i = index" id="HAUTEUR_UNITAIRE"
+          <td mat-cell *matCellDef="let elemen ; let i = index" id="HAUTEUR_UNITAIREmagistor"
             (mousedown)="onMouseDown(i, 13, 'HAUTEUR_UNITAIRE')" (mouseup)="onMouseUp(i, 13, 'HAUTEUR_UNITAIRE')"
             [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13]}">
             {{element.HAUTEUR_UNITAIRE}} </td>
         </ng-container>
 
         <ng-container matColumnDef="EAN">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> EAN
+          <th class="titre-column-magistor" id="EAN"  mat-header-cell *matHeaderCellDef> EAN
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[14].modelValue"
@@ -327,7 +327,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="EAN" (mousedown)="onMouseDown(i, 14, 'EAN')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="EANmagistor" (mousedown)="onMouseDown(i, 14, 'EAN')"
             (mouseup)="onMouseUp(i, 14, 'EAN')"
             [ngClass]="{'selected': selectedCellsState[i][14], 'unselected': !selectedCellsState[i][14]}">
             {{element.EAN}} </td>
@@ -335,7 +335,7 @@
 
 
         <ng-container matColumnDef="IS_COUPE">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> IS_COUPE
+          <th class="titre-column-magistor" id="IS_COUPE" mat-header-cell *matHeaderCellDef> IS_COUPE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[15].modelValue"
@@ -347,7 +347,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="IS_COUPE"
+          <td mat-cell *matCellDef="let element ; let i = index" id="IS_COUPEmagistor"
             (mousedown)="onMouseDown(i, 15, 'IS_COUPE')" (mouseup)="onMouseUp(i, 15, 'IS_COUPE')"
             [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][15]}">
             {{element.IS_COUPE}} </td>
@@ -355,7 +355,7 @@
 
 
         <ng-container matColumnDef="SEUIL_BLOCAGE_PERIME">
-          <th class="titre-column-magistor" mat-header-cell *matHeaderCellDef> SEUIL_BLOCAGE_PERIME
+          <th class="titre-column-magistor" id="SEUIL_BLOCAGE_PERIME" mat-header-cell *matHeaderCellDef> SEUIL_BLOCAGE_PERIME
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[16].modelValue"
@@ -367,7 +367,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="SEUIL_BLOCAGE_PERIME"
+          <td mat-cell *matCellDef="let element ; let i = index" id="SEUIL_BLOCAGE_PERIMEmagistor"
             (mousedown)="onMouseDown(i, 16, 'SEUIL_BLOCAGE_PERIME')"
             (mouseup)="onMouseUp(i, 16, 'SEUIL_BLOCAGE_PERIME')"
             [ngClass]="{'selected': selectedCellsState[i][16], 'unselected': !selectedCellsState[i][16]}">
@@ -398,7 +398,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 0, 'OP_CODE')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="OP_CODEmagistor" (mousedown)="onMouseDown(i, 0, 'OP_CODE')"
             (mouseup)="onMouseUp(i, 0, 'OP_CODE')"
             [ngClass]="{'selected': selectedCellsState[i][0], 'unselected': !selectedCellsState[i][0]}">
             {{element.OP_CODE}} </td>
@@ -417,7 +417,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="OP_ACTIONmagistor"
             (mousedown)="onMouseDown(i, 1, 'OP_ACTION')" (mouseup)="onMouseUp(i, 1, 'OP_ACTION')"
             [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
             {{element.OP_ACTION}} </td>
@@ -437,7 +437,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="CODE_SOCmagistor"
             (mousedown)="onMouseDown(i, 2, 'CODE_SOC')" (mouseup)="onMouseUp(i, 2, 'CODE_SOC')"
             [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
             {{element.CODE_SOC}}
@@ -458,7 +458,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index"  id="CODE_FRNmagistor"
             (mousedown)="onMouseDown(i, 3, 'CODE_FRN')" (mouseup)="onMouseUp(i, 3, 'CODE_FRN')"
             [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
             {{element.CODE_FRN}} </td>
@@ -478,7 +478,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index"  (mousedown)="onMouseDown(i, 4, 'N_PIECE')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="N_PIECEmagistor"  (mousedown)="onMouseDown(i, 4, 'N_PIECE')"
             (mouseup)="onMouseUp(i, 4, 'N_PIECE')"
             [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
             {{element.N_PIECE}} </td>
@@ -498,7 +498,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="TYPE_RECEPmagistor"
             (mousedown)="onMouseDown(i, 5, 'TYPE_RECEP')" (mouseup)="onMouseUp(i, 5, 'TYPE_RECEP')"
             [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
             {{element.TYPE_RECEP}} </td>
@@ -517,7 +517,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="REF_COMMANDEmagistor"
             (mousedown)="onMouseDown(i, 6, 'REF_COMMANDE')" (mouseup)="onMouseUp(i, 6, 'REF_COMMANDE')"
             [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
             {{element.REF_COMMANDE}} </td>
@@ -537,7 +537,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="DATE_ATTENDUEmagistor"
             (mousedown)="onMouseDown(i, 7, 'DATE_ATTENDUE')" (mouseup)="onMouseUp(i, 7, 'DATE_ATTENDUE')"
             [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
             {{element.DATE_ATTENDUE}}
@@ -568,7 +568,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index"  (mousedown)="onMouseDown(i, 0, 'OP_CODE')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="OP_CODEmagistor" (mousedown)="onMouseDown(i, 0, 'OP_CODE')"
             (mouseup)="onMouseUp(i, 0, 'OP_CODE')"
             [ngClass]="{'selected': selectedCellsState[i][0], 'unselected': !selectedCellsState[i][0]}">
             {{element.OP_CODE}} </td>
@@ -587,7 +587,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="OP_ACTIONmagistor"
             (mousedown)="onMouseDown(i, 1, 'OP_ACTION')" (mouseup)="onMouseUp(i, 1, 'OP_ACTION')"
             [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
             {{element.OP_ACTION}} </td>
@@ -606,7 +606,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="CODE_SOCmagistor"
             (mousedown)="onMouseDown(i, 2, 'CODE_SOC')" (mouseup)="onMouseUp(i, 2, 'CODE_SOC')"
             [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
             {{element.CODE_SOC}} </td>
@@ -625,7 +625,7 @@
             </mat-form-field>
           </th>
 
-          <td mat-cell *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 3, 'N_CDE')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="N_CDEmagistor" (mousedown)="onMouseDown(i, 3, 'N_CDE')"
             (mouseup)="onMouseUp(i, 3, 'N_CDE')"
             [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
             {{element.N_CDE}} </td>
@@ -644,7 +644,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="TYPE_CDEmagistor"
             (mousedown)="onMouseDown(i, 4, 'TYPE_CDE')" (mouseup)="onMouseUp(i, 4, 'TYPE_CDE')"
             [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
             {{element.TYPE_CDE}} </td>
@@ -663,7 +663,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="DATE_CDEmagistor"
             (mousedown)="onMouseDown(i, 5, 'DATE_CDE')" (mouseup)="onMouseUp(i, 5, 'DATE_CDE')"
             [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
             {{element.DATE_CDE}} </td>
@@ -682,7 +682,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="DATE_DDEEmagistor"
             (mousedown)="onMouseDown(i, 6, 'DATE_DDEE')" (mouseup)="onMouseUp(i, 6, 'DATE_DDEE')"
             [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
             {{element.DATE_DDEE}} </td>
@@ -702,7 +702,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="HEURE_DDEEmagistor"
             (mousedown)="onMouseDown(i, 7, 'HEURE_DDEE')" (mouseup)="onMouseUp(i, 7, 'HEURE_DDEE')"
             [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
             {{element.HEURE_DDEE}} </td>
@@ -723,7 +723,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element  ; let i = index" 
+          <td mat-cell *matCellDef="let element  ; let i = index" id="NO_CLIENTmagistor"
             (mousedown)="onMouseDown(i, 8, 'NO_CLIENT')" (mouseup)="onMouseUp(i, 8, 'NO_CLIENT')"
             [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}">
             {{element.NO_CLIENT}} </td>
@@ -743,7 +743,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="REF_CLIENTmagistor"
             (mousedown)="onMouseDown(i, 9, 'REF_CLIENT')" (mouseup)="onMouseUp(i, 9, 'REF_CLIENT')"
             [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9]}">
             {{element.REF_CLIENT}} </td>
@@ -763,7 +763,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_INDIVIDUmagistor"
             (mousedown)="onMouseDown(i, 10, 'AFAC_INDIVIDU')" (mouseup)="onMouseUp(i, 10, 'AFAC_INDIVIDU')"
             [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10]}">
             {{element.AFAC_INDIVIDU}}
@@ -783,7 +783,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_RAISON_SOCIALEmagistor"
             (mousedown)="onMouseDown(i, 11, 'AFAC_RAISON_SOCIALE')" (mouseup)="onMouseUp(i, 11, 'AFAC_RAISON_SOCIALE')"
             [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}">
             {{element.AFAC_RAISON_SOCIALE}} </td>
@@ -804,7 +804,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_ADRESSE1magistor"
             (mousedown)="onMouseDown(i, 12, 'AFAC_ADRESSE1')" (mouseup)="onMouseUp(i, 12, 'AFAC_ADRESSE1')"
             [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}">
             {{element.AFAC_ADRESSE1}} </td>
@@ -824,7 +824,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_CPmagistor"
             (mousedown)="onMouseDown(i, 13, 'AFAC_CP')" (mouseup)="onMouseUp(i, 13, 'AFAC_CP')"
             [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13]}">
             {{element.AFAC_CP}}
@@ -844,7 +844,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_VILLEmagistor"
             (mousedown)="onMouseDown(i, 14, 'AFAC_VILLE')" (mouseup)="onMouseUp(i, 14, 'AFAC_VILLE')"
             [ngClass]="{'selected': selectedCellsState[i][14], 'unselected': !selectedCellsState[i][14]}">
             {{element.AFAC_VILLE}} </td>
@@ -863,7 +863,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_PAYSmagistor"
             (mousedown)="onMouseDown(i, 15, 'AFAC_PAYS')" (mouseup)="onMouseUp(i, 15, 'AFAC_PAYS')"
             [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][15]}">
             {{element.AFAC_PAYS}} </td>
@@ -882,7 +882,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_TELmagistor"
             (mousedown)="onMouseDown(i, 16, 'AFAC_TEL')" (mouseup)="onMouseUp(i, 16, 'AFAC_TEL')"
             [ngClass]="{'selected': selectedCellsState[i][16], 'unselected': !selectedCellsState[i][16]}">
             {{element.AFAC_TEL}} </td>
@@ -902,7 +902,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_MAILmagistor"
             (mousedown)="onMouseDown(i, 17, 'AFAC_MAIL')" (mouseup)="onMouseUp(i, 17, 'AFAC_MAIL')"
             [ngClass]="{'selected': selectedCellsState[i][17], 'unselected': !selectedCellsState[i][17]}">
             {{element.AFAC_MAIL}} </td>
@@ -922,7 +922,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_INDIVIDUmagistor"
             (mousedown)="onMouseDown(i, 18, 'ALIV_INDIVIDU')" (mouseup)="onMouseUp(i, 18, 'ALIV_INDIVIDU')"
             [ngClass]="{'selected': selectedCellsState[i][18], 'unselected': !selectedCellsState[i][18]}">
             {{element.ALIV_INDIVIDU}} </td>
@@ -941,7 +941,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_RAISON_SOCIALEmagistor"
             (mousedown)="onMouseDown(i, 19, 'ALIV_RAISON_SOCIALE')" (mouseup)="onMouseUp(i, 19, 'ALIV_RAISON_SOCIALE')"
             [ngClass]="{'selected': selectedCellsState[i][19], 'unselected': !selectedCellsState[i][19]}">
             {{element.ALIV_RAISON_SOCIALE}} </td>
@@ -961,7 +961,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_ADRESSE1magistor"
             (mousedown)="onMouseDown(i, 20, 'ALIV_ADRESSE1')" (mouseup)="onMouseUp(i, 20, 'ALIV_ADRESSE1')"
             [ngClass]="{'selected': selectedCellsState[i][20], 'unselected': !selectedCellsState[i][20]}">
             {{element.ALIV_ADRESSE1}} </td>
@@ -980,7 +980,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_CPmagistor"
             (mousedown)="onMouseDown(i, 21, 'ALIV_CP')" (mouseup)="onMouseUp(i, 21, 'ALIV_CP')"
             [ngClass]="{'selected': selectedCellsState[i][21], 'unselected': !selectedCellsState[i][21]}">
             {{element.ALIV_CP}} </td>
@@ -999,7 +999,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_VILLEmagistor"
             (mousedown)="onMouseDown(i, 22, 'ALIV_VILLE')" (mouseup)="onMouseUp(i, 22, 'ALIV_VILLE')"
             [ngClass]="{'selected': selectedCellsState[i][22], 'unselected': !selectedCellsState[i][22]}">
             {{element.ALIV_VILLE}} </td>
@@ -1018,7 +1018,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_PAYSmagistor"
             (mousedown)="onMouseDown(i, 23, 'ALIV_PAYS')" (mouseup)="onMouseUp(i, 23, 'ALIV_PAYS')"
             [ngClass]="{'selected': selectedCellsState[i][23], 'unselected': !selectedCellsState[i][23]}">
             {{element.ALIV_PAYS}} </td>
@@ -1038,7 +1038,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_TELmagistor"
             (mousedown)="onMouseDown(i, 24, 'ALIV_TEL')" (mouseup)="onMouseUp(i, 24, 'ALIV_TEL')"
             [ngClass]="{'selected': selectedCellsState[i][24], 'unselected': !selectedCellsState[i][24]}">
             {{element.ALIV_TEL}} </td>
@@ -1058,7 +1058,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" 
+          <td mat-cell *matCellDef="let element ; let i = index"  id="ALIV_MAILmagistor"
             (mousedown)="onMouseDown(i, 25, 'ALIV_MAIL')" (mouseup)="onMouseUp(i, 25, 'ALIV_MAIL')"
             [ngClass]="{'selected': selectedCellsState[i][25], 'unselected': !selectedCellsState[i][25]}">
             {{element.ALIV_MAIL}} </td>

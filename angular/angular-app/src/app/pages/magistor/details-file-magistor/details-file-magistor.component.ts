@@ -214,7 +214,6 @@ export class DetailsFileMagistorComponent implements OnInit {
     * @param cellsType
     */
   onMouseDown(rowId: number, colId: number, cellsType: string) {
-    console.error(rowId,colId)
     if (this.clickCorrection == false) {
       this.tableMouseDown = { rowId: rowId, colId: colId, cellsType: cellsType };
     }

@@ -8,7 +8,7 @@
           <div class="mdl-textfield label-search">
             <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
               [(ngModel)]="filterValue" placeholder="Rechercher" />
-            <label class="mdl-textfield__label" for="search2"></label>
+            <label style="padding: 0%" class="mdl-textfield__label" for="search2"></label>
           </div>
         </div>
         <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">

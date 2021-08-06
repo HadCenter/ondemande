@@ -149,14 +149,17 @@ export class MagistorComponent implements OnInit {
     }*/
   }
   setFilteredItems() {
-    /*this.advancedTable = this.filterItems(this.filterValue);
+    this.advancedTable = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
-    }*/
+    }
+    // this.currentPage = this.copyFilesPerPagination.length > 0 ? 1 : 0;
+    // this.numPage = Math.ceil(this.copyFilesPerPagination.length / this.countPerPage);
+    // this.advancedTable = this.copyFilesPerPagination.slice(0, this.countPerPage);
   }
 
   filterItems(filterValue) {
-    return this.fichiers.filter((item) => {
+    return this.copy_advancedTable.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }

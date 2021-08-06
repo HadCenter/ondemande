@@ -1,7 +1,7 @@
 <div class="container mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
   <div class="content-file-edi">
     <div class="content-labels">
-      <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--5-col-phone">
+      <base-card class="mdl-cell mdl-cell--9-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone">
         <base-card-body class="content-first-card ">
           <div class="content-label">
             <label class="details-label">Statut</label>
@@ -21,9 +21,9 @@
           </div>
         </base-card-body>
       </base-card>
-      <div *ngIf="file" style='text-align: center;'
-        class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-        <button [disabled]="file?.number_annomalies==0"
+      <div *ngIf="file" style='text-align: center; display: block;'
+        class="mdl-cell mdl-cell--3-col-desktop mdl-cell--3-col-tablet mdl-cell--2-col-phone">
+        <button [disabled]="file?.number_annomalies==0" style="    margin-bottom: 5px;"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
         </button>
         <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"

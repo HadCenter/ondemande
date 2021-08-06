@@ -9,6 +9,7 @@ import { ThemeModule } from 'theme/theme.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [DetailsFileMagistorComponent],
@@ -21,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatTableModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatSnackBarModule,
     
   ]
 })

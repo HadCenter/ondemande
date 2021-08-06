@@ -1,5 +1,5 @@
 <div class="dialog-content">
-  <app-loader [position]="'absolute'" [width]="'480px'" [height]="'296px'" [bg]="'transparant'" [show]="showloader">
+  <app-loader [position]="'absolute'" [width]="'296px'" [height]="'296px'" [bg]="'transparant'" [show]="showloader">
   </app-loader>
   <base-card class="card-dialog">
     <base-card-title>
@@ -19,13 +19,6 @@
                 <mat-icon>attach_file</mat-icon>
               </button>
               <input hidden accept=".xlsx" (change)="selectFile($event)" #fileInput type="file" id="file" name="file">
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-              <mat-label>Type</mat-label>
-              <mat-select [(value)]="selectedTypeLogisticFile">
-                <option value=""></option>
-                <mat-option [value]="option" *ngFor="let option of typesLogisticFile">{{ option }}</mat-option>
-              </mat-select>
             </mat-form-field>
           </div>
           <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>

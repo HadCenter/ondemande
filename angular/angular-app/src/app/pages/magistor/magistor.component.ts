@@ -284,7 +284,12 @@ export class DialogImportFile {
       },
       (err) => {
         this.showloader = false;
-        this.error = "Veuillez télécharger un fichier";
+        if(err.error.message == "file save echec")
+        {
+          this.error = "Type du fichier existant";
+        }else{
+          this.error = "Veuillez télécharger un fichier";
+        }
       }
     );
   }

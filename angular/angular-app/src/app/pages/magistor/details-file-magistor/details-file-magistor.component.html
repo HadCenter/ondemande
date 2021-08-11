@@ -1,7 +1,7 @@
 <div class="container mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
   <div class="content-file-edi">
     <div class="content-labels">
-      <base-card class="mdl-cell mdl-cell--9-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone">
+      <base-card class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--3-col-phone">
         <base-card-body class="content-first-card ">
           <div class="content-label">
             <label class="details-label">Statut</label>
@@ -22,14 +22,26 @@
         </base-card-body>
       </base-card>
       <div *ngIf="file" style='text-align: center; display: block;'
-        class="mdl-cell mdl-cell--3-col-desktop mdl-cell--3-col-tablet mdl-cell--2-col-phone">
-        <button [disabled]="file?.number_annomalies==0" style="    margin-bottom: 5px;"
+        class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--3-col-phone">
+       
+       
+        <div style="padding: 7px;" class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+          <div style="padding: 0px;" class="mdl-textfield label-search">
+            <input  style="color: white;" class="mdl-textfield__input" type="text" id="search1" (input)="setFilteredItemsValid()"
+              [(ngModel)]="searchItems" placeholder="Rechercher" autocomplete="off" />
+            <label class="mdl-textfield__label" for="search1"></label>
+          </div>
+        </div>
+
+       <div>
+        <button [disabled]="file?.number_annomalies==0"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
         </button>
         <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
           les filtres
         </button>
+      </div>
       </div>
     </div>
     <div *ngIf="copyfileMagistor" class="content-table" style="margin: 8px;">
@@ -308,7 +320,7 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let elemen ; let i = index" id="HAUTEUR_UNITAIREmagistor"
+          <td mat-cell *matCellDef="let element ; let i = index" id="HAUTEUR_UNITAIREmagistor"
             (mousedown)="onMouseDown(i, 13, 'HAUTEUR_UNITAIRE')" (mouseup)="onMouseUp(i, 13, 'HAUTEUR_UNITAIRE')"
             [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13]}">
             {{element.HAUTEUR_UNITAIRE}} </td>

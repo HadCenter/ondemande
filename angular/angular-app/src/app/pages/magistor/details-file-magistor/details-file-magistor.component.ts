@@ -20,6 +20,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   file: any = [];
   testFile: any = [];
   files: any = [];
+  searchItems: any =[];
   filterValues: any = [];
   fileMagistor: any;
   copyfileMagistor: any;
@@ -70,7 +71,7 @@ export class DetailsFileMagistorComponent implements OnInit {
             this.testFile = this.copyfileMagistor;   //copy to use on selection
             this.files = this.copyfileMagistor;    // copy to filter *
             this.displayedColumns = (Object.keys(this.copyfileMagistor[0]));
-
+            
             // initialize all selectedCellsState to false
             this.copyfileMagistor.forEach(element => {
               this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
@@ -107,6 +108,23 @@ export class DetailsFileMagistorComponent implements OnInit {
       }
     })
   }
+
+
+  /**** Filter items on valid file */
+  setFilteredItemsValid() {
+    this.copyfileMagistor = this.filterItemsValid(this.searchItems);
+    if (this.searchItems === '') {
+      this.copyfileMagistor = this.copyfileMagistor;
+    }
+  }
+
+  filterItemsValid(filterValue: string) {
+    return this.files.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
+    });
+  }
+
+
 
 
 

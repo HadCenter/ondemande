@@ -159,8 +159,9 @@ export class MagistorComponent implements OnInit {
   }
 
   filterItems(filterValue) {
+    let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
     return this.copy_advancedTable.filter((item) => {
-      return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
+      return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
     });
   }
     /******Open dialog Import File */

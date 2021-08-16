@@ -14,4 +14,7 @@ export class DetailsFileMagistorService {
   getLogisticFileContent(data): Observable<any> {
     return this.http.post(`${this.url}/seeLogisticFileContent`, data);
   }
+  public corretFile (data): Observable<any> {
+    return  this.http.post(`${this.url}/createFileFromColumnAndRowsAndUpdate/`,data);
+  }
 }

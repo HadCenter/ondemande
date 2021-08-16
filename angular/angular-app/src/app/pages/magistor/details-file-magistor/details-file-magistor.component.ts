@@ -25,6 +25,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   fileMagistor: any;
   copyfileMagistor: any;
   displayedColumns: any;
+  public snackAction = 'Ok';
   typeFileART: boolean = false;
   typeFileREC: boolean = false;
   typeFileCDC: boolean = false;
@@ -36,6 +37,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   LAST_EDITABLE_ROW: number = 0;
   FIRST_EDITABLE_COL: number = 0;                       // first column is not editable --> so start from index 1
   LAST_EDITABLE_COL: number = 0;
+  fileTocheck: any;
   selectedCellsState: boolean[][] = [
     // [false, false, false],
   ];
@@ -43,6 +45,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   clickCorrection: boolean = false;
   constructor(private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
+    public router: Router,
     private fileService: DetailsFileMagistorService) { }
 
   ngOnInit(): void {
@@ -71,6 +74,9 @@ export class DetailsFileMagistorComponent implements OnInit {
             this.testFile = this.copyfileMagistor;   //copy to use on selection
             this.files = this.copyfileMagistor;    // copy to filter *
             this.displayedColumns = (Object.keys(this.copyfileMagistor[0]));
+
+            this.LAST_EDITABLE_ROW = this.copyfileMagistor.length - 1;
+        this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
             
             // initialize all selectedCellsState to false
             this.copyfileMagistor.forEach(element => {
@@ -438,4 +444,48 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
     return output;
   }
+
+
+ /**
+  * Correct the file
+  */
+ correctionFile() {
+  this.clickCorrection = true;
+  var user = JSON.parse(localStorage.getItem('currentUser'));
+ // this.rearrangeAttributes();  //Remove unecessey columns
+  this.hideUiSelectionOnCorrection();  //hide ui selection on correction
+  if (this.copyfileMagistor.rows.length > 0) {
+   // this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
+   // this.removeUnecesseryColumns(); // from rows filewrong
+    this.fileTocheck = {
+      fileId: this.file.idFile,
+      account_id: user.id,
+      columns: this.displayedColumns,
+      rows: this.copyfileMagistor,
+
+    }
+  }
+
+  this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+  console.warn("**file to check**", this.fileTocheck)
+  this.fileService.corretFile(this.fileTocheck).subscribe(res => {
+    console.log('resultat correction', res);
+    if (res.message == "success") {
+      this.router.navigate(['/list-file-edi']);
+    }
+  })
+}
+
+ /**
+    * Hide ui selection red rectangle
+    */
+   hideUiSelectionOnCorrection() {
+    if (document.querySelector('.selected')) {
+      var inputs = document.querySelectorAll(".selected");
+      for (var i = 0; i < inputs.length; i++) {
+        inputs[i].classList.remove('selected');
+      }
+    }
+  }
+
 }

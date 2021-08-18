@@ -55,6 +55,7 @@
               </td>
               <td class="column-actions mdl-data-table__cell--non-numeric">
                 <button
+                [disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                 >Corriger
                 </button>

@@ -256,9 +256,9 @@ def createFileFromColumnAndRows(request):
 
 def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> TransactionFileContentAndOptions:
     fileContentObjects = list()
-    options = transactionFileColumnsException(set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set())
+    options = transactionFileColumnsException(set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set())
     for x in df.values.tolist():
-        fileContentObjects.append(transactionFileColumnsException(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15]))
+        fileContentObjects.append(transactionFileColumnsException(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15],x[16]))
         options.Tournee.add(x[0])
         options.taskId.add(x[1])
         options.itemId.add(x[2])
@@ -273,18 +273,19 @@ def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> Transactio
         options.Item___Quantite.add(x[11])
         options.Code_postal.add(x[12])
         options.Round_Name.add(x[13])
-        options.Remarque.add(x[14])
-        options.isDeleted.add(x[15])
+        options.Express.add(x[14])
+        options.Remarque.add(x[15])
+        options.isDeleted.add(x[16])
     return TransactionFileContentAndOptions(fileContent = fileContentObjects , options = options )
 
 def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> TransactionFileContentAndOptions:
     fileContentObjects = list()
     options = transactionFileColumnsLivraison(set(), set(), set(), set(), set(), set(), set(), set(), set(), set(),
-                                              set(), set(), set(), set(), set())
+                                              set(), set(), set(), set(), set(), set(), set(), set())
     for x in df.values.tolist():
         fileContentObjects.append(
             transactionFileColumnsLivraison(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10], x[11],
-                                            x[12], x[13], x[14]))
+                                            x[12], x[13], x[14], x[15], x[16], x[17]))
         options.Tournee.add(x[0])
         options.taskId.add(x[1])
         options.itemId.add(x[2])
@@ -298,8 +299,11 @@ def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> Transactio
         options.Item___Type_unite_manutention.add(x[10])
         options.Item___Quantite.add(x[11])
         options.Code_postal.add(x[12])
-        options.sourceHubName.add(x[13])
-        options.Round_Name.add(x[14])
+        options.total_price.add(x[13])
+        options.sourceHubName.add(x[14])
+        options.Round_Name.add(x[15])
+        options.isExpress.add(x[16])
+        options.toDelete.add(x[17])
 
     return TransactionFileContentAndOptions(fileContent=fileContentObjects, options=options)
 
@@ -338,9 +342,9 @@ def reading_list_transactionFileColumnsMetadata(df: pd.DataFrame) -> Transaction
 def reading_list_transactionFileColumnsMad(df: pd.DataFrame) -> TransactionFileContentAndOptions:
     fileContentObjects = list()
     options = transactionFileColumnsMad(set(), set(), set(), set(), set(), set(), set(), set(), set(), set(),
-                                              set(), set(), set(), set(), set())
+                                              set(), set(), set(), set(), set(), set(), set(),set())
     for x in df.values.tolist():
-        fileContentObjects.append(transactionFileColumnsMad(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10], x[11],x[12], x[13], x[14]))
+        fileContentObjects.append(transactionFileColumnsMad(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10], x[11],x[12], x[13], x[14], x[15], x[16],x[17]))
         options.Tournee.add(x[0])
         options.taskId.add(x[1])
         options.itemId.add(x[2])
@@ -356,6 +360,9 @@ def reading_list_transactionFileColumnsMad(df: pd.DataFrame) -> TransactionFileC
         options.Code_postal.add(x[12])
         options.sourceHubName.add(x[13])
         options.Round_Name.add(x[14])
+        options.toDelete.add(x[15])
+        options.StartTime.add(x[16])
+        options.ClousureTime.add(x[17])
 
     return TransactionFileContentAndOptions(fileContent=fileContentObjects, options=options)
 

@@ -171,7 +171,7 @@ class kpi2WithFiltersDto:
 
 
 class transactionFileColumnsException:
-    def __init__(self, Tournee, taskId, itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom,Item___Type,Item___Quantite,Code_postal,Round_Name,Remarque,isDeleted):
+    def __init__(self, Tournee, taskId, itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom,Item___Type,Item___Quantite,Code_postal,Round_Name,Express,Remarque,isDeleted):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -186,6 +186,7 @@ class transactionFileColumnsException:
         self.Item___Quantite = Item___Quantite
         self.Code_postal = Code_postal
         self.Round_Name = Round_Name
+        self.Express = Express
         self.Remarque = Remarque
         self.isDeleted = isDeleted
 class transactionFileColumnsLivraison:

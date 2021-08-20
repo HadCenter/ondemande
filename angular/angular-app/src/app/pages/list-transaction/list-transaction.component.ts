@@ -152,15 +152,31 @@ export class ListTransactionComponent implements OnInit {
     this.copyTransactionsPerPagination = this.sortByAttributeObject(this.copyTransactionsPerPagination, order, index);
   }
   public sortByAttributeObject(transactions, order, index) {
-    if (index == 0) {
+    if (index == 1) {
       return this.sortByTransactionOrder(transactions, order, index);
     }
-    else if (index == 1) {
+    else if (index == 2) {
       return this.sortByDateDebutOrder(transactions, order, index);
     }
-    else if (index == 2) {
+    else if (index == 3) {
       return this.sortByDateFinOrder(transactions, order, index);
     }
+    else if (index ==0){
+      return this.sortByDateCreation(transactions, order, index);
+    }
+  }
+
+  private sortByDateCreation(array, order, value) {
+    const compareFunction = (a, b) => {
+      if (a.created_at.slice(0, 19) > b.created_at.slice(0, 19)) {
+        return 1 * order;
+      }
+      if (a.created_at.slice(0, 19) < b.created_at.slice(0, 19)) {
+        return -1 * order;
+      }
+      return 0;
+    }
+    return array.sort(compareFunction);
   }
   private sortByTransactionOrder(array, order, value) {
     const compareFunction = (a, b) => {
@@ -217,8 +233,18 @@ export class ListTransactionComponent implements OnInit {
     this.advancedTable = this.copyTransactionsPerPagination.slice(0, this.countPerPage);
   }
   filterItems(filterValue: string) {
-    let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
-    return this.transactions.filter((item) => {
+  let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
+  // this.transactions.forEach(element => {
+  //   // element.created_at.toISOString().split('T')[0]
+  //   const x=element.created_at.substr(0, 19) ;
+  //   var allDate = x.split('-');
+  //   var thisDate = allDate[2].split('T');
+  //   element.created_at= [thisDate[0],allDate[1],allDate[0],thisDate[1] ].join("-");
+  //  console.warn(element.created_at);
+  //   //console.log((element.created_at.toISOString()).getFullYear() );
+  // });
+   //console.error(this.transactions)
+     return this.transactions.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
     });
   }

@@ -2,7 +2,7 @@
   <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
     <base-card>
       <base-card-title>
-        <h1 class="mdl-card__title-text">Liste des fichiers</h1>
+        <h1 class="mdl-card__title-text">Liste des fichiers logistiques</h1>
         <div class="mdl-layout-spacer"></div>
         <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
           <div class="mdl-textfield label-search">
@@ -38,8 +38,7 @@
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
               <!-- <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{row.fileName}}</td> -->
               <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{ row.logisticFileName.name  }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"dd/MM/yyyy" }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"HH:mm" }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"dd/MM/yyyy 'à' HH:mm" }}</td>
 
               <td class="mdl-data-table__cell--non-numeric">{{ row.clientName }}
               </td>
@@ -55,6 +54,7 @@
               </td>
               <td class="column-actions mdl-data-table__cell--non-numeric">
                 <button
+                [disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                 >Corriger
                 </button>

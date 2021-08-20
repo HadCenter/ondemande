@@ -22,11 +22,6 @@ export class MagistorService {
 
       },
       {
-        name: 'Heure création',
-        sort: null,
-
-      },
-      {
         //             name: '# Code client',
         name: 'Nom client',
         sort: null,

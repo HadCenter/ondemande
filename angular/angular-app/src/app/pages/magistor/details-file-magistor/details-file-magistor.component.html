@@ -34,7 +34,7 @@
         </div>
 
        <div>
-        <button [disabled]="file?.number_annomalies==0"
+        <button [disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
         </button>
         <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"

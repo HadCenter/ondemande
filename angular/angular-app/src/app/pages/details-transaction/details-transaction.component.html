@@ -30,7 +30,7 @@
       <!--            </div>-->
 
       <div class="element-2">
-        
+
         <button style="margin-right: 5px;"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
           transaction
@@ -66,9 +66,9 @@
                 </mat-panel-title>
                 <mat-panel-description class="description">
                   <button (click)='deleteRowsLivraison();$event.stopPropagation();' id="deleteWrongBtn"
-                  [disabled]=" rowsToDeleteLivraison?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
-                  class=" delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Effacer
-                </button>
+                    [disabled]=" rowsToDeleteLivraison?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
+                    class=" delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Effacer
+                  </button>
                   <button (click)='correctionFile("livraison");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                   </button>
@@ -331,14 +331,60 @@
                       {{element.Round_Name}} </td>
                   </ng-container>
 
+                  <!-- isExpress Column -->
+                  <ng-container matColumnDef="isExpress">
+                    <th id="isExpress" class="titre-column" mat-header-cell *matHeaderCellDef> isExpress
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[13].columnProp}}"
+                          [(ngModel)]="options[13].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[13],$event)">
+                          <mat-option value="">-- Select {{options[13].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[13].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 13, 'isExpress','livraison')"
+                      (mouseup)="onMouseUp(i, 13, 'isExpress','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][13], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][13]}">
+                      {{element.isExpress}} </td>
+                  </ng-container>
+
+
+                  <!-- total_price Column -->
+                  <ng-container matColumnDef="total_price">
+                    <th id="total_price" class="titre-column" mat-header-cell *matHeaderCellDef> total_price
+                      <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                        <mat-select class="filter-column" matNativeControl name="{{options[14].columnProp}}"
+                          [(ngModel)]="options[14].modelValue"
+                          (selectionChange)="setFilteredItemsOptions(options[14],$event)">
+                          <mat-option value="">-- Select {{options[14].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of options[14].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 14, 'isExpress','livraison')"
+                      (mouseup)="onMouseUp(i, 14, 'isExpress','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][14], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][14]}">
+                      {{element.total_price}} </td>
+                  </ng-container>
+
+
+
+
+
                   <ng-container matColumnDef="toDelete">
-                    <th id="isDeletedLivraison" style="padding-bottom: 16px;" class="titre-column-livraison" mat-header-cell *matHeaderCellDef>
+                    <th id="isDeletedLivraison" style="padding-bottom: 16px;" class="titre-column-livraison"
+                      mat-header-cell *matHeaderCellDef>
                       <!-- isDelete -->
                     </th>
                     <td mat-cell #cellException class="center-cell-transactionsFiles"
                       *matCellDef="let element ; let i = index">
-                      <mat-checkbox color="warn" (click)="$event.stopPropagation()"
-                        [checked]="element.toDelete==1" (change)="selectDeleteRow(element,'livraison')">
+                      <mat-checkbox color="warn" (click)="$event.stopPropagation()" [checked]="element.toDelete==1"
+                        (change)="selectDeleteRow(element,'livraison')">
                       </mat-checkbox>
                     </td>
 
@@ -661,7 +707,7 @@
                         <mat-select class="filter-column" matNativeControl name="{{optionsException[12].columnProp}}"
                           [(ngModel)]="optionsException[12].modelValue"
                           (selectionChange)="setFilteredItemsExceptionOptions(optionsException[12],$event)">
-                          <mat-option value="">-- Select {{optionsException[11].columnProp}}--</mat-option>
+                          <mat-option value="">-- Select {{optionsException[12].columnProp}}--</mat-option>
                           <mat-option [value]="item" *ngFor="let item of optionsException[12].options">
                             <label>{{item}}</label>
                           </mat-option>
@@ -675,15 +721,40 @@
                       {{element.Remarque}} </td>
                   </ng-container>
 
+
+                  <!-- Remarque Column -->
+                  <ng-container matColumnDef="Express">
+                    <th id="ExpressException" class="titre-column-exception" mat-header-cell *matHeaderCellDef>
+                      Express
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsException[13].columnProp}}"
+                          [(ngModel)]="optionsException[13].modelValue"
+                          (selectionChange)="setFilteredItemsExceptionOptions(optionsException[13],$event)">
+                          <mat-option value="">-- Select {{optionsException[13].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsException[13].options">
+                            <label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 13, 'Express','exception')"
+                      (mouseup)="onMouseUp(i, 13, 'Express','exception')"
+                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][13], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][13]}">
+                      {{element.Express}} </td>
+                  </ng-container>
+
+
                   <!-- isDeleted Column -->
                   <ng-container matColumnDef="isDeleted">
-                    <th id="isDeletedException" style="padding-bottom: 16px !important;" class="titre-column-exception" mat-header-cell *matHeaderCellDef>
+                    <th id="isDeletedException" style="padding-bottom: 16px !important;" class="titre-column-exception"
+                      mat-header-cell *matHeaderCellDef>
                       <!-- isDeleted -->
                     </th>
                     <td mat-cell #cellException class="center-cell-transactionsFiles"
                       *matCellDef="let element ; let i = index">
-                      <mat-checkbox color="warn" (click)="$event.stopPropagation()"
-                        [checked]="element.isDeleted==1" (change)="selectDeleteRow(element,'exception')">
+                      <mat-checkbox color="warn" (click)="$event.stopPropagation()" [checked]="element.isDeleted==1"
+                        (change)="selectDeleteRow(element,'exception')">
                       </mat-checkbox>
                     </td>
 
@@ -1137,9 +1208,9 @@
                 </mat-panel-title>
                 <mat-panel-description class="description">
                   <button (click)='deleteRowsMad();$event.stopPropagation();' id="deleteWrongBtn"
-                  [disabled]=" rowsToDeleteMad?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
-                  class=" delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Effacer
-                </button>
+                    [disabled]=" rowsToDeleteMad?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
+                    class=" delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Effacer
+                  </button>
                   <button (click)='correctionFile("mad");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                   </button>
@@ -1406,15 +1477,59 @@
                       {{element.Round_Name}} </td>
                   </ng-container>
 
+                  
+                  <!-- StartTime Column -->
+                  <ng-container matColumnDef="StartTime">
+                    <th id="StartTimeMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> StartTime
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[13].columnProp}}"
+                          [(ngModel)]="optionsMad[13].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[13],$event)">
+                          <mat-option value="">-- Select {{optionsMad[13].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[13].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell #cellMad class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 13, 'StartTime','mad')"
+                      (mouseup)="onMouseUp(i, 13, 'StartTime','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][13], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][13]}">
+                      {{element.StartTime | date:"yyyy/MM/dd 'à' HH:mm" }} </td>
+                  </ng-container>
+
+
+                     <!-- ClousureTime Column -->
+                  <ng-container matColumnDef="ClousureTime">
+                    <th id="ClousureTimeMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> ClousureTime
+                      <mat-form-field class="form-column" appearance="fill">
+                        <mat-select class="filter-column" matNativeControl name="{{optionsMad[14].columnProp}}"
+                          [(ngModel)]="optionsMad[14].modelValue"
+                          (selectionChange)="setFilteredItemsMadOptions(optionsMad[14],$event)">
+                          <mat-option value="">-- Select {{optionsMad[14].columnProp}}--</mat-option>
+                          <mat-option [value]="item" *ngFor="let item of optionsMad[14].options"><label>{{item}}</label>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td mat-cell #cellMad class="center-cell-transactionsFiles"
+                      *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 14, 'ClousureTime','mad')"
+                      (mouseup)="onMouseUp(i, 14, 'ClousureTime','mad')"
+                      [ngClass]="{'selected': selectedCellsStateMad[i+ paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][14], 'unselected': !selectedCellsStateMad[i+paginator.toArray()[3].pageIndex*paginator.toArray()[3].pageSize][14]}">
+                      {{element.ClousureTime| date:"yyyy/MM/dd 'à' HH:mm"}} </td>
+                  </ng-container>
+
+
 
                   <ng-container matColumnDef="toDelete">
-                    <th id="isDeletedMad" style="padding-bottom: 16px;" class="titre-column-Mad" mat-header-cell *matHeaderCellDef>
+                    <th id="isDeletedMad" style="padding-bottom: 16px;" class="titre-column-Mad" mat-header-cell
+                      *matHeaderCellDef>
                       <!-- isDelete -->
                     </th>
                     <td mat-cell #cellException class="center-cell-transactionsFiles"
                       *matCellDef="let element ; let i = index">
-                      <mat-checkbox color="warn" (click)="$event.stopPropagation()"
-                        [checked]="element.toDelete==1" (change)="selectDeleteRow(element,'mad')">
+                      <mat-checkbox color="warn" (click)="$event.stopPropagation()" [checked]="element.toDelete==1"
+                        (change)="selectDeleteRow(element,'mad')">
                       </mat-checkbox>
                     </td>
 

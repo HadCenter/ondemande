@@ -23,10 +23,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   fichierLivraison: any = [];
   fichierMad: any = [];
   fichierMetadata: any = [];
-  displayedColumnsLivraison: string[] = ['toDelete','Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name'];
-  displayedColumnsException: string[] = ['isDeleted', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque'];
+  displayedColumnsLivraison: string[] = ['toDelete','Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name','isExpress','total_price'];
+  displayedColumnsException: string[] = ['isDeleted', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque','Express'];
   displayedColumnsMetadata: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'sourceClosureDate', 'realInfoHasPrepared', 'status', 'metadataFACTURATION'];
-  displayedColumnsMad: string[] = ['toDelete','Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name'];
+  displayedColumnsMad: string[] = ['toDelete','Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name','StartTime','ClousureTime'];
   dataSource = new MatTableDataSource<any>(this.fichierLivraison);
   dataSourceException = new MatTableDataSource<any>(this.fichierException);
   dataSourceMetaData = new MatTableDataSource<any>(this.fichierMetadata);
@@ -142,6 +142,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.dataSourceMetaData.data.forEach(element => {
           this.selectedCellsStateMetaData.push(Array.from({ length: Object.keys(this.dataSourceMetaData.data[0]).length - 1 }, () => false))
         });
+      
         // get select options
         this.displayedColumnsMetadata.forEach(item => {
           this.getOptionMetaData(item);

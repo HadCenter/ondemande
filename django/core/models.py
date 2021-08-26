@@ -91,7 +91,7 @@ class AnomaliesEdiFileAnnuaire(models.Model):
         db_table = 'anomalies_edi_file_annuaire'
 
 class HistoryAnomaliesEdiFiles(models.Model):
-    edi_file = models.ForeignKey(EDIfile ,db_column="edi_file_id", on_delete= models.DO_NOTHING )
+    edi_file = models.ForeignKey(EDIfile ,db_column="edi_file_id", on_delete= models.CASCADE )
     execution_time = models.DateTimeField(blank=True, null=True)
     anomalie = models.ForeignKey(AnomaliesEdiFileAnnuaire,db_column="anomalie_id",on_delete=models.DO_NOTHING , blank=True, null=True)
     number_of_anomalies = models.IntegerField(blank=True, null=True)
@@ -146,7 +146,7 @@ class AccountsAccount(models.Model):
 class InterventionAdmin(models.Model):
     id = models.IntegerField(primary_key=True)
     id_admin = models.ForeignKey(AccountsAccount ,db_column="id_admin", on_delete= models.DO_NOTHING )
-    id_file_edi = models.ForeignKey(EDIfile ,db_column="id_file_edi", on_delete= models.DO_NOTHING )
+    id_file_edi = models.ForeignKey(EDIfile ,db_column="id_file_edi", on_delete= models.CASCADE )
     execution_time = models.DateTimeField(blank=True, default=datetime.now())
 
     class Meta:

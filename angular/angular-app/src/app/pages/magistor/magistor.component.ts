@@ -53,6 +53,8 @@ export class MagistorComponent implements OnInit {
       return 'red';
     }
   }
+
+ 
   public getFiles() {
     this.tablesService.getAllLogisticFiles()
       .subscribe(res => {
@@ -176,8 +178,9 @@ export class MagistorComponent implements OnInit {
   }
   public actualiser() {
     this.advancedTable = [];
-    this.show = true;
+    this.copy_advancedTable = [];
     this.files = [];
+    this.show = true;
     this.getFiles();
   }
   gotoDetails(row) {
@@ -288,7 +291,11 @@ export class DialogImportFile {
         if(err.error.message == "file save echec")
         {
           this.error = "Type du fichier existant";
-        }else{
+        }
+        else if (err.error.includes("'OP_CODE'")  ){
+          this.error ="Type de fichier incorrecte";
+        }
+        else{
           this.error = "Veuillez télécharger un fichier";
         }
       }

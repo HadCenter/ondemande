@@ -22,6 +22,7 @@ export class ListTransactionComponent implements OnInit {
   private countPerPage = 8;
   public numPage = 0;
   public advancedTable = [];
+  copy_transactions:any=[];
   showJobRun = false;
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   constructor(private tablesService: ListTransactionService,
@@ -31,6 +32,17 @@ export class ListTransactionComponent implements OnInit {
   ngOnInit(): void {
     this.listenToWebSocket();
     this.getTransactions();
+  }
+
+  searchCreated_at(){
+   this.copy_transactions.forEach(element => {
+      const x=element.created_at.substr(0, 19) ;
+      var allDate = x.split('-');
+      var thisDate = allDate[2].split('T');
+    //  element.created_at= [thisDate[0],allDate[1],allDate[0],thisDate[1] ].join("-");
+      element.created_at= [thisDate[0],allDate[1],allDate[0]].join("-");
+      element.created_at=[element.created_at,thisDate[1]].join(' à ')
+    });
   }
 
   listenToWebSocket() {
@@ -100,6 +112,7 @@ export class ListTransactionComponent implements OnInit {
   public actualiser() {
     this.advancedTable = [];
     this.transactions = [];
+    this.copy_transactions = [];
     this.showLowderListTransaction = true;
     this.getTransactions();
   }
@@ -109,10 +122,12 @@ export class ListTransactionComponent implements OnInit {
       .subscribe(res => {
         this.showLowderListTransaction = false;
         this.transactions = res;
+        this.copy_transactions=res;
         this.copyTransactionsPerPagination = this.transactions;
         console.log(this.transactions);
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        this.searchCreated_at();
       },
         error => {
           this.showLowderListTransaction = false;
@@ -244,7 +259,7 @@ export class ListTransactionComponent implements OnInit {
   //   //console.log((element.created_at.toISOString()).getFullYear() );
   // });
    //console.error(this.transactions)
-     return this.transactions.filter((item) => {
+     return this.copy_transactions.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
     });
   }
@@ -272,6 +287,8 @@ export class DailogGenerateTransaction {
   }
   ngOnInit(): void {
   }
+
+
   onNoclick() {
     this.dialogRef.close();
   }
@@ -306,3 +323,4 @@ export class DailogGenerateTransaction {
   //   event.target.required = true;
   // }
 }
+

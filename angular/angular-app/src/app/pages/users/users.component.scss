@@ -38,7 +38,12 @@ td.mdl-data-table__cell--non-numeric.task-done {
   color: #fff;
   cursor: pointer;
 }
-
+td.user-info.mdl-data-table__cell--non-numeric{
+  text-align: center;
+}
+th.user-info.mdl-data-table__cell--non-numeric{
+  text-align: center;
+}
 
 body {
   padding-top: 20px;

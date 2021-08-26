@@ -12,8 +12,9 @@ import { ListTransactionService } from './list-transaction.service';
 import { GenererTransactionService } from './dialog/generer-transaction.service';
 import { LoaderModule } from 'app/components/loader/loader.module';
 import {MatIconModule} from '@angular/material/icon';
+import { Mypipe } from './mypipe';
 @NgModule({
-  declarations: [ListTransactionComponent,DailogGenerateTransaction],
+  declarations: [ListTransactionComponent,DailogGenerateTransaction,Mypipe],
   imports: [
     CommonModule,
     ListTransactionRoutingModule,

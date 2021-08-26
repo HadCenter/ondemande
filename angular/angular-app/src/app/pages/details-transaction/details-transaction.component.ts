@@ -23,10 +23,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   fichierLivraison: any = [];
   fichierMad: any = [];
   fichierMetadata: any = [];
-  displayedColumnsLivraison: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name'];
-  displayedColumnsException: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque', 'isDeleted'];
+  displayedColumnsLivraison: string[] = ['toDelete','Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name','isExpress','total_price'];
+  displayedColumnsException: string[] = ['isDeleted', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque','Express'];
   displayedColumnsMetadata: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'sourceClosureDate', 'realInfoHasPrepared', 'status', 'metadataFACTURATION'];
-  displayedColumnsMad: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name'];
+  displayedColumnsMad: string[] = ['toDelete','Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name','StartTime','ClousureTime'];
   dataSource = new MatTableDataSource<any>(this.fichierLivraison);
   dataSourceException = new MatTableDataSource<any>(this.fichierException);
   dataSourceMetaData = new MatTableDataSource<any>(this.fichierMetadata);
@@ -80,6 +80,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   copySelectionException: any = [];
   copySelectionMetaData: any = [];
   copySelectionMad: any = [];
+  rowsToDeleteException: any = [];
+  rowsToDeleteLivraison : any =[];
+  rowsToDeleteMad: any =[];
   clickCorrection: boolean = false;
   public filterValueLivraison: any;
   public filterValueException: any;
@@ -97,11 +100,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     var data = { "transaction_id": parseInt(this.route.snapshot.params.id) };
     this.service.seeAllFileTransaction(data).subscribe(res => {
 
-      if (res.livrasion !== null && Object.keys(res.livraison).length !== 0) {
+      if (res.livraison !== null && Object.keys(res.livraison).length !== 0) {
         this.dataSource.paginator = this.paginator.toArray()[0];
         this.arrayLivraison = res.livraison;
         this.dataSource.data = this.arrayLivraison.fileContent;
-        this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+        this.dataSource.data = this.dataSource.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
         this.copySelectionLivraison = this.dataSource.data  //copy to use on selection
         this.copyFilterLivraison = this.dataSource.data;
         this.dataSource.data.forEach(element => {
@@ -117,7 +120,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.dataSourceException.paginator = this.paginator.toArray()[1];
         this.arrayException = res.exception;
         this.dataSourceException.data = this.arrayException.fileContent;
-        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
         this.copySelectionException = this.dataSourceException.data  //copy to use on selection
         this.copyFilterException = this.dataSourceException.data;
         this.dataSourceException.data.forEach(element => {
@@ -133,12 +136,13 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.dataSourceMetaData.paginator = this.paginator.toArray()[2];
         this.arrayMetaData = res.metadata;
         this.dataSourceMetaData.data = this.arrayMetaData.fileContent;
-        this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+        this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
         this.copySelectionMetaData = this.dataSourceMetaData.data  //copy to use on selection
         this.copyFilterMetaData = this.dataSourceMetaData.data;
         this.dataSourceMetaData.data.forEach(element => {
           this.selectedCellsStateMetaData.push(Array.from({ length: Object.keys(this.dataSourceMetaData.data[0]).length - 1 }, () => false))
         });
+      
         // get select options
         this.displayedColumnsMetadata.forEach(item => {
           this.getOptionMetaData(item);
@@ -149,7 +153,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.dataSourceMAD.paginator = this.paginator.toArray()[3];
         this.arrayMad = res.mad;
         this.dataSourceMAD.data = this.arrayMad.fileContent;
-        this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+        this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
         this.copySelectionMad = this.dataSourceMAD.data  //copy to use on selection
         this.copyFilterMad = this.dataSourceMAD.data;
         this.dataSourceMAD.data.forEach(element => {
@@ -168,6 +172,125 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     })
 
   }
+
+  selectDeleteRow(row,typeFile) {
+  
+    if (typeFile=="exception"){
+        //uncheck delete rowId from rowstoDelete
+      if (this.rowsToDeleteException.includes(row.taskId)) {
+        this.rowsToDeleteException.splice(this.rowsToDeleteException.indexOf(row.taskId), 1);
+      }
+      //check add to rowTodelete
+      else {
+        this.rowsToDeleteException.push(row.taskId);
+  
+      }
+
+      if (row.isDeleted == 0) {
+        row.isDeleted = 1;
+      }
+      else if (row.isDeleted ==1) {
+        row.isDeleted = 0;
+      }
+      // console.warn(row);
+     
+    }
+    else if(typeFile=="livraison"){
+         //uncheck delete rowId from rowstoDelete
+         if (this.rowsToDeleteLivraison.includes(row.taskId)) {
+          this.rowsToDeleteLivraison.splice(this.rowsToDeleteLivraison.indexOf(row.taskId), 1);
+        }
+        //check add to rowTodelete
+        else {
+          this.rowsToDeleteLivraison.push(row.taskId);
+    
+        }
+
+        if (row.toDelete == 0) {
+          row.toDelete = 1;
+        }
+        else if (row.toDelete ==1) {
+          row.toDelete = 0;
+        }
+    }
+    else if(typeFile=="mad"){
+      //uncheck delete rowId from rowstoDelete
+      if (this.rowsToDeleteMad.includes(row.taskId)) {
+       this.rowsToDeleteMad.splice(this.rowsToDeleteMad.indexOf(row.taskId), 1);
+     }
+     //check add to rowTodelete
+     else {
+       this.rowsToDeleteMad.push(row.taskId);
+ 
+     }
+     if (row.toDelete == 0) {
+      row.toDelete = 1;
+    }
+    else if (row.toDelete ==1) {
+      row.toDelete = 0;
+    }
+ }
+
+  
+   
+   
+     }
+ /**
+  * Delete row from file exception
+  */
+  deleteRowsException() {
+    this.fileTocheck = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacement: {
+        columns: Object.keys(this.dataSourceException.data[0]),
+        rows: this.dataSourceException.data.map(Object.values),
+      }
+    }
+    // console.error("**", this.fileTocheck)
+    this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
+      if (res.message == "ok") {
+        console.warn("ok")
+      }
+    })
+  }
+
+/**
+  * Delete row from file livraison
+  */
+  deleteRowsLivraison() {
+    this.fileTocheck = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacement: {
+        columns: Object.keys(this.dataSource.data[0]),
+        rows: this.dataSource.data.map(Object.values),
+      }
+    }
+    // console.error("**", this.fileTocheck)
+    this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
+      if (res.message == "ok") {
+        console.warn("ok")
+      }
+    })
+  }
+
+  /**
+  * Delete row from file livraison
+  */
+ deleteRowsMad() {
+  this.fileTocheck = {
+    transaction_id: this.transaction.transaction_id,
+    fileReplacement: {
+      columns: Object.keys(this.dataSourceMAD.data[0]),
+      rows: this.dataSourceMAD.data.map(Object.values),
+    }
+  }
+  // console.error("**", this.fileTocheck)
+  this.service.correctMadFile(this.fileTocheck).subscribe(res => {
+    if (res.message == "ok") {
+      console.warn("ok")
+    }
+  })
+}
 
   /**
   * Get options inside selects for MetaData
@@ -484,7 +607,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 */
   changeSelectedOptionExceptionColor(filter) {
     if (filter.columnProp && filter.modelValue != "") {
-      console.warn(filter.columnProp, filter.columnProp + "Exception")
+      // console.warn(filter.columnProp, filter.columnProp + "Exception")
       document.getElementById(filter.columnProp + "Exception").style.color = "#00bcd4";
     }
     else {
@@ -496,7 +619,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 */
   changeSelectedOptionMetaDataColor(filter) {
     if (filter.columnProp && filter.modelValue != "") {
-      console.warn(filter.columnProp, filter.columnProp + "MetaData")
+      // console.warn(filter.columnProp, filter.columnProp + "MetaData")
       document.getElementById(filter.columnProp + "MetaData").style.color = "#00bcd4";
     }
     else {
@@ -508,7 +631,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 */
   changeSelectedOptionMadColor(filter) {
     if (filter.columnProp && filter.modelValue != "") {
-      console.warn(filter.columnProp, filter.columnProp + "Mad")
+      // console.warn(filter.columnProp, filter.columnProp + "Mad")
       document.getElementById(filter.columnProp + "Mad").style.color = "#00bcd4";
     }
     else {

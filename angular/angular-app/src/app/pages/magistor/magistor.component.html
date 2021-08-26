@@ -17,7 +17,7 @@
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Importer fichier
         </button>
         &nbsp;
-        <a><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Actualiser
+        <a><button  (click)="actualiser()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Actualiser
           </button></a>
       </base-card-title>
       <base-card-body class="no-padding">
@@ -54,6 +54,11 @@
               </td>
               <td class="column-actions mdl-data-table__cell--non-numeric">
                 <button
+                [disabled]="file?.number_annomalies==0 || file?.status=='Terminé'"
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                >Valider
+                </button>
+                <button style="margin-left: 3px;"
                 [disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                 >Corriger

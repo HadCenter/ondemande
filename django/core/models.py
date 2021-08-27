@@ -147,7 +147,7 @@ class InterventionAdmin(models.Model):
     id = models.IntegerField(primary_key=True)
     id_admin = models.ForeignKey(AccountsAccount ,db_column="id_admin", on_delete= models.DO_NOTHING )
     id_file_edi = models.ForeignKey(EDIfile ,db_column="id_file_edi", on_delete= models.CASCADE )
-    execution_time = models.DateTimeField(blank=True, default=datetime.now())
+    execution_time = models.DateTimeField(auto_now =True)
 
     class Meta:
         managed = False

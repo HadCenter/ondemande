@@ -13,5 +13,6 @@ urlpatterns = [
     path('correctAllFiles', views.correctAllFiles),
 
     path('getAllTransactionMadLivraison', views.getAllTransactionMadLivraison),
-    path('getSingleTransactionMadLivraison/<int:pk>', views.getSingleTransactionMadLivraison)
+    path('getSingleTransactionMadLivraison/<int:pk>', views.getSingleTransactionMadLivraison),
+    path('startEngineOnMagistorFiles', views.startEngineOnMagistorFiles)
 ]

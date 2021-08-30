@@ -20,6 +20,11 @@ talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHoo
 
 #talendUrlMADFileWebHookOLD ='https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDev/0920e59cd9e54e43b0b11ca072a02850'
 talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDevV2/f8e6c58d240a4248b8f1a06e63621fae'
+talendUrlMagistorWebHook = ''
+
+@api_view(['POST'])
+def startEngineOnMagistorFiles(request):
+	return startEngineWithLinkAndData(talendUrlMagistorWebHook,request.data)
 
 @api_view(['POST'])
 def startEngineOnEdiFiles(request):

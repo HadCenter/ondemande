@@ -201,6 +201,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         row.isDeleted = 0;
       }
       // console.warn(row);
+      // location.reload();
 
     }
     else if (typeFile == "livraison") {
@@ -220,6 +221,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       else if (row.toDelete == 1) {
         row.toDelete = 0;
       }
+      // location.reload();
     }
     else if (typeFile == "mad") {
       //uncheck delete rowId from rowstoDelete
@@ -237,6 +239,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       else if (row.toDelete == 1) {
         row.toDelete = 0;
       }
+      // location.reload();
     }
 
 
@@ -257,7 +260,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // console.error("**", this.fileTocheck)
     this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
-        console.warn("ok")
+        console.warn("ok");
+        location.reload();
+       
       }
     })
   }
@@ -276,7 +281,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // console.error("**", this.fileTocheck)
     this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
-        console.warn("ok")
+        console.warn("ok");
+        location.reload();
+       // return false;
       }
     })
   }
@@ -295,7 +302,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // console.error("**", this.fileTocheck)
     this.service.correctMadFile(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
-        console.warn("ok")
+        console.warn("ok");
+        location.reload();
       }
     })
   }

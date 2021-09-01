@@ -289,8 +289,9 @@
             {{element.LONGEUR_UNITAIRE}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="LARGEUR_UNITAIRE">
-          <th class="titre-column-magistor" id="LARGEUR_UNITAIRE" mat-header-cell *matHeaderCellDef> LARGEUR_UNITAIRE
+
+        <ng-container matColumnDef="HAUTEUR_UNITAIRE">
+          <th class="titre-column-magistor" id="HAUTEUR_UNITAIRE" mat-header-cell *matHeaderCellDef> HAUTEUR_UNITAIRE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[12].modelValue"
@@ -302,14 +303,14 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="LARGEUR_UNITAIREmagistor"
-            (mousedown)="onMouseDown(i, 12, 'LARGEUR_UNITAIRE')" (mouseup)="onMouseUp(i, 12, 'LARGEUR_UNITAIRE')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="HAUTEUR_UNITAIREmagistor"
+            (mousedown)="onMouseDown(i, 12, 'HAUTEUR_UNITAIRE')" (mouseup)="onMouseUp(i, 12, 'HAUTEUR_UNITAIRE')"
             [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}">
-            {{element.LARGEUR_UNITAIRE}} </td>
+            {{element.HAUTEUR_UNITAIRE}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="HAUTEUR_UNITAIRE">
-          <th class="titre-column-magistor" id="HAUTEUR_UNITAIRE" mat-header-cell *matHeaderCellDef> HAUTEUR_UNITAIRE
+        <ng-container matColumnDef="EAN">
+          <th class="titre-column-magistor" id="EAN"  mat-header-cell *matHeaderCellDef> EAN
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[13].modelValue"
@@ -321,14 +322,15 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="HAUTEUR_UNITAIREmagistor"
-            (mousedown)="onMouseDown(i, 13, 'HAUTEUR_UNITAIRE')" (mouseup)="onMouseUp(i, 13, 'HAUTEUR_UNITAIRE')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="EANmagistor" (mousedown)="onMouseDown(i, 13, 'EAN')"
+            (mouseup)="onMouseUp(i, 13, 'EAN')"
             [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13]}">
-            {{element.HAUTEUR_UNITAIRE}} </td>
+            {{element.EAN}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="EAN">
-          <th class="titre-column-magistor" id="EAN"  mat-header-cell *matHeaderCellDef> EAN
+
+        <ng-container matColumnDef="IS_COUPE">
+          <th class="titre-column-magistor" id="IS_COUPE" mat-header-cell *matHeaderCellDef> IS_COUPE
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[14].modelValue"
@@ -340,15 +342,15 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="EANmagistor" (mousedown)="onMouseDown(i, 14, 'EAN')"
-            (mouseup)="onMouseUp(i, 14, 'EAN')"
+          <td mat-cell *matCellDef="let element ; let i = index" id="IS_COUPEmagistor"
+            (mousedown)="onMouseDown(i, 14, 'IS_COUPE')" (mouseup)="onMouseUp(i, 14, 'IS_COUPE')"
             [ngClass]="{'selected': selectedCellsState[i][14], 'unselected': !selectedCellsState[i][14]}">
-            {{element.EAN}} </td>
+            {{element.IS_COUPE}} </td>
         </ng-container>
 
 
-        <ng-container matColumnDef="IS_COUPE">
-          <th class="titre-column-magistor" id="IS_COUPE" mat-header-cell *matHeaderCellDef> IS_COUPE
+        <ng-container matColumnDef="SEUIL_BLOCAGE_PERIME">
+          <th class="titre-column-magistor" id="SEUIL_BLOCAGE_PERIME" mat-header-cell *matHeaderCellDef> SEUIL_BLOCAGE_PERIME
 
             <mat-form-field class="form-column" appearance="fill">
               <mat-select multiple [(ngModel)]="options[15].modelValue"
@@ -360,30 +362,10 @@
             </mat-form-field>
 
           </th>
-          <td mat-cell *matCellDef="let element ; let i = index" id="IS_COUPEmagistor"
-            (mousedown)="onMouseDown(i, 15, 'IS_COUPE')" (mouseup)="onMouseUp(i, 15, 'IS_COUPE')"
-            [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][15]}">
-            {{element.IS_COUPE}} </td>
-        </ng-container>
-
-
-        <ng-container matColumnDef="SEUIL_BLOCAGE_PERIME">
-          <th class="titre-column-magistor" id="SEUIL_BLOCAGE_PERIME" mat-header-cell *matHeaderCellDef> SEUIL_BLOCAGE_PERIME
-
-            <mat-form-field class="form-column" appearance="fill">
-              <mat-select multiple [(ngModel)]="options[16].modelValue"
-                (selectionChange)="setFilteredItemsOptions(options[16],$event)">
-                <mat-select-trigger>
-                </mat-select-trigger>
-                <mat-option *ngFor="let item of options[16].options" [value]="item">{{item}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-
-          </th>
           <td mat-cell *matCellDef="let element ; let i = index" id="SEUIL_BLOCAGE_PERIMEmagistor"
-            (mousedown)="onMouseDown(i, 16, 'SEUIL_BLOCAGE_PERIME')"
-            (mouseup)="onMouseUp(i, 16, 'SEUIL_BLOCAGE_PERIME')"
-            [ngClass]="{'selected': selectedCellsState[i][16], 'unselected': !selectedCellsState[i][16]}">
+            (mousedown)="onMouseDown(i, 15, 'SEUIL_BLOCAGE_PERIME')"
+            (mouseup)="onMouseUp(i, 15, 'SEUIL_BLOCAGE_PERIME')"
+            [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][15]}">
             {{element.SEUIL_BLOCAGE_PERIME}} </td>
         </ng-container>
 

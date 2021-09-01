@@ -456,7 +456,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   //console.error(this.file);
   this.hideUiSelectionOnCorrection();  //hide ui selection on correction
  // if (this.copyfileMagistor.rows.length > 0) {
-    this.fileTocheck = {
+    this.fileTocheck = [{
       Magistor_Current_Client: this.file.clientName,
       Magistor_Current_File: this.file.logisticFileType.slice(0,3)
       // fileId: this.file.idFile,
@@ -465,7 +465,7 @@ export class DetailsFileMagistorComponent implements OnInit {
       // rows: this.copyfileMagistor,
 
    // }
-  }
+  }]
 
   this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
   console.warn("**file to check**", this.fileTocheck)

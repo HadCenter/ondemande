@@ -7,6 +7,7 @@ import { environment } from '../../../environments/environment';
 export class MagistorService {
 
   private url = `${environment.apiBaseUrl}/api`;
+  private url2= `${environment.apiBaseUrl}/talendEsb`;
   constructor(private http: HttpClient)
    { }
   public getAdvancedHeaders() {
@@ -72,5 +73,8 @@ export class MagistorService {
   }
   public getAllLogisticFiles () : Observable<any> {
     return this.http.get(`${this.url}/getLogisticFiles/`);
+  }
+  public corretFile (data): Observable<any> {
+    return  this.http.post(`${this.url2}/startEngineOnMagistorFiles`,data);
   }
 }

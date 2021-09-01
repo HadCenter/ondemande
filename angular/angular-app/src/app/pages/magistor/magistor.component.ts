@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MagistorService } from './magistor.service';
-import { MatDialog, MatDialogRef,} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,12 +20,15 @@ export class MagistorComponent implements OnInit {
 
   fichiers: any = [];
   public filterValue: any;
+  fileTocheck: any;
+  snackBarRef: any;
+  public snackAction = 'Ok';
 
   constructor(
     private tablesService: MagistorService,
+    private _snackBar: MatSnackBar,
     private router: Router,
-    public dialog: MatDialog)
-    { }
+    public dialog: MatDialog) { }
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   public readonly sortOrder = {
     asc: 1,
@@ -53,8 +56,14 @@ export class MagistorComponent implements OnInit {
       return 'red';
     }
   }
+  openSnackBar(message: string, action: string) {
+    this.snackBarRef = this._snackBar.open(message, action, {
+      duration: 6000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
 
- 
   public getFiles() {
     this.tablesService.getAllLogisticFiles()
       .subscribe(res => {
@@ -166,7 +175,7 @@ export class MagistorComponent implements OnInit {
       return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
     });
   }
-    /******Open dialog Import File */
+  /******Open dialog Import File */
   openDialog() {
     const dialogRef = this.dialog.open(DialogImportFile);
     dialogRef.afterClosed().subscribe(result => {
@@ -186,6 +195,23 @@ export class MagistorComponent implements OnInit {
   gotoDetails(row) {
     this.router.navigate(['/details-file-logistique', row.idLogisticFile])
   }
+  correctionFile(file) {
+
+    this.fileTocheck = {
+      Magistor_Current_Client: file.clientName,
+      Magistor_Current_File: file.logisticFileType.slice(0, 3)
+    }
+
+    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+    console.warn("**file to check**", this.fileTocheck)
+    this.tablesService.corretFile(this.fileTocheck).subscribe(res => {
+      console.log('resultat correction', res);
+      if (res.message == "ok") {
+        this.actualiser();
+      }
+    })
+  }
+
 
 }
 
@@ -220,6 +246,7 @@ export class DialogImportFile {
   expediteurArray: any = [];
   expediteurArrayFiltred: any;
 
+
   constructor(private tablesService: MagistorService,
     private router: Router,
     public dialogRef: MatDialogRef<DialogImportFile>,
@@ -241,6 +268,7 @@ export class DialogImportFile {
     }
 
   }
+
 
   get f() {
     return this.myForm.controls;
@@ -288,14 +316,13 @@ export class DialogImportFile {
       },
       (err) => {
         this.showloader = false;
-        if(err.error.message == "file save echec")
-        {
+        if (err.error.message == "file save echec") {
           this.error = "Type du fichier existant";
         }
-        else if (err.error.includes("'OP_CODE'")  ){
-          this.error ="Type de fichier incorrecte";
+        else if (err.error.includes("'OP_CODE'")) {
+          this.error = "Type de fichier incorrecte";
         }
-        else{
+        else {
           this.error = "Veuillez télécharger un fichier";
         }
       }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DetailsFileMagistorService } from '../details-file-magistor.service';
+import { DetailsFileMagistorService } from './details-file-magistor.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -451,29 +451,30 @@ export class DetailsFileMagistorComponent implements OnInit {
   */
  correctionFile() {
   this.clickCorrection = true;
-  var user = JSON.parse(localStorage.getItem('currentUser'));
- // this.rearrangeAttributes();  //Remove unecessey columns
+ // var user = JSON.parse(localStorage.getItem('currentUser'));
+  //console.error(user);
+  //console.error(this.file);
   this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-  if (this.copyfileMagistor.rows.length > 0) {
-   // this.rearrangeAttributesValidFile(); //Remove unecessey columns from valid file
-   // this.removeUnecesseryColumns(); // from rows filewrong
+ // if (this.copyfileMagistor.rows.length > 0) {
     this.fileTocheck = {
-      fileId: this.file.idFile,
-      account_id: user.id,
-      columns: this.displayedColumns,
-      rows: this.copyfileMagistor,
+      Magistor_Current_Client: this.file.clientName,
+      Magistor_Current_File: this.file.logisticFileType.slice(0,3)
+      // fileId: this.file.idFile,
+      // account_id: user.id,
+      // columns: this.displayedColumns,
+      // rows: this.copyfileMagistor,
 
-    }
+   // }
   }
 
   this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
   console.warn("**file to check**", this.fileTocheck)
-  this.fileService.corretFile(this.fileTocheck).subscribe(res => {
-    console.log('resultat correction', res);
-    if (res.message == "success") {
-      this.router.navigate(['/list-file-edi']);
-    }
-  })
+   this.fileService.corretFile(this.fileTocheck).subscribe(res => {
+     console.log('resultat correction', res);
+     if (res.message == "ok") {
+       this.router.navigate(['/logistique']);
+     }
+   })
 }
 
  /**

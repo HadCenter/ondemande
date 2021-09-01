@@ -1,72 +1,71 @@
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
   <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
-    <base-card>
-      <base-card-title>
-        <h1 class="mdl-card__title-text">Liste des fichiers logistiques</h1>
-        <div class="mdl-layout-spacer"></div>
-        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-          <div class="mdl-textfield label-search">
-            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-              [(ngModel)]="filterValue" placeholder="Rechercher" />
-            <label style="padding: 0%" class="mdl-textfield__label" for="search2"></label>
-          </div>
+  <base-card>
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Liste des fichiers logistiques</h1>
+      <div class="mdl-layout-spacer"></div>
+      <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+        <div class="mdl-textfield label-search">
+          <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+            [(ngModel)]="filterValue" placeholder="Rechercher" />
+          <label style="padding: 0%" class="mdl-textfield__label" for="search2"></label>
         </div>
-        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
-        </base-pagination>
-        <button (click)="openDialog()"
-          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Importer fichier
-        </button>
-        &nbsp;
-        <a><button  (click)="actualiser()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Actualiser
-          </button></a>
-      </base-card-title>
-      <base-card-body class="no-padding">
-        <table  *ngIf="advancedTable.length > 0" class="table-list mdl-data-table mdl-js-data-table sorting-table">
-          <thead>
-            <tr>
-              <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
+      </div>
+      <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+      </base-pagination>
+      <button (click)="openDialog()"
+        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Importer
+        fichier
+      </button>
+      &nbsp;
+      <a><button (click)="actualiser()"
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Actualiser
+        </button></a>
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <table *ngIf="advancedTable.length > 0" class="table-list mdl-data-table mdl-js-data-table sorting-table">
+        <thead>
+          <tr>
+            <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
               (click)="changeSorting(header, i)">
-                <span>{{ header.name}}</span>
-                <i *ngIf="header.sort !== null " class="material-icons sorting"
-                  [class.asc]="header.sort === sortOrder.asc"
-                  [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</i>
-              </th>
+              <span>{{ header.name}}</span>
+              <i *ngIf="header.sort !== null " class="material-icons sorting"
+                [class.asc]="header.sort === sortOrder.asc"
+                [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</i>
+            </th>
 
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-              <!-- <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{row.fileName}}</td> -->
-              <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{ row.logisticFileName.name  }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"dd/MM/yyyy 'à' HH:mm" }}</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
+            <!-- <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{row.fileName}}</td> -->
+            <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;">{{ row.logisticFileName.name }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"dd/MM/yyyy 'à' HH:mm" }}</td>
 
-              <td class="mdl-data-table__cell--non-numeric">{{ row.clientName }}
-              </td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.clientName }}
+            </td>
 
-               <td class="mdl-data-table__cell--non-numeric">{{ row.logisticFileType }}
-              </td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.logisticFileType }}
+            </td>
 
-               <td class="mdl-data-table__cell--non-numeric">{{ row.number_annomalies }}
-              </td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.number_annomalies }}
+            </td>
 
-              <td class="mdl-data-table__cell--non-numeric">
-                <span class="label label--mini color--{{getColor(row.status)}} ">{{ row.status }}</span>
-              </td>
-              <td class="column-actions mdl-data-table__cell--non-numeric">
-                <button
-                [disabled]="file?.number_annomalies==0 || file?.status=='Terminé'"
-                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                >Valider
-                </button>
-                <button style="margin-left: 3px;"
-                [disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'"
-                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                >Corriger
-                </button>
-                <button style="margin-left: 3px;" (click)="gotoDetails(row)"
-                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Détails
-                </button>
-                <!-- <button style="margin-left: 3px;" [disabled]=" row.number_wrong_commands>0 || row.status!=='Terminé' "
+            <td class="mdl-data-table__cell--non-numeric">
+              <span class="label label--mini color--{{getColor(row.status)}} ">{{ row.status }}</span>
+            </td>
+            <td class="column-actions mdl-data-table__cell--non-numeric">
+              <button [disabled]="file?.number_annomalies==0 || file?.status=='Terminé'"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
+              </button>
+              <!----  [disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'"!-->
+              <button style="margin-left: 3px;" (click)="correctionFile(row)"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
+              </button>
+              <button style="margin-left: 3px;" (click)="gotoDetails(row)"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Détails
+              </button>
+              <!-- <button style="margin-left: 3px;" [disabled]=" row.number_wrong_commands>0 || row.status!=='Terminé' "
                  (click)="sendFileToUrbantz(row.contact.codeClient, row.validatedOrders);$event.stopPropagation();"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Envoyer à Urbantz
               </button>
@@ -74,11 +73,10 @@
                   class="download material-icons">
                   download
                 </span> -->
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </base-card-body>
-    </base-card>
-  </div>
-
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </base-card-body>
+  </base-card>
+</div>

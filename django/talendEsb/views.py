@@ -19,7 +19,8 @@ from channels.layers import get_channel_layer
 talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev/750137b1abc34995959f89a19a9aa489'
 
 #talendUrlMADFileWebHookOLD ='https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDev/0920e59cd9e54e43b0b11ca072a02850'
-talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDevV2/f8e6c58d240a4248b8f1a06e63621fae'
+#talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDevV2/f8e6c58d240a4248b8f1a06e63621fae'
+talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDevV3/9c89751b78d3403e9d30c77775a373ce'
 talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/WMS_ONDEMAND_FWH/9162c61d321d44eb81a528107e726e57'
 
 @api_view(['POST'])
@@ -67,6 +68,16 @@ madPlanJobList = ["ECOLOTRANS_URBANTZ_TO_HUB_SANS_MAD_OTHERS_ONDEMAND",
 				  "ECOLOTRANS_URBANTZ_CORRECTION_FACTURATION_VALUES_ONDEMAND",
 				  "ECOLOTRANS_URBANTZ_TO_HUB_MAD_CORRECTION",
 				  "ECOLOTRANS_URBANTZ_LIVRAISON_FILE_CORRECTION" ]
+
+# madPlanJobList = ["SANS_MAD_OTHERS_v2",
+# 				  "SANS_MAD_RUNGIS_ONDEMAND_v2",
+# 				  "MAD_DB_DETAILED_v2",
+# 				  "ROUND_CALCULATE_NEW_RULE_QUANTITY_v2",
+# 				  "DIAGNOSTIC_LIVRAISON_QUANTITY_v2",
+# 				  "URBANTZ_CORRECTION_EXCEPTIONS_v2",
+# 				  "URBANTZ_CORRECTION_FACTURATION_VALUES_ONDEMAND_v2",
+# 				  "URBANTZ_TO_HUB_MAD_CORRECTION_v2",
+# 				  "URBANTZ_LIVRAISON_FILE_CORRECTION_v2" ]
 @api_view(['POST'])
 def integrerMADFile(request):
 	transaction_id = request.data['transaction_id']
@@ -95,7 +106,6 @@ def genererMADFile(request):
 	jobs_to_start.append(madPlanJobList[2])
 	jobs_to_start.append(madPlanJobList[3])
 	jobs_to_start.append(madPlanJobList[4])
-
 	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transactionToInsert.id,end_date_plus_one = transactionToInsert.end_date.replace("-","/"),start_date = transactionToInsert.start_date.replace("-","/"),jobs_to_start =jobs_to_start)
 	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
@@ -184,6 +194,7 @@ def correctLivraisonFile(request):
 
 
 	jobs_to_start = []
+
 	jobs_to_start.append(madPlanJobList[8])
 
 	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
@@ -209,7 +220,6 @@ def correctAllFiles(request):
 	fileNameMetadata = "ExceptionFacturationValue_Livraisons.xlsx"
 	fileNameException = "Livraisons_Exception.xlsx"
 	jobs_to_start = []
-
 
 	if fileReplacementLivraison != None :
 		df = pd.DataFrame(fileReplacementLivraison['rows'], columns=fileReplacementLivraison['columns'])
@@ -239,7 +249,11 @@ def correctAllFiles(request):
 		sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
 		jobs_to_start.append(madPlanJobList[5])
 
-
+	jobs_to_start.append(madPlanJobList[0])
+	jobs_to_start.append(madPlanJobList[1])
+	jobs_to_start.append(madPlanJobList[2])
+	jobs_to_start.append(madPlanJobList[3])
+	jobs_to_start.append(madPlanJobList[4])
 	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
 
 	startEngineOnMadFiles(madObjectToPost)

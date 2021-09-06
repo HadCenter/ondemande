@@ -7,9 +7,10 @@ import logging
 import pandas as pd
 import numpy as np
 from .models import LogisticFile, LogisticFileInfo, FileExcelContent
+
 logger = logging.getLogger('django')
 
-FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "FILES"
+FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "TransMagistor"
 
 def removeLogisticFileFromServer(fileName):
     django_directory = os.getcwd()
@@ -17,30 +18,40 @@ def removeLogisticFileFromServer(fileName):
     os.remove(fileName)
     os.chdir(django_directory)
 
-
 def traceLogisticFileInDB(fileName, typeLogisticFile):
     logisticFileObject = LogisticFile(logisticFile=fileName, logisticFileType=typeLogisticFile)
     logisticFileObject.save()
     idFileInDB = logisticFileObject.id
     return idFileInDB
 
+def copyLogisticFileFromMagistorTransToIN(sftp_client,logisticFileName,source,destination):
+    django_directory = os.getcwd()
+    os.chdir("media/files")
+    sftp_client.get(source +  "/" + logisticFileName, os.getcwd() + "/" + logisticFileName)
+    sftp_client.put(logisticFileName, destination + "/" + logisticFileName)
+    os.remove(logisticFileName)
+    os.chdir(django_directory)
+
+def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile):
+    sftp_client = connect()
+    typeLogistFileExist = logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile)
+    if(typeLogistFileExist):
+        return False
+    else:
+        sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
+        destinationPath = "/IN"
+        copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
+        return True
 
 def logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
-    sftp_client.chdir('.')
-    logisticClientFolders = ['ARCHIVE', 'IN', 'OUT']
-    for logisticClientFolder in logisticClientFolders:
-        if logisticClientFolder not in sftp_client.listdir():
-            sftp_client.mkdir(logisticClientFolder)
-    sftp_client.chdir("/IN")
+    INFolderPath = "/IN"
+    sftp_client.chdir(INFolderPath)
     typeLogistFileExist = False
     for logisticFile in sftp_client.listdir():
         fileType = logisticFile[0:5]
         if (fileType == typeLogisticFile):
             typeLogistFileExist = True
     return typeLogistFileExist
-
-
-
 
 def saveUploadedLogisticFile(request_file):
     fs = FileSystemStorage()
@@ -63,12 +74,10 @@ def saveUploadedLogisticFile(request_file):
         uploadLogisticFileInSFtpServer(sftp_client, fileName, idFileInDB)
         return True
 
-
 def get_extension(filename):
     basename = os.path.basename(filename)  # os independent
     ext = '.'.join(basename.split('.')[1:])
     return '.' + ext if ext else None
-
 
 def createFolderIfNotExist(sftp_client, folderName, placementPath):
     sftp_client.chdir(placementPath)
@@ -80,7 +89,6 @@ def createFolderIfNotExist(sftp_client, folderName, placementPath):
     else:
         folderPath = sftp_client.getcwd() + "/" + folderName
     return folderPath
-
 
 def uploadLogisticFileInSFtpServer(sftp_client , fileName , idFileInDB ):
     django_directory = os.getcwd()

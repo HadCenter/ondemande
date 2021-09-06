@@ -327,6 +327,8 @@ export class DialogImportFile {
   }
 
   selectFile(event) {
+    this.error="";
+    this.clicked=false;
     if (event.target.files.length > 0) {
       this.selectedFiles = <File>event.target.files[0];
       this.myForm.patchValue({
@@ -371,6 +373,7 @@ export class DialogImportFile {
   }
 
   submit() {
+    this.clicked=true;
     this.showloader = true;
     const formData = new FormData();
     formData.append('file', this.myForm.get('fileSource').value);
@@ -393,6 +396,7 @@ export class DialogImportFile {
       },
       (err) => {
         this.showloader = false;
+        this.myForm.reset();
         this.error = "Veuillez télécharger un fichier EDI";
       }
     );

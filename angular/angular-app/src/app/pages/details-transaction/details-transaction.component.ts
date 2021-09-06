@@ -93,6 +93,15 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   copyDataSourceMetaData: any = [];
   copyDataSourceMad: any = [];
 
+  columnsLivraison:any =[];
+  rowsLivraison :any=[];
+  columnsException:any =[];
+  rowsException :any=[];
+  columnsMetaData:any =[];
+  rowsMetaData :any=[];
+  columnsMad:any =[];
+  rowsMad :any=[];
+
   constructor(private route: ActivatedRoute,
     public service: DetailsTransactionService,
     private _snackBar: MatSnackBar, private router: Router,) { super(); }
@@ -1236,23 +1245,39 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
  * Correct all transaction files
  */
   correctionAllFile() {
+    if (this.dataSource.data.length>0){
+      this.columnsLivraison=Object.keys(this.dataSource.data[0]);
+      this.rowsLivraison =this.dataSource.data.map(Object.values);
+    }
+    if (this.dataSourceException.data.length>0){
+      this.columnsException= Object.keys(this.dataSourceException.data[0]);
+        this.rowsException= this.dataSourceException.data.map(Object.values);
+    }
+    if (this.dataSourceMetaData.data.length>0){
+      this.columnsMetaData= Object.keys(this.dataSourceMetaData.data[0]);
+      this.rowsMetaData= this.dataSourceMetaData.data.map(Object.values);
+    }
+    if (this.dataSourceMAD.data.length>0){
+      this.columnsMad= Object.keys(this.dataSourceMAD.data[0]);
+      this.rowsMad= this.dataSourceMAD.data.map(Object.values);
+    }
     this.fileTocheck = {
       transaction_id: this.transaction.transaction_id,
       fileReplacementLivraison: {
-        columns: Object.keys(this.dataSource.data[0]),
-        rows: this.dataSource.data.map(Object.values),
+        columns:  this.columnsLivraison,
+        rows: this.rowsLivraison,
       },
       fileReplacementMAD: {
-        columns: Object.keys(this.dataSourceMAD.data[0]),
-        rows: this.dataSourceMAD.data.map(Object.values),
+        columns: this.columnsMad,
+        rows: this.rowsMad,
       },
       fileReplacementMetadata: {
-        columns: Object.keys(this.dataSourceMetaData.data[0]),
-        rows: this.dataSourceMetaData.data.map(Object.values),
+        columns: this.columnsMetaData,
+        rows: this.rowsMetaData,
       },
       fileReplacementException: {
-        columns: Object.keys(this.dataSourceException.data[0]),
-        rows: this.dataSourceException.data.map(Object.values),
+        columns: this.columnsException,
+        rows: this.rowsException,
       },
 
     }

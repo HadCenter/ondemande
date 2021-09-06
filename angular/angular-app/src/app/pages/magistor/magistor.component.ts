@@ -260,13 +260,19 @@ export class DialogImportFile {
   }
 
   selectFile(event) {
+    this.error = '';
+    this.clicked=false;
+    // this.myForm.invalid=false;
+    // this.myForm.reset();
+    // for (let control in this.myForm.controls) {
+    //   this.myForm.controls[control].setErrors(null);
+    // }
     if (event.target.files.length > 0) {
       this.selectedFiles = <File>event.target.files[0];
       this.myForm.patchValue({
         fileSource: this.selectedFiles
       });
     }
-
   }
 
 
@@ -294,6 +300,7 @@ export class DialogImportFile {
   onFileChange(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
+
       this.myForm.patchValue({
         fileSource: file
       });
@@ -307,6 +314,7 @@ export class DialogImportFile {
   submit() {
     console.log("web service start");
     this.showloader = true;
+    this.clicked=true;
     const formData = new FormData();
     formData.append('logisticFile', this.myForm.get('fileSource').value);
     this.tablesService.uploadLogisticFile(formData).subscribe(
@@ -316,6 +324,9 @@ export class DialogImportFile {
       },
       (err) => {
         this.showloader = false;
+        // this.myForm.reset();
+        this.myForm.reset();
+
         if (err.error.message == "file save echec") {
           this.error = "Type du fichier existant";
         }

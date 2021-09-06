@@ -212,8 +212,8 @@ def seeFileContent(request):
 @api_view(['POST'])
 def seeLogisticFileContent(request):
     logisticFilename = request.data['logisticFileName']
-    responseObject = seeContentLogisticFile(logisticFilename)
-    print("responseObject", responseObject);
+    folderLogisticFile = request.data['folderLogisticFile']
+    responseObject = seeContentLogisticFile(logisticFilename, folderLogisticFile)
     responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
     return HttpResponse(responseObjectText, content_type="application/json")
 

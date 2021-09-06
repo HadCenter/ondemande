@@ -9,6 +9,8 @@ import numpy as np
 from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 logger = logging.getLogger('django')
 
+FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "FILES"
+
 def removeLogisticFileFromServer(fileName):
     django_directory = os.getcwd()
     os.chdir("media/files")
@@ -19,6 +21,8 @@ def removeLogisticFileFromServer(fileName):
 def traceLogisticFileInDB(fileName, typeLogisticFile):
     logisticFileObject = LogisticFile(logisticFile=fileName, logisticFileType=typeLogisticFile)
     logisticFileObject.save()
+    idFileInDB = logisticFileObject.id
+    return idFileInDB
 
 
 def logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
@@ -47,27 +51,43 @@ def saveUploadedLogisticFile(request_file):
     path = "media/files/"
     pathLogisticFile = path + logisticFile
     dataFrameLogisticFile = pd.read_excel(pathLogisticFile)
-    typeLogisticFile = dataFrameLogisticFile["OP_CODE"].values[0]
-    fileName = typeLogisticFile + timestr + extension
-    os.rename(r'media/files/{}'.format(logisticFile), r'media/files/{}'.format(fileName))
-    sftp_client = connect()
-    if logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
-        removeLogisticFileFromServer(fileName)
+    if ( "OP_CODE" not in dataFrameLogisticFile.columns):
+        os.remove(pathLogisticFile)
         return False
     else:
-        uploadLogisticFileInSFtpServer(sftp_client,fileName)
-        traceLogisticFileInDB(fileName, typeLogisticFile)
+        typeLogisticFile = dataFrameLogisticFile["OP_CODE"].values[0]
+        fileName = typeLogisticFile + timestr + extension
+        os.rename(r'media/files/{}'.format(logisticFile), r'media/files/{}'.format(fileName))
+        idFileInDB = traceLogisticFileInDB(fileName, typeLogisticFile)
+        sftp_client = connect()
+        uploadLogisticFileInSFtpServer(sftp_client, fileName, idFileInDB)
         return True
+
 
 def get_extension(filename):
     basename = os.path.basename(filename)  # os independent
     ext = '.'.join(basename.split('.')[1:])
     return '.' + ext if ext else None
 
-def uploadLogisticFileInSFtpServer(sftp_client,fileName):
+
+def createFolderIfNotExist(sftp_client, folderName, placementPath):
+    sftp_client.chdir(placementPath)
+    if folderName not in sftp_client.listdir():
+        folderName = "{}".format(folderName)
+        sftp_client.mkdir(folderName)
+    if(placementPath == "/"):
+        folderPath = sftp_client.getcwd() + folderName
+    else:
+        folderPath = sftp_client.getcwd() + "/" + folderName
+    return folderPath
+
+
+def uploadLogisticFileInSFtpServer(sftp_client , fileName , idFileInDB ):
     django_directory = os.getcwd()
     os.chdir("media/files")
-    sftp_client.put(fileName, sftp_client.getcwd() +"/" + fileName)
+    importedFilesfolderPath = createFolderIfNotExist(sftp_client, folderName=FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES , placementPath="/")
+    idFileFolderPath = createFolderIfNotExist(sftp_client, folderName=idFileInDB, placementPath=importedFilesfolderPath)
+    sftp_client.put(fileName, idFileFolderPath + "/" + fileName)
     os.remove(fileName)
     os.chdir(django_directory)
 
@@ -104,21 +124,13 @@ def getSingleLogisticFileDetail(key):
                                             archived = logisticFileDB.archived)
     return logisticFileResponse
 
-def seeContentLogisticFile(logisticFileName):
+def seeContentLogisticFile(logisticFileName, folderLogisticFile):
     django_directory = os.getcwd()
-    logger.info('current directory in server ' + django_directory)
+    folderLogisticFilePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
     sftp_client = connect()
-    logger.info('fin connect to SFTP server')
-    sftp_client.chdir('.')
-    logger.info('SFTP server directory : '+ sftp_client.getcwd())
-    sftp_client.chdir("/IN")
-    logger.info('change SFTP directory : ' + sftp_client.getcwd())
-    for name in sftp_client.listdir():
-        if name == logisticFileName:
-            os.chdir("media/files")
-            sftp_client.get(sftp_client.getcwd() + "/" + name,os.getcwd() + "/" + name)
-            logger.info(name + ' downloaded successufuly')
-            break
+    sftp_client.chdir(folderLogisticFilePath)
+    os.chdir("media/files")
+    sftp_client.get(sftp_client.getcwd() + "/" + logisticFileName, os.getcwd() + "/" + logisticFileName)
     excelLogisticFile = pd.read_excel(logisticFileName)
     excelfile = excelLogisticFile.fillna('')
     columns = list(excelfile.columns)
@@ -129,7 +141,6 @@ def seeContentLogisticFile(logisticFileName):
     os.remove(logisticFileName)
     responseObject = FileExcelContent(columns, rows)
     os.chdir(django_directory)
-    logger.info("current working directory après remove & os.chdir(django_directory) " + os.getcwd())
     return responseObject
 
 

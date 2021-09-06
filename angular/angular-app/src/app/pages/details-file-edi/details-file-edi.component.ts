@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {SelectionModel} from '@angular/cdk/collections';
 
 export interface MouseEvent {
   rowId: number;
@@ -54,6 +55,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   alreadyClicked: boolean = false;
   displayedColumnsValid: any;
   sendedToUrbantz = false;
+  selectionCh = new SelectionModel<any>(true, []);
 
   constructor(private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -62,6 +64,31 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     private fileService: DetailsFileEdiService) {
     super();
   }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selectionCh.selected.length;
+    const numRows = this.copyFileWrong.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selectionCh.clear();
+      return;
+    }
+
+    this.selectionCh.select(...this.copyFileWrong);
+  }
+
+    // /** The label for the checkbox on the passed row */
+    // checkboxLabel(row?: any): string {
+    //   if (!row) {
+    //     return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    //   }
+    //   return `${this.selectionCh.isSelected(row) ? 'deselect' : 'select'} row ${row.rowId + 1}`;
+    // }
 
   ngOnInit(): void {
     this.getFile(this.route.snapshot.params.id);
@@ -803,6 +830,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   removeUnecesseryColumns() {
+    console.error("files",this.files)
     this.correctedFilerows = this.files.map(Object.values);
     this.correctedFilerows.forEach(element => {
       element.shift();   // remove remarque from rows
@@ -810,6 +838,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       element.push(element.shift()); // put selected on last column of rows
 
     });
+    console.warn(this.correctedFilerows); 
   }
 
   removeUnecesseryColumnsDelete() {
@@ -861,6 +890,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    * @param row
    */
   public onCheckboxStateChange(row) {
+    
     //check
     if (row.selected !== 1) {
       this.selection.push(row.rowId);

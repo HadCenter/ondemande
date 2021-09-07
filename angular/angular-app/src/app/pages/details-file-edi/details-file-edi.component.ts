@@ -75,15 +75,26 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     if (this.isAllSelected()) {
+      this.copyFileWrong.forEach(element => {
+        element.selected = 1;
+        this.onCheckboxStateChange(element)
+        })
       this.selectionCh.clear();
       return;
     }
     else {
-      this.copyFileWrong.forEach(element => {
-        this.onCheckboxStateChange(element)
-      });
+      console.error("hihii")
+       this.copyFileWrong.forEach(element => {
+       element.selected = 0;
+       this.onCheckboxStateChange(element)
+       })
       this.selectionCh.select(...this.copyFileWrong);
+      // this.copyFileWrong.forEach(element => {
+      //  element.selected = 0;
+      //   this.onCheckboxStateChange(element)
+      // })
     }
+    
   }
 
   // /** The label for the checkbox on the passed row */

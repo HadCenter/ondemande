@@ -187,8 +187,8 @@
                   </ng-container>
 
                   <ng-container matColumnDef="selected">
-                    <th class="header-actif" mat-header-cell *matHeaderCellDef>
-                      <mat-checkbox 
+                    <th class="header-actif" mat-header-cell *matHeaderCellDef>Actif
+                      <mat-checkbox  style="margin-left:5px"
                         (change)="$event ? masterToggle() : null"
                         [checked]="selectionCh.hasValue() && isAllSelected()"
                         [indeterminate]="selectionCh.hasValue() && !isAllSelected()"

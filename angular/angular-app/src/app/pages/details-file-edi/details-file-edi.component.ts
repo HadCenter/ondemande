@@ -46,9 +46,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   displayedColumns = [];
   filterValues: any = [];
   clickCorrection: boolean = false;
-  selectedCellsState: boolean[][] = [
-    // [false, false, false],
-  ];
+  selectedCellsState: boolean[][] = [  ];
   correctedFilerows: any;
   rowsToDelete: any = [];
   rowsToDeleteValid: any = [];
@@ -83,16 +81,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       return;
     }
     else {
-      console.error("hihii")
        this.copyFileWrong.forEach(element => {
        element.selected = 0;
        this.onCheckboxStateChange(element)
        })
       this.selectionCh.select(...this.copyFileWrong);
-      // this.copyFileWrong.forEach(element => {
-      //  element.selected = 0;
-      //   this.onCheckboxStateChange(element)
-      // })
     }
     
   }
@@ -149,24 +142,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     return element.Remarque_id == 12 && !element.Ref3 ? 'Introuvable' : element.Ref3;
   }
 
-
-
-  // /******Open dialog Delete Row */
-  // openDialog(i) {
-  //   const dialogRef = this.dialog.open(DialogDeleteRowFile);
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     console.log("result", result);
-
-  //     if (result == true) {
-  //       this.copyFileWrong.splice(i, 1);
-  //       console.error(this.copyFileWrong);
-  //       // this.actualiser();
-  //     }
-  //     console.error(this.copyFileWrong);
-
-  //   });
-  // }
-
   deleteRows(optionFile) {
     this.alreadyClicked = true;
     // delete row from valid file
@@ -198,7 +173,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
       this.fileService.updateFile(this.fileTocheck).subscribe(res => {
         if (res.message == "done") {
-          // this.rowsToDelete = [];
           this.rowsToDeleteValid = [];
           this.alreadyClicked = false;
           if (this.fileValid.rows.length == 0) {

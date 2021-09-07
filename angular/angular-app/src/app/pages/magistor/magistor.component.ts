@@ -206,7 +206,7 @@ export class MagistorComponent implements OnInit {
     // console.warn(file)
 
     this.tablesService.validateFile(this.fileTovalidate).subscribe((res) => {
-      if (res.message == "ok") {
+      if (res.message == "file validated successfully") {
         file.ButtonValidateActivated=false;
         file.ButtonCorrecteActiveted =true;
       }

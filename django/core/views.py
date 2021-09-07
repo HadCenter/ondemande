@@ -36,7 +36,7 @@ from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
 from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
-from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile
+from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -150,6 +150,16 @@ def LogisticFileCreate(request, format=None):
     else:
         return JsonResponse({'message': 'file save echec'}, status=status.HTTP_403_FORBIDDEN)
 
+@api_view(['POST'])
+def validateLogisticFileWS(request):
+    logisticFilename = request.data['logisticFileName']
+    folderLogisticFile = request.data['folderLogisticFile']
+    typeLogisticFile = request.data['typeLogisticFile']
+    logisticFileValidated = validateLogisticFile(logisticFilename, folderLogisticFile, typeLogisticFile)
+    if(logisticFileValidated):
+        return JsonResponse({'message': 'file validated successfully'}, status=status.HTTP_200_OK)
+    else:
+        return JsonResponse({'message': 'file validated echec'}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['GET'])
 def fileList(request):

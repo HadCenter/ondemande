@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
 
 export interface MouseEvent {
   rowId: number;
@@ -78,17 +78,21 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.selectionCh.clear();
       return;
     }
-
-    this.selectionCh.select(...this.copyFileWrong);
+    else {
+      this.copyFileWrong.forEach(element => {
+        this.onCheckboxStateChange(element)
+      });
+      this.selectionCh.select(...this.copyFileWrong);
+    }
   }
 
-    // /** The label for the checkbox on the passed row */
-    // checkboxLabel(row?: any): string {
-    //   if (!row) {
-    //     return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    //   }
-    //   return `${this.selectionCh.isSelected(row) ? 'deselect' : 'select'} row ${row.rowId + 1}`;
-    // }
+  // /** The label for the checkbox on the passed row */
+  // checkboxLabel(row?: any): string {
+  //   if (!row) {
+  //     return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+  //   }
+  //   return `${this.selectionCh.isSelected(row) ? 'deselect' : 'select'} row ${row.rowId + 1}`;
+  // }
 
   ngOnInit(): void {
     this.getFile(this.route.snapshot.params.id);
@@ -191,10 +195,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
             {
               var data = {
                 idFile: this.file.idFile,
-                fileName : this.file.fileName,
-                clientCode : this.file.contact.codeClient,
-                validated_orders : this.file.validatedOrders,
-                wrong_commands : this.file.wrongCommands
+                fileName: this.file.fileName,
+                clientCode: this.file.contact.codeClient,
+                validated_orders: this.file.validatedOrders,
+                wrong_commands: this.file.wrongCommands
               };
               this.fileService.deleteFileEDI(data).subscribe(res => {
                 console.log("delete succes");
@@ -238,17 +242,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       }
       this.fileService.updateFile(this.fileTocheck).subscribe(res => {
         if (res.message == "done") {
-         
+
           if (this.fileWrong.rows.length == 0) {
             (document.getElementById('sendToUrbantz') as HTMLButtonElement).disabled = false;
             if (this.fileValid.rows.length == 0) // en plus on a 0 prestations valides
             {
               var data = {
                 idFile: this.file.idFile,
-                fileName : this.file.fileName,
-                clientCode : this.file.contact.codeClient,
-                validated_orders : this.file.validatedOrders,
-                wrong_commands : this.file.wrongCommands
+                fileName: this.file.fileName,
+                clientCode: this.file.contact.codeClient,
+                validated_orders: this.file.validatedOrders,
+                wrong_commands: this.file.wrongCommands
               };
               this.fileService.deleteFileEDI(data).subscribe(res => {
                 console.log("delete succes");
@@ -830,7 +834,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   removeUnecesseryColumns() {
-    console.error("files",this.files)
     this.correctedFilerows = this.files.map(Object.values);
     this.correctedFilerows.forEach(element => {
       element.shift();   // remove remarque from rows
@@ -838,7 +841,6 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       element.push(element.shift()); // put selected on last column of rows
 
     });
-    console.warn(this.correctedFilerows); 
   }
 
   removeUnecesseryColumnsDelete() {
@@ -890,7 +892,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    * @param row
    */
   public onCheckboxStateChange(row) {
-    
+
     //check
     if (row.selected !== 1) {
       this.selection.push(row.rowId);

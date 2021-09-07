@@ -54,6 +54,7 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.file = resp;
         var data = {
           "logisticFileName": this.file.logisticFileName.name,
+          "folderLogisticFile": this.file.idLogisticFile,
         }
         if (this.file.logisticFileType == "ART01") {
           this.typeFileART = true;

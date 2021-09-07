@@ -25,8 +25,6 @@ export class MagistorComponent implements OnInit {
   snackBarRef: any;
   public snackAction = 'Ok';
   public errorValidation ="Un fichier de même type existe"
-  btnCorrection : any=[];
-  btnValidate :any=[];
 
   constructor(
     private tablesService: MagistorService,
@@ -199,8 +197,7 @@ export class MagistorComponent implements OnInit {
   gotoDetails(row) {
     this.router.navigate(['/details-file-logistique', row.idLogisticFile])
   }
-  validateFile(file,i){
-    console.error('file',file,i)
+  validateFile(file){
     this.fileTovalidate = {
       logisticFileName: file.logisticFileName.name,
       folderLogisticFile: file.idLogisticFile,
@@ -209,13 +206,11 @@ export class MagistorComponent implements OnInit {
 
     this.tablesService.corretFile(this.fileTovalidate).subscribe((res) => {
       if (res.message == "ok") {
-        console.warn("ok")
-        // file.ButtonValidateActivated=false;
-        // file.ButtonCorrecteActiveted =true;
+        file.ButtonValidateActivated=false;
+        file.ButtonCorrecteActiveted =true;
       }
     },
     (err) => {
-      // console.log('resultat correction', 'Un fichier de meme type existe');
       this.openSnackBar(this.errorValidation,this.snackAction);
     })
   }
@@ -290,11 +285,6 @@ export class DialogImportFile {
   selectFile(event) {
     this.error = '';
     this.clicked=false;
-    // this.myForm.invalid=false;
-    // this.myForm.reset();
-    // for (let control in this.myForm.controls) {
-    //   this.myForm.controls[control].setErrors(null);
-    // }
     if (event.target.files.length > 0) {
       this.selectedFiles = <File>event.target.files[0];
       this.myForm.patchValue({
@@ -315,16 +305,6 @@ export class DialogImportFile {
       horizontalPosition: 'center',
     });
   }
-
-  openSnackbarListExpediteur() {
-    /*this._snackBar.openFromComponent(SnackbarComponent, {
-      panelClass: "snack-exp",
-      verticalPosition: 'top',
-      horizontalPosition: 'center',
-      data: this.expediteurArrayFiltred
-    });*/
-  }
-
   onFileChange(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];

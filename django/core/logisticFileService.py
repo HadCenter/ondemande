@@ -41,6 +41,7 @@ def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile)
         sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
         destinationPath = "/IN"
         copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
+        LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False)
         return True
 
 def logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
@@ -116,7 +117,9 @@ def getAllLogisticFileList():
         logisticFileResponse= LogisticFileInfo(idLogisticFile=logisticFileDB.id, logisticFileName=logisticFileDB.logisticFile,
                                  createdAt=logisticFileDB.created_at, logisticFileType=logisticFileDB.logisticFileType,
                                  status=logisticFileDB.status, number_annomalies=logisticFileDB.number_annomalies,
-                                 clientName= logisticFileDB.clientName, archived = logisticFileDB.archived)
+                                 clientName= logisticFileDB.clientName, archived = logisticFileDB.archived,
+                                 ButtonCorrecteActiveted= logisticFileDB.ButtonCorrecteActiveted,
+                                 ButtonValidateActivated= logisticFileDB.ButtonValidateActivated)
         listLogisticFiles.append(logisticFileResponse)
     return listLogisticFiles
 
@@ -129,7 +132,10 @@ def getSingleLogisticFileDetail(key):
                                             status=logisticFileDB.status,
                                             number_annomalies=logisticFileDB.number_annomalies,
                                             clientName=logisticFileDB.clientName,
-                                            archived = logisticFileDB.archived)
+                                            archived = logisticFileDB.archived,
+                                            ButtonCorrecteActiveted = logisticFileDB.ButtonCorrecteActiveted,
+                                            ButtonValidateActivated = logisticFileDB.ButtonValidateActivated
+                                            )
     return logisticFileResponse
 
 def seeContentLogisticFile(logisticFileName, folderLogisticFile):

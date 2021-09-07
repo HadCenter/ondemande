@@ -21,8 +21,12 @@ export class MagistorComponent implements OnInit {
   fichiers: any = [];
   public filterValue: any;
   fileTocheck: any;
+  fileTovalidate:any;
   snackBarRef: any;
   public snackAction = 'Ok';
+  public errorValidation ="Un fichier de même type existe"
+  btnCorrection : any=[];
+  btnValidate :any=[];
 
   constructor(
     private tablesService: MagistorService,
@@ -195,6 +199,26 @@ export class MagistorComponent implements OnInit {
   gotoDetails(row) {
     this.router.navigate(['/details-file-logistique', row.idLogisticFile])
   }
+  validateFile(file,i){
+    console.error('file',file,i)
+    this.fileTovalidate = {
+      logisticFileName: file.logisticFileName.name,
+      folderLogisticFile: file.idLogisticFile,
+      typeLogisticFile: file.logisticFileType
+    }
+
+    this.tablesService.corretFile(this.fileTovalidate).subscribe((res) => {
+      if (res.message == "ok") {
+        console.warn("ok")
+        // file.ButtonValidateActivated=false;
+        // file.ButtonCorrecteActiveted =true;
+      }
+    },
+    (err) => {
+      // console.log('resultat correction', 'Un fichier de meme type existe');
+      this.openSnackBar(this.errorValidation,this.snackAction);
+    })
+  }
   correctionFile(file) {
 
     this.fileTocheck = {
@@ -212,8 +236,11 @@ export class MagistorComponent implements OnInit {
     })
   }
 
+  
+
 
 }
+
 
 export const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
@@ -231,6 +258,7 @@ export class DialogImportFile {
   showloader = false;
   clicked = false;
   public snackAction = 'voir plus +';
+  public errorValidation = "Un fichier de même type existe"
   snackActionExpediteur = "ok";
   minWidth: number = 250;
   width: number = this.minWidth;

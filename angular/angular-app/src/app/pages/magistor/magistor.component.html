@@ -55,11 +55,12 @@
               <span class="label label--mini color--{{getColor(row.status)}} ">{{ row.status }}</span>
             </td>
             <td class="column-actions mdl-data-table__cell--non-numeric">
-              <button [disabled]="file?.number_annomalies==0 || file?.status=='Terminé'"
+              <button [disabled]="file?.number_annomalies==0 || file?.status=='Terminé' ||row?.ButtonValidateActivated==false " (click)="validateFile(row,i)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
               </button>
               <!----  [disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'"!-->
               <button style="margin-left: 3px;" (click)="correctionFile(row)"
+              [disabled]="row?.ButtonCorrecteActiveted==false"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
               </button>
               <button style="margin-left: 3px;" (click)="gotoDetails(row)"

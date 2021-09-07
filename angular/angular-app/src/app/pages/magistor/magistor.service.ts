@@ -77,4 +77,7 @@ export class MagistorService {
   public corretFile (data): Observable<any> {
     return  this.http.post(`${this.url2}/startEngineOnMagistorFiles`,data);
   }
+  public validateFile (data): Observable<any> {
+    return  this.http.post(`${this.url}/validateLogisticFile`,data);
+  }
 }

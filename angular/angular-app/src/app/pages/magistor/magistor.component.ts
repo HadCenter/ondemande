@@ -203,8 +203,9 @@ export class MagistorComponent implements OnInit {
       folderLogisticFile: file.idLogisticFile,
       typeLogisticFile: file.logisticFileType
     }
+    // console.warn(file)
 
-    this.tablesService.corretFile(this.fileTovalidate).subscribe((res) => {
+    this.tablesService.validateFile(this.fileTovalidate).subscribe((res) => {
       if (res.message == "ok") {
         file.ButtonValidateActivated=false;
         file.ButtonCorrecteActiveted =true;

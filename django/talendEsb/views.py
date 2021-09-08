@@ -20,6 +20,12 @@ talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/DiagnosticEdiWebh
 
 talendUrlMADFileWebHook ='https://webhooks.eu.cloud.talend.com/urbantzTOHubWebhookProd/35204d3ed002461dab7374289c666034'
 
+talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/WMS_ONDEMAND_FWH/9162c61d321d44eb81a528107e726e57'
+
+@api_view(['POST'])
+def startEngineOnMagistorFiles(request):
+	print("request.data for magistor",request.data);
+	return startEngineWithLinkAndData(talendUrlMagistorWebHook,request.data)
 
 @api_view(['POST'])
 def startEngineOnEdiFiles(request):
@@ -89,7 +95,6 @@ def genererMADFile(request):
 	jobs_to_start.append(madPlanJobList[2])
 	jobs_to_start.append(madPlanJobList[3])
 	jobs_to_start.append(madPlanJobList[4])
-
 	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transactionToInsert.id,end_date_plus_one = transactionToInsert.end_date.replace("-","/"),start_date = transactionToInsert.start_date.replace("-","/"),jobs_to_start =jobs_to_start)
 	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
@@ -178,6 +183,7 @@ def correctLivraisonFile(request):
 
 
 	jobs_to_start = []
+
 	jobs_to_start.append(madPlanJobList[8])
 
 	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
@@ -203,7 +209,6 @@ def correctAllFiles(request):
 	fileNameMetadata = "ExceptionFacturationValue_Livraisons.xlsx"
 	fileNameException = "Livraisons_Exception.xlsx"
 	jobs_to_start = []
-
 
 	if fileReplacementLivraison != None :
 		df = pd.DataFrame(fileReplacementLivraison['rows'], columns=fileReplacementLivraison['columns'])
@@ -233,7 +238,12 @@ def correctAllFiles(request):
 		sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
 		jobs_to_start.append(madPlanJobList[5])
 
-
+	jobs_to_start.append(madPlanJobList[0])
+	jobs_to_start.append(madPlanJobList[1])
+	jobs_to_start.append(madPlanJobList[2])
+	jobs_to_start.append(madPlanJobList[3])
+	jobs_to_start.append(madPlanJobList[4])
+	print("jobs to start = ", jobs_to_start)
 	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
 
 	startEngineOnMadFiles(madObjectToPost)

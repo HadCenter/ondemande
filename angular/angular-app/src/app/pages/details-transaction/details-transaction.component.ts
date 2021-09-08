@@ -23,10 +23,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   fichierLivraison: any = [];
   fichierMad: any = [];
   fichierMetadata: any = [];
-  displayedColumnsLivraison: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name'];
-  displayedColumnsException: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque', 'isDeleted'];
+  displayedColumnsLivraison: string[] = ['toDelete', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'isExpress', 'total_price'];
+  displayedColumnsException: string[] = ['isDeleted', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque', 'Express'];
   displayedColumnsMetadata: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'sourceClosureDate', 'realInfoHasPrepared', 'status', 'metadataFACTURATION'];
-  displayedColumnsMad: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name'];
+  displayedColumnsMad: string[] = ['toDelete', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'StartTime', 'ClousureTime'];
   dataSource = new MatTableDataSource<any>(this.fichierLivraison);
   dataSourceException = new MatTableDataSource<any>(this.fichierException);
   dataSourceMetaData = new MatTableDataSource<any>(this.fichierMetadata);
@@ -35,14 +35,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   selectionEception: any[] = [];
   selectionMetadata: any[] = [];
   selectionMad: any[] = [];
-  // @ViewChildren("cell", { read: ElementRef }) cells: QueryList<ElementRef>;
-  // @ViewChildren("cellException", { read: ElementRef }) cellsException: QueryList<ElementRef>;
-  // @ViewChildren("cellMetadata", { read: ElementRef }) cellsMetadata: QueryList<ElementRef>;
-  // @ViewChildren("cellMad", { read: ElementRef }) cellsMad: QueryList<ElementRef>;
   newCellValue: string = '';
-  newCellValueException: string = '';
-  newCellValueMetadata: string = '';
-  newCellValueMad: string = '';
+  // newCellValueException: string = '';
+  // newCellValueMetadata: string = '';
+  // newCellValueMad: string = '';
   arrayLivraison: any = [];
   arrayException: any = [];
   arrayMetaData: any = [];
@@ -84,11 +80,27 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   copySelectionException: any = [];
   copySelectionMetaData: any = [];
   copySelectionMad: any = [];
+  rowsToDeleteException: any = [];
+  rowsToDeleteLivraison: any = [];
+  rowsToDeleteMad: any = [];
   clickCorrection: boolean = false;
   public filterValueLivraison: any;
   public filterValueException: any;
   public filterValueMad: any;
   public filterValuemetadata: any;
+  copyDataSource: any = [];
+  copyDataSourceException: any = [];
+  copyDataSourceMetaData: any = [];
+  copyDataSourceMad: any = [];
+
+  columnsLivraison:any =[];
+  rowsLivraison :any=[];
+  columnsException:any =[];
+  rowsException :any=[];
+  columnsMetaData:any =[];
+  rowsMetaData :any=[];
+  columnsMad:any =[];
+  rowsMad :any=[];
 
   constructor(private route: ActivatedRoute,
     public service: DetailsTransactionService,
@@ -101,69 +113,74 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     var data = { "transaction_id": parseInt(this.route.snapshot.params.id) };
     this.service.seeAllFileTransaction(data).subscribe(res => {
 
-      if (res.livrasion !==null && Object.keys(res.livraison).length !== 0 ){
-      this.dataSource.paginator = this.paginator.toArray()[0];
-      this.arrayLivraison = res.livraison;
-      this.dataSource.data = this.arrayLivraison.fileContent;
-      this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
-      this.copySelectionLivraison = this.dataSource.data  //copy to use on selection
-      this.copyFilterLivraison = this.dataSource.data ;
-      this.dataSource.data.forEach(element => {
-        this.selectedCellsState.push(Array.from({ length: Object.keys(this.dataSource.data[0]).length - 1 }, () => false))
-      });
-      // get select options
-      this.displayedColumnsLivraison.forEach(item => {
-        this.getOption(item);
-      })
-      
-    }
-    if (res.exception !==null && Object.keys(res.exception).length !== 0 ){
-      this.dataSourceException.paginator = this.paginator.toArray()[1];
-      this.arrayException = res.exception;
-      this.dataSourceException.data = this.arrayException.fileContent;
-      this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
-      this.copySelectionException = this.dataSourceException.data  //copy to use on selection
-      this.copyFilterException= this.dataSourceException.data ;
-      this.dataSourceException.data.forEach(element => {
-        this.selectedCellsStateException.push(Array.from({ length: Object.keys(this.dataSourceException.data[0]).length - 1 }, () => false))
-      });
-      // get select options
-      this.displayedColumnsException.forEach(item => {
-        this.getOptionException(item);
-      })
-    }
+      if (res.livraison !== null && Object.keys(res.livraison).length !== 0) {
+        this.dataSource.paginator = this.paginator.toArray()[0];
+        this.arrayLivraison = res.livraison;
+        this.dataSource.data = this.arrayLivraison.fileContent;
+        this.dataSource.data = this.dataSource.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
+        this.copySelectionLivraison = this.dataSource.data  //copy to use on selection
+        this.copyFilterLivraison = this.dataSource.data;
+        this.copyDataSource = this.dataSource.data; // copy to correction
+        this.dataSource.data.forEach(element => {
+          this.selectedCellsState.push(Array.from({ length: Object.keys(this.dataSource.data[0]).length - 1 }, () => false))
+        });
+        // get select options
+        this.displayedColumnsLivraison.forEach(item => {
+          this.getOption(item);
+        })
 
-    if (res.metadata !==null && Object.keys(res.metadata).length !== 0 ){
-      this.dataSourceMetaData.paginator = this.paginator.toArray()[2];
-      this.arrayMetaData = res.metadata;
-      this.dataSourceMetaData.data = this.arrayMetaData.fileContent;
-      this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
-      this.copySelectionMetaData = this.dataSourceMetaData.data  //copy to use on selection
-      this.copyFilterMetaData= this.dataSourceMetaData.data;
-      this.dataSourceMetaData.data.forEach(element => {
-        this.selectedCellsStateMetaData.push(Array.from({ length: Object.keys(this.dataSourceMetaData.data[0]).length - 1 }, () => false))
-      });
-      // get select options
-      this.displayedColumnsMetadata.forEach(item => {
-        this.getOptionMetaData(item);
-      })
-    }
+      }
+      if (res.exception !== null && Object.keys(res.exception).length !== 0) {
+        this.dataSourceException.paginator = this.paginator.toArray()[1];
+        this.arrayException = res.exception;
+        this.dataSourceException.data = this.arrayException.fileContent;
+        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
+        this.copySelectionException = this.dataSourceException.data  //copy to use on selection
+        this.copyFilterException = this.dataSourceException.data;
+        this.copyDataSourceException = this.dataSourceException.data; // copy to correction
+        this.dataSourceException.data.forEach(element => {
+          this.selectedCellsStateException.push(Array.from({ length: Object.keys(this.dataSourceException.data[0]).length - 1 }, () => false))
+        });
+        // get select options
+        this.displayedColumnsException.forEach(item => {
+          this.getOptionException(item);
+        })
+      }
 
-if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
-      this.dataSourceMAD.paginator = this.paginator.toArray()[3];
-      this.arrayMad = res.mad;
-      this.dataSourceMAD.data = this.arrayMad.fileContent;
-      this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
-      this.copySelectionMad = this.dataSourceMAD.data  //copy to use on selection
-      this.copyFilterMad= this.dataSourceMAD.data;
-      this.dataSourceMAD.data.forEach(element => {
-        this.selectedCellsStateMad.push(Array.from({ length: Object.keys(this.dataSourceMAD.data[0]).length - 1 }, () => false))
-      });
-      // get select options
-      this.displayedColumnsMad.forEach(item => {
-        this.getOptionMAD(item);
-      })
-    }
+      if (res.metadata !== null && Object.keys(res.metadata).length !== 0) {
+        this.dataSourceMetaData.paginator = this.paginator.toArray()[2];
+        this.arrayMetaData = res.metadata;
+        this.dataSourceMetaData.data = this.arrayMetaData.fileContent;
+        this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
+        this.copySelectionMetaData = this.dataSourceMetaData.data  //copy to use on selection
+        this.copyFilterMetaData = this.dataSourceMetaData.data;
+        this.copyDataSourceMetaData = this.dataSourceMetaData.data; // copy to correction
+        this.dataSourceMetaData.data.forEach(element => {
+          this.selectedCellsStateMetaData.push(Array.from({ length: Object.keys(this.dataSourceMetaData.data[0]).length - 1 }, () => false))
+        });
+
+        // get select options
+        this.displayedColumnsMetadata.forEach(item => {
+          this.getOptionMetaData(item);
+        })
+      }
+
+      if (res.mad !== null && Object.keys(res.mad).length !== 0) {
+        this.dataSourceMAD.paginator = this.paginator.toArray()[3];
+        this.arrayMad = res.mad;
+        this.dataSourceMAD.data = this.arrayMad.fileContent;
+        this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
+        this.copySelectionMad = this.dataSourceMAD.data  //copy to use on selection
+        this.copyFilterMad = this.dataSourceMAD.data;
+        this.copyDataSourceMad = this.dataSourceMAD.data; // copy to correction
+        this.dataSourceMAD.data.forEach(element => {
+          this.selectedCellsStateMad.push(Array.from({ length: Object.keys(this.dataSourceMAD.data[0]).length - 1 }, () => false))
+        });
+        // get select options
+        this.displayedColumnsMad.forEach(item => {
+          this.getOptionMAD(item);
+        })
+      }
 
       this.showLoaderLivraisonFile = false;
       this.showLoaderExceptionFile = false;
@@ -173,6 +190,133 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
 
   }
 
+  selectDeleteRow(row, typeFile) {
+
+    if (typeFile == "exception") {
+      //uncheck delete rowId from rowstoDelete
+      if (this.rowsToDeleteException.includes(row.taskId)) {
+        this.rowsToDeleteException.splice(this.rowsToDeleteException.indexOf(row.taskId), 1);
+      }
+      //check add to rowTodelete
+      else {
+        this.rowsToDeleteException.push(row.taskId);
+
+      }
+
+      if (row.isDeleted == 0) {
+        row.isDeleted = 1;
+      }
+      else if (row.isDeleted == 1) {
+        row.isDeleted = 0;
+      }
+      // console.warn(row);
+      // location.reload();
+
+    }
+    else if (typeFile == "livraison") {
+      //uncheck delete rowId from rowstoDelete
+      if (this.rowsToDeleteLivraison.includes(row.taskId)) {
+        this.rowsToDeleteLivraison.splice(this.rowsToDeleteLivraison.indexOf(row.taskId), 1);
+      }
+      //check add to rowTodelete
+      else {
+        this.rowsToDeleteLivraison.push(row.taskId);
+
+      }
+
+      if (row.toDelete == 0) {
+        row.toDelete = 1;
+      }
+      else if (row.toDelete == 1) {
+        row.toDelete = 0;
+      }
+      // location.reload();
+    }
+    else if (typeFile == "mad") {
+      //uncheck delete rowId from rowstoDelete
+      if (this.rowsToDeleteMad.includes(row.taskId)) {
+        this.rowsToDeleteMad.splice(this.rowsToDeleteMad.indexOf(row.taskId), 1);
+      }
+      //check add to rowTodelete
+      else {
+        this.rowsToDeleteMad.push(row.taskId);
+
+      }
+      if (row.toDelete == 0) {
+        row.toDelete = 1;
+      }
+      else if (row.toDelete == 1) {
+        row.toDelete = 0;
+      }
+      // location.reload();
+    }
+
+
+
+
+  }
+  /**
+   * Delete row from file exception
+   */
+  deleteRowsException() {
+    this.fileTocheck = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacement: {
+        columns: Object.keys(this.dataSourceException.data[0]),
+        rows: this.dataSourceException.data.map(Object.values),
+      }
+    }
+    // console.error("**", this.fileTocheck)
+    this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
+      if (res.message == "ok") {
+        console.warn("ok");
+        location.reload();
+       
+      }
+    })
+  }
+
+  /**
+    * Delete row from file livraison
+    */
+  deleteRowsLivraison() {
+    this.fileTocheck = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacement: {
+        columns: Object.keys(this.dataSource.data[0]),
+        rows: this.dataSource.data.map(Object.values),
+      }
+    }
+    // console.error("**", this.fileTocheck)
+    this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
+      if (res.message == "ok") {
+        console.warn("ok");
+        location.reload();
+       // return false;
+      }
+    })
+  }
+
+  /**
+  * Delete row from file livraison
+  */
+  deleteRowsMad() {
+    this.fileTocheck = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacement: {
+        columns: Object.keys(this.dataSourceMAD.data[0]),
+        rows: this.dataSourceMAD.data.map(Object.values),
+      }
+    }
+    // console.error("**", this.fileTocheck)
+    this.service.correctMadFile(this.fileTocheck).subscribe(res => {
+      if (res.message == "ok") {
+        console.warn("ok");
+        location.reload();
+      }
+    })
+  }
+
   /**
   * Get options inside selects for MetaData
   * @param filter
@@ -180,6 +324,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   getOptionMetaData(filter) {
     let optionsMetaData = [];
     optionsMetaData = this.arrayMetaData.options[filter];
+    optionsMetaData = optionsMetaData.filter(item => item !== "")
     this.displayedColumnsMetadata.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -197,6 +342,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   getOptionMAD(filter) {
     let optionsMad = [];
     optionsMad = this.arrayMad.options[filter]
+    optionsMad = optionsMad.filter(item => item !== "")
     this.displayedColumnsMad.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -214,6 +360,11 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
 */
   resetFiltre(file) {
     if (file == "livraison") {
+      // reset header colors
+      const rows = document.getElementsByClassName('titre-column') as HTMLCollectionOf<HTMLElement>;
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].style.color = 'white';
+      }
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
           this.selectedCellsState[i][j] = false;
@@ -230,6 +381,10 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
       this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
     }
     else if (file == "exception") {
+      const rows = document.getElementsByClassName('titre-column-exception') as HTMLCollectionOf<HTMLElement>;
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].style.color = 'white';
+      }
 
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
@@ -248,7 +403,10 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
       this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
     }
     else if (file == "metadata") {
-
+      const rows = document.getElementsByClassName('titre-column-metadata') as HTMLCollectionOf<HTMLElement>;
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].style.color = 'white';
+      }
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
           this.selectedCellsStateMetaData[i][j] = false;
@@ -267,6 +425,10 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     }
 
     else { //MAD
+      const rows = document.getElementsByClassName('titre-column-mad') as HTMLCollectionOf<HTMLElement>;
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].style.color = 'white';
+      }
       for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
         for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
           this.selectedCellsStateMad[i][j] = false;
@@ -290,7 +452,8 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   */
   getOption(filter) {
     let options = [];
-    options = this.arrayLivraison.options[filter]
+    options = this.arrayLivraison.options[filter];
+    options = options.filter(item => item !== "")
     this.displayedColumnsLivraison.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -305,6 +468,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   getOptionException(filter) {
     let optionsException = [];
     optionsException = this.arrayException.options[filter]
+    optionsException = optionsException.filter(item => item !== "")
     this.displayedColumnsException.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -330,21 +494,21 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   }
 
 
-    /**** Filter items */
-    setFilteredItemsLivraison() {
-      this.dataSource.data = this.filterItemsLivraison(this.filterValueLivraison);
-      if (this.filterValueLivraison === '') {
-        this.dataSource.data= this.dataSource.data;
-      }
+  /**** Filter items */
+  setFilteredItemsLivraison() {
+    this.dataSource.data = this.filterItemsLivraison(this.filterValueLivraison);
+    if (this.filterValueLivraison === '') {
+      this.dataSource.data = this.dataSource.data;
     }
-  
-    filterItemsLivraison(filterValueLivraison : string) {
-      return this.copyFilterLivraison.filter((item) => {
-        return JSON.stringify(item).toLowerCase().includes(filterValueLivraison.toLowerCase());
-      });
-    }
+  }
 
-     /**** Filter items */
+  filterItemsLivraison(filterValueLivraison: string) {
+    return this.copyFilterLivraison.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterValueLivraison.toLowerCase());
+    });
+  }
+
+  /**** Filter items */
   setFilteredItemsException() {
     this.dataSourceException.data = this.filterItemsException(this.filterValueException);
     if (this.filterValueException === '') {
@@ -352,34 +516,34 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     }
   }
 
-    /**** Filter items */
-    setFilteredItemsMetadata() {
-      this.dataSourceMetaData.data = this.filterItemsMetadata(this.filterValuemetadata);
-      if (this.filterValuemetadata === '') {
-        this.dataSourceMetaData.data = this.dataSourceMetaData.data;
-      }
+  /**** Filter items */
+  setFilteredItemsMetadata() {
+    this.dataSourceMetaData.data = this.filterItemsMetadata(this.filterValuemetadata);
+    if (this.filterValuemetadata === '') {
+      this.dataSourceMetaData.data = this.dataSourceMetaData.data;
     }
-  
-    filterItemsMetadata(filterItemsMetadata : string) {
-      return this.copyFilterMetaData.filter((item) => {
-        return JSON.stringify(item).toLowerCase().includes(filterItemsMetadata.toLowerCase());
-      });
-    }
-      /**** Filter items */
-    setFilteredItemsMAD() {
-      this.dataSourceMAD.data = this.filterItemsMAD(this.filterValueMad);
-      if (this.filterValueMad === '') {
-        this.dataSourceMAD.data = this.dataSourceMAD.data;
-      }
-    }
-  
-    filterItemsMAD(filterItemsMAD : string) {
-      return this.copyFilterMad.filter((item) => {
-        return JSON.stringify(item).toLowerCase().includes(filterItemsMAD.toLowerCase());
-      });
-    }
+  }
 
-  filterItemsException(filterItemsException : string) {
+  filterItemsMetadata(filterItemsMetadata: string) {
+    return this.copyFilterMetaData.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterItemsMetadata.toLowerCase());
+    });
+  }
+  /**** Filter items */
+  setFilteredItemsMAD() {
+    this.dataSourceMAD.data = this.filterItemsMAD(this.filterValueMad);
+    if (this.filterValueMad === '') {
+      this.dataSourceMAD.data = this.dataSourceMAD.data;
+    }
+  }
+
+  filterItemsMAD(filterItemsMAD: string) {
+    return this.copyFilterMad.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterItemsMAD.toLowerCase());
+    });
+  }
+
+  filterItemsException(filterItemsException: string) {
     return this.copyFilterException.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterItemsException.toLowerCase());
     });
@@ -422,9 +586,89 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
       }
     }
   }
+  getIntersection(filter) {
+    return this.dataSource.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+  getIntersectionException(filter) {
+    return this.dataSourceException.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+
+  getIntersectionMetaData(filter) {
+    return this.dataSourceMetaData.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+  getIntersectionMad(filter) {
+    return this.dataSourceMAD.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+
+  /**
+* change color of the selected column header on file livraison
+*/
+  changeSelectedOptionColor(filter) {
+    if (filter.columnProp && filter.modelValue != "") {
+      document.getElementById(filter.columnProp).style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp).style.color = "white";
+    }
+  }
+  /**
+* change color of the selected column header on file exception
+*/
+  changeSelectedOptionExceptionColor(filter) {
+    if (filter.columnProp && filter.modelValue != "") {
+      // console.warn(filter.columnProp, filter.columnProp + "Exception")
+      document.getElementById(filter.columnProp + "Exception").style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp + "Exception").style.color = "white";
+    }
+  }
+  /**
+* change color of the selected column header on file metaData
+*/
+  changeSelectedOptionMetaDataColor(filter) {
+    if (filter.columnProp && filter.modelValue != "") {
+      // console.warn(filter.columnProp, filter.columnProp + "MetaData")
+      document.getElementById(filter.columnProp + "MetaData").style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp + "MetaData").style.color = "white";
+    }
+  }
+  /**
+* change color of the selected column header on file MAD
+*/
+  changeSelectedOptionMadColor(filter) {
+    if (filter.columnProp && filter.modelValue != "") {
+      // console.warn(filter.columnProp, filter.columnProp + "Mad")
+      document.getElementById(filter.columnProp + "Mad").style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp + "Mad").style.color = "white";
+    }
+  }
   setFilteredItemsOptions(filter) {
     // check if filter is already selected
+
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
+    //  let selected=filter.columnProp;
+    this.changeSelectedOptionColor(filter);
     if (filterExists == false) { this.filterValues.push(filter) }
     // if only one select is selected
     if (this.filterValues.length == 1) {
@@ -433,34 +677,46 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-        this.dataSource.data = [...this.dataSource.data, ...this.filterChange(filter)];
-        //delete doublon
-        this.dataSource.data = this.dataSource.data.filter((object, index) => index === this.dataSource.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+        this.dataSource.data = this.getIntersection(filter)
+        if (this.dataSource.data.length == 0) {
+          this.dataSource.data.push({})
+        }
       }
       else {
-        this.dataSource.data = [];
+        this.dataSource.data = this.copyFilterLivraison;
         this.filterValues.forEach(element => {
-          this.dataSource.data = this.dataSource.data.concat(this.filterChange(element));
+          this.dataSource.data = this.dataSource.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        //delete doublon
         this.dataSource.data = this.dataSource.data.filter((object, index) => index === this.dataSource.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        if (this.dataSource.data.length == 0) {
+          this.dataSource.data.push({})
+        }
       }
     }
 
     // if selected is deactivate
-    if (filter.modelValue == "") {
-      if (this.filterValues.length == 1) {
+    if (filter.modelValue == "" || filter.modelValue.length == 0) {
+
+      this.filterValues = this.filterValues.filter(item => item.columnProp != filter.columnProp);
+      if (this.filterValues.length == 0) {
         this.dataSource.data = this.copySelectionLivraison;
         this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
       }
+      else if (this.filterValues.length == 1) {
+        this.dataSource.data = this.filterChange(this.filterValues[0])
+      }
       else {
         this.filterValues = this.filterValues.filter(function (item) {
+
           return item.columnProp !== filter.columnProp;
         })
+        this.dataSource.data = this.copySelectionLivraison;
         this.filterValues.forEach(element => {
-          this.dataSource.data = this.filterChange(element)
+          this.dataSource.data = this.dataSource.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
+        if (this.dataSource.data.length == 0) {
+          this.dataSource.data.push({})
+        }
       }
     }
 
@@ -470,6 +726,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   setFilteredItemsExceptionOptions(filter) {
     // check if filter is already selected
     const filterExists = this.filterExceptionValues.some(f => f.columnProp === filter.columnProp);
+    this.changeSelectedOptionExceptionColor(filter)
     if (filterExists == false) { this.filterExceptionValues.push(filter) }
     // if only one select is selected
     if (this.filterExceptionValues.length == 1) {
@@ -478,34 +735,46 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-        this.dataSourceException.data = [...this.dataSourceException.data, ...this.filterExceptionChange(filter)];
-        //delete doublon
-        this.dataSourceException.data = this.dataSourceException.data.filter((object, index) => index === this.dataSourceException.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+        this.dataSourceException.data = this.getIntersectionException(filter)
+        if (this.dataSourceException.data.length == 0) {
+          this.dataSourceException.data.push({})
+        }
       }
       else {
-        this.dataSourceException.data = [];
+        this.dataSourceException.data = this.copyFilterException;
         this.filterExceptionValues.forEach(element => {
-          this.dataSourceException.data = this.dataSourceException.data.concat(this.filterExceptionChange(element));
+          this.dataSourceException.data = this.dataSourceException.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        //delete doublon
         this.dataSourceException.data = this.dataSourceException.data.filter((object, index) => index === this.dataSourceException.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        if (this.dataSourceException.data.length == 0) {
+          this.dataSourceException.data.push({})
+        }
       }
     }
 
     // if selected is deactivate
-    if (filter.modelValue == "") {
-      if (this.filterExceptionValues.length == 1) {
+    if (filter.modelValue == "" || filter.modelValue.length == 0) {
+
+      this.filterExceptionValues = this.filterExceptionValues.filter(item => item.columnProp != filter.columnProp);
+      if (this.filterExceptionValues.length == 0) {
         this.dataSourceException.data = this.copySelectionException;
-        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+        this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      }
+      else if (this.filterExceptionValues.length == 1) {
+        this.dataSourceException.data = this.filterChange(this.filterExceptionValues[0])
       }
       else {
         this.filterExceptionValues = this.filterExceptionValues.filter(function (item) {
+
           return item.columnProp !== filter.columnProp;
         })
+        this.dataSourceException.data = this.copySelectionException;
         this.filterExceptionValues.forEach(element => {
-          this.dataSourceException.data = this.filterExceptionChange(element)
+          this.dataSourceException.data = this.dataSourceException.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
+        if (this.dataSourceException.data.length == 0) {
+          this.dataSourceException.data.push({})
+        }
       }
     }
 
@@ -514,6 +783,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   setFilteredItemsMetaDataOptions(filter) {
     // check if filter is already selected
     const filterExists = this.filterMetaDataValues.some(f => f.columnProp === filter.columnProp);
+    this.changeSelectedOptionMetaDataColor(filter);
     if (filterExists == false) { this.filterMetaDataValues.push(filter) }
     // if only one select is selected
     if (this.filterMetaDataValues.length == 1) {
@@ -522,18 +792,20 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-        this.dataSourceMetaData.data = [...this.dataSourceMetaData.data, ...this.filterMetaDataChange(filter)];
-        //delete doublon
-        this.dataSourceMetaData.data = this.dataSourceMetaData.data.filter((object, index) => index === this.dataSourceMetaData.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+        this.dataSourceMetaData.data = this.getIntersectionMetaData(filter)
+        if (this.dataSourceMetaData.data.length == 0) {
+          this.dataSourceMetaData.data.push({})
+        }
       }
       else {
-        this.dataSourceMetaData.data = [];
+        this.dataSourceMetaData.data = this.copyFilterMetaData;
         this.filterMetaDataValues.forEach(element => {
-          this.dataSourceMetaData.data = this.dataSourceMetaData.data.concat(this.filterMetaDataChange(element));
+          this.dataSourceMetaData.data = this.dataSourceMetaData.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        //delete doublon
         this.dataSourceMetaData.data = this.dataSourceMetaData.data.filter((object, index) => index === this.dataSourceMetaData.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        if (this.dataSourceMetaData.data.length == 0) {
+          this.dataSourceMetaData.data.push({})
+        }
       }
     }
 
@@ -558,6 +830,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
   setFilteredItemsMadOptions(filter) {
     // check if filter is already selected
     const filterExists = this.filterMadValues.some(f => f.columnProp === filter.columnProp);
+    this.changeSelectedOptionMadColor(filter);
     if (filterExists == false) { this.filterMadValues.push(filter) }
     // if only one select is selected
     if (this.filterMadValues.length == 1) {
@@ -566,21 +839,22 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
-        this.dataSourceMAD.data = [...this.dataSourceMAD.data, ...this.filterMadChange(filter)];
-        //delete doublon
-        this.dataSourceMAD.data = this.dataSourceMAD.data.filter((object, index) => index === this.dataSourceMAD.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-        this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
+        this.dataSourceMAD.data = this.getIntersectionMad(filter)
+        if (this.dataSourceMAD.data.length == 0) {
+          this.dataSourceMAD.data.push({})
+        }
       }
       else {
-        this.dataSourceMAD.data = [];
+        this.dataSourceMAD.data = this.copyFilterMad;
         this.filterMadValues.forEach(element => {
-          this.dataSourceMAD.data = this.dataSourceMAD.data.concat(this.filterMadChange(element));
+          this.dataSourceMAD.data = this.dataSourceMAD.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        //delete doublon
         this.dataSourceMAD.data = this.dataSourceMAD.data.filter((object, index) => index === this.dataSourceMAD.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        if (this.dataSourceMAD.data.length == 0) {
+          this.dataSourceMAD.data.push({})
+        }
       }
     }
-
     // if selected is deactivate
     if (filter.modelValue == "") {
       if (this.filterMadValues.length == 1) {
@@ -830,11 +1104,11 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
           this.dataSourceMAD.data = dataCopy;
         }
       } else {
-        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'OK');
+        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'Fermé');
       }
     }
   }
-  
+
 
   /**
 * After the user enters a new value, all selected cells must be updated
@@ -856,10 +1130,10 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
         this.newCellValue += event.key;
       }
       this.updateSelectedCellsValues(this.newCellValue);
-     
+
     }
   }
- 
+
   /**
 * Correct the file
 */
@@ -874,11 +1148,12 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
 
         }
       }
+
       this.fileTocheck = {
         transaction_id: this.transaction.transaction_id,
         fileReplacement: {
           columns: Object.keys(this.dataSource.data[0]),
-          rows: this.dataSource.data.map(Object.values),
+          rows: this.copyDataSource.map(Object.values),
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
@@ -904,7 +1179,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
         transaction_id: this.transaction.transaction_id,
         fileReplacement: {
           columns: Object.keys(this.dataSourceException.data[0]),
-          rows: this.dataSourceException.data.map(Object.values),
+          rows: this.copyDataSourceException.map(Object.values),
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
@@ -929,7 +1204,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
         transaction_id: this.transaction.transaction_id,
         fileReplacement: {
           columns: Object.keys(this.dataSourceMetaData.data[0]),
-          rows: this.dataSourceMetaData.data.map(Object.values),
+          rows: this.copyDataSourceMetaData.map(Object.values),
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
@@ -954,7 +1229,7 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
         transaction_id: this.transaction.transaction_id,
         fileReplacement: {
           columns: Object.keys(this.dataSourceMAD.data[0]),
-          rows: this.dataSourceMAD.data.map(Object.values),
+          rows: this.copyDataSourceMad.map(Object.values),
         }
       }
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
@@ -970,23 +1245,39 @@ if (res.mad !==null && Object.keys(res.mad).length !== 0 ){
  * Correct all transaction files
  */
   correctionAllFile() {
+    if (this.dataSource.data.length>0){
+      this.columnsLivraison=Object.keys(this.dataSource.data[0]);
+      this.rowsLivraison =this.dataSource.data.map(Object.values);
+    }
+    if (this.dataSourceException.data.length>0){
+      this.columnsException= Object.keys(this.dataSourceException.data[0]);
+        this.rowsException= this.dataSourceException.data.map(Object.values);
+    }
+    if (this.dataSourceMetaData.data.length>0){
+      this.columnsMetaData= Object.keys(this.dataSourceMetaData.data[0]);
+      this.rowsMetaData= this.dataSourceMetaData.data.map(Object.values);
+    }
+    if (this.dataSourceMAD.data.length>0){
+      this.columnsMad= Object.keys(this.dataSourceMAD.data[0]);
+      this.rowsMad= this.dataSourceMAD.data.map(Object.values);
+    }
     this.fileTocheck = {
       transaction_id: this.transaction.transaction_id,
       fileReplacementLivraison: {
-        columns: Object.keys(this.dataSource.data[0]),
-        rows: this.dataSource.data.map(Object.values),
+        columns:  this.columnsLivraison,
+        rows: this.rowsLivraison,
       },
       fileReplacementMAD: {
-        columns: Object.keys(this.dataSourceMAD.data[0]),
-        rows: this.dataSourceMAD.data.map(Object.values),
+        columns: this.columnsMad,
+        rows: this.rowsMad,
       },
       fileReplacementMetadata: {
-        columns: Object.keys(this.dataSourceMetaData.data[0]),
-        rows: this.dataSourceMetaData.data.map(Object.values),
+        columns: this.columnsMetaData,
+        rows: this.rowsMetaData,
       },
       fileReplacementException: {
-        columns: Object.keys(this.dataSourceException.data[0]),
-        rows: this.dataSourceException.data.map(Object.values),
+        columns: this.columnsException,
+        rows: this.rowsException,
       },
 
     }

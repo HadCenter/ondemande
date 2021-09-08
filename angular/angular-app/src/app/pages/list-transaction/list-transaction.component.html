@@ -34,13 +34,21 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody>   
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
+              <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | mypipe: 31: "dd/MM/yyyy 'à' HH:mm"}}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.start_date | date:"yyyy/MM/dd"}}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.end_date | date:"yyyy/MM/dd"}}</td>
               <td class="mdl-data-table__cell--non-numeric">
                 <span class="label label--mini color--{{getColor(row.statut)}} border ">{{ row.statut}}</span>
               </td>
+              <td *ngIf="row.fichier_exception_sftp==null && row.statut=='Terminé'" class="mdl-data-table__cell--non-numeric">
+                <mat-icon aria-hidden="false" aria-label="Example home icon">warning</mat-icon>
+              </td>
+              <td *ngIf="row.fichier_exception_sftp!==null || row.statut!== 'Terminé'" class="mdl-data-table__cell--non-numeric">
+                <span ></span>
+              </td>
+
               <td class="column-actions mdl-data-table__cell--non-numeric">
                 <button (click)="gotoDetails(row)" [disabled] = "row.statut !== 'Terminé'"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"

@@ -31,12 +31,23 @@ class EDIfile(models.Model):
     def __str__(self):
         return os.path.basename(self.file.name)
 
+class LogisticFile(models.Model):
+    logisticFile = models.FileField(blank = False, null = False)
+    logisticFileType = models.CharField(max_length=200, blank=True, null= True)
+    created_at = models.DateTimeField(auto_now =True)
+    status = models.CharField(max_length=200,default= 'En attente')
+    number_annomalies = models.IntegerField(default=0)
+    clientName = models.CharField(max_length=200,default= 'REDLEAN_T')
+    archived = models.BooleanField(default=False)
+    ButtonCorrecteActiveted = models.BooleanField(default=False)
+    ButtonValidateActivated = models.BooleanField(default=True)
+    def __str__(self):
+        return os.path.basename(self.logisticFile.name)
+
 class FileExcelContent:
     def __init__(self,columns,rows):
         self.columns = columns
         self.rows =rows
-
-
 
 class Contact:
     def __init__(self, idContact : int, codeClient : str , nomClient: str , email : str , archived:  int):
@@ -46,7 +57,18 @@ class Contact:
         self.email = email
         self.archived = archived
 
-
+class LogisticFileInfo:
+    def __init__(self, idLogisticFile : int, logisticFileName: str, createdAt: models.DateTimeField, logisticFileType : str , status: str, number_annomalies: int, clientName: str, archived: int, ButtonCorrecteActiveted: int, ButtonValidateActivated: int):
+        self.idLogisticFile = idLogisticFile
+        self.logisticFileName = logisticFileName
+        self.createdAt = createdAt
+        self.logisticFileType = logisticFileType
+        self.status = status
+        self.number_annomalies = number_annomalies
+        self.clientName = clientName
+        self.archived = archived
+        self.ButtonCorrecteActiveted = ButtonCorrecteActiveted
+        self.ButtonValidateActivated = ButtonValidateActivated
 
 
 class FileInfo:
@@ -74,7 +96,7 @@ class AnomaliesEdiFileAnnuaire(models.Model):
         db_table = 'anomalies_edi_file_annuaire'
 
 class HistoryAnomaliesEdiFiles(models.Model):
-    edi_file = models.ForeignKey(EDIfile ,db_column="edi_file_id", on_delete= models.DO_NOTHING )
+    edi_file = models.ForeignKey(EDIfile ,db_column="edi_file_id", on_delete= models.CASCADE )
     execution_time = models.DateTimeField(blank=True, null=True)
     anomalie = models.ForeignKey(AnomaliesEdiFileAnnuaire,db_column="anomalie_id",on_delete=models.DO_NOTHING , blank=True, null=True)
     number_of_anomalies = models.IntegerField(blank=True, null=True)
@@ -129,8 +151,8 @@ class AccountsAccount(models.Model):
 class InterventionAdmin(models.Model):
     id = models.IntegerField(primary_key=True)
     id_admin = models.ForeignKey(AccountsAccount ,db_column="id_admin", on_delete= models.DO_NOTHING )
-    id_file_edi = models.ForeignKey(EDIfile ,db_column="id_file_edi", on_delete= models.DO_NOTHING )
-    execution_time = models.DateTimeField(blank=True, default=datetime.now())
+    id_file_edi = models.ForeignKey(EDIfile ,db_column="id_file_edi", on_delete= models.CASCADE )
+    execution_time = models.DateTimeField(auto_now =True)
 
     class Meta:
         managed = False
@@ -154,7 +176,7 @@ class kpi2WithFiltersDto:
 
 
 class transactionFileColumnsException:
-    def __init__(self, Tournee, taskId, itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom,Item___Type,Item___Quantite,Code_postal,Round_Name,Remarque,isDeleted):
+    def __init__(self, Tournee, taskId, itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom,Item___Type,Item___Quantite,Code_postal,Round_Name,Express,Remarque,isDeleted):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -169,10 +191,11 @@ class transactionFileColumnsException:
         self.Item___Quantite = Item___Quantite
         self.Code_postal = Code_postal
         self.Round_Name = Round_Name
+        self.Express = Express
         self.Remarque = Remarque
         self.isDeleted = isDeleted
 class transactionFileColumnsLivraison:
-    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name):
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,total_price,sourceHubName,Round_Name,isExpress,toDelete):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -186,8 +209,11 @@ class transactionFileColumnsLivraison:
         self.Item___Type_unite_manutention = Item___Type_unite_manutention
         self.Item___Quantite = Item___Quantite
         self.Code_postal = Code_postal
+        self.total_price = total_price
         self.sourceHubName = sourceHubName
         self.Round_Name = Round_Name
+        self.isExpress = isExpress
+        self.toDelete = toDelete
 class transactionFileColumnsMetadata:
     def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name,sourceClosureDate,realInfoHasPrepared,status,metadataFACTURATION):
         self.Tournee = Tournee
@@ -210,7 +236,7 @@ class transactionFileColumnsMetadata:
         self.status = status
         self.metadataFACTURATION = metadataFACTURATION
 class transactionFileColumnsMad:
-    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name):
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name,toDelete,StartTime,ClousureTime):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -226,6 +252,9 @@ class transactionFileColumnsMad:
         self.Code_postal = Code_postal
         self.sourceHubName = sourceHubName
         self.Round_Name = Round_Name
+        self.toDelete = toDelete
+        self.StartTime = StartTime
+        self.ClousureTime = ClousureTime
 
 
 class TransactionFileContentAndOptions:

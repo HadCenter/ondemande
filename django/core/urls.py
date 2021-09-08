@@ -7,7 +7,8 @@ urlpatterns = [
 	path("getClients/",views.clientList, name = "client-list"),
     path('file/', views.fileCreate, name='file-create'),
     path("getFiles/", views.fileList, name = "file-list"),
-    path("archiverFileEDI/", views.archive_fileEDI),
+    path("getArchivedFiles/", views.archivedFileList, name = "archived-file-list"),
+    path("deleteFileEDI/", views.delete_fileEDI),
     path("getFilesByClient/<str:pk>", views.getFilesByClient, name = "file-list"),
     path('getClient/<int:pk>', views.client_detail),
     path('getFile/<int:pk>', views.file_detail),
@@ -20,5 +21,11 @@ urlpatterns = [
     path('DoInterventionAsAdminForEdiFileAndChangeFile/', views.DoInterventionAsAdminForEdiFileAndChangeFile, name="DoInterventionAsAdminForEdiFileAndChangeFile"),
     path('seeFileContentMADFile',views.seeFileContentMADFile , name= "seeFileContentMADFile"),
     path('seeAllFileContentMADFile',views.seeAllFileContentMADFile , name= "seeAllFileContentMADFile"),
+    path('logisticFile/', views.LogisticFileCreate, name='logistic-file-create'),
+    path("getLogisticFiles/", views.logisticFileList, name = "logistic-file-list"),
+    path('getLogisticFile/<int:pk>', views.logistic_file_detail),
+    path('seeLogisticFileContent', views.seeLogisticFileContent, name="seeLogisticFileContent"),
+    path('validateLogisticFile', views.validateLogisticFileWS, name= "validateLogisticFile"),
+    path('downloadImportedLogisticFile', views.downloadImportedLogisticFileWS, name= "downloadImportedLogisticFile")
 
 ]

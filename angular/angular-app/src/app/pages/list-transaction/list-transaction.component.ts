@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListTransactionService } from './list-transaction.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import {FormGroup, FormControl} from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { GenererTransactionService } from './dialog/generer-transaction.service';
 @Component({
   selector: 'app-list-transaction',
@@ -22,30 +22,68 @@ export class ListTransactionComponent implements OnInit {
   private countPerPage = 8;
   public numPage = 0;
   public advancedTable = [];
-  showJobRun=false;
+  copy_transactions:any=[];
+  showJobRun = false;
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
   constructor(private tablesService: ListTransactionService,
     private router: Router,
     public dialog: MatDialog) { }
+
   ngOnInit(): void {
+    this.listenToWebSocket();
+    this.getTransactions();
+  }
+
+  searchCreated_at(){
+   this.copy_transactions.forEach(element => {
+      const x=element.created_at.substr(0, 19) ;
+      var allDate = x.split('-');
+      var thisDate = allDate[2].split('T');
+    //  element.created_at= [thisDate[0],allDate[1],allDate[0],thisDate[1] ].join("-");
+      element.created_at= [thisDate[0],allDate[1],allDate[0]].join("-");
+      element.created_at=[element.created_at,thisDate[1]].join(' à ')
+    });
+  }
+
+  listenToWebSocket() {
     this.tablesService.messages.subscribe(msg => {
       console.log("Response from websocket: ", JSON.parse(msg));
-      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
-        // console.error("ws running jobs", JSON.parse(msg).Running_Jobs)
+      // if there is a transaction job on Run
+      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0 && ((JSON.parse(msg).Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction"))).length > 0) {
+        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
         this.showJobRun = true;
       }
-      else if (JSON.parse(msg).jobEnded &&(JSON.parse(msg).jobEnded).includes ("Talend Job Transaction Mad Ended")) {
-        this.showJobRun = false;
-        this.actualiser();
-
+      // if all runing job are different from transaction
+      else if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
+        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
+      }
+      // if there is a job who ended refresh the page
+      else if (JSON.parse(msg).jobEnded) {
+        if ((JSON.parse(msg).jobEnded).includes("Talend Job Transaction Mad Ended")) {
+          localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
+          this.showJobRun = false;
+          this.actualiser();
+        }
       }
     });
-    if((Object.keys(this.tablesService.data).length !== 0)){
-      if (JSON.parse(this.tablesService.data).Running_Jobs.length > 0){
-        this.showJobRun = true;
+    // check localstorage if the user come from another page 
+
+    if (JSON.parse(localStorage.getItem('ws'))) {
+      if (JSON.parse(localStorage.getItem('ws')).Running_Jobs){
+        if((JSON.parse(localStorage.getItem('ws')).Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
+          this.showJobRun = true;
+        }
       }
+      else if (JSON.parse(localStorage.getItem('ws')).state.Running_Jobs){
+        if((JSON.parse(localStorage.getItem('ws')).state.Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
+          this.showJobRun = true;
+        }
+      }
+  
+      
     }
-     this.getTransactions();
+
+
   }
   getColor(ch) {
     if (ch === 'En attente') {
@@ -74,6 +112,7 @@ export class ListTransactionComponent implements OnInit {
   public actualiser() {
     this.advancedTable = [];
     this.transactions = [];
+    this.copy_transactions = [];
     this.showLowderListTransaction = true;
     this.getTransactions();
   }
@@ -83,24 +122,25 @@ export class ListTransactionComponent implements OnInit {
       .subscribe(res => {
         this.showLowderListTransaction = false;
         this.transactions = res;
+        this.copy_transactions=res;
         this.copyTransactionsPerPagination = this.transactions;
         console.log(this.transactions);
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        this.searchCreated_at();
       },
         error => {
           this.showLowderListTransaction = false;
           console.log(error)
         });
   }
-  public integrerTransaction(transaction_id)
-  {
+  public integrerTransaction(transaction_id) {
     const formData = new FormData();
     formData.append('transaction_id', transaction_id);
     this.tablesService.integrerTransaction(formData).subscribe(
       (res) => {
-      console.log(res);
-      this.router.navigate(['/list-transaction']);
+        console.log(res);
+        this.router.navigate(['/list-transaction']);
       },
       (err) => {
         console.log(err);
@@ -127,15 +167,31 @@ export class ListTransactionComponent implements OnInit {
     this.copyTransactionsPerPagination = this.sortByAttributeObject(this.copyTransactionsPerPagination, order, index);
   }
   public sortByAttributeObject(transactions, order, index) {
-    if (index == 0) {
+    if (index == 1) {
       return this.sortByTransactionOrder(transactions, order, index);
     }
-    else if (index == 1) {
+    else if (index == 2) {
       return this.sortByDateDebutOrder(transactions, order, index);
     }
-    else if (index == 2) {
+    else if (index == 3) {
       return this.sortByDateFinOrder(transactions, order, index);
     }
+    else if (index ==0){
+      return this.sortByDateCreation(transactions, order, index);
+    }
+  }
+
+  private sortByDateCreation(array, order, value) {
+    const compareFunction = (a, b) => {
+      if (a.created_at.slice(0, 19) > b.created_at.slice(0, 19)) {
+        return 1 * order;
+      }
+      if (a.created_at.slice(0, 19) < b.created_at.slice(0, 19)) {
+        return -1 * order;
+      }
+      return 0;
+    }
+    return array.sort(compareFunction);
   }
   private sortByTransactionOrder(array, order, value) {
     const compareFunction = (a, b) => {
@@ -189,11 +245,21 @@ export class ListTransactionComponent implements OnInit {
     }
     this.currentPage = this.copyTransactionsPerPagination.length > 0 ? 1 : 0;
     this.numPage = Math.ceil(this.copyTransactionsPerPagination.length / this.countPerPage);
-    this.advancedTable = this.copyTransactionsPerPagination.slice(0,this.countPerPage);
+    this.advancedTable = this.copyTransactionsPerPagination.slice(0, this.countPerPage);
   }
-  filterItems(filterValue : string) {
-    let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
-    return this.transactions.filter((item) => {
+  filterItems(filterValue: string) {
+  let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
+  // this.transactions.forEach(element => {
+  //   // element.created_at.toISOString().split('T')[0]
+  //   const x=element.created_at.substr(0, 19) ;
+  //   var allDate = x.split('-');
+  //   var thisDate = allDate[2].split('T');
+  //   element.created_at= [thisDate[0],allDate[1],allDate[0],thisDate[1] ].join("-");
+  //  console.warn(element.created_at);
+  //   //console.log((element.created_at.toISOString()).getFullYear() );
+  // });
+   //console.error(this.transactions)
+     return this.copy_transactions.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
     });
   }
@@ -214,18 +280,19 @@ export class DailogGenerateTransaction {
 
   constructor(
     public dialogRef: MatDialogRef<DailogGenerateTransaction>,
-    private service_genererTransaction : GenererTransactionService
+    private service_genererTransaction: GenererTransactionService
   ) {
     this.maxDate = new Date();
     this.maxDate.setDate(this.maxDate.getDate() - 1);
   }
   ngOnInit(): void {
   }
+
+
   onNoclick() {
     this.dialogRef.close();
   }
-  genererTransaction()
-  {
+  genererTransaction() {
     this.clicked = true;
     this.showloader = true;
     var start_date = this.toJSONLocal(this.range.value.start_date);
@@ -247,8 +314,7 @@ export class DailogGenerateTransaction {
 
   }
   // convertir les dates en une chaîne de date conviviale MySQL
-  toJSONLocal (date)
-  {
+  toJSONLocal(date) {
     var local = new Date(date);
     local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
     return local.toJSON().slice(0, 10);
@@ -257,3 +323,4 @@ export class DailogGenerateTransaction {
   //   event.target.required = true;
   // }
 }
+

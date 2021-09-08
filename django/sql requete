@@ -1,0 +1,9 @@
+// sql requete for create table core_logisticfile
+CREATE TABLE core_logisticfile (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  logisticFile VARCHAR(100) NOT NULL,
+  logisticFileType VARCHAR(200),
+  created_at DATETIME(6),
+  status VARCHAR(200),
+  number_annomalies INT,
+  clientName VARCHAR(200) );

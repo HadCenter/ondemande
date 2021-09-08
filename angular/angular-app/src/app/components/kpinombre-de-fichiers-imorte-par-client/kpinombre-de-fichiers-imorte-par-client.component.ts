@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 
 import { KPInombreDeFichiersImorteParClientService } from './kpinombre-de-fichiers-imorte-par-client.service';
 
@@ -11,34 +11,36 @@ import { KPInombreDeFichiersImorteParClientService } from './kpinombre-de-fichie
 export class KPInombreDeFichiersImorteParClientComponent implements OnInit {
   @Input('nameSelected') nameSelected: any;
   @Input('rangeDate') rangeDate: any;
-  count ;
+  showLoaderFilesByClient: boolean = true;
+  count;
   constructor(
-    public serviceKPI : KPInombreDeFichiersImorteParClientService,) { }
+    public serviceKPI: KPInombreDeFichiersImorteParClientService,) { }
   ngOnInit(): void {
     this.getNumberOfFilesPerDateAll();
   }
 
   getNumberOfFilesPerDateAll() {
     var filters = {
-       "dateFilter": null,
-       "clientFilter": null,
+      "dateFilter": null,
+      "clientFilter": null,
     }
     this.serviceKPI.getNumberOfFilesWithFilters(filters).subscribe(res => {
       this.count = res.length;
+      this.showLoaderFilesByClient = false;
     })
   }
 
   ngOnChanges(changes: SimpleChanges) {
     const isFirstChange = Object.values(changes).some(c => c.isFirstChange());
     if (isFirstChange == false) {
-        var filters = {
-          "dateFilter": this.rangeDate,
-          "clientFilter": this.nameSelected,
-        }
-        this.serviceKPI.getNumberOfFilesWithFilters(filters).subscribe(res => {
-          this.count = res.length;
-        })
+      var filters = {
+        "dateFilter": this.rangeDate,
+        "clientFilter": this.nameSelected,
+      }
+      this.serviceKPI.getNumberOfFilesWithFilters(filters).subscribe(res => {
+        this.count = res.length;
+      })
     }
-    }
+  }
 
 }

@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import {MyCustomPaginatorIntl} from './paginator-frensh';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [DetailsTransactionComponent],
@@ -31,6 +32,8 @@ import {MyCustomPaginatorIntl} from './paginator-frensh';
     MatTableModule,
     LoaderModule,
     MatPaginatorModule,
+    MatCheckboxModule,
+
   ],
   providers: [
     DetailsTransactionService,

@@ -126,7 +126,7 @@ mat-panel-description.description.mat-expansion-panel-header-description {
     margin-right: 2px;
   }
 }
-#conteneur {
+#conteneur-transaction {
   display: flex;
   justify-content: space-between;
 }
@@ -139,6 +139,21 @@ mat-panel-description.description.mat-expansion-panel-header-description {
   width: max-content;
 }
 th.titre-column {
+  padding: 0 15px 0 15px !important;
+  text-align: center !important;
+
+}
+th.titre-column-exception {
+  padding: 0 15px 0 15px !important;
+  text-align: center !important;
+
+}
+th.titre-column-metadata {
+  padding: 0 15px 0 15px !important;
+  text-align: center !important;
+
+}
+th.titre-column-mad {
   padding: 0 15px 0 15px !important;
   text-align: center !important;
 

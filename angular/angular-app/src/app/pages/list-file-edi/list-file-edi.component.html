@@ -49,7 +49,7 @@
         
             <td class="mdl-data-table__cell--non-numeric" style="color: #00bcd4;max-width: 150px;cursor: pointer;"><a
                 [matTooltip]=row.fileName matTooltipClass="tooltip-custom">{{row.fileName}} </a></td>
-            <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"yyyy/MM/dd 'à' HH:mm" }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.createdAt | date:"dd/MM/yyyy 'à' HH:mm" }}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ row.contact.nomClient}}</td>
 
             <td *ngIf="row.status === 'Terminé'" class="label-wrong mdl-data-table__cell--non-numeric">{{

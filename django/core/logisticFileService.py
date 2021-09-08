@@ -23,7 +23,11 @@ def traceLogisticFileInDB(fileName, typeLogisticFile):
     logisticFileObject.save()
     idFileInDB = logisticFileObject.id
     return idFileInDB
-
+def copyLogisticFileFromMagistorTransToLocalHost(sftp_client,logisticFileName,source):
+    django_directory = os.getcwd()
+    os.chdir(django_directory)
+    sftp_client.get(source + "/" + logisticFileName, os.getcwd() + "/" + logisticFileName )
+    os.chdir(django_directory)
 def copyLogisticFileFromMagistorTransToIN(sftp_client,logisticFileName,source,destination):
     django_directory = os.getcwd()
     os.chdir("media/files")
@@ -31,18 +35,6 @@ def copyLogisticFileFromMagistorTransToIN(sftp_client,logisticFileName,source,de
     sftp_client.put(logisticFileName, destination + "/" + logisticFileName)
     os.remove(logisticFileName)
     os.chdir(django_directory)
-
-def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile):
-    sftp_client = connect()
-    typeLogistFileExist = logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile)
-    if(typeLogistFileExist):
-        return False
-    else:
-        sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
-        destinationPath = "/IN"
-        copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
-        LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False)
-        return True
 
 def logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
     INFolderPath = "/IN"
@@ -156,5 +148,32 @@ def seeContentLogisticFile(logisticFileName, folderLogisticFile):
     responseObject = FileExcelContent(columns, rows)
     os.chdir(django_directory)
     return responseObject
+
+
+def readLogisticFileFromLocalHost(logisticFileName):
+    with open(logisticFileName, 'rb') as f:
+        logisticFile = f.read()
+    return logisticFile
+
+
+def downloadImportedLogisticFile(logisticFileName,folderLogisticFile):
+    sftp_client = connect()
+    sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
+    copyLogisticFileFromMagistorTransToLocalHost(sftp_client=sftp_client,logisticFileName=logisticFileName,source=sourcePath)
+    logisticFile = readLogisticFileFromLocalHost(logisticFileName)
+    return logisticFile
+
+def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile):
+    sftp_client = connect()
+    typeLogistFileExist = logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile)
+    if(typeLogistFileExist):
+        return False
+    else:
+        sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
+        destinationPath = "/IN"
+        copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
+        LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False)
+        return True
+
 
 

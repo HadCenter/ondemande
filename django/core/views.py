@@ -36,7 +36,7 @@ from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
 from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
-from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile
+from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -492,3 +492,13 @@ def DoInterventionAsAdminForEdiFileAndChangeFile(request):
     createFileEdiFromColumnAndRows(columns, rows, fileId ,fileType)
     return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+def downloadImportedLogisticFileWS(request):
+    logisticFileName = request.data['logisticFileName']
+    folderLogisticFile = request.data['folderLogisticFile']
+    logisticFile = downloadImportedLogisticFile(logisticFileName,folderLogisticFile)
+    response = HttpResponse(logisticFile, content_type="application/xls")
+    response['Content-Disposition'] = "attachment; filename={0}".format(logisticFileName)
+    response['Content-Length'] = os.path.getsize(logisticFileName)
+    os.remove(logisticFileName)
+    return response

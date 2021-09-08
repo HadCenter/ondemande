@@ -18,6 +18,10 @@ export class ForgotPasswordComponent extends BlankLayoutCardComponent implements
   public sendMail: string;
   constructor(private authService: ForgotPasswordService, private fb: FormBuilder, private router: Router) {
     super();
+    if (localStorage.getItem('currentUser')){
+      this.router.navigate(['/home']);
+      }
+      else{
     this.loginForm = this.fb.group({
       email: new FormControl('', [
         Validators.required,
@@ -25,6 +29,7 @@ export class ForgotPasswordComponent extends BlankLayoutCardComponent implements
       ]),
     });
     this.email = this.loginForm.get('email');
+  }
   }
   public ngOnInit() {
     this.loginForm.valueChanges.subscribe(() => {

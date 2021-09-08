@@ -5,7 +5,7 @@ import { MatDialog, MatDialogRef, } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-magistor',
   templateUrl: './magistor.component.html',
@@ -25,7 +25,7 @@ export class MagistorComponent implements OnInit {
   snackBarRef: any;
   public snackAction = 'Ok';
   public errorValidation ="Un fichier de même type existe"
-
+  fileToDownload: any;
   constructor(
     private tablesService: MagistorService,
     private _snackBar: MatSnackBar,
@@ -203,7 +203,6 @@ export class MagistorComponent implements OnInit {
       folderLogisticFile: file.idLogisticFile,
       typeLogisticFile: file.logisticFileType
     }
-    // console.warn(file)
 
     this.tablesService.validateFile(this.fileTovalidate).subscribe((res) => {
       if (res.message == "file validated successfully") {
@@ -216,12 +215,10 @@ export class MagistorComponent implements OnInit {
     })
   }
   correctionFile(file) {
-
     this.fileTocheck = {
       Magistor_Current_Client: file.clientName,
       Magistor_Current_File: file.logisticFileType.slice(0, 3)
     }
-
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck)
     this.tablesService.corretFile(this.fileTocheck).subscribe(res => {
@@ -230,6 +227,17 @@ export class MagistorComponent implements OnInit {
         this.actualiser();
       }
     })
+  }
+
+  downloadFile(file){
+    this.fileToDownload ={
+      logisticFileName: file.logisticFileName.name,
+      folderLogisticFile: file.idLogisticFile
+    }
+    this.tablesService.downloadFile(this.fileToDownload) .subscribe(res => {
+      saveAs(res, file.logisticFileName.name);
+    }, error => console.log(error));
+
   }
 
   

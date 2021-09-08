@@ -80,4 +80,7 @@ export class MagistorService {
   public validateFile (data): Observable<any> {
     return  this.http.post(`${this.url}/validateLogisticFile`,data);
   }
+  public downloadFile (data): Observable<any> {
+    return  this.http.post(`${this.url}/downloadImportedLogisticFile`,data, { responseType: "blob" });
+  }
 }

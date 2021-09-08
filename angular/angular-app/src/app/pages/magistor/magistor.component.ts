@@ -21,8 +21,10 @@ export class MagistorComponent implements OnInit {
   fichiers: any = [];
   public filterValue: any;
   fileTocheck: any;
+  fileTovalidate:any;
   snackBarRef: any;
   public snackAction = 'Ok';
+  public errorValidation ="Un fichier de même type existe"
 
   constructor(
     private tablesService: MagistorService,
@@ -195,6 +197,24 @@ export class MagistorComponent implements OnInit {
   gotoDetails(row) {
     this.router.navigate(['/details-file-logistique', row.idLogisticFile])
   }
+  validateFile(file){
+    this.fileTovalidate = {
+      logisticFileName: file.logisticFileName.name,
+      folderLogisticFile: file.idLogisticFile,
+      typeLogisticFile: file.logisticFileType
+    }
+    // console.warn(file)
+
+    this.tablesService.validateFile(this.fileTovalidate).subscribe((res) => {
+      if (res.message == "file validated successfully") {
+        file.ButtonValidateActivated=false;
+        file.ButtonCorrecteActiveted =true;
+      }
+    },
+    (err) => {
+      this.openSnackBar(this.errorValidation,this.snackAction);
+    })
+  }
   correctionFile(file) {
 
     this.fileTocheck = {
@@ -212,8 +232,11 @@ export class MagistorComponent implements OnInit {
     })
   }
 
+  
+
 
 }
+
 
 export const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
@@ -231,6 +254,7 @@ export class DialogImportFile {
   showloader = false;
   clicked = false;
   public snackAction = 'voir plus +';
+  public errorValidation = "Un fichier de même type existe"
   snackActionExpediteur = "ok";
   minWidth: number = 250;
   width: number = this.minWidth;
@@ -262,11 +286,6 @@ export class DialogImportFile {
   selectFile(event) {
     this.error = '';
     this.clicked=false;
-    // this.myForm.invalid=false;
-    // this.myForm.reset();
-    // for (let control in this.myForm.controls) {
-    //   this.myForm.controls[control].setErrors(null);
-    // }
     if (event.target.files.length > 0) {
       this.selectedFiles = <File>event.target.files[0];
       this.myForm.patchValue({
@@ -287,16 +306,6 @@ export class DialogImportFile {
       horizontalPosition: 'center',
     });
   }
-
-  openSnackbarListExpediteur() {
-    /*this._snackBar.openFromComponent(SnackbarComponent, {
-      panelClass: "snack-exp",
-      verticalPosition: 'top',
-      horizontalPosition: 'center',
-      data: this.expediteurArrayFiltred
-    });*/
-  }
-
   onFileChange(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];

@@ -86,10 +86,10 @@
               <app-loader [width]="'94%'" [position]="'initial'" [height]="'0%'" [bg]="'transparant'"
                 [show]="showLoaderLivraisonFile"></app-loader>
               <div class="content-table">
-                <div>
-                  <mat-paginator [hidden]="!dataSource.data.length" [pageSizeOptions]="[100,200,300]"
+
+                  <mat-paginator   [hidden]="!dataSource.data.length" [pageSizeOptions]="[100,200,300]"
                     showFirstLastButtons></mat-paginator>
-                </div>
+
                 <table mat-table [dataSource]="dataSource" *ngIf="dataSource.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
 
@@ -812,7 +812,7 @@
                 [show]="showLoaderMetadataFile"></app-loader>
               <div class="content-table">
                 <div>
-                  <mat-paginator [hidden]="!dataSourceMetaData.data.length" [pageSizeOptions]="[100,200,300]"
+                  <mat-paginator  [hidden]="!dataSourceMetaData.data.length" [pageSizeOptions]="[100,200,300]"
                     showFirstLastButtons></mat-paginator>
                 </div>
                 <table mat-table [dataSource]="dataSourceMetaData" *ngIf="dataSourceMetaData.data.length > 0"

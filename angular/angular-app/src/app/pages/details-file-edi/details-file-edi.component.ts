@@ -505,6 +505,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   /**
+* change color of the selected column header on file livraison
+*/
+changeSelectedOptionColor(filter) {
+  if (filter.columnProp && filter.modelValue != "") {
+    document.getElementById(filter.columnProp+"-header").style.color = "#00bcd4";
+  }
+  else {
+    document.getElementById(filter.columnProp+"-header").style.color = "white";
+  }
+}
+  /**
      * Get options inside selects
      * @param filter
      */
@@ -536,8 +547,10 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
 
   setFilteredItemsOptions(filter) {
+    console.error(filter)
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
+    this.changeSelectedOptionColor(filter);
     if (filterExists == false) { this.filterValues.push(filter) }
     // if only one select is selected
     if (this.filterValues.length == 1) {
@@ -611,6 +624,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   * Reset filter
   */
   resetFiltre() {
+    // change color of header white for all columns
+  const rows = document.getElementsByClassName('titre-column') as HTMLCollectionOf<HTMLElement>;
+  for (let i = 0; i < rows.length; i++) {
+    rows[i].style.color = 'white';
+  }
     this.initSelectedCells();    // init selected cells
     // reset the selected filtre
     this.options.forEach(element => {

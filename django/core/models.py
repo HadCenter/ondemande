@@ -41,6 +41,7 @@ class LogisticFile(models.Model):
     archived = models.BooleanField(default=False)
     ButtonCorrecteActiveted = models.BooleanField(default=False)
     ButtonValidateActivated = models.BooleanField(default=True)
+    FileDeleted = models.BooleanField(default=False)
     def __str__(self):
         return os.path.basename(self.logisticFile.name)
 
@@ -58,7 +59,7 @@ class Contact:
         self.archived = archived
 
 class LogisticFileInfo:
-    def __init__(self, idLogisticFile : int, logisticFileName: str, createdAt: models.DateTimeField, logisticFileType : str , status: str, number_annomalies: int, clientName: str, archived: int, ButtonCorrecteActiveted: int, ButtonValidateActivated: int):
+    def __init__(self, idLogisticFile : int, logisticFileName: str, createdAt: models.DateTimeField, logisticFileType : str , status: str, number_annomalies: int, clientName: str, archived: int, ButtonCorrecteActiveted: int, ButtonValidateActivated: int, FileDeleted: int):
         self.idLogisticFile = idLogisticFile
         self.logisticFileName = logisticFileName
         self.createdAt = createdAt
@@ -69,6 +70,7 @@ class LogisticFileInfo:
         self.archived = archived
         self.ButtonCorrecteActiveted = ButtonCorrecteActiveted
         self.ButtonValidateActivated = ButtonValidateActivated
+        self.FileDeleted = FileDeleted
 
 
 class FileInfo:

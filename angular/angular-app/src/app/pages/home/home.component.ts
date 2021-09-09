@@ -65,7 +65,6 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
   constructor(public tablesService: HomeService, private router: Router,) { super(); }
 
   ngOnInit(): void {
-    console.warn("Début *********** ngOnInit")
     this.tablesService.getAllAnomalies().subscribe(res => {
       this.allAnomalies = res;
       this.allAnomalies_copy = res;
@@ -74,7 +73,6 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       this.getAllTypesANomalie();
     });
     this.listenToWebSocket();
-    console.warn("Fin *********** ngOnInit")
   }
 
   listenToWebSocket(){
@@ -86,74 +84,74 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
   }
   initializeFiltredClients()
   {
-    console.warn("Début ********* initializeFiltredClients")
+    // console.warn("Début ********* initializeFiltredClients")
     this.filteredClients = this.clientControl.valueChanges.pipe(
         startWith<string | Client[]>(""),
         map(value => (typeof value === "string" ? value : this.lastFilter_client)),
         map(filter => this.filter_client(filter))
       );
-    console.warn("Fin ********* initializeFiltredClients")
+    // console.warn("Fin ********* initializeFiltredClients")
   }
   initializeFiltredFiles() {
-    console.warn("Début ********* initializeFiltredFiles")
+    // console.warn("Début ********* initializeFiltredFiles")
     this.filteredFiles = this.fileControl.valueChanges.pipe(
         startWith<string | File[]>(""),
         map(value => (typeof value === "string" ? value : this.lastFilter_file)),
         map(filter => this.filter_file(filter))
       );
-    console.warn("Fin ********* initializeFiltredFiles")
+    // console.warn("Fin ********* initializeFiltredFiles")
   }
   initializeFiltredTypesAnomalies() {
-    console.warn("Début ********* initializeFiltredTypesAnomalies")
+    // console.warn("Début ********* initializeFiltredTypesAnomalies")
     this.filteredtypesAnomalies = this.typesAnomaliesControl.valueChanges.pipe(
         startWith<string | Anomalie[]>(""),
         map(value => (typeof value === "string" ? value : this.lastFilter_typeanomalie)),
         map(filter => this.filter_TypesAnomalies(filter))
       );
-    console.warn("Fin ********* initializeFiltredTypesAnomalies")
+    // console.warn("Fin ********* initializeFiltredTypesAnomalies")
   }
   filter_client(filter: string): Client[] {
-    console.warn("Début *********** filter_client")
+    // console.warn("Début *********** filter_client")
     this.lastFilter_client = filter;
     if (filter) {
-      console.warn("Fin *********** filter_client")
+      // console.warn("Fin *********** filter_client")
       return this.listClientsNames.filter(option => {
         return (
           option.clientName.toLowerCase().indexOf(filter.toLowerCase()) === 0
         );
       });
     } else {
-      console.warn("Fin *********** filter_client")
+      // console.warn("Fin *********** filter_client")
       return this.listClientsNames.slice();
     }
   }
   filter_file(filter: string): File[] {
-    console.warn("Début *********** filter_file")
+    // console.warn("Début *********** filter_file")
     this.lastFilter_file = filter;
     if (filter) {
-      console.warn("Fin *********** filter_file")
+      // console.warn("Fin *********** filter_file")
       return this.listFilesNames.filter(option => {
         return (
           option.fileName.toLowerCase().indexOf(filter.toLowerCase()) === 0
         );
       });
     } else {
-      console.warn("Fin *********** filter_file")
+      // console.warn("Fin *********** filter_file")
       return this.listFilesNames.slice();
     }
   }
   filter_TypesAnomalies(filter: string): Anomalie[] {
-    console.warn("Début *********** filter_TypesAnomalies")
+    // console.warn("Début *********** filter_TypesAnomalies")
     this.lastFilter_typeanomalie = filter;
     if (filter) {
-      console.warn("Fin *********** filter_TypesAnomalies")
+      // console.warn("Fin *********** filter_TypesAnomalies")
       return this.listTypesAnomaliesNames.filter(option => {
         return (
           option.anomalieName.toLowerCase().indexOf(filter.toLowerCase()) === 0
         );
       });
     } else {
-      console.warn("Fin *********** filter_TypesAnomalies")
+      // console.warn("Fin *********** filter_TypesAnomalies")
       return this.listTypesAnomaliesNames.slice();
     }
   }
@@ -161,7 +159,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
   {
     if(selected instanceof Client)
     {
-      console.warn("Début *********** toggleSelectionClient")
+      // console.warn("Début *********** toggleSelectionClient")
       selected.selected = !selected.selected;
       if (selected.selected) {
         this.selectedClients.push(selected);
@@ -174,11 +172,11 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       }
       this.selectedClientsNames = this.selectedClients.map(client => client.clientName);
       this.clientControl.setValue('');
-      console.warn("Fin *********** toggleSelectionClient")
+      // console.warn("Fin *********** toggleSelectionClient")
     }else{
       if(selected instanceof File)
       {
-        console.warn("Début *********** toggleSelectionFile")
+        // console.warn("Début *********** toggleSelectionFile")
         selected.selected = !selected.selected;
         if (selected.selected) {
           this.selectedFiles.push(selected);
@@ -191,11 +189,11 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
         }
         this.selectedFilesNames = this.selectedFiles.map(file => file.fileName);
         this.fileControl.setValue('');
-        console.warn("Fin *********** toggleSelectionFile")
+        // console.warn("Fin *********** toggleSelectionFile")
       }else{
         if (selected instanceof Anomalie)
         {
-          console.warn("Début *********** toggleSelectiontypesAnomalies")
+          // console.warn("Début *********** toggleSelectiontypesAnomalies")
           selected.selected = !selected.selected;
           if (selected.selected) {
             this.selectedtypesAnomalies.push(selected);
@@ -208,7 +206,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
           }
           this.selectedtypesAnomaliesNames = this.selectedtypesAnomalies.map(anomalie => anomalie.anomalieName);
           this.typesAnomaliesControl.setValue('');
-          console.warn("Fin *********** toggleSelectiontypesAnomalies")
+          // console.warn("Fin *********** toggleSelectiontypesAnomalies")
         }
       }
     }

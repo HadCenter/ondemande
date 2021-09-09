@@ -276,4 +276,10 @@ div.mat-paginator-container{
 {
   border:1px solid red;
 }
+.mat-paginator-page-size {
+  align-items: center !important;
+}
+.mat-paginator-page-size-select.mat-form-field-appearance-fill {
+  margin-top: -4px !important;
+}
 

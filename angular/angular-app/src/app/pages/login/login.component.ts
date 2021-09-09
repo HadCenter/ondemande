@@ -17,17 +17,23 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
 
   constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) {
     super();
+    if (localStorage.getItem('currentUser')){
+        this.router.navigate(['/home']);
+      }
+    else{
+        this.loginForm = this.fb.group({
+          password: new FormControl('', Validators.required),
+          email: new FormControl('', [
+            Validators.required,
+            Validators.pattern(this.emailPattern),
+    
+          ]),
+        });
+        this.email = this.loginForm.get('email');
+        this.password = this.loginForm.get('password');
+      }
 
-    this.loginForm = this.fb.group({
-      password: new FormControl('', Validators.required),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.pattern(this.emailPattern),
-
-      ]),
-    });
-    this.email = this.loginForm.get('email');
-    this.password = this.loginForm.get('password');
+   
   }
 
   public ngOnInit() {

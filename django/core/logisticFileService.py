@@ -176,4 +176,34 @@ def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile)
         return True
 
 
+def logisticFileExistInFolderIN(sftp_client, logisticFileName):
+    INFolderPath = "/IN"
+    sftp_client.chdir(INFolderPath)
+    LogistFileExist = False
+    for logisticFile in sftp_client.listdir():
+        if (logisticFile == logisticFileName):
+            LogistFileExist = True
+    return LogistFileExist
+
+
+def deleteLogisticFileFromInFolder(sftp_client, FolderInPath, logisticFileName):
+    for logisticFile in sftp_client.listdir(path=FolderInPath):
+        if (logisticFile == logisticFileName):
+            sftp_client.remove(FolderInPath + "/"+ logisticFile)
+
+
+def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
+    sftp_client = connect()
+    LogistFileExist = logisticFileExistInFolderIN(sftp_client,logisticFileName)
+    if(LogistFileExist == False):
+        LogisticFile.objects.filter(pk=idLogisticFile).update(FileDeleted=True)
+        return False
+    else:
+        deleteLogisticFileFromInFolder(sftp_client= sftp_client, FolderInPath= "/IN", logisticFileName=logisticFileName)
+        LogisticFile.objects.filter(pk=idLogisticFile).update(FileDeleted=True)
+        return True
+
+
+
+
 

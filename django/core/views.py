@@ -36,7 +36,7 @@ from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
 from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
-from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile
+from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -502,3 +502,13 @@ def downloadImportedLogisticFileWS(request):
     response['Content-Length'] = os.path.getsize(logisticFileName)
     os.remove(logisticFileName)
     return response
+
+@api_view(['POST'])
+def deleteNotValidateLogisticFileWS(request):
+    logisticFileName = request.data['logisticFileName']
+    idLogisticFile = request.data['idLogisticFile']
+    logisticFileDeleted = deleteNotValidateLogisticFile(logisticFileName, idLogisticFile)
+    if(logisticFileDeleted):
+        return JsonResponse({'message': 'file deleted successfully'}, status=status.HTTP_200_OK)
+    else:
+        return JsonResponse({'message': 'file not found'}, status=status.HTTP_403_FORBIDDEN)

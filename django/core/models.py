@@ -41,6 +41,7 @@ class LogisticFile(models.Model):
     archived = models.BooleanField(default=False)
     ButtonCorrecteActiveted = models.BooleanField(default=False)
     ButtonValidateActivated = models.BooleanField(default=True)
+    FileDeleted = models.BooleanField(default=False)
     def __str__(self):
         return os.path.basename(self.logisticFile.name)
 

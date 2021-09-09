@@ -111,7 +111,8 @@ def getAllLogisticFileList():
                                  status=logisticFileDB.status, number_annomalies=logisticFileDB.number_annomalies,
                                  clientName= logisticFileDB.clientName, archived = logisticFileDB.archived,
                                  ButtonCorrecteActiveted= logisticFileDB.ButtonCorrecteActiveted,
-                                 ButtonValidateActivated= logisticFileDB.ButtonValidateActivated)
+                                 ButtonValidateActivated= logisticFileDB.ButtonValidateActivated,
+                                 FileDeleted= logisticFileDB.FileDeleted)
         listLogisticFiles.append(logisticFileResponse)
     return listLogisticFiles
 
@@ -126,8 +127,8 @@ def getSingleLogisticFileDetail(key):
                                             clientName=logisticFileDB.clientName,
                                             archived = logisticFileDB.archived,
                                             ButtonCorrecteActiveted = logisticFileDB.ButtonCorrecteActiveted,
-                                            ButtonValidateActivated = logisticFileDB.ButtonValidateActivated
-                                            )
+                                            ButtonValidateActivated = logisticFileDB.ButtonValidateActivated,
+                                            FileDeleted=logisticFileDB.FileDeleted)
     return logisticFileResponse
 
 def seeContentLogisticFile(logisticFileName, folderLogisticFile):

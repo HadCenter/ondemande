@@ -8,10 +8,10 @@ import { WebsocketService } from '../../services/websocket.service';
 export class ListTransactionService {
 
   private url = `${environment.apiBaseUrl}/talendEsb`;
-  public WS_URL = "ws://52.47.208.8:8000/ws/notifications"
+  public WS_URL = "ws://13.36.210.39:8000/ws/notifications"
   public messages: Subject<any>;
   data:any={};
-  constructor(private http: HttpClient,private wsService: WebsocketService) { 
+  constructor(private http: HttpClient,private wsService: WebsocketService) {
     this.messages = <Subject<any>>wsService.connect(this.WS_URL).map(
       (response: MessageEvent): any => {
         console.warn('resp from websocket',response)

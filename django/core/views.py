@@ -35,7 +35,7 @@ from .models import transactionFileColumnsException , transactionFileColumnsLivr
 from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
-from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows
+from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows, updateHistoryOfAnnomalies
 from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
@@ -490,6 +490,9 @@ def DoInterventionAsAdminForEdiFileAndChangeFile(request):
     interventionToSave.save()
 
     createFileEdiFromColumnAndRows(columns, rows, fileId ,fileType)
+
+    if (fileType == "error"):
+        updateHistoryOfAnnomalies(prestations= rows, fileId= fileId)
     return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])

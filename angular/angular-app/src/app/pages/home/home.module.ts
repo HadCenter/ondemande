@@ -20,7 +20,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { KpiInterventionAdminComponent } from 'app/components/kpi-intervention-admin/kpi-intervention-admin.component';
 
-
+import { MAT_DATE_LOCALE } from '@angular/material/core'
 
 
 @NgModule({
@@ -41,6 +41,7 @@ import { KpiInterventionAdminComponent } from 'app/components/kpi-intervention-a
   ],
   providers: [
     HomeService,
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' },
    },
   ],

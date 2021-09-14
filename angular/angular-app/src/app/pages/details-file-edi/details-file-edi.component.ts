@@ -497,6 +497,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         })
       }
       else {
+        this.showWrong=false;
         this.fileWrong.rows = [];
       }
     })
@@ -671,7 +672,7 @@ changeSelectedOptionColor(filter) {
         // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
       }
       else {
-
+        this.showValid=false;
         this.fileValid.rows = [];
 
       }

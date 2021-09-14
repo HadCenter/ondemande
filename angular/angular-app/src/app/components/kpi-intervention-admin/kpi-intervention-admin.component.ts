@@ -16,6 +16,7 @@ export class KpiInterventionAdminComponent implements OnInit {
   showLoaderInterventionBydate: boolean = true;
   @Input('nameSelected') nameSelected: any;
   @Input('rangeDate') rangeDate: any;
+  @Input('fileSelected') fileSelected: any;
 
   constructor(public interventionService: KpiInterventionAdminService) {
     this.initChart();
@@ -29,6 +30,7 @@ export class KpiInterventionAdminComponent implements OnInit {
         var filters = {
           "dateFilter": this.rangeDate,
           "clientFilter": this.nameSelected,
+          "fileFilter": this.fileSelected
         }
         this.interventionService.getNumberOfInterventionsWithFilters(filters).subscribe(res => {
           this.InterventionsByFiltres = res;
@@ -166,7 +168,7 @@ export class KpiInterventionAdminComponent implements OnInit {
       },
       navigator: {
         enabled: true,
-        adaptToUpdatedData: false,   /**navigator update xx */
+        adaptToUpdatedData: true,   /**navigator update xx */
         series: {
           lineWidth: 0
         }

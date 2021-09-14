@@ -69,7 +69,7 @@
     </div>
 
     <div  class="content-nb-file-client mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone">
-      <app-kpinombre-de-fichiers-imorte-par-client [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames">
+      <app-kpinombre-de-fichiers-imorte-par-client [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" [fileSelected]="selectedFilesNames">
       </app-kpinombre-de-fichiers-imorte-par-client>
   
   </div>
@@ -82,14 +82,14 @@
   </div>
   <div class="content-chart">
   <div  class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-    <app-kpi-intervention-admin [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames">
+    <app-kpi-intervention-admin [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" [fileSelected]="selectedFilesNames">
     </app-kpi-intervention-admin>
   </div>
 
  
     <div  class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
       <app-kpievolution-nombre-de-fichiers-imorte-par-client [rangeDate]="rangeDate"
-        [nameSelected]="selectedClientsNames"></app-kpievolution-nombre-de-fichiers-imorte-par-client>
+        [nameSelected]="selectedClientsNames" [fileSelected]="selectedFilesNames"></app-kpievolution-nombre-de-fichiers-imorte-par-client>
     </div>
   </div>
   

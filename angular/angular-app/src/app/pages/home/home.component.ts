@@ -247,7 +247,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       start_date = null;
     }
     if (this.range.value.end) {
-      end_date = this.toJSONLocal(this.range.value.end);
+      end_date = this.toJSONLocalEndDate(this.range.value.end);
     }
     else {
       end_date = null;
@@ -261,7 +261,15 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
   toJSONLocal(date) {
     var local = new Date(date);
     local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
-    return (local.toJSON().replace("T", " ")).slice(0, 19)
+    return (local.toJSON().replace("T", " ")).slice(0, 19);
+  }
+
+  toJSONLocalEndDate(date){
+    var local = new Date(date);
+    local.setHours(local.getHours() + 23.59)
+    local.setMinutes((local.getMinutes() - local.getTimezoneOffset())+59);
+    local.setSeconds(local.getSeconds() + 59)
+    return (local.toJSON().replace("T", " ")).slice(0, 19);
   }
 
 }

@@ -220,6 +220,7 @@ def getNumberOfInterventionsWithFilters(request):
 def getNumberOfFilesWithFilters(request):
     dateFilter = request.data["dateFilter"]
     clientFilter = request.data["clientFilter"]
+    fileFilter = request.data["fileFilter"]
 
     ediFiles = EDIfile.objects.order_by('created_at').prefetch_related("client")
     if dateFilter != None:
@@ -229,6 +230,8 @@ def getNumberOfFilesWithFilters(request):
             ediFiles = ediFiles.filter(created_at__gte=startDate)
         if endDate != None:
             ediFiles = ediFiles.filter(created_at__lte=endDate)
+    if (fileFilter != None) and (len(fileFilter) > 0):
+        ediFiles = ediFiles.filter(id_file_edi__file__in=fileFilter)
     if (clientFilter != None) and (len(clientFilter) > 0):
         ediFiles = ediFiles.filter(client__nom_client__in=clientFilter)
 

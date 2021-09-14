@@ -349,3 +349,7 @@ def updateHistoryOfAnnomalies(prestations, fileId):
     for remarqueId in list(set(listOfAllRemarqueId)):
         remarqueIdOccurance = listOfAllRemarqueId.count(remarqueId)
         HistoryAnomaliesEdiFiles.objects.filter(edi_file_id=fileId,anomalie_id=remarqueId).update(number_of_anomalies=remarqueIdOccurance, execution_time=timezone.now())
+    listOfAllHistoryOfAnnomalies = HistoryAnomaliesEdiFiles.objects.filter(edi_file_id=fileId)
+    for historyAnnomalie in listOfAllHistoryOfAnnomalies:
+        if historyAnnomalie.anomalie_id not in list(set(listOfAllRemarqueId)):
+            HistoryAnomaliesEdiFiles.objects.filter(edi_file_id=fileId, anomalie_id=historyAnnomalie.anomalie_id).update(number_of_anomalies=0, execution_time=timezone.now())

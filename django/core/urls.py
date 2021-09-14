@@ -26,6 +26,7 @@ urlpatterns = [
     path('getLogisticFile/<int:pk>', views.logistic_file_detail),
     path('seeLogisticFileContent', views.seeLogisticFileContent, name="seeLogisticFileContent"),
     path('validateLogisticFile', views.validateLogisticFileWS, name= "validateLogisticFile"),
-    path('downloadImportedLogisticFile', views.downloadImportedLogisticFileWS, name= "downloadImportedLogisticFile")
+    path('downloadImportedLogisticFile', views.downloadImportedLogisticFileWS, name= "downloadImportedLogisticFile"),
+    path('deleteNotValidateLogisticFile', views.deleteNotValidateLogisticFileWS, name= "deleteNotValidateLogisticFile")
 
 ]

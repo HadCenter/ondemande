@@ -162,16 +162,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Remarque">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Remarque
-                      <!-- <mat-form-field class="form-column" appearance="fill">
-                        <mat-select class="filter-column" matNativeControl name="{{options[1].columnProp}}"
-                          [(ngModel)]="options[1].modelValue"
-                          (selectionChange)="setFilteredItemsOptions(options[1],$event)">
-                          <mat-option value="">-- Select {{options[1].columnProp}}--</mat-option>
-                          <mat-option [value]="item" *ngFor="let item of options[1].options"><label>{{item}}</label>
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field> -->
+                    <th class="titre-column" mat-header-cell id="Remarque-header" *matHeaderCellDef> Remarque
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select multiple [(ngModel)]="options[1].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[1],$event)">
@@ -187,7 +178,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="selected">
-                    <th class="header-actif" mat-header-cell *matHeaderCellDef>Actif
+                    <th class="header-actif" mat-header-cell id="selected-header" *matHeaderCellDef>Actif
                       <mat-checkbox  style="margin-left:5px"
                         (change)="$event ? masterToggle() : null"
                         [checked]="selectionCh.hasValue() && isAllSelected()"
@@ -208,7 +199,7 @@
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="RefClient">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> RefClient
+                    <th class="titre-column" mat-header-cell id="RefClient-header" *matHeaderCellDef> RefClient
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[3].columnProp}}"
                           [(ngModel)]="options[3].modelValue"
@@ -238,7 +229,7 @@
 
 
                   <ng-container matColumnDef="Expediteur">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Expediteur
+                    <th class="titre-column" mat-header-cell id="Expediteur-header" *matHeaderCellDef> Expediteur
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[4].columnProp}}"
                           [(ngModel)]="options[4].modelValue"
@@ -268,7 +259,7 @@
 
 
                   <ng-container matColumnDef="Type">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Type
+                    <th class="titre-column" mat-header-cell id="Type-header" *matHeaderCellDef> Type
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[5].columnProp}}"
                           [(ngModel)]="options[5].modelValue"
@@ -296,7 +287,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Date_livraison">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Date_livraison
+                    <th class="titre-column" mat-header-cell id="Date_livraison-header" *matHeaderCellDef> Date_livraison
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[6].columnProp}}"
                           [(ngModel)]="options[6].modelValue"
@@ -323,7 +314,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Start">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Start
+                    <th class="titre-column" mat-header-cell id="Start-header" *matHeaderCellDef> Start
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[7].columnProp}}"
                           [(ngModel)]="options[7].modelValue"
@@ -351,7 +342,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="End">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> End
+                    <th class="titre-column" mat-header-cell id="End-header" *matHeaderCellDef> End
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[8].columnProp}}"
                           [(ngModel)]="options[8].modelValue"
@@ -379,7 +370,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Labels">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Labels
+                    <th class="titre-column" mat-header-cell id="Labels-header" *matHeaderCellDef> Labels
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[9].columnProp}}"
                           [(ngModel)]="options[9].modelValue"
@@ -407,7 +398,7 @@
                       {{getLabels(element)}} </td>
                   </ng-container>
                   <ng-container matColumnDef="Quantite">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Quantite
+                    <th class="titre-column" mat-header-cell id="Quantite-header" *matHeaderCellDef> Quantite
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[10].columnProp}}"
                           [(ngModel)]="options[10].modelValue"
@@ -434,7 +425,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="CodeArticle">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> CodeArticle
+                    <th class="titre-column" mat-header-cell id="CodeArticle-header" *matHeaderCellDef> CodeArticle
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[11].columnProp}}"
                           [(ngModel)]="options[11].modelValue"
@@ -461,7 +452,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Nom_destinataire">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Nom_destinataire
+                    <th class="titre-column" mat-header-cell id="Nom_destinataire-header" *matHeaderCellDef> Nom_destinataire
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[12].columnProp}}"
                           [(ngModel)]="options[12].modelValue"
@@ -488,7 +479,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="rue">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> rue
+                    <th class="titre-column" mat-header-cell id="rue-header" *matHeaderCellDef> rue
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[13].columnProp}}"
                           [(ngModel)]="options[13].modelValue"
@@ -515,7 +506,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="ville">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> ville
+                    <th class="titre-column" mat-header-cell id="ville-header" *matHeaderCellDef> ville
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[14].columnProp}}"
                           [(ngModel)]="options[14].modelValue"
@@ -542,7 +533,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="CP">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> CP
+                    <th class="titre-column" mat-header-cell id="CP-header" *matHeaderCellDef> CP
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[15].columnProp}}"
                           [(ngModel)]="options[15].modelValue"
@@ -567,7 +558,7 @@
                       {{getCP(element)}} </td>
                   </ng-container>
                   <ng-container matColumnDef="Adresse2">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Adresse2
+                    <th class="titre-column" mat-header-cell id="Adresse2-header" *matHeaderCellDef> Adresse2
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[16].columnProp}}"
                           [(ngModel)]="options[16].modelValue"
@@ -594,7 +585,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="CODE_interphone">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> CODE_interphone
+                    <th class="titre-column" mat-header-cell id="CODE_interphone-header" *matHeaderCellDef> CODE_interphone
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[17].columnProp}}"
                           [(ngModel)]="options[17].modelValue"
@@ -620,7 +611,7 @@
                       {{element.CODE_interphone}} </td>
                   </ng-container>
                   <ng-container matColumnDef="Etage">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Etage
+                    <th class="titre-column" mat-header-cell id="Etage-header" *matHeaderCellDef> Etage
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[18].columnProp}}"
                           [(ngModel)]="options[18].modelValue"
@@ -646,7 +637,7 @@
                       {{element.Etage}} </td>
                   </ng-container>
                   <ng-container matColumnDef="Porte">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Porte
+                    <th class="titre-column" mat-header-cell id="Porte-header" *matHeaderCellDef> Porte
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[19].columnProp}}"
                           [(ngModel)]="options[19].modelValue"
@@ -673,7 +664,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Instructions">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Instructions
+                    <th class="titre-column" mat-header-cell id="Instructions-header" *matHeaderCellDef> Instructions
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[20].columnProp}}"
                           [(ngModel)]="options[20].modelValue"
@@ -700,7 +691,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Telephone">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Telephone
+                    <th class="titre-column" mat-header-cell id="Telephone-header" *matHeaderCellDef> Telephone
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[21].columnProp}}"
                           [(ngModel)]="options[21].modelValue"
@@ -727,7 +718,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Tel2">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Tel2
+                    <th class="titre-column" mat-header-cell id="Tel2-header" *matHeaderCellDef> Tel2
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[22].columnProp}}"
                           [(ngModel)]="options[22].modelValue"
@@ -754,7 +745,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Tel3">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Tel3
+                    <th class="titre-column" mat-header-cell id="Tel3-header" *matHeaderCellDef> Tel3
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[23].columnProp}}"
                           [(ngModel)]="options[23].modelValue"
@@ -781,7 +772,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="email">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> email
+                    <th class="titre-column" mat-header-cell id="email-header" *matHeaderCellDef> email
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[24].columnProp}}"
                           [(ngModel)]="options[24].modelValue"
@@ -808,7 +799,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Ref_commande">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Ref_commande
+                    <th class="titre-column" mat-header-cell id="Ref_commande-header" *matHeaderCellDef> Ref_commande
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[25].columnProp}}"
                           [(ngModel)]="options[25].modelValue"
@@ -835,7 +826,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Ref2">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Ref2
+                    <th class="titre-column" mat-header-cell id="Ref2-header" *matHeaderCellDef> Ref2
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[26].columnProp}}"
                           [(ngModel)]="options[26].modelValue"
@@ -862,7 +853,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Ref3">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Ref3
+                    <th class="titre-column" mat-header-cell id="Ref3-header" *matHeaderCellDef> Ref3
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select multiple [(ngModel)]="options[27].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[27],$event)">
@@ -880,7 +871,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Code_barres">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Code_barres
+                    <th class="titre-column" mat-header-cell id="Code_barres-header" *matHeaderCellDef> Code_barres
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select multiple [(ngModel)]="options[28].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[28],$event)">
@@ -898,7 +889,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Nom_tournee">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Nom_tournee
+                    <th class="titre-column" mat-header-cell id="Nom_tournee-header" *matHeaderCellDef> Nom_tournee
                       <mat-form-field class="form-column" appearance="fill">
                         <mat-select multiple [(ngModel)]="options[29].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[29],$event)">
@@ -916,7 +907,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="Arret">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> Arret
+                    <th class="titre-column" mat-header-cell id="Arret-header" *matHeaderCellDef> Arret
                       <!-- <mat-form-field class="form-column" appearance="fill">
                         <mat-select class="filter-column" matNativeControl name="{{options[30].columnProp}}"
                           [(ngModel)]="options[30].modelValue"

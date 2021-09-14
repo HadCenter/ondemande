@@ -32,7 +32,6 @@ export class KpiInterventionAdminComponent implements OnInit {
         }
         this.interventionService.getNumberOfInterventionsWithFilters(filters).subscribe(res => {
           this.InterventionsByFiltres = res;
-          console.warn("this.InterventionsByFiltres : ", this.InterventionsByFiltres);
           this.getNumberOfInterventions();
         })
       }
@@ -56,7 +55,6 @@ export class KpiInterventionAdminComponent implements OnInit {
   getNumberOfInterventions() {
     var mapDateToNumberOfInterventions = {}
     this.InterventionsByFiltres.forEach(element => {
-      console.log(typeof element.date);
       if (!Object.keys(mapDateToNumberOfInterventions).includes(element.date)) {
         mapDateToNumberOfInterventions[element.date] = 0;
       }
@@ -80,17 +78,13 @@ export class KpiInterventionAdminComponent implements OnInit {
   getNumberOfInterventionsPerDateAll() {
     this.interventionService.getNumberOfInterventionsPerDateAll().subscribe(res => {
       const nbrInterventionsByDate = res;
-      console.log("nbrInterventionsByDate ngOnInit",res);
       Object.keys(nbrInterventionsByDate);
       Object.values(nbrInterventionsByDate);
       this.interventionsBydates = Object.entries(nbrInterventionsByDate);
-      console.log("this.interventionsBydates",this.interventionsBydates);
       this.interventionsBydates.forEach(element => {
-        console.log(element[0]);
         element[0] = (new Date(element[0]+" GMT")).getTime();
         this.interventionsBydates_copy = [...this.interventionsBydates];
       });
-      console.log("this.interventionsBydates",this.interventionsBydates)
       this.loadChart();
     })
   }

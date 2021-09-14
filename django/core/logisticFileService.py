@@ -111,7 +111,8 @@ def getAllLogisticFileList():
                                  status=logisticFileDB.status, number_annomalies=logisticFileDB.number_annomalies,
                                  clientName= logisticFileDB.clientName, archived = logisticFileDB.archived,
                                  ButtonCorrecteActiveted= logisticFileDB.ButtonCorrecteActiveted,
-                                 ButtonValidateActivated= logisticFileDB.ButtonValidateActivated)
+                                 ButtonValidateActivated= logisticFileDB.ButtonValidateActivated,
+                                 FileDeleted= logisticFileDB.FileDeleted)
         listLogisticFiles.append(logisticFileResponse)
     return listLogisticFiles
 
@@ -126,8 +127,8 @@ def getSingleLogisticFileDetail(key):
                                             clientName=logisticFileDB.clientName,
                                             archived = logisticFileDB.archived,
                                             ButtonCorrecteActiveted = logisticFileDB.ButtonCorrecteActiveted,
-                                            ButtonValidateActivated = logisticFileDB.ButtonValidateActivated
-                                            )
+                                            ButtonValidateActivated = logisticFileDB.ButtonValidateActivated,
+                                            FileDeleted=logisticFileDB.FileDeleted)
     return logisticFileResponse
 
 def seeContentLogisticFile(logisticFileName, folderLogisticFile):
@@ -174,6 +175,36 @@ def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile)
         copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
         LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False)
         return True
+
+
+def logisticFileExistInFolderIN(sftp_client, logisticFileName):
+    INFolderPath = "/IN"
+    sftp_client.chdir(INFolderPath)
+    LogistFileExist = False
+    for logisticFile in sftp_client.listdir():
+        if (logisticFile == logisticFileName):
+            LogistFileExist = True
+    return LogistFileExist
+
+
+def deleteLogisticFileFromInFolder(sftp_client, FolderInPath, logisticFileName):
+    for logisticFile in sftp_client.listdir(path=FolderInPath):
+        if (logisticFile == logisticFileName):
+            sftp_client.remove(FolderInPath + "/"+ logisticFile)
+
+
+def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
+    sftp_client = connect()
+    LogistFileExist = logisticFileExistInFolderIN(sftp_client,logisticFileName)
+    if(LogistFileExist == False):
+        LogisticFile.objects.filter(pk=idLogisticFile).update(FileDeleted=True)
+        return False
+    else:
+        deleteLogisticFileFromInFolder(sftp_client= sftp_client, FolderInPath= "/IN", logisticFileName=logisticFileName)
+        LogisticFile.objects.filter(pk=idLogisticFile).update(FileDeleted=True)
+        return True
+
+
 
 
 

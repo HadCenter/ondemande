@@ -99,7 +99,7 @@ class AnomaliesEdiFileAnnuaire(models.Model):
 
 class HistoryAnomaliesEdiFiles(models.Model):
     edi_file = models.ForeignKey(EDIfile ,db_column="edi_file_id", on_delete= models.CASCADE )
-    execution_time = models.DateTimeField(blank=True, null=True)
+    execution_time = models.DateTimeField(auto_now =True)
     anomalie = models.ForeignKey(AnomaliesEdiFileAnnuaire,db_column="anomalie_id",on_delete=models.DO_NOTHING , blank=True, null=True)
     number_of_anomalies = models.IntegerField(blank=True, null=True)
 

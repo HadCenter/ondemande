@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 import ftplib
 import logging
 import os
@@ -341,3 +341,15 @@ def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)
     file.close()
     os.remove(fileName)
+
+def updateHistoryOfAnnomalies(prestations, fileId):
+    listOfAllRemarqueId =[]
+    for prestation in prestations:
+        listOfAllRemarqueId.append(prestation[28])
+    for remarqueId in list(set(listOfAllRemarqueId)):
+        remarqueIdOccurance = listOfAllRemarqueId.count(remarqueId)
+        HistoryAnomaliesEdiFiles.objects.filter(edi_file_id=fileId,anomalie_id=remarqueId).update(number_of_anomalies=remarqueIdOccurance, execution_time=timezone.now())
+    listOfAllHistoryOfAnnomalies = HistoryAnomaliesEdiFiles.objects.filter(edi_file_id=fileId)
+    for historyAnnomalie in listOfAllHistoryOfAnnomalies:
+        if historyAnnomalie.anomalie_id not in list(set(listOfAllRemarqueId)):
+            HistoryAnomaliesEdiFiles.objects.filter(edi_file_id=fileId, anomalie_id=historyAnnomalie.anomalie_id).update(number_of_anomalies=0, execution_time=timezone.now())

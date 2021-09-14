@@ -50,7 +50,7 @@ export class MagistorComponent implements OnInit {
   getColor(ch) {
     if (ch === 'En attente') {
       return 'blue';
-    } else if (ch === 'Terminé') {
+    } else if (ch === 'Validé') {
       return 'green';
     } else if (ch === 'En cours') {
       return 'orange';
@@ -208,6 +208,7 @@ export class MagistorComponent implements OnInit {
       if (res.message == "file validated successfully") {
         file.ButtonValidateActivated=false;
         file.ButtonCorrecteActiveted =true;
+        file.status ='Validé';
       }
     },
     (err) => {
@@ -240,7 +241,7 @@ export class MagistorComponent implements OnInit {
 
   }
 
-  
+
 
 
 }

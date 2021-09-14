@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 
+
 export class Client {
   constructor(public clientName: string, public selected?: boolean) {
     if (selected === undefined) selected = false;

@@ -248,37 +248,13 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
   listenToWebSocket() {
     this.tablesService.messages.subscribe(msg => {
-      console.log("Response from websocket: ", JSON.parse(msg));
-      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0 && (JSON.parse(msg).Running_Jobs).filter(s => s.includes("Talend Job Edi")).length > 0) {
-        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
-        this.showJobRun = true;
-      }
-      else if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
-        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
-      }
-      else if (JSON.parse(msg).jobEnded && (JSON.parse(msg).jobEnded).includes("Talend Job EDI Ended")) {
-        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
-        this.showJobRun = false;
+      console.log("Response from websocket: ", msg);
+      localStorage.setItem('ws', msg);
+      if(msg == "table ediFile updated")
+      {
         this.actualiser();
-
       }
     });
-
-    if (JSON.parse(localStorage.getItem('ws'))) {
-      if (JSON.parse(localStorage.getItem('ws')).Running_Jobs){
-        if((JSON.parse(localStorage.getItem('ws')).Running_Jobs).filter(s => s.includes("Talend Job Edi")).length > 0){
-          this.showJobRun = true;
-        }
-      }
-      else if (JSON.parse(localStorage.getItem('ws')).state.Running_Jobs){
-        if((JSON.parse(localStorage.getItem('ws')).state.Running_Jobs).filter(s => s.includes("Talend Job Edi")).length > 0){
-          this.showJobRun = true;
-        }
-      }
-   
- 
-      
-    }
   }
 
 }

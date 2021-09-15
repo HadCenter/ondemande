@@ -35,7 +35,7 @@ from .models import transactionFileColumnsException , transactionFileColumnsLivr
 from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
-from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows, updateHistoryOfAnnomalies
+from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows, updateHistoryOfAnnomalies, updateMetaDataFileInTableCoreEDIFile
 from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
@@ -515,3 +515,14 @@ def deleteNotValidateLogisticFileWS(request):
         return JsonResponse({'message': 'file deleted successfully'}, status=status.HTTP_200_OK)
     else:
         return JsonResponse({'message': 'file not found'}, status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['POST'])
+def updateMetaDataFileInTableCoreEDIFileWS(request):
+    ediFileName = request.data['ediFileName']
+    ediFileStatus =  request.data['ediFileStatus']
+    errorEdiFileName = request.data['errorEdiFileName']
+    correctEdiFileName = request.data['correctEdiFileName']
+    numberWrongCommands = request.data['numberWrongCommands']
+    numberCorrectCommands = request.data['numberCorrectCommands']
+    updateMetaDataFileInTableCoreEDIFile(ediFileName=ediFileName, ediFileStatus=ediFileStatus, errorEdiFileName=errorEdiFileName, correctEdiFileName=correctEdiFileName, numberWrongCommands=numberWrongCommands, numberCorrectCommands=numberCorrectCommands)
+    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)

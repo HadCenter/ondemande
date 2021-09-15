@@ -7,7 +7,7 @@ import jsonpickle
 
 
 class ChatConsumer(WebsocketConsumer):
-    state = { "Running_Jobs" : [] }
+    state = "DB not updated"
     def connect(self):
         self.room_name = 'notifications_room'
         self.room_group_name = self.room_name+"_group"
@@ -39,7 +39,10 @@ class ChatConsumer(WebsocketConsumer):
         print("NOTIFICATION TRIGERED")
         # Receive message from room group
         message = notification['message']
+        print("message to send = ",message)
         # Send message to WebSocket
+        print("début send message to WebSocket")
         self.send(text_data=json.dumps(
             message
         ))
+        print("fin send message to WebSocket")

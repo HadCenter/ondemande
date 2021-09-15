@@ -4,24 +4,28 @@
       <base-card class="mdl-cell mdl-cell--10-col-desktop mdl-cell--10-col-tablet mdl-cell--5-col-phone">
         <base-card-body class="content-first-card ">
           <div class="content-label">
-            <label class="details-label">Statut</label>
+            <label class="details-label-header">Statut</label>
             <label class="details-label">{{file?.status}}</label>
           </div>
           <div class="content-label">
-            <label class="details-label">Date</label>
+            <label class="details-label-header">Date</label>
             <label class="details-label">{{file?.createdAt| date:"dd/MM/yyyy 'à' HH:mm"}}</label>
           </div>
           <div class="content-label">
-            <label class="details-label">Code client</label>
+            <label class="details-label-header">Nom fichier</label>
+            <label class="details-label">{{file?.fileName}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label-header">Code client</label>
             <label class="details-label">{{file?.contact.codeClient}}</label>
           </div>
           <div class="content-label">
-            <label class="details-label">Nombre des prestations erronées</label>
+            <label class="details-label-header">Nombre des prestations erronées</label>
             <label *ngIf='!fileWrong?.rows' class="label-wrong">- </label>
             <label *ngIf='fileWrong?.rows' class="label-wrong">{{fileWrong.rows.length || 0}} </label>
           </div>
           <div class="content-label">
-            <label class="details-label">Nombre des prestations validées</label>
+            <label class="details-label-header">Nombre des prestations validées</label>
             <label *ngIf='!fileValid?.rows' class="label-success">- </label>
             <label *ngIf='fileValid?.rows' class="label-success">{{fileValid?.rows?.length || 0}} </label>
 

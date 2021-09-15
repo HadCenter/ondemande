@@ -313,7 +313,7 @@
                     <td mat-cell class="center-cell-prestationsErronnees" id="Date_livraison"
                       (mousedown)="onMouseDown(i, 6, 'Date_livraison')" (mouseup)="onMouseUp(i, 6, 'Date_livraison')"
                       *matCellDef="let element; let i = index"
-                      [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6], 'error': (element.Remarque_id==3 ||element.Remarque_id==20)}">
+                      [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6], 'error': (element.Remarque_id==3 ||element.Remarque_id==20|| element.Remarque_id==6)}">
                       {{element.Date_livraison}} </td>
                   </ng-container>
 

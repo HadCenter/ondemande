@@ -111,6 +111,7 @@ export class KpiInterventionAdminComponent implements OnInit {
 
       },
       xAxis: {
+        minRange: 1,
         title: {
           gridLineWidth: 0,
           style: {
@@ -128,10 +129,12 @@ export class KpiInterventionAdminComponent implements OnInit {
         // showFirstLabel: false,
         // showLastLabel: false,
         startOnTick: true,
+        
         labels: {
           style: {
             color: "hsla(0,0%,100%,.5)"
           },
+          
         },
       },
       yAxis: [{ // Primary yAxis
@@ -147,6 +150,7 @@ export class KpiInterventionAdminComponent implements OnInit {
             color: "hsla(0,0%,100%,.5)"
           }
         },
+       
         endOnTick: true,
         showFirstLabel: true,
         showLastLabel: true,

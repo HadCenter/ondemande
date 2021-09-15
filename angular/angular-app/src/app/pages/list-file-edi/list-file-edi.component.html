@@ -82,7 +82,7 @@
               </span>
             </td>
             <app-loader *ngIf="row.status== 'En attente'" class="loader" [width]="'100%'" [position]="'sticky'"
-            [height]="'182px'" [bg]="'transparant'" [show]="showJobRun"></app-loader>
+            [height]="'182px'" [bg]="'transparant'" [show]="row.status == 'En attente'"></app-loader>
           </tr>
         </tbody>
       </table>

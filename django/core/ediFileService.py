@@ -173,6 +173,7 @@ def saveUploadedEdiFile(request_file):
 def uploadFileInFtpServer(fileName, code_client):
     ftp = connect()
     path_client_input = path_racine_input + code_client
+    path_filesToDiagnostic = path_client_input + "/FILES_TO_DIAGNOSTIC"
     ftp.cwd(path_racine_output)
     if code_client not in ftp.nlst():
         ftp.mkd(code_client)
@@ -180,6 +181,9 @@ def uploadFileInFtpServer(fileName, code_client):
     if code_client not in ftp.nlst():
         ftp.mkd(code_client)
     ftp.cwd(path_client_input)
+    if "FILES_TO_DIAGNOSTIC" not in ftp.nlst():
+        ftp.mkd("FILES_TO_DIAGNOSTIC")
+    ftp.cwd(path_filesToDiagnostic)
     file = open(fileName, 'rb')
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)
     file.close()

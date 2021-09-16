@@ -105,9 +105,9 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
         type: 'datetime',
         // min: Date.UTC(2015, 1, 1, 0),
         dateTimeLabelFormats: {
-          day: '%Y/%m/%d',
-          month: '%Y/%m/%d',
-          year: '%Y/%m/%d'
+          day: '%d/%m/%Y',
+          month: '%d/%m/%Y',
+          year: '%d/%m/%Y'
         },
         endOnTick: true,
         // showFirstLabel: false,

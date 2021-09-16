@@ -10,7 +10,7 @@ from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 
 logger = logging.getLogger('django')
 
-FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "TransMagistor"
+FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "TransMagistorPreprod"
 
 def removeLogisticFileFromServer(fileName):
     django_directory = os.getcwd()

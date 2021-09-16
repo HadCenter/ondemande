@@ -346,11 +346,11 @@ export class DialogImportFile {
         this.myForm.reset();
 
         if (err.error.message == "file save echec") {
-          this.error = "Type du fichier existant";
-        }
-        else if (err.error.includes("'OP_CODE'")) {
           this.error = "Type de fichier incorrecte";
         }
+        // else if (err.error.includes("'OP_CODE'")) {
+        //   this.error = "Type de fichier incorrecte";
+        // }
         else {
           this.error = "Veuillez télécharger un fichier";
         }

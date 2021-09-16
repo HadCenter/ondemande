@@ -58,6 +58,9 @@
               <button [disabled]="file?.number_annomalies==0 || file?.status=='Terminé' ||row?.ButtonValidateActivated==false " (click)="validateFile(row)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
               </button>
+              <button style="margin-left: 3px;"  [disabled]="file?.number_annomalies==0 || file?.status=='Terminé' ||row?.ButtonValidateActivated==true "
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Dévalider
+              </button>
               <!----  [disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'"!-->
               <button style="margin-left: 3px;" (click)="correctionFile(row)"
               [disabled]="row?.ButtonCorrecteActiveted==false"

@@ -548,7 +548,7 @@ changeSelectedOptionColor(filter) {
 
 
   setFilteredItemsOptions(filter) {
-    console.error(filter)
+    // console.error(filter)
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
     this.changeSelectedOptionColor(filter);

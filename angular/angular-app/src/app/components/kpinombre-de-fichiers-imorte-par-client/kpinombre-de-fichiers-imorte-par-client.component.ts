@@ -10,7 +10,9 @@ import { KPInombreDeFichiersImorteParClientService } from './kpinombre-de-fichie
 
 export class KPInombreDeFichiersImorteParClientComponent implements OnInit {
   @Input('nameSelected') nameSelected: any;
+  @Input('fileSelected') fileSelected: any;
   @Input('rangeDate') rangeDate: any;
+
   showLoaderFilesByClient: boolean = true;
   count;
   constructor(
@@ -23,6 +25,7 @@ export class KPInombreDeFichiersImorteParClientComponent implements OnInit {
     var filters = {
       "dateFilter": null,
       "clientFilter": null,
+      "fileFilter": null,
     }
     this.serviceKPI.getNumberOfFilesWithFilters(filters).subscribe(res => {
       this.count = res.length;
@@ -36,6 +39,7 @@ export class KPInombreDeFichiersImorteParClientComponent implements OnInit {
       var filters = {
         "dateFilter": this.rangeDate,
         "clientFilter": this.nameSelected,
+        "fileFilter": this.fileSelected,
       }
       this.serviceKPI.getNumberOfFilesWithFilters(filters).subscribe(res => {
         this.count = res.length;

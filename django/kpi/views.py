@@ -231,7 +231,7 @@ def getNumberOfFilesWithFilters(request):
         if endDate != None:
             ediFiles = ediFiles.filter(created_at__lte=endDate)
     if (fileFilter != None) and (len(fileFilter) > 0):
-        ediFiles = ediFiles.filter(id_file_edi__file__in=fileFilter)
+        ediFiles = ediFiles.filter(file__in=fileFilter)
     if (clientFilter != None) and (len(clientFilter) > 0):
         ediFiles = ediFiles.filter(client__nom_client__in=clientFilter)
 

@@ -23,6 +23,7 @@ export class KpiAnomaliesComponent implements OnInit {
   anomaliesByFiltres: any = [];
   showChartAnomaliesByDates: boolean = true;
   showChartAnomaliesByType: boolean = true;
+  currentTimeZoneOffsetInHours=0;
 
   @Input('typeAnomaliesSelected') typeAnomaliesSelected: any;
   @Input('fileSelected') fileSelected: any;
@@ -33,6 +34,7 @@ export class KpiAnomaliesComponent implements OnInit {
     this.initChart();
     this.initChart_nbAnomaliesByType();
     this.anomaliesByFiltres = [];
+    
   }
   ngOnInit(): void {
     this.getNumberOfAnomaliesPerDateAll();
@@ -111,12 +113,23 @@ export class KpiAnomaliesComponent implements OnInit {
   }
 
   initChart() {
+var x = new Date();
+var currentTimeZoneOffsetInHours = ((x.getTimezoneOffset() / 60))+((x.getTimezoneOffset() / 60));
+
     this.options = {
+    //   global: {
+    //     timezoneOffset: -2
+    // },
       chart: {
         spacingLeft: 2,
         spacingRight: 20,
         // zoomType: 'xy',
         backgroundColor: '#444',
+
+      },
+      time: {
+      // useUTC: false,
+     timezoneOffset: currentTimeZoneOffsetInHours * 60
 
       },
       xAxis: {

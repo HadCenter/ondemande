@@ -112,7 +112,7 @@ def getAllLogisticFileList():
                                  clientName= logisticFileDB.clientName, archived = logisticFileDB.archived,
                                  ButtonCorrecteActiveted= logisticFileDB.ButtonCorrecteActiveted,
                                  ButtonValidateActivated= logisticFileDB.ButtonValidateActivated,
-                                 FileDeleted= logisticFileDB.FileDeleted)
+                                 ButtonInvalidateActivated= logisticFileDB.ButtonInvalidateActivated)
         listLogisticFiles.append(logisticFileResponse)
     return listLogisticFiles
 
@@ -128,7 +128,7 @@ def getSingleLogisticFileDetail(key):
                                             archived = logisticFileDB.archived,
                                             ButtonCorrecteActiveted = logisticFileDB.ButtonCorrecteActiveted,
                                             ButtonValidateActivated = logisticFileDB.ButtonValidateActivated,
-                                            FileDeleted=logisticFileDB.FileDeleted)
+                                            ButtonInvalidateActivated= logisticFileDB.ButtonInvalidateActivated)
     return logisticFileResponse
 
 def seeContentLogisticFile(logisticFileName, folderLogisticFile):
@@ -173,7 +173,7 @@ def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile)
         sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
         destinationPath = "/IN"
         copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
-        LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False,status='Validé')
+        LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False,ButtonInvalidateActivated=True,status='Validé')
         return True
 
 
@@ -197,11 +197,11 @@ def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
     sftp_client = connect()
     LogistFileExist = logisticFileExistInFolderIN(sftp_client,logisticFileName)
     if(LogistFileExist == False):
-        LogisticFile.objects.filter(pk=idLogisticFile).update(FileDeleted=True)
+        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='Dévalidé')
         return False
     else:
         deleteLogisticFileFromInFolder(sftp_client= sftp_client, FolderInPath= "/IN", logisticFileName=logisticFileName)
-        LogisticFile.objects.filter(pk=idLogisticFile).update(FileDeleted=True)
+        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='Dévalidé')
         return True
 
 

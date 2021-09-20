@@ -520,9 +520,6 @@ def deleteNotValidateLogisticFileWS(request):
 def updateMetaDataFileInTableCoreEDIFileWS(request):
     ediFileName = request.data['ediFileName']
     ediFileStatus =  request.data['ediFileStatus']
-    errorEdiFileName = request.data['errorEdiFileName']
-    correctEdiFileName = request.data['correctEdiFileName']
-    numberWrongCommands = request.data['numberWrongCommands']
-    numberCorrectCommands = request.data['numberCorrectCommands']
-    updateMetaDataFileInTableCoreEDIFile(ediFileName=ediFileName, ediFileStatus=ediFileStatus, errorEdiFileName=errorEdiFileName, correctEdiFileName=correctEdiFileName, numberWrongCommands=numberWrongCommands, numberCorrectCommands=numberCorrectCommands)
+
+    updateMetaDataFileInTableCoreEDIFile(ediFileName=ediFileName, ediFileStatus=ediFileStatus)
     return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)

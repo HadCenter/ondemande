@@ -359,18 +359,8 @@ def updateHistoryOfAnnomalies(prestations, fileId):
             HistoryAnomaliesEdiFiles.objects.filter(edi_file_id=fileId, anomalie_id=historyAnnomalie.anomalie_id).delete()
 
 
-def updateMetaDataFileInTableCoreEDIFile(ediFileName, ediFileStatus, errorEdiFileName, correctEdiFileName, numberWrongCommands, numberCorrectCommands):
-    #EDIfile.objects.filter(file=ediFileName).update(status=ediFileStatus, wrong_commands=errorEdiFileName, validated_orders=correctEdiFileName, number_correct_commands=numberCorrectCommands, number_wrong_commands=numberWrongCommands )
-    if errorEdiFileName is None and correctEdiFileName  is None and numberWrongCommands is None and numberCorrectCommands is None:
-        ediFile = EDIfile.objects.get(file=ediFileName)
-        ediFile.status = ediFileStatus
-        ediFile.save()
-    else:
-        ediFile = EDIfile.objects.get(file=ediFileName)
-        ediFile.status = ediFileStatus
-        ediFile.wrong_commands = errorEdiFileName
-        ediFile.validated_orders = correctEdiFileName
-        ediFile.number_correct_commands = numberCorrectCommands
-        ediFile.number_wrong_commands = numberWrongCommands
-        ediFile.save()
+def updateMetaDataFileInTableCoreEDIFile(ediFileName, ediFileStatus):
+    ediFile = EDIfile.objects.get(file=ediFileName)
+    ediFile.status = ediFileStatus
+    ediFile.save()
 

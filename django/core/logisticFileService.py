@@ -197,11 +197,11 @@ def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
     sftp_client = connect()
     LogistFileExist = logisticFileExistInFolderIN(sftp_client,logisticFileName)
     if(LogistFileExist == False):
-        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='Dévalidé')
+        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
         return False
     else:
         deleteLogisticFileFromInFolder(sftp_client= sftp_client, FolderInPath= "/IN", logisticFileName=logisticFileName)
-        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='Dévalidé')
+        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
         return True
 
 

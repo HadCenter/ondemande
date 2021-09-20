@@ -22,6 +22,7 @@ export class MagistorComponent implements OnInit {
   public filterValue: any;
   fileTocheck: any;
   fileTovalidate:any;
+  fileToInvalidate:any;
   snackBarRef: any;
   public snackAction = 'Ok';
   public errorValidation ="Un fichier de même type existe"
@@ -208,11 +209,33 @@ export class MagistorComponent implements OnInit {
       if (res.message == "file validated successfully") {
         file.ButtonValidateActivated=false;
         file.ButtonCorrecteActiveted =true;
+        file.ButtonInvalidateActivated = true;
         file.status ='Validé';
       }
     },
     (err) => {
       this.openSnackBar(this.errorValidation,this.snackAction);
+    })
+  }
+  invalidateFile(file){
+    this.fileToInvalidate = {
+      logisticFileName: file.logisticFileName.name,
+      idLogisticFile: file.idLogisticFile,
+    }
+
+    this.tablesService.invalidateFile(this.fileToInvalidate).subscribe((res) => {
+      if (res.message == "file deleted successfully") {
+        file.ButtonValidateActivated =true;
+        file.ButtonCorrecteActiveted =false;
+        file.ButtonInvalidateActivated =false;
+        file.status ='En attente';
+      }
+    },
+    (err) => {
+      file.ButtonValidateActivated=true;
+      file.ButtonCorrecteActiveted =false;
+      file.ButtonInvalidateActivated = false;
+      file.status ='En attente';
     })
   }
   correctionFile(file) {

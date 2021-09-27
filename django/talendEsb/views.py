@@ -16,7 +16,7 @@ import os
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
-talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev/750137b1abc34995959f89a19a9aa489'
+talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev2/b3059ca807ff4e1c99825fb81716a81c'
 
 #talendUrlMADFileWebHookOLD ='https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDev/0920e59cd9e54e43b0b11ca072a02850'
 #talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDevV2/f8e6c58d240a4248b8f1a06e63621fae'

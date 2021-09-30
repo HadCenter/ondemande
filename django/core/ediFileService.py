@@ -339,7 +339,7 @@ def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
 
     df.to_excel(fileName, index=False)
     ftp = connect()
-    ftp.cwd(path_base + clientDB.code_client + "FILES_TO_DIAGNOSTIC" )
+    ftp.cwd(path_base + clientDB.code_client + "/FILES_TO_DIAGNOSTIC" )
     file = open(fileName, 'rb')
     print(os.path.basename(fileName))
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)

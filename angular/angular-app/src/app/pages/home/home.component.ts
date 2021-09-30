@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 
+
 export class Client {
   constructor(public clientName: string, public selected?: boolean) {
     if (selected === undefined) selected = false;
@@ -189,6 +190,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
         }
         this.selectedFilesNames = this.selectedFiles.map(file => file.fileName);
         this.fileControl.setValue('');
+        this.changeTypeAomaliesList();
         // console.warn("Fin *********** toggleSelectionFile")
       }else{
         if (selected instanceof Anomalie)
@@ -210,6 +212,21 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
         }
       }
     }
+  }
+  changeTypeAomaliesList(){
+   // const listAnomalies=[];
+    this.listTypesAnomaliesNames=[];
+    this.selectedFilesNames.forEach(el => {
+     const listAnomalies=this.allAnomalies_copy.filter(element => element.edi_file_name ==el);
+    listAnomalies.forEach(element => {
+      var anomalie = new Anomalie(element.anomalie_name);
+      this.listTypesAnomaliesNames.push(anomalie);
+     this.listTypesAnomaliesNames = this.listTypesAnomaliesNames.filter((v, i, a) => a.findIndex(t => (t.anomalieName === v.anomalieName)) === i);
+    });
+  });
+
+  this.initializeFiltredTypesAnomalies();
+
   }
   getAllClients() {
     const uniqueClients = this.allAnomalies_copy.filter((v, i, a) => a.findIndex(t => (t.client_id === v.client_id)) === i);
@@ -246,7 +263,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       start_date = null;
     }
     if (this.range.value.end) {
-      end_date = this.toJSONLocal(this.range.value.end);
+      end_date = this.toJSONLocalEndDate(this.range.value.end);
     }
     else {
       end_date = null;
@@ -260,7 +277,15 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
   toJSONLocal(date) {
     var local = new Date(date);
     local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
-    return (local.toJSON().replace("T", " ")).slice(0, 19)
+    return (local.toJSON().replace("T", " ")).slice(0, 19);
+  }
+
+  toJSONLocalEndDate(date){
+    var local = new Date(date);
+    local.setHours(local.getHours() + 23.59)
+    local.setMinutes((local.getMinutes() - local.getTimezoneOffset())+59);
+    local.setSeconds(local.getSeconds() + 59)
+    return (local.toJSON().replace("T", " ")).slice(0, 19);
   }
 
 }

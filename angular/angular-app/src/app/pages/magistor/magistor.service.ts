@@ -83,4 +83,7 @@ export class MagistorService {
   public downloadFile (data): Observable<any> {
     return  this.http.post(`${this.url}/downloadImportedLogisticFile`,data, { responseType: "blob" });
   }
+  public invalidateFile (data): Observable<any> {
+    return  this.http.post(`${this.url}/deleteNotValidateLogisticFile`,data);
+  }
 }

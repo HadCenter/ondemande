@@ -16,6 +16,7 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
   showLoaderFilesBydate: boolean = true;
   @Input('nameSelected') nameSelected: any;
   @Input('rangeDate') rangeDate: any;
+  @Input('fileSelected') fileSelected: any;
 
   constructor(public fileService: KPIEvolutionNombreDeFichiersImorteParClientService) {
     this.initChart();
@@ -29,6 +30,7 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
         var filters = {
           "dateFilter": this.rangeDate,
           "clientFilter": this.nameSelected,
+          "fileFilter":this.fileSelected
         }
         this.fileService.getNumberOfFilesWithFilters(filters).subscribe(res => {
           this.FilesByFiltres = res;
@@ -103,9 +105,9 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
         type: 'datetime',
         // min: Date.UTC(2015, 1, 1, 0),
         dateTimeLabelFormats: {
-          day: '%Y/%m/%d',
-          month: '%Y/%m/%d',
-          year: '%Y/%m/%d'
+          day: '%d/%m/%Y',
+          month: '%d/%m/%Y',
+          year: '%d/%m/%Y'
         },
         endOnTick: true,
         // showFirstLabel: false,
@@ -151,7 +153,7 @@ export class KPIEvolutionNombreDeFichiersImorteParClientComponent implements OnI
       },
       navigator: {
         enabled: true,
-        adaptToUpdatedData: false,   /**navigator update xx */
+        adaptToUpdatedData: true,   /**navigator update xx */
         series: {
           lineWidth: 0
         }

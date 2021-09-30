@@ -16,6 +16,7 @@ export class KpiInterventionAdminComponent implements OnInit {
   showLoaderInterventionBydate: boolean = true;
   @Input('nameSelected') nameSelected: any;
   @Input('rangeDate') rangeDate: any;
+  @Input('fileSelected') fileSelected: any;
 
   constructor(public interventionService: KpiInterventionAdminService) {
     this.initChart();
@@ -29,6 +30,7 @@ export class KpiInterventionAdminComponent implements OnInit {
         var filters = {
           "dateFilter": this.rangeDate,
           "clientFilter": this.nameSelected,
+          "fileFilter": this.fileSelected
         }
         this.interventionService.getNumberOfInterventionsWithFilters(filters).subscribe(res => {
           this.InterventionsByFiltres = res;
@@ -109,6 +111,7 @@ export class KpiInterventionAdminComponent implements OnInit {
 
       },
       xAxis: {
+        minRange: 1,
         title: {
           gridLineWidth: 0,
           style: {
@@ -118,18 +121,20 @@ export class KpiInterventionAdminComponent implements OnInit {
         type: 'datetime',
         // min: Date.UTC(2015, 1, 1, 0),
         dateTimeLabelFormats: {
-          day: '%Y/%m/%d',
-          month: '%Y/%m/%d',
-          year: '%Y/%m/%d'
+          day: '%d/%m/%Y',
+          month: '%d/%m/%Y',
+          year: '%d/%m/%Y'
         },
         endOnTick: true,
         // showFirstLabel: false,
         // showLastLabel: false,
         startOnTick: true,
+        
         labels: {
           style: {
             color: "hsla(0,0%,100%,.5)"
           },
+          
         },
       },
       yAxis: [{ // Primary yAxis
@@ -145,6 +150,7 @@ export class KpiInterventionAdminComponent implements OnInit {
             color: "hsla(0,0%,100%,.5)"
           }
         },
+       
         endOnTick: true,
         showFirstLabel: true,
         showLastLabel: true,
@@ -166,7 +172,7 @@ export class KpiInterventionAdminComponent implements OnInit {
       },
       navigator: {
         enabled: true,
-        adaptToUpdatedData: false,   /**navigator update xx */
+        adaptToUpdatedData: true,   /**navigator update xx */
         series: {
           lineWidth: 0
         }

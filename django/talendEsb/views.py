@@ -20,7 +20,6 @@ talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/DiagnosticEdiWebh
 
 talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ONDEMANDURBANTZTOHUBPREPRODV3/b97aea04e5b3402c8476ac7daa5d10ea'
 
-
 talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/WMS_ONDEMAND_FWH/9162c61d321d44eb81a528107e726e57'
 
 @api_view(['POST'])

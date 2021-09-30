@@ -28,7 +28,7 @@
           aria-label="clients" matInput [matAutocomplete]="auto" [formControl]="clientControl">
       </mat-form-field>
       <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let client of filteredClients | async" [value]="selectedClients">
+        <mat-option class="option-anomalies" *ngFor="let client of filteredClients | async" [value]="selectedClients">
           <mat-checkbox [checked]="client.selected" (change)="toggleSelection(client)"
             (click)="$event.stopPropagation()">
             {{ client.clientName }}
@@ -44,7 +44,7 @@
           aria-label="files" matInput [matAutocomplete]="file" [formControl]="fileControl">
       </mat-form-field>
       <mat-autocomplete #file="matAutocomplete">
-        <mat-option *ngFor="let file of filteredFiles | async" [value]="selectedFiles">
+        <mat-option class="option-anomalies" *ngFor="let file of filteredFiles | async" [value]="selectedFiles">
           <mat-checkbox [checked]="file.selected" (change)="toggleSelection(file)" (click)="$event.stopPropagation()">
             {{ file.fileName }}
           </mat-checkbox>
@@ -53,13 +53,13 @@
     </div>
     <div style="display: grid" class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--6-col-phone">
       <label class="select-label">Types d'anomalies</label>
-      <mat-form-field class="select-filter" appearance="fill">
+      <mat-form-field class="select-filter"  appearance="fill" style="width:240px">
         <input type="text"
           placeholder="{{selectedtypesAnomalies?.length >0 ? selectedtypesAnomalies?.length + ' types d\'anomalies sélectionnés' :'Tout'}}"
           aria-label="typesAnomalies" matInput [matAutocomplete]="typeanomalie" [formControl]="typesAnomaliesControl">
       </mat-form-field>
       <mat-autocomplete #typeanomalie="matAutocomplete">
-        <mat-option *ngFor="let typeAnomalie of filteredtypesAnomalies | async" [value]="selectedtypesAnomalies">
+        <mat-option class="option-anomalies" *ngFor="let typeAnomalie of filteredtypesAnomalies | async" [value]="selectedtypesAnomalies">
           <mat-checkbox [checked]="typeAnomalie.selected" (change)="toggleSelection(typeAnomalie)"
             (click)="$event.stopPropagation()">
             {{ typeAnomalie.anomalieName }}
@@ -69,7 +69,7 @@
     </div>
 
     <div  class="content-nb-file-client mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone">
-      <app-kpinombre-de-fichiers-imorte-par-client [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames">
+      <app-kpinombre-de-fichiers-imorte-par-client [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" [fileSelected]="selectedFilesNames">
       </app-kpinombre-de-fichiers-imorte-par-client>
   
   </div>
@@ -82,14 +82,14 @@
   </div>
   <div class="content-chart">
   <div  class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-    <app-kpi-intervention-admin [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames">
+    <app-kpi-intervention-admin [rangeDate]="rangeDate" [nameSelected]="selectedClientsNames" [fileSelected]="selectedFilesNames">
     </app-kpi-intervention-admin>
   </div>
 
  
     <div  class="mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
       <app-kpievolution-nombre-de-fichiers-imorte-par-client [rangeDate]="rangeDate"
-        [nameSelected]="selectedClientsNames"></app-kpievolution-nombre-de-fichiers-imorte-par-client>
+        [nameSelected]="selectedClientsNames" [fileSelected]="selectedFilesNames"></app-kpievolution-nombre-de-fichiers-imorte-par-client>
     </div>
   </div>
   

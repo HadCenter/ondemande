@@ -22,6 +22,7 @@ export class MagistorComponent implements OnInit {
   public filterValue: any;
   fileTocheck: any;
   fileTovalidate:any;
+  fileToInvalidate:any;
   snackBarRef: any;
   public snackAction = 'Ok';
   public errorValidation ="Un fichier de même type existe"
@@ -50,7 +51,7 @@ export class MagistorComponent implements OnInit {
   getColor(ch) {
     if (ch === 'En attente') {
       return 'blue';
-    } else if (ch === 'Terminé') {
+    } else if (ch === 'Validé') {
       return 'green';
     } else if (ch === 'En cours') {
       return 'orange';
@@ -208,17 +209,40 @@ export class MagistorComponent implements OnInit {
       if (res.message == "file validated successfully") {
         file.ButtonValidateActivated=false;
         file.ButtonCorrecteActiveted =true;
+        file.ButtonInvalidateActivated = true;
+        file.status ='Validé';
       }
     },
     (err) => {
       this.openSnackBar(this.errorValidation,this.snackAction);
     })
   }
+  invalidateFile(file){
+    this.fileToInvalidate = {
+      logisticFileName: file.logisticFileName.name,
+      idLogisticFile: file.idLogisticFile,
+    }
+
+    this.tablesService.invalidateFile(this.fileToInvalidate).subscribe((res) => {
+      if (res.message == "file deleted successfully") {
+        file.ButtonValidateActivated =true;
+        file.ButtonCorrecteActiveted =false;
+        file.ButtonInvalidateActivated =false;
+        file.status ='En attente';
+      }
+    },
+    (err) => {
+      file.ButtonValidateActivated=true;
+      file.ButtonCorrecteActiveted =false;
+      file.ButtonInvalidateActivated = false;
+      file.status ='En attente';
+    })
+  }
   correctionFile(file) {
-    this.fileTocheck = {
+    this.fileTocheck = [{
       Magistor_Current_Client: file.clientName,
       Magistor_Current_File: file.logisticFileType.slice(0, 3)
-    }
+    }]
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck)
     this.tablesService.corretFile(this.fileTocheck).subscribe(res => {
@@ -240,7 +264,7 @@ export class MagistorComponent implements OnInit {
 
   }
 
-  
+
 
 
 }
@@ -345,11 +369,11 @@ export class DialogImportFile {
         this.myForm.reset();
 
         if (err.error.message == "file save echec") {
-          this.error = "Type du fichier existant";
-        }
-        else if (err.error.includes("'OP_CODE'")) {
           this.error = "Type de fichier incorrecte";
         }
+        // else if (err.error.includes("'OP_CODE'")) {
+        //   this.error = "Type de fichier incorrecte";
+        // }
         else {
           this.error = "Veuillez télécharger un fichier";
         }

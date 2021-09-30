@@ -314,7 +314,7 @@ def createFileFromColumnAndRowsAndUpdateCore(columns, rows, fileId):
     fileDB.save()
     createFileEdiFromColumnAndRows(columns, rows, fileId , "edi")
     data = [{"filePath": fileName, "ClientOwner": clientDB.code_client, "fileId": fileDB.id}]
-    startEngineOnEdiFilesWithData(data)
+    #startEngineOnEdiFilesWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 
 def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
@@ -339,7 +339,7 @@ def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
 
     df.to_excel(fileName, index=False)
     ftp = connect()
-    ftp.cwd(path_base + clientDB.code_client)
+    ftp.cwd(path_base + clientDB.code_client + "FILES_TO_DIAGNOSTIC" )
     file = open(fileName, 'rb')
     print(os.path.basename(fileName))
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)

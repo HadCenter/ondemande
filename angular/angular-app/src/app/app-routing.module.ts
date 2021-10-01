@@ -23,6 +23,8 @@ const routes: Routes = [
       { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule), canActivate: [AuthGuard] },
       { path: 'profil', loadChildren: () => import('./pages/profil/profil.module').then(m => m.ProfilModule), canActivate: [AuthGuard] },
       { path: 'details-user/:id', loadChildren: () => import('./pages/details-user/details-user.module').then(m => m.DetailsUserModule), canActivate: [AuthGuard] },
+      { path: 'facturation-logistique', loadChildren: () => import('./pages/facturation-logistique/facturation-logistique.module').then(m => m.FacturationLogistiqueModule), canActivate: [AuthGuard] },
+
     ],
   },
   {

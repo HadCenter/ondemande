@@ -10,6 +10,7 @@ import { DetailsFileEdiComponent } from './details-file-edi/details-file-edi.com
 import { ListTransactionComponent } from './list-transaction/list-transaction.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { DetailsTransactionComponent } from './details-transaction/details-transaction.component';
+import { FacturationLogistiqueComponent } from './facturation-logistique/facturation-logistique.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,7 @@ import { DetailsTransactionComponent } from './details-transaction/details-trans
    DetailsFileEdiComponent,
    ListTransactionComponent,
    DetailsTransactionComponent,
-
+   FacturationLogistiqueComponent
 
   ],
 

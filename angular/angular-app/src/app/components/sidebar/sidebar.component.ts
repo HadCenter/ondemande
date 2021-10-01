@@ -36,7 +36,11 @@ export class SidebarComponent extends BaseSidebarComponent {
       ],
       icon: 'list',
     },
-    { name : "Fichiers livraisons" , link: '/list-transaction', icon: 'list' },
+    { name : "Facturation" , children: [
+      { name: 'Facturation transport', link: '/list-transaction' },
+      { name: 'Facturation logistique', link: '/facturation-logistique' },
+      ]
+      , icon: 'list' },
     { name : "Utilisateurs" , link: '/users', icon: 'list' },
     {
       name: 'Fichiers archivés', children: [

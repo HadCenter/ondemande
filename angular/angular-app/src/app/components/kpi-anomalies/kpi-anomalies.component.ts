@@ -114,9 +114,10 @@ export class KpiAnomaliesComponent implements OnInit {
 
   initChart() {
 var x = new Date();
-var currentTimeZoneOffsetInHours = ((x.getTimezoneOffset() / 60))+((x.getTimezoneOffset() / 60));
-
-    this.options = {
+//var currentTimeZoneOffsetInHours = ((x.getTimezoneOffset() / 60))+((x.getTimezoneOffset() / 60));
+var currentTimeZoneOffsetInHours = ((x.getTimezoneOffset() / 60));
+    
+this.options = {
     //   global: {
     //     timezoneOffset: -2
     // },

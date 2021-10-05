@@ -259,7 +259,7 @@ def correctAllFiles(request):
 	print("jobs to start = ", jobs_to_start)
 	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
 
-	startEngineOnMadFiles(madObjectToPost)
+	#startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):

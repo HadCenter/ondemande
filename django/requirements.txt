@@ -18,3 +18,4 @@ paramiko
 pyjwt
 pika
 channels
+msal==1.15.0

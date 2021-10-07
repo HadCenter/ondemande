@@ -24,6 +24,7 @@ const routes: Routes = [
       { path: 'profil', loadChildren: () => import('./pages/profil/profil.module').then(m => m.ProfilModule), canActivate: [AuthGuard] },
       { path: 'details-user/:id', loadChildren: () => import('./pages/details-user/details-user.module').then(m => m.DetailsUserModule), canActivate: [AuthGuard] },
       { path: 'facturation-logistique', loadChildren: () => import('./pages/facturation-logistique/facturation-logistique.module').then(m => m.FacturationLogistiqueModule), canActivate: [AuthGuard] },
+      { path: 'powerbi-embedded', loadChildren: () => import('./pages/powerbi-embedded/powerbi-embedded.module').then(m => m.PowerbiEmbeddedModule), canActivate: [AuthGuard] },
 
     ],
   },

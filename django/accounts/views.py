@@ -79,7 +79,7 @@ def token_status (request):
     message = smart_str(urlsafe_base64_decode(token))
     id = message[32:]
     account = Account.objects.get(pk=id)
-    now = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = datetime.datetime.now()
     c = now - account.created_at
     minutes = c.total_seconds() / 60
     if minutes > 2880 or account.is_active == True:
@@ -100,6 +100,7 @@ def forgetPassword(request):
         'id': account.id,
         'iat': datetime.datetime.utcnow()
     }
+    #print("TIME WHEN EMAIL SENT IS :  ",datetime.datetime.now())
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
     token_forget_password = Tokensforgetpassword(token = token,account = account)
     token_forget_password.save()
@@ -126,13 +127,13 @@ def forgetPassword(request):
 def token_rest_status(request):
     token = request.data['token']
     decode = jwt.decode(token, SECRET_KEY, algorithms="HS256")
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now()
     print("now",now)
     print("decode_iat",decode['iat'])
     print(datetime.datetime.fromtimestamp(decode['iat']))
-    c =  now - datetime.datetime.fromtimestamp(decode['iat'])
+    c = now - datetime.datetime.fromtimestamp(decode['iat']) 
     minutes = c.total_seconds() / 60
-    print("minutes", minutes)
+    print("minutes", minutes," AND  difference in minutes is :  ",c)
     try:
         token_object = Tokensforgetpassword.objects.get(token=token)
     except :

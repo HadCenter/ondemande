@@ -37,7 +37,7 @@ class RegisterAPI(generics.GenericAPIView):
 			(secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(8)))
 		_mutable = request.data._mutable
 		request.data._mutable = True
-		request.data['created_at'] = datetime.datetime.utcnow()
+		request.data['created_at'] = datetime.datetime.now()
 		request.data['password'] = password
 		request.data._mutable = _mutable
 		serializer = self.get_serializer(data=request.data)

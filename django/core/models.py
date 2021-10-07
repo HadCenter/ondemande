@@ -1,6 +1,9 @@
 from django.db import models
 import os
 from datetime import datetime
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+
 # Create your models here.
 def upload_to(instance, filename):
     return 'files/{filename}'.format(filename=filename)
@@ -18,7 +21,7 @@ class Client(models.Model):
         return self.nom_client
 class EDIfile(models.Model):
     file = models.FileField(blank = False, null = False, upload_to=upload_to)
-    created_at = models.DateTimeField(auto_now =True)
+    created_at = models.DateTimeField(auto_now_add =True)
     status = models.CharField(max_length=200,default= 'En attente')
     wrong_commands = models.CharField(max_length=200, default="_")
     validated_orders = models.CharField(max_length=200, default="_")
@@ -31,10 +34,15 @@ class EDIfile(models.Model):
     def __str__(self):
         return os.path.basename(self.file.name)
 
+# @receiver(post_save, sender=EDIfile)
+# def set_active_from_on_create(sender, instance, created, **kwargs):
+#     if created is True:
+#         instance.created_at = datetime.now()
+
 class LogisticFile(models.Model):
     logisticFile = models.FileField(blank = False, null = False)
     logisticFileType = models.CharField(max_length=200, blank=True, null= True)
-    created_at = models.DateTimeField(auto_now =True)
+    created_at = models.DateTimeField(auto_now_add =True)
     status = models.CharField(max_length=200,default= 'En attente')
     number_annomalies = models.IntegerField(default=0)
     clientName = models.CharField(max_length=200,default= 'REDLEAN_T')

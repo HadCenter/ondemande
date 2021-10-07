@@ -30,7 +30,7 @@ class TransactionsLivraison(models.Model):
     fichier_exception_sftp = models.CharField(max_length=100, blank=True, null=True)
     fichier_metadata_sftp = models.CharField(max_length=100, blank=True, null=True)
     fichier_mad_sftp = models.CharField(max_length=100, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         managed = False

@@ -57,3 +57,30 @@ class ReportConfig:
         self.reportName = report_name
         self.embedUrl = embed_url
         self.datasetId = dataset_id
+
+class EmbedTokenRequestBody:
+    
+    # Camel casing is used for the member variables as they are going to be serialized and camel case is standard for JSON keys
+
+    datasets = None
+    reports = None
+    targetWorkspaces = None
+
+    def __init__(self):
+        self.datasets = []
+        self.reports = []
+        self.targetWorkspaces = []
+
+
+class EmbedToken:
+    
+    # Camel casing is used for the member variables as they are going to be serialized and camel case is standard for JSON keys
+
+    tokenId = None
+    token = None
+    tokenExpiry = None
+
+    def __init__(self, token_id, token, token_expiry):
+        self.tokenId = token_id
+        self.token = token
+        self.tokenExpiry = token_expiry

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConfigResponse } from './powerbi-embedded.component';
@@ -13,8 +13,11 @@ export class PowerbiEmbeddedService {
   /**
    * @returns embed configuration
    */
-  getEmbedConfig(endpoint: string): Observable<ConfigResponse> {
-    return this.httpClient.get<ConfigResponse>(endpoint);
+  getEmbedConfig(id: string): Observable<ConfigResponse> {
+    let params = new HttpParams();
+    params = params.append('id', id);
+
+    return this.httpClient.get<ConfigResponse>(`http://localhost:8000/embededPowerBI/getEmbedParamsForSingleReport/`+id);
   }
 
 }

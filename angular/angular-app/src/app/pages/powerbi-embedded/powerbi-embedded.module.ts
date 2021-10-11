@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PowerbiEmbeddedComponent } from './powerbi-embedded.component';
 import { PowerbiEmbeddedRoutingModule } from './powerbi-embedded-routing.module';
+import { NgxPowerBiModule } from 'ngx-powerbi';
 
 
 
@@ -9,7 +10,8 @@ import { PowerbiEmbeddedRoutingModule } from './powerbi-embedded-routing.module'
   declarations: [PowerbiEmbeddedComponent],
   imports: [
     CommonModule,
-    PowerbiEmbeddedRoutingModule
+    PowerbiEmbeddedRoutingModule,
+    NgxPowerBiModule
   ]
 })
 export class PowerbiEmbeddedModule { }

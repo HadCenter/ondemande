@@ -1063,6 +1063,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             }
             else if (this.fileSelected == "exception") {
               dataCopy[i][this.displayedColumnsException[startCol]] = text;
+              /**if we modify a column of the exception file it will be automatically modified at the level of the delivery file */
+              this.dataSource.data.forEach(el=>{
+                if (dataCopy[i].taskId==el.taskId){
+                  el[this.displayedColumnsException[startCol]]=text
+                }
+              })
             }
             else if (this.fileSelected == "metadata") {
               dataCopy[i][this.displayedColumnsMetadata[startCol]] = text;

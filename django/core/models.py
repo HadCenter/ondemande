@@ -205,7 +205,7 @@ class transactionFileColumnsException:
         self.Remarque = Remarque
         self.isDeleted = isDeleted
 class transactionFileColumnsLivraison:
-    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,total_price,sourceHubName,Round_Name,isExpress,toDelete):
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,total_price,Round_Name,sourceHubName,isExpress,toDelete):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -220,8 +220,8 @@ class transactionFileColumnsLivraison:
         self.Item___Quantite = Item___Quantite
         self.Code_postal = Code_postal
         self.total_price = total_price
-        self.sourceHubName = sourceHubName
         self.Round_Name = Round_Name
+        self.sourceHubName = sourceHubName
         self.isExpress = isExpress
         self.toDelete = toDelete
 class transactionFileColumnsMetadata:

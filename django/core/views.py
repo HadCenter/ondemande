@@ -310,8 +310,8 @@ def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> Transactio
         options.Item___Quantite.add(x[11])
         options.Code_postal.add(x[12])
         options.total_price.add(x[13])
-        options.sourceHubName.add(x[14])
-        options.Round_Name.add(x[15])
+        options.Round_Name.add(x[14])
+        options.sourceHubName.add(x[15])
         options.isExpress.add(x[16])
         options.toDelete.add(x[17])
 

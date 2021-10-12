@@ -2,6 +2,9 @@ from django.db import models
 import os
 from django.db.models.signals import post_save
 from datetime import datetime
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+
 # Create your models here.
 from django.dispatch import receiver
 from asgiref.sync import async_to_sync
@@ -25,7 +28,7 @@ class Client(models.Model):
         return self.nom_client
 class EDIfile(models.Model):
     file = models.FileField(blank = False, null = False, upload_to=upload_to)
-    created_at = models.DateTimeField(auto_now =True)
+    created_at = models.DateTimeField(auto_now_add =True)
     status = models.CharField(max_length=200,default= 'En attente')
     wrong_commands = models.CharField(max_length=200, default="_")
     validated_orders = models.CharField(max_length=200, default="_")
@@ -38,10 +41,15 @@ class EDIfile(models.Model):
     def __str__(self):
         return os.path.basename(self.file.name)
 
+# @receiver(post_save, sender=EDIfile)
+# def set_active_from_on_create(sender, instance, created, **kwargs):
+#     if created is True:
+#         instance.created_at = datetime.now()
+
 class LogisticFile(models.Model):
     logisticFile = models.FileField(blank = False, null = False)
     logisticFileType = models.CharField(max_length=200, blank=True, null= True)
-    created_at = models.DateTimeField(auto_now =True)
+    created_at = models.DateTimeField(auto_now_add =True)
     status = models.CharField(max_length=200,default= 'En attente')
     number_annomalies = models.IntegerField(default=0)
     clientName = models.CharField(max_length=200,default= 'REDLEAN_T')
@@ -204,7 +212,7 @@ class transactionFileColumnsException:
         self.Remarque = Remarque
         self.isDeleted = isDeleted
 class transactionFileColumnsLivraison:
-    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,total_price,sourceHubName,Round_Name,isExpress,toDelete):
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,total_price,Round_Name,sourceHubName,isExpress,toDelete):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -219,8 +227,8 @@ class transactionFileColumnsLivraison:
         self.Item___Quantite = Item___Quantite
         self.Code_postal = Code_postal
         self.total_price = total_price
-        self.sourceHubName = sourceHubName
         self.Round_Name = Round_Name
+        self.sourceHubName = sourceHubName
         self.isExpress = isExpress
         self.toDelete = toDelete
 class transactionFileColumnsMetadata:

@@ -93,14 +93,14 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   copyDataSourceMetaData: any = [];
   copyDataSourceMad: any = [];
 
-  columnsLivraison:any =[];
-  rowsLivraison :any=[];
-  columnsException:any =[];
-  rowsException :any=[];
-  columnsMetaData:any =[];
-  rowsMetaData :any=[];
-  columnsMad:any =[];
-  rowsMad :any=[];
+  columnsLivraison: any = [];
+  rowsLivraison: any = [];
+  columnsException: any = [];
+  rowsException: any = [];
+  columnsMetaData: any = [];
+  rowsMetaData: any = [];
+  columnsMad: any = [];
+  rowsMad: any = [];
 
   constructor(private route: ActivatedRoute,
     public service: DetailsTransactionService,
@@ -271,7 +271,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       if (res.message == "ok") {
         console.warn("ok");
         location.reload();
-       
+
       }
     })
   }
@@ -292,7 +292,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       if (res.message == "ok") {
         console.warn("ok");
         location.reload();
-       // return false;
+        // return false;
       }
     })
   }
@@ -1063,6 +1063,31 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             }
             else if (this.fileSelected == "exception") {
               dataCopy[i][this.displayedColumnsException[startCol]] = text;
+              /**if we modify a column of the exception file it will be automatically modified at the level of the delivery file */
+              this.dataSource.data.forEach(el => {
+                if (dataCopy[i].taskId == el.taskId) {
+                  /*****processing of fields with different column names */
+                  if (this.displayedColumnsException[startCol] == "Express") {
+                    if ((dataCopy[i][this.displayedColumnsException[startCol]]).toUpperCase() == "OUI") {
+                      el.isExpress = 1;
+                    }
+                    else if ((dataCopy[i][this.displayedColumnsException[startCol]]).toUpperCase() == "NON") {
+                      el.isExpress = 0;
+                    }
+                  }
+                  else if (this.displayedColumnsException[startCol] == "Item___Nom") {
+                    el.Item___Nom_sous_categorie = text
+                  }
+                  else if (this.displayedColumnsException[startCol] == "Item___Type") {
+                    el.Item___Type_unite_manutention = text;
+                  }
+                  /******* */
+                  else {
+                    el[this.displayedColumnsException[startCol]] = text
+                  }
+
+                }
+              })
             }
             else if (this.fileSelected == "metadata") {
               dataCopy[i][this.displayedColumnsMetadata[startCol]] = text;
@@ -1245,26 +1270,26 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
  * Correct all transaction files
  */
   correctionAllFile() {
-    if (this.dataSource.data.length>0){
-      this.columnsLivraison=Object.keys(this.dataSource.data[0]);
-      this.rowsLivraison =this.dataSource.data.map(Object.values);
+    if (this.dataSource.data.length > 0) {
+      this.columnsLivraison = Object.keys(this.dataSource.data[0]);
+      this.rowsLivraison = this.dataSource.data.map(Object.values);
     }
-    if (this.dataSourceException.data.length>0){
-      this.columnsException= Object.keys(this.dataSourceException.data[0]);
-        this.rowsException= this.dataSourceException.data.map(Object.values);
+    if (this.dataSourceException.data.length > 0) {
+      this.columnsException = Object.keys(this.dataSourceException.data[0]);
+      this.rowsException = this.dataSourceException.data.map(Object.values);
     }
-    if (this.dataSourceMetaData.data.length>0){
-      this.columnsMetaData= Object.keys(this.dataSourceMetaData.data[0]);
-      this.rowsMetaData= this.dataSourceMetaData.data.map(Object.values);
+    if (this.dataSourceMetaData.data.length > 0) {
+      this.columnsMetaData = Object.keys(this.dataSourceMetaData.data[0]);
+      this.rowsMetaData = this.dataSourceMetaData.data.map(Object.values);
     }
-    if (this.dataSourceMAD.data.length>0){
-      this.columnsMad= Object.keys(this.dataSourceMAD.data[0]);
-      this.rowsMad= this.dataSourceMAD.data.map(Object.values);
+    if (this.dataSourceMAD.data.length > 0) {
+      this.columnsMad = Object.keys(this.dataSourceMAD.data[0]);
+      this.rowsMad = this.dataSourceMAD.data.map(Object.values);
     }
     this.fileTocheck = {
       transaction_id: this.transaction.transaction_id,
       fileReplacementLivraison: {
-        columns:  this.columnsLivraison,
+        columns: this.columnsLivraison,
         rows: this.rowsLivraison,
       },
       fileReplacementMAD: {

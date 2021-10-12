@@ -249,7 +249,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
   listenToWebSocket() {
     this.tablesService.messages.subscribe(msg => {
       console.log("Response from websocket: ", msg);
-      localStorage.setItem('ws', msg);
+      localStorage.setItem('wsEdi', msg);
       console.log("save in localstorage done");
       if(msg === "\"table ediFile updated\"")
       {

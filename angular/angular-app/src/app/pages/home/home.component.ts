@@ -73,7 +73,7 @@ export class HomeComponent extends UpgradableComponent implements OnInit {
       this.getAllFiles();
       this.getAllTypesANomalie();
     });
-    this.listenToWebSocket();
+    /*this.listenToWebSocket();*/
   }
 
   listenToWebSocket(){

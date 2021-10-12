@@ -17,7 +17,7 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
-        self.send(text_data= jsonpickle.encode(ChatConsumer.state,unpicklable=False))
+        self.send(text_data= jsonpickle.encode(ChatConsumer.stateTransaction,unpicklable=False))
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(

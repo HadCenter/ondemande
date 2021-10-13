@@ -705,6 +705,9 @@
                   </ng-container>
 
                   <!-- Remarque Column -->
+                  <!-- (mousedown)="onMouseDown(i, 12, 'Remarque','exception')"
+                  (mouseup)="onMouseUp(i, 12, 'Remarque','exception')"
+                  [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][12], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][12]}" -->
                   <ng-container matColumnDef="Remarque">
                     <th id="RemarqueException" class="titre-column-exception" mat-header-cell *matHeaderCellDef>
                       Remarque
@@ -719,10 +722,8 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles"
-                      *matCellDef="let element ; let i = index" (mousedown)="onMouseDown(i, 12, 'Remarque','exception')"
-                      (mouseup)="onMouseUp(i, 12, 'Remarque','exception')"
-                      [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][12], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][12]}">
+                    <td mat-cell #cellException class="center-cell-transactionsFiles" 
+                      *matCellDef="let element ; let i = index">
                       {{element.Remarque}} </td>
                   </ng-container>
 

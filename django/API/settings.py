@@ -56,7 +56,9 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    #'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -103,6 +105,7 @@ DATABASES = {
         'NAME': 'ondemand',
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
+        #'HOST': '52.47.208.8',
         'HOST': '172.17.0.1',
         'PORT': '3306',
     }

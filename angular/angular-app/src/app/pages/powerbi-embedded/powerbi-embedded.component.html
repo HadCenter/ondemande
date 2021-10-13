@@ -6,11 +6,11 @@
 <!-- <div style=" width: 100%;" [ngStyle]="{ 'height': (screenHeight-150)+ 'px' }" #embeddedReport></div>   -->
 
 <div class="ngx-container">
-    <ngx-powerbi-component type= {{reportConfig.type}}
-                        id="f839444b-ed27-45f8-9514-7570c7485ebd"
-                        embedUrl="https://app.powerbi.com/reportEmbed?reportId=f839444b-ed27-45f8-9514-7570c7485ebd&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly9XQUJJLUZSQU5DRS1DRU5UUkFMLUEtUFJJTUFSWS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCIsImVtYmVkRmVhdHVyZXMiOnsibW9kZXJuRW1iZWQiOnRydWUsImNlcnRpZmllZFRlbGVtZXRyeUVtYmVkIjp0cnVlLCJ1c2FnZU1ldHJpY3NWTmV4dCI6dHJ1ZX19"
-                        tokenType="Aad"
-                        accessToken="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Imwzc1EtNTBjQ0g0eEJWWkxIVEd3blNSNzY4MCIsImtpZCI6Imwzc1EtNTBjQ0g0eEJWWkxIVEd3blNSNzY4MCJ9.eyJhdWQiOiJodHRwczovL2FuYWx5c2lzLndpbmRvd3MubmV0L3Bvd2VyYmkvYXBpIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvNTk0Y2IwMjEtZTVlYS00MjBmLTg4M2UtMzI0NzZjOGY2NTNiLyIsImlhdCI6MTYzMzk2MzYyOSwibmJmIjoxNjMzOTYzNjI5LCJleHAiOjE2MzM5Njc1MjksImFjY3QiOjAsImFjciI6IjEiLCJhaW8iOiJBVVFBdS84VEFBQUEzUkZjYjVNaytGL2U1aVcvQmFmMStTMGV0VmFwd2o1UE1qNlZhdXZRNkIzY0lualA1cUM5eXRDK21YVlFOR3RaK3ZZNW5UbUNMWDN5TWl0TUUwSDdyQT09IiwiYW1yIjpbInB3ZCIsIm1mYSJdLCJhcHBpZCI6IjdmNTlhNzczLTJlYWYtNDI5Yy1hMDU5LTUwZmM1YmIyOGI0NCIsImFwcGlkYWNyIjoiMiIsImZhbWlseV9uYW1lIjoicmVkbGVhbiIsImdpdmVuX25hbWUiOiJSZWRsZWFuIiwiaXBhZGRyIjoiODYuNzYuMTc4LjI0IiwibmFtZSI6IlJlZGxlYW4gIHJlZGxlYW4iLCJvaWQiOiI5OTc1YzFhMy1hYThhLTRhMzItODA5ZC00ZmM0NTAwZjQ4NGYiLCJwdWlkIjoiMTAwMzIwMDBERDNCMzIxMiIsInJoIjoiMC5BVWdBSWJCTVdlcmxEMEtJUGpKSGJJOWxPM09uV1gtdkxweENvRmxRX0Z1eWkwUklBSXcuIiwic2NwIjoidXNlcl9pbXBlcnNvbmF0aW9uIiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoiRk5JSVFRS05Fa0hYWFQyLUNOa0M2TU1yajJUdGxEWEhwMjAwZTB6VmwwYyIsInRpZCI6IjU5NGNiMDIxLWU1ZWEtNDIwZi04ODNlLTMyNDc2YzhmNjUzYiIsInVuaXF1ZV9uYW1lIjoicmVkbGVhbkBlY29sb3RyYW5zMS5vbm1pY3Jvc29mdC5jb20iLCJ1cG4iOiJyZWRsZWFuQGVjb2xvdHJhbnMxLm9ubWljcm9zb2Z0LmNvbSIsInV0aSI6InYtSmlPbkIySkVpRVdQTUIyVUpBQVEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjcyOTgyN2UzLTljMTQtNDlmNy1iYjFiLTk2MDhmMTU2YmJiOCIsIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCIsImZlOTMwYmU3LTVlNjItNDdkYi05MWFmLTk4YzNhNDlhMzhiMSIsImE5ZWE4OTk2LTEyMmYtNGM3NC05NTIwLThlZGNkMTkyODI2YyIsImYwMjNmZDgxLWE2MzctNGI1Ni05NWZkLTc5MWFjMDIyNjAzMyIsImI3OWZiZjRkLTNlZjktNDY4OS04MTQzLTc2YjE5NGU4NTUwOSJdfQ.JpPNO81Y--WvZezFn_9U9epBdyHTsOnWK6WRR5DvENTZbYroMkuCV-aQbXPGzL532fl-b8kQz3pnlcg09miuJf91jgOH1O0-rDuKmg47aRlURLoNhIRKRQ6c7GmcAc8x4VnXZ3wAEEicZM7Y60DrhSmiWOXaYQ-HJ2kBnvvN53QSMfO2Zc3c3WN11SfrAiYeEUfI-MzKfPyLwJZc4mRksDjMMCyEmQQBmn7cGQbAjlOX0Seoa_fhaHmNJ3GblFsVm42LrqnMDqnIaULdJrSpVup8ejUakDpAq2TqQSzwFLcalMlQi3SSg5gAzLWFpxiWZbGL0BGXt49-4Gx6epiH5Q"
+    <ngx-powerbi-component type= {{embedConfig.type}}
+                        id={{embedConfig.reportId}}
+                        embedUrl={{embedConfig.embedUrl}}
+                        tokenType="Embed"
+                        accessToken={{embedConfig.accessToken}}
                         >
     </ngx-powerbi-component>
 </div>

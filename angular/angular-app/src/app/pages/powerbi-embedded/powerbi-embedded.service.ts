@@ -14,10 +14,10 @@ export class PowerbiEmbeddedService {
    * @returns embed configuration
    */
   getEmbedConfig(id: string): Observable<ConfigResponse> {
-    let params = new HttpParams();
-    params = params.append('id', id);
+    // let params = new HttpParams();
+    // params = params.append('id', id);
 
-    return this.httpClient.get<ConfigResponse>(`http://localhost:8000/embededPowerBI/getEmbedParamsForSingleReport/`+id);
+    return this.httpClient.get<ConfigResponse>(`http://localhost:8000/embededPowerBI/getSingleReport/`+id);
   }
 
 }

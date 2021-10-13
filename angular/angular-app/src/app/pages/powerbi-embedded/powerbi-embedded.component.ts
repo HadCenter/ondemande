@@ -10,6 +10,8 @@ export interface ConfigResponse {
   tokenId: string;
   accessToken: string;
   reportConfig: {
+    reportId: string,
+    reportName: string,
     embedUrl: string;
   };
 }
@@ -22,7 +24,16 @@ export interface ConfigResponse {
 })
 export class PowerbiEmbeddedComponent implements OnInit {
   report: Report;
-  public embedConfig: any;
+  public embedConfig= {
+    type: 'report',
+    tokenType: "",
+    accessToken: "",
+    embedUrl: "",
+    reportId: "",
+    permissions: "",
+    settings: {}
+  };
+
   reportConfig: pbi.IReportEmbedConfiguration = {
     type: 'report',
     embedUrl: undefined,
@@ -30,6 +41,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
     accessToken: undefined,
     settings: undefined,
   };
+
   @ViewChild('embeddedReport')
     embeddedReport: ElementRef;
     config: any;
@@ -103,19 +115,20 @@ export class PowerbiEmbeddedComponent implements OnInit {
         
         // });
 
-        this.pbiService.getEmbedConfig("hh").subscribe(config => {
+        this.pbiService.getEmbedConfig("a2bf73b0-7d7a-4c67-a7f7-f064821b76b2").subscribe(config => {
           this.config = config;
           const model = window['powerbi-client'].models;
           this.embedConfig = {
               type: 'report',
-              tokenType: model.TokenType.Embed,
+              tokenType : model.TokenType.Embed,
               accessToken: config.accessToken,
-              embedUrl: config.reportConfig.embedUrl,
-              // permissions: model.Permissions.All,
-              // settings: {
-              //     filterPaneEnabled: true,
-              //     navContentPaneEnabled: true
-               //}
+              embedUrl: config.reportConfig[0].embedUrl,
+              reportId: config.reportConfig[0].reportId,
+              permissions: model.Permissions.All,
+              settings: {
+                  filterPaneEnabled: true,
+                  navContentPaneEnabled: true
+               }
           };
           console.log(this.embedConfig);
         //  this.report = <Report>powerbi.embed(this.embeddedReport.nativeElement, embedConfig);

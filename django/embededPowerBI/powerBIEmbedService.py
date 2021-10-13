@@ -7,6 +7,7 @@ from .models import ReportConfig
 from .models import EmbedConfig
 from .models import EmbedTokenRequestBody
 from .models import EmbedToken
+from django.core.cache import cache
 
 import requests
 import json
@@ -156,5 +157,10 @@ class PbiEmbedService:
             Dict: Request header
         '''
         aadService = AadService();
-        print({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + aadService.get_access_token()})
-        return {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + aadService.get_access_token()}
+
+        if cache.get('my_token') is None:
+            aadService.get_access_token()
+            print("# # # GENERATING NEW TOKEN IN PROCESS... # # #")
+        
+        print({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cache.get('my_token')})
+        return {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cache.get('my_token')}

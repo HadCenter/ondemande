@@ -1,23 +1,42 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ConfigResponse } from './powerbi-embedded.component';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PowerbiEmbeddedService {
+  private url = `${environment.apiBaseUrl}/embededPowerBI`;
 
   constructor(private httpClient: HttpClient) {}
 
-  /**
-   * @returns embed configuration
-   */
-  getEmbedConfig(id: string): Observable<ConfigResponse> {
-    // let params = new HttpParams();
-    // params = params.append('id', id);
+  getAllReports(): Observable<any> {
 
-    return this.httpClient.get<ConfigResponse>(`http://localhost:8000/embededPowerBI/getSingleReport/`+id);
+    return this.httpClient.get<any>(`${this.url}/getAllReports`);
   }
 
+  public getAdvancedHeaders() {
+    return [
+        {
+            name: 'Nom du rapport',
+
+        },
+        {
+            name: 'Type',
+
+        },
+        // {
+        //     name: 'Profile',
+
+        // },
+        // {
+        //     name: 'Statut',
+
+        // },
+        // {
+        //     name : 'Actions'
+        // }
+    ];
+  }
 }

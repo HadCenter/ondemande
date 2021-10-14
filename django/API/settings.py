@@ -48,8 +48,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'talendEsb',
     'channels',
-    'websocket',
-    'embededPowerBI'
+    'websocket'
 ]
 
 MIDDLEWARE = [
@@ -103,7 +102,6 @@ DATABASES = {
         'NAME': 'ondemand',
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
-        #'HOST': '52.47.208.8',
         'HOST': '172.17.0.1',
         'PORT': '3306',
     }
@@ -201,12 +199,5 @@ ASGI_APPLICATION = 'API.wsgi.application'
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
     }
 }

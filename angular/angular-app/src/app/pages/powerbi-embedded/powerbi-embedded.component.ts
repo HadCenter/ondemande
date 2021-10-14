@@ -6,7 +6,7 @@ import { PowerbiEmbeddedService } from './powerbi-embedded.service';
 @Component({
   selector: 'app-powerbi-embedded',
   templateUrl: './powerbi-embedded.component.html',
-  styleUrls: ['./powerbi-embedded.component.css']
+  styleUrls: ['./powerbi-embedded.component.scss']
 })
 export class PowerbiEmbeddedComponent implements OnInit {
   reports = [];

@@ -23,9 +23,7 @@
               "src/theme/styles.scss"
             ],
             "scripts": [
-              "node_modules/material-design-lite/material.js",
-              "node_modules/powerbi-client/dist/powerbi.min.js", 
-              "node_modules/powerbi-models/dist/models.min.js"
+              "node_modules/material-design-lite/material.js"
 
             ]
           },

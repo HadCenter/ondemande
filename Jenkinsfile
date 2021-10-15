@@ -22,6 +22,10 @@ pipeline {
                 sh "docker-compose up -d"
             }
         }
-
+        stage('Dangling Images') {
+            steps {
+                sh 'docker system prune -f'
+            }
+        }
     }
 }

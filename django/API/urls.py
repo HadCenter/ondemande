@@ -31,6 +31,7 @@ urlpatterns = [
     path('salesforceEsb/', include('salesforceEsb.urls')),
     path('urbantzEsb/', include('urbantzEsb.urls')),
     path('swagger/', schema_view ,name = "docs"),
-    path('rabbitMQ/',include('rabbitMQ.urls'))
+    path('rabbitMQ/',include('rabbitMQ.urls')),
+    path('embededPowerBI/',include('embededPowerBI.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

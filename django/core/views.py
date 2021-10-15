@@ -200,6 +200,13 @@ def downloadFileName(request):
                 commande = "RETR " + name
                 ftp.retrbinary(commande, file.write)
             break
+    ftp.cwd(path_client + "/FILES_TO_DIAGNOSTIC")
+    for name in ftp.nlst():
+        if name == fileName:
+            with open(name, "wb") as file:
+                commande = "RETR " + name
+                ftp.retrbinary(commande, file.write)
+            break
     with open(fileName, 'rb') as f:
         file = f.read()
     response = HttpResponse(file, content_type="application/xls")

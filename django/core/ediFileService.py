@@ -325,21 +325,21 @@ def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
     fileName : str
     if fileType == "correct" :
         fileName = fileDB.validated_orders
-        path_base = path_racine_output
+        path = path_racine_output + clientDB.code_client
         fileDB.number_correct_commands = len(rows)
         fileDB.save()
     elif fileType == "error" :
         fileName = fileDB.wrong_commands
-        path_base = path_racine_output
+        path = path_racine_output + clientDB.code_client
         fileDB.number_wrong_commands = len(rows)
         fileDB.save()
     else :
         fileName = fileDB.file.name
-        path_base = path_racine_input
+        path = path_racine_input + clientDB.code_client + "/FILES_TO_DIAGNOSTIC"
 
     df.to_excel(fileName, index=False)
     ftp = connect()
-    ftp.cwd(path_base + clientDB.code_client + "/FILES_TO_DIAGNOSTIC" )
+    ftp.cwd(path)
     file = open(fileName, 'rb')
     print(os.path.basename(fileName))
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)

@@ -23,7 +23,7 @@ class LoginAPI(generics.GenericAPIView):
 		user = serializer.validated_data
 		payload = {
 			'id': user.id,
-			'iat' : datetime.datetime.utcnow()
+			'iat' : datetime.datetime.now()
 		}
 		token = jwt.encode(payload,'secret',algorithm='HS256').decode('utf-8')
 		return Response({

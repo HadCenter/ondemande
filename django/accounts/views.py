@@ -98,7 +98,7 @@ def forgetPassword(request):
         return Response({'message':'Utilisateur n\'est pas actif/n\'existe pas'},status.HTTP_200_OK)
     payload = {
         'id': account.id,
-        'iat': datetime.datetime.utcnow()
+        'iat': datetime.datetime.now()
     }
     #print("TIME WHEN EMAIL SENT IS :  ",datetime.datetime.now())
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')

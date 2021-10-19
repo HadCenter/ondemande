@@ -7,7 +7,8 @@ import jsonpickle
 
 
 class ChatConsumer(WebsocketConsumer):
-    state = { "Running_Jobs" : [] }
+    state = "table ediFile not updated"
+    stateTransaction = {"Running_Jobs": []}
     def connect(self):
         self.room_name = 'notifications_room'
         self.room_group_name = self.room_name+"_group"

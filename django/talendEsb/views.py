@@ -266,13 +266,13 @@ def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):
 	from rabbitMQ.views import sendMessageRabbitMqToStartJob
 	# requests.post(talendUrlEDIFileWebHook, json=data)
 	from websocket.consumers import ChatConsumer
-	ChatConsumer.state['Running_Jobs'].append("Talend Job Mad Transaction " + str(madObjectToPost.transaction_id))
+	ChatConsumer.stateTransaction['Running_Jobs'].append("Talend Job Mad Transaction " + str(madObjectToPost.transaction_id))
 	channel_layer = get_channel_layer()
 	async_to_sync(channel_layer.group_send)(
 		'notifications_room_group',
 		{
 			'type': 'send_message_to_frontend',
-			'message': ChatConsumer.state
+			'message': ChatConsumer.stateTransaction
 		}
 	)
 	messageMQ = RabbitMqMessagesForJobToStart(webhook=talendUrlMADFileWebHook, payloadToSendToTalend=madObjectToPost,

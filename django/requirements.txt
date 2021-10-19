@@ -15,7 +15,7 @@ xlrd
 openpyxl
 django-rest-swagger
 paramiko
-pyjwt
+pyjwt==1.7.1
 pika
 channels
 msal==1.15.0

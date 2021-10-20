@@ -1,10 +1,17 @@
 from django.db import models
 import os
+from django.db.models.signals import post_save
 from datetime import datetime
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
 # Create your models here.
+from django.dispatch import receiver
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from websocket.consumers import ChatConsumer
+
+
 def upload_to(instance, filename):
     return 'files/{filename}'.format(filename=filename)
 
@@ -271,3 +278,22 @@ class TransactionFileContentAndOptions:
     def __init__(self,fileContent,options):
         self.fileContent = fileContent
         self.options = options
+
+@receiver(post_save, sender=EDIfile)
+def send_message_to_frontend_when_edifile_updated(sender, instance=None, created=False, **kwargs):
+    if not created:
+        print("ediFile updated")
+        # ediFile object updated
+        ediFile_obj = instance
+        print(ediFile_obj)
+        #ChatConsumer.state = "DB updated"
+        messageToSend = "table ediFile updated"
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'notifications_room_group',
+            {
+                'type': 'send_message_to_frontend',
+                'message': messageToSend
+            }
+        )
+        print("done")

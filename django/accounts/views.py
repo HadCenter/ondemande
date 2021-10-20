@@ -79,8 +79,11 @@ def token_status (request):
     message = smart_str(urlsafe_base64_decode(token))
     id = message[32:]
     account = Account.objects.get(pk=id)
-    now = datetime.datetime.now()
-    c = now - account.created_at
+    now = datetime.datetime.utcnow()
+    print("NOOOOOOOOW :  ",now.replace(tzinfo=datetime.timezone.utc))
+    print("CREATED A IS :  ",account.created_at)
+    c = now.replace(tzinfo=datetime.timezone.utc) - account.created_at
+    print("COMPARE IS :  ",c)
     minutes = c.total_seconds() / 60
     if minutes > 2880 or account.is_active == True:
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)

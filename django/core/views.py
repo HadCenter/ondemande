@@ -35,7 +35,7 @@ from .models import transactionFileColumnsException , transactionFileColumnsLivr
 from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
-from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows, updateHistoryOfAnnomalies
+from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows, updateHistoryOfAnnomalies, updateMetaDataFileInTableCoreEDIFile
 from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
@@ -194,6 +194,13 @@ def downloadFileName(request):
     path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
     path_client = path_racine + '/' + clientCode
     ftp.cwd(path_client)
+    for name in ftp.nlst():
+        if name == fileName:
+            with open(name, "wb") as file:
+                commande = "RETR " + name
+                ftp.retrbinary(commande, file.write)
+            break
+    ftp.cwd(path_client + "/FILES_TO_DIAGNOSTIC_DEV")
     for name in ftp.nlst():
         if name == fileName:
             with open(name, "wb") as file:
@@ -515,3 +522,11 @@ def deleteNotValidateLogisticFileWS(request):
         return JsonResponse({'message': 'file deleted successfully'}, status=status.HTTP_200_OK)
     else:
         return JsonResponse({'message': 'file not found'}, status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['POST'])
+def updateMetaDataFileInTableCoreEDIFileWS(request):
+    ediFileName = request.data['ediFileName']
+    ediFileStatus =  request.data['ediFileStatus']
+
+    updateMetaDataFileInTableCoreEDIFile(ediFileName=ediFileName, ediFileStatus=ediFileStatus)
+    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)

@@ -11,6 +11,8 @@ import { ListTransactionComponent } from './list-transaction/list-transaction.co
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { DetailsTransactionComponent } from './details-transaction/details-transaction.component';
 import { FacturationLogistiqueComponent } from './facturation-logistique/facturation-logistique.component';
+import { PowerbiEmbeddedComponent } from './powerbi-embedded/powerbi-embedded.component';
+import { DetailsKpiPowerbiComponent } from './details-kpi-powerbi/details-kpi-powerbi.component';
 
 @NgModule({
   imports: [
@@ -30,7 +32,9 @@ import { FacturationLogistiqueComponent } from './facturation-logistique/factura
    DetailsFileEdiComponent,
    ListTransactionComponent,
    DetailsTransactionComponent,
-   FacturationLogistiqueComponent
+   FacturationLogistiqueComponent,
+   PowerbiEmbeddedComponent,
+   DetailsKpiPowerbiComponent
 
   ],
 

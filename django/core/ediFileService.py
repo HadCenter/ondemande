@@ -173,6 +173,7 @@ def saveUploadedEdiFile(request_file):
 def uploadFileInFtpServer(fileName, code_client):
     ftp = connect()
     path_client_input = path_racine_input + code_client
+    path_filesToDiagnostic = path_client_input + "/FILES_TO_DIAGNOSTIC_DEV"
     ftp.cwd(path_racine_output)
     if code_client not in ftp.nlst():
         ftp.mkd(code_client)
@@ -180,6 +181,9 @@ def uploadFileInFtpServer(fileName, code_client):
     if code_client not in ftp.nlst():
         ftp.mkd(code_client)
     ftp.cwd(path_client_input)
+    if "FILES_TO_DIAGNOSTIC_DEV" not in ftp.nlst():
+        ftp.mkd("FILES_TO_DIAGNOSTIC_DEV")
+    ftp.cwd(path_filesToDiagnostic)
     file = open(fileName, 'rb')
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)
     file.close()
@@ -310,7 +314,7 @@ def createFileFromColumnAndRowsAndUpdateCore(columns, rows, fileId):
     fileDB.save()
     createFileEdiFromColumnAndRows(columns, rows, fileId , "edi")
     data = [{"filePath": fileName, "ClientOwner": clientDB.code_client, "fileId": fileDB.id}]
-    startEngineOnEdiFilesWithData(data)
+    #startEngineOnEdiFilesWithData(data)
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 
 def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
@@ -321,21 +325,21 @@ def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
     fileName : str
     if fileType == "correct" :
         fileName = fileDB.validated_orders
-        path_base = path_racine_output
+        path = path_racine_output + clientDB.code_client
         fileDB.number_correct_commands = len(rows)
         fileDB.save()
     elif fileType == "error" :
         fileName = fileDB.wrong_commands
-        path_base = path_racine_output
+        path = path_racine_output + clientDB.code_client
         fileDB.number_wrong_commands = len(rows)
         fileDB.save()
     else :
         fileName = fileDB.file.name
-        path_base = path_racine_input
+        path = path_racine_input + clientDB.code_client + "/FILES_TO_DIAGNOSTIC_DEV"
 
     df.to_excel(fileName, index=False)
     ftp = connect()
-    ftp.cwd(path_base + clientDB.code_client)
+    ftp.cwd(path)
     file = open(fileName, 'rb')
     print(os.path.basename(fileName))
     ftp.storbinary('STOR ' + os.path.basename(fileName), file)
@@ -353,3 +357,10 @@ def updateHistoryOfAnnomalies(prestations, fileId):
     for historyAnnomalie in listOfAllHistoryOfAnnomalies:
         if historyAnnomalie.anomalie_id not in list(set(listOfAllRemarqueId)):
             HistoryAnomaliesEdiFiles.objects.filter(edi_file_id=fileId, anomalie_id=historyAnnomalie.anomalie_id).delete()
+
+
+def updateMetaDataFileInTableCoreEDIFile(ediFileName, ediFileStatus):
+    ediFile = EDIfile.objects.get(file=ediFileName)
+    ediFile.status = ediFileStatus
+    ediFile.save()
+

@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'talendEsb',
     'channels',
-    'websocket'
+    'websocket',
+    'embededPowerBI'
 ]
 
 MIDDLEWARE = [

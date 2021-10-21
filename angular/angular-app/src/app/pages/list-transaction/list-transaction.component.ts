@@ -22,6 +22,7 @@ export class ListTransactionComponent implements OnInit {
   private countPerPage = 8;
   public numPage = 0;
   public advancedTable = [];
+
   copy_transactions:any=[];
   showJobRun = false;
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
@@ -70,7 +71,7 @@ export class ListTransactionComponent implements OnInit {
         }
       }
     });
-    // check localstorage if the user come from another page
+    // check localstorage if the user come from another page 
 
     if (JSON.parse(localStorage.getItem('ws'))) {
       if (JSON.parse(localStorage.getItem('ws')).Running_Jobs){
@@ -78,13 +79,13 @@ export class ListTransactionComponent implements OnInit {
           this.showJobRun = true;
         }
       }
-      else if (JSON.parse(localStorage.getItem('ws')).stateTransaction.Running_Jobs){
-        if((JSON.parse(localStorage.getItem('ws')).stateTransaction.Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
+      else if (JSON.parse(localStorage.getItem('ws')).state.Running_Jobs){
+        if((JSON.parse(localStorage.getItem('ws')).state.Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
           this.showJobRun = true;
         }
       }
-
-
+  
+      
     }
 
 

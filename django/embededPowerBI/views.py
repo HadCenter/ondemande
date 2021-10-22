@@ -1,5 +1,8 @@
+from django.http import JsonResponse
+from rest_framework import status
 import jsonpickle
 from django.http import HttpResponse
+from requests.models import Response
 
 # Create your views here.
 from rest_framework.decorators import api_view
@@ -8,6 +11,7 @@ from .config import BaseConfig
 import requests
 from .azureActiveDirectoryService import AadService
 from django.core.cache import cache
+import json
 
 @api_view(['GET'])
 def getEmbedParamsForSingleReport(request,id):
@@ -37,3 +41,41 @@ def getUserToken(request):
     return cache.get('my_token')
 
 
+@api_view(['GET'])
+def resume(self):
+    config = BaseConfig()
+    powerBIEmbedServiceInstance = PbiEmbedService()
+    report_url = f'https://management.azure.com/subscriptions/{config.SUBSCRIPTION_ID}/resourceGroups/{config.RESOURCE_GROUP_NAME}/providers/Microsoft.PowerBIDedicated/capacities/{config.DEDICATED_CAPACITY_NAME}/resume?api-version={config.API_VERSION}'
+    api_response = requests.post(report_url, headers=powerBIEmbedServiceInstance.get_azure_header())
+    #response = api_response.json()
+    if api_response.status_code == 202:
+        return JsonResponse({'message': 'resumed successfully'}, status=status.HTTP_200_OK)
+    else:
+        return JsonResponse({'message': 'Could not be resumed'}, status=status.HTTP_403_FORBIDDEN)
+
+    
+@api_view(['GET'])
+def suspend(self):
+    config = BaseConfig()
+    powerBIEmbedServiceInstance = PbiEmbedService()
+    report_url = f'https://management.azure.com/subscriptions/{config.SUBSCRIPTION_ID}/resourceGroups/{config.RESOURCE_GROUP_NAME}/providers/Microsoft.PowerBIDedicated/capacities/{config.DEDICATED_CAPACITY_NAME}/suspend?api-version={config.API_VERSION}'
+    api_response = requests.post(report_url, headers=powerBIEmbedServiceInstance.get_azure_header())
+    #response = api_response.json()
+    print(api_response)
+    #print(response)
+    if api_response.status_code == 202:
+        return JsonResponse({'message': 'suspended successfully'}, status=status.HTTP_200_OK)
+    else:
+        return JsonResponse({'message': 'Could not be suspended'}, status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['GET'])
+def getCapacityState(request):
+    config = BaseConfig()
+    powerBIEmbedServiceInstance = PbiEmbedService()
+    report_url = f'https://management.azure.com/subscriptions/{config.SUBSCRIPTION_ID}/resourceGroups/{config.RESOURCE_GROUP_NAME}/providers/Microsoft.PowerBIDedicated/capacities/{config.DEDICATED_CAPACITY_NAME}?api-version={config.API_VERSION}'
+    api_response = requests.get(report_url, headers=powerBIEmbedServiceInstance.get_azure_header())
+    response = json.loads(api_response.text)
+    if api_response.status_code == 200:
+        return HttpResponse(json.dumps(response['properties']['state']), content_type="application/json")
+    else:
+        return Response({'status': 'could not get details '})

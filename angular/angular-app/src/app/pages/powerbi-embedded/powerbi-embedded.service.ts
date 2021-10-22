@@ -15,6 +15,17 @@ export class PowerbiEmbeddedService {
 
     return this.httpClient.get<any>(`${this.url}/getAllReports`);
   }
+  resumeCapacity(): Observable<any> {
+    return this.httpClient.get<any>(`${this.url}/resume`);
+  }
+
+  suspendCapacity(): Observable<any> {
+    return this.httpClient.get<any>(`${this.url}/suspend`);
+  }
+
+  getCapacityState(): Observable<any> {
+    return this.httpClient.get<any>(`${this.url}/getCapacityState`);
+  }
 
   public getAdvancedHeaders() {
     return [

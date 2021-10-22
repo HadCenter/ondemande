@@ -160,7 +160,17 @@ class PbiEmbedService:
 
         if cache.get('my_token') is None:
             aadService.get_access_token()
-            print("# # # GENERATING NEW TOKEN IN PROCESS... # # #")
-        
-        print({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cache.get('my_token')})
+
         return {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cache.get('my_token')}
+
+    def get_azure_header(self):
+        '''Get Power BI API request header
+        Returns:
+            Dict: Request header
+        '''
+        aadService = AadService();
+
+        if cache.get('azure_token') is None:
+            aadService.get_azure_token()
+        print(cache.get('azure_token'))
+        return {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cache.get('azure_token')}

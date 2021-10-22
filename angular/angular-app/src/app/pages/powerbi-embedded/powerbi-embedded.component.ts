@@ -137,9 +137,9 @@ export class PowerbiEmbeddedComponent implements OnInit {
       disableClose: false
     });
     if (decision == 'activer') {
-      this.dialogRef.componentInstance.confirmMessage = "Voulez vous vraiment activer la capacité ?"
+      this.dialogRef.componentInstance.confirmMessage = "Voulez-vous activer la capacité ?"
     } else if (decision == 'suspendre') {
-      this.dialogRef.componentInstance.confirmMessage = "Voulez vous vraiment suspendre la capacité ?"
+      this.dialogRef.componentInstance.confirmMessage = "Voulez-vous suspendre la capacité ?"
     }
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {

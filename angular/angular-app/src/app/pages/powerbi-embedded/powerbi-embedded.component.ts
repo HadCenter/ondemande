@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'app/services';
+import { interpolateObject } from 'd3';
 import { PowerbiEmbeddedService } from './powerbi-embedded.service';
 
 @Component({
@@ -18,18 +20,67 @@ export class PowerbiEmbeddedComponent implements OnInit {
   public advancedTable = [];
   public filterValue: any;
   limit = 15;
+  public btnClicked = false;
   public getAdvancedTablePage(page, countPerPage) {
     return this.copyReportsPerPagination.slice((page - 1) * countPerPage, page * countPerPage);
   }
 
   public advancedHeaders = this.pbiService.getAdvancedHeaders();
+  public user: any;
+  public capacityState: string;
 
   constructor(private router: Router,
-    private pbiService: PowerbiEmbeddedService) { }
+    private pbiService: PowerbiEmbeddedService,
+    private authService: AuthService) { }
 
   ngOnInit() {
+    this.pbiService.getCapacityState().subscribe(res => this.capacityState = res);
     this.getReports();
+    this.authService.userData.subscribe(user => this.user = user);
   }
+
+  public suspendreCapacite() {
+    let interval;
+    this.btnClicked = true;
+    this.pbiService.suspendCapacity().subscribe(res => console.log(res));
+    this.pbiService.getCapacityState().subscribe(res => this.capacityState = res);
+    interval = setInterval(() => {this.pbiService.getCapacityState().subscribe(res => {
+      console.log(res);
+      this.capacityState = res;
+      if(this.capacityState == 'Paused'){
+        clearInterval(interval);
+        this.btnClicked = false;
+        console.log("interval clearerd");
+      }});
+      }      ,5000)
+
+  }
+  public activerCapacite() {
+    let interval;
+    this.btnClicked = true;
+    this.pbiService.resumeCapacity().subscribe(res => console.log(res));
+    this.pbiService.getCapacityState().subscribe(res => this.capacityState = res);
+    interval = setInterval(() => {this.pbiService.getCapacityState().subscribe(res => {
+      console.log(res);
+      this.capacityState = res;
+      if(this.capacityState == 'Succeeded'){
+        clearInterval(interval);
+        this.btnClicked = false;
+        console.log("interval clearerd");
+      }});
+      }
+      ,15000);
+      
+    // while (this.capacityState != 'Succeeded') {
+    //   console.log("WHILE LOOOOOP ", this.capacityState);
+    //   this.pbiService.getCapacityState().subscribe(res => {
+    //     this.capacityState = res;
+    //     this.btnClicked = false;
+    //   })
+    //   setInterval(() => console.log("interval invoked"),10000)
+    // }
+  }
+
   public changePage(page, force = false) {
     if (page !== this.currentPage || force) {
       this.currentPage = page;

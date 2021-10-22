@@ -23,11 +23,12 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { PowerbiEmbeddedService } from './powerbi-embedded.service';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 
 
 @NgModule({
-  declarations: [PowerbiEmbeddedComponent],
+  declarations: [PowerbiEmbeddedComponent, ConfirmDialogComponent],
   imports: [
     CommonModule,
     PowerbiEmbeddedRoutingModule,
@@ -58,6 +59,8 @@ import { PowerbiEmbeddedService } from './powerbi-embedded.service';
     PowerbiEmbeddedService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
+  entryComponents: [ConfirmDialogComponent]
+
 
 })
 export class PowerbiEmbeddedModule { }

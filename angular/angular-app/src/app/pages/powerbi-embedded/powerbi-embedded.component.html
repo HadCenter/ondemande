@@ -16,60 +16,61 @@
 </div> -->
 
 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-    <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
-    <base-card>
-        <base-card-title>
-          <h1 class="mdl-card__title-text">Liste des rapports</h1>
-          <div class="mdl-layout-spacer"></div>
-          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-            <div class="mdl-textfield label-search " >
-              <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                [(ngModel)]="filterValue" placeholder="Rechercher" />
-              <label class="mdl-textfield__label" for="search2" ></label>
-            </div>
-          </div>
-          <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
-          </base-pagination>
-          <!-- <p>{{ capacityState }}</p> -->
-          <button *ngIf="(user.id == 15 || user.id == 3) && (capacityState == 'Paused' || capacityState == 'Resuming' )" (click)="activerCapacite()"
-                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
-                  [disabled]="btnClicked" >
-                  Activer capacité
-                  <app-loader *ngIf="btnClicked" class="loader" [width]="'100%'" [position]="'sticky'"
-                  [height]="'100px'" [bg]="'transparant'" [show]="btnClicked"></app-loader>
-      
-                </button>
-                <button *ngIf="(user.id == 15 || user.id == 3) && (capacityState == 'Succeeded' || capacityState == 'Pausing' )" (click)="suspendreCapacite()"
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
-                [disabled]="btnClicked" >Suspendre capacité
-                <app-loader *ngIf="btnClicked" class="loader" [width]="'100%'" [position]="'sticky'"
-                [height]="'100px'" [bg]="'transparant'" [show]="btnClicked"></app-loader>
+  <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
+  <base-card>
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Liste des rapports</h1>
+      <div class="mdl-layout-spacer"></div>
+      <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+        <div class="mdl-textfield label-search ">
+          <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+            [(ngModel)]="filterValue" placeholder="Rechercher" />
+          <label class="mdl-textfield__label" for="search2"></label>
+        </div>
+      </div>
+      <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+      </base-pagination>
+      <!-- <p>{{ capacityState }}</p> -->
+      <button *ngIf="(user.role == 'SuperAdmin') && (capacityState == 'Paused' || capacityState == 'Resuming' )"
+        (click)="openConfirmDialog('activer')"
+        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+        [disabled]="btnClicked">
+        Activer capacité
+        <app-loader *ngIf="btnClicked" class="loader" [width]="'100%'" [position]="'sticky'" [height]="'100px'"
+          [bg]="'transparant'" [show]="btnClicked"></app-loader>
 
+      </button>
+      <button *ngIf="(user.role == 'SuperAdmin') && (capacityState == 'Succeeded' || capacityState == 'Pausing' )"
+        (click)="openConfirmDialog('suspendre')"
+        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+        [disabled]="btnClicked">Suspendre capacité
+        <app-loader *ngIf="btnClicked" class="loader" [width]="'100%'" [position]="'sticky'" [height]="'100px'"
+          [bg]="'transparant'" [show]="btnClicked"></app-loader>
+
+      </button>
+
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <table *ngIf="advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+        <thead>
+          <tr>
+            <th *ngFor="let header of advancedHeaders " class="user-info mdl-data-table__cell--non-numeric">
+              <span>{{ header.name }}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
+            <td class="user-info mdl-data-table__cell--non-numeric">{{ row.name }}</td>
+            <td class="user-info mdl-data-table__cell--non-numeric">{{ row.reportType }}</td>
+            <td class="user-info mdl-data-table__cell--non-numeric">
+              <button (click)="showDetailReport(row)" [disabled]="btnClicked"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Afficher
               </button>
-
-        </base-card-title>
-        <base-card-body class="no-padding">
-          <table *ngIf="advancedTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
-            <thead>
-              <tr>
-                <th *ngFor="let header of advancedHeaders " class="user-info mdl-data-table__cell--non-numeric">
-                  <span>{{ header.name }}</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-                <td class="user-info mdl-data-table__cell--non-numeric">{{ row.name }}</td>
-                <td class="user-info mdl-data-table__cell--non-numeric">{{ row.reportType }}</td>
-                <td class="user-info mdl-data-table__cell--non-numeric">
-                  <button (click)="showDetailReport(row)"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Afficher
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-        </table>
-        </base-card-body>
-      </base-card>
-  </div>
-  
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </base-card-body>
+  </base-card>
+</div>

@@ -1,3 +1,5 @@
+import requests
+from .config import BaseConfig
 from embededPowerBI.config import BaseConfig as app
 from django.core.cache import cache
 import msal
@@ -44,3 +46,26 @@ class AadService:
 
         except Exception as ex:
             raise Exception('Error retrieving Access token\n' + str(ex))
+
+    def get_azure_token(self):
+        '''Generates and returns Access token
+        Returns:
+            string: Access token
+        '''
+
+        api_response = None
+        config = BaseConfig()
+        report_url = f'https://login.windows.net/{config.TENANT_ID}/oauth2/token'
+        payload = {'grant_type':'client_credentials',
+        'client_id':config.CLIENT_ID , 
+        'client_secret': config.CLIENT_SECRET,
+        'resource' : config.RESOURCE,
+        'scopes' : config.SCOPES
+        }
+        api_response = requests.post(report_url, data=payload)
+        response = api_response.json()
+
+        try:
+            cache.set('azure_token', response['access_token'], 3600)
+        except KeyError:
+            raise Exception(response['error_description'])

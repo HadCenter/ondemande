@@ -23,9 +23,28 @@ class BaseConfig(object):
     # Scope of AAD app. Use the below configuration to use all the permissions provided in the AAD app through Azure portal.
     SCOPE = ['https://analysis.windows.net/powerbi/api/.default']
 
+    #SCOPES FOR AZURE AUTH
+    SCOPES= 'https://management.azure.com/.default'
+
+    #Resource for AZURE
+    RESOURCE = 'https://management.azure.com'
+
     # URL used for initiating authorization request
     AUTHORITY = 'https://login.microsoftonline.com/organizations'
 
+
+    AZURE_AUTHORITY = 'https://login.windows.net/tenant/oauth2/token'
+
+    #AZURE SUBSCRIPTION ID
+    SUBSCRIPTION_ID = 'cb90222b-7b5b-4f10-a44b-5957d232e6f4'
+
+    #AZURE Resource Group NAME
+    RESOURCE_GROUP_NAME = 'PowerBI_Ecolotrans'
+
+    #DEDICATED CAPACITY NAME
+    DEDICATED_CAPACITY_NAME = 'powerbiecolotransressource'
+
+    API_VERSION = '2021-01-01'
     # Master user email address. Required only for MasterUser authentication mode.
     POWER_BI_USER = ''
 

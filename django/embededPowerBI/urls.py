@@ -4,5 +4,8 @@ urlpatterns = [
     path("getSingleReport/<str:id>", views.getEmbedParamsForSingleReport, name = "get-single-report" ),
     path("getAllReports/", views.getMultipleReports, name = "get-single-report" ),
     path("getUserToken/", views.getUserToken, name = "get-user-token" ),
+    path("resume/", views.resume, name = "resume-capacity" ),
+    path("suspend/", views.suspend, name = "suspend-capacity" ),
+    path("getCapacityState/", views.getCapacityState, name = "get-capacity-state" ),
 
 ]

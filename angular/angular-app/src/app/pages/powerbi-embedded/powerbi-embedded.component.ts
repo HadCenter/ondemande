@@ -40,22 +40,23 @@ export class PowerbiEmbeddedComponent implements OnInit {
 
   ngOnInit() {
     let interval;
-    this.pbiService.getCapacityState().subscribe(res => {this.capacityState = res;
-    if(this.capacityState != "Succeeded" && this.capacityState != "Paused"){
-      this.btnClicked = true;
-      interval = setInterval(() => {
-        this.pbiService.getCapacityState().subscribe(res => {
-          console.log(res);
-          this.capacityState = res;
-          if (this.capacityState == 'Paused' || this.capacityState =='Succeeded') {
-            clearInterval(interval);
-            this.btnClicked = false;
-            this.openSnackBar("la capacité de Power BI a été mis à jour avec succès. ", "Ok");
-            console.log("interval clearerd");
-          }
-        });
-      }, 10000)
-    }
+    this.pbiService.getCapacityState().subscribe(res => {
+      this.capacityState = res;
+      if (this.capacityState != "Succeeded" && this.capacityState != "Paused") {
+        this.btnClicked = true;
+        interval = setInterval(() => {
+          this.pbiService.getCapacityState().subscribe(res => {
+            console.log(res);
+            this.capacityState = res;
+            if (this.capacityState == 'Paused' || this.capacityState == 'Succeeded') {
+              clearInterval(interval);
+              this.btnClicked = false;
+              this.openSnackBar("la capacité de Power BI a été mis à jour avec succès. ", "Ok");
+              console.log("interval clearerd");
+            }
+          });
+        }, 10000)
+      }
     });
     this.getReports();
     this.authService.userData.subscribe(user => this.user = user);
@@ -71,41 +72,54 @@ export class PowerbiEmbeddedComponent implements OnInit {
     let interval;
     this.btnClicked = true;
     this.openSnackBar("Suspension de la capacité de Power BI en cours. ", "Ok");
-    this.pbiService.suspendCapacity().subscribe(res => console.log(res));
-    this.pbiService.getCapacityState().subscribe(res => this.capacityState = res);
-    interval = setInterval(() => {
-      this.pbiService.getCapacityState().subscribe(res => {
-        console.log(res);
-        this.capacityState = res;
-        if (this.capacityState == 'Paused') {
-          clearInterval(interval);
-          this.btnClicked = false;
-          this.openSnackBar("la capacité de Power BI a été mis en pause avec succès. ", "Ok");
-          console.log("interval clearerd");
-        }
+    this.pbiService.suspendCapacity().subscribe(res => {
+      //console.log(res)
+      interval = setInterval(() => {
+        this.pbiService.getCapacityState().subscribe(res => {
+          console.log(res);
+          this.capacityState = res;
+          if (this.capacityState == 'Paused') {
+            clearInterval(interval);
+            this.btnClicked = false;
+            this.openSnackBar("la capacité de Power BI a été mis en pause avec succès. ", "Ok");
+            console.log("interval clearerd");
+          }
+        });
+      }, 5000);
+    },
+      err => {
+        this.openSnackBar("Une erreur est survenue, veuillez réessayer. ", "Ok");
+        this.btnClicked = false;
       });
-    }, 5000)
+
 
   }
   public activerCapacite() {
     let interval;
     this.btnClicked = true;
     this.openSnackBar("Activation de la capacité de Power BI en cours. ", "Ok");
-    this.pbiService.resumeCapacity().subscribe(res => console.log(res));
-    this.pbiService.getCapacityState().subscribe(res => this.capacityState = res);
-    interval = setInterval(() => {
-      this.pbiService.getCapacityState().subscribe(res => {
-        console.log(res);
-        this.capacityState = res;
-        if (this.capacityState == 'Succeeded') {
-          clearInterval(interval);
-          this.btnClicked = false;
-          this.openSnackBar("la capacité de Power BI a démarré avec succès. ", "Ok");
-          console.log("interval clearerd");
-        }
-      });
-    }
-      , 15000);
+    this.pbiService.resumeCapacity().subscribe(res => {//console.log(res);
+      interval = setInterval(() => {
+        this.pbiService.getCapacityState().subscribe(res => {
+          console.log(res);
+          this.capacityState = res;
+          if (this.capacityState == 'Succeeded') {
+            clearInterval(interval);
+            this.btnClicked = false;
+            this.openSnackBar("la capacité de Power BI a démarré avec succès. ", "Ok");
+            console.log("interval clearerd");
+          }
+        });
+      }
+        , 15000);
+    },
+      err => {
+        this.openSnackBar("Une erreur est survenue, veuillez réessayer. ", "Ok");
+        this.btnClicked = false;
+      }
+    );
+    //this.pbiService.getCapacityState().subscribe(res => this.capacityState = res);
+
 
     // while (this.capacityState != 'Succeeded') {
     //   console.log("WHILE LOOOOOP ", this.capacityState);
@@ -118,7 +132,6 @@ export class PowerbiEmbeddedComponent implements OnInit {
   }
 
   openConfirmDialog(decision) {
-    console.log(decision == 'activer');
     this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
       disableClose: false
@@ -128,8 +141,6 @@ export class PowerbiEmbeddedComponent implements OnInit {
     } else if (decision == 'suspendre') {
       this.dialogRef.componentInstance.confirmMessage = "Voulez vous vraiment suspendre la capacité ?"
     }
-
-
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if (decision == 'activer') {

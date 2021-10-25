@@ -357,6 +357,8 @@ td.icon-delete {
 }
 .mat-dialog-container {
   background-color: #444;
+  overflow: hidden !important;
+
 }
 button.delete-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.button--colored-teal:not([disabled]) {
   margin-right: 5px;

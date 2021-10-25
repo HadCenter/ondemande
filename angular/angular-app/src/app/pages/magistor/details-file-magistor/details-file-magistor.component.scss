@@ -365,6 +365,7 @@ td.icon-delete{
 .btn-delete .mat-icon:hover { color: red !important; }
 .mat-dialog-container {
   background-color: #444;
+  overflow: hidden !important;
 }
 button.delete-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.button--colored-teal:not([disabled])
  {

@@ -54,29 +54,29 @@ export class SidebarComponent extends BaseSidebarComponent {
     } else {
       this.menu = [
         { name: "Accueil", link: '/home', icon: 'list' },
-        { name: 'Clients', link: '/list-client', icon: 'list' },
-        {
-          name: 'Intégration', children: [
-            { name: 'Transport archivés', link: '/list-file-edi-archives' },
-            { name: 'Logistique archivés', link: '/logistique-archives' },
-          ],
-          icon: 'list',
-        },
-        {
-          name: "Facturation", children: [
-            { name: 'Facturation transport', link: '/list-transaction' },
-            { name: 'Facturation logistique', link: '/facturation-logistique' },
-          ]
-          , icon: 'list'
-        },
+//        { name: 'Clients', link: '/list-client', icon: 'list' },
+//         {
+//           name: 'Intégration', children: [
+//             { name: 'Transport archivés', link: '/list-file-edi-archives' },
+//             { name: 'Logistique archivés', link: '/logistique-archives' },
+//           ],
+//           icon: 'list',
+//         },
+//         {
+//           name: "Facturation", children: [
+//             { name: 'Facturation transport', link: '/list-transaction' },
+//             { name: 'Facturation logistique', link: '/facturation-logistique' },
+//           ]
+//           , icon: 'list'
+//         },
         { name: "Rapports", link: '/rapports', icon: 'list' },
-        {
-          name: 'Fichiers archivés', children: [
-            { name: 'Transport', link: '/list-file-edi' },
-            { name: 'Logistique', link: '/logistique' },
-          ],
-          icon: 'list',
-        },
+        // {
+        //   name: 'Fichiers archivés', children: [
+        //     { name: 'Transport archivés', link: '/list-file-edi-archives' },
+        //     { name: 'Logistique archivés', link: '/logistique-archives' },
+        //   ],
+        //   icon: 'list',
+        // },
       ];
     }
   }

@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp
+from .transactionFileService import sendTransactionParamsToExecutionServerInCsvFile
 
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
@@ -95,8 +96,9 @@ def genererMADFile(request):
 	jobs_to_start.append(madPlanJobList[2])
 	jobs_to_start.append(madPlanJobList[3])
 	jobs_to_start.append(madPlanJobList[4])
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transactionToInsert.id,end_date_plus_one = transactionToInsert.end_date.replace("-","/"),start_date = transactionToInsert.start_date.replace("-","/"),jobs_to_start =jobs_to_start)
-	startEngineOnMadFiles(madObjectToPost)
+
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transactionToInsert.id, jobs_to_start =jobs_to_start,destination_folder="to_generate")
+
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
@@ -115,8 +117,8 @@ def correctExceptionFile(request):
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[5])
 
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
-	startEngineOnMadFiles(madObjectToPost)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id, jobs_to_start =jobs_to_start,destination_folder="to_correct")
+
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
@@ -138,9 +140,8 @@ def correctMetadataFile(request):
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[6])
 
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id, jobs_to_start =jobs_to_start,destination_folder="to_correct")
 
-	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
@@ -162,9 +163,8 @@ def correctMADFile(request):
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[7])
 
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id, jobs_to_start =jobs_to_start,destination_folder="to_correct")
 
-	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
@@ -186,9 +186,8 @@ def correctLivraisonFile(request):
 
 	jobs_to_start.append(madPlanJobList[8])
 
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id, jobs_to_start =jobs_to_start,destination_folder="to_correct")
 
-	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
@@ -243,10 +242,9 @@ def correctAllFiles(request):
 	jobs_to_start.append(madPlanJobList[2])
 	jobs_to_start.append(madPlanJobList[3])
 	jobs_to_start.append(madPlanJobList[4])
-	print("jobs to start = ", jobs_to_start)
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
 
-	startEngineOnMadFiles(madObjectToPost)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id,jobs_to_start =jobs_to_start,destination_folder="to_correct")
+
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):

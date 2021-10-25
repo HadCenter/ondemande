@@ -54,7 +54,7 @@ export class SidebarComponent extends BaseSidebarComponent {
     } else {
       this.menu = [
         { name: "Accueil", link: '/home', icon: 'list' },
-        { name: 'Clients', link: '/list-client', icon: 'list' },
+//        { name: 'Clients', link: '/list-client', icon: 'list' },
 //         {
 //           name: 'Intégration', children: [
 //             { name: 'Transport archivés', link: '/list-file-edi-archives' },
@@ -70,13 +70,13 @@ export class SidebarComponent extends BaseSidebarComponent {
 //           , icon: 'list'
 //         },
         { name: "Rapports", link: '/rapports', icon: 'list' },
-        {
-          name: 'Fichiers archivés', children: [
-            { name: 'Transport archivés', link: '/list-file-edi-archives' },
-            { name: 'Logistique archivés', link: '/logistique-archives' },
-          ],
-          icon: 'list',
-        },
+        // {
+        //   name: 'Fichiers archivés', children: [
+        //     { name: 'Transport archivés', link: '/list-file-edi-archives' },
+        //     { name: 'Logistique archivés', link: '/logistique-archives' },
+        //   ],
+        //   icon: 'list',
+        // },
       ];
     }
   }

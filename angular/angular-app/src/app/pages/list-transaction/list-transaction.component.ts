@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject  } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListTransactionService } from './list-transaction.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl } from '@angular/forms';
 import { GenererTransactionService } from './dialog/generer-transaction.service';
+import * as Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-list-transaction',
   templateUrl: './list-transaction.component.html',
@@ -71,7 +76,7 @@ export class ListTransactionComponent implements OnInit {
         }
       }
     });
-    // check localstorage if the user come from another page 
+    // check localstorage if the user come from another page
 
     if (JSON.parse(localStorage.getItem('ws'))) {
       if (JSON.parse(localStorage.getItem('ws')).Running_Jobs){
@@ -84,11 +89,7 @@ export class ListTransactionComponent implements OnInit {
           this.showJobRun = true;
         }
       }
-  
-      
     }
-
-
   }
   getColor(ch) {
     if (ch === 'En attente') {
@@ -106,12 +107,15 @@ export class ListTransactionComponent implements OnInit {
   }
 
   public openDialog() {
-    const dialogRef = this.dialog.open(DailogGenerateTransaction);
+    const dialogRef = this.dialog.open(DailogGenerateTransaction,{
+      data: {
+        copy_transactions : this.copy_transactions
+      }
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
         this.actualiser();
       }
-
     });
   }
   public actualiser() {
@@ -275,6 +279,7 @@ export class ListTransactionComponent implements OnInit {
   styleUrls: ['dialog/generer-transaction.component.scss']
 })
 export class DailogGenerateTransaction {
+  public snackAction = 'Ok';
   maxDate: Date;
   showloader = false;
   clicked = false;
@@ -282,18 +287,20 @@ export class DailogGenerateTransaction {
     start_date: new FormControl(),
     end_date: new FormControl()
   });
+  receivedTransactionsFromParentComponent: any = [];
 
   constructor(
     public dialogRef: MatDialogRef<DailogGenerateTransaction>,
-    private service_genererTransaction: GenererTransactionService
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private service_genererTransaction: GenererTransactionService,
+    private _snackBar: MatSnackBar,
   ) {
     this.maxDate = new Date();
     this.maxDate.setDate(this.maxDate.getDate() - 1);
+    this.receivedTransactionsFromParentComponent = data
   }
   ngOnInit(): void {
   }
-
-
   onNoclick() {
     this.dialogRef.close();
   }
@@ -304,8 +311,31 @@ export class DailogGenerateTransaction {
     var end_date = this.toJSONLocal(this.range.value.end_date);
     const formData = new FormData();
     formData.append('start_date', start_date);
-    formData.append('end_date', end_date);
-    this.service_genererTransaction.genererTransaction(formData).subscribe(
+    formData.append('end_date',end_date);
+    console.warn("start_date =",start_date);
+    console.warn("end_date =",end_date);
+    const start = moment(start_date, 'YYYY-MM-DD');
+    const end   = moment(end_date, 'YYYY-MM-DD');
+    const rangeTransaction = moment.range(start, end);
+    var rangeExist = false;
+    this.receivedTransactionsFromParentComponent.copy_transactions.forEach(element => {
+      if (element.statut == "En attente")
+      {
+         var formatStartDate = element.start_date.split("-").reverse().join("-");
+         var formatEndDate = element.end_date.split("-").reverse().join("-");
+         var rangeElement = moment.range(formatStartDate, formatEndDate);
+         if (rangeElement.overlaps(rangeTransaction, { adjacent: true })){
+           rangeExist = true;
+         }
+      }
+    });
+    if (rangeExist)
+    {
+        this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
+        this.showloader = false;
+        this.dialogRef.close('submit');
+    }else{
+     this.service_genererTransaction.genererTransaction(formData).subscribe(
       (res) => {
         this.showloader = false;
         console.log(res);
@@ -315,8 +345,16 @@ export class DailogGenerateTransaction {
         this.showloader = false;
         console.log(err);
       }
-    );
-
+     );
+    }
+  }
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 4500,
+      // verticalPosition: 'bottom',
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
   }
   // convertir les dates en une chaîne de date conviviale MySQL
   toJSONLocal(date) {

@@ -65,6 +65,13 @@
             <td class="user-info mdl-data-table__cell--non-numeric">{{ row.name }}</td>
             <td class="user-info mdl-data-table__cell--non-numeric">{{ row.reportType }}</td>
             <td class="user-info mdl-data-table__cell--non-numeric">
+              <button (click)="refreshReport(row)" [disabled]="btnClicked"
+              matTooltip="Actualiser"
+              matTooltipPosition="before"
+              class="mdl-button mdl-js-button  button--colored-teal ">
+              <i class="material-icons ">refresh</i>
+              
+            </button>
               <button (click)="showDetailReport(row)" [disabled]="btnClicked"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Afficher
               </button>

@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.http.response import HttpResponseNotFound
 from rest_framework import status
 import jsonpickle
 from django.http import HttpResponse
@@ -79,3 +80,29 @@ def getCapacityState(request):
         return HttpResponse(json.dumps(response['properties']['state']), content_type="application/json")
     else:
         return Response({'status': 'could not get details '})
+
+@api_view(['GET'])
+def getRefreshState(request,id):
+    baseConfigInstance = BaseConfig()
+    powerBIEmbedServiceInstance = PbiEmbedService()
+    refresh_url = f'https://api.powerbi.com/v1.0/myorg/groups/{baseConfigInstance.WORKSPACE_ID}/datasets/{id}/refreshes'
+    api_response = requests.get(refresh_url, headers=powerBIEmbedServiceInstance.get_request_header())
+    if( str(api_response.status_code).startswith("4")):
+        return HttpResponseNotFound(api_response, content_type="application/json")
+    else:
+        return HttpResponse(api_response, content_type="application/json")
+
+@api_view(['POST'])
+def refreshReport(request,id):
+    baseConfigInstance = BaseConfig()
+    powerBIEmbedServiceInstance = PbiEmbedService()
+    refresh_url = f'https://api.powerbi.com/v1.0/myorg/groups/{baseConfigInstance.WORKSPACE_ID}/datasets/{id}/refreshes'
+    api_response = requests.post(refresh_url, headers=powerBIEmbedServiceInstance.get_request_header())
+    print(api_response)
+    if( str(api_response.status_code).startswith("4")):
+        print("ERROOOOR WORKEEEED")
+        return HttpResponseNotFound(api_response, content_type="application/json")
+    else:
+        print("ERROOOOR NOOOOOOOOOOOOOOOT WORKEEEED")
+        return HttpResponse(api_response, content_type="application/json")
+

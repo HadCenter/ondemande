@@ -7,5 +7,8 @@ urlpatterns = [
     path("resume/", views.resume, name = "resume-capacity" ),
     path("suspend/", views.suspend, name = "suspend-capacity" ),
     path("getCapacityState/", views.getCapacityState, name = "get-capacity-state" ),
+    path("refreshReport/<str:id>", views.refreshReport, name = "refresh-report" ),
+    path("getRefreshState/<str:id>", views.getRefreshState, name = "refresh-report" ),
+
 
 ]

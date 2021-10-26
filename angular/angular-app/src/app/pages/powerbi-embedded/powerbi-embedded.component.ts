@@ -193,4 +193,11 @@ export class PowerbiEmbeddedComponent implements OnInit {
     console.log(row.id);
     this.router.navigate(['/details-rapport', row.id])
   }
+
+  
+  public refreshReport(row) {
+    this.pbiService.refreshDataset(row.datasetId).subscribe(res => console.log(res),
+    err => console.error(err));
+  }
+
 }

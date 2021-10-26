@@ -27,6 +27,10 @@ export class PowerbiEmbeddedService {
     return this.httpClient.get<any>(`${this.url}/getCapacityState`);
   }
 
+  refreshDataset(id : string): Observable<any> {
+    return this.httpClient.post<any>(`${this.url}/refreshReport/${id}`,{});
+  }
+
   public getAdvancedHeaders() {
     return [
         {

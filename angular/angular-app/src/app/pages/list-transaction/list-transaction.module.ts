@@ -14,6 +14,7 @@ import { LoaderModule } from 'app/components/loader/loader.module';
 import { MatIconModule } from '@angular/material/icon';
 import { Mypipe } from './mypipe';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [ListTransactionComponent, DailogGenerateTransaction],
   imports: [
@@ -27,7 +28,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     MatDatepickerModule,
     MatNativeDateModule,
     LoaderModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule,
 
   ],
   entryComponents: [

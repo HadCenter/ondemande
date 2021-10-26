@@ -196,7 +196,10 @@ export class PowerbiEmbeddedComponent implements OnInit {
 
   
   public refreshReport(row) {
-    this.pbiService.refreshDataset(row.datasetId).subscribe(res => console.log(res),
+    this.openSnackBar("Actualisation du rapport en cours. ", "Ok");
+
+    this.pbiService.refreshDataset(row.datasetId).subscribe(res =>     
+      this.openSnackBar("Début de l'actualisation du rapport. ", "Ok"),
     err => console.error(err));
   }
 

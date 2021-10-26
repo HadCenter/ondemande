@@ -65,7 +65,7 @@
             <td class="user-info mdl-data-table__cell--non-numeric">{{ row.name }}</td>
             <td class="user-info mdl-data-table__cell--non-numeric">{{ row.reportType }}</td>
             <td class="user-info mdl-data-table__cell--non-numeric">
-              <button (click)="refreshReport(row)" [disabled]="btnClicked"
+              <button *ngIf="(user.role == 'SuperAdmin')" (click)="refreshReport(row)" [disabled]="btnClicked"
               matTooltip="Actualiser"
               matTooltipPosition="before"
               class="mdl-button mdl-js-button  button--colored-teal ">

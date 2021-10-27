@@ -250,7 +250,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.messages.subscribe(msg => {
       console.log("Response from websocket: ", JSON.parse(msg));
       localStorage.setItem('wsEdi', JSON.stringify(JSON.parse(msg)));
-      if(JSON.parse(msg).stateEdi === "\"table ediFile updated\"")
+      if(JSON.parse(msg).stateEdi === "table ediFile updated")
       {
         this.actualiser();
       }

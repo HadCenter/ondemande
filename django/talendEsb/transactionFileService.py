@@ -22,5 +22,5 @@ def listToString(s):
 
 def updateMetaDataFileInTableTransactionsLivraison(transactionId, transactionStatus):
     transaction = TransactionsLivraison.objects.get(pk=transactionId)
-    transaction.status = transactionStatus
+    transaction.statut = transactionStatus
     transaction.save()

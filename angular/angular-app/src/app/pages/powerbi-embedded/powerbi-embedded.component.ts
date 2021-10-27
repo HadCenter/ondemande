@@ -51,7 +51,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
             if (this.capacityState == 'Paused' || this.capacityState == 'Succeeded') {
               clearInterval(interval);
               this.btnClicked = false;
-              this.openSnackBar("la capacité de Power BI a été mis à jour avec succès. ", "Ok");
+              this.openSnackBar("la capacité de Power BI a été mis à jour avec succès. ", "Ok", 7000);
               console.log("interval clearerd");
             }
           });
@@ -61,9 +61,9 @@ export class PowerbiEmbeddedComponent implements OnInit {
     this.getReports();
     this.authService.userData.subscribe(user => this.user = user);
   }
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string, duration: number ) {
     this._snackBar.open(message, action, {
-      duration: 5000,
+      duration: duration,
       verticalPosition: 'top',
       horizontalPosition: 'center',
     });
@@ -71,7 +71,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
   public suspendreCapacite() {
     let interval;
     this.btnClicked = true;
-    this.openSnackBar("Suspension de la capacité de Power BI en cours. ", "Ok");
+    this.openSnackBar("Suspension de la capacité de Power BI en cours. ", "Ok", 5000);
     this.pbiService.suspendCapacity().subscribe(res => {
       //console.log(res)
       interval = setInterval(() => {
@@ -81,14 +81,14 @@ export class PowerbiEmbeddedComponent implements OnInit {
           if (this.capacityState == 'Paused') {
             clearInterval(interval);
             this.btnClicked = false;
-            this.openSnackBar("la capacité de Power BI a été mis en pause avec succès. ", "Ok");
+            this.openSnackBar("la capacité de Power BI a été mis en pause avec succès. ", "Ok", 7000);
             console.log("interval clearerd");
           }
         });
       }, 5000);
     },
       err => {
-        this.openSnackBar("Une erreur est survenue, veuillez réessayer. ", "Ok");
+        this.openSnackBar("Une erreur est survenue, veuillez réessayer. ", "Ok", 5000);
         this.btnClicked = false;
       });
 
@@ -97,7 +97,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
   public activerCapacite() {
     let interval;
     this.btnClicked = true;
-    this.openSnackBar("Activation de la capacité de Power BI en cours. ", "Ok");
+    this.openSnackBar("Activation de la capacité de Power BI en cours. ", "Ok", 5000);
     this.pbiService.resumeCapacity().subscribe(res => {//console.log(res);
       interval = setInterval(() => {
         this.pbiService.getCapacityState().subscribe(res => {
@@ -106,7 +106,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
           if (this.capacityState == 'Succeeded') {
             clearInterval(interval);
             this.btnClicked = false;
-            this.openSnackBar("la capacité de Power BI a démarré avec succès. ", "Ok");
+            this.openSnackBar("la capacité de Power BI a démarré avec succès. ", "Ok", 7000);
             console.log("interval clearerd");
           }
         });
@@ -114,7 +114,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
         , 15000);
     },
       err => {
-        this.openSnackBar("Une erreur est survenue, veuillez réessayer. ", "Ok");
+        this.openSnackBar("Une erreur est survenue, veuillez réessayer. ", "Ok", 5000);
         this.btnClicked = false;
       }
     );
@@ -177,14 +177,26 @@ export class PowerbiEmbeddedComponent implements OnInit {
   }
 
   public getReports() {
+    let wait;
     this.pbiService.getAllReports()
       .subscribe(res => {
         this.reports = res.value;
-        console.log(this.reports);
-        this.copyReportsPerPagination = this.reports;
-        this.numPage = Math.ceil(res.value.length / this.countPerPage);
-        this.show = false;
-        this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        this.reports.shift(); //supprime le rapprt : Report Usage Metrics Report qui crée 
+        wait = new Promise<void>((resolve, reject) => { this.reports.forEach((element, index, array) => {
+          this.pbiService.getDatasetState(element.datasetId).subscribe(res => {
+            element.refreshDate = res.value[0].endTime;//retourne la derniere actualisation
+            if (index === array.length -1) resolve();
+          });
+          
+        }) });  
+        wait.then(() => {
+          console.log(this.reports);
+          this.copyReportsPerPagination = this.reports;
+          this.numPage = Math.ceil(res.value.length / this.countPerPage);
+          this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+          this.show = false;
+        });
+        
       },
         error => console.log(error));
   }
@@ -194,13 +206,37 @@ export class PowerbiEmbeddedComponent implements OnInit {
     this.router.navigate(['/details-rapport', row.id])
   }
 
-  
-  public refreshReport(row) {
-    this.openSnackBar("Actualisation du rapport en cours. ", "Ok");
 
-    this.pbiService.refreshDataset(row.datasetId).subscribe(res =>     
-      this.openSnackBar("Début de l'actualisation du rapport. ", "Ok"),
-    err => console.error(err));
+  public refreshReport(row) {
+    let interval, refreshState;
+    this.openSnackBar("Actualisation du rapport en cours. ", "Ok", 5000);
+
+    this.pbiService.refreshDataset(row.datasetId).subscribe(data =>{
+      interval = setInterval(() => {
+        this.pbiService.getDatasetState(row.datasetId).subscribe(res => {
+          refreshState = res.value[0].status;
+          console.log(refreshState);
+          if (refreshState == 'Completed') {
+            clearInterval(interval);
+            row.refreshDate = res.value[0].endTime;
+            this.openSnackBar("Le rapport est actualisé avec succès. ", "Ok", 3600000);
+          }else if(refreshState == 'Failed') {
+            clearInterval(interval);
+            row.refreshDate = res.value[0].endTime;
+            this.openSnackBar("Erreur lors de l'actualisation du rapport,réessayer plus tard.", "Ok", 10000);
+          }
+        });
+      }
+        , 40000);
+    },
+      err => this.openSnackBar("Erreur lors de l'actualisation du rapport,réessayer plus tard.", "Ok", 5000));
+
+      
+  }
+
+  public refreshBD() {
+    this.openSnackBar("Actualisation du rapport en cours. ", "Ok", 5000);
+
   }
 
 }

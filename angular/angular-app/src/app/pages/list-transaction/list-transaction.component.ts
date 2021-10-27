@@ -58,38 +58,12 @@ export class ListTransactionComponent implements OnInit {
   listenToWebSocket() {
     this.tablesService.messages.subscribe(msg => {
       console.log("Response from websocket: ", JSON.parse(msg));
-      // if there is a transaction job on Run
-      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0 && ((JSON.parse(msg).Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction"))).length > 0) {
-        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
-        this.showJobRun = true;
-      }
-      // if all runing job are different from transaction
-      else if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
-        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
-      }
-      // if there is a job who ended refresh the page
-      else if (JSON.parse(msg).jobEnded) {
-        if ((JSON.parse(msg).jobEnded).includes("Talend Job Transaction Mad Ended")) {
-          localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
-          this.showJobRun = false;
-          this.actualiser();
-        }
+      localStorage.setItem('wsTransaction', JSON.stringify(JSON.parse(msg)));
+      if(JSON.parse(msg).stateTransaction === "\"table transactionFile updated\"")
+      {
+        this.actualiser();
       }
     });
-    // check localstorage if the user come from another page
-
-    if (JSON.parse(localStorage.getItem('ws'))) {
-      if (JSON.parse(localStorage.getItem('ws')).Running_Jobs){
-        if((JSON.parse(localStorage.getItem('ws')).Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
-          this.showJobRun = true;
-        }
-      }
-      else if (JSON.parse(localStorage.getItem('ws')).state.Running_Jobs){
-        if((JSON.parse(localStorage.getItem('ws')).state.Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
-          this.showJobRun = true;
-        }
-      }
-    }
   }
   getColor(ch) {
     if (ch === 'En attente') {

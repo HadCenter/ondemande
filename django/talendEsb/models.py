@@ -1,5 +1,8 @@
 from django.db import models
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 # Create your models here.
 
 class SendMadPostProcessPostObject:
@@ -42,3 +45,16 @@ class RabbitMqMessagesForJobToStart:
         self.webhook = webhook
         self.payloadToSendToTalend = payloadToSendToTalend
         self.environnement = environnement
+
+@receiver(post_save, sender=TransactionsLivraison)
+def send_message_to_frontend_when_transactionFile_updated(sender, instance=None, created=False, **kwargs):
+    if not created:
+        messageToSend = {"stateEdi": "table ediFile not updated", "stateTransaction" : "table transactionFile updated"}
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'notifications_room_group',
+            {
+                'type': 'send_message_to_frontend',
+                'message': messageToSend
+            }
+        )

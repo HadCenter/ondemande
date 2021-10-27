@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp
-from .transactionFileService import sendTransactionParamsToExecutionServerInCsvFile
+from .transactionFileService import sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison
+from django.http import JsonResponse
 
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
@@ -72,15 +73,6 @@ madPlanJobList = ["ECOLOTRANS_URBANTZ_TO_HUB_SANS_MAD_OTHERS_ONDEMAND",
 				  "ECOLOTRANS_URBANTZ_TO_HUB_MAD_CORRECTION",
 				  "ECOLOTRANS_URBANTZ_LIVRAISON_FILE_CORRECTION" ]
 
-# madPlanJobList = ["SANS_MAD_OTHERS_v2",
-# 				  "SANS_MAD_RUNGIS_ONDEMAND_v2",
-# 				  "MAD_DB_DETAILED_v2",
-# 				  "ROUND_CALCULATE_NEW_RULE_QUANTITY_v2",
-# 				  "DIAGNOSTIC_LIVRAISON_QUANTITY_v2",
-# 				  "URBANTZ_CORRECTION_EXCEPTIONS_v2",
-# 				  "URBANTZ_CORRECTION_FACTURATION_VALUES_ONDEMAND_v2",
-# 				  "URBANTZ_TO_HUB_MAD_CORRECTION_v2",
-# 				  "URBANTZ_LIVRAISON_FILE_CORRECTION_v2" ]
 @api_view(['POST'])
 def integrerMADFile(request):
 	transaction_id = request.data['transaction_id']
@@ -296,4 +288,12 @@ def getSingleTransactionMadLivraison (request,pk):
 	t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp,created_at = transactionDB.created_at)
 
 	return HttpResponse(jsonpickle.encode(t,unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def updateMetaDataFileInTableTransactionsLivraisonWS(request):
+    transactionId = request.data['transactionId']
+    transactionStatus =  request.data['transactionStatus']
+
+    updateMetaDataFileInTableTransactionsLivraison(transactionId=transactionId, transactionStatus=transactionStatus)
+    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
 

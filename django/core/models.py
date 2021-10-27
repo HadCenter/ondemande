@@ -287,7 +287,7 @@ def send_message_to_frontend_when_edifile_updated(sender, instance=None, created
         ediFile_obj = instance
         print(ediFile_obj)
         #ChatConsumer.state = "DB updated"
-        messageToSend = "table ediFile updated"
+        messageToSend = {"stateEdi": "table ediFile updated", "stateTransaction" : "table transactionFile not updated"}
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'notifications_room_group',

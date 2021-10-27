@@ -11,8 +11,9 @@ urlpatterns = [
     path('correctMADFile', views.correctMADFile),
     path('correctLivraisonFile', views.correctLivraisonFile),
     path('correctAllFiles', views.correctAllFiles),
-
     path('getAllTransactionMadLivraison', views.getAllTransactionMadLivraison),
     path('getSingleTransactionMadLivraison/<int:pk>', views.getSingleTransactionMadLivraison),
-    path('startEngineOnMagistorFiles', views.startEngineOnMagistorFiles)
+    path('startEngineOnMagistorFiles', views.startEngineOnMagistorFiles),
+    path('updateMetaDataFileInTableTransactionsLivraison', views.updateMetaDataFileInTableTransactionsLivraisonWS, name="updateMetaDataFileInTableTransactionsLivraison"),
+
 ]

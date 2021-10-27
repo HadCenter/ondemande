@@ -106,3 +106,11 @@ def refreshReport(request,id):
         print("ERROOOOR NOOOOOOOOOOOOOOOT WORKEEEED")
         return HttpResponse(api_response, content_type="application/json")
 
+@api_view(['POST'])
+def refreshDatabase(request):
+	return refreshDatabaseWithData(request.data)
+
+def refreshDatabaseWithData(data):
+
+	requests.post("", json=data)
+	return Response({"message": "ok"}, status=status.HTTP_200_OK)

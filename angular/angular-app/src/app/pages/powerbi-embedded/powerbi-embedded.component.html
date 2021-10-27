@@ -32,6 +32,12 @@
       <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
       </base-pagination>
       <!-- <p>{{ capacityState }}</p> -->
+      <button *ngIf="(user.role == 'SuperAdmin') && capacityState" (click)="refreshBD()" [disabled]="btnClicked"
+              matTooltip="Actualisation de la base de données"
+              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">
+              <!-- <i class="material-icons ">refresh</i> -->
+              Actualiser
+            </button>
       <button *ngIf="(user.role == 'SuperAdmin') && (capacityState == 'Paused' || capacityState == 'Resuming' )"
         (click)="openConfirmDialog('activer')"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
@@ -64,8 +70,10 @@
           <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
             <td class="user-info mdl-data-table__cell--non-numeric">{{ row.name }}</td>
             <td class="user-info mdl-data-table__cell--non-numeric">{{ row.reportType }}</td>
+            <td class="user-info mdl-data-table__cell--non-numeric">{{ row.refreshDate | date:"dd/MM/yyyy 'à' HH:mm"  }}</td>
+
             <td class="user-info mdl-data-table__cell--non-numeric">
-              <button *ngIf="(user.role == 'SuperAdmin')" (click)="refreshReport(row)" [disabled]="btnClicked"
+              <button (click)="refreshReport(row)" [disabled]="btnClicked"
               matTooltip="Actualiser"
               matTooltipPosition="before"
               class="mdl-button mdl-js-button  button--colored-teal ">

@@ -31,6 +31,10 @@ export class PowerbiEmbeddedService {
     return this.httpClient.post<any>(`${this.url}/refreshReport/${id}`,{});
   }
 
+  getDatasetState(id : string): Observable<any> {
+    return this.httpClient.get<any>(`${this.url}/getRefreshState/${id}`);
+  }
+
   public getAdvancedHeaders() {
     return [
         {
@@ -41,10 +45,10 @@ export class PowerbiEmbeddedService {
             name: 'Type',
 
         },
-        // {
-        //     name: 'Profile',
+        {
+            name: 'Dernière actualisation',
 
-        // },
+        },
         // {
         //     name: 'Statut',
 

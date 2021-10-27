@@ -5,6 +5,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import * as Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
 
 
 export interface MouseEvent {
@@ -18,6 +22,7 @@ export interface MouseEvent {
   styleUrls: ['./details-transaction.component.scss']
 })
 export class DetailsTransactionComponent extends UpgradableComponent implements OnInit {
+  copy_transactions:any=[];
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   fichierException: any = [];
   fichierLivraison: any = [];
@@ -187,7 +192,33 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.showLoaderMetadataFile = false;
       this.showLoaderMadFile = false;
     })
+    this.getTransactions();
 
+  }
+  public getTransactions() {
+    this.service.getAllTransactions()
+      .subscribe(res => {
+        this.copy_transactions=res;
+        this.formatDates();
+      },
+        error => {
+          console.log(error)
+        });
+  }
+
+  formatDates(){
+    this.copy_transactions.forEach(element => {
+      const creatAt = (element.created_at.substr(0, 19)).split('-');
+      const start = (element.start_date.substr(0, 19)).split('-');
+      const end = ((element.end_date.substr(0, 19)).split('-'));
+      var thisDate = creatAt[2].split('T');
+      var thisDate2 = start[2].split('T');
+      var thisDate3 = end[2].split('T');
+      element.end_date = [thisDate3[0], end[1], end[0]].join("-");
+      element.start_date = [thisDate2[0], start[1], start[0]].join("-");
+      element.created_at = [thisDate[0], creatAt[1], creatAt[0]].join("-");
+      element.created_at = [element.created_at, thisDate[1]].join(' à ')
+      });
   }
 
   selectDeleteRow(row, typeFile) {
@@ -1163,6 +1194,33 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 * Correct the file
 */
   correctionFile(index) {
+    const startDate = (this.transaction.start_date.substr(0, 19)).split('-');
+    const endDate = ((this.transaction.end_date.substr(0, 19)).split('-'));
+    var thisDate2 = startDate[2].split('T');
+    var thisDate3 = endDate[2].split('T');
+    const end_date = [thisDate3[0], endDate[1], endDate[0]].join("-");
+    const start_date = [thisDate2[0], startDate[1], startDate[0]].join("-");
+    var formatStartDate = start_date.split("-").reverse().join("-");
+    var formatEndDate = end_date.split("-").reverse().join("-");
+    const start = moment(formatStartDate, 'YYYY-MM-DD');
+    const end   = moment(formatEndDate, 'YYYY-MM-DD');
+    const rangeTransaction = moment.range(start, end);
+    var rangeExist = false;
+    this.copy_transactions.forEach(element => {
+      if (element.statut == "En attente")
+      {
+         var formatStartDate = element.start_date.split("-").reverse().join("-");
+         var formatEndDate = element.end_date.split("-").reverse().join("-");
+         var rangeElement = moment.range(formatStartDate, formatEndDate);
+         if (rangeElement.overlaps(rangeTransaction, { adjacent: true })){
+           rangeExist = true;
+         }
+      }
+    });
+    if (rangeExist)
+    {
+        this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
+    }else{
     this.hideUiSelectionOnCorrection();  //hide ui selection on correction
     if (index == "livraison") {  // correction file livraison
       this.LAST_EDITABLE_ROW = this.dataSource.data.length - 1;
@@ -1263,6 +1321,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.router.navigate(['/list-transaction']);
         }
       })
+    }
     }
   }
 

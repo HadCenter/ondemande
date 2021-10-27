@@ -31,5 +31,8 @@ public correctExceptionFile(data): Observable<any> {
 public correctLivraisonFile(data): Observable<any> {
   return  this.http.post(`${this.url1}/correctLivraisonFile`,data);
 }
+public getAllTransactions(): Observable<any> {
+  return this.http.get(`${this.url1}/getAllTransactionMadLivraison`);
+}
 
 }

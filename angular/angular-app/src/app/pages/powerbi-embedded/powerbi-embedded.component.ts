@@ -61,7 +61,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
     this.getReports();
     this.authService.userData.subscribe(user => this.user = user);
   }
-  openSnackBar(message: string, action: string, duration: number ) {
+  openSnackBar(message: string, action: string, duration: number) {
     this._snackBar.open(message, action, {
       duration: duration,
       verticalPosition: 'top',
@@ -175,31 +175,52 @@ export class PowerbiEmbeddedComponent implements OnInit {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
+  //Get reports and wait for actualisation date than show data
+  // public getReports() { 
+  //   let wait;
+  //   this.pbiService.getAllReports()
+  //     .subscribe(res => {
+  //       this.reports = res.value;
+  //       this.reports.shift(); //supprime le rapprt : Report Usage Metrics Report qui crée 
+  //       wait = new Promise<void>((resolve, reject) => { this.reports.forEach((element, index, array) => {
+  //         this.pbiService.getDatasetState(element.datasetId).subscribe(res => {
+  //           element.refreshDate = res.value[0].endTime;//retourne la derniere actualisation
+  //           if (index === array.length -1) resolve();
+  //         });
 
+  //       }) });  
+  //       wait.then(() => {
+  //         console.log(this.reports);
+  //         this.copyReportsPerPagination = this.reports;
+  //         this.numPage = Math.ceil(res.value.length / this.countPerPage);
+  //         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+  //         this.show = false;
+  //       });
+
+  //     },
+  //       error => console.log(error));
+  // }
   public getReports() {
     let wait;
     this.pbiService.getAllReports()
       .subscribe(res => {
         this.reports = res.value;
         this.reports.shift(); //supprime le rapprt : Report Usage Metrics Report qui crée 
-        wait = new Promise<void>((resolve, reject) => { this.reports.forEach((element, index, array) => {
+        this.reports.forEach((element, index, array) => {
           this.pbiService.getDatasetState(element.datasetId).subscribe(res => {
             element.refreshDate = res.value[0].endTime;//retourne la derniere actualisation
-            if (index === array.length -1) resolve();
+            console.log(element.refreshDate);
           });
-          
-        }) });  
-        wait.then(() => {
-          console.log(this.reports);
-          this.copyReportsPerPagination = this.reports;
-          this.numPage = Math.ceil(res.value.length / this.countPerPage);
-          this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
-          this.show = false;
         });
-        
+        console.log(this.reports);
+        this.copyReportsPerPagination = this.reports;
+        this.numPage = Math.ceil(res.value.length / this.countPerPage);
+        this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        this.show = false;
       },
         error => console.log(error));
   }
+
 
   public showDetailReport(row) {
     console.log(row.id);
@@ -211,7 +232,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
     let interval, refreshState;
     this.openSnackBar("Actualisation du rapport en cours. ", "Ok", 5000);
 
-    this.pbiService.refreshDataset(row.datasetId).subscribe(data =>{
+    this.pbiService.refreshDataset(row.datasetId).subscribe(data => {
       interval = setInterval(() => {
         this.pbiService.getDatasetState(row.datasetId).subscribe(res => {
           refreshState = res.value[0].status;
@@ -220,7 +241,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
             clearInterval(interval);
             row.refreshDate = res.value[0].endTime;
             this.openSnackBar("Le rapport est actualisé avec succès. ", "Ok", 3600000);
-          }else if(refreshState == 'Failed') {
+          } else if (refreshState == 'Failed') {
             clearInterval(interval);
             row.refreshDate = res.value[0].endTime;
             this.openSnackBar("Erreur lors de l'actualisation du rapport,réessayer plus tard.", "Ok", 10000);
@@ -231,11 +252,11 @@ export class PowerbiEmbeddedComponent implements OnInit {
     },
       err => this.openSnackBar("Erreur lors de l'actualisation du rapport,réessayer plus tard.", "Ok", 5000));
 
-      
+
   }
 
   public refreshBD() {
-    this.openSnackBar("Actualisation du rapport en cours. ", "Ok", 5000);
+    this.openSnackBar("La base de données ne peut pas être actualisé manuellement, réessayer plus tard. ", "Ok", 5000);
 
   }
 

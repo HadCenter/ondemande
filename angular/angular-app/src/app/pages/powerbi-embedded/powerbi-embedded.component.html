@@ -74,7 +74,10 @@
             <!-- <td class="user-info mdl-data-table__cell--non-numeric">{{ row.refreshDate | date: "dd/MM/yyyy 'à' HH:mm" }}</td> -->
 
             <td class="user-info mdl-data-table__cell--non-numeric">
-              <button (click)="refreshReport(row)" [disabled]="btnClicked"
+              <app-loader *ngIf="row.refreshState == 'Unknown'" class="loader row-loader" [width]="'100%'" [position]="'sticky'"
+              [height]="'150px'" [bg]="'transparant'" [show]="row.refreshState == 'Unknown'"></app-loader>
+  
+              <button (click)="refreshReport(row)" [disabled]="row.refreshState == 'Unknown'"
                 matTooltip="Dernière actualisation&#13;{{row.refreshDate | date: 'dd/MM/yyyy à HH:mm' }} "
                 matTooltipPosition="before" class="mdl-button mdl-js-button  button--colored-teal ">
                 <i class="material-icons ">refresh</i>

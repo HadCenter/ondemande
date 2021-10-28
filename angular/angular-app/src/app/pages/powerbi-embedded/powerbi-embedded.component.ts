@@ -209,6 +209,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
         this.reports.forEach((element, index, array) => {
           this.pbiService.getDatasetState(element.datasetId).subscribe(res => {
             element.refreshDate = res.value[0].endTime;//retourne la derniere actualisation
+            element.refreshState = res.value[0].status;
             console.log(element.refreshDate);
           });
         });
@@ -233,9 +234,11 @@ export class PowerbiEmbeddedComponent implements OnInit {
     this.openSnackBar("Actualisation du rapport en cours. ", "Ok", 5000);
 
     this.pbiService.refreshDataset(row.datasetId).subscribe(data => {
+      row.refreshState = "Unknown";
       interval = setInterval(() => {
         this.pbiService.getDatasetState(row.datasetId).subscribe(res => {
           refreshState = res.value[0].status;
+          row.refreshState = res.value[0].status;
           console.log(refreshState);
           if (refreshState == 'Completed') {
             clearInterval(interval);

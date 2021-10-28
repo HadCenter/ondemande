@@ -310,12 +310,13 @@ span.border{
 border-radius: 10px 10px 10px 10px;
 }
 
-app-loader{
-
+app-loader.loader{
   z-index: 99999;
   left: 50%;
   position: absolute;
 }
+
+
 app-loader.loader div div.child{
 top:17%
 }
@@ -323,7 +324,10 @@ app-loader.loader div div.child img{
 width: 30px;
 height: 30px;
 }
-
+app-loader.row-loader{
+  left: 20%;
+  top: 15%;
+}
 .mat-tooltip  {
   white-space: pre-line;
 }

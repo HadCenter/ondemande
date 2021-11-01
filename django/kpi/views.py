@@ -74,7 +74,7 @@ def getNumberOfAnomaliesPerDate(request):
 
 @api_view(['GET'])
 def getNumberOfAnomaliesPerDateAll(request):
-    historyanomalies = HistoryAnomaliesEdiFiles.objects.all().prefetch_related("anomalie").prefetch_related("edi_file")
+    historyanomalies = HistoryAnomaliesEdiFiles.objects.order_by('execution_time').prefetch_related("anomalie").prefetch_related("edi_file")
     mapDateToNumberOfAnomalies = {}
     for anomaly in historyanomalies:
         if anomaly.execution_time.strftime("%m-%d-%Y %H:%M") not in mapDateToNumberOfAnomalies.keys():

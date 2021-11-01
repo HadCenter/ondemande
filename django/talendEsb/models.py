@@ -49,7 +49,11 @@ class RabbitMqMessagesForJobToStart:
 @receiver(post_save, sender=TransactionsLivraison)
 def send_message_to_frontend_when_transactionFile_updated(sender, instance=None, created=False, **kwargs):
     if not created:
-        messageToSend = {"stateEdi": "table ediFile not updated", "stateTransaction" : "table transactionFile updated"}
+        messageToSend = {
+            "stateEdi": "table ediFile not updated",
+            "stateTransaction" : "table transactionFile updated",
+            "stateLogistic": "table logisticFile not updated"
+        }
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'notifications_room_group',

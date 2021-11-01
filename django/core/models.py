@@ -282,12 +282,11 @@ class TransactionFileContentAndOptions:
 @receiver(post_save, sender=EDIfile)
 def send_message_to_frontend_when_edifile_updated(sender, instance=None, created=False, **kwargs):
     if not created:
-        print("ediFile updated")
-        # ediFile object updated
-        ediFile_obj = instance
-        print(ediFile_obj)
-        #ChatConsumer.state = "DB updated"
-        messageToSend = {"stateEdi": "table ediFile updated", "stateTransaction" : "table transactionFile not updated"}
+        messageToSend = {
+            "stateEdi": "table ediFile updated",
+            "stateTransaction" : "table transactionFile not updated",
+            "stateLogistic": "table logisticFile not updated"
+        }
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'notifications_room_group',
@@ -296,4 +295,19 @@ def send_message_to_frontend_when_edifile_updated(sender, instance=None, created
                 'message': messageToSend
             }
         )
-        print("done")
+@receiver(post_save, sender=LogisticFile)
+def send_message_to_frontend_when_logisticfile_updated(sender, instance=None, created=False, **kwargs):
+    if not created:
+        messageToSend = {
+            "stateEdi": "table ediFile not updated",
+            "stateTransaction" : "table transactionFile not updated",
+            "stateLogistic": "table logisticFile updated"
+        }
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'notifications_room_group',
+            {
+                'type': 'send_message_to_frontend',
+                'message': messageToSend
+            }
+        )

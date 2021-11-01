@@ -36,7 +36,7 @@ from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
 from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows, updateHistoryOfAnnomalies, updateMetaDataFileInTableCoreEDIFile
-from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile
+from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile, updateMetaDataFileInTableCoreLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -529,4 +529,12 @@ def updateMetaDataFileInTableCoreEDIFileWS(request):
     ediFileStatus =  request.data['ediFileStatus']
 
     updateMetaDataFileInTableCoreEDIFile(ediFileName=ediFileName, ediFileStatus=ediFileStatus)
+    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def updateMetaDataFileInTableCoreLogisticFileWS(request):
+    logisticFileId = request.data['logisticFileId']
+    logisticFileStatus = request.data['logisticFileStatus']
+
+    updateMetaDataFileInTableCoreLogisticFile(logisticFileId=logisticFileId, logisticFileStatus=logisticFileStatus)
     return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)

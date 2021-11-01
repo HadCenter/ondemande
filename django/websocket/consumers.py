@@ -6,7 +6,11 @@ import jsonpickle
 
 
 class ChatConsumer(WebsocketConsumer):
-    state = {"stateEdi": "table ediFile not updated", "stateTransaction" : "table transactionFile not updated"}
+    state = {
+        "stateEdi": "table ediFile not updated",
+        "stateTransaction" : "table transactionFile not updated",
+        "stateLogistic" : "table logisticFile not updated"
+    }
     def connect(self):
         self.room_name = 'notifications_room'
         self.room_group_name = self.room_name+"_group"

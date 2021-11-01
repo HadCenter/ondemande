@@ -44,9 +44,18 @@ export class MagistorComponent implements OnInit {
   public advancedTable = [];
 
   ngOnInit(): void {
-    /*this.fichiers = this.tablesService.advanceTableData;
-    this.advancedTable = this.fichiers*/
+    this.listenToWebSocket();
     this.getFiles();
+  }
+  listenToWebSocket() {
+    this.tablesService.messages.subscribe(msg => {
+      console.log("Response from websocket: ", JSON.parse(msg));
+      localStorage.setItem('wslogistic', JSON.stringify(JSON.parse(msg)));
+      if(JSON.parse(msg).stateLogistic === "table logisticFile updated")
+      {
+        this.actualiser();
+      }
+    });
   }
   getColor(ch) {
     if (ch === 'En attente') {

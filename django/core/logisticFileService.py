@@ -204,6 +204,11 @@ def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
         LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
         return True
 
+def updateMetaDataFileInTableCoreLogisticFile(logisticFileId, logisticFileStatus):
+    logisticFile = LogisticFile.objects.get(pk=logisticFileId)
+    logisticFile.status = logisticFileStatus
+    logisticFile.save()
+
 
 
 

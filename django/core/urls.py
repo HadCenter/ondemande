@@ -29,6 +29,6 @@ urlpatterns = [
     path('downloadImportedLogisticFile', views.downloadImportedLogisticFileWS, name= "downloadImportedLogisticFile"),
     path('deleteNotValidateLogisticFile', views.deleteNotValidateLogisticFileWS, name= "deleteNotValidateLogisticFile"),
     path('updateMetaDataFileInTableCoreEDIFile', views.updateMetaDataFileInTableCoreEDIFileWS, name= "updateMetaDataFileInTableCoreEDIFile"),
-
+    path('updateMetaDataFileInTableCoreLogisticFile', views.updateMetaDataFileInTableCoreLogisticFileWS,name="updateMetaDataFileInTableCoreLogisticFile"),
 
 ]

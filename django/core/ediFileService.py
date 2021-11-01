@@ -358,7 +358,6 @@ def updateHistoryOfAnnomalies(prestations, fileId):
         if historyAnnomalie.anomalie_id not in list(set(listOfAllRemarqueId)):
             HistoryAnomaliesEdiFiles.objects.filter(edi_file_id=fileId, anomalie_id=historyAnnomalie.anomalie_id).delete()
 
-
 def updateMetaDataFileInTableCoreEDIFile(ediFileName, ediFileStatus):
     ediFile = EDIfile.objects.get(file=ediFileName)
     ediFile.status = ediFileStatus

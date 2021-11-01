@@ -1,15 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable,Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { WebsocketService } from '../../services/websocket.service';
 
 @Injectable()
 export class MagistorService {
 
   private url = `${environment.apiBaseUrl}/api`;
   private url2= `${environment.apiBaseUrl}/talendEsb`;
-  constructor(private http: HttpClient)
-   { }
+  public WS_URL = "ws://13.36.210.39:8000/ws/notifications"
+  public messages: Subject<any>;
+  data:any={};
+  constructor(private http: HttpClient,private wsService: WebsocketService)
+  {
+    this.messages = <Subject<any>>wsService.connect(this.WS_URL).map(
+      (response: MessageEvent): any => {
+        console.warn('resp from websocket',response)
+        this.data=response.data;
+        let data = response.data;
+        return data;
+      }
+    );
+  }
   public getAdvancedHeaders() {
     return [
       {

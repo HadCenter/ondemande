@@ -155,10 +155,17 @@
                   <!-- Delete Column -->
 
                   <ng-container matColumnDef="Delete">
-                    <th class="titre-column" mat-header-cell *matHeaderCellDef> </th>
+                    <th class="header-actif" mat-header-cell id="selectDelete-header" *matHeaderCellDef>
+                      <mat-checkbox  style="margin-left:5px"
+                        (change)="$event ? deleteMasterToggle() : null"
+                        [checked]=" rowsToDelete.length == copyFileWrong.length"
+                         >
+                      </mat-checkbox>
+                    </th>
 
                     <td mat-cell *matCellDef="let element; let j = index">
                       <mat-checkbox color="warn" (click)="$event.stopPropagation()"
+                      [checked]=" isRowSelected(element.rowId)"
                         (change)="selectDeleteRow (element.rowId)">
                       </mat-checkbox>
 

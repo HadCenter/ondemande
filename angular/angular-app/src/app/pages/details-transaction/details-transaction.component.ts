@@ -1194,30 +1194,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 * Correct the file
 */
   correctionFile(index) {
-    const startDate = (this.transaction.start_date.substr(0, 19)).split('-');
-    const endDate = ((this.transaction.end_date.substr(0, 19)).split('-'));
-    var thisDate2 = startDate[2].split('T');
-    var thisDate3 = endDate[2].split('T');
-    const end_date = [thisDate3[0], endDate[1], endDate[0]].join("-");
-    const start_date = [thisDate2[0], startDate[1], startDate[0]].join("-");
-    var formatStartDate = start_date.split("-").reverse().join("-");
-    var formatEndDate = end_date.split("-").reverse().join("-");
-    const start = moment(formatStartDate, 'YYYY-MM-DD');
-    const end   = moment(formatEndDate, 'YYYY-MM-DD');
-    const rangeTransaction = moment.range(start, end);
-    var rangeExist = false;
-    this.copy_transactions.forEach(element => {
-      if (element.statut == "En attente")
-      {
-         var formatStartDate = element.start_date.split("-").reverse().join("-");
-         var formatEndDate = element.end_date.split("-").reverse().join("-");
-         var rangeElement = moment.range(formatStartDate, formatEndDate);
-         if (rangeElement.overlaps(rangeTransaction, { adjacent: true })){
-           rangeExist = true;
-         }
-      }
-    });
-    if (rangeExist)
+    if (this.verifRangeDateBeforeCorrection())
     {
         this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
     }else{
@@ -1329,6 +1306,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
  * Correct all transaction files
  */
   correctionAllFile() {
+    if (this.verifRangeDateBeforeCorrection())
+    {
+        this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
+    }else{
     if (this.dataSource.data.length > 0) {
       this.columnsLivraison = Object.keys(this.dataSource.data[0]);
       this.rowsLivraison = this.dataSource.data.map(Object.values);
@@ -1372,7 +1353,34 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.router.navigate(['/list-transaction']);
       }
     })
-
+    }
+  }
+  verifRangeDateBeforeCorrection()
+  {
+    const startDate = (this.transaction.start_date.substr(0, 19)).split('-');
+    const endDate = ((this.transaction.end_date.substr(0, 19)).split('-'));
+    var thisDate2 = startDate[2].split('T');
+    var thisDate3 = endDate[2].split('T');
+    const end_date = [thisDate3[0], endDate[1], endDate[0]].join("-");
+    const start_date = [thisDate2[0], startDate[1], startDate[0]].join("-");
+    var formatStartDate = start_date.split("-").reverse().join("-");
+    var formatEndDate = end_date.split("-").reverse().join("-");
+    const start = moment(formatStartDate, 'YYYY-MM-DD');
+    const end   = moment(formatEndDate, 'YYYY-MM-DD');
+    const rangeTransaction = moment.range(start, end);
+    var rangeExist = false;
+    this.copy_transactions.forEach(element => {
+      if (element.statut == "En attente")
+      {
+         var formatStartDate = element.start_date.split("-").reverse().join("-");
+         var formatEndDate = element.end_date.split("-").reverse().join("-");
+         var rangeElement = moment.range(formatStartDate, formatEndDate);
+         if (rangeElement.overlaps(rangeTransaction, { adjacent: true })){
+           rangeExist = true;
+         }
+      }
+    });
+    return rangeExist;
   }
 
   /**

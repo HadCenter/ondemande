@@ -280,6 +280,27 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       (document.getElementById('deleteWrongBtn') as HTMLButtonElement).disabled = false;
     }
   }
+
+  deleteMasterToggle(){
+    console.log(this.rowsToDelete.length);
+    if (this.rowsToDelete.length == this.copyFileWrong.length) {
+      this.rowsToDelete = [];
+      (document.getElementById('deleteWrongBtn') as HTMLButtonElement).disabled = false;
+
+    }else{
+      this.rowsToDelete = [];
+      for(var element of this.copyFileWrong){
+        this.rowsToDelete.push(element.rowId);
+      }
+    }
+    console.log(this.rowsToDelete.length);
+
+  }
+
+
+  isRowSelected(rowId){
+    return this.rowsToDelete.includes(rowId);
+  }
   /**
      * Update table's dataSource
      * @param text

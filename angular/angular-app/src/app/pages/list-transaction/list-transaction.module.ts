@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Mypipe } from './mypipe';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 @NgModule({
-  declarations: [ListTransactionComponent, DailogGenerateTransaction, Mypipe],
+  declarations: [ListTransactionComponent, DailogGenerateTransaction],
   imports: [
     CommonModule,
     ListTransactionRoutingModule,
@@ -37,7 +37,6 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     ListTransactionService,
     GenererTransactionService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
-    { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
   ],
 })
 export class ListTransactionModule { }

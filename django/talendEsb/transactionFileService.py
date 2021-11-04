@@ -6,7 +6,7 @@ from .models import TransactionsLivraison
 def sendTransactionParamsToExecutionServerInCsvFile(transaction_id, jobs_to_start, destination_folder):
     fileName = str(transaction_id) + ".csv"
     jobsToStartInOneString = listToString(jobs_to_start)
-    remotePath = "/home/talend/projects/ftpfiles/IN/ondemand_preprod/transactions/" + destination_folder + "/" + fileName
+    remotePath = "/home/talend/projects/ftpfiles/IN/ondemand_dev/transactions/" + destination_folder + "/" + fileName
     df = pd.DataFrame([ [transaction_id, jobsToStartInOneString]], columns=['id', 'jobsToStart'])
     df.to_csv(fileName, index=False, sep=';')
     sftp.put(localpath=fileName, remotepath=remotePath)

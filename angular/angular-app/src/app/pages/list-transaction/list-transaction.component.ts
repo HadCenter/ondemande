@@ -59,6 +59,7 @@ export class ListTransactionComponent implements OnInit {
     this.tablesService.messages.subscribe(msg => {
       console.log("Response from websocket: ", JSON.parse(msg));
       localStorage.setItem('wsTransaction', JSON.stringify(JSON.parse(msg)));
+      console.log("COLMPARAIIIIISON    :   ",JSON.parse(msg).stateTransaction, "   = ",JSON.parse(msg).stateTransaction === "table transactionFile updated");
       if(JSON.parse(msg).stateTransaction === "table transactionFile updated")
       {
         this.actualiser();

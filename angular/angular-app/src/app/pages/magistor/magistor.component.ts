@@ -211,6 +211,8 @@ export class MagistorComponent implements OnInit {
         file.ButtonCorrecteActiveted =true;
         file.ButtonInvalidateActivated = true;
         file.status ='Validé';
+      }else if(res.message == "file validated echec"){
+        this.openSnackBar(this.errorValidation,this.snackAction);
       }
     },
     (err) => {

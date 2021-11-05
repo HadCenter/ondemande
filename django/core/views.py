@@ -159,7 +159,7 @@ def validateLogisticFileWS(request):
     if(logisticFileValidated):
         return JsonResponse({'message': 'file validated successfully'}, status=status.HTTP_200_OK)
     else:
-        return JsonResponse({'message': 'file validated echec'}, status=status.HTTP_403_FORBIDDEN)
+        return JsonResponse({'message': 'file validated echec'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def fileList(request):

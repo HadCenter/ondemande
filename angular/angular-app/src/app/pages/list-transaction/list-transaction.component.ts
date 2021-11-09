@@ -41,18 +41,18 @@ export class ListTransactionComponent implements OnInit {
   }
 
   formatDates(){
-    // this.copy_transactions.forEach(element => {
-    //   const creatAt = (element.created_at.substr(0, 19)).split('-');
-    //   const start = (element.start_date.substr(0, 19)).split('-');
-    //   const end = ((element.end_date.substr(0, 19)).split('-'));
-    //   var thisDate = creatAt[2].split('T');
-    //   var thisDate2 = start[2].split('T');
-    //   var thisDate3 = end[2].split('T');
-    //   element.end_date = [thisDate3[0], end[1], end[0]].join("-");
-    //   element.start_date = [thisDate2[0], start[1], start[0]].join("-");
-    //   element.created_at = [thisDate[0], creatAt[1], creatAt[0]].join("-");
-    //   element.created_at = [element.created_at, thisDate[1]].join(' à ')
-    //   });
+    this.copy_transactions.forEach(element => {
+      const creatAt = (element.created_at.substr(0, 19)).split('-');
+      const start = (element.start_date.substr(0, 19)).split('-');
+      const end = ((element.end_date.substr(0, 19)).split('-'));
+      var thisDate = creatAt[2].split('T');
+      var thisDate2 = start[2].split('T');
+      var thisDate3 = end[2].split('T');
+      element.end_date = [thisDate3[0], end[1], end[0]].join("-");
+      element.start_date = [thisDate2[0], start[1], start[0]].join("-");
+      element.created_at = [thisDate[0], creatAt[1], creatAt[0]].join("-");
+      element.created_at = [element.created_at, thisDate[1]].join(' à ')
+      });
   }
 
   listenToWebSocket() {

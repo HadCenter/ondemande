@@ -78,10 +78,12 @@ def createFolderIfNotExist(sftp_client, folderName, placementPath):
     if folderName not in sftp_client.listdir():
         folderName = "{}".format(folderName)
         sftp_client.mkdir(folderName)
+        sftp_client.chown(folderName, 5500,5500)
     if(placementPath == "/"):
         folderPath = sftp_client.getcwd() + folderName
     else:
         folderPath = sftp_client.getcwd() + "/" + folderName
+    
     return folderPath
 
 def uploadLogisticFileInSFtpServer(sftp_client , fileName , idFileInDB ):

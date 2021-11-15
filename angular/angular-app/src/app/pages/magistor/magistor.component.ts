@@ -253,7 +253,7 @@ export class MagistorComponent implements OnInit {
     this.fileTocheck = [{
       Magistor_Current_Client: file.clientName,
       Magistor_Current_File: file.logisticFileType.slice(0, 3),
-      Magistor_File_Id: file.idLogisticFile
+      Magistor_File_Id: file.idLogisticFile.toString()
     }]
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck)

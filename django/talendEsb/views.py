@@ -25,8 +25,8 @@ talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/WebHookDiagnostic
 #talendUrlMADFileWebHookOLD ='https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDev/0920e59cd9e54e43b0b11ca072a02850'
 #talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDevV2/f8e6c58d240a4248b8f1a06e63621fae'
 talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDevV3/9c89751b78d3403e9d30c77775a373ce'
-talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/WMS_ONDEMAND_FWH/9162c61d321d44eb81a528107e726e57'
-
+#talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/WMS_ONDEMAND_FWH/9162c61d321d44eb81a528107e726e57'
+talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/ondemand_webhouk/c5c1952960dd41248c32b8b992b9648b'
 @api_view(['POST'])
 def startEngineOnMagistorFiles(request):
 	print("request.data for magistor",request.data);

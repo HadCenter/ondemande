@@ -9,7 +9,7 @@ export class MagistorService {
 
   private url = `${environment.apiBaseUrl}/api`;
   private url2= `${environment.apiBaseUrl}/talendEsb`;
-  public WS_URL = "ws://13.36.210.39:8000/ws/notifications"
+  public WS_URL = "ws://52.47.208.8:8000/ws/notifications"
   public messages: Subject<any>;
   data:any={};
   constructor(private http: HttpClient,private wsService: WebsocketService)

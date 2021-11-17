@@ -17,7 +17,7 @@ import jsonpickle
 import os
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-
+from core.logisticFileService import updateMetaDataFileInTableCoreLogisticFile
 #talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev2/b3059ca807ff4e1c99825fb81716a81c'
 #talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/WebHookEdiDevV2/abf4dae483424aee9577ebc0aac9b81d'
 talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/WebHookDiagnosticFileEdiV3/076247bbdec34a8391c77a5b2159b591'
@@ -58,7 +58,7 @@ def startEngineOnEdiFilesWithData(data):
 
 def startEngineWithLinkAndData(link:str,data):
 
-
+	updateMetaDataFileInTableCoreLogisticFile(logisticFileId=data[0]['Magistor_File_Id'], logisticFileStatus="En cours")
 	requests.post(link, json=data)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 

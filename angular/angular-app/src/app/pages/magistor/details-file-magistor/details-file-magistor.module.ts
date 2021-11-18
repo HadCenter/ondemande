@@ -10,6 +10,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [DetailsFileMagistorComponent],
@@ -23,7 +24,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatFormFieldModule,
     MatSnackBarModule,
-    
+    MatExpansionModule,
+
   ]
 })
 export class DetailsFileMagistorModule { }

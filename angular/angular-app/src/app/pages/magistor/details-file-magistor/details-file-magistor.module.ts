@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { LoaderModule } from 'app/components/loader/loader.module';
 
 @NgModule({
   declarations: [DetailsFileMagistorComponent],
@@ -25,6 +26,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatFormFieldModule,
     MatSnackBarModule,
     MatExpansionModule,
+    LoaderModule
 
   ]
 })

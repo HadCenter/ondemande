@@ -58,9 +58,9 @@ export class MagistorComponent implements OnInit {
     });
   }
   getColor(ch) {
-    if (ch === 'En attente') {
+    if (ch === 'En attente' || ch === 'à vérifier') {
       return 'blue';
-    } else if (ch === 'Validé') {
+    } else if (ch === 'Validé' || ch === 'Terminé') {
       return 'green';
     } else if (ch === 'En cours') {
       return 'orange';

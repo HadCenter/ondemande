@@ -146,6 +146,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.alreadyClicked = true;
     // delete row from valid file
     if (optionFile == "valid") {
+      this.showValid  = true;
       for (var i = this.fileValid.rows.length - 1; i >= 0; i--) {
         for (var j = 0; j < this.rowsToDeleteValid.length; j++) {
           if (this.fileValid.rows[i] && (this.fileValid.rows[i][this.fileValid.rows[i].length - 1] === this.rowsToDeleteValid[j])) {
@@ -188,9 +189,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
               this.fileService.deleteFileEDI(data).subscribe(res => {
                 console.log("delete succes");
                 this.router.navigate(['/list-file-edi']);
+                this.showValid  = false;
 
               })
+            }else{
+              this.showValid  = false;
             }
+          }else{
+            this.showValid  = false;
           }
         }
       })
@@ -198,6 +204,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
     }
     else {
+      this.showWrong = true;
       // delete row from wrong file
       for (var i = this.fileWrong.rows.length - 1; i >= 0; i--) {
         for (var j = 0; j < this.rowsToDelete.length; j++) {
@@ -242,11 +249,17 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
               this.fileService.deleteFileEDI(data).subscribe(res => {
                 console.log("delete succes");
                 this.router.navigate(['/list-file-edi']);
+                this.showWrong = false;
 
               })
+            }else{
+              this.showWrong = false;
             }
             // document.getElementById("myBtn").disabled = true;
+          }else{
+            this.showWrong = false;
           }
+          //this.showWrong = false;
 
         }
       })

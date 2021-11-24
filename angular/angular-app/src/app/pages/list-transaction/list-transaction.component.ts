@@ -46,6 +46,10 @@ export class ListTransactionComponent implements OnInit {
       const start = (element.start_date.substr(0, 19)).split('-');
       const end = ((element.end_date.substr(0, 19)).split('-'));
       var thisDate = creatAt[2].split('T');
+      var time = thisDate[1].split(':');
+      var currentTimeZoneOffsetInHours = ((new Date().getTimezoneOffset() / 60));      
+      time[0] = (parseInt(time[0]) - currentTimeZoneOffsetInHours).toString();  //affich l'heure selon l'heure de pc de l'user
+      thisDate[1] = [time[0], time[1], time[2]].join(":");
       var thisDate2 = start[2].split('T');
       var thisDate3 = end[2].split('T');
       element.end_date = [thisDate3[0], end[1], end[0]].join("-");

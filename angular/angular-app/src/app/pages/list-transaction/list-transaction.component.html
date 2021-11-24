@@ -54,7 +54,7 @@
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                 >Détails
                 </button>
-                <button (click)="integrerTransaction(row.transaction_id)" [disabled] = "row.statut !== 'Terminé'" style="margin-left: 3px;"
+                <button (click)="integrerTransaction(row.transaction_id)" [disabled] = "(row.statut !== 'Terminé') || true" style="margin-left: 3px;"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
                 </button>
               </td>

@@ -18,5 +18,5 @@ COPY . /code/
 
 EXPOSE 8000
 
-CMD ["uwsgi", "--http", ":8080", "--ini", "./uwsgi/uwsgi.ini"]
-#CMD python manage.py runserver 0.0.0.0:8000
+#CMD ["uwsgi", "--http", ":8080", "--ini", "./uwsgi/uwsgi.ini"]
+CMD python manage.py runserver 0.0.0.0:8000

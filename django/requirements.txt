@@ -5,9 +5,9 @@ psycopg2
 djangorestframework-jwt
 cryptography
 python-jose
-django-rest-knox
+django-rest-knox==4.1.0
 requests
-mysqlclient
+mysqlclient==2.0.3
 django-salesforce
 jsonpickle
 pandas
@@ -16,6 +16,7 @@ openpyxl
 django-rest-swagger
 paramiko
 pyjwt==1.7.1
-pika
-channels
+pika==1.2.0
+channels==2.3.1
 msal==1.15.0
+uwsgi

@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'o87w7g(!mb8o8fs^&7=w9prsjnwkt05azo8#bpg6_r=p*yt#)%'
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'API.settings')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -103,8 +104,8 @@ DATABASES = {
         'NAME': 'ondemand',
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
-        #'HOST': '52.47.208.8',
-        'HOST': '172.17.0.1',
+        'HOST': '52.47.208.8',
+        #'HOST': '172.17.0.1',
         'PORT': '3306',
     }
 }

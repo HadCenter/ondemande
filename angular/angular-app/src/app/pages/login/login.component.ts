@@ -44,6 +44,7 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
   }
 
   public login() {
+    console.log("login pressed");
     this.error = null;
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.getRawValue())

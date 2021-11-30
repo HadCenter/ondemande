@@ -46,7 +46,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   displayedColumns = [];
   filterValues: any = [];
   clickCorrection: boolean = false;
-  selectedCellsState: boolean[][] = [  ];
+  selectedCellsState: boolean[][] = [];
   correctedFilerows: any;
   rowsToDelete: any = [];
   rowsToDeleteValid: any = [];
@@ -76,18 +76,18 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.copyFileWrong.forEach(element => {
         element.selected = 1;
         this.onCheckboxStateChange(element)
-        })
+      })
       this.selectionCh.clear();
       return;
     }
     else {
-       this.copyFileWrong.forEach(element => {
-       element.selected = 0;
-       this.onCheckboxStateChange(element)
-       })
+      this.copyFileWrong.forEach(element => {
+        element.selected = 0;
+        this.onCheckboxStateChange(element)
+      })
       this.selectionCh.select(...this.copyFileWrong);
     }
-    
+
   }
 
   // /** The label for the checkbox on the passed row */
@@ -146,11 +146,26 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.alreadyClicked = true;
     // delete row from valid file
     if (optionFile == "valid") {
-      this.showValid  = true;
-      for (var i = this.fileValid.rows.length - 1; i >= 0; i--) {
-        for (var j = 0; j < this.rowsToDeleteValid.length; j++) {
-          if (this.fileValid.rows[i] && (this.fileValid.rows[i][this.fileValid.rows[i].length - 1] === this.rowsToDeleteValid[j])) {
-            this.fileValid.rows.splice(i, 1);
+      this.showValid = true;
+      if (this.rowsToDeleteValid.length == this.fileValid.rows.length) {
+        this.fileValid.rows=[]
+      }
+      else {
+
+
+        for (var i = this.fileValid.rows.length - 1; i >= 0; i--) {
+          for (var j = 0; j < this.rowsToDeleteValid.length; j++) {
+            if (this.fileValid.rows[i] && (this.fileValid.rows[i][this.fileValid.rows[i].length - 1] === this.rowsToDeleteValid[j])) {
+
+              this.fileValid.rows.splice(i, 1);
+
+              // this.files = this.files.filter((el) => !this.rowsToDelete.includes(el.rowId));
+              // this.testFile = this.testValidFile.filter((el) => !this.rowsToDelete.includes(el.rowId));
+              //this.copyFileValid = this.copyFileValid.filter((el) => !this.rowsToDeleteValid.includes(el.rowId));
+
+
+              //this.fileValid.rows.splice(i, 1);
+            }
           }
         }
       }
@@ -189,14 +204,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
               this.fileService.deleteFileEDI(data).subscribe(res => {
                 console.log("delete succes");
                 this.router.navigate(['/list-file-edi']);
-                this.showValid  = false;
+                this.showValid = false;
 
               })
-            }else{
-              this.showValid  = false;
+            } else {
+              this.showValid = false;
             }
-          }else{
-            this.showValid  = false;
+          } else {
+            this.showValid = false;
           }
         }
       })
@@ -252,11 +267,11 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
                 this.showWrong = false;
 
               })
-            }else{
+            } else {
               this.showWrong = false;
             }
             // document.getElementById("myBtn").disabled = true;
-          }else{
+          } else {
             this.showWrong = false;
           }
           //this.showWrong = false;
@@ -277,6 +292,9 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       this.rowsToDeleteValid.push(rowId);
 
     }
+    if (this.rowsToDeleteValid.length > 0) {
+      (document.getElementById('deleteValidBtn') as HTMLButtonElement).disabled = false;
+    }
   }
 
   selectDeleteRow(rowId) {
@@ -294,25 +312,41 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     }
   }
 
-  deleteMasterToggle(){
-    console.log(this.rowsToDelete.length);
+  deleteMasterToggle() {
+    
     if (this.rowsToDelete.length == this.copyFileWrong.length) {
       this.rowsToDelete = [];
       (document.getElementById('deleteWrongBtn') as HTMLButtonElement).disabled = false;
 
-    }else{
+    } else {
       this.rowsToDelete = [];
-      for(var element of this.copyFileWrong){
+      for (var element of this.copyFileWrong) {
         this.rowsToDelete.push(element.rowId);
       }
     }
-    console.log(this.rowsToDelete.length);
 
+  }
+  deleteMasterToggleValid() {
+   
+    if (this.rowsToDeleteValid.length == this.copyFileValid.length) {
+      this.rowsToDeleteValid = [];
+      (document.getElementById('deleteValidBtn') as HTMLButtonElement).disabled = false;
+
+    } else {
+      this.rowsToDeleteValid = [];
+      for (var element of this.copyFileValid) {
+        this.rowsToDeleteValid.push(element.rowId);
+      }
+    }
+   
   }
 
 
-  isRowSelected(rowId){
+  isRowSelected(rowId) {
     return this.rowsToDelete.includes(rowId);
+  }
+  isRowValidSelected(rowId) {
+    return this.rowsToDeleteValid.includes(rowId);
   }
   /**
      * Update table's dataSource
@@ -531,7 +565,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         })
       }
       else {
-        this.showWrong=false;
+        this.showWrong = false;
         this.fileWrong.rows = [];
       }
     })
@@ -542,14 +576,14 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   /**
 * change color of the selected column header on file livraison
 */
-changeSelectedOptionColor(filter) {
-  if (filter.columnProp && filter.modelValue != "") {
-    document.getElementById(filter.columnProp+"-header").style.color = "#00bcd4";
+  changeSelectedOptionColor(filter) {
+    if (filter.columnProp && filter.modelValue != "") {
+      document.getElementById(filter.columnProp + "-header").style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp + "-header").style.color = "white";
+    }
   }
-  else {
-    document.getElementById(filter.columnProp+"-header").style.color = "white";
-  }
-}
   /**
      * Get options inside selects
      * @param filter
@@ -660,10 +694,10 @@ changeSelectedOptionColor(filter) {
   */
   resetFiltre() {
     // change color of header white for all columns
-  const rows = document.getElementsByClassName('titre-column') as HTMLCollectionOf<HTMLElement>;
-  for (let i = 0; i < rows.length; i++) {
-    rows[i].style.color = 'white';
-  }
+    const rows = document.getElementsByClassName('titre-column') as HTMLCollectionOf<HTMLElement>;
+    for (let i = 0; i < rows.length; i++) {
+      rows[i].style.color = 'white';
+    }
     this.initSelectedCells();    // init selected cells
     // reset the selected filtre
     this.options.forEach(element => {
@@ -706,7 +740,7 @@ changeSelectedOptionColor(filter) {
         // this.displayedColumnsValid=this.fileValid.columns.splice(0,this.fileValid.columns.length-2)
       }
       else {
-        this.showValid=false;
+        this.showValid = false;
         this.fileValid.rows = [];
 
       }

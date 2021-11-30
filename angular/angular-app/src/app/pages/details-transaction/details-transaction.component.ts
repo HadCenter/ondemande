@@ -220,6 +220,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       element.created_at = [element.created_at, thisDate[1]].join(' à ')
       });
   }
+ 
 
   selectDeleteRow(row, typeFile) {
 
@@ -240,6 +241,22 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       else if (row.isDeleted == 1) {
         row.isDeleted = 0;
       }
+      //Select automatique of column in livraison file
+      this.dataSource.data.forEach(el => {
+        if (row.taskId == el.taskId) {
+          if ( row.isDeleted == 1){
+            el.toDelete=1;
+            this.rowsToDeleteLivraison.push(row.taskId);
+          }
+          else if ( row.isDeleted == 0){
+            el.toDelete=0;
+            if (this.rowsToDeleteLivraison.includes(row.taskId)) {
+              this.rowsToDeleteLivraison.splice(this.rowsToDeleteLivraison.indexOf(row.taskId), 1);
+            }
+          }
+        }
+        })
+      
       // console.warn(row);
       // location.reload();
 
@@ -254,7 +271,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.rowsToDeleteLivraison.push(row.taskId);
 
       }
-
       if (row.toDelete == 0) {
         row.toDelete = 1;
       }
@@ -281,8 +297,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
       // location.reload();
     }
-
-
 
 
   }
@@ -1087,6 +1101,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
         //--Edit cells from the same column
         if (startCol === endCol) {
+          console.warn('start',startCol)
           for (let i = startRow; i <= endRow; i++) {
             if (this.fileSelected == "livraison") {
 
@@ -1106,6 +1121,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                       el.isExpress = 0;
                     }
                   }
+  
                   else if (this.displayedColumnsException[startCol] == "Item___Nom") {
                     el.Item___Nom_sous_categorie = text
                   }

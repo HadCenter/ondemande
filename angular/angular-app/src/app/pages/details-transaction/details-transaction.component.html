@@ -759,6 +759,7 @@
                       isDeleted
                     </th>
                     <td mat-cell #cellException class="center-cell-transactionsFiles"
+                   
                       *matCellDef="let element ; let i = index">
                       <mat-checkbox color="warn" (click)="$event.stopPropagation()" [checked]="element.isDeleted==1"
                         (change)="selectDeleteRow(element,'exception')">

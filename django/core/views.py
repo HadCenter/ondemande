@@ -190,6 +190,8 @@ def getFilesByClient(request,pk):
 def downloadFileName(request):
     fileName = request.data['fileName']
     clientCode = request.data['clientCode']
+    entred1 : bool = False
+    entred2:bool = False
     ftp = connect()
     path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
     path_client = path_racine + '/' + clientCode
@@ -200,6 +202,43 @@ def downloadFileName(request):
                 commande = "RETR " + name
                 ftp.retrbinary(commande, file.write)
             break
+    
+
+    path_client2 = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/" + clientCode
+    ftp.cwd(path_client2)
+    for name in ftp.nlst():
+        if name == "error_"+fileName:
+            with open(name, "wb") as file2:
+                commande = "RETR " + name
+                ftp.retrbinary(commande, file2.write)
+                entred2 = True
+            break
+    for name in ftp.nlst():
+        if name == "correct_"+fileName:
+            with open(name, "wb") as file1:
+                commande = "RETR " + name
+                ftp.retrbinary(commande, file1.write)
+                entred1 = True
+            break
+    if entred1:
+        df1 = pd.read_excel("correct_"+fileName)
+        #df1 = df1.append(pd.read_excel("error_"+fileName), ignore_index=True) 
+        df1.to_excel(fileName, index=False)
+        file1.close()
+        os.remove("correct_"+fileName)
+
+    if entred2:
+        df2 = pd.read_excel("error_"+fileName)
+        #df1 = df1.append(pd.read_excel("error_"+fileName), ignore_index=True)
+        df2.drop('Remarque_id', axis=1, inplace=True) 
+        df2.to_excel(fileName, index=False)
+        file2.close()
+        os.remove("error_"+fileName)
+
+    if entred1 and entred2:
+        df3 = df1.append(df2, ignore_index=True) 
+        df3.to_excel(fileName, index=False)
+
     ftp.cwd(path_client + "/FILES_TO_DIAGNOSTIC_DEV")
     for name in ftp.nlst():
         if name == fileName:
@@ -207,6 +246,11 @@ def downloadFileName(request):
                 commande = "RETR " + name
                 ftp.retrbinary(commande, file.write)
             break
+
+
+
+
+
     with open(fileName, 'rb') as f:
         file = f.read()
     response = HttpResponse(file, content_type="application/xls")

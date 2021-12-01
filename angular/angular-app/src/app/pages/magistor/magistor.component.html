@@ -67,6 +67,7 @@
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
               </button>
               <button style="margin-left: 3px;" (click)="gotoDetails(row)"
+              [disabled]="row?.status == 'Invalide' || row?.status == 'En cours'"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Détails
               </button>
               <span  (click)="downloadFile(row)"

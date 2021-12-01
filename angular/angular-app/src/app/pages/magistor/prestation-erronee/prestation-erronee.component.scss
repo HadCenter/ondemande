@@ -208,6 +208,8 @@ td.label-remarque{
     padding: 4px 0;
     //width: 143px;
     text-align:left;
+    white-space: pre-wrap;
+
 }
 
 
@@ -375,8 +377,8 @@ button.delete-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-e
   color:white ;
 }
 .error {
-  color: red !important;
-  // background-color: red;
+  color: white !important;
+  background-color: rgba(255, 0, 0, 0.356) !important;
 }
 
 .reorder
@@ -394,5 +396,5 @@ button.delete-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-e
 }
 
 .table-width-100{
-  width:100%;
+  width: 100%;
 }

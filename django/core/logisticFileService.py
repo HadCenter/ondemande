@@ -134,14 +134,14 @@ def getSingleLogisticFileDetail(key):
                                             ButtonInvalidateActivated= logisticFileDB.ButtonInvalidateActivated)
     return logisticFileResponse
 
-def seeContentLogisticFile(logisticFileName, folderLogisticFile):
+def seeContentLogisticFile(logisticFileName, folderLogisticFile, logisticSheetName):
     os.chdir(DJANGO_DIRECTORY)
     folderLogisticFilePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
     sftp_client = connect()
     sftp_client.chdir(folderLogisticFilePath)
     os.chdir("media/files")
     sftp_client.get(sftp_client.getcwd() + "/" + logisticFileName, os.getcwd() + "/" + logisticFileName)
-    excelLogisticFile = pd.read_excel(logisticFileName)
+    excelLogisticFile = pd.read_excel(logisticFileName, sheet_name=logisticSheetName)
     excelfile = excelLogisticFile.fillna('')
     columns = list(excelfile.columns)
     for column in columns:

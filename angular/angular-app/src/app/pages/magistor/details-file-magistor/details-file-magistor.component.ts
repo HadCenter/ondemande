@@ -23,8 +23,16 @@ export class DetailsFileMagistorComponent implements OnInit {
   searchItems: any =[];
   filterValues: any = [];
   fileMagistor: any;
+  errorfileMagistor: any;
+  fileMagistor2: any;
+  errorfileMagistor2: any;
+
   copyfileMagistor: any;
+  copyerrorfileMagistor: any;
+  copyfileMagistor2: any;
+  copyerrorfileMagistor2: any;
   displayedColumns: any;
+  displayedColumns2: any
   public snackAction = 'Ok';
   typeFileART: boolean = false;
   typeFileREC: boolean = false;
@@ -38,6 +46,8 @@ export class DetailsFileMagistorComponent implements OnInit {
   FIRST_EDITABLE_COL: number = 0;                       // first column is not editable --> so start from index 1
   LAST_EDITABLE_COL: number = 0;
   fileTocheck: any;
+  oneBloc: boolean;
+  secondSheet: any;
   selectedCellsState: boolean[][] = [
     // [false, false, false],
   ];
@@ -52,18 +62,35 @@ export class DetailsFileMagistorComponent implements OnInit {
     this.fileService.getFile(this.route.snapshot.params.id).subscribe(
       resp => {
         this.file = resp;
-        var data = {
-          "logisticFileName": this.file.logisticFileName.name,
-          "folderLogisticFile": this.file.idLogisticFile,
-        }
+        var data;
         if (this.file.logisticFileType == "ART01") {
           this.typeFileART = true;
+          this.secondSheet = "CND01";
         }
         else if (this.file.logisticFileType == "REC01") {
           this.typeFileREC = true;
+          this.secondSheet = "LRC01";
         }
         else if (this.file.logisticFileType == "CDC01") {
           this.typeFileCDC = true;
+          this.secondSheet = "LCD01";
+        }
+        if (this.file.status == "En attente" || this.file.status == "Validé") {
+          this.oneBloc=true;
+          data = {
+            "logisticFileName": this.file.logisticFileName.name,
+            "folderLogisticFile": this.file.idLogisticFile,
+            "logisticSheetName": this.file.logisticFileType,
+          }
+        } else {
+          this.oneBloc = false ;
+          var fileName = this.file.logisticFileName.name;
+          fileName = fileName.slice(0, 3) + fileName.slice(5);
+          data = {
+            "logisticFileName": fileName.replace('.xlsx', '_Correct.xlsx'),
+            "folderLogisticFile": this.file.idLogisticFile,
+            "logisticSheetName": this.file.logisticFileType,
+          }
         }
         this.fileService.getLogisticFileContent(data).subscribe(res => {
           this.fileMagistor = res;
@@ -91,6 +118,82 @@ export class DetailsFileMagistorComponent implements OnInit {
             })
           }
         })
+
+
+        data ={
+          "logisticFileName": fileName.replace('.xlsx', '_Correct.xlsx'),
+          "folderLogisticFile": this.file.idLogisticFile,
+          "logisticSheetName": this.secondSheet,
+        }
+        console.log(data);
+        this.fileService.getLogisticFileContent(data).subscribe(res => {
+          this.fileMagistor2 = res;
+          console.log(this.fileMagistor.rows);
+          if (this.fileMagistor2.rows.length > 0) {
+            this.copyfileMagistor2 = JSON.parse(JSON.stringify(this.fileMagistor2));
+            this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);
+            this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
+            //this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
+          }
+        })
+
+
+
+        if (this.file.number_annomalies != 0) {
+          var fileName = this.file.logisticFileName.name;
+          fileName = fileName.slice(0, 3) + fileName.slice(5);
+          var data_error = {
+            "logisticFileName": fileName.replace('.xlsx', '_Exceptions.xlsx'),
+            "folderLogisticFile": this.file.idLogisticFile,
+            "logisticSheetName": this.file.logisticFileType,
+
+          }
+          this.fileService.getLogisticFileContent(data_error).subscribe(res => {
+            this.errorfileMagistor = res;
+
+            if (this.errorfileMagistor.rows.length > 0) {
+              this.copyerrorfileMagistor = JSON.parse(JSON.stringify(this.errorfileMagistor));
+              this.copyerrorfileMagistor.rows.splice(0, 0, this.copyerrorfileMagistor.columns);
+              this.copyerrorfileMagistor = this.convertToArrayOfObjects(this.copyerrorfileMagistor.rows);
+              this.testFile = this.copyerrorfileMagistor;   //copy to use on selection
+              this.files = this.copyerrorfileMagistor;    // copy to filter *
+              this.displayedColumns = (Object.keys(this.copyerrorfileMagistor[0]));
+              this.displayedColumns.unshift(this.displayedColumns.pop());
+              this.LAST_EDITABLE_ROW = this.copyerrorfileMagistor.length - 1;
+              this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
+
+              // initialize all selectedCellsState to false
+              this.copyerrorfileMagistor.forEach(element => {
+                this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
+              });
+              // get select options
+              this.displayedColumns.forEach(item => {
+                this.getOption(item);
+              })
+            }
+          })
+
+
+          var data_error2 = {
+            "logisticFileName": fileName.replace('.xlsx', '_Exceptions.xlsx'),
+            "folderLogisticFile": this.file.idLogisticFile,
+            "logisticSheetName": this.secondSheet,
+
+          }
+          this.fileService.getLogisticFileContent(data_error2).subscribe(res => {
+            this.errorfileMagistor2 = res;
+
+            if (this.errorfileMagistor2.rows.length > 0) {
+              this.copyerrorfileMagistor2 = JSON.parse(JSON.stringify(this.errorfileMagistor2));
+              this.copyerrorfileMagistor2.rows.splice(0, 0, this.copyerrorfileMagistor2.columns);
+              this.copyerrorfileMagistor2 = this.convertToArrayOfObjects(this.copyerrorfileMagistor2.rows);
+              this.displayedColumns2 = (Object.keys(this.copyerrorfileMagistor2[0]));
+              this.displayedColumns2.unshift(this.displayedColumns2.pop());
+            }
+            console.log(this.errorfileMagistor2);
+          })
+
+        }
       })
   }
 

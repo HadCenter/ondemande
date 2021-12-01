@@ -267,7 +267,8 @@ def seeFileContent(request):
 def seeLogisticFileContent(request):
     logisticFilename = request.data['logisticFileName']
     folderLogisticFile = request.data['folderLogisticFile']
-    responseObject = seeContentLogisticFile(logisticFilename, folderLogisticFile)
+    logisticSheetName = request.data['logisticSheetName']
+    responseObject = seeContentLogisticFile(logisticFilename, folderLogisticFile, logisticSheetName)
     responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
     return HttpResponse(responseObjectText, content_type="application/json")
 

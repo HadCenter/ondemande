@@ -412,15 +412,15 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   /************selection multiple of checkbox in livraison bloc *******/
   deleteMasterToggleLivraison() {
     // unselect
-    if (this.rowsToDeleteLivraison.length == this.copyDataSource.length) {
+    if (this.rowsToDeleteLivraison.length == this.dataSource.data.length) {
       this.rowsToDeleteLivraison = [];
-      this.copyDataSource.forEach(element => {
+      this.dataSource.data.forEach(element => {
         element.toDelete = 0;
       });
       //select
     } else {
-      this.rowsToDeleteLivraison = [];
-      for (var element of this.copyDataSource) {
+     // this.rowsToDeleteLivraison = [];
+      for (var element of this.dataSource.data) {
         element.toDelete = 1;
         this.rowsToDeleteLivraison.push(element.taskId);
       }
@@ -429,9 +429,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
   /************selection multiple of checkbox in livraison bloc *******/
   deleteMasterToggleException() {
-    if (this.rowsToDeleteException.length == this.copyDataSourceException.length) {
+    if (this.rowsToDeleteException.length == this.dataSourceException.data.length) {
       this.rowsToDeleteException = [];
-      this.copyDataSourceException.forEach(element => {
+      this.dataSourceException.data.forEach(element => {
         this.dataSource.data.forEach(el => {
           element.isDeleted = 0;
           //UnSelect automatique of column in livraison bloc
@@ -445,12 +445,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         })
       });
     } else {
-      this.rowsToDeleteException = [];
-      for (var element of this.copyDataSourceException) {
+    //  this.rowsToDeleteException = [];
+      for (var element of this.dataSourceException.data) {
         element.isDeleted = 1;
         this.rowsToDeleteException.push(element.taskId);
 
-        this.dataSource.data.forEach(el => {
+        this.copyFilterLivraison.forEach(el => {
           if (element.taskId == el.taskId) {
             el.toDelete = 1;
             if (!this.rowsToDeleteLivraison.includes(el.taskId)) {
@@ -623,6 +623,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (this.filterValueException === '') {
       this.dataSourceException.data = this.dataSourceException.data;
     }
+
   }
 
   /**** Filter items */
@@ -774,7 +775,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
   setFilteredItemsOptions(filter) {
     // check if filter is already selected
-
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
     //  let selected=filter.columnProp;
     this.changeSelectedOptionColor(filter);
@@ -886,7 +886,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
     }
-
   }
 
   setFilteredItemsMetaDataOptions(filter) {

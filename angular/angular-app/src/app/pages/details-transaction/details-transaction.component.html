@@ -387,7 +387,7 @@
                       mat-header-cell *matHeaderCellDef>
                       toDelete
                       <mat-checkbox style="margin-left:5px" (change)="$event ? deleteMasterToggleLivraison() : null"
-                        [checked]=" rowsToDeleteLivraison.length == copyDataSource.length">
+                        [checked]=" rowsToDeleteLivraison.length == dataSource.data.length">
                       </mat-checkbox>
                     </th>
                     <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
@@ -761,7 +761,7 @@
                       mat-header-cell *matHeaderCellDef>
                       isDeleted
                       <mat-checkbox style="margin-left:5px" (change)="$event ? deleteMasterToggleException() : null"
-                      [checked]=" rowsToDeleteException.length == copyDataSourceException.length">
+                      [checked]=" rowsToDeleteException.length == dataSourceException.data.length">
                     </mat-checkbox>
                     </th>
                     <td mat-cell #cellException class="center-cell-transactionsFiles"

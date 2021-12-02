@@ -214,7 +214,10 @@ export class PowerbiEmbeddedComponent implements OnInit {
   }
 
   public refreshBD() {
-    this.openSnackBar("La base de données ne peut pas être actualisé manuellement, réessayer plus tard. ", "Ok", 5000);
+    this.pbiService.refreshBD().subscribe(
+      res => this.openSnackBar("Actualisation de la base de données en cours... ", "Ok", 5000),
+      err => this.openSnackBar("La base de données ne peut pas être actualisé manuellement, réessayer plus tard. ", "Ok", 5000),
+    )
 
   }
 

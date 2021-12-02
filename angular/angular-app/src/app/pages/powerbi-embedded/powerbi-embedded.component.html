@@ -33,12 +33,12 @@
       <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
       </base-pagination>
       <!-- <p>{{ capacityState }}</p> -->
-      <!-- <button *ngIf="(user.role == 'SuperAdmin') && capacityState" (click)="refreshBD()" [disabled]="btnClicked"
+      <button *ngIf="capacityState" (click)="refreshBD()" [disabled]="btnClicked"
         matTooltip="Actualisation de la base de données"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">
         <i class="material-icons ">refresh</i>
         Actualiser
-      </button> -->
+      </button>
       <button *ngIf="(user.role == 'SuperAdmin') && (capacityState == 'Paused' || capacityState == 'Resuming' )"
         (click)="openConfirmDialog('activer')" matTooltip="Statut actuel : suspendu"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "

@@ -48,6 +48,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   fileTocheck: any;
   oneBloc: boolean;
   secondSheet: any;
+  terminated: boolean = false;
   selectedCellsState: boolean[][] = [
     // [false, false, false],
   ];
@@ -75,15 +76,16 @@ export class DetailsFileMagistorComponent implements OnInit {
           this.typeFileCDC = true;
           this.secondSheet = "LCD01";
         }
-        if (this.file.status == "En attente" || this.file.status == "Validé") {
-          this.oneBloc=true;
+        if (this.file.status == "En attente" || this.file.status == "Validé" || this.file.status == "Terminé") {
+          this.oneBloc = true;
+          console.log(this.oneBloc);
           data = {
             "logisticFileName": this.file.logisticFileName.name,
             "folderLogisticFile": this.file.idLogisticFile,
             "logisticSheetName": this.file.logisticFileType,
           }
         } else {
-          this.oneBloc = false ;
+          this.oneBloc = false;
           var fileName = this.file.logisticFileName.name;
           fileName = fileName.slice(0, 3) + fileName.slice(5);
           data = {
@@ -92,6 +94,10 @@ export class DetailsFileMagistorComponent implements OnInit {
             "logisticSheetName": this.file.logisticFileType,
           }
         }
+        if (this.file.status == "Terminé") {
+          this.terminated = true;
+        }
+        console.log(data);
         this.fileService.getLogisticFileContent(data).subscribe(res => {
           this.fileMagistor = res;
 
@@ -117,18 +123,19 @@ export class DetailsFileMagistorComponent implements OnInit {
               this.getOption(item);
             })
           }
-        })
+        }
+        )
 
 
-        data ={
-          "logisticFileName": fileName.replace('.xlsx', '_Correct.xlsx'),
+        data = {
+          "logisticFileName": this.file.logisticFileName.name,
           "folderLogisticFile": this.file.idLogisticFile,
           "logisticSheetName": this.secondSheet,
         }
         console.log(data);
         this.fileService.getLogisticFileContent(data).subscribe(res => {
           this.fileMagistor2 = res;
-          console.log(this.fileMagistor.rows);
+          console.log(this.fileMagistor2.rows);
           if (this.fileMagistor2.rows.length > 0) {
             this.copyfileMagistor2 = JSON.parse(JSON.stringify(this.fileMagistor2));
             this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);

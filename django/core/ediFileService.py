@@ -328,11 +328,56 @@ def createFileEdiFromColumnAndRows(columns, rows, fileId , fileType):
         path = path_racine_output + clientDB.code_client
         fileDB.number_correct_commands = len(rows)
         fileDB.save()
+        # if fileDB.wrong_commands != "_":
+        #     #response = seeFileContentEdi(fileDB.wrong_commands,clientDB.code_client)
+        #     ftp = connect()
+        #     ftp.cwd(path)
+        #     for name in ftp.nlst():
+        #         if name == fileDB.wrong_commands:
+        #             with open(name, "wb") as file:
+        #                 commande = "RETR " + name
+        #                 ftp.retrbinary(commande, file.write)
+        #             break
+
+        #     df1 = pd.DataFrame(rows, columns=columns)
+        #     df1 = df1.append(pd.read_excel(fileDB.wrong_commands), ignore_index=True)
+        #     df1.to_excel(fileDB.file.name, index=False)
+        #     ftp.cwd(path_racine_input + clientDB.code_client)
+        #     file = open(fileDB.file.name, 'rb')
+        #     print(os.path.basename(fileDB.file.name))
+        #     ftp.storbinary('STOR ' + os.path.basename(fileDB.file.name), file)
+        #     file.close()
+        #     ftp.close()
+        #     os.remove(fileDB.file.name)
+
+
     elif fileType == "error" :
         fileName = fileDB.wrong_commands
         path = path_racine_output + clientDB.code_client
         fileDB.number_wrong_commands = len(rows)
         fileDB.save()
+        # if fileDB.validated_orders != "_":
+        #     #response = seeFileContentEdi(fileDB.wrong_commands,clientDB.code_client)
+        #     ftp1 = connect()
+        #     ftp1.cwd(path)
+        #     for name in ftp1.nlst():
+        #         if name == fileDB.validated_orders:
+        #             with open(name, "wb") as file:
+        #                 commande = "RETR " + name
+        #                 ftp1.retrbinary(commande, file.write)
+        #             break
+
+        #     df1 = pd.DataFrame(rows, columns=columns)
+        #     df1 = df1.append(pd.read_excel(fileDB.validated_orders), ignore_index=True) 
+        #     df1.to_excel(fileDB.file.name, index=False)
+        #     ftp1.cwd(path_racine_input + clientDB.code_client)
+        #     file = open(fileDB.file.name, 'rb')
+        #     print(os.path.basename(fileDB.file.name))
+        #     ftp1.storbinary('STOR ' + os.path.basename(fileDB.file.name), file)
+        #     file.close()
+        #     ftp1.close()
+        #     os.remove(fileDB.file.name)
+
     else :
         fileName = fileDB.file.name
         path = path_racine_input + clientDB.code_client + "/FILES_TO_DIAGNOSTIC_DEV"

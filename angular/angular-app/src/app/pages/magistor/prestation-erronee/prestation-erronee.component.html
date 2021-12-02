@@ -253,20 +253,20 @@
                     </ng-container>
 
 
-                    <ng-container matColumnDef="LONGUEUR_UNITAIRE">
+                    <ng-container *ngIf="displayedColumns.includes('LONGEUR_UNITAIRE')" matColumnDef="LONGEUR_UNITAIRE">
+                        <th class="titre-column-magistor" id="LONGEUR_UNITAIRE" mat-header-cell *matHeaderCellDef>
+                            LONGEUR_UNITAIRE
+                        </th>
+                        <td mat-cell *matCellDef="let element ; let i = index" id="LONGEUR_UNITAIREmagistor"
+                            (mousedown)="onMouseDown(i, 11, 'LONGEUR_UNITAIRE')"
+                            (mouseup)="onMouseUp(i, 11, 'LONGEUR_UNITAIRE')"
+                            [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}">
+                            {{element.LONGEUR_UNITAIRE}} </td>
+                    </ng-container>
+
+                    <ng-container *ngIf="displayedColumns.includes('LONGUEUR_UNITAIRE')" matColumnDef="LONGUEUR_UNITAIRE">
                         <th class="titre-column-magistor" id="LONGUEUR_UNITAIRE" mat-header-cell *matHeaderCellDef>
                             LONGUEUR_UNITAIRE
-
-                            <mat-form-field class="form-column" appearance="fill">
-                                <mat-select multiple [(ngModel)]="options[11].modelValue"
-                                    (selectionChange)="setFilteredItemsOptions(options[11],$event)">
-                                    <mat-select-trigger>
-                                    </mat-select-trigger>
-                                    <mat-option *ngFor="let item of options[11].options" [value]="item">{{item}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-
                         </th>
                         <td mat-cell *matCellDef="let element ; let i = index" id="LONGUEUR_UNITAIREmagistor"
                             (mousedown)="onMouseDown(i, 11, 'LONGUEUR_UNITAIRE')"
@@ -401,7 +401,9 @@
     class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
     <base-card-title class="reorder">
         <div id="conteneur">
-            <label class="label-wrong">Conditionnement : Prestations erronées</label>
+            <label *ngIf="!oneBloc" class="label-wrong">Conditionnement : Prestations erronées</label>
+            <label *ngIf="oneBloc" class="">Conditionnement</label>
+
         </div>
         <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
             <div class="mdl-textfield label-search">
@@ -436,7 +438,7 @@
 
                 <div class="content-table">
                 <table mat-table id='mytable' *ngIf="typeFileART" [dataSource]="data"
-                    class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
+                    class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
                     <!-- Delete Column -->
                     <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
                         <th class="titre-column-magistor" id="REMARQUE" mat-header-cell *matHeaderCellDef>
@@ -565,7 +567,16 @@
                             {{element.POIDS}} </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="LONGUEUR">
+                    <ng-container *ngIf="displayedColumns.includes('LONGEUR')" matColumnDef="LONGEUR">
+                        <th class="titre-column-magistor" id="LONGEUR" mat-header-cell *matHeaderCellDef> LONGEUR
+                        </th>
+                        <td mat-cell *matCellDef="let element ; let i = index" id="LONGEURmagistor"
+                            (mousedown)="onMouseDown2(i, 7, 'LONGEUR')" (mouseup)="onMouseUp2(i, 7, 'LONGEUR')"
+                            [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
+                            {{element.LONGEUR}} </td>
+                    </ng-container>
+
+                    <ng-container *ngIf="displayedColumns.includes('LONGUEUR')" matColumnDef="LONGUEUR">
                         <th class="titre-column-magistor" id="LONGUEUR" mat-header-cell *matHeaderCellDef> LONGUEUR
                         </th>
                         <td mat-cell *matCellDef="let element ; let i = index" id="LONGUEURmagistor"
@@ -860,7 +871,9 @@
     class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
     <base-card-title class="reorder">
         <div id="conteneur">
-            <label class="label-wrong">Lignes de réception : Prestations erronées</label>
+            <label *ngIf="!oneBloc" class="label-wrong">Lignes de réception : Prestations erronées</label>
+            <label *ngIf="oneBloc">Lignes de réception</label>
+
         </div>
         <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
             <div class="mdl-textfield label-search">
@@ -1019,8 +1032,8 @@
                         </button>
                     </mat-panel-description>
                 </mat-expansion-panel-header>
-                <div class="content-table">
-                    <table mat-table id='mytable' *ngIf="typeFileCDC" [dataSource]="data"
+                <div *ngIf="data.length>0" class="content-table">
+                    <table mat-table id='mytable' *ngIf="typeFileCDC && data.length>0" [dataSource]="data"
                         class="table-validator mdl-data-table mdl-js-data-table  sorting-table"
                         (keyup)="onKeyUp($event)">
 
@@ -1050,7 +1063,7 @@
                             <td mat-cell *matCellDef="let element ; let i = index" id="OP_CODEmagistor"
                                 (mousedown)="onMouseDown(i, 0, 'OP_CODE')" (mouseup)="onMouseUp(i, 0, 'OP_CODE')"
                                 [ngClass]="{'selected': selectedCellsState[i][0], 'unselected': !selectedCellsState[i][0]}"
-                                class="error">
+                                class="">
                                 {{element.OP_CODE}} </td>
                         </ng-container>
 
@@ -1616,7 +1629,9 @@
     class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
     <base-card-title class="reorder">
         <div id="conteneur">
-            <label class="label-wrong">Lignes de commandes : Prestations erronées</label>
+            <label *ngIf="!oneBloc" class="label-wrong">Lignes de commandes : Prestations erronées</label>
+            <label *ngIf="oneBloc" >Lignes de commandes </label>
+
         </div>
         <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
             <div class="mdl-textfield label-search">
@@ -1650,7 +1665,7 @@
                 </mat-expansion-panel-header>
                 <div class="content-table">
 
-                <table mat-table id='mytable' *ngIf="typeFileCDC" [dataSource]="data"
+                <table mat-table id='mytable' *ngIf="typeFileCDC && data.length>0" [dataSource]="data"
                     class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
 
                     <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">

@@ -52,8 +52,12 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   }
   ngOnChanges(changes: SimpleChanges): void {
     //console.log("changes happend");
-    console.log("changes happend   ", changes.data);
+    console.log("data changes happend   ", changes.data.currentValue);
+    this.data = changes.data.currentValue;
+    this.originData = changes.originData.currentValue;
     //throw new Error('Method not implemented.');
+    console.log("origindata changes happend   ", changes.originData.currentValue);
+
   }
 
   ngOnInit(): void {
@@ -71,12 +75,16 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.typeFileCDC = true;
     }
     this.displayedColumns = (Object.keys(this.data[0]));
+
     if (!this.oneBloc) {
       this.displayedColumns.unshift(this.displayedColumns.pop());
+      for (var i = 0; i < this.data.length; i++) {
+        if(this.data[i]['REMARQUE'].includes(";")){
+          this.data[i]['REMARQUE'] = this.data[i]['REMARQUE'].split(';').join('\n');
+        }
+      }
     }
-    for (var i = 0; i < this.data.length; i++) {
-      this.data[i]['REMARQUE'] = this.data[i]['REMARQUE'].split(';').join('\n');
-    }
+
 
     this.LAST_EDITABLE_ROW = this.data.length - 1;
     this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;

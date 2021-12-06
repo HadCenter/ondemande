@@ -190,6 +190,9 @@ def getFilesByClient(request,pk):
 def downloadFileName(request):
     fileName = request.data['fileName']
     clientCode = request.data['clientCode']
+    print(fileName)
+    ediFile = EDIfile.objects.get(file=fileName)
+    print(ediFile.number_wrong_commands == 0)
     entred1 : bool = False
     entred2:bool = False
     ftp = connect()
@@ -207,14 +210,14 @@ def downloadFileName(request):
     path_client2 = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/" + clientCode
     ftp.cwd(path_client2)
     for name in ftp.nlst():
-        if name == "error_"+fileName:
+        if name == "error_"+fileName and (ediFile.number_wrong_commands != 0):
             with open(name, "wb") as file2:
                 commande = "RETR " + name
                 ftp.retrbinary(commande, file2.write)
                 entred2 = True
             break
     for name in ftp.nlst():
-        if name == "correct_"+fileName:
+        if name == "correct_"+fileName and (ediFile.number_correct_commands != 0):
             with open(name, "wb") as file1:
                 commande = "RETR " + name
                 ftp.retrbinary(commande, file1.write)
@@ -258,7 +261,6 @@ def downloadFileName(request):
     response['Content-Length'] = os.path.getsize(fileName)
     os.remove(fileName)
     return response
-
 
 @api_view(['POST'])
 def seeFileContent(request):

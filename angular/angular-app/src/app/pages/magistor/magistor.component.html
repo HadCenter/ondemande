@@ -18,9 +18,9 @@
         fichier
       </button>
       &nbsp;
-      <a><button (click)="actualiser()"
+      <!-- <a><button (click)="actualiser()"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Actualiser
-        </button></a>
+        </button></a> -->
     </base-card-title>
     <base-card-body class="no-padding">
       <table *ngIf="advancedTable.length > 0" class="table-list mdl-data-table mdl-js-data-table sorting-table">
@@ -67,6 +67,7 @@
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
               </button>
               <button style="margin-left: 3px;" (click)="gotoDetails(row)"
+              [disabled]="row?.status == 'Invalide' || row?.status == 'En cours'"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Détails
               </button>
               <span  (click)="downloadFile(row)"

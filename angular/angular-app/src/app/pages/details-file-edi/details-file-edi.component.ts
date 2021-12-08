@@ -493,6 +493,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    */
   @HostListener('document:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent): void {
+    console.warn("***",event.target)
     let target = event.target as HTMLTextAreaElement;
     if (target.id == "") {
       // If no cell is selected then ignore keyUp event

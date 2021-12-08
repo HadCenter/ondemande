@@ -148,7 +148,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     if (optionFile == "valid") {
       this.showValid = true;
       if (this.rowsToDeleteValid.length == this.fileValid.rows.length) {
-        this.fileValid.rows=[]
+        this.fileValid.rows = []
       }
       else {
 
@@ -313,7 +313,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
   }
 
   deleteMasterToggle() {
-    
+
     if (this.rowsToDelete.length == this.copyFileWrong.length) {
       this.rowsToDelete = [];
       (document.getElementById('deleteWrongBtn') as HTMLButtonElement).disabled = false;
@@ -327,7 +327,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
   }
   deleteMasterToggleValid() {
-   
+
     if (this.rowsToDeleteValid.length == this.copyFileValid.length) {
       this.rowsToDeleteValid = [];
       (document.getElementById('deleteValidBtn') as HTMLButtonElement).disabled = false;
@@ -338,7 +338,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
         this.rowsToDeleteValid.push(element.rowId);
       }
     }
-   
+
   }
 
 
@@ -493,23 +493,26 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
    */
   @HostListener('document:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent): void {
+    console.warn("***",event.target)
+    let target = event.target as HTMLTextAreaElement;
+    if (target.id == "") {
+      // If no cell is selected then ignore keyUp event
+      if (this.tableMouseDown && this.tableMouseUp) {
 
-    // If no cell is selected then ignore keyUp event
-    if (this.tableMouseDown && this.tableMouseUp) {
+        let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
+          'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
+          'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
+          'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
 
-      let specialKeys: string[] = ['Enter', 'PrintScreen', 'Escape', 'cControl', 'NumLock', 'PageUp', 'PageDown', 'End',
-        'Home', 'Delete', 'Insert', 'ContextMenu', 'Control', 'ControlAltGraph', 'Alt', 'Meta', 'Shift', 'CapsLock',
-        'Tab', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Pause', 'ScrollLock', 'Dead', '',
-        'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
+        if (event.key === 'Backspace') { // 'delete' key is pressed
+          const end: number = this.newCellValue.length - 1;
+          this.newCellValue = this.newCellValue.slice(0, end);
 
-      if (event.key === 'Backspace') { // 'delete' key is pressed
-        const end: number = this.newCellValue.length - 1;
-        this.newCellValue = this.newCellValue.slice(0, end);
-
-      } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
-        this.newCellValue += event.key;
+        } else if (this.indexOfInArray(event.key, specialKeys) === -1) {
+          this.newCellValue += event.key;
+        }
+        this.updateSelectedCellsValues(this.newCellValue);
       }
-      this.updateSelectedCellsValues(this.newCellValue);
     }
   }
 

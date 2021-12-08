@@ -130,7 +130,7 @@
 
     <div>
       <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-        <base-card-title class="reorder-edi">
+        <base-card-title class="reorder-edi ">
           <div id="conteneur">
             <label class="label-wrong">Prestations erronées</label>
           </div>
@@ -168,7 +168,7 @@
                 [show]="showWrong"></app-loader>
               <div *ngIf="copyFileWrong" class="content-table">
                 <table mat-table id='mytable' [dataSource]="copyFileWrong"
-                  class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
+                  class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event,this)">
                   <!-- Delete Column -->
 
                   <ng-container matColumnDef="Delete">
@@ -232,7 +232,7 @@
                         </mat-select>
                       </mat-form-field> -->
 
-                      <mat-form-field class="form-column" appearance="fill">
+                      <mat-form-field class="form-column" appearance="fill" >
                         <mat-select multiple [(ngModel)]="options[3].modelValue"
                           (selectionChange)="setFilteredItemsOptions(options[3],$event)">
                           <mat-select-trigger>

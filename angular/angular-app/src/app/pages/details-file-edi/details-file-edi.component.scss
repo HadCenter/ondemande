@@ -7,7 +7,7 @@ body {
 .content-first-card {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  grid-auto-rows: 30px;
+  grid-auto-rows: auto;
   grid-gap: 10px;
 }
 .content-first-card > label {
@@ -32,7 +32,7 @@ mat-panel-title.mat-expansion-panel-header-title {
   color: white;
 }
 base-card-body.content-first-card.mdl-card__supporting-text {
-  padding: 30px 16px;
+  padding: 36px 16px;
 }
 .table-validator {
   width: max-content;
@@ -370,7 +370,7 @@ button.delete-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-e
   // background-color: red;
 }
 
-.reorder {
+.reorder-edi {
   display: flex;
   justify-content: space-between;
 }

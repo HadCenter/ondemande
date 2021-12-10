@@ -36,12 +36,12 @@
 
         <div *ngIf="fileMagistor">
           <!----[disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'" !-->
-          <button (click)='$event.stopPropagation();' style="margin-left: 5px;"
+          <button (click)='correctionFile();$event.stopPropagation();' style="margin-left: 5px;"
           [disabled]="terminated || file?.ButtonValidateActivated==false"
             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
           </button>
 
-          <button (click)="correctionFile()" style="margin-left: 5px;" [disabled]="terminated || file?.ButtonCorrecteActiveted==false"
+          <button (click)="correctionFile();$event.stopPropagation();" style="margin-left: 5px;" [disabled]="terminated || file?.ButtonCorrecteActiveted==false"
             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
           </button>
           <!-- <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"

@@ -1,5 +1,6 @@
-<div class="container mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-  <div class="content-file-edi">
+<div class="container mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone"
+  (mousedown)="onMouseDownAll()">
+  <div class="content-file-magistor">
     <div class="content-labels">
       <base-card class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--3-col-phone">
         <base-card-body class="content-first-card-magistor">
@@ -25,609 +26,608 @@
         class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--3-col-phone">
 
 
-        <div style="padding: 7px;" class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+        <!-- <div style="padding: 7px;" class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
           <div style="padding: 0px;" class="mdl-textfield label-search">
             <input style="color: white;" class="mdl-textfield__input" type="text" id="search1"
               (input)="setFilteredItemsValid()" [(ngModel)]="searchItems" placeholder="Rechercher" autocomplete="off" />
             <label class="mdl-textfield__label" for="search1"></label>
           </div>
-        </div>
+        </div> -->
 
-        <div>
+        <div *ngIf="fileMagistor">
           <!----[disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'" !-->
-          <button (click)="correctionFile()"
+          <button (click)='$event.stopPropagation();' style="margin-left: 5px;"
+          [disabled]="terminated || file?.ButtonValidateActivated==false"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
+          </button>
+
+          <button (click)="correctionFile()" style="margin-left: 5px;" [disabled]="terminated || file?.ButtonCorrecteActiveted==false"
             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
           </button>
-          <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
+          <!-- <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
             les filtres
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
-    <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
+    <!-- <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
       [show]="!terminated && oneBloc && !(fileMagistor && fileMagistor2)"></app-loader>
-      <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
-      [show]="!terminated && !oneBloc && !(fileMagistor && errorfileMagistor)"></app-loader>
+    <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
+      [show]="!terminated && !oneBloc && !(fileMagistor && errorfileMagistor)"></app-loader> -->
+    <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="showLoader">
+    </app-loader>
 
-    <div *ngIf="true" class="" style="margin: 8px;">
+
+    <div style="margin: 8px;">
 
       <!-------------------------------TYPE FILE ART--------------------------------------->
-      <div *ngIf="terminated">
+      <div *ngIf="typeFileART && !showLoader">
+        <div *ngIf="terminated">
 
-        <base-card *ngIf="typeFileART"
-          class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-          <base-card-title class="reorder">
-            <div id="conteneur">
-              <label class="label-success">Article : Prestations validées</label>
-            </div>
-            <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-              <div class="mdl-textfield label-search">
-                <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                  [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-                <label class="mdl-textfield__label" for="search2"></label>
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Article : Prestations validées</label>
               </div>
-            </div>
-          </base-card-title>
-          <base-card-body class="content-file-line">
-            <mat-accordion>
-              <mat-expansion-panel hideToggle>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Afficher Log
-                  </mat-panel-title>
-                  <mat-panel-description>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
 
-                  </mat-panel-description>
-                </mat-expansion-panel-header>  
-                <div *ngIf="fileMagistor" class="content-table">
-                  <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
-                    <thead>
-                      <tr>
-                        <th *ngFor="let row of fileMagistor?.columns ; let i = index"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div *ngIf="fileMagistor" class="content-table">
+                    <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
-                        <!-- <td>
+                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
                         </mat-checkbox>
 
                       </td> -->
 
-                        <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <label [ngClass]="full-column">
-                            {{column}}
-                          </label>
-                        </td>
-                      </tr>
-                    </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-                  </table>
+                    </table>
+                  </div>
+                </mat-expansion-panel>
+
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Conditionnement : Prestations validées</label>
+              </div>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-              </mat-expansion-panel>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div *ngIf="fileMagistor2" class="content-table">
+                    <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-            </mat-accordion>
-          </base-card-body>
-        </base-card>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-        <base-card *ngIf="typeFileART"
-        class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-        <base-card-title class="reorder">
-          <div id="conteneur">
-            <label class="label-success">Conditionnement : Prestations validées</label>
-          </div>
-          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-            <div class="mdl-textfield label-search">
-              <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-              <label class="mdl-textfield__label" for="search2"></label>
-            </div>
-          </div>
-        </base-card-title>
-        <base-card-body class="content-file-line">
-          <mat-accordion>
-            <mat-expansion-panel hideToggle>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Afficher Log
-                </mat-panel-title>
-                <mat-panel-description>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <div *ngIf="fileMagistor2" class="content-table">
-                <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
-                  <thead>
-                    <tr>
-                      <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
-                        class="details-line mdl-data-table__cell--non-numeric">
-                        <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
-
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                    <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
-                      <!-- <td>
+                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                       <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                         (change)="selectDeleteRowValidFile (i)">
                       </mat-checkbox>
 
                     </td> -->
 
-                      <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                        class="details-line mdl-data-table__cell--non-numeric">
-                        <label [ngClass]="full-column">
-                          {{column}}
-                        </label>
-                      </td>
-                    </tr>
-                  </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-                </table>
+                    </table>
+                  </div>
+                </mat-expansion-panel>
+
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+
+        </div>
+        <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
+          <app-prestation-erronee *ngIf="fileMagistor" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
+            [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc">
+          </app-prestation-erronee>
+
+          <app-prestation-erronee *ngIf="fileMagistor2" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
+            [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc">
+          </app-prestation-erronee>
+
+        </div>
+        <div *ngIf="!terminated && !oneBloc && fileMagistor && errorfileMagistor">
+          <!------------------------------------- FEUILLE ART01 --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
+
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Article : Prestations validées</label>
               </div>
-            </mat-expansion-panel>
-
-          </mat-accordion>
-        </base-card-body>
-      </base-card>
-
-      </div>
-      <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
-        <app-prestation-erronee *ngIf="typeFileART && fileMagistor" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"  [data]="copyfileMagistor"
-          [sheet1]="true" [oneBloc]="oneBloc">
-        </app-prestation-erronee>
-
-        <app-prestation-erronee *ngIf="typeFileART && fileMagistor2" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2" [data]="copyfileMagistor2"
-          [sheet1]="false" [oneBloc]="oneBloc">
-        </app-prestation-erronee>
-
-      </div>
-      <div *ngIf="!terminated && !oneBloc && typeFileART && errorfileMagistor && errorfileMagistor2">
-        <!------------------------------------- FEUILLE ART01 --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
-
-        <base-card *ngIf="typeFileART"
-          class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-          <base-card-title class="reorder">
-            <div id="conteneur">
-              <label class="label-success">Article : Prestations validées</label>
-            </div>
-            <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-              <div class="mdl-textfield label-search">
-                <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                  [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-                <label class="mdl-textfield__label" for="search2"></label>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
               </div>
-            </div>
-          </base-card-title>
-          <base-card-body class="content-file-line">
-            <mat-accordion>
-              <mat-expansion-panel hideToggle>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Afficher Log
-                  </mat-panel-title>
-                  <mat-panel-description>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
 
-                <div *ngIf="fileMagistor" class="content-table">
-                  <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
-                    <thead>
-                      <tr>
-                        <th *ngFor="let row of fileMagistor?.columns ; let i = index"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+                  <div *ngIf="fileMagistor" class="content-table">
+                    <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
-                        <!-- <td>
+                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
                         </mat-checkbox>
 
                       </td> -->
 
-                        <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <label [ngClass]="full-column">
-                            {{column}}
-                          </label>
-                        </td>
-                      </tr>
-                    </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-                  </table>
-                </div>
-              </mat-expansion-panel>
+                    </table>
+                  </div>
+                </mat-expansion-panel>
 
-            </mat-accordion>
-          </base-card-body>
-        </base-card>
-        <!------------------------------------- FEUILLE ART01 --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
-        <app-prestation-erronee *ngIf="typeFileART && errorfileMagistor?.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="errorfileMagistor" [data]="copyerrorfileMagistor"
-          [sheet1]="true">
-        </app-prestation-erronee>
-        <!------------------------------------- FEUILLE CND01 --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+          <!------------------------------------- FEUILLE ART01 --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
+          <app-prestation-erronee *ngIf="errorfileMagistor?.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="errorfileMagistor" [data]="copyerrorfileMagistor" [sheet1]="true">
+          </app-prestation-erronee>
+          <!------------------------------------- FEUILLE CND01 --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
 
-        <base-card *ngIf="typeFileART"
-          class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-          <base-card-title class="reorder">
-            <div id="conteneur">
-              <label class="label-success">Conditionnement : Prestations validées</label>
-            </div>
-            <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-              <div class="mdl-textfield label-search">
-                <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                  [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-                <label class="mdl-textfield__label" for="search2"></label>
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Conditionnement : Prestations validées</label>
               </div>
-            </div>
-          </base-card-title>
-          <base-card-body class="content-file-line">
-            <mat-accordion>
-              <mat-expansion-panel hideToggle>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Afficher Log
-                  </mat-panel-title>
-                  <mat-panel-description>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
 
-                <div *ngIf="fileMagistor2" class="content-table">
-                  <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
-                    <thead>
-                      <tr>
-                        <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+                  <div *ngIf="fileMagistor2" class="content-table">
+                    <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
-                        <!-- <td>
+                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
                         </mat-checkbox>
 
                       </td> -->
 
-                        <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <label [ngClass]="full-column">
-                            {{column}}
-                          </label>
-                        </td>
-                      </tr>
-                    </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-                  </table>
-                </div>
-              </mat-expansion-panel>
+                    </table>
+                  </div>
+                </mat-expansion-panel>
 
-            </mat-accordion>
-          </base-card-body>
-        </base-card>
-        <!------------------------------------- FEUILLE CND01 --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
-        <app-prestation-erronee *ngIf="typeFileART && errorfileMagistor2?.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2"
-          [sheet1]="false">
-        </app-prestation-erronee>
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+          <!------------------------------------- FEUILLE CND01 --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
+          <app-prestation-erronee *ngIf="errorfileMagistor2?.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2" [sheet1]="false">
+          </app-prestation-erronee>
+        </div>
       </div>
-
-
-
-
-
 
       <!-------------------------------TYPE FILE REC--------------------------------------->
-      <div *ngIf="terminated">
+      <div *ngIf="typeFileREC  && !showLoader">
+        <div *ngIf="terminated">
 
-        <base-card *ngIf="typeFileREC"
-        class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-        <base-card-title class="reorder">
-          <div id="conteneur">
-            <label class="label-success">Réception : Prestations validées</label>
-          </div>
-          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-            <div class="mdl-textfield label-search">
-              <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-              <label class="mdl-textfield__label" for="search2"></label>
-            </div>
-          </div>
-        </base-card-title>
-        <base-card-body class="content-file-line">
-          <mat-accordion>
-            <mat-expansion-panel hideToggle>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Afficher Log
-                </mat-panel-title>
-                <mat-panel-description>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
-              [show]="!(fileMagistor )"></app-loader>
-        
-              <div *ngIf="fileMagistor" class="content-table">
-                <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
-                  <thead>
-                    <tr>
-                      <th *ngFor="let row of fileMagistor?.columns ; let i = index"
-                        class="details-line mdl-data-table__cell--non-numeric">
-                        <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Réception : Prestations validées</label>
+              </div>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
+                    [show]="!(fileMagistor )"></app-loader>
 
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                  <div *ngIf="fileMagistor" class="content-table">
+                    <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-                    <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
-                      <!-- <td>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                       <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                         (change)="selectDeleteRowValidFile (i)">
                       </mat-checkbox>
 
                     </td> -->
 
-                      <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                        class="details-line mdl-data-table__cell--non-numeric">
-                        <label [ngClass]="full-column">
-                          {{column}}
-                        </label>
-                      </td>
-                    </tr>
-                  </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-                </table>
+                    </table>
+                  </div>
+
+                </mat-expansion-panel>
+
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Lignes de réception : Prestations validées</label>
               </div>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
+                    [show]="!(fileMagistor2 )"></app-loader>
 
-            </mat-expansion-panel>
+                  <div *ngIf="fileMagistor2" class="content-table">
+                    <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-          </mat-accordion>
-        </base-card-body>
-      </base-card>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-      <base-card *ngIf="typeFileREC"
-      class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-      <base-card-title class="reorder">
-        <div id="conteneur">
-          <label class="label-success">Lignes de réception : Prestations validées</label>
-        </div>
-        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-          <div class="mdl-textfield label-search">
-            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-              [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-            <label class="mdl-textfield__label" for="search2"></label>
-          </div>
-        </div>
-      </base-card-title>
-      <base-card-body class="content-file-line">
-        <mat-accordion>
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Afficher Log
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
-            [show]="!(fileMagistor2 )"></app-loader>
-
-            <div *ngIf="fileMagistor2" class="content-table">
-              <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
-                <thead>
-                  <tr>
-                    <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
-                      class="details-line mdl-data-table__cell--non-numeric">
-                      <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
-
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
-                    <!-- <td>
+                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                     <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                       (change)="selectDeleteRowValidFile (i)">
                     </mat-checkbox>
 
                   </td> -->
 
-                    <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                      class="details-line mdl-data-table__cell--non-numeric">
-                      <label [ngClass]="full-column">
-                        {{column}}
-                      </label>
-                    </td>
-                  </tr>
-                </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-              </table>
-            </div>
-          </mat-expansion-panel>
+                    </table>
+                  </div>
+                </mat-expansion-panel>
 
-        </mat-accordion>
-      </base-card-body>
-    </base-card>
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+        </div>
 
-      </div>
-      <div *ngIf="!terminated && oneBloc && typeFileREC && fileMagistor && fileMagistor2">
-        <app-prestation-erronee [typeFile]="file?.logisticFileType" [originData]="fileMagistor" [data]="copyfileMagistor" [sheet1]="true"
-          [oneBloc]="oneBloc">
-        </app-prestation-erronee>
+        <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
+          <app-prestation-erronee [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
+            [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc">
+          </app-prestation-erronee>
 
-        <app-prestation-erronee [typeFile]="file?.logisticFileType" [originData]="fileMagistor2" [data]="copyfileMagistor2" [sheet1]="false"
-          [oneBloc]="oneBloc">
-        </app-prestation-erronee>
+          <app-prestation-erronee [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
+            [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc">
+          </app-prestation-erronee>
 
-      </div>
-      <div *ngIf="!terminated && !oneBloc && typeFileREC && errorfileMagistor && fileMagistor">
+        </div>
 
-        <!------------------------------------- FEUILLE REC01  --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
+        <div *ngIf="!terminated && !oneBloc && fileMagistor && errorfileMagistor ">
 
-        <base-card *ngIf="typeFileREC"
-          class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-          <base-card-title class="reorder">
-            <div id="conteneur">
-              <label class="label-success">Réception : Prestations validées</label>
-            </div>
-            <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-              <div class="mdl-textfield label-search">
-                <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                  [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-                <label class="mdl-textfield__label" for="search2"></label>
+          <!------------------------------------- FEUILLE REC01  --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
+
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Réception : Prestations validées</label>
               </div>
-            </div>
-          </base-card-title>
-          <base-card-body class="content-file-line">
-            <mat-accordion>
-              <mat-expansion-panel hideToggle>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Afficher Log
-                  </mat-panel-title>
-                  <mat-panel-description>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
-                <div *ngIf="fileMagistor" class="content-table">
-                  <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
-                    <thead>
-                      <tr>
-                        <th *ngFor="let row of fileMagistor?.columns ; let i = index"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div *ngIf="fileMagistor" class="content-table">
+                    <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
-                        <!-- <td>
+                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
                         </mat-checkbox>
 
                       </td> -->
 
-                        <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <label [ngClass]="full-column">
-                            {{column}}
-                          </label>
-                        </td>
-                      </tr>
-                    </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-                  </table>
-                </div>
+                    </table>
+                  </div>
 
-              </mat-expansion-panel>
+                </mat-expansion-panel>
 
-            </mat-accordion>
-          </base-card-body>
-        </base-card>
-        <!------------------------------------- FEUILLE REC01  --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+          <!------------------------------------- FEUILLE REC01  --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
 
-        <app-prestation-erronee *ngIf="typeFileREC && errorfileMagistor?.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="errorfileMagistor" [data]="copyerrorfileMagistor"
-          [sheet1]="true">
-        </app-prestation-erronee>
+          <app-prestation-erronee *ngIf="errorfileMagistor?.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="errorfileMagistor" [data]="copyerrorfileMagistor" [sheet1]="true">
+          </app-prestation-erronee>
 
 
-        <!------------------------------------- FEUILLE LRC01  --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
+          <!------------------------------------- FEUILLE LRC01  --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
 
-        <base-card *ngIf="typeFileREC"
-          class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-          <base-card-title class="reorder">
-            <div id="conteneur">
-              <label class="label-success">Lignes de réception : Prestations validées</label>
-            </div>
-            <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-              <div class="mdl-textfield label-search">
-                <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                  [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-                <label class="mdl-textfield__label" for="search2"></label>
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Lignes de réception : Prestations validées</label>
               </div>
-            </div>
-          </base-card-title>
-          <base-card-body class="content-file-line">
-            <mat-accordion>
-              <mat-expansion-panel hideToggle>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Afficher Log
-                  </mat-panel-title>
-                  <mat-panel-description>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
 
-                <div *ngIf="fileMagistor2" class="content-table">
-                  <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
-                    <thead>
-                      <tr>
-                        <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+                  <div *ngIf="fileMagistor2" class="content-table">
+                    <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
-                        <!-- <td>
+                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
                         </mat-checkbox>
 
                       </td> -->
 
-                        <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <label [ngClass]="full-column">
-                            {{column}}
-                          </label>
-                        </td>
-                      </tr>
-                    </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-                  </table>
-                </div>
-              </mat-expansion-panel>
+                    </table>
+                  </div>
+                </mat-expansion-panel>
 
-            </mat-accordion>
-          </base-card-body>
-        </base-card>
-        <!------------------------------------- FEUILLE LRC01  --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+          <!------------------------------------- FEUILLE LRC01  --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
 
-        <!-- <base-card *ngIf="false &&  typeFileREC"
+          <!-- <base-card *ngIf="false &&  typeFileREC"
         class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
         <base-card-title class="reorder">
           <div id="conteneur">
@@ -847,301 +847,297 @@
         </base-card-body>
       </base-card> -->
 
-        <app-prestation-erronee *ngIf="typeFileREC && errorfileMagistor2?.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2"
-          [sheet1]="false">
-        </app-prestation-erronee>
+          <app-prestation-erronee *ngIf="errorfileMagistor2?.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2" [sheet1]="false">
+          </app-prestation-erronee>
+        </div>
       </div>
 
-
-
-
       <!-------------------------------TYPE FILE CDC--------------------------------------->
+      <div *ngIf="typeFileCDC  && !showLoader">
+        <div *ngIf="terminated">
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Commandes : Prestations validées</label>
+              </div>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div *ngIf="fileMagistor" class="content-table">
+                    <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-<div *ngIf="terminated">
-      <base-card *ngIf="typeFileCDC"
-      class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-      <base-card-title class="reorder">
-        <div id="conteneur">
-          <label class="label-success">Commandes : Prestations validées</label>
-        </div>
-        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-          <div class="mdl-textfield label-search">
-            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-              [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-            <label class="mdl-textfield__label" for="search2"></label>
-          </div>
-        </div>
-      </base-card-title>
-      <base-card-body class="content-file-line">
-        <mat-accordion>
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Afficher Log
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <div *ngIf="fileMagistor" class="content-table">
-              <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
-                <thead>
-                  <tr>
-                    <th *ngFor="let row of fileMagistor?.columns ; let i = index"
-                      class="details-line mdl-data-table__cell--non-numeric">
-                      <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
-                    <!-- <td>
+                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                     <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                       (change)="selectDeleteRowValidFile (i)">
                     </mat-checkbox>
 
                   </td> -->
 
-                    <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                      class="details-line mdl-data-table__cell--non-numeric">
-                      <label [ngClass]="full-column">
-                        {{column}}
-                      </label>
-                    </td>
-                  </tr>
-                </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-              </table>
-            </div>
+                    </table>
+                  </div>
 
-          </mat-expansion-panel>
+                </mat-expansion-panel>
 
-        </mat-accordion>
-      </base-card-body>
-    </base-card>
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
 
 
-    <base-card *ngIf="typeFileCDC"
-    class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-    <base-card-title class="reorder">
-      <div id="conteneur">
-        <label class="label-success">Lignes de commandes : Prestations validées</label>
-      </div>
-      <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-        <div class="mdl-textfield label-search">
-          <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-            [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-          <label class="mdl-textfield__label" for="search2"></label>
-        </div>
-      </div>
-    </base-card-title>
-    <base-card-body class="content-file-line">
-      <mat-accordion>
-        <mat-expansion-panel hideToggle>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Afficher Log
-            </mat-panel-title>
-            <mat-panel-description>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Lignes de commandes : Prestations validées</label>
+              </div>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
 
-          <div *ngIf="fileMagistor2" class="content-table">
-            <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
-              <thead>
-                <tr>
-                  <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
-                    class="details-line mdl-data-table__cell--non-numeric">
-                    <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+                  <div *ngIf="fileMagistor2" class="content-table">
+                    <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
-                  <!-- <td>
+                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                   <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                     (change)="selectDeleteRowValidFile (i)">
                   </mat-checkbox>
 
                 </td> -->
 
-                  <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                    class="details-line mdl-data-table__cell--non-numeric">
-                    <label [ngClass]="full-column">
-                      {{column}}
-                    </label>
-                  </td>
-                </tr>
-              </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-            </table>
-          </div>
-        </mat-expansion-panel>
+                    </table>
+                  </div>
+                </mat-expansion-panel>
 
-      </mat-accordion>
-    </base-card-body>
-  </base-card>
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
 
-</div>
+        </div>
 
+        <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
+          <app-prestation-erronee *ngIf="fileMagistor" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
+            [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc" (changedDataEvent)="changedData($event)">
+          </app-prestation-erronee>
 
+          <app-prestation-erronee *ngIf="fileMagistor2" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
+            [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc" (changedDataEvent)="changedData2($event)">
+          </app-prestation-erronee>
 
-      <div *ngIf="!terminated && oneBloc && typeFileCDC">
-        <app-prestation-erronee *ngIf="fileMagistor" [typeFile]="file?.logisticFileType" [originData]="fileMagistor" [data]="copyfileMagistor"
-          [sheet1]="true" [oneBloc]="oneBloc">
-        </app-prestation-erronee>
+        </div>
 
-        <app-prestation-erronee *ngIf="fileMagistor2" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2" [data]="copyfileMagistor2"
-          [sheet1]="false" [oneBloc]="oneBloc">
-        </app-prestation-erronee>
+        <div *ngIf="!terminated && !oneBloc && fileMagistor && errorfileMagistor">
+          <!------------------------------------- FEUILLE CDC01  --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
 
-      </div>
-      <div *ngIf="!terminated && !oneBloc && typeFileCDC && copyerrorfileMagistor">
-        <!------------------------------------- FEUILLE CDC01  --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
-
-        <base-card *ngIf="typeFileCDC"
-          class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-          <base-card-title class="reorder">
-            <div id="conteneur">
-              <label class="label-success">Commandes : Prestations validées</label>
-            </div>
-            <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-              <div class="mdl-textfield label-search">
-                <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                  [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-                <label class="mdl-textfield__label" for="search2"></label>
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Commandes : Prestations validées</label>
               </div>
-            </div>
-          </base-card-title>
-          <base-card-body class="content-file-line">
-            <mat-accordion>
-              <mat-expansion-panel hideToggle>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Afficher Log
-                  </mat-panel-title>
-                  <mat-panel-description>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
-                <div *ngIf="fileMagistor" class="content-table">
-                  <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
-                    <thead>
-                      <tr>
-                        <th *ngFor="let row of fileMagistor?.columns ; let i = index"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div *ngIf="fileMagistor" class="content-table">
+                    <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
-                        <!-- <td>
+                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
                         </mat-checkbox>
 
                       </td> -->
 
-                        <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <label [ngClass]="full-column">
-                            {{column}}
-                          </label>
-                        </td>
-                      </tr>
-                    </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-                  </table>
-                </div>
+                    </table>
+                  </div>
 
-              </mat-expansion-panel>
+                </mat-expansion-panel>
 
-            </mat-accordion>
-          </base-card-body>
-        </base-card>
-        <!------------------------------------- FEUILLE CDC01  --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+          <!------------------------------------- FEUILLE CDC01  --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
 
-        <app-prestation-erronee *ngIf="typeFileCDC && errorfileMagistor?.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="errorfileMagistor" [data]="copyerrorfileMagistor"
-          [sheet1]="true" [oneBloc]="false">
-        </app-prestation-erronee>
-        <!------------------------------------- FEUILLE LCD01  --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
+          <app-prestation-erronee *ngIf="errorfileMagistor?.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="errorfileMagistor" [data]="copyerrorfileMagistor" [sheet1]="true" [oneBloc]="false"
+            (changedDataEvent)="changedData($event)">
+          </app-prestation-erronee>
+          <!------------------------------------- FEUILLE LCD01  --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
 
-        <base-card *ngIf="typeFileCDC"
-          class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
-          <base-card-title class="reorder">
-            <div id="conteneur">
-              <label class="label-success">Lignes de commandes : Prestations validées</label>
-            </div>
-            <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
-              <div class="mdl-textfield label-search">
-                <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
-                  [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
-                <label class="mdl-textfield__label" for="search2"></label>
+          <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+            <base-card-title class="reorder">
+              <div id="conteneur">
+                <label class="label-success">Lignes de commandes : Prestations validées</label>
               </div>
-            </div>
-          </base-card-title>
-          <base-card-body class="content-file-line">
-            <mat-accordion>
-              <mat-expansion-panel hideToggle>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Afficher Log
-                  </mat-panel-title>
-                  <mat-panel-description>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
+              <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+                <div class="mdl-textfield label-search">
+                  <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+                    [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="search2"></label>
+                </div>
+              </div>
+            </base-card-title>
+            <base-card-body class="content-file-line">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Afficher Log
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
 
-                <div *ngIf="fileMagistor2" class="content-table">
-                  <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
-                    <thead>
-                      <tr>
-                        <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+                  <div *ngIf="fileMagistor2" class="content-table">
+                    <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
-                        <!-- <td>
+                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                          <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
                         </mat-checkbox>
 
                       </td> -->
 
-                        <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
-                          class="details-line mdl-data-table__cell--non-numeric">
-                          <label [ngClass]="full-column">
-                            {{column}}
-                          </label>
-                        </td>
-                      </tr>
-                    </tbody>
+                          <td *ngFor="let column of item; let j=index; trackBy:customTrackBy" [ngClass]="full-column"
+                            class="details-line mdl-data-table__cell--non-numeric">
+                            <label [ngClass]="full-column">
+                              {{column}}
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
 
-                  </table>
-                </div>
-              </mat-expansion-panel>
+                    </table>
+                  </div>
+                </mat-expansion-panel>
 
-            </mat-accordion>
-          </base-card-body>
-        </base-card>
-        <!------------------------------------- FEUILLE LCD01  --------------------------------------->
-        <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
+              </mat-accordion>
+            </base-card-body>
+          </base-card>
+          <!------------------------------------- FEUILLE LCD01  --------------------------------------->
+          <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
 
-        <app-prestation-erronee *ngIf="typeFileCDC && errorfileMagistor2?.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2"
-          [sheet1]="false" [oneBloc]="false">
-        </app-prestation-erronee>
+          <app-prestation-erronee *ngIf="errorfileMagistor2?.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2" [sheet1]="false" [oneBloc]="false"
+            (changedDataEvent)="changedData2($event)">
+          </app-prestation-erronee>
+        </div>
       </div>
     </div>
 

@@ -106,7 +106,7 @@ export class DetailsFileMagistorComponent implements OnInit {
 
 
 
-  getValidFiles(){
+  getValidFiles() {
     var data = {
       "logisticFileName": this.fileName,
       "folderLogisticFile": this.file.idLogisticFile,
@@ -153,14 +153,14 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
         //this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
       }
-      if (this.file.number_annomalies != 0) {
+      if (this.file.number_annomalies == 0) {
         this.showLoader = false;
       }
     })
   }
 
 
-  getWrongFiles(){
+  getWrongFiles() {
     this.fileName = this.file.logisticFileName.name;
     this.fileName = this.fileName.slice(0, 3) + this.fileName.slice(5);
     this.fileName = this.fileName.replace('.xlsx', '_Exceptions.xlsx')
@@ -591,39 +591,36 @@ export class DetailsFileMagistorComponent implements OnInit {
   correctionFile() {
     this.showLoader = true;
 
-    //this.clickCorrection = true;
-    // var user = JSON.parse(localStorage.getItem('currentUser'));
-    //console.error(user);
-    //console.error(this.file);
-    //this.hideUiSelectionOnCorrection();  //hide ui selection on correction
-    // if (this.copyfileMagistor.rows.length > 0) {
-    var validFile1 = this.copyfileMagistor.map(Object.values);
     var errorFile1;
-    var errorFile2; 
-    if(this.oneBloc){
-      // errorFile1 = this.correctedErrorfileMagistor.map(Object.values);
-      // errorFile2 = this.correctedErrorfileMagistor2.map(Object.values);
-      console.log(this.correctedErrorfileMagistor);
-    }else{
-      errorFile1 = this.correctedErrorfileMagistor.map(Object.values);
-      errorFile2 = this.correctedErrorfileMagistor2.map(Object.values);
-  
+    var errorFile2;
+    var columns, columns2;
+    if (this.oneBloc) {
+      columns = (Object.keys(this.correctedErrorfileMagistor[0]));
+      columns2 = (Object.keys(this.correctedErrorfileMagistor2[0]));
+    } else {
+
+      columns =   this.errorfileMagistor['columns'];
+      columns2 = this.errorfileMagistor2['columns'];
+      console.log(columns);
+      console.log(columns2);
+    }
+    if (this.correctedErrorfileMagistor == undefined) {
+      this.correctedErrorfileMagistor = [];
+    }
+    if (this.correctedErrorfileMagistor2 == undefined) {
+      this.correctedErrorfileMagistor2 = [];
     }
 
-    var columns = (Object.keys(this.copyerrorfileMagistor[0]));
-    var columns2 = (Object.keys(this.copyerrorfileMagistor2[0]));
+    errorFile1 = this.correctedErrorfileMagistor.map(Object.values);
+    errorFile2 = this.correctedErrorfileMagistor2.map(Object.values);
 
     this.fileTocheck = {
       fileId: this.file.idLogisticFile,
-      //Magistor_File_Name: this.file.logisticFileType,
-      // fileId: this.file.idFile,
       columns1: columns,
       rows1error: errorFile1,
-
       columns2: columns2,
       rows2error: errorFile2,
 
-      // }
     };
     //console.log("copy rows : ", this.copyfileMagistor.map(Object.values));
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);

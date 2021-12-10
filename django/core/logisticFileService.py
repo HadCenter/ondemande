@@ -222,6 +222,63 @@ def updateMetaDataFileInTableCoreLogisticFile(logisticFileId, logisticFileStatus
 
     logisticFile.save()
 
+def createFileLogisticFromColumnAndRows(LogisticFileId, columns1, rows1, columns2, rows2):
+    os.chdir(DJANGO_DIRECTORY)
+    os.chdir("media/files")
+    logisticFile = LogisticFile.objects.get(pk=LogisticFileId)
+    sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,LogisticFileId)
+    fileName : str
+    columns1HasRemarque : bool = False
+    columns2HasRemarque : bool = False
+    sftp_client = connect()
+    fileName = logisticFile.logisticFile.name
+    sftp_client.get(sourcePath +  "/" + fileName, fileName)
+    excelfile = pd.ExcelFile(fileName)
+    FileSheets = excelfile.sheet_names
+    excelfile.close()
+
+
+    df = pd.DataFrame(rows1, columns=columns1)
+    df2 = pd.DataFrame(rows2, columns=columns2)
+
+    for element in columns1:
+        if(element == 'REMARQUE'):
+            dfwithoutRemarque = df.drop("REMARQUE", axis=1)
+            columns1HasRemarque = True
+
+    for element in columns2:
+        if(element == 'REMARQUE'):
+            df2withoutRemarque = df2.drop("REMARQUE", axis=1)
+            columns2HasRemarque = True
+
+
+    if(columns1HasRemarque or columns2HasRemarque):
+        transIdFileException = fileName[0:3] + fileName[5:]
+        transIdFileException = transIdFileException.replace('.xlsx', '_Exceptions.xlsx')
+        with pd.ExcelWriter(fileName) as writer:  
+            df.to_excel(writer, sheet_name=FileSheets[0], index=False)
+            df2.to_excel(writer, sheet_name=FileSheets[1], index= False)
+
+        sftp_client.put(fileName, sourcePath + "/" + transIdFileException)
+        os.remove(fileName)
+
+        transIdFileCorrect = fileName[0:3] + fileName[5:]
+        transIdFileCorrect = transIdFileCorrect.replace('.xlsx', '_Correct.xlsx')
+        sftp_client.get(sourcePath +  "/" + transIdFileCorrect, transIdFileCorrect)
+
+        df = dfwithoutRemarque.append(pd.read_excel(transIdFileCorrect, sheet_name=FileSheets[0]), ignore_index=True)
+        df2 = df2withoutRemarque.append(pd.read_excel(transIdFileCorrect, sheet_name=FileSheets[1]), ignore_index=True)
+
+    with pd.ExcelWriter(fileName) as writer:  
+        df.to_excel(writer, sheet_name=FileSheets[0], index=False)
+        df2.to_excel(writer, sheet_name=FileSheets[1], index= False)
+
+    sftp_client.put(fileName, sourcePath + "/" + fileName)
+
+    os.remove(fileName)
+    os.chdir(DJANGO_DIRECTORY)
+
+
 
 
 

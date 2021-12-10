@@ -3,6 +3,7 @@ import { DetailsFileMagistorService } from './details-file-magistor.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PrestationErroneeService } from '../prestation-erronee/prestation-erronee.service';
 
 export interface MouseEvent {
   rowId: number;
@@ -49,21 +50,25 @@ export class DetailsFileMagistorComponent implements OnInit {
   oneBloc: boolean;
   secondSheet: any;
   terminated: boolean = false;
+  fileName: string;
   selectedCellsState: boolean[][] = [
     // [false, false, false],
   ];
 
   clickCorrection: boolean = false;
+  correctedErrorfileMagistor: any;
+  correctedErrorfileMagistor2: any;
+  showLoader: boolean = true;
   constructor(private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
     public router: Router,
-    private fileService: DetailsFileMagistorService) { }
+    private fileService: DetailsFileMagistorService,
+    private prestationService: PrestationErroneeService) { }
 
   ngOnInit(): void {
     this.fileService.getFile(this.route.snapshot.params.id).subscribe(
       resp => {
         this.file = resp;
-        var data;
         if (this.file.logisticFileType == "ART01") {
           this.typeFileART = true;
           this.secondSheet = "CND01";
@@ -78,130 +83,153 @@ export class DetailsFileMagistorComponent implements OnInit {
         }
         if (this.file.status == "En attente" || this.file.status == "Validé" || this.file.status == "Terminé") {
           this.oneBloc = true;
-          console.log(this.oneBloc);
-          data = {
-            "logisticFileName": this.file.logisticFileName.name,
-            "folderLogisticFile": this.file.idLogisticFile,
-            "logisticSheetName": this.file.logisticFileType,
-          }
+          this.fileName = this.file.logisticFileName.name;
         } else {
           this.oneBloc = false;
-          var fileName = this.file.logisticFileName.name;
-          fileName = fileName.slice(0, 3) + fileName.slice(5);
-          data = {
-            "logisticFileName": fileName.replace('.xlsx', '_Correct.xlsx'),
-            "folderLogisticFile": this.file.idLogisticFile,
-            "logisticSheetName": this.file.logisticFileType,
-          }
+          this.fileName = this.file.logisticFileName.name;
+          this.fileName = this.fileName.slice(0, 3) + this.fileName.slice(5);
+          this.fileName = this.fileName.replace('.xlsx', '_Correct.xlsx')
         }
         if (this.file.status == "Terminé") {
           this.terminated = true;
         }
-        console.log(data);
-        this.fileService.getLogisticFileContent(data).subscribe(res => {
-          this.fileMagistor = res;
-          console.log(this.fileMagistor.rows);
-          if (this.fileMagistor.rows.length > 0) {
-            this.copyfileMagistor = JSON.parse(JSON.stringify(this.fileMagistor));
-            this.copyfileMagistor.rows.splice(0, 0, this.copyfileMagistor.columns);
-            this.copyfileMagistor = this.convertToArrayOfObjects(this.copyfileMagistor.rows);
-            this.testFile = this.copyfileMagistor;   //copy to use on selection
-            this.files = this.copyfileMagistor;    // copy to filter *
-            this.displayedColumns = (Object.keys(this.copyfileMagistor[0]));
-
-            this.LAST_EDITABLE_ROW = this.copyfileMagistor.length - 1;
-            this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
-
-            // initialize all selectedCellsState to false
-            this.copyfileMagistor.forEach(element => {
-              this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
-            });
 
 
-            // get select options
-            this.displayedColumns.forEach(item => {
-              this.getOption(item);
-            })
-          }
-        }
-        )
-
-
-        data = {
-          "logisticFileName": this.file.logisticFileName.name,
-          "folderLogisticFile": this.file.idLogisticFile,
-          "logisticSheetName": this.secondSheet,
-        }
-        console.log(data);
-        this.fileService.getLogisticFileContent(data).subscribe(res => {
-          this.fileMagistor2 = res;
-          console.log(this.fileMagistor2.rows);
-          if (this.fileMagistor2.rows.length > 0) {
-            this.copyfileMagistor2 = JSON.parse(JSON.stringify(this.fileMagistor2));
-            this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);
-            this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
-            //this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
-          }
-        })
-
-
+        this.getValidFiles();
 
         if (this.file.number_annomalies != 0) {
-          var fileName = this.file.logisticFileName.name;
-          fileName = fileName.slice(0, 3) + fileName.slice(5);
-          var data_error = {
-            "logisticFileName": fileName.replace('.xlsx', '_Exceptions.xlsx'),
-            "folderLogisticFile": this.file.idLogisticFile,
-            "logisticSheetName": this.file.logisticFileType,
-
-          }
-          this.fileService.getLogisticFileContent(data_error).subscribe(res => {
-            this.errorfileMagistor = res;
-
-            if (this.errorfileMagistor.rows.length > 0) {
-              this.copyerrorfileMagistor = JSON.parse(JSON.stringify(this.errorfileMagistor));
-              this.copyerrorfileMagistor.rows.splice(0, 0, this.copyerrorfileMagistor.columns);
-              this.copyerrorfileMagistor = this.convertToArrayOfObjects(this.copyerrorfileMagistor.rows);
-              this.testFile = this.copyerrorfileMagistor;   //copy to use on selection
-              this.files = this.copyerrorfileMagistor;    // copy to filter *
-              this.displayedColumns = (Object.keys(this.copyerrorfileMagistor[0]));
-              this.displayedColumns.unshift(this.displayedColumns.pop());
-              this.LAST_EDITABLE_ROW = this.copyerrorfileMagistor.length - 1;
-              this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
-
-              // initialize all selectedCellsState to false
-              this.copyerrorfileMagistor.forEach(element => {
-                this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
-              });
-              // get select options
-              this.displayedColumns.forEach(item => {
-                this.getOption(item);
-              })
-            }
-          })
-
-
-          var data_error2 = {
-            "logisticFileName": fileName.replace('.xlsx', '_Exceptions.xlsx'),
-            "folderLogisticFile": this.file.idLogisticFile,
-            "logisticSheetName": this.secondSheet,
-
-          }
-          this.fileService.getLogisticFileContent(data_error2).subscribe(res => {
-            this.errorfileMagistor2 = res;
-
-            if (this.errorfileMagistor2.rows.length > 0) {
-              this.copyerrorfileMagistor2 = JSON.parse(JSON.stringify(this.errorfileMagistor2));
-              this.copyerrorfileMagistor2.rows.splice(0, 0, this.copyerrorfileMagistor2.columns);
-              this.copyerrorfileMagistor2 = this.convertToArrayOfObjects(this.copyerrorfileMagistor2.rows);
-              this.displayedColumns2 = (Object.keys(this.copyerrorfileMagistor2[0]));
-              this.displayedColumns2.unshift(this.displayedColumns2.pop());
-            }
-            console.log(this.errorfileMagistor2);
-          })
+          this.getWrongFiles();
 
         }
       })
+  }
+
+
+
+  getValidFiles(){
+    var data = {
+      "logisticFileName": this.fileName,
+      "folderLogisticFile": this.file.idLogisticFile,
+      "logisticSheetName": this.file.logisticFileType,
+    }
+
+    this.fileService.getLogisticFileContent(data).subscribe(res => {
+      this.fileMagistor = res;
+      console.log(this.fileMagistor.rows);
+      if (this.fileMagistor.rows.length > 0) {
+        this.copyfileMagistor = JSON.parse(JSON.stringify(this.fileMagistor));
+        this.copyfileMagistor.rows.splice(0, 0, this.copyfileMagistor.columns);
+        this.copyfileMagistor = this.convertToArrayOfObjects(this.copyfileMagistor.rows);
+        this.testFile = this.copyfileMagistor;   //copy to use on selection
+        this.files = this.copyfileMagistor;    // copy to filter *
+        this.displayedColumns = (Object.keys(this.copyfileMagistor[0]));
+
+        this.LAST_EDITABLE_ROW = this.copyfileMagistor.length - 1;
+        this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
+
+        // initialize all selectedCellsState to false
+        this.copyfileMagistor.forEach(element => {
+          this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
+        });
+
+
+        // get select options
+        this.displayedColumns.forEach(item => {
+          this.getOption(item);
+        })
+      }
+    }
+    )
+    data = {
+      "logisticFileName": this.fileName,
+      "folderLogisticFile": this.file.idLogisticFile,
+      "logisticSheetName": this.secondSheet,
+    }
+    this.fileService.getLogisticFileContent(data).subscribe(res => {
+      this.fileMagistor2 = res;
+      if (this.fileMagistor2.rows.length > 0) {
+        this.copyfileMagistor2 = JSON.parse(JSON.stringify(this.fileMagistor2));
+        this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);
+        this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
+        //this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
+      }
+      if (this.file.number_annomalies != 0) {
+        this.showLoader = false;
+      }
+    })
+  }
+
+
+  getWrongFiles(){
+    this.fileName = this.file.logisticFileName.name;
+    this.fileName = this.fileName.slice(0, 3) + this.fileName.slice(5);
+    this.fileName = this.fileName.replace('.xlsx', '_Exceptions.xlsx')
+    var data_error = {
+      "logisticFileName": this.fileName,
+      "folderLogisticFile": this.file.idLogisticFile,
+      "logisticSheetName": this.file.logisticFileType,
+    }
+    this.fileService.getLogisticFileContent(data_error).subscribe(res => {
+      this.errorfileMagistor = res;
+
+      if (this.errorfileMagistor.rows.length > 0) {
+        this.copyerrorfileMagistor = JSON.parse(JSON.stringify(this.errorfileMagistor));
+        this.copyerrorfileMagistor.rows.splice(0, 0, this.copyerrorfileMagistor.columns);
+        this.copyerrorfileMagistor = this.convertToArrayOfObjects(this.copyerrorfileMagistor.rows);
+        this.correctedErrorfileMagistor = this.copyerrorfileMagistor;
+        this.testFile = this.copyerrorfileMagistor;   //copy to use on selection
+        this.files = this.copyerrorfileMagistor;    // copy to filter *
+        this.displayedColumns = (Object.keys(this.copyerrorfileMagistor[0]));
+        this.displayedColumns.unshift(this.displayedColumns.pop());
+        this.LAST_EDITABLE_ROW = this.copyerrorfileMagistor.length - 1;
+        this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
+
+        // initialize all selectedCellsState to false
+        this.copyerrorfileMagistor.forEach(element => {
+          this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
+        });
+        // get select options
+        this.displayedColumns.forEach(item => {
+          this.getOption(item);
+        })
+      }
+    })
+
+
+    var data_error2 = {
+      "logisticFileName": this.fileName,
+      "folderLogisticFile": this.file.idLogisticFile,
+      "logisticSheetName": this.secondSheet,
+
+    }
+    this.fileService.getLogisticFileContent(data_error2).subscribe(res => {
+      this.errorfileMagistor2 = res;
+      if (this.errorfileMagistor2.rows.length > 0) {
+        this.copyerrorfileMagistor2 = JSON.parse(JSON.stringify(this.errorfileMagistor2));
+        this.copyerrorfileMagistor2.rows.splice(0, 0, this.copyerrorfileMagistor2.columns);
+        this.copyerrorfileMagistor2 = this.convertToArrayOfObjects(this.copyerrorfileMagistor2.rows);
+        this.displayedColumns2 = (Object.keys(this.copyerrorfileMagistor2[0]));
+        this.displayedColumns2.unshift(this.displayedColumns2.pop());
+        this.correctedErrorfileMagistor2 = this.copyerrorfileMagistor2;
+      }
+      this.showLoader = false;
+    })
+  }
+
+  actualiser() {
+    this.showLoader = true;
+
+    this.fileMagistor = undefined;
+    this.errorfileMagistor = undefined;
+    this.fileMagistor2 = undefined;
+    this.errorfileMagistor2 = undefined;
+    this.getValidFiles();
+
+    if (this.file.number_annomalies != 0) {
+      this.getWrongFiles();
+
+    }
+
   }
 
   /**
@@ -565,29 +593,49 @@ export class DetailsFileMagistorComponent implements OnInit {
    * Correct the file
    */
   correctionFile() {
-    this.clickCorrection = true;
+    this.showLoader = true;
+
+    //this.clickCorrection = true;
     // var user = JSON.parse(localStorage.getItem('currentUser'));
     //console.error(user);
     //console.error(this.file);
-    this.hideUiSelectionOnCorrection();  //hide ui selection on correction
+    //this.hideUiSelectionOnCorrection();  //hide ui selection on correction
     // if (this.copyfileMagistor.rows.length > 0) {
-    this.fileTocheck = [{
-      Magistor_Current_Client: this.file.clientName,
-      Magistor_Current_File: this.file.logisticFileType.slice(0, 3)
+    var validFile1 = this.copyfileMagistor.map(Object.values);
+    var errorFile1;
+    var errorFile2; 
+    if(this.oneBloc){
+      // errorFile1 = this.correctedErrorfileMagistor.map(Object.values);
+      // errorFile2 = this.correctedErrorfileMagistor2.map(Object.values);
+      console.log(this.correctedErrorfileMagistor);
+    }else{
+      errorFile1 = this.correctedErrorfileMagistor.map(Object.values);
+      errorFile2 = this.correctedErrorfileMagistor2.map(Object.values);
+  
+    }
+
+    var columns = (Object.keys(this.copyerrorfileMagistor[0]));
+    var columns2 = (Object.keys(this.copyerrorfileMagistor2[0]));
+
+    this.fileTocheck = {
+      fileId: this.file.idLogisticFile,
+      //Magistor_File_Name: this.file.logisticFileType,
       // fileId: this.file.idFile,
-      // account_id: user.id,
-      // columns: this.displayedColumns,
-      // rows: this.copyfileMagistor,
+      columns1: columns,
+      rows1error: errorFile1,
+
+      columns2: columns2,
+      rows2error: errorFile2,
 
       // }
-    }]
-
+    };
+    //console.log("copy rows : ", this.copyfileMagistor.map(Object.values));
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
-    console.warn("**file to check**", this.fileTocheck)
-    this.fileService.corretFile(this.fileTocheck).subscribe(res => {
+    console.warn("**file to check**", this.fileTocheck);
+    this.fileService.correctLogisticFile(this.fileTocheck).subscribe(res => {
       console.log('resultat correction', res);
-      if (res.message == "ok") {
-        this.router.navigate(['/logistique']);
+      if (res.message == "success") {
+        this.actualiser();
       }
     })
   }
@@ -604,4 +652,28 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
   }
 
+  onMouseDownAll() {
+    //   console.log("mouse all happend");
+    //   if (document.querySelector('td.selected') !== null) {
+    //     document.querySelector('td.selected').classList.remove('selected');
+    //   this.prestationService.settableMouseDown2(undefined);
+    //   this.prestationService.settableMouseDown(undefined);
+    //   this.prestationService.settableMouseUp2(undefined);
+    //   this.prestationService.settableMouseUp(undefined);
+    //   }
+
+  }
+
+  changedData(data: any) {
+    console.log("AFter change detected data was : ", this.copyerrorfileMagistor);
+    this.correctedErrorfileMagistor = data;
+
+    console.log("Detected changes :: ", data);
+  }
+
+  changedData2(data: any) {
+    console.log("AFter change 2 detected data was : ", this.copyerrorfileMagistor2);
+    this.correctedErrorfileMagistor2 = data;
+    console.log("Detected changes 2 :: ", data);
+  }
 }

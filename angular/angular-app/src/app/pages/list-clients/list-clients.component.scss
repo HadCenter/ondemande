@@ -98,6 +98,7 @@ body {
   }
   .mat-dialog-container {
     background-color: #444;
+    overflow: hidden !important;
 }
 
 .mat-dialog-title {

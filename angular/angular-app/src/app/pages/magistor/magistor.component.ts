@@ -44,14 +44,23 @@ export class MagistorComponent implements OnInit {
   public advancedTable = [];
 
   ngOnInit(): void {
-    /*this.fichiers = this.tablesService.advanceTableData;
-    this.advancedTable = this.fichiers*/
+    this.listenToWebSocket();
     this.getFiles();
   }
+  listenToWebSocket() {
+    this.tablesService.messages.subscribe(msg => {
+      console.log("Response from websocket: ", JSON.parse(msg));
+      //localStorage.setItem('wslogistic', JSON.stringify(JSON.parse(msg)));
+      if(JSON.parse(msg).stateLogistic === "table logisticFile updated")
+      {
+        this.actualiser();
+      }
+    });
+  }
   getColor(ch) {
-    if (ch === 'En attente') {
+    if (ch === 'En attente' || ch === 'à vérifier') {
       return 'blue';
-    } else if (ch === 'Validé') {
+    } else if (ch === 'Validé' || ch === 'Terminé') {
       return 'green';
     } else if (ch === 'En cours') {
       return 'orange';
@@ -211,6 +220,8 @@ export class MagistorComponent implements OnInit {
         file.ButtonCorrecteActiveted =true;
         file.ButtonInvalidateActivated = true;
         file.status ='Validé';
+      }else if(res.message == "file validated echec"){
+        this.openSnackBar(this.errorValidation,this.snackAction);
       }
     },
     (err) => {
@@ -241,7 +252,8 @@ export class MagistorComponent implements OnInit {
   correctionFile(file) {
     this.fileTocheck = [{
       Magistor_Current_Client: file.clientName,
-      Magistor_Current_File: file.logisticFileType.slice(0, 3)
+      Magistor_Current_File: file.logisticFileType.slice(0, 3),
+      Magistor_File_Id: file.idLogisticFile.toString()
     }]
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck)

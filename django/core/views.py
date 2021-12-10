@@ -36,7 +36,7 @@ from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
 from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows, updateHistoryOfAnnomalies, updateMetaDataFileInTableCoreEDIFile
-from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile
+from core.logisticFileService import saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile, updateMetaDataFileInTableCoreLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -159,7 +159,7 @@ def validateLogisticFileWS(request):
     if(logisticFileValidated):
         return JsonResponse({'message': 'file validated successfully'}, status=status.HTTP_200_OK)
     else:
-        return JsonResponse({'message': 'file validated echec'}, status=status.HTTP_403_FORBIDDEN)
+        return JsonResponse({'message': 'file validated echec'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def fileList(request):
@@ -190,6 +190,11 @@ def getFilesByClient(request,pk):
 def downloadFileName(request):
     fileName = request.data['fileName']
     clientCode = request.data['clientCode']
+    print(fileName)
+    ediFile = EDIfile.objects.get(file=fileName)
+    print(ediFile.number_wrong_commands == 0)
+    entred1 : bool = False
+    entred2:bool = False
     ftp = connect()
     path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
     path_client = path_racine + '/' + clientCode
@@ -200,6 +205,43 @@ def downloadFileName(request):
                 commande = "RETR " + name
                 ftp.retrbinary(commande, file.write)
             break
+    
+
+    path_client2 = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/" + clientCode
+    ftp.cwd(path_client2)
+    for name in ftp.nlst():
+        if name == "error_"+fileName and (ediFile.number_wrong_commands != 0):
+            with open(name, "wb") as file2:
+                commande = "RETR " + name
+                ftp.retrbinary(commande, file2.write)
+                entred2 = True
+            break
+    for name in ftp.nlst():
+        if name == "correct_"+fileName and (ediFile.number_correct_commands != 0):
+            with open(name, "wb") as file1:
+                commande = "RETR " + name
+                ftp.retrbinary(commande, file1.write)
+                entred1 = True
+            break
+    if entred1:
+        df1 = pd.read_excel("correct_"+fileName)
+        #df1 = df1.append(pd.read_excel("error_"+fileName), ignore_index=True) 
+        df1.to_excel(fileName, index=False)
+        file1.close()
+        os.remove("correct_"+fileName)
+
+    if entred2:
+        df2 = pd.read_excel("error_"+fileName)
+        #df1 = df1.append(pd.read_excel("error_"+fileName), ignore_index=True)
+        df2.drop('Remarque_id', axis=1, inplace=True) 
+        df2.to_excel(fileName, index=False)
+        file2.close()
+        os.remove("error_"+fileName)
+
+    if entred1 and entred2:
+        df3 = df1.append(df2, ignore_index=True) 
+        df3.to_excel(fileName, index=False)
+
     ftp.cwd(path_client + "/FILES_TO_DIAGNOSTIC_DEV")
     for name in ftp.nlst():
         if name == fileName:
@@ -207,6 +249,11 @@ def downloadFileName(request):
                 commande = "RETR " + name
                 ftp.retrbinary(commande, file.write)
             break
+
+
+
+
+
     with open(fileName, 'rb') as f:
         file = f.read()
     response = HttpResponse(file, content_type="application/xls")
@@ -214,7 +261,6 @@ def downloadFileName(request):
     response['Content-Length'] = os.path.getsize(fileName)
     os.remove(fileName)
     return response
-
 
 @api_view(['POST'])
 def seeFileContent(request):
@@ -230,7 +276,8 @@ def seeFileContent(request):
 def seeLogisticFileContent(request):
     logisticFilename = request.data['logisticFileName']
     folderLogisticFile = request.data['folderLogisticFile']
-    responseObject = seeContentLogisticFile(logisticFilename, folderLogisticFile)
+    logisticSheetName = request.data['logisticSheetName']
+    responseObject = seeContentLogisticFile(logisticFilename, folderLogisticFile, logisticSheetName)
     responseObjectText = jsonpickle.encode(responseObject, unpicklable=False)
     return HttpResponse(responseObjectText, content_type="application/json")
 
@@ -529,4 +576,12 @@ def updateMetaDataFileInTableCoreEDIFileWS(request):
     ediFileStatus =  request.data['ediFileStatus']
 
     updateMetaDataFileInTableCoreEDIFile(ediFileName=ediFileName, ediFileStatus=ediFileStatus)
+    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def updateMetaDataFileInTableCoreLogisticFileWS(request):
+    logisticFileId = request.data['logisticFileId']
+    logisticFileStatus = request.data['logisticFileStatus']
+
+    updateMetaDataFileInTableCoreLogisticFile(logisticFileId=logisticFileId, logisticFileStatus=logisticFileStatus)
     return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)

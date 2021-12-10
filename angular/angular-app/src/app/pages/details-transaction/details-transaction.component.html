@@ -17,12 +17,13 @@
           </div>
           <div class="content-label">
             <label class="details-label">Date Création </label>
-            <label *ngIf="transaction" class="details-label">{{transaction?.created_at | date:"dd-MM-yyyy 'à' HH:mm"}}</label>
+            <label *ngIf="transaction" class="details-label">{{transaction?.created_at | date:"dd-MM-yyyy 'à'
+              HH:mm"}}</label>
             <label *ngIf="!transaction" class="details-label">-</label>
           </div>
           <div class="content-label">
             <label class="details-label">Date Début </label>
-            <label *ngIf="transaction" class="details-label">{{transaction?.start_date |  date:"dd-MM-yyyy"}}</label>
+            <label *ngIf="transaction" class="details-label">{{transaction?.start_date | date:"dd-MM-yyyy"}}</label>
             <label *ngIf="!transaction" class="details-label">-</label>
           </div>
           <div class="content-label">
@@ -36,7 +37,7 @@
 
       <div class="element-2">
 
-        <button style="margin-right: 5px;"
+        <button style="margin-right: 5px;" [disabled]="true"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
           transaction
         </button>
@@ -70,13 +71,13 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='deleteRowsLivraison();$event.stopPropagation();' id="deleteWrongBtn"
+                  <!-- <button (click)='deleteRowsLivraison();$event.stopPropagation();' id="deleteWrongBtn"
                     [disabled]=" rowsToDeleteLivraison?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
                     class=" delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Effacer
                   </button>
                   <button (click)='correctionFile("livraison");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-                  </button>
+                  </button> -->
                   <button (click)='resetFiltre("livraison");$event.stopPropagation();' style="margin-left: 5px;"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                     les filtres
@@ -87,8 +88,8 @@
                 [show]="showLoaderLivraisonFile"></app-loader>
               <div class="content-table">
 
-                  <mat-paginator   [hidden]="!dataSource.data.length" [pageSizeOptions]="[100,200,300]"
-                    showFirstLastButtons></mat-paginator>
+                <mat-paginator [hidden]="!dataSource.data.length" [pageSizeOptions]="[100,200,300]"
+                  showFirstLastButtons></mat-paginator>
 
                 <table mat-table [dataSource]="dataSource" *ngIf="dataSource.data.length > 0"
                   class="table-livraison mdl-data-table mdl-js-data-table  sorting-table">
@@ -385,10 +386,13 @@
                     <th id="isDeletedLivraison" style="padding-bottom: 16px;" class="titre-column-livraison"
                       mat-header-cell *matHeaderCellDef>
                       toDelete
+                      <mat-checkbox style="margin-left:5px" (change)="$event ? deleteMasterToggleLivraison() : null"
+                        [checked]=" rowsToDeleteLivraison.length == dataSource.data.length">
+                      </mat-checkbox>
                     </th>
-                    <td mat-cell #cell class="center-cell-transactionsFiles"
-                      *matCellDef="let element ; let i = index">
-                      <mat-checkbox color="warn" (click)="$event.stopPropagation()" [checked]="element.toDelete==1"
+                    <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                      <mat-checkbox color="warn" (click)="$event.stopPropagation()"
+                        [checked]=" isRowLivraisonSelected(element.taskId)"
                         (change)="selectDeleteRow(element,'livraison')">
                       </mat-checkbox>
                     </td>
@@ -429,13 +433,13 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='deleteRowsException();$event.stopPropagation();' id="deleteWrongBtn"
+                  <!-- <button (click)='deleteRowsException();$event.stopPropagation();' id="deleteWrongBtn"
                     [disabled]=" rowsToDeleteException?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
                     class=" delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Effacer
                   </button>
                   <button (click)='correctionFile("exception");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-                  </button>
+                  </button> -->
                   <button (click)='resetFiltre("exception");$event.stopPropagation();' style="margin-left: 5px;"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                     les filtres
@@ -722,7 +726,7 @@
                         </mat-select>
                       </mat-form-field>
                     </th>
-                    <td mat-cell #cellException class="center-cell-transactionsFiles" 
+                    <td mat-cell #cellException class="center-cell-transactionsFiles"
                       *matCellDef="let element ; let i = index">
                       {{element.Remarque}} </td>
                   </ng-container>
@@ -756,10 +760,14 @@
                     <th id="isDeletedException" style="padding-bottom: 16px !important;" class="titre-column-exception"
                       mat-header-cell *matHeaderCellDef>
                       isDeleted
+                      <mat-checkbox style="margin-left:5px" (change)="$event ? deleteMasterToggleException() : null"
+                      [checked]=" rowsToDeleteException.length == dataSourceException.data.length">
+                    </mat-checkbox>
                     </th>
                     <td mat-cell #cellException class="center-cell-transactionsFiles"
                       *matCellDef="let element ; let i = index">
-                      <mat-checkbox color="warn" (click)="$event.stopPropagation()" [checked]="element.isDeleted==1"
+                      <mat-checkbox color="warn" (click)="$event.stopPropagation()"
+                      [checked]=" isRowExceptionSelected(element.taskId)"
                         (change)="selectDeleteRow(element,'exception')">
                       </mat-checkbox>
                     </td>
@@ -800,9 +808,9 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='correctionFile("metadata");$event.stopPropagation();'
+                  <!-- <button (click)='correctionFile("metadata");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-                  </button>
+                  </button> -->
                   <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                     les filtres
@@ -813,7 +821,7 @@
                 [show]="showLoaderMetadataFile"></app-loader>
               <div class="content-table">
                 <div>
-                  <mat-paginator  [hidden]="!dataSourceMetaData.data.length" [pageSizeOptions]="[100,200,300]"
+                  <mat-paginator [hidden]="!dataSourceMetaData.data.length" [pageSizeOptions]="[100,200,300]"
                     showFirstLastButtons></mat-paginator>
                 </div>
                 <table mat-table [dataSource]="dataSourceMetaData" *ngIf="dataSourceMetaData.data.length > 0"
@@ -1213,13 +1221,13 @@
                   Afficher Log
                 </mat-panel-title>
                 <mat-panel-description class="description">
-                  <button (click)='deleteRowsMad();$event.stopPropagation();' id="deleteWrongBtn"
+                  <!-- <button (click)='deleteRowsMad();$event.stopPropagation();' id="deleteWrongBtn"
                     [disabled]=" rowsToDeleteMad?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
                     class=" delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Effacer
                   </button>
                   <button (click)='correctionFile("mad");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-                  </button>
+                  </button> -->
                   <button (click)='resetFiltre("mad");$event.stopPropagation();' style="margin-left: 5px;"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                     les filtres
@@ -1483,7 +1491,7 @@
                       {{element.Round_Name}} </td>
                   </ng-container>
 
-                  
+
                   <!-- StartTime Column -->
                   <ng-container matColumnDef="StartTime">
                     <th id="StartTimeMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> StartTime
@@ -1505,7 +1513,7 @@
                   </ng-container>
 
 
-                     <!-- ClousureTime Column -->
+                  <!-- ClousureTime Column -->
                   <ng-container matColumnDef="ClousureTime">
                     <th id="ClousureTimeMad" class="titre-column-mad" mat-header-cell *matHeaderCellDef> ClousureTime
                       <mat-form-field class="form-column" appearance="fill">

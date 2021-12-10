@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp
+from .transactionFileService import sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison
+from django.http import JsonResponse
 
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
@@ -15,7 +17,7 @@ import jsonpickle
 import os
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-
+from core.logisticFileService import updateMetaDataFileInTableCoreLogisticFile
 #talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/ondemandEdiWebHookDev2/b3059ca807ff4e1c99825fb81716a81c'
 #talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/WebHookEdiDevV2/abf4dae483424aee9577ebc0aac9b81d'
 talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/WebHookDiagnosticFileEdiV3/076247bbdec34a8391c77a5b2159b591'
@@ -23,8 +25,9 @@ talendUrlEDIFileWebHook ='https://webhooks.eu.cloud.talend.com/WebHookDiagnostic
 #talendUrlMADFileWebHookOLD ='https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDev/0920e59cd9e54e43b0b11ca072a02850'
 #talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDevV2/f8e6c58d240a4248b8f1a06e63621fae'
 talendUrlMADFileWebHook = 'https://webhooks.eu.cloud.talend.com/ondemandUrbantzToHubWebHookDevV3/9c89751b78d3403e9d30c77775a373ce'
-talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/WMS_ONDEMAND_FWH/9162c61d321d44eb81a528107e726e57'
-
+#talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/WMS_ONDEMAND_FWH/9162c61d321d44eb81a528107e726e57'
+#talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/ondemand_webhouk/810dff0fb12748fcbd308ddea901598f'
+talendUrlMagistorWebHook = 'https://webhooks.eu.cloud.talend.com/ondemand_webhook/b5767ca305144d87bfee5231990966ca'
 @api_view(['POST'])
 def startEngineOnMagistorFiles(request):
 	print("request.data for magistor",request.data);
@@ -56,7 +59,7 @@ def startEngineOnEdiFilesWithData(data):
 
 def startEngineWithLinkAndData(link:str,data):
 
-
+	updateMetaDataFileInTableCoreLogisticFile(logisticFileId=data[0]['Magistor_File_Id'], logisticFileStatus="En cours")
 	requests.post(link, json=data)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
@@ -71,15 +74,6 @@ madPlanJobList = ["ECOLOTRANS_URBANTZ_TO_HUB_SANS_MAD_OTHERS_ONDEMAND",
 				  "ECOLOTRANS_URBANTZ_TO_HUB_MAD_CORRECTION",
 				  "ECOLOTRANS_URBANTZ_LIVRAISON_FILE_CORRECTION" ]
 
-# madPlanJobList = ["SANS_MAD_OTHERS_v2",
-# 				  "SANS_MAD_RUNGIS_ONDEMAND_v2",
-# 				  "MAD_DB_DETAILED_v2",
-# 				  "ROUND_CALCULATE_NEW_RULE_QUANTITY_v2",
-# 				  "DIAGNOSTIC_LIVRAISON_QUANTITY_v2",
-# 				  "URBANTZ_CORRECTION_EXCEPTIONS_v2",
-# 				  "URBANTZ_CORRECTION_FACTURATION_VALUES_ONDEMAND_v2",
-# 				  "URBANTZ_TO_HUB_MAD_CORRECTION_v2",
-# 				  "URBANTZ_LIVRAISON_FILE_CORRECTION_v2" ]
 @api_view(['POST'])
 def integrerMADFile(request):
 	transaction_id = request.data['transaction_id']
@@ -108,8 +102,9 @@ def genererMADFile(request):
 	jobs_to_start.append(madPlanJobList[2])
 	jobs_to_start.append(madPlanJobList[3])
 	jobs_to_start.append(madPlanJobList[4])
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transactionToInsert.id,end_date_plus_one = transactionToInsert.end_date.replace("-","/"),start_date = transactionToInsert.start_date.replace("-","/"),jobs_to_start =jobs_to_start)
-	startEngineOnMadFiles(madObjectToPost)
+
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transactionToInsert.id, jobs_to_start =jobs_to_start,destination_folder="to_generate")
+
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
@@ -128,8 +123,8 @@ def correctExceptionFile(request):
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[5])
 
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
-	startEngineOnMadFiles(madObjectToPost)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id, jobs_to_start =jobs_to_start,destination_folder="to_correct")
+
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
@@ -151,9 +146,8 @@ def correctMetadataFile(request):
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[6])
 
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id, jobs_to_start =jobs_to_start,destination_folder="to_correct")
 
-	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
@@ -175,9 +169,8 @@ def correctMADFile(request):
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[7])
 
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id, jobs_to_start =jobs_to_start,destination_folder="to_correct")
 
-	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
@@ -199,9 +192,8 @@ def correctLivraisonFile(request):
 
 	jobs_to_start.append(madPlanJobList[8])
 
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id, jobs_to_start =jobs_to_start,destination_folder="to_correct")
 
-	startEngineOnMadFiles(madObjectToPost)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 
@@ -256,10 +248,9 @@ def correctAllFiles(request):
 	jobs_to_start.append(madPlanJobList[2])
 	jobs_to_start.append(madPlanJobList[3])
 	jobs_to_start.append(madPlanJobList[4])
-	print("jobs to start = ", jobs_to_start)
-	madObjectToPost = SendMadPostProcessPostObject(transaction_id = transaction.id,end_date_plus_one = transaction.end_date.strftime("%Y/%m/%d"),start_date = transaction.start_date.strftime("%Y/%m/%d"),jobs_to_start =jobs_to_start)
 
-	startEngineOnMadFiles(madObjectToPost)
+	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id,jobs_to_start =jobs_to_start,destination_folder="to_correct")
+
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
 def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):
@@ -298,4 +289,12 @@ def getSingleTransactionMadLivraison (request,pk):
 	t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp,created_at = transactionDB.created_at)
 
 	return HttpResponse(jsonpickle.encode(t,unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def updateMetaDataFileInTableTransactionsLivraisonWS(request):
+    transactionId = request.data['transactionId']
+    transactionStatus =  request.data['transactionStatus']
+
+    updateMetaDataFileInTableTransactionsLivraison(transactionId=transactionId, transactionStatus=transactionStatus)
+    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
 

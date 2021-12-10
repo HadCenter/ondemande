@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject  } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListTransactionService } from './list-transaction.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl } from '@angular/forms';
 import { GenererTransactionService } from './dialog/generer-transaction.service';
+import * as Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-list-transaction',
   templateUrl: './list-transaction.component.html',
@@ -41,6 +46,10 @@ export class ListTransactionComponent implements OnInit {
       const start = (element.start_date.substr(0, 19)).split('-');
       const end = ((element.end_date.substr(0, 19)).split('-'));
       var thisDate = creatAt[2].split('T');
+      var time = thisDate[1].split(':');
+      var currentTimeZoneOffsetInHours = ((new Date().getTimezoneOffset() / 60));      
+      time[0] = (parseInt(time[0]) - currentTimeZoneOffsetInHours).toString();  //affich l'heure selon l'heure de pc de l'user
+      thisDate[1] = [time[0], time[1], time[2]].join(":");
       var thisDate2 = start[2].split('T');
       var thisDate3 = end[2].split('T');
       element.end_date = [thisDate3[0], end[1], end[0]].join("-");
@@ -53,42 +62,13 @@ export class ListTransactionComponent implements OnInit {
   listenToWebSocket() {
     this.tablesService.messages.subscribe(msg => {
       console.log("Response from websocket: ", JSON.parse(msg));
-      // if there is a transaction job on Run
-      if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0 && ((JSON.parse(msg).Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction"))).length > 0) {
-        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
-        this.showJobRun = true;
-      }
-      // if all runing job are different from transaction
-      else if (JSON.parse(msg).Running_Jobs && JSON.parse(msg).Running_Jobs.length > 0) {
-        localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
-      }
-      // if there is a job who ended refresh the page
-      else if (JSON.parse(msg).jobEnded) {
-        if ((JSON.parse(msg).jobEnded).includes("Talend Job Transaction Mad Ended")) {
-          localStorage.setItem('ws', JSON.stringify(JSON.parse(msg)));
-          this.showJobRun = false;
-          this.actualiser();
-        }
+      localStorage.setItem('wsTransaction', JSON.stringify(JSON.parse(msg)));
+      console.log("COLMPARAIIIIISON    :   ",JSON.parse(msg).stateTransaction, "   = ",JSON.parse(msg).stateTransaction === "table transactionFile updated");
+      if(JSON.parse(msg).stateTransaction === "table transactionFile updated")
+      {
+        this.actualiser();
       }
     });
-    // check localstorage if the user come from another page 
-
-    if (JSON.parse(localStorage.getItem('ws'))) {
-      if (JSON.parse(localStorage.getItem('ws')).Running_Jobs){
-        if((JSON.parse(localStorage.getItem('ws')).Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
-          this.showJobRun = true;
-        }
-      }
-      else if (JSON.parse(localStorage.getItem('ws')).state.Running_Jobs){
-        if((JSON.parse(localStorage.getItem('ws')).state.Running_Jobs).filter(s => s.includes("Talend Job Mad Transaction")).length > 0){
-          this.showJobRun = true;
-        }
-      }
-  
-      
-    }
-
-
   }
   getColor(ch) {
     if (ch === 'En attente') {
@@ -106,12 +86,15 @@ export class ListTransactionComponent implements OnInit {
   }
 
   public openDialog() {
-    const dialogRef = this.dialog.open(DailogGenerateTransaction);
+    const dialogRef = this.dialog.open(DailogGenerateTransaction,{
+      data: {
+        copy_transactions : this.copy_transactions
+      }
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
         this.actualiser();
       }
-
     });
   }
   public actualiser() {
@@ -275,6 +258,7 @@ export class ListTransactionComponent implements OnInit {
   styleUrls: ['dialog/generer-transaction.component.scss']
 })
 export class DailogGenerateTransaction {
+  public snackAction = 'Ok';
   maxDate: Date;
   showloader = false;
   clicked = false;
@@ -282,18 +266,20 @@ export class DailogGenerateTransaction {
     start_date: new FormControl(),
     end_date: new FormControl()
   });
+  receivedTransactionsFromParentComponent: any = [];
 
   constructor(
     public dialogRef: MatDialogRef<DailogGenerateTransaction>,
-    private service_genererTransaction: GenererTransactionService
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private service_genererTransaction: GenererTransactionService,
+    private _snackBar: MatSnackBar,
   ) {
     this.maxDate = new Date();
     this.maxDate.setDate(this.maxDate.getDate() - 1);
+    this.receivedTransactionsFromParentComponent = data
   }
   ngOnInit(): void {
   }
-
-
   onNoclick() {
     this.dialogRef.close();
   }
@@ -304,8 +290,31 @@ export class DailogGenerateTransaction {
     var end_date = this.toJSONLocal(this.range.value.end_date);
     const formData = new FormData();
     formData.append('start_date', start_date);
-    formData.append('end_date', end_date);
-    this.service_genererTransaction.genererTransaction(formData).subscribe(
+    formData.append('end_date',end_date);
+    console.warn("start_date =",start_date);
+    console.warn("end_date =",end_date);
+    const start = moment(start_date, 'YYYY-MM-DD');
+    const end   = moment(end_date, 'YYYY-MM-DD');
+    const rangeTransaction = moment.range(start, end);
+    var rangeExist = false;
+    this.receivedTransactionsFromParentComponent.copy_transactions.forEach(element => {
+      if (element.statut == "En attente")
+      {
+         var formatStartDate = element.start_date.split("-").reverse().join("-");
+         var formatEndDate = element.end_date.split("-").reverse().join("-");
+         var rangeElement = moment.range(formatStartDate, formatEndDate);
+         if (rangeElement.overlaps(rangeTransaction, { adjacent: true })){
+           rangeExist = true;
+         }
+      }
+    });
+    if (rangeExist)
+    {
+        this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
+        this.showloader = false;
+        this.dialogRef.close('submit');
+    }else{
+     this.service_genererTransaction.genererTransaction(formData).subscribe(
       (res) => {
         this.showloader = false;
         console.log(res);
@@ -315,8 +324,16 @@ export class DailogGenerateTransaction {
         this.showloader = false;
         console.log(err);
       }
-    );
-
+     );
+    }
+  }
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 4500,
+      // verticalPosition: 'bottom',
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
   }
   // convertir les dates en une chaîne de date conviviale MySQL
   toJSONLocal(date) {

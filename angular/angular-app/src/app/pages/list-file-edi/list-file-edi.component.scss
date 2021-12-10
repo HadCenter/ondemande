@@ -2,6 +2,7 @@
     .mdl-card,
     .mdl-card__supporting-text {
           overflow-x: auto;
+          overflow-y:hidden;
     }
 
     table {
@@ -100,6 +101,7 @@ span.mat-button-wrapper {
   }
   .mat-dialog-container {
     background-color: #444;
+    overflow: hidden !important;
 }
 
 .mat-dialog-title {

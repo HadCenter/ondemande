@@ -9,6 +9,7 @@ urlpatterns = [
     path("getCapacityState/", views.getCapacityState, name = "get-capacity-state" ),
     path("refreshReport/<str:id>", views.refreshReport, name = "refresh-report" ),
     path("getRefreshState/<str:id>", views.getRefreshState, name = "refresh-report" ),
+    path("refreshDatabase", views.refreshDatabase, name = "refresh-database" ),
 
 
 ]

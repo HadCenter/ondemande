@@ -1,5 +1,4 @@
 # chat/consumers.py
-import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
@@ -7,8 +6,11 @@ import jsonpickle
 
 
 class ChatConsumer(WebsocketConsumer):
-    state = "table ediFile not updated"
-    stateTransaction = {"Running_Jobs": []}
+    state = {
+        "stateEdi": "table ediFile not updated",
+        "stateTransaction" : "table transactionFile not updated",
+        "stateLogistic" : "table logisticFile not updated"
+    }
     def connect(self):
         self.room_name = 'notifications_room'
         self.room_group_name = self.room_name+"_group"

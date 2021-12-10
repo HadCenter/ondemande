@@ -7,16 +7,17 @@ import logging
 import pandas as pd
 import numpy as np
 from .models import LogisticFile, LogisticFileInfo, FileExcelContent
-
+from django.conf import settings
+DJANGO_DIRECTORY = settings.BASE_DIR
 logger = logging.getLogger('django')
 
 FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "TransMagistorDev"
 
 def removeLogisticFileFromServer(fileName):
-    django_directory = os.getcwd()
+    os.chdir(DJANGO_DIRECTORY)
     os.chdir("media/files")
     os.remove(fileName)
-    os.chdir(django_directory)
+    os.chdir(DJANGO_DIRECTORY)
 
 def traceLogisticFileInDB(fileName, typeLogisticFile):
     logisticFileObject = LogisticFile(logisticFile=fileName, logisticFileType=typeLogisticFile)
@@ -24,17 +25,16 @@ def traceLogisticFileInDB(fileName, typeLogisticFile):
     idFileInDB = logisticFileObject.id
     return idFileInDB
 def copyLogisticFileFromMagistorTransToLocalHost(sftp_client,logisticFileName,source):
-    django_directory = os.getcwd()
-    os.chdir(django_directory)
+    os.chdir(DJANGO_DIRECTORY)
     sftp_client.get(source + "/" + logisticFileName, os.getcwd() + "/" + logisticFileName )
-    os.chdir(django_directory)
+    os.chdir(DJANGO_DIRECTORY)
 def copyLogisticFileFromMagistorTransToIN(sftp_client,logisticFileName,source,destination):
-    django_directory = os.getcwd()
+    os.chdir(DJANGO_DIRECTORY)
     os.chdir("media/files")
     sftp_client.get(source +  "/" + logisticFileName, os.getcwd() + "/" + logisticFileName)
     sftp_client.put(logisticFileName, destination + "/" + logisticFileName)
     os.remove(logisticFileName)
-    os.chdir(django_directory)
+    os.chdir(DJANGO_DIRECTORY)
 
 def logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
     INFolderPath = "/IN"
@@ -47,6 +47,7 @@ def logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile):
     return typeLogistFileExist
 
 def saveUploadedLogisticFile(request_file):
+    os.chdir(DJANGO_DIRECTORY)
     fs = FileSystemStorage()
     logistic_file_name = request_file.name
     timestr = time.strftime("%d%m%Y")
@@ -77,20 +78,22 @@ def createFolderIfNotExist(sftp_client, folderName, placementPath):
     if folderName not in sftp_client.listdir():
         folderName = "{}".format(folderName)
         sftp_client.mkdir(folderName)
+        sftp_client.chown(folderName, 5500,5500)
     if(placementPath == "/"):
         folderPath = sftp_client.getcwd() + folderName
     else:
         folderPath = sftp_client.getcwd() + "/" + folderName
+    
     return folderPath
 
 def uploadLogisticFileInSFtpServer(sftp_client , fileName , idFileInDB ):
-    django_directory = os.getcwd()
+    os.chdir(DJANGO_DIRECTORY)
     os.chdir("media/files")
     importedFilesfolderPath = createFolderIfNotExist(sftp_client, folderName=FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES , placementPath="/")
     idFileFolderPath = createFolderIfNotExist(sftp_client, folderName=idFileInDB, placementPath=importedFilesfolderPath)
     sftp_client.put(fileName, idFileFolderPath + "/" + fileName)
     os.remove(fileName)
-    os.chdir(django_directory)
+    os.chdir(DJANGO_DIRECTORY)
 
 def connect():
     ssh = paramiko.SSHClient()
@@ -131,14 +134,14 @@ def getSingleLogisticFileDetail(key):
                                             ButtonInvalidateActivated= logisticFileDB.ButtonInvalidateActivated)
     return logisticFileResponse
 
-def seeContentLogisticFile(logisticFileName, folderLogisticFile):
-    django_directory = os.getcwd()
+def seeContentLogisticFile(logisticFileName, folderLogisticFile, logisticSheetName):
+    os.chdir(DJANGO_DIRECTORY)
     folderLogisticFilePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
     sftp_client = connect()
     sftp_client.chdir(folderLogisticFilePath)
     os.chdir("media/files")
     sftp_client.get(sftp_client.getcwd() + "/" + logisticFileName, os.getcwd() + "/" + logisticFileName)
-    excelLogisticFile = pd.read_excel(logisticFileName)
+    excelLogisticFile = pd.read_excel(logisticFileName, sheet_name=logisticSheetName)
     excelfile = excelLogisticFile.fillna('')
     columns = list(excelfile.columns)
     for column in columns:
@@ -147,7 +150,7 @@ def seeContentLogisticFile(logisticFileName, folderLogisticFile):
     rows = excelfile.values.tolist()
     os.remove(logisticFileName)
     responseObject = FileExcelContent(columns, rows)
-    os.chdir(django_directory)
+    os.chdir(DJANGO_DIRECTORY)
     return responseObject
 
 
@@ -203,6 +206,21 @@ def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
         deleteLogisticFileFromInFolder(sftp_client= sftp_client, FolderInPath= "/IN", logisticFileName=logisticFileName)
         LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
         return True
+
+def updateMetaDataFileInTableCoreLogisticFile(logisticFileId, logisticFileStatus):
+    logisticFile = LogisticFile.objects.get(pk=logisticFileId)
+    logisticFile.status = logisticFileStatus
+    if(logisticFileStatus.casefold() in (status.casefold() for status in ["En cours","Invalide","Terminé"])):
+        logisticFile.ButtonCorrecteActiveted = False
+        logisticFile.ButtonValidateActivated = False
+        logisticFile.ButtonInvalidateActivated = False
+
+    elif(logisticFileStatus.casefold() == "à vérifier".casefold()):
+        logisticFile.ButtonCorrecteActiveted = False
+        logisticFile.ButtonValidateActivated = True
+        logisticFile.ButtonInvalidateActivated = False
+
+    logisticFile.save()
 
 
 

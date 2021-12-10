@@ -14,6 +14,7 @@ from .azureActiveDirectoryService import AadService
 from django.core.cache import cache
 import json
 
+updatePowerBIDatabaseWebhook = "https://webhooks.eu.cloud.talend.com/Urbantz_webhook/8cef079f1994441d8da289ba6243306e"
 @api_view(['GET'])
 def getEmbedParamsForSingleReport(request,id):
     #print(request.GET.get('id',"params in url not found"))
@@ -108,9 +109,9 @@ def refreshReport(request,id):
 
 @api_view(['POST'])
 def refreshDatabase(request):
-	return refreshDatabaseWithData(request.data)
+	return refreshDatabaseWithData(updatePowerBIDatabaseWebhook, request.data)
 
-def refreshDatabaseWithData(data):
+def refreshDatabaseWithData(link:str,data):
+	requests.post(link, json=data)
+	return JsonResponse({'message': 'ok'}, status=status.HTTP_200_OK)
 
-	requests.post("", json=data)
-	return Response({"message": "ok"}, status=status.HTTP_200_OK)

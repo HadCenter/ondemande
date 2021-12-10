@@ -18,4 +18,8 @@ export class DetailsFileMagistorService {
   public corretFile (data): Observable<any> {
     return  this.http.post(`${this.url2}/startEngineOnMagistorFiles`,data);
   }
+  public correctLogisticFile (data): Observable<any> {
+    return  this.http.post(`${this.url}/createLogisticFile`,data);
+  }
+
 }

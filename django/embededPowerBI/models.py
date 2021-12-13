@@ -104,7 +104,7 @@ class PowerBiRTLog(models.Model):
 
 @receiver(post_save, sender=PowerBiRTLog)
 def send_message_to_frontend_when_powerbi_updated(sender, instance=None, created=False, **kwargs):
-    if not created:
+    if created:
         messageToSend = {        
             "stateEdi": "table ediFile not updated",
             "stateTransaction" : "table transactionFile not updated",

@@ -7,6 +7,7 @@ from requests.models import Response
 
 # Create your views here.
 from rest_framework.decorators import api_view
+from .models import PowerBiRTLog
 from embededPowerBI.powerBIEmbedService import PbiEmbedService
 from .config import BaseConfig
 import requests
@@ -114,4 +115,27 @@ def refreshDatabase(request):
 def refreshDatabaseWithData(link:str,data):
 	requests.post(link, json=data)
 	return JsonResponse({'message': 'ok'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def updatePowerBiRefreshButtonStatusWS(request):
+    statut = request.data['status']
+    id_admin = request.data['id_admin']
+
+    updatePowerBiRefreshButtonStatus(statut = statut, id_admin = id_admin )
+    return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
+
+
+def updatePowerBiRefreshButtonStatus(statut: str, id_admin):
+    powerBiRtLog = PowerBiRTLog()
+    powerBiRtLog.status = statut
+    powerBiRtLog.id_admin = id_admin
+    powerBiRtLog.save()
+
+@api_view(['GET'])
+def getPowerBiRefreshButtonStatus(request):
+    statut = PowerBiRTLog.objects.last().status
+    return JsonResponse({'status': statut}, status=status.HTTP_200_OK)
+
+
+
 

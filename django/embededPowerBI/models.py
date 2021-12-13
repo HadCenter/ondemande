@@ -1,6 +1,7 @@
+import os
 from django.db import models
 from django.db.models.signals import post_save
-from django.dispatch.dispatcher import receiver
+from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -97,13 +98,17 @@ class PowerBiRTLog(models.Model):
     status = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now =True)
     class Meta:
+        managed = False
         db_table = 'powerbi_rt_log'
 
 
 @receiver(post_save, sender=PowerBiRTLog)
 def send_message_to_frontend_when_powerbi_updated(sender, instance=None, created=False, **kwargs):
     if not created:
-        messageToSend = {
+        messageToSend = {        
+            "stateEdi": "table ediFile not updated",
+            "stateTransaction" : "table transactionFile not updated",
+            "stateLogistic" : "table logisticFile not updated",
             "statePowerbi": "table powerbirtlog updated"
         }
         channel_layer = get_channel_layer()

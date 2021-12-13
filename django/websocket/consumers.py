@@ -9,7 +9,8 @@ class ChatConsumer(WebsocketConsumer):
     state = {
         "stateEdi": "table ediFile not updated",
         "stateTransaction" : "table transactionFile not updated",
-        "stateLogistic" : "table logisticFile not updated"
+        "stateLogistic" : "table logisticFile not updated",
+        "statePowerbi" : "table powerbirtlog not updated"
     }
     def connect(self):
         self.room_name = 'notifications_room'

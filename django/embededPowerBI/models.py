@@ -1,4 +1,10 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+from core.models import AccountsAccount
 
 # Create your models here.
 
@@ -84,3 +90,27 @@ class EmbedToken:
         self.tokenId = token_id
         self.token = token
         self.tokenExpiry = token_expiry
+
+class PowerBiRTLog(models.Model):
+    id = models.IntegerField(primary_key=True)
+    id_admin = models.IntegerField()
+    status = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now =True)
+    class Meta:
+        db_table = 'powerbi_rt_log'
+
+
+@receiver(post_save, sender=PowerBiRTLog)
+def send_message_to_frontend_when_powerbi_updated(sender, instance=None, created=False, **kwargs):
+    if not created:
+        messageToSend = {
+            "statePowerbi": "table powerbirtlog updated"
+        }
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'notifications_room_group',
+            {
+                'type': 'send_message_to_frontend',
+                'message': messageToSend
+            }
+        )

@@ -10,6 +10,8 @@ urlpatterns = [
     path("refreshReport/<str:id>", views.refreshReport, name = "refresh-report" ),
     path("getRefreshState/<str:id>", views.getRefreshState, name = "refresh-report" ),
     path("refreshDatabase", views.refreshDatabase, name = "refresh-database" ),
+    path("updatePowerBiRefreshButtonStatus", views.updatePowerBiRefreshButtonStatusWS, name = "updatePowerBiRefreshButtonStatus" ),
+    path("getPowerBiRefreshButtonStatus", views.getPowerBiRefreshButtonStatus, name = "getPowerBiRefreshButtonStatus" ),
 
 
 ]

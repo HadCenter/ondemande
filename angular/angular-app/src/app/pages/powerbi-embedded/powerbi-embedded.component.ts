@@ -66,10 +66,11 @@ export class PowerbiEmbeddedComponent implements OnInit {
     this.pbiService.getRefreshDBState().subscribe(res => {
       console.log("########### ",res.status);
       if(res.status == "En cours"){
-        this.canRefreshBD == false;
+        this.canRefreshBD = false;
       }else{
-        this.canRefreshBD == true;
+        this.canRefreshBD = true;
       }
+
     })
   }
 

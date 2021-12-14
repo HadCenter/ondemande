@@ -33,7 +33,7 @@
       <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
       </base-pagination>
       <!-- <p>{{ capacityState }}</p> -->
-      <button *ngIf="capacityState" (click)="refreshBD()" [disabled]="!canRefreshBD"
+      <button *ngIf="capacityState" (click)="refreshBD();$event.stopPropagation()" [disabled]="!canRefreshBD"
         matTooltip="Actualisation de la base de données"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">
         <i class="material-icons ">refresh</i>

@@ -285,7 +285,8 @@ def send_message_to_frontend_when_edifile_updated(sender, instance=None, created
         messageToSend = {
             "stateEdi": "table ediFile updated",
             "stateTransaction" : "table transactionFile not updated",
-            "stateLogistic": "table logisticFile not updated"
+            "stateLogistic": "table logisticFile not updated",
+            "statePowerbi": "table powerbirtlog not updated"
         }
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
@@ -301,7 +302,8 @@ def send_message_to_frontend_when_logisticfile_updated(sender, instance=None, cr
         messageToSend = {
             "stateEdi": "table ediFile not updated",
             "stateTransaction" : "table transactionFile not updated",
-            "stateLogistic": "table logisticFile updated"
+            "stateLogistic": "table logisticFile updated",
+            "statePowerbi": "table powerbirtlog not updated"
         }
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(

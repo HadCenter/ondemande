@@ -51,7 +51,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
     this.pbiService.messages.subscribe(msg => {
       console.log(JSON.parse(msg).statePowerbi);
       if (JSON.parse(msg).statePowerbi === "table powerbirtlog updated") {
-        this.canRefreshBD = true;
+        this.getbtnRefreshDBState();
       }
     });
   }
@@ -65,7 +65,6 @@ export class PowerbiEmbeddedComponent implements OnInit {
 
   getbtnRefreshDBState(){
     this.pbiService.getRefreshDBState().subscribe(res => {
-      console.log("########### ",res.status);
       if(res.status == "En cours"){
         this.canRefreshBD = false;
       }else{

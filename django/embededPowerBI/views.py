@@ -110,7 +110,10 @@ def refreshReport(request,id):
 
 @api_view(['POST'])
 def refreshDatabase(request):
-	return refreshDatabaseWithData(updatePowerBIDatabaseWebhook, request.data)
+    
+    updatePowerBiRefreshButtonStatus(statut = "En cours", id_admin = request.data[0]['id_admin'])
+    return refreshDatabaseWithData(updatePowerBIDatabaseWebhook, request.data)
+
 
 def refreshDatabaseWithData(link:str,data):
 	requests.post(link, json=data)

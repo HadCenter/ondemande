@@ -45,6 +45,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
     this.getReports();
     this.authService.userData.subscribe(user => this.user = user);
     this.listenToWebSocket();
+
   }
   listenToWebSocket() {
     this.pbiService.messages.subscribe(msg => {
@@ -238,7 +239,10 @@ export class PowerbiEmbeddedComponent implements OnInit {
   }
 
   public refreshBD() {
-    this.pbiService.refreshBD().subscribe(
+    var params = [{
+      id_admin: this.user.id,
+    }]
+    this.pbiService.refreshBD(params).subscribe(
       res => this.openSnackBar("Actualisation de la base de données en cours... ", "Ok", 5000),
       err => this.openSnackBar("La base de données ne peut pas être actualisé manuellement, réessayer plus tard. ", "Ok", 5000),
     )

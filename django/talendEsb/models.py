@@ -52,7 +52,8 @@ def send_message_to_frontend_when_transactionFile_updated(sender, instance=None,
         messageToSend = {
             "stateEdi": "table ediFile not updated",
             "stateTransaction" : "table transactionFile updated",
-            "stateLogistic": "table logisticFile not updated"
+            "stateLogistic": "table logisticFile not updated",
+            "statePowerbi": "table powerbirtlog not updated"
         }
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(

@@ -1,16 +1,26 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { WebsocketService } from 'app/services/websocket.service';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PowerbiEmbeddedService {
   private url = `${environment.apiBaseUrl}/embededPowerBI`;
 
-  constructor(private httpClient: HttpClient) {}
-
+  public WS_URL = "ws://52.47.208.8:8000/ws/notifications"
+  public messages: Subject<any>;
+  data:any={};
+ constructor(private httpClient: HttpClient,private wsService: WebsocketService) {
+   this.messages = <Subject<any>>wsService.connect(this.WS_URL).map(
+     (response: MessageEvent): any => {
+       console.warn('resp from websocket',response)
+       this.data=response.data;
+       let data = response.data;
+       return data;
+     }
+   );
+ }
   getAllReports(): Observable<any> {
 
     return this.httpClient.get<any>(`${this.url}/getAllReports`);
@@ -30,13 +40,18 @@ export class PowerbiEmbeddedService {
   refreshDataset(id : string): Observable<any> {
     return this.httpClient.post<any>(`${this.url}/refreshReport/${id}`,{});
   }
-  refreshBD(): Observable<any> {
-    return this.httpClient.post<any>(`${this.url}/refreshDatabase`,{});
+  refreshBD(data): Observable<any> {
+    return this.httpClient.post<any>(`${this.url}/refreshDatabase`,data);
   }
 
   getDatasetState(id : string): Observable<any> {
     return this.httpClient.get<any>(`${this.url}/getRefreshState/${id}`);
   }
+
+  getRefreshDBState(): Observable<any> {
+    return this.httpClient.get<any>(`${this.url}/getPowerBiRefreshButtonStatus`);
+  }
+
 
   public getAdvancedHeaders() {
     return [

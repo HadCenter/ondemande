@@ -17,6 +17,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
   reports = [];
   copyReportsPerPagination = [];
   show = true;
+  canRefreshBD: boolean;
   public currentPage = 1;
   private countPerPage = 8;
   public numPage = 0;
@@ -39,9 +40,20 @@ export class PowerbiEmbeddedComponent implements OnInit {
     private authService: AuthService) { }
 
   ngOnInit() {
+    this.getbtnRefreshDBState();
     this.getCapacityState(10000);
     this.getReports();
     this.authService.userData.subscribe(user => this.user = user);
+    this.listenToWebSocket();
+
+  }
+  listenToWebSocket() {
+    this.pbiService.messages.subscribe(msg => {
+      console.log(JSON.parse(msg).statePowerbi);
+      if (JSON.parse(msg).statePowerbi === "table powerbirtlog updated") {
+        this.getbtnRefreshDBState();
+      }
+    });
   }
   openSnackBar(message: string, action: string, duration: number) {
     this._snackBar.open(message, action, {
@@ -50,6 +62,18 @@ export class PowerbiEmbeddedComponent implements OnInit {
       horizontalPosition: 'center',
     });
   }
+
+  getbtnRefreshDBState(){
+    this.pbiService.getRefreshDBState().subscribe(res => {
+      if(res.status == "En cours"){
+        this.canRefreshBD = false;
+      }else{
+        this.canRefreshBD = true;
+      }
+
+    })
+  }
+
 
 
   public getCapacityState(duration: number) {
@@ -148,7 +172,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
     this.advancedTable = this.copyReportsPerPagination.slice(0, this.countPerPage);
   }
 
-  
+
   filterItems(filterValue) {
     return this.reports.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
@@ -214,7 +238,10 @@ export class PowerbiEmbeddedComponent implements OnInit {
   }
 
   public refreshBD() {
-    this.pbiService.refreshBD().subscribe(
+    var params = [{
+      id_admin: this.user.id,
+    }]
+    this.pbiService.refreshBD(params).subscribe(
       res => this.openSnackBar("Actualisation de la base de données en cours... ", "Ok", 5000),
       err => this.openSnackBar("La base de données ne peut pas être actualisé manuellement, réessayer plus tard. ", "Ok", 5000),
     )

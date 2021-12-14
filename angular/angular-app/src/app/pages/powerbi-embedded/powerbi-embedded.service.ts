@@ -42,8 +42,8 @@ export class PowerbiEmbeddedService {
   refreshDataset(id : string): Observable<any> {
     return this.httpClient.post<any>(`${this.url}/refreshReport/${id}`,{});
   }
-  refreshBD(): Observable<any> {
-    return this.httpClient.post<any>(`${this.url}/refreshDatabase`,{});
+  refreshBD(data): Observable<any> {
+    return this.httpClient.post<any>(`${this.url}/refreshDatabase`,data);
   }
 
   getDatasetState(id : string): Observable<any> {

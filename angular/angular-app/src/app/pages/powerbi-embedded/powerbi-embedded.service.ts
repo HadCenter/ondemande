@@ -4,9 +4,7 @@ import { WebsocketService } from 'app/services/websocket.service';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PowerbiEmbeddedService {
   private url = `${environment.apiBaseUrl}/embededPowerBI`;
 

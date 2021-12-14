@@ -7,6 +7,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import { event } from 'd3';
 
 const moment = extendMoment(Moment);
 
@@ -106,6 +107,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   rowsMetaData: any = [];
   columnsMad: any = [];
   rowsMad: any = [];
+  allLivraison: boolean = false;
+  allException: boolean = false;
+
 
 
   constructor(private route: ActivatedRoute,
@@ -278,7 +282,27 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       else if (row.toDelete == 1) {
         row.toDelete = 0;
       }
-      // location.reload();
+
+
+      //Select automatique of column in exception file
+      this.dataSourceException.data.forEach(el => {
+        if (row.taskId == el.taskId) {
+          if (row.toDelete == 1) {
+            el.isDeleted = 1;
+            this.rowsToDeleteException.push(el.taskId);
+          }
+          else if (row.toDelete == 0) {
+            el.isDeleted = 0;
+            if (this.rowsToDeleteException.includes(el.taskId)) {
+              this.rowsToDeleteException.splice(this.rowsToDeleteException.indexOf(el.taskId), 1);
+            }
+          }
+        }
+      })
+
+
+
+
     }
     else if (typeFile == "mad") {
       //uncheck delete rowId from rowstoDelete
@@ -410,26 +434,58 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     return this.rowsToDeleteException.includes(taskId);
   }
   /************selection multiple of checkbox in livraison bloc *******/
-  deleteMasterToggleLivraison() {
+  deleteMasterToggleLivraison(event) {
     // unselect
-    if (this.rowsToDeleteLivraison.length == this.dataSource.data.length) {
+    // if (this.rowsToDeleteLivraison.length == this.dataSource.data.length) {
+    if (event.checked == false) {
+      this.allLivraison = false;
       this.rowsToDeleteLivraison = [];
-      this.dataSource.data.forEach(element => {
-        element.toDelete = 0;
-      });
+      this.dataSourceException.data.forEach(el => {
+        this.dataSource.data.forEach(element => {
+          element.toDelete = 0;
+          //UnSelect automatique of column in Exception bloc
+          if (element.taskId == el.taskId) {
+            el.toDelete = 0;
+            if (this.rowsToDeleteException.includes(el.taskId)) {
+              this.rowsToDeleteException.splice(this.rowsToDeleteException.indexOf(el.taskId), 1);
+
+            }
+          }
+          this.allException = false;
+        });
+      })
+
       //select
     } else {
-     // this.rowsToDeleteLivraison = [];
+      this.allLivraison = true;
+      // this.rowsToDeleteLivraison = [];
       for (var element of this.dataSource.data) {
         element.toDelete = 1;
         this.rowsToDeleteLivraison.push(element.taskId);
+        //Select automatique of column in Exception bloc
+        this.copyFilterException.forEach(el => {
+          if (element.taskId == el.taskId) {
+            el.toDelete = 1;
+            if (!this.rowsToDeleteException.includes(el.taskId)) {
+              this.rowsToDeleteException.push(el.taskId);
+            }
+
+          }
+          if (this.rowsToDeleteException.length == this.dataSourceException.data.length) {
+            this.allException = true;
+          }
+
+        })
       }
+
     }
 
   }
   /************selection multiple of checkbox in livraison bloc *******/
-  deleteMasterToggleException() {
-    if (this.rowsToDeleteException.length == this.dataSourceException.data.length) {
+  deleteMasterToggleException(event) {
+    // if (this.rowsToDeleteException.length == this.dataSourceException.data.length) {
+    if (event.checked == false) {
+      this.allException = false;
       this.rowsToDeleteException = [];
       this.dataSourceException.data.forEach(element => {
         this.dataSource.data.forEach(el => {
@@ -442,10 +498,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
             }
           }
+          this.allLivraison = false;
         })
       });
     } else {
-    //  this.rowsToDeleteException = [];
+      this.allException = true;
+      //  this.rowsToDeleteException = [];
       for (var element of this.dataSourceException.data) {
         element.isDeleted = 1;
         this.rowsToDeleteException.push(element.taskId);
@@ -456,7 +514,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             if (!this.rowsToDeleteLivraison.includes(el.taskId)) {
               this.rowsToDeleteLivraison.push(el.taskId);
             }
-
+            if (this.rowsToDeleteLivraison.length == this.dataSource.data.length) {
+              this.allLivraison = true;
+            }
           }
 
         })
@@ -778,10 +838,13 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
     //  let selected=filter.columnProp;
     this.changeSelectedOptionColor(filter);
+
+
     if (filterExists == false) { this.filterValues.push(filter) }
     // if only one select is selected
     if (this.filterValues.length == 1) {
       this.dataSource.data = this.filterChange(filter);
+
     }
     else {
       // if already another select is active merge the results
@@ -802,7 +865,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
     }
-
+   
     // if selected is deactivate
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
 
@@ -827,6 +890,20 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSource.data.push({})
         }
       }
+    }
+    //update selected all chebox
+    if (this.rowsToDeleteLivraison.length == this.dataSource.data.length) {
+      this.allLivraison = true;
+      if (this.rowsToDeleteException.length == this.dataSourceException.data.length) {
+        this.allException = true;
+      }
+    }
+    else {
+      this.allLivraison = false;
+      if (this.rowsToDeleteException.length !== this.dataSourceException.data.length) {
+        this.allException = false;
+      }
+
     }
 
   }
@@ -886,6 +963,21 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
     }
+    // update select all checkbox
+    if (this.rowsToDeleteException.length == this.dataSourceException.data.length) {
+      this.allException = true;
+      if (this.rowsToDeleteLivraison.length == this.dataSource.data.length) {
+        this.allLivraison = true;
+      }
+    }
+    else {
+      this.allException = false;
+      if (this.rowsToDeleteLivraison.length !== this.dataSource.data.length) {
+        this.allLivraison = false;
+      }
+
+    }
+
   }
 
   setFilteredItemsMetaDataOptions(filter) {

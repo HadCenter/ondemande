@@ -253,6 +253,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
   }
 
   public refreshBD() {
+    this.canRefreshBD = false;
     var params = [{
       id_admin: this.user.id,
     }]

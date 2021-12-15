@@ -14,6 +14,7 @@ import requests
 from .azureActiveDirectoryService import AadService
 from django.core.cache import cache
 import json
+import time
 
 updatePowerBIDatabaseWebhook = "https://webhooks.eu.cloud.talend.com/DB_RT_ONDEMAND/b56ff707f3754e9683363c8bf4895c24"
 @api_view(['GET'])
@@ -110,14 +111,19 @@ def refreshReport(request,id):
 
 @api_view(['POST'])
 def refreshDatabase(request):
-    
-    updatePowerBiRefreshButtonStatus(statut = "En cours", id_admin = request.data[0]['id_admin'])
-    return refreshDatabaseWithData(updatePowerBIDatabaseWebhook, request.data)
+    updatePowerBiRefreshButtonStatus(statut = "En attente", id_admin = request.data[0]['id_admin'])
+    refreshDatabaseWithData(updatePowerBIDatabaseWebhook, request.data)
+    return JsonResponse({'message': 'ok'}, status=status.HTTP_200_OK)
+
+
+def checkButtonStatusAndChangeItAfterSomeTime():
+    time.sleep(250) #sleep for 4 minutes
+    if(PowerBiRTLog.objects.last().status == "En attente"):
+        updatePowerBiRefreshButtonStatus(statut = "Echec", id_admin = 15)
 
 
 def refreshDatabaseWithData(link:str,data):
-	requests.post(link, json=data)
-	return JsonResponse({'message': 'ok'}, status=status.HTTP_200_OK)
+    requests.post(link, json=data)
 
 @api_view(['POST'])
 def updatePowerBiRefreshButtonStatusWS(request):

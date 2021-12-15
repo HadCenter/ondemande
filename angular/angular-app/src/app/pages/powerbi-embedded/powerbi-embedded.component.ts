@@ -49,7 +49,6 @@ export class PowerbiEmbeddedComponent implements OnInit {
   }
   listenToWebSocket() {
     this.pbiService.messages.subscribe(msg => {
-      console.log(JSON.parse(msg).statePowerbi);
       if (JSON.parse(msg).statePowerbi === "table powerbirtlog updated") {
         this.getbtnRefreshDBStateAndShowSnackBar();
       }
@@ -195,19 +194,21 @@ export class PowerbiEmbeddedComponent implements OnInit {
   }
 
   public getReports() {
-    let wait;
     this.pbiService.getAllReports()
       .subscribe(res => {
         this.reports = res.value;
         this.reports.shift(); //supprime le rapprt : Report Usage Metrics Report qui crée 
         this.reports.forEach((element, index, array) => {
           this.pbiService.getDatasetState(element.datasetId).subscribe(res => {
-            element.refreshDate = res.value[0].endTime;//retourne la derniere actualisation
-            element.refreshState = res.value[0].status;
-            console.log(element.refreshDate);
+            if(res.value.length > 0){
+              element.refreshDate = res.value[0].endTime;//retourne la derniere actualisation
+              element.refreshState = res.value[0].status;  
+            }else{
+              element.refreshDate = "";
+              element.refreshState = "";  
+            }
           });
         });
-        console.log(this.reports);
         this.copyReportsPerPagination = this.reports;
         this.numPage = Math.ceil(res.value.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);

@@ -59,7 +59,7 @@ def startEngineOnEdiFilesWithData(data):
 
 def startEngineWithLinkAndData(link:str,data):
 
-	updateMetaDataFileInTableCoreLogisticFile(logisticFileId=data[0]['Magistor_File_Id'], logisticFileStatus="En cours")
+	updateMetaDataFileInTableCoreLogisticFile(logisticFileId=data[0]['Magistor_File_Id'], logisticFileStatus="En attente d'un moteur")
 	requests.post(link, json=data)
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 

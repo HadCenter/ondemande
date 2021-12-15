@@ -210,7 +210,7 @@ def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
 def updateMetaDataFileInTableCoreLogisticFile(logisticFileId, logisticFileStatus):
     logisticFile = LogisticFile.objects.get(pk=logisticFileId)
     logisticFile.status = logisticFileStatus
-    if(logisticFileStatus.casefold() in (status.casefold() for status in ["En cours","Invalide","Terminé"])):
+    if(logisticFileStatus.casefold() in (status.casefold() for status in ["En attente d'un moteur","En cours","Invalide","Terminé"])):
         logisticFile.ButtonCorrecteActiveted = False
         logisticFile.ButtonValidateActivated = False
         logisticFile.ButtonInvalidateActivated = False

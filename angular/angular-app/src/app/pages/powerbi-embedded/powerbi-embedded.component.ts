@@ -51,7 +51,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
     this.pbiService.messages.subscribe(msg => {
       console.log(JSON.parse(msg).statePowerbi);
       if (JSON.parse(msg).statePowerbi === "table powerbirtlog updated") {
-        this.getbtnRefreshDBState();
+        this.getbtnRefreshDBStateAndShowSnackBar();
       }
     });
   }
@@ -65,7 +65,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
 
   getbtnRefreshDBState(){
     this.pbiService.getRefreshDBState().subscribe(res => {
-      if(res.status == "En cours"){
+      if(res.status == "En cours" || res.status == "En attente"){
         this.canRefreshBD = false;
       }else{
         this.canRefreshBD = true;
@@ -74,6 +74,21 @@ export class PowerbiEmbeddedComponent implements OnInit {
     })
   }
 
+  getbtnRefreshDBStateAndShowSnackBar(){
+    this.pbiService.getRefreshDBState().subscribe(res => {
+      if(res.status == "En cours" || res.status == "En attente"){
+        this.canRefreshBD = false;
+        this.openSnackBar("Actualisation de la base de données en cours... ", "Ok", 8000);
+      }else if (res.status == "Terminé"){
+        this.canRefreshBD = true;
+        this.openSnackBar("La base de données a été actualisé avec succès ", "Ok", 10000);
+      }else{
+        this.canRefreshBD = true;
+        this.openSnackBar("Une erreur est survenue lors de l'actualisation de la base de données, veuillez réessayer!", "Ok", 10000);
+      }
+
+    })
+  }
 
 
   public getCapacityState(duration: number) {
@@ -242,7 +257,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
       id_admin: this.user.id,
     }]
     this.pbiService.refreshBD(params).subscribe(
-      res => this.openSnackBar("Actualisation de la base de données en cours... ", "Ok", 5000),
+      res => this.openSnackBar("Actualisation de la base de données en cours... ", "Ok", 10000),
       err => this.openSnackBar("La base de données ne peut pas être actualisé manuellement, réessayer plus tard. ", "Ok", 5000),
     )
 

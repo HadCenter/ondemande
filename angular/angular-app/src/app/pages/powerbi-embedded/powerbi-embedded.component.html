@@ -38,7 +38,7 @@
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">
         <i class="material-icons ">refresh</i>
         Actualiser
-      </button> -->
+      </button> 
       <button *ngIf="(user.role == 'SuperAdmin') && (capacityState == 'Paused' || capacityState == 'Resuming' )"
         (click)="openConfirmDialog('activer')" matTooltip="Statut actuel : suspendu"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "

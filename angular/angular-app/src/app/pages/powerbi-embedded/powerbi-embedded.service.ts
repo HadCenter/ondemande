@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 export class PowerbiEmbeddedService {
   private url = `${environment.apiBaseUrl}/embededPowerBI`;
 
-  public WS_URL = "ws://52.47.208.8:8000/ws/notifications"
+  public WS_URL = "ws://13.36.210.39:8000/ws/notifications"
   public messages: Subject<any>;
   data:any={};
  constructor(private httpClient: HttpClient,private wsService: WebsocketService) {

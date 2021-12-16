@@ -219,6 +219,10 @@ def updateMetaDataFileInTableCoreLogisticFile(logisticFileId, logisticFileStatus
         logisticFile.ButtonCorrecteActiveted = False
         logisticFile.ButtonValidateActivated = True
         logisticFile.ButtonInvalidateActivated = False
+    elif(logisticFileStatus.casefold() == "Echec".casefold()):
+        logisticFile.ButtonCorrecteActiveted = False
+        logisticFile.ButtonValidateActivated = True
+        logisticFile.ButtonInvalidateActivated = False
 
     logisticFile.save()
 

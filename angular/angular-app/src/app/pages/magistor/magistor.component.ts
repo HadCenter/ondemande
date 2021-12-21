@@ -239,15 +239,22 @@ export class MagistorComponent implements OnInit {
         file.ButtonValidateActivated =true;
         file.ButtonCorrecteActiveted =false;
         file.ButtonInvalidateActivated =false;
-        file.status ='En attente';
+        if(file.number_annomalies == 0){
+          file.status ='En attente';
+        }else {
+          file.status ='à vérifier';
+        }
       }
     },
     (err) => {
       file.ButtonValidateActivated=true;
       file.ButtonCorrecteActiveted =false;
       file.ButtonInvalidateActivated = false;
-      file.status ='En attente';
-    })
+      if(file.number_annomalies == 0){
+        file.status ='En attente';
+      }else {
+        file.status ='à vérifier';
+      }    })
   }
   correctionFile(file) {
     this.fileTocheck = [{

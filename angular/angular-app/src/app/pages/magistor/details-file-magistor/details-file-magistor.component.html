@@ -6,7 +6,9 @@
         <base-card-body class="content-first-card ">
           <div class="content-label">
             <label class="details-label">Statut</label>
-            <label class="details-label">{{file?.status}}</label>
+            <span *ngIf="file" class="details-label-color color--{{getColor(file?.status)}}">{{file?.status}}</span>
+            <!-- <span class="label label--mini color--{{getColor(row.status)}} ">{{ file?.status }}</span> -->
+
           </div>
           <div class="content-label">
             <label class="details-label">Date</label>
@@ -33,22 +35,35 @@
             <label class="mdl-textfield__label" for="search1"></label>
           </div>
         </div> -->
+          <button (click)='saveModificationsOnFile();$event.stopPropagation();' style="margin: 3px; "
+            [disabled]="dataChanged==false"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">
 
-        <div *ngIf="fileMagistor">
+            <i class="material-icons ">save</i>
+            Enregistrer les modifications
+          </button>
+
           <!----[disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'" !-->
-          <button (click)='correctionFile();$event.stopPropagation();' style="margin-left: 5px;"
-          [disabled]="terminated || file?.ButtonValidateActivated==false"
-            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
-          </button>
+          <div>
+            <button (click)='openConfirmDialog("valider");$event.stopPropagation();' style="margin: 1px;"
+              [disabled]="validateClicked==true || terminated || file?.ButtonValidateActivated==false"
+              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
+            </button>
 
-          <button (click)="correctionFile();$event.stopPropagation();" style="margin-left: 5px;" [disabled]="terminated || file?.ButtonCorrecteActiveted==false"
-            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-          </button>
+            <button (click)='invalidateFile()' style="margin: 1px;"
+              [disabled]="correctClicked==true || terminated || file?.ButtonInvalidateActivated==false"
+              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Dévalider
+            </button>
+
+            <button (click)='openConfirmDialog("corriger");$event.stopPropagation();' style="margin: 1px;"
+              [disabled]="correctClicked==true ||terminated || file?.ButtonCorrecteActiveted==false"
+              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
+            </button>
+          </div>
           <!-- <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
             les filtres
           </button> -->
-        </div>
       </div>
     </div>
     <!-- <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
@@ -191,11 +206,11 @@
         </div>
         <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
           <app-prestation-erronee *ngIf="fileMagistor" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
-            [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc">
+            [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc"> (changedDataEvent)="changedData($event)"
           </app-prestation-erronee>
 
           <app-prestation-erronee *ngIf="fileMagistor2" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
-            [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc">
+            [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc" (changedDataEvent)="changedData2($event)">
           </app-prestation-erronee>
 
         </div>
@@ -267,7 +282,8 @@
           <!------------------------------------- FEUILLE ART01 --------------------------------------->
           <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
           <app-prestation-erronee *ngIf="errorfileMagistor?.rows.length > 0" [typeFile]="file?.logisticFileType"
-            [originData]="errorfileMagistor" [data]="copyerrorfileMagistor" [sheet1]="true">
+            [originData]="errorfileMagistor" [data]="copyerrorfileMagistor" [sheet1]="true"
+            (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
           <!------------------------------------- FEUILLE CND01 --------------------------------------->
           <!-------------------------------------------- PRESTATIONS VALIDEES --------------------------------------->
@@ -336,7 +352,8 @@
           <!------------------------------------- FEUILLE CND01 --------------------------------------->
           <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
           <app-prestation-erronee *ngIf="errorfileMagistor2?.rows.length > 0" [typeFile]="file?.logisticFileType"
-            [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2" [sheet1]="false">
+            [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2" [sheet1]="false"
+            (changedDataEvent)="changedData2($event)">
           </app-prestation-erronee>
         </div>
       </div>
@@ -477,11 +494,11 @@
 
         <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
           <app-prestation-erronee [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
-            [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc">
+            [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc" (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
 
           <app-prestation-erronee [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
-            [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc">
+            [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc" (changedDataEvent)="changedData2($event)">
           </app-prestation-erronee>
 
         </div>
@@ -556,7 +573,8 @@
           <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
 
           <app-prestation-erronee *ngIf="errorfileMagistor?.rows.length > 0" [typeFile]="file?.logisticFileType"
-            [originData]="errorfileMagistor" [data]="copyerrorfileMagistor" [sheet1]="true">
+            [originData]="errorfileMagistor" [data]="copyerrorfileMagistor" [sheet1]="true"
+            (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
 
 
@@ -848,7 +866,8 @@
       </base-card> -->
 
           <app-prestation-erronee *ngIf="errorfileMagistor2?.rows.length > 0" [typeFile]="file?.logisticFileType"
-            [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2" [sheet1]="false">
+            [originData]="errorfileMagistor2" [data]="copyerrorfileMagistor2" [sheet1]="false"
+            (changedDataEvent)="changedData2($event)">
           </app-prestation-erronee>
         </div>
       </div>

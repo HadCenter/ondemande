@@ -4,7 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PrestationErroneeService } from '../prestation-erronee/prestation-erronee.service';
-
+import { MagistorService } from '../magistor.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 export interface MouseEvent {
   rowId: number;
   colId: number;
@@ -18,7 +20,7 @@ export interface MouseEvent {
   styleUrls: ['./details-file-magistor.component.scss']
 })
 export class DetailsFileMagistorComponent implements OnInit {
-  file: any = [];
+  file: any;
   testFile: any = [];
   files: any = [];
   searchItems: any =[];
@@ -27,7 +29,6 @@ export class DetailsFileMagistorComponent implements OnInit {
   errorfileMagistor: any;
   fileMagistor2: any;
   errorfileMagistor2: any;
-
   copyfileMagistor: any;
   copyerrorfileMagistor: any;
   copyfileMagistor2: any;
@@ -35,6 +36,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   displayedColumns: any;
   displayedColumns2: any
   public snackAction = 'Ok';
+  public errorValidation = "Un fichier de même type existe"
   typeFileART: boolean = false;
   typeFileREC: boolean = false;
   typeFileCDC: boolean = false;
@@ -59,11 +61,18 @@ export class DetailsFileMagistorComponent implements OnInit {
   correctedErrorfileMagistor: any;
   correctedErrorfileMagistor2: any;
   showLoader: boolean = true;
+  correctClicked: boolean = false;
+  validateClicked : boolean = false;
+  dataChanged: boolean = false;
+  dialogRef: MatDialogRef<ConfirmDialogComponent>;
+
   constructor(private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
     public router: Router,
+    public dialog: MatDialog,
     private fileService: DetailsFileMagistorService,
-    private prestationService: PrestationErroneeService) { }
+    private prestationService: PrestationErroneeService,
+    private magistorService: MagistorService) { }
 
   ngOnInit(): void {
     this.fileService.getFile(this.route.snapshot.params.id).subscribe(
@@ -81,7 +90,7 @@ export class DetailsFileMagistorComponent implements OnInit {
           this.typeFileCDC = true;
           this.secondSheet = "LCD01";
         }
-        if (this.file.status == "En attente" || this.file.status == "Validé" || this.file.status == "Terminé") {
+        if (this.file.status == "En attente" || (this.file.status == "Validé" && this.file.number_annomalies == 0) || this.file.status == "Terminé") {
           this.oneBloc = true;
           this.fileName = this.file.logisticFileName.name;
         } else {
@@ -104,6 +113,16 @@ export class DetailsFileMagistorComponent implements OnInit {
       })
   }
 
+  listenToWebSocket() {
+    this.magistorService.messages.subscribe(msg => {
+      console.log("Response from websocket: ", JSON.parse(msg));
+      //localStorage.setItem('wslogistic', JSON.stringify(JSON.parse(msg)));
+      if(JSON.parse(msg).stateLogistic === "table logisticFile updated")
+      {
+        this.actualiser2();
+      }
+    });
+  }
 
 
   getValidFiles() {
@@ -112,7 +131,7 @@ export class DetailsFileMagistorComponent implements OnInit {
       "folderLogisticFile": this.file.idLogisticFile,
       "logisticSheetName": this.file.logisticFileType,
     }
-
+    console.log(data);
     this.fileService.getLogisticFileContent(data).subscribe(res => {
       this.fileMagistor = res;
       console.log(this.fileMagistor.rows);
@@ -151,6 +170,7 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyfileMagistor2 = JSON.parse(JSON.stringify(this.fileMagistor2));
         this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);
         this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
+
         //this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
       }
       if (this.file.number_annomalies == 0) {
@@ -218,11 +238,23 @@ export class DetailsFileMagistorComponent implements OnInit {
 
   actualiser() {
     this.showLoader = true;
-
+    this.dataChanged = false;
     this.fileMagistor = undefined;
     this.errorfileMagistor = undefined;
     this.fileMagistor2 = undefined;
     this.errorfileMagistor2 = undefined;
+    if (this.file.status == "En attente" || (this.file.status == "Validé" && this.file.number_annomalies == 0) || this.file.status == "Terminé") {
+      this.oneBloc = true;
+      this.fileName = this.file.logisticFileName.name;
+    } else {
+      this.oneBloc = false;
+      this.fileName = this.file.logisticFileName.name;
+      this.fileName = this.fileName.slice(0, 3) + this.fileName.slice(5);
+      this.fileName = this.fileName.replace('.xlsx', '_Correct.xlsx')
+    }
+    if (this.file.status == "Terminé") {
+      this.terminated = true;
+    }
     this.getValidFiles();
 
     if (this.file.number_annomalies != 0) {
@@ -231,6 +263,60 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
 
   }
+  actualiser2() {
+    this.showLoader = true;
+    this.dataChanged = false;
+
+    this.fileService.getFile(this.route.snapshot.params.id).subscribe(
+      resp => {
+        this.file = resp;
+        if (this.file.logisticFileType == "ART01") {
+          this.typeFileART = true;
+          this.secondSheet = "CND01";
+        }
+        else if (this.file.logisticFileType == "REC01") {
+          this.typeFileREC = true;
+          this.secondSheet = "LRC01";
+        }
+        else if (this.file.logisticFileType == "CDC01") {
+          this.typeFileCDC = true;
+          this.secondSheet = "LCD01";
+        }
+        if (this.file.status == "En attente" || (this.file.status == "Validé" && this.file.number_annomalies == 0) || this.file.status == "Terminé") {
+          this.oneBloc = true;
+          this.fileName = this.file.logisticFileName.name;
+        } else {
+          this.oneBloc = false;
+          this.fileName = this.file.logisticFileName.name;
+          this.fileName = this.fileName.slice(0, 3) + this.fileName.slice(5);
+          this.fileName = this.fileName.replace('.xlsx', '_Correct.xlsx')
+        }
+        if (this.file.status == "Terminé") {
+          this.terminated = true;
+        }
+
+
+        this.getValidFiles();
+
+        if (this.file.number_annomalies != 0) {
+          this.getWrongFiles();
+
+        }
+      })
+  }
+
+  getColor(ch) {
+    if (ch === 'En attente' || ch === 'à vérifier') {
+      return 'blue';
+    } else if (ch === 'Validé' || ch === 'Terminé') {
+      return 'green';
+    } else if (ch === 'En cours') {
+      return 'orange';
+    } else {
+      return 'red';
+    }
+  }
+
 
   /**
     * Get options inside selects
@@ -588,27 +674,90 @@ export class DetailsFileMagistorComponent implements OnInit {
   /**
    * Correct the file
    */
-  correctionFile() {
-    this.showLoader = true;
+  //   NOT USED
+  // correctAndValidateFile() {
+  //   this.showLoader = true;
 
+  //   var errorFile1;
+  //   var errorFile2;
+  //   var columns, columns2;
+  //   if (this.oneBloc) {
+  //     columns = this.fileMagistor['columns'];
+  //     columns2 = this.fileMagistor2['columns'];
+  //     if (this.correctedErrorfileMagistor == undefined) {
+  //       this.correctedErrorfileMagistor = this.copyfileMagistor;
+  //     }
+  //     if (this.correctedErrorfileMagistor2 == undefined) {
+  //       this.correctedErrorfileMagistor2 = this.copyfileMagistor2;
+  //     }
+
+  //   } else {
+  //     columns = this.errorfileMagistor['columns'];
+  //     columns2 = this.errorfileMagistor2['columns'];
+  //     if (this.correctedErrorfileMagistor == undefined) {
+  //       this.correctedErrorfileMagistor = [];
+  //     }
+  //     if (this.correctedErrorfileMagistor2 == undefined) {
+  //       this.correctedErrorfileMagistor2 = [];
+  //     }
+
+  //   }
+  //   console.log(columns);
+  //   console.log(columns2);
+
+  //   console.log(this.correctedErrorfileMagistor);
+  //   console.log(this.correctedErrorfileMagistor2);
+
+
+
+  //   errorFile1 = this.correctedErrorfileMagistor.map(Object.values);
+  //   errorFile2 = this.correctedErrorfileMagistor2.map(Object.values);
+
+  //   this.fileTocheck = {
+  //     fileId: this.file.idLogisticFile,
+  //     columns1: columns,
+  //     rows1error: errorFile1,
+  //     columns2: columns2,
+  //     rows2error: errorFile2,
+  //   };
+  //   //console.log("copy rows : ", this.copyfileMagistor.map(Object.values));
+  //   this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+  //   console.warn("**file to check**", this.fileTocheck);
+  //   this.fileService.correctAndValidateLogisticFile(this.fileTocheck).subscribe(res => {
+  //     console.log('resultat correction', res);
+  //     if (res.message == "file validated successfully") {
+  //       this.actualiser2();
+  //     }
+  //   })
+  // }
+
+  /**
+   * Save modificatiosn on file and place it in folder IN if it's already validated
+   */
+  saveModificationsOnFile() {
+    this.showLoader = true;
+    this.dataChanged = false;
     var errorFile1;
     var errorFile2;
     var columns, columns2;
     if (this.oneBloc) {
-      columns = (Object.keys(this.correctedErrorfileMagistor[0]));
-      columns2 = (Object.keys(this.correctedErrorfileMagistor2[0]));
+      columns = this.fileMagistor['columns'];
+      columns2 = this.fileMagistor2['columns'];
+      if (this.correctedErrorfileMagistor == undefined) {
+        this.correctedErrorfileMagistor = this.copyfileMagistor;
+      }
+      if (this.correctedErrorfileMagistor2 == undefined) {
+        this.correctedErrorfileMagistor2 = this.copyfileMagistor2;
+      }
     } else {
-
-      columns =   this.errorfileMagistor['columns'];
+      columns = this.errorfileMagistor['columns'];
       columns2 = this.errorfileMagistor2['columns'];
-      console.log(columns);
-      console.log(columns2);
-    }
-    if (this.correctedErrorfileMagistor == undefined) {
-      this.correctedErrorfileMagistor = [];
-    }
-    if (this.correctedErrorfileMagistor2 == undefined) {
-      this.correctedErrorfileMagistor2 = [];
+      if (this.correctedErrorfileMagistor == undefined) {
+        this.correctedErrorfileMagistor = [];
+      }
+      if (this.correctedErrorfileMagistor2 == undefined) {
+        this.correctedErrorfileMagistor2 = [];
+      }
     }
 
     errorFile1 = this.correctedErrorfileMagistor.map(Object.values);
@@ -620,23 +769,102 @@ export class DetailsFileMagistorComponent implements OnInit {
       rows1error: errorFile1,
       columns2: columns2,
       rows2error: errorFile2,
-
     };
     //console.log("copy rows : ", this.copyfileMagistor.map(Object.values));
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck);
-    this.fileService.correctLogisticFile(this.fileTocheck).subscribe(res => {
-      console.log('resultat correction', res);
-      if (res.message == "success") {
-        this.actualiser();
+    if (this.file.status == "Validé") {
+      this.fileService.correctAndValidateLogisticFile(this.fileTocheck).subscribe(res => {
+        if (res.message == "file validated successfully") {
+          this.actualiser2();
+        }
+      })
+    } else {
+      this.fileService.correctLogisticFile(this.fileTocheck).subscribe(res => {
+        if (res.message == "success") {
+          this.actualiser();
+        }
+      })
+    }
+  }
+
+  validateFile() {
+    this.validateClicked = true;
+    this.openSnackBar("Validation du fichier en cours...", this.snackAction);
+
+    var fileTovalidate = {
+      logisticFileName: this.file.logisticFileName.name,
+      folderLogisticFile: this.file.idLogisticFile,
+      typeLogisticFile: this.file.logisticFileType
+    }
+
+    this.magistorService.validateFile(fileTovalidate).subscribe((res) => {
+      if (res.message == "file validated successfully") {
+        this.file.ButtonValidateActivated = false;
+        this.file.ButtonCorrecteActiveted = true;
+        this.file.ButtonInvalidateActivated = true;
+        this.file.status = 'Validé';
+      } else if (res.message == "file validated echec") {
+        this.openSnackBar(this.errorValidation, this.snackAction);
       }
+    },
+      (err) => {
+        this.openSnackBar(this.errorValidation, this.snackAction);
+      })
+  }
+  invalidateFile() {
+    this.openSnackBar("Dévalidation du fichier en cours...", this.snackAction);
+
+    var fileToInvalidate = {
+      logisticFileName: this.file.logisticFileName.name,
+      idLogisticFile: this.file.idLogisticFile,
+    }
+
+    this.magistorService.invalidateFile(fileToInvalidate).subscribe((res) => {
+      if (res.message == "file deleted successfully") {
+        this.file.ButtonValidateActivated = true;
+        this.file.ButtonCorrecteActiveted = false;
+        this.file.ButtonInvalidateActivated = false;
+        if (this.file.number_annomalies == 0) {
+          this.file.status = 'En attente';
+        } else {
+          this.file.status = 'à vérifier';
+        }
+      }
+    },
+      (err) => {
+        this.file.ButtonValidateActivated = true;
+        this.file.ButtonCorrecteActiveted = false;
+        this.file.ButtonInvalidateActivated = false;
+        if (this.file.number_annomalies == 0) {
+          this.file.status = 'En attente';
+        } else {
+          this.file.status = 'à vérifier';
+        }
+      })
+  }
+  correctionFile() {
+    this.correctClicked = true;
+    this.fileTocheck = [{
+      Magistor_Current_Client: this.file.clientName,
+      Magistor_Current_File: this.file.logisticFileType.slice(0, 3),
+      Magistor_File_Id: this.file.idLogisticFile.toString()
+    }]
+    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+    console.warn("**file to check**", this.fileTocheck)
+    this.fileService.corretFile(this.fileTocheck).subscribe(res => {
+      console.log('resultat correction', res);
+      if (res.message == "ok") {
+        this.router.navigate(['/logistique']);
+        }
     })
   }
 
- /**
-    * Hide ui selection red rectangle
-    */
-   hideUiSelectionOnCorrection() {
+
+  /**
+     * Hide ui selection red rectangle
+     */
+  hideUiSelectionOnCorrection() {
     if (document.querySelector('.selected')) {
       var inputs = document.querySelectorAll(".selected");
       for (var i = 0; i < inputs.length; i++) {
@@ -658,15 +886,47 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
   changedData(data: any) {
-    console.log("AFter change detected data was : ", this.copyerrorfileMagistor);
     this.correctedErrorfileMagistor = data;
-
-    console.log("Detected changes :: ", data);
+    if (!this.dataChanged) {
+      this.dataChanged = true;
+    }
   }
 
   changedData2(data: any) {
-    console.log("AFter change 2 detected data was : ", this.copyerrorfileMagistor2);
     this.correctedErrorfileMagistor2 = data;
-    console.log("Detected changes 2 :: ", data);
+    if (!this.dataChanged) {
+      this.dataChanged = true;
+    }
+
+  }
+  openConfirmDialog(decision) {
+    if(!this.dataChanged){
+      if (decision == 'valider') {
+        this.validateFile();
+      } else if (decision == 'corriger') {
+        this.correctionFile();
+      }
+
+    }
+    else{
+      this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        disableClose: false
+      });
+      if (decision == 'valider') {
+        this.dialogRef.componentInstance.confirmMessage = "Voulez-vous valider le ficher sans l'enregistrer ?"
+      } else if (decision == 'corriger') {
+        this.dialogRef.componentInstance.confirmMessage = "Voulez-vous corriger le ficher sans l'enregistrer ?"
+      }
+      this.dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          if (decision == 'valider') {
+            this.validateFile();
+          } else if (decision == 'corriger') {
+            this.correctionFile();
+          }
+        }
+        this.dialogRef = null;
+      });
+    }
   }
 }

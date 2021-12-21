@@ -21,5 +21,8 @@ export class DetailsFileMagistorService {
   public correctLogisticFile (data): Observable<any> {
     return  this.http.post(`${this.url}/createLogisticFile`,data);
   }
+  public correctAndValidateLogisticFile (data): Observable<any> {
+    return  this.http.post(`${this.url}/createLogisticFileAndValidateFile`,data);
+  }
 
 }

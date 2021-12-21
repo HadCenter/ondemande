@@ -313,7 +313,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     this.tableMouseDown = this.prestationService.gettableMouseDown();
     this.tableMouseUp = this.prestationService.gettableMouseUp();
     if (this.tableMouseDown && this.tableMouseUp) {
-      this.openSnackBar('changement detecté dans la feuille 1', 'Fermé');
+      //this.openSnackBar('changement detecté dans la feuille 1', 'Fermé');
       if (this.tableMouseDown.cellsType === this.tableMouseUp.cellsType) {
         //convert every rows to object
         console.log("rrrr1111111 = ", this.copyData);
@@ -394,7 +394,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     this.tableMouseUp2 = this.prestationService.gettableMouseUp2();
 
     if (this.tableMouseDown2 && this.tableMouseUp2) {
-      this.openSnackBar('changement detecté dans la feuille 2', 'Fermé');
+      //this.openSnackBar('changement detecté dans la feuille 2', 'Fermé');
 
       if (this.tableMouseDown2.cellsType === this.tableMouseUp2.cellsType) {
         //convert every rows to object

@@ -199,12 +199,15 @@ def deleteLogisticFileFromInFolder(sftp_client, FolderInPath, logisticFileName):
 def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
     sftp_client = connect()
     LogistFileExist = logisticFileExistInFolderIN(sftp_client,logisticFileName)
-    if(LogistFileExist == False):
+    if(int(LogisticFile.objects.get(pk=idLogisticFile).number_annomalies) > 0):
+        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='à vérifier')
+    else:
         LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
+
+    if(LogistFileExist == False):
         return False
     else:
         deleteLogisticFileFromInFolder(sftp_client= sftp_client, FolderInPath= "/IN", logisticFileName=logisticFileName)
-        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
         return True
 
 def updateMetaDataFileInTableCoreLogisticFile(logisticFileId, logisticFileStatus):
@@ -241,9 +244,10 @@ def createFileLogisticFromColumnAndRows(LogisticFileId, columns1, rows1, columns
     FileSheets = excelfile.sheet_names
     excelfile.close()
 
-
     df = pd.DataFrame(rows1, columns=columns1)
     df2 = pd.DataFrame(rows2, columns=columns2)
+    df.rename(columns={'LONGUEUR_UNITAIRE':'LONGEUR_UNITAIRE'}, inplace = True)
+    df2.rename(columns={'LONGUEUR':'LONGEUR'}, inplace = True)
 
     for element in columns1:
         if(element == 'REMARQUE'):
@@ -270,8 +274,13 @@ def createFileLogisticFromColumnAndRows(LogisticFileId, columns1, rows1, columns
         transIdFileCorrect = transIdFileCorrect.replace('.xlsx', '_Correct.xlsx')
         sftp_client.get(sourcePath +  "/" + transIdFileCorrect, transIdFileCorrect)
 
-        df = dfwithoutRemarque.append(pd.read_excel(transIdFileCorrect, sheet_name=FileSheets[0]), ignore_index=True)
-        df2 = df2withoutRemarque.append(pd.read_excel(transIdFileCorrect, sheet_name=FileSheets[1]), ignore_index=True)
+        fichier_correct = pd.read_excel(transIdFileCorrect, sheet_name=FileSheets[0])
+        fichier_correct.rename(columns={'LONGUEUR_UNITAIRE':'LONGEUR_UNITAIRE'}, inplace = True)
+        df = dfwithoutRemarque.append(fichier_correct, ignore_index=True)
+
+        fichier_correct2 = pd.read_excel(transIdFileCorrect, sheet_name=FileSheets[1])
+        fichier_correct2.rename(columns={'LONGUEUR':'LONGEUR'}, inplace = True)
+        df2 = df2withoutRemarque.append(fichier_correct2, ignore_index=True)
 
     with pd.ExcelWriter(fileName) as writer:  
         df.to_excel(writer, sheet_name=FileSheets[0], index=False)
@@ -281,9 +290,30 @@ def createFileLogisticFromColumnAndRows(LogisticFileId, columns1, rows1, columns
 
     os.remove(fileName)
     os.chdir(DJANGO_DIRECTORY)
+    return fileName
+
+def validateAndReplaceLogisticFile(logisticFileName, folderLogisticFile):
+    sftp_client = connect()
+    LogistFileExist = LogisticFileExistInSftpServer(sftp_client,logisticFileName)
+    typeLogistFileExist = logisticFileTypeExistInSftpServer(sftp_client,logisticFileName[0:5])
+    if (not(LogistFileExist) and typeLogistFileExist):
+        return False
+    else:
+        sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
+        destinationPath = "/IN"
+        copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
+        #LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False,ButtonInvalidateActivated=True,status='Validé')
+        return True
 
 
-
+def LogisticFileExistInSftpServer(sftp_client,logisticFileName):
+    INFolderPath = "/IN"
+    sftp_client.chdir(INFolderPath)
+    LogistFileExist = False
+    for logisticFile in sftp_client.listdir():
+        if (logisticFile == logisticFileName):
+            LogistFileExist = True
+    return LogistFileExist
 
 
 

@@ -36,7 +36,7 @@ from .serializers import ClientSerializer, ClientTestSerialize
 
 from core.clientService import getAllClientList , getClientInfo
 from core.ediFileService import saveUploadedEdiFile, getAllFileEdiData, getAllArchivedFileEdiData , getFilesEdiByClient , getSingleEdiFileDetail , seeFileContentEdi , createFileFromColumnAndRowsAndUpdateCore , createFileEdiFromColumnAndRows, updateHistoryOfAnnomalies, updateMetaDataFileInTableCoreEDIFile
-from core.logisticFileService import createFileLogisticFromColumnAndRows, saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile, updateMetaDataFileInTableCoreLogisticFile
+from core.logisticFileService import validateAndReplaceLogisticFile, createFileLogisticFromColumnAndRows, saveUploadedLogisticFile, getAllLogisticFileList, getSingleLogisticFileDetail, seeContentLogisticFile, validateLogisticFile, downloadImportedLogisticFile, deleteNotValidateLogisticFile, updateMetaDataFileInTableCoreLogisticFile
 
 schema_view = get_swagger_view(title='TEST API')
 
@@ -597,3 +597,20 @@ def createLogisticFileFromColumnAndRows(request):
     createFileLogisticFromColumnAndRows(fileId, columns1, rows1, columns2, rows2)
 
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def createLogisticFileAndValidateFile(request):
+    columns1 = request.data['columns1']
+    rows1 = request.data['rows1error']
+    columns2 = request.data['columns2']
+    rows2 = request.data['rows2error']
+
+    fileId = request.data['fileId']
+    logisticFilename = createFileLogisticFromColumnAndRows(fileId, columns1, rows1, columns2, rows2)
+
+    logisticFileValidated = validateAndReplaceLogisticFile(logisticFilename, fileId)
+    if(logisticFileValidated):
+        return JsonResponse({'message': 'file validated successfully'}, status=status.HTTP_200_OK)
+    else:
+        return JsonResponse({'message': 'file validated echec'}, status=status.HTTP_200_OK)

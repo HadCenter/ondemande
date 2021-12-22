@@ -15,4 +15,4 @@ services:
     container_name: angular-container
     build: angular
     ports:
-      - "80:80"
+      - "88:80"

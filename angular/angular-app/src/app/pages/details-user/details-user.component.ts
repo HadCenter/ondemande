@@ -57,7 +57,6 @@ currentUser : User = {
     this.email = this.updateForm.get('email');
     this.profile = this.updateForm.get('profile');
     this.status = this.updateForm.get('status');
-
    }
 
 ngOnInit(): void {

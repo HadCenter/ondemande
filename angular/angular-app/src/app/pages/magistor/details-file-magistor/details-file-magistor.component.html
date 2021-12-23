@@ -206,7 +206,7 @@
         </div>
         <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
           <app-prestation-erronee *ngIf="fileMagistor" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
-            [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc"> (changedDataEvent)="changedData($event)"
+            [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc" (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
 
           <app-prestation-erronee *ngIf="fileMagistor2" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"

@@ -14,7 +14,7 @@ pandas
 xlrd
 openpyxl
 django-rest-swagger
-paramiko
+paramiko==2.7.2
 pyjwt==1.7.1
 pika==1.2.0
 channels==2.3.1

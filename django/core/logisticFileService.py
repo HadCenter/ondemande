@@ -100,7 +100,7 @@ def connect():
 
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-    ssh.connect(hostname='talend.ecolotrans.net', username='REDLEAN_T', password='rV53PjKsu6JEJ22m', port='2022')
+    ssh.connect(hostname='10.10.1.8', username='REDLEAN_T', password='rV53PjKsu6JEJ22m', port='2022')
 
     sftp_client = ssh.open_sftp()
     return  sftp_client

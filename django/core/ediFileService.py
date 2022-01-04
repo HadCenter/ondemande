@@ -42,7 +42,7 @@ path_racine_input = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/"
 path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
 
 def connect():
-    FTP_HOST = "talend.ecolotrans.net"
+    FTP_HOST = "10.10.1.8"
     FTP_USER = "talend"
     FTP_PASS = "Rand069845"
     ftp = ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASS)
@@ -263,7 +263,7 @@ def getSingleEdiFileDetail(key):
     return fileReponse
 
 def connect():
-    FTP_HOST = "talend.ecolotrans.net"
+    FTP_HOST = "10.10.1.8"
     FTP_USER = "talend"
     FTP_PASS = "Rand069845"
     ftp = ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASS)

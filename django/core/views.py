@@ -242,7 +242,7 @@ def seeLogisticFileContent(request):
 
 
 def connect():
-    FTP_HOST = "talend.ecolotrans.net"
+    FTP_HOST = "10.10.1.8"
     FTP_USER = "talend"
     FTP_PASS = "Rand069845"
     ftp = ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASS)

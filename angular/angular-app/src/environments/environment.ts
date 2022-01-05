@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://15.236.206.237:8000',
+  apiBaseUrl: 'https://ondemand.ecolotrans.net/back',
 };

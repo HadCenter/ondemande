@@ -20,8 +20,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/theme/styles.scss",
-              "node_modules/material-design-lite/material.css"
+              "src/theme/styles.scss"
             ],
             "scripts": [
               "node_modules/material-design-lite/material.js",

@@ -25,7 +25,7 @@ SECRET_KEY = 'o87w7g(!mb8o8fs^&7=w9prsjnwkt05azo8#bpg6_r=p*yt#)%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [ '62.210.233.22/back', 'ondemand.ecolotrans.net/back', '62.210.233.22/backend', 'ondemand.ecolotrans.net/backend']
+ALLOWED_HOSTS = [ '*'  ]
 
 AUTH_USER_MODEL = 'accounts.Account'
 

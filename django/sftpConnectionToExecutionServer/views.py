@@ -5,7 +5,7 @@ import paramiko
 paramiko.util.log_to_file("paramiko.log")
 
 # Open a transport
-host,port = "talend.ecolotrans.net",22
+host,port = "10.10.1.8",22
 transport = paramiko.Transport((host,port))
 
 # Auth

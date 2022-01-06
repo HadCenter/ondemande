@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'o87w7g(!mb8o8fs^&7=w9prsjnwkt05azo8#bpg6_r=p*yt#)%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['www.ondemand.ecolotrans.net', '62.210.233.22', 'ondemand.ecolotrans.net']
 
 AUTH_USER_MODEL = 'accounts.Account'
 
@@ -103,8 +103,8 @@ DATABASES = {
         'NAME': 'ondemand',
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
-        #'HOST': '52.47.208.8',
-        'HOST': '172.17.0.1',
+        'HOST': '13.36.210.39',
+        #'HOST': '172.17.0.1',
         'PORT': '3306',
     }
 }

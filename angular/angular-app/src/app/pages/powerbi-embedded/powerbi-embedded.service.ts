@@ -12,7 +12,7 @@ export class PowerbiEmbeddedService {
   public messages: Subject<any>;
   data:any={};
  constructor(private httpClient: HttpClient,private wsService: WebsocketService) {
-   this.messages = <Subject<any>>wsService.connect(this.WS_URL).map(
+   this.messages = <Subject<any>>wsService.connect(environment.WS_URL).map(
      (response: MessageEvent): any => {
        console.warn('resp from websocket',response)
        this.data=response.data;

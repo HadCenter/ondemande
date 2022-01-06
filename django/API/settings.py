@@ -104,8 +104,8 @@ DATABASES = {
         'NAME': 'ondemand',
         'USER': 'ondemand',
         'PASSWORD': 'ondemand',
-        #'HOST': '52.47.208.8',
-        'HOST': 'localhost',
+        'HOST': '52.47.208.8',
+        #'HOST': 'localhost',
         'PORT': '3306',
     }
 }

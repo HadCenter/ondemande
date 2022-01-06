@@ -196,7 +196,10 @@ export class DetailsClientComponent extends UpgradableComponent implements OnIni
   styleUrls: ['./token-client/token-client.component.css']
 })
 export class TokenClientComponent extends UpgradableComponent implements OnInit {
-   currentClient = {};
+   currentClient = {
+    token : '',
+    token_for_flux : ''
+   };
   constructor(public dialogRef: MatDialogRef<TokenClientComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private clientService: TokenClientService) { super(); }

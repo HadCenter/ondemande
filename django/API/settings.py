@@ -21,9 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'o87w7g(!mb8o8fs^&7=w9prsjnwkt05azo8#bpg6_r=p*yt#)%'
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "your_project.settings")  
-import django             
-django.setup() 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 

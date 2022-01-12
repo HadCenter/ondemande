@@ -64,7 +64,7 @@ class RegisterAPI(generics.GenericAPIView):
 		email = EmailMessage(
 			email_subject,
 			email_body,
-			'ahmedbelaiba19952018@gmail.com',
+			'ondemandprojecteco@gmail.com',
 			[email],
 		)
 		email.send(fail_silently=False)

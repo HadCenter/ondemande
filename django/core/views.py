@@ -42,8 +42,8 @@ schema_view = get_swagger_view(title='TEST API')
 
 logger = logging.getLogger('django')
 
-path_racine_input = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/"
-path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
+path_racine_input = "/IN/POC_ON_DEMAND/INPUT/ClientInput/"
+path_racine_output = "/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
 
 CLIENT_TEST = "REDLEAN_T"
 
@@ -194,8 +194,7 @@ def downloadFileName(request):
     entred1 : bool = False
     entred2:bool = False
     ftp = connect()
-    path_racine = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput"
-    path_client = path_racine + '/' + clientCode
+    path_client = path_racine_input + '/' + clientCode
     ftp.cwd(path_client)
     for name in ftp.nlst():
         if name == fileName:
@@ -205,7 +204,7 @@ def downloadFileName(request):
             break
 
 
-    path_client2 = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/" + clientCode
+    path_client2 = path_racine_output + clientCode
     ftp.cwd(path_client2)
     for name in ftp.nlst():
         if name == "error_"+fileName and (ediFile.number_wrong_commands != 0):

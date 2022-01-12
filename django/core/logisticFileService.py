@@ -11,7 +11,7 @@ from django.conf import settings
 DJANGO_DIRECTORY = settings.BASE_DIR
 logger = logging.getLogger('django')
 
-FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "TransMagistorPreprod"
+FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "TransMagistorProd"
 
 def removeLogisticFileFromServer(fileName):
     os.chdir(DJANGO_DIRECTORY)

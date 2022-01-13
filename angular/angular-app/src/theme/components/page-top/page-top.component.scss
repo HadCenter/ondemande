@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import '~theme/helpers';
 
 @media screen and (max-width: $layout-screen-size-threshold) {
@@ -16,8 +17,8 @@
 
     &:first-child {
       font-size: 16px;
-      padding-top: $list-min-padding/2;
-      padding-bottom: $list-min-padding/2;
+      padding-top: math.div($list-min-padding, 2);
+      padding-bottom: math.div($list-min-padding, 2);
       height: $account-dropdown-avatar-size + $list-min-padding;
 
       .mdl-list__item-primary-content {

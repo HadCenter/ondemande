@@ -120,7 +120,7 @@ def forgetPassword(request):
     email = EmailMessage(
         email_subject,
         email_body,
-        'ondemandprojecteco@gmail.com',
+        'ecolotransondemand@gmail.com',
         [email],
     )
     email.send(fail_silently=False)

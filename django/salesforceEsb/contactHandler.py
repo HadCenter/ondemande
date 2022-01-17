@@ -31,8 +31,8 @@ def contactMapFields(client :Client, objectToSendToDB):
     if 'Email' in objectToSendToDB :
         client.email = objectToSendToDB['Email']
 
-    if client.archived != objectToSendToDB['Archived__c'] : #detect if archived changed to apply action
-        client.archived = objectToSendToDB['Archived__c']
+    if client.archived != objectToSendToDB['RL_Archived__c'] : #detect if archived changed to apply action
+        client.archived = objectToSendToDB['RL_Archived__c']
         if  client.archived == True :
             print("lancement archivage")
             archive_client(client)

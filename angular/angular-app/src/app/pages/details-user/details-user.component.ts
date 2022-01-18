@@ -74,7 +74,7 @@ public getStatus(is_active)
 }
 public getRole(is_admin)
 {
-  console.log(is_admin);
+  //console.log(is_admin);
   if(is_admin === true)
   {
     return "Admin";
@@ -86,9 +86,9 @@ public getRole(is_admin)
     event.target.required = true;
   }
   updateUser(): void {
-    console.log(this.currentUser);
-    console.log(this.role);
-    console.log(this.activated);
+    // console.log(this.currentUser);
+    // console.log(this.role);
+    // console.log(this.activated);
     if(this.activated === 'Active')
     {
       this.currentUser['is_active'] = 'true';
@@ -106,11 +106,11 @@ public getRole(is_admin)
       this.currentUser['is_superadmin'] = 'true';
     }
 
-    console.log(this.currentUser);
+    //console.log(this.currentUser);
     this.userService.update(this.currentUser.id, this.currentUser)
       .subscribe(
         response => {
-          console.log(response);
+          //console.log(response);
           this.router.navigate(['/users'])
         });
   }
@@ -122,10 +122,10 @@ public getRole(is_admin)
           this.currentUser = data;
           this.role = this.getRole(this.currentUser.is_admin);
           this.activated = this.getStatus(this.currentUser.is_active);
-          console.log(this.currentUser);
+          //console.log(this.currentUser);
         },
         error => {
-          console.log(error);
+          //console.log(error);
         });
   }
 

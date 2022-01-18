@@ -34,7 +34,7 @@ export class DetailsKpiPowerbiComponent implements OnInit {
   constructor(private route: ActivatedRoute, private detailkpi: DetailsKpiPowerbiService) { }
 
   ngOnInit(): void {
-console.log("ON INIIIIIIIIIIIIIIIIIIIIIIIIIT");
+//console.log("ON INIIIIIIIIIIIIIIIIIIIIIIIIIT");
     this.getDetailKpi(this.route.snapshot.params.id);
 
   }
@@ -56,6 +56,6 @@ console.log("ON INIIIIIIIIIIIIIIIIIIIIIIIIIT");
         }
       };
     });
-    console.log(this.embedConfig);
+    //console.log(this.embedConfig);
   }
 }

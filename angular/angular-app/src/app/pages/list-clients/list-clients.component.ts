@@ -106,7 +106,8 @@ export class ListClientsComponent extends UpgradableComponent implements OnInit 
         this.addStatusForSearch();
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },
-        error => console.log(error));
+        //error => console.log(error)
+        );
   }
   /***
     deux solutions:
@@ -185,7 +186,7 @@ export class DetailsClientComponent extends UpgradableComponent implements OnIni
           this.currentClient = data;
         },
         error => {
-          console.log(error);
+          //console.log(error);
         });
   }
 
@@ -212,10 +213,10 @@ export class TokenClientComponent extends UpgradableComponent implements OnInit 
       .subscribe(
         data => {
           this.currentClient = data;
-          console.log(this.currentClient);
+          //console.log(this.currentClient);
         },
         error => {
-          console.log(error);
+          //console.log(error);
     });
   }
   sauvegarder()
@@ -224,11 +225,11 @@ export class TokenClientComponent extends UpgradableComponent implements OnInit 
     var data = this.currentClient;
     this.clientService.updateClientToken(id,data).subscribe(
       (res) => {
-        console.log(res);
+        //console.log(res);
         this.dialogRef.close('submit');
       },
       (err) => {
-        console.log(err);
+        //console.log(err);
       }
     );
 

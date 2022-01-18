@@ -64,7 +64,8 @@ export class BrowserStatisticsChartComponent implements OnInit {
          this.data.forEach(element => this.count = this.count + element.files.length);
         this.show = false;
       },
-        error => console.log(error));
+        //error => console.log(error)
+        );
     }
     onBookChange(ob) {
        this.selected = ob.value;

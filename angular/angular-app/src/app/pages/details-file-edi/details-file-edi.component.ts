@@ -202,7 +202,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
                 wrong_commands: this.file.wrongCommands
               };
               this.fileService.deleteFileEDI(data).subscribe(res => {
-                console.log("delete succes");
+                //console.log("delete succes");
                 this.router.navigate(['/list-file-edi']);
                 this.showValid = false;
 
@@ -262,7 +262,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
                 wrong_commands: this.file.wrongCommands
               };
               this.fileService.deleteFileEDI(data).subscribe(res => {
-                console.log("delete succes");
+                //console.log("delete succes");
                 this.router.navigate(['/list-file-edi']);
                 this.showWrong = false;
 
@@ -383,7 +383,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
         //--Edit cells from the same column
         if (startCol === endCol) {
-          console.log('--Edit cells from the same column', startCol);
+          //console.log('--Edit cells from the same column', startCol);
           for (let i = startRow; i <= endRow; i++) {
             //change color after modify value
             this.copyFileWrong.forEach((element, index) => {
@@ -399,7 +399,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           }
         } else {
           //--Edit cells starting and ending not on the same column
-          console.log('--Edit cells starting and ending not on the same column');
+          //console.log('--Edit cells starting and ending not on the same column');
 
           for (let i = startRow; i <= endRow; i++) {
             for (let j = startCol; j <= endCol; j++) {
@@ -407,7 +407,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
             }
           }
         }
-        console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
+        //console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
         this.copyFileWrong = dataCopy;
       } else {
@@ -755,7 +755,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
       .subscribe(
         data => {
           this.file = data;
-          console.log("file", this.file);
+          //console.log("file", this.file);
 
           if (this.file.validatedOrders != '_') {
             this.getValidFile();
@@ -775,7 +775,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
           }
         },
         error => {
-          console.log(error);
+          //console.log(error);
         });
   }
 
@@ -900,7 +900,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck)
     this.fileService.corretFile(this.fileTocheck).subscribe(res => {
-      console.log('resultat correction', res);
+      //console.log('resultat correction', res);
       if (res.message == "success") {
         this.router.navigate(['/list-file-edi']);
       }
@@ -940,7 +940,7 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
     this.fileService.sendFileToUrbantz(data).subscribe(
       result => {
         // Handle result
-        console.log("res urbantz", result)
+        //console.log("res urbantz", result)
       },
       error => {
         this.openSnackBar("Erreur d’envoi", this.snackAction);

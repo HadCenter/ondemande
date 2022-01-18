@@ -49,7 +49,7 @@ export class MagistorComponent implements OnInit {
   }
   listenToWebSocket() {
     this.tablesService.messages.subscribe(msg => {
-      console.log("Response from websocket: ", JSON.parse(msg));
+      //console.log("Response from websocket: ", JSON.parse(msg));
       localStorage.setItem('wslogistic', JSON.stringify(JSON.parse(msg)));
       if(JSON.parse(msg).stateLogistic === "table logisticFile updated")
       {
@@ -81,17 +81,18 @@ export class MagistorComponent implements OnInit {
       .subscribe(res => {
         this.files = res;
         this.copyFilesPerPagination = this.files;
-        console.log('files', this.files)
+        //console.log('files', this.files)
         this.show = false;
         /*this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage); /****to display */
         this.advancedTable = this.files;
-        console.log("advanced", this.advancedTable)
+        //console.log("advanced", this.advancedTable)
         this.copy_advancedTable = this.advancedTable; /***copy for filter */
         this.allTable = this.advancedTable; /****all content */
 
       },
-        error => console.log(error));
+        //error => console.log(error)
+        );
   }
 
   public getAdvancedTablePage(page, countPerPage) {
@@ -255,7 +256,7 @@ export class MagistorComponent implements OnInit {
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck)
     this.tablesService.corretFile(this.fileTocheck).subscribe(res => {
-      console.log('resultat correction', res);
+      //console.log('resultat correction', res);
       if (res.message == "ok") {
         this.actualiser();
       }
@@ -269,7 +270,9 @@ export class MagistorComponent implements OnInit {
     }
     this.tablesService.downloadFile(this.fileToDownload) .subscribe(res => {
       saveAs(res, file.logisticFileName.name);
-    }, error => console.log(error));
+    }, 
+    //error => console.log(error)
+    );
 
   }
 
@@ -362,7 +365,7 @@ export class DialogImportFile {
   }
 
   submit() {
-    console.log("web service start");
+    //console.log("web service start");
     this.showloader = true;
     this.clicked=true;
     const formData = new FormData();

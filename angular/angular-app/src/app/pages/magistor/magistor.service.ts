@@ -81,7 +81,7 @@ export class MagistorService {
     return this.advanceTableData.slice((page - 1) * countPerPage, page * countPerPage);
   }
   public uploadLogisticFile(formData) {
-    console.log("web service");
+    //console.log("web service");
     return this.http.post(`${this.url}/logisticFile/`, formData);
   }
   public getAllLogisticFiles () : Observable<any> {

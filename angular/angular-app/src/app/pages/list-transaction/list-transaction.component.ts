@@ -61,7 +61,7 @@ export class ListTransactionComponent implements OnInit {
 
   listenToWebSocket() {
     this.tablesService.messages.subscribe(msg => {
-      console.log("Response from websocket: ", JSON.parse(msg));
+      //console.log("Response from websocket: ", JSON.parse(msg));
       localStorage.setItem('wsTransaction', JSON.stringify(JSON.parse(msg)));
       if(JSON.parse(msg).stateTransaction === "table transactionFile updated")
       {
@@ -111,14 +111,14 @@ export class ListTransactionComponent implements OnInit {
         this.transactions = res;
         this.copy_transactions=res;
         this.copyTransactionsPerPagination = this.transactions;
-        console.log(this.transactions);
+        //console.log(this.transactions);
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
         this.formatDates();
       },
         error => {
           this.showLowderListTransaction = false;
-          console.log(error)
+          //console.log(error)
         });
   }
   public integrerTransaction(transaction_id) {
@@ -126,11 +126,11 @@ export class ListTransactionComponent implements OnInit {
     formData.append('transaction_id', transaction_id);
     this.tablesService.integrerTransaction(formData).subscribe(
       (res) => {
-        console.log(res);
+        //console.log(res);
         this.router.navigate(['/list-transaction']);
       },
       (err) => {
-        console.log(err);
+        //console.log(err);
       }
     );
   }
@@ -316,12 +316,12 @@ export class DailogGenerateTransaction {
      this.service_genererTransaction.genererTransaction(formData).subscribe(
       (res) => {
         this.showloader = false;
-        console.log(res);
+        //console.log(res);
         this.dialogRef.close('submit');
       },
       (err) => {
         this.showloader = false;
-        console.log(err);
+        //console.log(err);
       }
      );
     }

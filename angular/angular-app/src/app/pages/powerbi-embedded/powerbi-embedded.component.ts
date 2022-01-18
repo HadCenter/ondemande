@@ -98,18 +98,18 @@ export class PowerbiEmbeddedComponent implements OnInit {
         this.btnClicked = true;
         interval = setInterval(() => {
           this.pbiService.getCapacityState().subscribe(res => {
-            console.log(res);
+            //console.log(res);
             this.capacityState = res;
             if (this.capacityState == 'Paused') {
               clearInterval(interval);
               this.btnClicked = false;
               this.openSnackBar("la capacité de Power BI a été mis en pause avec succès. ", "Ok", 7000);
-              console.log("interval clearerd");
+              //console.log("interval clearerd");
             } else if (this.capacityState == 'Succeeded') {
               clearInterval(interval);
               this.btnClicked = false;
               this.openSnackBar("la capacité de Power BI a démarré avec succès. ", "Ok", 7000);
-              console.log("interval clearerd");
+              //console.log("interval clearerd");
             }
           });
         }, duration);
@@ -214,12 +214,13 @@ export class PowerbiEmbeddedComponent implements OnInit {
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
         this.show = false;
       },
-        error => console.log(error));
+        //error => console.log(error)
+        );
   }
 
 
   public showDetailReport(row) {
-    console.log(row.id);
+    //console.log(row.id);
     this.router.navigate(['/details-rapport', row.id])
   }
 
@@ -234,7 +235,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
         this.pbiService.getDatasetState(row.datasetId).subscribe(res => {
           refreshState = res.value[0].status;
           row.refreshState = res.value[0].status;
-          console.log(refreshState);
+          //console.log(refreshState);
           if (refreshState == 'Completed') {
             clearInterval(interval);
             row.refreshDate = res.value[0].endTime;

@@ -83,7 +83,8 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
         this.numPage = Math.ceil(res.length / this.countPerPage); this.show = false;
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
       },
-        error => console.log(error));
+        //error => console.log(error)
+        );
   }
   public getProfile(is_superadmin) {
     if (is_superadmin) {
@@ -119,7 +120,7 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
   }
 
   openUpdateUser(id) {
-    console.log("id,", id)
+    //console.log("id,", id)
     const dialogRef = this.matDialog.open(DialogDetailsUser, {
       data: {
         id: id
@@ -192,7 +193,9 @@ export class DialogCreateUser extends UpgradableComponent {
           },
           error => {
             this.showloader = false;
-            this.error = "L'email est déja utilisé"; console.log(error); });
+            this.error = "L'email est déja utilisé"; 
+            //console.log(error); 
+          });
     }
   }
 }
@@ -277,7 +280,7 @@ export class DialogDetailsUser extends UpgradableComponent {
       this.currentUser['is_active'] = 'false';
     }
     this.currentUser['role'] = this.role;
-    console.log(this.currentUser);
+    //console.log(this.currentUser);
     this.showloader = true;
     this.userService.update(this.currentUser.id, this.currentUser)
       .subscribe(
@@ -297,7 +300,7 @@ export class DialogDetailsUser extends UpgradableComponent {
           this.activated = this.getStatus(this.currentUser.is_active);
         },
         error => {
-          console.log(error);
+          //console.log(error);
         });
   }
 

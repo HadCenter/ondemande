@@ -59,10 +59,10 @@ export class UserPasswordComponent extends BlankLayoutCardComponent implements O
 //     this.token = routeParams.get('token');
     this.password1 = this.loginForm.getRawValue()['password1'];
     this.password2 = this.loginForm.getRawValue()['password2'];
-    console.log(this.loginForm.getRawValue());
+    //console.log(this.loginForm.getRawValue());
     var data = this.loginForm.getRawValue();
     data['token']= this.token;
-    console.log(data);
+    //console.log(data);
     if (this.loginForm.valid) {
       this.userPasswordService.login(data)
         .subscribe(res => this.router.navigate(['/login']),

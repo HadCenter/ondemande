@@ -52,7 +52,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           return (user.email === request.body.email && user.password === request.body.password
           );
         });
-        console.log('filteredUsers', filteredUsers)
+        //console.log('filteredUsers', filteredUsers)
         if (filteredUsers.length) {
           const curuser = filteredUsers[0];
           const body = {
@@ -73,7 +73,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             request.body.password === 'viguierecolotrans2020.'
 
           ))) {
-          console.log("request body", request.body)
+          //console.log("request body", request.body)
           const curuser = request.body;
           if (curuser.email == 'y.kara@ecolotrans.com') {
           curuser.username = 'Kara'

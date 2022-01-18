@@ -207,7 +207,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.formatDates();
       },
         error => {
-          console.log(error)
+          //console.log(error)
         });
   }
 

@@ -12,7 +12,7 @@ export class ImportFileEdiService {
     return this.http.get(`${this.url}/getClients/`);
   }
   public uploadLogisticFile(formData) {
-    console.log("web service");
+    //console.log("web service");
     return this.http.post(`${this.url}/logisticFile/`, formData);
   }
 }

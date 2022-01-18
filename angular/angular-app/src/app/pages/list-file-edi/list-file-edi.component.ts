@@ -162,11 +162,11 @@ export class ListFileEDIComponent extends UpgradableComponent {
       .subscribe(res => {
         this.files = res;
         this.copyFilesPerPagination = this.files;
-        console.log('files', this.files)
+        //console.log('files', this.files)
         this.show = false;
         this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage); /****to display */
-        console.log("advanced", this.advancedTable)
+        //console.log("advanced", this.advancedTable)
         this.copy_advancedTable = this.advancedTable; /***copy for filter */
         this.allTable = this.advancedTable; /****all content */
         for (var i = 0; i < this.advancedTable.length; i++) {
@@ -174,17 +174,20 @@ export class ListFileEDIComponent extends UpgradableComponent {
           this.sendedToUrbantz.push(false);
         }
       },
-        error => console.log(error));
+        //error => console.log(error)
+        );
   }
 
   public analyserEDI(row) {
     this.tablesService.executeJob(row)
       .subscribe(res => {
-        console.log("success");
+        //console.log("success");
         row.cliqued = true;
         this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction)
         //  this.router.navigate(['/list-file-edi']);
-      }, error => console.log(error));
+      }, 
+      //error => console.log(error)
+      );
   }
 
   public actualiser() {
@@ -198,7 +201,9 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.downloadFileInput(clientCode, fileName)
       .subscribe(res => {
         saveAs(res, fileName);
-      }, error => console.log(error));
+      }, 
+      //error => console.log(error)
+      );
   }
 
   gotoDetails(row) {
@@ -214,7 +219,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
     this.tablesService.sendFileToUrbantz(data).subscribe(
       result => {
         // Handle result
-        console.log("res urbantz", result)
+        //console.log("res urbantz", result)
       },
       error => {
         this.openSnackBar("Erreur d’envoi", this.snackAction);
@@ -248,7 +253,7 @@ export class ListFileEDIComponent extends UpgradableComponent {
 
   listenToWebSocket() {
     this.tablesService.messages.subscribe(msg => {
-      console.log("Response from websocket: ", JSON.parse(msg));
+     //console.log("Response from websocket: ", JSON.parse(msg));
       localStorage.setItem('wsEdi', JSON.stringify(JSON.parse(msg)));
       if(JSON.parse(msg).stateEdi === "table ediFile updated")
       {

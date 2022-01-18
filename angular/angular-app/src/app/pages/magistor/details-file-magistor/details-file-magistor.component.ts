@@ -200,7 +200,7 @@ export class DetailsFileMagistorComponent implements OnInit {
 
         //--Edit cells from the same column
         if (startCol === endCol) {
-          console.log('--Edit cells from the same column', startCol);
+          //console.log('--Edit cells from the same column', startCol);
           for (let i = startRow; i <= endRow; i++) {
             //change color after modify value
             this.copyfileMagistor.forEach((element, index) => {
@@ -216,7 +216,7 @@ export class DetailsFileMagistorComponent implements OnInit {
           }
         } else {
           //--Edit cells starting and ending not on the same column
-          console.log('--Edit cells starting and ending not on the same column');
+          //console.log('--Edit cells starting and ending not on the same column');
 
           for (let i = startRow; i <= endRow; i++) {
             for (let j = startCol; j <= endCol; j++) {
@@ -224,7 +224,7 @@ export class DetailsFileMagistorComponent implements OnInit {
             }
           }
         }
-        console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
+        //console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
         this.copyfileMagistor = dataCopy;
       } else {
@@ -471,7 +471,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
   console.warn("**file to check**", this.fileTocheck)
    this.fileService.corretFile(this.fileTocheck).subscribe(res => {
-     console.log('resultat correction', res);
+     //console.log('resultat correction', res);
      if (res.message == "ok") {
        this.router.navigate(['/logistique']);
      }

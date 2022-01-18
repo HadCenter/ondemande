@@ -1258,8 +1258,34 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         if (startCol === endCol) {
           for (let i = startRow; i <= endRow; i++) {
             if (this.fileSelected == "livraison") {
-
               dataCopy[i][this.displayedColumnsLivraison[startCol]] = text;
+              /**if we modify a column of the livraison file it will be automatically modified at the level of the exception file */
+              this.dataSourceException.data.forEach(el => {
+                if (dataCopy[i].taskId == el.taskId) {
+                  /*****processing of fields with different column names */
+                  if (this.displayedColumnsLivraison[startCol] == "isExpress") {
+                    if ((dataCopy[i][this.displayedColumnsLivraison[startCol]]) == 1) {
+                      el.Express = "OUI";
+                    }
+                    else if ((dataCopy[i][this.displayedColumnsLivraison[startCol]]) == 0) {
+                      el.Express = "NON";
+                    }
+                  }
+
+                  else if (this.displayedColumnsLivraison[startCol] == "Item___Nom_sous_categorie") {
+                    el.Item___Nom = text
+                  }
+                  else if (this.displayedColumnsLivraison[startCol] == "Item___Type_unite_manutention") {
+                    el.Item___Type = text;
+                  }
+                  /******* */
+                  else {
+                    el[this.displayedColumnsLivraison[startCol]] = text
+                  }
+
+                }
+              })
+
             }
             else if (this.fileSelected == "exception") {
               dataCopy[i][this.displayedColumnsException[startCol]] = text;

@@ -16,7 +16,7 @@ from django.core.cache import cache
 import json
 import time
 
-updatePowerBIDatabaseWebhook = "https://webhooks.eu.cloud.talend.com/DB_RT_ONDEMAND/b56ff707f3754e9683363c8bf4895c24"
+updatePowerBIDatabaseWebhook = "https://webhooks.eu.cloud.talend.com/DB_RT_ONDEMAND_PROD/bd30e4e6d1ab46edbd018328baedce5c"
 @api_view(['GET'])
 def getEmbedParamsForSingleReport(request,id):
     #print(request.GET.get('id',"params in url not found"))

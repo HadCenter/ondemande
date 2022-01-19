@@ -38,8 +38,8 @@ schema_view = get_swagger_view(title='TEST API')
 
 logger = logging.getLogger('django')
 
-path_racine_input = "/Preprod/IN/POC_ON_DEMAND/INPUT/ClientInput/"
-path_racine_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
+path_racine_input = "/IN/POC_ON_DEMAND/INPUT/ClientInput/"
+path_racine_output = "/IN/POC_ON_DEMAND/OUTPUT/TalendOutput/"
 
 def connect():
     FTP_HOST = "10.10.1.8"

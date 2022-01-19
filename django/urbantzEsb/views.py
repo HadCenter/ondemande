@@ -17,7 +17,7 @@ from core.models import Client
 from core.models import EDIfile
 
 urbantzUrl = "https://api.urbantz.com/v2/task"
-path_racine_talend_output = "/Preprod/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
+path_racine_talend_output = "/IN/POC_ON_DEMAND/OUTPUT/TalendOutput"
 
 
 @api_view(['POST'])

@@ -334,8 +334,8 @@ export class DetailsFileEdiComponent extends UpgradableComponent implements OnIn
 
     } else {
       this.rowsToDeleteValid = [];
-      for (var element of this.copyFileValid) {
-        this.rowsToDeleteValid.push(element.rowId);
+      for (var i=0; i< this.copyFileValid.length; i++) {
+        this.rowsToDeleteValid.push(i);
       }
     }
 

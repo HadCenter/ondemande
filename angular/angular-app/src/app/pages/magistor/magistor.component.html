@@ -62,10 +62,10 @@
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Dévalider
               </button>
               <!----  [disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'"!-->
-              <button style="margin-left: 3px;" (click)="correctionFile(row)"
+              <!-- <button style="margin-left: 3px;" (click)="correctionFile(row)"
               [disabled]="row?.ButtonCorrecteActiveted==false"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-              </button>
+              </button> -->
               <button style="margin-left: 3px;" (click)="gotoDetails(row)"
               [disabled]="row?.status == 'Invalide' || row?.status == 'En cours' || row?.status == 'En attente d\'un moteur' "
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Détails

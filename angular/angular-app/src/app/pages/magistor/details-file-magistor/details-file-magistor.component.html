@@ -15,6 +15,14 @@
             <label class="details-label">{{file?.createdAt| date:"dd/MM/yyyy"}}</label>
           </div>
           <div class="content-label">
+            <label class="details-label">Type</label>
+            <label class="details-label">{{file?.logisticFileType.substr(0,3)}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Nom fichier</label>
+            <label class="details-label">{{fileName?.substr(3)}}</label>
+          </div>
+          <div class="content-label">
             <label class="details-label">Client name</label>
             <label class="details-label">{{file?.clientName}}</label>
           </div>

@@ -9,6 +9,7 @@ import {
 } from '@angular/common/http';
 
 import { AuthService } from './auth.service';
+import { environment } from 'environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -17,7 +18,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add authorization token for full api requests
-    if (request.url.includes('api') && this.auth.isLoggedIn) {
+    console.log(this.auth.isLoggedIn);
+    
+    if (request.url.includes(environment.apiBaseUrl) && localStorage.getItem('currentUser')) {
+      console.log(request.url);
+
       request = request.clone({
         setHeaders: { Authorization: `Bearer ${this.auth.authToken}` },
       });

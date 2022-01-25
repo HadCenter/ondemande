@@ -12,6 +12,7 @@ from django.core.mail import EmailMessage
 import secrets
 from django.utils.encoding import smart_bytes
 from django.utils.http import urlsafe_base64_encode
+from API.settings import SECRET_KEY
 class LoginAPI(generics.GenericAPIView):
 	serializer_class = LoginSerializer
 	def post(self, request, *args, **kwargs):
@@ -30,7 +31,7 @@ class LoginAPI(generics.GenericAPIView):
 			'id': user.id,
 			'iat' : datetime.datetime.utcnow()
 		}
-		token = jwt.encode(payload,'secret',algorithm='HS256').decode('utf-8')
+		token = jwt.encode(payload,SECRET_KEY,algorithm='HS256').decode('utf-8')
 		return Response({
 			'user': UserSerializer(user).data,
 			'token': token

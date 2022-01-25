@@ -48,7 +48,7 @@ class RegisterAPI(generics.GenericAPIView):
 		id = user.id
 		token = secrets.token_hex(16) + str(id)
 		encodeToken = urlsafe_base64_encode(smart_bytes(token))
-		base64_message = encodeToken.decode('ascii')
+		base64_message = encodeToken
 		current_site = get_current_site(request)
 		current_site_domain = current_site.domain.split(':')[0]
 		absurl = f'http://{current_site_domain}/#/user-password?token={base64_message}'

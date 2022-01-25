@@ -197,7 +197,7 @@ LOGGING ={
 }
 
 
-ASGI_APPLICATION = 'API.wsgi.application'
+ASGI_APPLICATION = 'API.asgi.application'
 
 CHANNEL_LAYERS = {
     "default": {

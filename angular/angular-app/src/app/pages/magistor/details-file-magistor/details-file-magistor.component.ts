@@ -775,7 +775,7 @@ export class DetailsFileMagistorComponent implements OnInit {
       rows2error: errorFile2,
     };
     //console.log("copy rows : ", this.copyfileMagistor.map(Object.values));
-    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+    this.openSnackBar("Demande de modification envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck);
     if (this.file.status == "Validé") {
       this.fileService.correctAndValidateLogisticFile(this.fileTocheck).subscribe(res => {

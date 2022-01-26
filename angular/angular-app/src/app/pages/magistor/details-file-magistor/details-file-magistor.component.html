@@ -15,7 +15,15 @@
             <label class="details-label">{{file?.createdAt| date:"dd/MM/yyyy"}}</label>
           </div>
           <div class="content-label">
-            <label class="details-label">Client name</label>
+            <label class="details-label">Type</label>
+            <label class="details-label">{{file?.logisticFileType.substr(0,3)}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Nom du fichier</label>
+            <label class="details-label">{{fileName?.substr(3)}}</label>
+          </div>
+          <div class="content-label">
+            <label class="details-label">Nom du client</label>
             <label class="details-label">{{file?.clientName}}</label>
           </div>
           <div class="content-label">
@@ -34,7 +42,6 @@
           </div>
         </div> -->
           <button (click)='saveModificationsOnFile();$event.stopPropagation();' style="margin: 3px; "
-            [disabled]="dataChanged==false"
             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">
 
             <i class="material-icons ">save</i>

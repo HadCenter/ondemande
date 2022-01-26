@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { emit } from 'process';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { PrestationErroneeService } from './prestation-erronee.service';
 

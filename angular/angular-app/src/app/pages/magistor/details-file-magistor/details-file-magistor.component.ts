@@ -56,7 +56,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   selectedCellsState: boolean[][] = [
     // [false, false, false],
   ];
-
+  name_file: string;
   clickCorrection: boolean = false;
   correctedErrorfileMagistor: any;
   correctedErrorfileMagistor2: any;
@@ -78,6 +78,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     this.fileService.getFile(this.route.snapshot.params.id).subscribe(
       resp => {
         this.file = resp;
+        this.name_file=this.file.logisticFileName.name;
         if (this.file.logisticFileType == "ART01") {
           this.typeFileART = true;
           this.secondSheet = "CND01";

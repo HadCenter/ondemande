@@ -48,14 +48,14 @@
                             (keyup)="onKeyUp($event)">
                             <!-- Delete Column -->
                             <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
-                                <th class="titre-column-magistor" id="REMARQUE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="REMARQUEERROR" mat-header-cell *matHeaderCellDef>
                                     REMARQUE
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[0].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[0].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[0],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[0].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[0].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -68,14 +68,14 @@
 
 
                             <ng-container matColumnDef="OP_CODE">
-                                <th class="titre-column-magistor" id="OP_CODE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_CODEERROR" mat-header-cell *matHeaderCellDef>
                                     OP_CODE
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[1].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[1].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[1],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[1].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[1].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -88,14 +88,14 @@
 
 
                             <ng-container matColumnDef="OP_ACTION">
-                                <th class="titre-column-magistor" id="OP_ACTION" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_ACTIONERROR" mat-header-cell *matHeaderCellDef>
                                     OP_ACTION
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[2].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[2].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[2],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[2].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[2].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -108,14 +108,14 @@
                             </ng-container>
 
                             <ng-container matColumnDef="CODE_SOC">
-                                <th class="titre-column-magistor" id="CODE_SOC" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_SOCERROR" mat-header-cell *matHeaderCellDef>
                                     CODE_SOC
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[3].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[3].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[3],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[3].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[3].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -128,15 +128,15 @@
                             </ng-container>
 
                             <ng-container matColumnDef="CODE_ARTICLE">
-                                <th class="titre-column-magistor" id="CODE_ARTICLE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_ARTICLEERROR" mat-header-cell *matHeaderCellDef>
                                     CODE_ARTICLE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[4].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[4].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[4],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[4].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[4].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -151,15 +151,15 @@
 
 
                             <ng-container matColumnDef="REF_FOURNISSEUR">
-                                <th class="titre-column-magistor" id="REF_FOURNISSEUR" mat-header-cell
+                                <th class="titre-column-magistor" id="REF_FOURNISSEURERROR" mat-header-cell
                                     *matHeaderCellDef>
                                     REF_FOURNISSEUR
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[5].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[5].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[5],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[5].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[5].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -172,16 +172,16 @@
                             </ng-container>
 
                             <ng-container matColumnDef="LIBELLE_ARTICLE">
-                                <th class="titre-column-magistor" id="LIBELLE_ARTICLE" mat-header-cell
+                                <th class="titre-column-magistor" id="LIBELLE_ARTICLEERROR" mat-header-cell
                                     *matHeaderCellDef>
                                     LIBELLE_ARTICLE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[6].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[6].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[6],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[6].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[6].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -196,15 +196,15 @@
 
 
                             <ng-container matColumnDef="FAMILLE">
-                                <th class="titre-column-magistor" id="FAMILLE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="FAMILLEERROR" mat-header-cell *matHeaderCellDef>
                                     FAMILLE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[7].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[7].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[7],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[7].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[7].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -217,14 +217,14 @@
                             </ng-container>
 
                             <ng-container matColumnDef="VALEUR">
-                                <th class="titre-column-magistor" id="VALEUR" mat-header-cell *matHeaderCellDef> VALEUR
+                                <th class="titre-column-magistor" id="VALEURERROR" mat-header-cell *matHeaderCellDef> VALEUR
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[8].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[8],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[8].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[8],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[8].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[8].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -237,15 +237,15 @@
                             </ng-container>
 
                             <ng-container matColumnDef="GESTION_LOT">
-                                <th class="titre-column-magistor" id="GESTION_LOT" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="GESTION_LOTERROR" mat-header-cell *matHeaderCellDef>
                                     GESTION_LOT
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[9].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[9],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[9].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[9],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[9].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[9].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -261,15 +261,15 @@
 
 
                             <ng-container matColumnDef="GESTION_DATE">
-                                <th class="titre-column-magistor" id="GESTION_DATE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="GESTION_DATEERROR" mat-header-cell *matHeaderCellDef>
                                     GESTION_DATE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[10].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[10],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[10].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[10],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[10].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[10].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -284,15 +284,15 @@
 
 
                             <ng-container matColumnDef="GESTION_NS">
-                                <th class="titre-column-magistor" id="GESTION_NS" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="GESTION_NSERROR" mat-header-cell *matHeaderCellDef>
                                     GESTION_NS
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[11].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[11],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[11].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[11],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[11].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[11].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -305,39 +305,58 @@
                                     {{element.GESTION_NS}} </td>
                             </ng-container>
 
+                          <ng-container *ngIf="displayedColumns.includes('LONGUEUR_UNITAIRE')"
+                                        matColumnDef="LONGUEUR_UNITAIRE">
+                            <th class="titre-column-magistor" id="LONGUEUR_UNITAIREERROR" mat-header-cell
+                                *matHeaderCellDef>
+                              LONGEUR_UNITAIRE
+                              <mat-select multiple [(ngModel)]="optionsError[12].modelValue"
+                                          (selectionChange)="setFilteredItemsOptions(optionsError[12],$event)">
+                                <mat-select-trigger>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let item of optionsError[12].options" [value]="item">{{item}}
+                                </mat-option>
+                              </mat-select>
+                            </th>
+                            <td mat-cell *matCellDef="let element ; let i = index" id="LONGUEUR_UNITAIREmagistor"
+                                (mousedown)="onMouseDown(i, 12, 'LONGUEUR_UNITAIRE')"
+                                (mouseup)="onMouseUp(i, 12, 'LONGUEUR_UNITAIRE')"
+                                [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}">
+                              {{element.LONGEUR_UNITAIRE}} </td>
+                          </ng-container>
 
-                            <ng-container *ngIf="displayedColumns.includes('LONGUEUR_UNITAIRE')"
-                                matColumnDef="LONGUEUR_UNITAIRE">
-                                <th class="titre-column-magistor" id="LONGUEUR_UNITAIRE" mat-header-cell
+                            <ng-container *ngIf="displayedColumns.includes('LONGEUR_UNITAIRE')"
+                                matColumnDef="LONGEUR_UNITAIRE">
+                                <th class="titre-column-magistor" id="LONGEUR_UNITAIREERROR" mat-header-cell
                                     *matHeaderCellDef>
                                     LONGEUR_UNITAIRE
-                                    <mat-select multiple [(ngModel)]="options[12].modelValue"
-                                        (selectionChange)="setFilteredItemsOptions(options[12],$event)">
+                                    <mat-select multiple [(ngModel)]="optionsError[12].modelValue"
+                                        (selectionChange)="setFilteredItemsOptions(optionsError[12],$event)">
                                         <mat-select-trigger>
                                         </mat-select-trigger>
-                                        <mat-option *ngFor="let item of options[12].options" [value]="item">{{item}}
+                                        <mat-option *ngFor="let item of optionsError[12].options" [value]="item">{{item}}
                                         </mat-option>
                                     </mat-select>
                                 </th>
-                                <td mat-cell *matCellDef="let element ; let i = index" id="LONGUEUR_UNITAIREmagistor"
-                                    (mousedown)="onMouseDown(i, 12, 'LONGUEUR_UNITAIRE')"
-                                    (mouseup)="onMouseUp(i, 12, 'LONGUEUR_UNITAIRE')"
+                                <td mat-cell *matCellDef="let element ; let i = index" id="LONGEUR_UNITAIREmagistor"
+                                    (mousedown)="onMouseDown(i, 12, 'LONGEUR_UNITAIRE')"
+                                    (mouseup)="onMouseUp(i, 12, 'LONGEUR_UNITAIRE')"
                                     [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}">
-                                    {{element.LONGUEUR_UNITAIRE}} </td>
+                                    {{element.LONGEUR_UNITAIRE}} </td>
                             </ng-container>
 
 
                             <ng-container matColumnDef="LARGEUR_UNITAIRE">
-                                <th class="titre-column-magistor" id="LARGEUR_UNITAIRE" mat-header-cell
+                                <th class="titre-column-magistor" id="LARGEUR_UNITAIREERROR" mat-header-cell
                                     *matHeaderCellDef>
                                     LARGEUR_UNITAIRE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[13].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[13],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[13].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[13],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[13].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[13].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -351,16 +370,16 @@
                             </ng-container>
 
                             <ng-container matColumnDef="HAUTEUR_UNITAIRE">
-                                <th class="titre-column-magistor" id="HAUTEUR_UNITAIRE" mat-header-cell
+                                <th class="titre-column-magistor" id="HAUTEUR_UNITAIREERROR" mat-header-cell
                                     *matHeaderCellDef>
                                     HAUTEUR_UNITAIRE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[14].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[14],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[14].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[14],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[14].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[14].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -374,14 +393,14 @@
                             </ng-container>
 
                             <ng-container matColumnDef="EAN">
-                                <th class="titre-column-magistor" id="EAN" mat-header-cell *matHeaderCellDef> EAN
+                                <th class="titre-column-magistor" id="EANERROR" mat-header-cell *matHeaderCellDef> EAN
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[15].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[15],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[15].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[15],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[15].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[15].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -395,15 +414,15 @@
 
 
                             <ng-container matColumnDef="IS_COUPE">
-                                <th class="titre-column-magistor" id="IS_COUPE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="IS_COUPEERROR" mat-header-cell *matHeaderCellDef>
                                     IS_COUPE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[16].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[16],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[16].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[16],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[16].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[16].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -418,16 +437,16 @@
 
 
                             <ng-container matColumnDef="SEUIL_BLOCAGE_PERIME">
-                                <th class="titre-column-magistor" id="SEUIL_BLOCAGE_PERIME" mat-header-cell
+                                <th class="titre-column-magistor" id="SEUIL_BLOCAGE_PERIMEERROR" mat-header-cell
                                     *matHeaderCellDef>
                                     SEUIL_BLOCAGE_PERIME
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[17].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[17],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[17].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[17],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[17].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[17].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -454,7 +473,7 @@
 
     <!------------------------------------- FEUILLE CND01 --------------------------------------->
     <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
-    <base-card *ngIf="typeFileART && data2?.length>=1 && !sheet1&& options2"
+    <base-card *ngIf="typeFileART && data2!==undefined && data2?.length>=1 && !sheet1 "
         class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
         <base-card-title class="reorder">
             <div id="conteneur">
@@ -499,14 +518,14 @@
                             (keyup)="onKeyUp($event)">
                             <!-- Delete Column -->
                             <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
-                                <th class="titre-column-magistor" id="REMARQUE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="REMARQUEERROR2" mat-header-cell *matHeaderCellDef>
                                     REMARQUE
                                   <mat-form-field class="form-column" appearance="fill">
-                                    <mat-select multiple [(ngModel)]="options2[0].modelValue"
-                                                (selectionChange)="setFilteredItemsOptions(options2[0],$event)">
+                                    <mat-select multiple [(ngModel)]="options2Error[0].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[0],$event)">
                                       <mat-select-trigger>
                                       </mat-select-trigger>
-                                      <mat-option *ngFor="let item of options2[0].options" [value]="item">{{item}}
+                                      <mat-option *ngFor="let item of options2Error[0].options" [value]="item">{{item}}
                                       </mat-option>
                                     </mat-select>
                                   </mat-form-field>
@@ -518,15 +537,15 @@
 
 
                             <ng-container matColumnDef="OP_CODE">
-                                <th class="titre-column-magistor" id="OP_CODE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_CODEERROR2" mat-header-cell *matHeaderCellDef>
                                     OP_CODE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options2[1].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                                        <mat-select multiple [(ngModel)]="options2Error[1].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions2(options2Error[1],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options2[1].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of options2Error[1].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -540,15 +559,15 @@
 
 
                             <ng-container matColumnDef="OP_ACTION">
-                                <th class="titre-column-magistor" id="OP_ACTION" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_ACTIONERROR2" mat-header-cell *matHeaderCellDef>
                                     OP_ACTION
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options2[2].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options2[2],$event)">
+                                        <mat-select multiple [(ngModel)]="options2Error[2].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions2(options2Error[2],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options2[2].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of options2Error[2].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -562,15 +581,15 @@
                             </ng-container>
 
                             <ng-container matColumnDef="CODE_SOC">
-                                <th class="titre-column-magistor" id="CODE_SOC" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_SOCERROR2" mat-header-cell *matHeaderCellDef>
                                     CODE_SOC
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options2[3].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options2[3],$event)">
+                                        <mat-select multiple [(ngModel)]="options2Error[3].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions2(options2Error[3],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options2[3].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of options2Error[3].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -585,15 +604,15 @@
                             </ng-container>
 
                             <ng-container matColumnDef="CODE_ARTICLE">
-                                <th class="titre-column-magistor" id="CODE_ARTICLE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_ARTICLEERROR2" mat-header-cell *matHeaderCellDef>
                                     CODE_ARTICLE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options2[4].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options2[4],$event)">
+                                        <mat-select multiple [(ngModel)]="options2Error[4].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions2(options2Error[4],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options2[4].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of options2Error[4].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -608,14 +627,14 @@
 
 
                             <ng-container matColumnDef="TYPE_COND">
-                                <th class="titre-column-magistor" id="TYPE_COND" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="TYPE_CONDERROR2" mat-header-cell *matHeaderCellDef>
                                     TYPE_COND
                                   <mat-form-field class="form-column" appearance="fill">
-                                  <mat-select multiple [(ngModel)]="options2[5].modelValue"
-                                              (selectionChange)="setFilteredItemsOptions(options2[5],$event)">
+                                  <mat-select multiple [(ngModel)]="options2Error[5].modelValue"
+                                              (selectionChange)="setFilteredItemsOptions2(options2Error[5],$event)">
                                     <mat-select-trigger>
                                     </mat-select-trigger>
-                                    <mat-option *ngFor="let item of options2[5].options" [value]="item">{{item}}
+                                    <mat-option *ngFor="let item of options2Error[5].options" [value]="item">{{item}}
                                     </mat-option>
                                   </mat-select>
                                   </mat-form-field>
@@ -628,14 +647,14 @@
                             </ng-container>
 
                             <ng-container matColumnDef="QTE" >
-                                <th class="titre-column-magistor" id="QTE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="QTEERROR2" mat-header-cell *matHeaderCellDef>
                                     QTE
                                   <mat-form-field class="form-column" appearance="fill">
-                                    <mat-select multiple [(ngModel)]="options2[6].modelValue"
-                                                (selectionChange)="setFilteredItemsOptions(options2[6],$event)">
+                                    <mat-select multiple [(ngModel)]="options2Error[6].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[6],$event)">
                                       <mat-select-trigger>
                                       </mat-select-trigger>
-                                      <mat-option *ngFor="let item of options2[6].options" [value]="item">{{item}}
+                                      <mat-option *ngFor="let item of options2Error[6].options" [value]="item">{{item}}
                                       </mat-option>
                                     </mat-select>
                                   </mat-form-field>
@@ -648,13 +667,13 @@
 
 
                             <ng-container matColumnDef="POIDS">
-                                <th class="titre-column-magistor" id="POIDS" mat-header-cell *matHeaderCellDef> POIDS
+                                <th class="titre-column-magistor" id="POIDSERROR2" mat-header-cell *matHeaderCellDef> POIDS
                                   <mat-form-field class="form-column" appearance="fill">
-                                    <mat-select multiple [(ngModel)]="options2[7].modelValue"
-                                                (selectionChange)="setFilteredItemsOptions(options2[7],$event)">
+                                    <mat-select multiple [(ngModel)]="options2Error[7].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[7],$event)">
                                       <mat-select-trigger>
                                       </mat-select-trigger>
-                                      <mat-option *ngFor="let item of options2[7].options" [value]="item">{{item}}
+                                      <mat-option *ngFor="let item of options2Error[7].options" [value]="item">{{item}}
                                       </mat-option>
                                     </mat-select>
                                   </mat-form-field>
@@ -665,15 +684,15 @@
                                     {{element.POIDS}} </td>
                             </ng-container>
 
-                          <!--  <ng-container *ngIf="displayedColumns.includes('LONGEUR')" matColumnDef="LONGEUR">
-                                <th class="titre-column-magistor" id="LONGEUR" mat-header-cell *matHeaderCellDef>
+                           <ng-container *ngIf="displayedColumns.includes('LONGEUR')" matColumnDef="LONGEUR">
+                                <th class="titre-column-magistor" id="LONGEURERROR2" mat-header-cell *matHeaderCellDef>
                                     LONGEUR
                                   <mat-form-field>
-                                    <mat-select multiple [(ngModel)]="options2[8].modelValue"
-                                                (selectionChange)="setFilteredItemsOptions(options2[8],$event)">
+                                    <mat-select multiple [(ngModel)]="options2Error[8].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[8],$event)">
                                       <mat-select-trigger>
                                       </mat-select-trigger>
-                                      <mat-option *ngFor="let item of options2[8].options" [value]="item">{{item}}
+                                      <mat-option *ngFor="let item of options2Error[8].options" [value]="item">{{item}}
                                       </mat-option>
                                     </mat-select>
                                   </mat-form-field>
@@ -682,17 +701,17 @@
                                     (mousedown)="onMouseDown2(i, 8, 'LONGEUR')" (mouseup)="onMouseUp2(i, 8, 'LONGEUR')"
                                     [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}">
                                     {{element.LONGEUR}} </td>
-                            </ng-container>!-->
+                            </ng-container>
 
                             <ng-container *ngIf="displayedColumns2.includes('LONGUEUR')" matColumnDef="LONGUEUR">
-                                <th class="titre-column-magistor" id="LONGUEUR" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="LONGUEURERROR2" mat-header-cell *matHeaderCellDef>
                                     LONGUEUR
                                   <mat-form-field class="form-column" appearance="fill">
-                                    <mat-select multiple [(ngModel)]="options2[8].modelValue"
-                                                (selectionChange)="setFilteredItemsOptions(options2[8],$event)">
+                                    <mat-select multiple [(ngModel)]="options2Error[8].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[8],$event)">
                                       <mat-select-trigger>
                                       </mat-select-trigger>
-                                      <mat-option *ngFor="let item of options2[8].options" [value]="item">{{item}}
+                                      <mat-option *ngFor="let item of options2Error[8].options" [value]="item">{{item}}
                                       </mat-option>
                                     </mat-select>
                                   </mat-form-field>
@@ -705,14 +724,14 @@
                             </ng-container>
 
                             <ng-container matColumnDef="LARGEUR">
-                                <th class="titre-column-magistor" id="LARGEUR" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="LARGEURERROR2" mat-header-cell *matHeaderCellDef>
                                     LARGEUR
                                   <mat-form-field class="form-column" appearance="fill">
-                                    <mat-select multiple [(ngModel)]="options2[9].modelValue"
-                                                (selectionChange)="setFilteredItemsOptions(options2[9],$event)">
+                                    <mat-select multiple [(ngModel)]="options2Error[9].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[9],$event)">
                                       <mat-select-trigger>
                                       </mat-select-trigger>
-                                      <mat-option *ngFor="let item of options2[9].options" [value]="item">{{item}}
+                                      <mat-option *ngFor="let item of options2Error[9].options" [value]="item">{{item}}
                                       </mat-option>
                                     </mat-select>
                                   </mat-form-field>
@@ -724,14 +743,14 @@
                             </ng-container>
 
                             <ng-container matColumnDef="HAUTEUR">
-                                <th class="titre-column-magistor" id="HAUTEUR" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="HAUTEURERROR2" mat-header-cell *matHeaderCellDef>
                                     HAUTEUR
                                   <mat-form-field class="form-column" appearance="fill">
-                                    <mat-select multiple [(ngModel)]="options2[10].modelValue"
-                                                (selectionChange)="setFilteredItemsOptions(options2[10],$event)">
+                                    <mat-select multiple [(ngModel)]="options2Error[10].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[10],$event)">
                                       <mat-select-trigger>
                                       </mat-select-trigger>
-                                      <mat-option *ngFor="let item of options2[10].options" [value]="item">{{item}}
+                                      <mat-option *ngFor="let item of options2Error[10].options" [value]="item">{{item}}
                                       </mat-option>
                                     </mat-select>
                                   </mat-form-field>
@@ -744,13 +763,13 @@
 
 
                             <ng-container matColumnDef="EAN">
-                                <th class="titre-column-magistor" id="EAN" mat-header-cell *matHeaderCellDef> EAN
+                                <th class="titre-column-magistor" id="EANERROR2" mat-header-cell *matHeaderCellDef> EAN
                                   <mat-form-field class="form-column" appearance="fill">
-                                    <mat-select multiple [(ngModel)]="options2[11].modelValue"
-                                                (selectionChange)="setFilteredItemsOptions(options2[11],$event)">
+                                    <mat-select multiple [(ngModel)]="options2Error[11].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[11],$event)">
                                       <mat-select-trigger>
                                       </mat-select-trigger>
-                                      <mat-option *ngFor="let item of options2[11].options" [value]="item">{{item}}
+                                      <mat-option *ngFor="let item of options2Error[11].options" [value]="item">{{item}}
                                       </mat-option>
                                     </mat-select>
                                   </mat-form-field>
@@ -820,8 +839,17 @@
                         <table mat-table id='mytable' *ngIf="typeFileREC" [dataSource]="data" style
                             class="table-rec mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
                             <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
-                                <th class="titre-column-magistor" id="REMARQUE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="REMARQUEERROR" mat-header-cell *matHeaderCellDef>
                                     REMARQUE
+                                  <mat-form-field class="form-column" appearance="fill">
+                                    <mat-select multiple [(ngModel)]="optionsError[0].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions(optionsError[0],$event)">
+                                      <mat-select-trigger>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let item of optionsError[0].options" [value]="item">{{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                                 </th>
                                 <td mat-cell *matCellDef="let element ;" id="REMARQUEmagistor"
                                     class="center-cell-prestationsErronnees label-remarque">
@@ -829,37 +857,37 @@
                             </ng-container>
 
                             <ng-container matColumnDef="OP_CODE">
-                                <th class="titre-column-magistor" id="OP_CODE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_CODEERROR" mat-header-cell *matHeaderCellDef>
                                     OP_CODE
 
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[0].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[1].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[1],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[0].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[1].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="OP_CODEmagistor"
-                                    (mousedown)="onMouseDown(i, 0, 'OP_CODE')" (mouseup)="onMouseUp(i, 0, 'OP_CODE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][0], 'unselected': !selectedCellsState[i][0]}">
+                                    (mousedown)="onMouseDown(i, 1, 'OP_CODE')" (mouseup)="onMouseUp(i, 1, 'OP_CODE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
                                     {{element.OP_CODE}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="OP_ACTION">
-                                <th class="titre-column-magistor" id="OP_ACTION" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_ACTIONERROR" mat-header-cell *matHeaderCellDef>
                                     OP_ACTION
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[1].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[2].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[2],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[1].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[2].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -868,141 +896,141 @@
                                 <td mat-cell *matCellDef="let element ; let i = index" id="OP_ACTIONmagistor"
                                     (mousedown)="onMouseDown(i, 1, 'OP_ACTION')"
                                     (mouseup)="onMouseUp(i, 1, 'OP_ACTION')"
-                                    [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
+                                    [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][1]}">
                                     {{element.OP_ACTION}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="CODE_SOC">
-                                <th class="titre-column-magistor" id="CODE_SOC" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_SOCERROR" mat-header-cell *matHeaderCellDef>
                                     CODE_SOC
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[2].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[3].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[3],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[2].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[3].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="CODE_SOCmagistor"
-                                    (mousedown)="onMouseDown(i, 2, 'CODE_SOC')" (mouseup)="onMouseUp(i, 2, 'CODE_SOC')"
-                                    [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
+                                    (mousedown)="onMouseDown(i, 3, 'CODE_SOC')" (mouseup)="onMouseUp(i, 3, 'CODE_SOC')"
+                                    [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
                                     {{element.CODE_SOC}}
                                 </td>
                             </ng-container>
 
 
                             <ng-container matColumnDef="CODE_FRN">
-                                <th class="titre-column-magistor" id="CODE_FRN" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_FRNERROR" mat-header-cell *matHeaderCellDef>
                                     CODE_FRN
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[3].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[4].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[4],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[3].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[4].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="CODE_FRNmagistor"
-                                    (mousedown)="onMouseDown(i, 3, 'CODE_FRN')" (mouseup)="onMouseUp(i, 3, 'CODE_FRN')"
-                                    [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
+                                    (mousedown)="onMouseDown(i, 4, 'CODE_FRN')" (mouseup)="onMouseUp(i, 4, 'CODE_FRN')"
+                                    [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
                                     {{element.CODE_FRN}} </td>
                             </ng-container>
 
 
                             <ng-container matColumnDef="N_PIECE">
-                                <th class="titre-column-magistor" id="N_PIECE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="N_PIECEERROR" mat-header-cell *matHeaderCellDef>
                                     N_PIECE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[4].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[5].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[5],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[4].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[5].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="N_PIECEmagistor"
-                                    (mousedown)="onMouseDown(i, 4, 'N_PIECE')" (mouseup)="onMouseUp(i, 4, 'N_PIECE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
+                                    (mousedown)="onMouseDown(i, 5, 'N_PIECE')" (mouseup)="onMouseUp(i, 5, 'N_PIECE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
                                     {{element.N_PIECE}} </td>
                             </ng-container>
 
 
                             <ng-container matColumnDef="TYPE_RECEP">
-                                <th class="titre-column-magistor" id="TYPE_RECEP" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="TYPE_RECEPERROR" mat-header-cell *matHeaderCellDef>
                                     TYPE_RECEP
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[5].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[6].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[6],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[5].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[6].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="TYPE_RECEPmagistor"
-                                    (mousedown)="onMouseDown(i, 5, 'TYPE_RECEP')"
-                                    (mouseup)="onMouseUp(i, 5, 'TYPE_RECEP')"
-                                    [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
+                                    (mousedown)="onMouseDown(i, 6, 'TYPE_RECEP')"
+                                    (mouseup)="onMouseUp(i, 6, 'TYPE_RECEP')"
+                                    [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
                                     {{element.TYPE_RECEP}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="REF_COMMANDE">
-                                <th class="titre-column-magistor" id="REF_COMMANDE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="REF_COMMANDEERROR" mat-header-cell *matHeaderCellDef>
                                     REF_COMMANDE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[6].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[7].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[7],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[6].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[7].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="REF_COMMANDEmagistor"
-                                    (mousedown)="onMouseDown(i, 6, 'REF_COMMANDE')"
-                                    (mouseup)="onMouseUp(i, 6, 'REF_COMMANDE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
+                                    (mousedown)="onMouseDown(i, 7, 'REF_COMMANDE')"
+                                    (mouseup)="onMouseUp(i, 7, 'REF_COMMANDE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
                                     {{element.REF_COMMANDE}} </td>
                             </ng-container>
 
 
                             <ng-container matColumnDef="DATE_ATTENDUE">
-                                <th class="titre-column-magistor" id="DATE_ATTENDUE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="DATE_ATTENDUEERROR" mat-header-cell *matHeaderCellDef>
                                     DATE_ATTENDUE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[7].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[8].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[8],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[7].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[8].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="DATE_ATTENDUEmagistor"
-                                    (mousedown)="onMouseDown(i, 7, 'DATE_ATTENDUE')"
-                                    (mouseup)="onMouseUp(i, 7, 'DATE_ATTENDUE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
+                                    (mousedown)="onMouseDown(i, 8, 'DATE_ATTENDUE')"
+                                    (mouseup)="onMouseUp(i, 8, 'DATE_ATTENDUE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}">
                                     {{element.DATE_ATTENDUE}}
                                 </td>
                             </ng-container>
@@ -1065,7 +1093,7 @@
                         <table mat-table id='mytable' *ngIf="typeFileREC" [dataSource]="data" style
                             class="table-rec mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
                             <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
-                                <th class="titre-column-magistor" id="REMARQUE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="REMARQUEERROR2" mat-header-cell *matHeaderCellDef>
                                     REMARQUE
                                 </th>
                                 <td mat-cell *matCellDef="let element ;" id="REMARQUEmagistor"
@@ -1074,16 +1102,15 @@
                             </ng-container>
 
                             <ng-container matColumnDef="OP_CODE">
-                                <th class="titre-column-magistor" id="OP_CODE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_CODEERROR2" mat-header-cell *matHeaderCellDef>
                                     OP_CODE
 
-
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[0].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+                                        <mat-select multiple [(ngModel)]="options2Error[0].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions2(optionsError2[0],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[0].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of options2Error[0].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -1096,8 +1123,17 @@
                             </ng-container>
 
                             <ng-container matColumnDef="CODE_SOC">
-                                <th class="titre-column-magistor" id="OP_ACTION" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_ACTIONERROR2" mat-header-cell *matHeaderCellDef>
                                     CODE_SOC
+                                  <mat-form-field class="form-column" appearance="fill">
+                                    <mat-select multiple [(ngModel)]="options2Error[1].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[1],$event)">
+                                      <mat-select-trigger>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let item of options2Error[1].options" [value]="item">{{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="CODE_SOCmagistor2"
                                     (mousedown)="onMouseDown2(i, 1, 'CODE_SOC')"
@@ -1107,8 +1143,17 @@
                             </ng-container>
 
                             <ng-container matColumnDef="N_PIECE">
-                                <th class="titre-column-magistor" id="N_PIECE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="N_PIECEERROR2" mat-header-cell *matHeaderCellDef>
                                     N_PIECE
+                                  <mat-form-field class="form-column" appearance="fill">
+                                    <mat-select multiple [(ngModel)]="options2Error[2].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[2],$event)">
+                                      <mat-select-trigger>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let item of options2Error[2].options" [value]="item">{{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="N_PIECEmagistor2"
                                     (mousedown)="onMouseDown2(i, 2, 'N_PIECE')" (mouseup)="onMouseUp2(i, 2, 'N_PIECE')"
@@ -1119,8 +1164,17 @@
 
 
                             <ng-container matColumnDef="CODE_ART">
-                                <th class="titre-column-magistor" id="CODE_ART" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_ARTERROR2" mat-header-cell *matHeaderCellDef>
                                     CODE_ART
+                                  <mat-form-field class="form-column" appearance="fill">
+                                    <mat-select multiple [(ngModel)]="options2Error[3].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[3],$event)">
+                                      <mat-select-trigger>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let item of options2Error[3].options" [value]="item">{{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="CODE_ARTmagistor2"
                                     (mousedown)="onMouseDown2(i, 3, 'CODE_ART')"
@@ -1131,8 +1185,17 @@
 
 
                             <ng-container matColumnDef="QTE_RECEP">
-                                <th class="titre-column-magistor" id="QTE_RECEP" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="QTE_RECEPERROR2" mat-header-cell *matHeaderCellDef>
                                     QTE_RECEP
+                                  <mat-form-field class="form-column" appearance="fill">
+                                    <mat-select multiple [(ngModel)]="options2Error[4].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[4],$event)">
+                                      <mat-select-trigger>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let item of options2Error[4].options" [value]="item">{{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="QTE_RECEPmagistor2"
                                     (mousedown)="onMouseDown2(i, 4, 'QTE_RECEP')"
@@ -1200,8 +1263,17 @@
                             class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
 
                             <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
-                                <th class="titre-column-magistor" id="REMARQUE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="REMARQUEERROR" mat-header-cell *matHeaderCellDef>
                                     REMARQUE
+                                  <mat-form-field class="form-column" appearance="fill">
+                                    <mat-select multiple [(ngModel)]="optionsError[0].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions(optionsError[0],$event)">
+                                      <mat-select-trigger>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let item of optionsError[0].options" [value]="item">{{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                                 </th>
                                 <td mat-cell *matCellDef="let element ;" id="REMARQUEmagistor"
                                     class="center-cell-prestationsErronnees label-remarque">
@@ -1209,87 +1281,87 @@
                             </ng-container>
 
                             <ng-container matColumnDef="OP_CODE">
-                                <th class="titre-column-magistor" id="OP_CODE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_CODEERROR" mat-header-cell *matHeaderCellDef>
                                     OP_CODE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[0].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[1].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[1],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[0].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[1].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="OP_CODEmagistor"
-                                    (mousedown)="onMouseDown(i, 0, 'OP_CODE')" (mouseup)="onMouseUp(i, 0, 'OP_CODE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][0], 'unselected': !selectedCellsState[i][0]}"
+                                    (mousedown)="onMouseDown(i, 1, 'OP_CODE')" (mouseup)="onMouseUp(i, 1, 'OP_CODE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}"
                                     class="">
                                     {{element.OP_CODE}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="OP_ACTION">
-                                <th class="titre-column-magistor" id="OP_ACTION" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_ACTIONERROR" mat-header-cell *matHeaderCellDef>
                                     OP_ACTION
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[1].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[2].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[2],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[1].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[2].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="OP_ACTIONmagistor"
-                                    (mousedown)="onMouseDown(i, 1, 'OP_ACTION')"
-                                    (mouseup)="onMouseUp(i, 1, 'OP_ACTION')"
-                                    [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
+                                    (mousedown)="onMouseDown(i, 2, 'OP_ACTION')"
+                                    (mouseup)="onMouseUp(i, 2, 'OP_ACTION')"
+                                    [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
                                     {{element.OP_ACTION}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="CODE_SOC">
-                                <th class="titre-column-magistor" id="CODE_SOC" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_SOCERROR" mat-header-cell *matHeaderCellDef>
                                     CODE_SOC
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[2].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[3].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[3],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[2].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[3].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="CODE_SOCmagistor"
-                                    (mousedown)="onMouseDown(i, 2, 'CODE_SOC')" (mouseup)="onMouseUp(i, 2, 'CODE_SOC')"
-                                    [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
+                                    (mousedown)="onMouseDown(i, 3, 'CODE_SOC')" (mouseup)="onMouseUp(i, 3, 'CODE_SOC')"
+                                    [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
                                     {{element.CODE_SOC}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="N_CDE">
-                                <th class="titre-column-magistor" id="N_CDE" mat-header-cell *matHeaderCellDef> N_CDE
+                                <th class="titre-column-magistor" id="N_CDEERROR" mat-header-cell *matHeaderCellDef> N_CDE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[3].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[4].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[4],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[3].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[4].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </th>
 
                                 <td mat-cell *matCellDef="let element ; let i = index" id="N_CDEmagistor"
-                                    (mousedown)="onMouseDown(i, 3, 'N_CDE')" (mouseup)="onMouseUp(i, 3, 'N_CDE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
+                                    (mousedown)="onMouseDown(i, 4, 'N_CDE')" (mouseup)="onMouseUp(i, 4, 'N_CDE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
                                     {{element.N_CDE}} </td>
                             </ng-container>
 
@@ -1298,19 +1370,19 @@
                                     TYPE_CDE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[4].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[4],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[5].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[5],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[4].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[5].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="TYPE_CDEmagistor"
-                                    (mousedown)="onMouseDown(i, 4, 'TYPE_CDE')" (mouseup)="onMouseUp(i, 4, 'TYPE_CDE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
+                                    (mousedown)="onMouseDown(i, 5, 'TYPE_CDE')" (mouseup)="onMouseUp(i, 5, 'TYPE_CDE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
                                     {{element.TYPE_CDE}} </td>
                             </ng-container>
 
@@ -1319,19 +1391,19 @@
                                     DATE_CDE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[5].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[5],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[6].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[6],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[5].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[6].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="DATE_CDEmagistor"
-                                    (mousedown)="onMouseDown(i, 5, 'DATE_CDE')" (mouseup)="onMouseUp(i, 5, 'DATE_CDE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
+                                    (mousedown)="onMouseDown(i, 6, 'DATE_CDE')" (mouseup)="onMouseUp(i, 6, 'DATE_CDE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
                                     {{element.DATE_CDE}} </td>
                             </ng-container>
 
@@ -1340,20 +1412,20 @@
                                     DATE_DDEE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[6].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[6],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[7].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[7],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[6].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[7].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="DATE_DDEEmagistor"
-                                    (mousedown)="onMouseDown(i, 6, 'DATE_DDEE')"
-                                    (mouseup)="onMouseUp(i, 6, 'DATE_DDEE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
+                                    (mousedown)="onMouseDown(i, 7, 'DATE_DDEE')"
+                                    (mouseup)="onMouseUp(i, 7, 'DATE_DDEE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
                                     {{element.DATE_DDEE}} </td>
                             </ng-container>
 
@@ -1363,20 +1435,20 @@
                                     HEURE_DDEE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[7].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[7],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[8].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[8],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[7].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[8].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="HEURE_DDEEmagistor"
-                                    (mousedown)="onMouseDown(i, 7, 'HEURE_DDEE')"
-                                    (mouseup)="onMouseUp(i, 7, 'HEURE_DDEE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][7], 'unselected': !selectedCellsState[i][7]}">
+                                    (mousedown)="onMouseDown(i, 8, 'HEURE_DDEE')"
+                                    (mouseup)="onMouseUp(i, 8, 'HEURE_DDEE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}">
                                     {{element.HEURE_DDEE}} </td>
                             </ng-container>
 
@@ -1387,20 +1459,20 @@
                                     NO_CLIENT
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[8].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[8],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[9].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[9],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[8].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[9].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element  ; let i = index" id="NO_CLIENTmagistor"
-                                    (mousedown)="onMouseDown(i, 8, 'NO_CLIENT')"
-                                    (mouseup)="onMouseUp(i, 8, 'NO_CLIENT')"
-                                    [ngClass]="{'selected': selectedCellsState[i][8], 'unselected': !selectedCellsState[i][8]}">
+                                    (mousedown)="onMouseDown(i, 9, 'NO_CLIENT')"
+                                    (mouseup)="onMouseUp(i, 9, 'NO_CLIENT')"
+                                    [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9]}">
                                     {{element.NO_CLIENT}} </td>
                             </ng-container>
 
@@ -1410,20 +1482,20 @@
                                     REF_CLIENT
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[9].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[9],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[10].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[10],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[9].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[10].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="REF_CLIENTmagistor"
-                                    (mousedown)="onMouseDown(i, 9, 'REF_CLIENT')"
-                                    (mouseup)="onMouseUp(i, 9, 'REF_CLIENT')"
-                                    [ngClass]="{'selected': selectedCellsState[i][9], 'unselected': !selectedCellsState[i][9]}">
+                                    (mousedown)="onMouseDown(i, 10, 'REF_CLIENT')"
+                                    (mouseup)="onMouseUp(i, 10, 'REF_CLIENT')"
+                                    [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10]}">
                                     {{element.REF_CLIENT}} </td>
                             </ng-container>
 
@@ -1433,20 +1505,20 @@
                                     AFAC_INDIVIDU
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[10].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[10],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[11].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[11],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[10].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[11].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_INDIVIDUmagistor"
-                                    (mousedown)="onMouseDown(i, 10, 'AFAC_INDIVIDU')"
-                                    (mouseup)="onMouseUp(i, 10, 'AFAC_INDIVIDU')"
-                                    [ngClass]="{'selected': selectedCellsState[i][10], 'unselected': !selectedCellsState[i][10]}">
+                                    (mousedown)="onMouseDown(i, 11, 'AFAC_INDIVIDU')"
+                                    (mouseup)="onMouseUp(i, 11, 'AFAC_INDIVIDU')"
+                                    [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}">
                                     {{element.AFAC_INDIVIDU}}
                                 </td>
                             </ng-container>
@@ -1457,20 +1529,20 @@
                                     AFAC_RAISON_SOCIALE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[11].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[11],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[12].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[12],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[11].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[12].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_RAISON_SOCIALEmagistor"
-                                    (mousedown)="onMouseDown(i, 11, 'AFAC_RAISON_SOCIALE')"
-                                    (mouseup)="onMouseUp(i, 11, 'AFAC_RAISON_SOCIALE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][11], 'unselected': !selectedCellsState[i][11]}">
+                                    (mousedown)="onMouseDown(i, 12, 'AFAC_RAISON_SOCIALE')"
+                                    (mouseup)="onMouseUp(i, 12, 'AFAC_RAISON_SOCIALE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}">
                                     {{element.AFAC_RAISON_SOCIALE}} </td>
                             </ng-container>
 
@@ -1481,20 +1553,20 @@
                                     AFAC_ADRESSE1
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[12].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[12],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[13].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[13],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[12].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[13].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_ADRESSE1magistor"
-                                    (mousedown)="onMouseDown(i, 12, 'AFAC_ADRESSE1')"
-                                    (mouseup)="onMouseUp(i, 12, 'AFAC_ADRESSE1')"
-                                    [ngClass]="{'selected': selectedCellsState[i][12], 'unselected': !selectedCellsState[i][12]}">
+                                    (mousedown)="onMouseDown(i, 13, 'AFAC_ADRESSE1')"
+                                    (mouseup)="onMouseUp(i, 13, 'AFAC_ADRESSE1')"
+                                    [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13]}">
                                     {{element.AFAC_ADRESSE1}} </td>
                             </ng-container>
 
@@ -1503,19 +1575,19 @@
                                     AFAC_CP
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[13].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[13],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[14].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[14],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[13].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[14].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_CPmagistor"
-                                    (mousedown)="onMouseDown(i, 13, 'AFAC_CP')" (mouseup)="onMouseUp(i, 13, 'AFAC_CP')"
-                                    [ngClass]="{'selected': selectedCellsState[i][13], 'unselected': !selectedCellsState[i][13]}">
+                                    (mousedown)="onMouseDown(i, 14, 'AFAC_CP')" (mouseup)="onMouseUp(i, 14, 'AFAC_CP')"
+                                    [ngClass]="{'selected': selectedCellsState[i][14], 'unselected': !selectedCellsState[i][14]}">
                                     {{element.AFAC_CP}}
                                 </td>
                             </ng-container>
@@ -1525,20 +1597,20 @@
                                     AFAC_VILLE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[14].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[14],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[15].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[15],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[14].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[15].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_VILLEmagistor"
-                                    (mousedown)="onMouseDown(i, 14, 'AFAC_VILLE')"
-                                    (mouseup)="onMouseUp(i, 14, 'AFAC_VILLE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][14], 'unselected': !selectedCellsState[i][14]}">
+                                    (mousedown)="onMouseDown(i, 15, 'AFAC_VILLE')"
+                                    (mouseup)="onMouseUp(i, 15, 'AFAC_VILLE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][14]}">
                                     {{element.AFAC_VILLE}} </td>
                             </ng-container>
 
@@ -1547,20 +1619,20 @@
                                     AFAC_PAYS
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[15].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[15],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[16].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[16],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[15].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[16].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_PAYSmagistor"
-                                    (mousedown)="onMouseDown(i, 15, 'AFAC_PAYS')"
-                                    (mouseup)="onMouseUp(i, 15, 'AFAC_PAYS')"
-                                    [ngClass]="{'selected': selectedCellsState[i][15], 'unselected': !selectedCellsState[i][15]}">
+                                    (mousedown)="onMouseDown(i, 16, 'AFAC_PAYS')"
+                                    (mouseup)="onMouseUp(i, 16, 'AFAC_PAYS')"
+                                    [ngClass]="{'selected': selectedCellsState[i][16], 'unselected': !selectedCellsState[i][15]}">
                                     {{element.AFAC_PAYS}} </td>
                             </ng-container>
 
@@ -1569,20 +1641,20 @@
                                     AFAC_TEL
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[16].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[16],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[17].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[17],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[16].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[17].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_TELmagistor"
-                                    (mousedown)="onMouseDown(i, 16, 'AFAC_TEL')"
-                                    (mouseup)="onMouseUp(i, 16, 'AFAC_TEL')"
-                                    [ngClass]="{'selected': selectedCellsState[i][16], 'unselected': !selectedCellsState[i][16]}">
+                                    (mousedown)="onMouseDown(i, 17, 'AFAC_TEL')"
+                                    (mouseup)="onMouseUp(i, 17, 'AFAC_TEL')"
+                                    [ngClass]="{'selected': selectedCellsState[i][17], 'unselected': !selectedCellsState[i][16]}">
                                     {{element.AFAC_TEL}} </td>
                             </ng-container>
 
@@ -1592,20 +1664,20 @@
                                     AFAC_MAIL
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[17].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[17],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[18].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[18],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[17].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[18].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="AFAC_MAILmagistor"
-                                    (mousedown)="onMouseDown(i, 17, 'AFAC_MAIL')"
-                                    (mouseup)="onMouseUp(i, 17, 'AFAC_MAIL')"
-                                    [ngClass]="{'selected': selectedCellsState[i][17], 'unselected': !selectedCellsState[i][17]}">
+                                    (mousedown)="onMouseDown(i, 18, 'AFAC_MAIL')"
+                                    (mouseup)="onMouseUp(i, 18, 'AFAC_MAIL')"
+                                    [ngClass]="{'selected': selectedCellsState[i][18], 'unselected': !selectedCellsState[i][18]}">
                                     {{element.AFAC_MAIL}} </td>
                             </ng-container>
 
@@ -1615,20 +1687,20 @@
                                     ALIV_INDIVIDU
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[18].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[18],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[19].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[19],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[18].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[19].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_INDIVIDUmagistor"
-                                    (mousedown)="onMouseDown(i, 18, 'ALIV_INDIVIDU')"
-                                    (mouseup)="onMouseUp(i, 18, 'ALIV_INDIVIDU')"
-                                    [ngClass]="{'selected': selectedCellsState[i][18], 'unselected': !selectedCellsState[i][18]}">
+                                    (mousedown)="onMouseDown(i, 19, 'ALIV_INDIVIDU')"
+                                    (mouseup)="onMouseUp(i, 19, 'ALIV_INDIVIDU')"
+                                    [ngClass]="{'selected': selectedCellsState[i][19], 'unselected': !selectedCellsState[i][19]}">
                                     {{element.ALIV_INDIVIDU}} </td>
                             </ng-container>
 
@@ -1638,20 +1710,20 @@
                                     ALIV_RAISON_SOCIALE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[19].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[19],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[20].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[20],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[19].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[20].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_RAISON_SOCIALEmagistor"
-                                    (mousedown)="onMouseDown(i, 19, 'ALIV_RAISON_SOCIALE')"
-                                    (mouseup)="onMouseUp(i, 19, 'ALIV_RAISON_SOCIALE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][19], 'unselected': !selectedCellsState[i][19]}">
+                                    (mousedown)="onMouseDown(i, 20, 'ALIV_RAISON_SOCIALE')"
+                                    (mouseup)="onMouseUp(i, 20, 'ALIV_RAISON_SOCIALE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][20], 'unselected': !selectedCellsState[i][20]}">
                                     {{element.ALIV_RAISON_SOCIALE}} </td>
                             </ng-container>
 
@@ -1661,20 +1733,20 @@
                                     ALIV_ADRESSE1
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[20].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[20],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[21].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[21],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[20].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[21].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_ADRESSE1magistor"
-                                    (mousedown)="onMouseDown(i, 20, 'ALIV_ADRESSE1')"
-                                    (mouseup)="onMouseUp(i, 20, 'ALIV_ADRESSE1')"
-                                    [ngClass]="{'selected': selectedCellsState[i][20], 'unselected': !selectedCellsState[i][20]}">
+                                    (mousedown)="onMouseDown(i, 21, 'ALIV_ADRESSE1')"
+                                    (mouseup)="onMouseUp(i, 21, 'ALIV_ADRESSE1')"
+                                    [ngClass]="{'selected': selectedCellsState[i][21], 'unselected': !selectedCellsState[i][21]}">
                                     {{element.ALIV_ADRESSE1}} </td>
                             </ng-container>
 
@@ -1683,19 +1755,19 @@
                                     ALIV_CP
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[21].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[21],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[22].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[22],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[21].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[22].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_CPmagistor"
-                                    (mousedown)="onMouseDown(i, 21, 'ALIV_CP')" (mouseup)="onMouseUp(i, 21, 'ALIV_CP')"
-                                    [ngClass]="{'selected': selectedCellsState[i][21], 'unselected': !selectedCellsState[i][21]}">
+                                    (mousedown)="onMouseDown(i, 22, 'ALIV_CP')" (mouseup)="onMouseUp(i, 22, 'ALIV_CP')"
+                                    [ngClass]="{'selected': selectedCellsState[i][22], 'unselected': !selectedCellsState[i][22]}">
                                     {{element.ALIV_CP}} </td>
                             </ng-container>
 
@@ -1704,20 +1776,20 @@
                                     ALIV_VILLE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[22].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[22],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[23].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[23],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[22].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[23].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_VILLEmagistor"
-                                    (mousedown)="onMouseDown(i, 22, 'ALIV_VILLE')"
-                                    (mouseup)="onMouseUp(i, 22, 'ALIV_VILLE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][22], 'unselected': !selectedCellsState[i][22]}">
+                                    (mousedown)="onMouseDown(i, 23, 'ALIV_VILLE')"
+                                    (mouseup)="onMouseUp(i, 23, 'ALIV_VILLE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][23], 'unselected': !selectedCellsState[i][23]}">
                                     {{element.ALIV_VILLE}} </td>
                             </ng-container>
 
@@ -1726,20 +1798,20 @@
                                     ALIV_PAYS
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[23].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[23],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[24].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[24],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[23].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[24].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_PAYSmagistor"
-                                    (mousedown)="onMouseDown(i, 23, 'ALIV_PAYS')"
-                                    (mouseup)="onMouseUp(i, 23, 'ALIV_PAYS')"
-                                    [ngClass]="{'selected': selectedCellsState[i][23], 'unselected': !selectedCellsState[i][23]}">
+                                    (mousedown)="onMouseDown(i, 24, 'ALIV_PAYS')"
+                                    (mouseup)="onMouseUp(i, 24, 'ALIV_PAYS')"
+                                    [ngClass]="{'selected': selectedCellsState[i][24], 'unselected': !selectedCellsState[i][24]}">
                                     {{element.ALIV_PAYS}} </td>
                             </ng-container>
 
@@ -1749,20 +1821,20 @@
                                     ALIV_TEL
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[24].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[24],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[25].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[25],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[24].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[25].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_TELmagistor"
-                                    (mousedown)="onMouseDown(i, 24, 'ALIV_TEL')"
-                                    (mouseup)="onMouseUp(i, 24, 'ALIV_TEL')"
-                                    [ngClass]="{'selected': selectedCellsState[i][24], 'unselected': !selectedCellsState[i][24]}">
+                                    (mousedown)="onMouseDown(i, 25, 'ALIV_TEL')"
+                                    (mouseup)="onMouseUp(i, 25, 'ALIV_TEL')"
+                                    [ngClass]="{'selected': selectedCellsState[i][25], 'unselected': !selectedCellsState[i][25]}">
                                     {{element.ALIV_TEL}} </td>
                             </ng-container>
 
@@ -1772,20 +1844,20 @@
                                     ALIV_MAIL
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[25].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[25],$event)">
+                                        <mat-select multiple [(ngModel)]="optionsError[26].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions(optionsError[26],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[25].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of optionsError[26].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="ALIV_MAILmagistor"
-                                    (mousedown)="onMouseDown(i, 25, 'ALIV_MAIL')"
-                                    (mouseup)="onMouseUp(i, 25, 'ALIV_MAIL')"
-                                    [ngClass]="{'selected': selectedCellsState[i][25], 'unselected': !selectedCellsState[i][25]}">
+                                    (mousedown)="onMouseDown(i, 26, 'ALIV_MAIL')"
+                                    (mouseup)="onMouseUp(i, 26, 'ALIV_MAIL')"
+                                    [ngClass]="{'selected': selectedCellsState[i][26], 'unselected': !selectedCellsState[i][26]}">
                                     {{element.ALIV_MAIL}} </td>
                             </ng-container>
 
@@ -1845,12 +1917,21 @@
                     </mat-expansion-panel-header>
                     <div class="content-table">
 
-                        <table mat-table id='mytable' *ngIf="typeFileCDC && data.length>0" [dataSource]="data"
+                        <table mat-table id='mytable' *ngIf="typeFileCDC && data2.length>0" [dataSource]="data2"
                             class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
 
                             <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
-                                <th class="titre-column-magistor" id="REMARQUE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="REMARQUEERROR2" mat-header-cell *matHeaderCellDef>
                                     REMARQUE
+                                  <mat-form-field class="form-column" appearance="fill">
+                                    <mat-select multiple [(ngModel)]="options2Error[0].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[0],$event)">
+                                      <mat-select-trigger>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let item of options2Error[0].options" [value]="item">{{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                                 </th>
                                 <td mat-cell *matCellDef="let element ;" id="REMARQUEmagistor"
                                     class="center-cell-prestationsErronnees label-remarque">
@@ -1858,108 +1939,126 @@
                             </ng-container>
 
                             <ng-container matColumnDef="OP_CODE">
-                                <th class="titre-column-magistor" id="OP_CODE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_CODEERROR2" mat-header-cell *matHeaderCellDef>
                                     OP_CODE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[0].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[0],$event)">
+                                        <mat-select multiple [(ngModel)]="options2Error[1].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions2(options2Error[1],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[0].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of options2Error[1].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="OP_CODEmagistor2"
-                                    (mousedown)="onMouseDown2(i, 0, 'OP_CODE')" (mouseup)="onMouseUp2(i, 0, 'OP_CODE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][0], 'unselected': !selectedCellsState[i][0]}">
+                                    (mousedown)="onMouseDown2(i, 1, 'OP_CODE')" (mouseup)="onMouseUp2(i, 1, 'OP_CODE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
                                     {{element.OP_CODE}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="OP_ACTION">
-                                <th class="titre-column-magistor" id="OP_ACTION" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="OP_ACTIONERROR2" mat-header-cell *matHeaderCellDef>
                                     OP_ACTION
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[1].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[1],$event)">
+                                        <mat-select multiple [(ngModel)]="options2Error[2].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions2(options2Error[2],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[1].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of options2Error[2].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="OP_ACTIONmagistor2"
-                                    (mousedown)="onMouseDown2(i, 1, 'OP_ACTION')"
-                                    (mouseup)="onMouseUp2(i, 1, 'OP_ACTION')"
-                                    [ngClass]="{'selected': selectedCellsState[i][1], 'unselected': !selectedCellsState[i][1]}">
+                                    (mousedown)="onMouseDown2(i, 2, 'OP_ACTION')"
+                                    (mouseup)="onMouseUp2(i, 2, 'OP_ACTION')"
+                                    [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
                                     {{element.OP_ACTION}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="CODE_SOC">
-                                <th class="titre-column-magistor" id="CODE_SOC" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_SOCERROR2" mat-header-cell *matHeaderCellDef>
                                     CODE_SOC
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[2].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[2],$event)">
+                                        <mat-select multiple [(ngModel)]="options2Error[3].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions2(options2Error[3],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[2].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of options2Error[3].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="CODE_SOCmagistor2"
-                                    (mousedown)="onMouseDown2(i, 2, 'CODE_SOC')"
-                                    (mouseup)="onMouseUp2(i, 2, 'CODE_SOC')"
-                                    [ngClass]="{'selected': selectedCellsState[i][2], 'unselected': !selectedCellsState[i][2]}">
+                                    (mousedown)="onMouseDown2(i, 3, 'CODE_SOC')"
+                                    (mouseup)="onMouseUp2(i, 3, 'CODE_SOC')"
+                                    [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
                                     {{element.CODE_SOC}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="N_CDE">
-                                <th class="titre-column-magistor" id="N_CDE" mat-header-cell *matHeaderCellDef> N_CDE
+                                <th class="titre-column-magistor" id="N_CDEERROR2" mat-header-cell *matHeaderCellDef> N_CDE
 
                                     <mat-form-field class="form-column" appearance="fill">
-                                        <mat-select multiple [(ngModel)]="options[3].modelValue"
-                                            (selectionChange)="setFilteredItemsOptions(options[3],$event)">
+                                        <mat-select multiple [(ngModel)]="options2Error[4].modelValue"
+                                            (selectionChange)="setFilteredItemsOptions2(options2Error[4],$event)">
                                             <mat-select-trigger>
                                             </mat-select-trigger>
-                                            <mat-option *ngFor="let item of options[3].options" [value]="item">{{item}}
+                                            <mat-option *ngFor="let item of options2Error[4].options" [value]="item">{{item}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </th>
 
                                 <td mat-cell *matCellDef="let element ; let i = index" id="N_CDEmagistor2"
-                                    (mousedown)="onMouseDown2(i, 3, 'N_CDE')" (mouseup)="onMouseUp2(i, 3, 'N_CDE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][3], 'unselected': !selectedCellsState[i][3]}">
+                                    (mousedown)="onMouseDown2(i, 4, 'N_CDE')" (mouseup)="onMouseUp2(i, 4, 'N_CDE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
                                     {{element.N_CDE}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="CODE_ART">
-                                <th class="titre-column-magistor" id="CODE_ART" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="CODE_ARTERROR2" mat-header-cell *matHeaderCellDef>
                                     CODE_ART
+                                  <mat-form-field class="form-column" appearance="fill">
+                                    <mat-select multiple [(ngModel)]="options2Error[5].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[5],$event)">
+                                      <mat-select-trigger>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let item of options2Error[5].options" [value]="item">{{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="CODE_ARTmagistor2"
-                                    (mousedown)="onMouseDown2(i, 4, 'CODE_ART')"
-                                    (mouseup)="onMouseUp2(i, 4, 'CODE_ART')"
-                                    [ngClass]="{'selected': selectedCellsState[i][4], 'unselected': !selectedCellsState[i][4]}">
+                                    (mousedown)="onMouseDown2(i, 5, 'CODE_ART')"
+                                    (mouseup)="onMouseUp2(i, 5, 'CODE_ART')"
+                                    [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
                                     {{element.CODE_ART}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="QTE_CDE">
-                                <th class="titre-column-magistor" id="QTE_CDE" mat-header-cell *matHeaderCellDef>
+                                <th class="titre-column-magistor" id="QTE_CDEERROR2" mat-header-cell *matHeaderCellDef>
                                     QTE_CDE
+                                  <mat-form-field class="form-column" appearance="fill">
+                                    <mat-select multiple [(ngModel)]="options2Error[6].modelValue"
+                                                (selectionChange)="setFilteredItemsOptions2(options2Error[6],$event)">
+                                      <mat-select-trigger>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let item of options2Error[6].options" [value]="item">{{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                                 </th>
                                 <td mat-cell *matCellDef="let element ; let i = index" id="QTE_CDEmagistor2"
-                                    (mousedown)="onMouseDown2(i, 5, 'QTE_CDE')" (mouseup)="onMouseUp2(i, 5, 'QTE_CDE')"
-                                    [ngClass]="{'selected': selectedCellsState[i][5], 'unselected': !selectedCellsState[i][5]}">
+                                    (mousedown)="onMouseDown2(i, 6, 'QTE_CDE')" (mouseup)="onMouseUp2(i, 6, 'QTE_CDE')"
+                                    [ngClass]="{'selected': selectedCellsState[i][6], 'unselected': !selectedCellsState[i][6]}">
                                     {{element.QTE_CDE}} </td>
                             </ng-container>
 

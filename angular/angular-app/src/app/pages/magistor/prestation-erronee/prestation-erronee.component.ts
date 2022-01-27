@@ -35,7 +35,11 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     // [false, false, false],
   ];
   testFile: any;
+  files:any =[];
   options: any = [];
+  testFile2: any;
+  files2:any =[];
+  options2: any = [];
   copyData: any;
   tableMouseDown: MouseEvent;
   tableMouseUp: MouseEvent;
@@ -48,7 +52,9 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   FIRST_EDITABLE_COL: number = 0;                       // first column is not editable --> so start from index 1
   LAST_EDITABLE_COL: number = 0;
   clickCorrection: boolean = false;
-
+  filterValues: any = [];
+  private displayedColumns2: string[];
+  private data2: any;
   constructor(private eRef: ElementRef,
     private prestationService: PrestationErroneeService,
     private _snackBar: MatSnackBar) {
@@ -61,6 +67,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     this.data = changes.data.currentValue;
     this.originData = changes.originData.currentValue;
     //throw new Error('Method not implemented.');
+    this.prestationService.saveData( this.data)
     console.log("origindata changes happend   ", changes.originData.currentValue);
 
   }
@@ -76,32 +83,67 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     else if (this.typeFile == "CDC01") {
       this.typeFileCDC = true;
     }
-    this.displayedColumns = (Object.keys(this.data[0]));
-    //si ce n'est pas un seul bloc alors affiche la colonne remarque en premier
-    if (!this.oneBloc) {
-      this.displayedColumns.unshift(this.displayedColumns.pop());
-      for (var i = 0; i < this.data.length; i++) {
-        //si ça contient plusieurs remarques alors affiche chaque remarque dans une ligne
-        if (this.data[i]['REMARQUE'].includes(";")) {
-          this.data[i]['REMARQUE'] = this.data[i]['REMARQUE'].split(';').join('\n');
+
+      this.displayedColumns = (Object.keys(this.data[0]));
+      if (!this.oneBloc) {
+        this.displayedColumns.unshift(this.displayedColumns.pop());
+        for (var i = 0; i < this.data.length; i++) {
+          //si ça contient plusieurs remarques alors affiche chaque remarque dans une ligne
+          if (this.data[i]['REMARQUE'].includes(";")) {
+            this.data[i]['REMARQUE'] = this.data[i]['REMARQUE'].split(';').join('\n');
+          }
         }
+        console.warn('data',this.data)
+
       }
+      this.LAST_EDITABLE_ROW = this.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
+      this.data=this.prestationService.sheet1;
+      this.testFile = this.data;  // copy to selection
+      this.files=this.data // copy to filter
+      // initialize all selectedCellsState to false
+      this.data.forEach(element => {
+        this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
+      });
+      this.displayedColumns.forEach(item => {
+        this.getOption(item);
+      })
+
+    if (this.prestationService.sheet2) {
+      this.displayedColumns2 = (Object.keys(this.prestationService.sheet2[0]));
+      console.error("é/*/*/", this.displayedColumns2)
+      if (!this.oneBloc) {
+        this.displayedColumns2.unshift(this.displayedColumns2.pop());
+        for (var i = 0; i < this.prestationService.sheet2.length; i++) {
+          //si ça contient plusieurs remarques alors affiche chaque remarque dans une ligne
+          if (this.prestationService.sheet2[i]['REMARQUE'].includes(";")) {
+            this.prestationService.sheet2[i]['REMARQUE'] = this.prestationService.sheet2[i]['REMARQUE'].split(';').join('\n');
+          }
+        }
+        console.warn('data', this.data)
+
+      }
+      this.LAST_EDITABLE_ROW = this.prestationService.sheet2.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumns2.length - 1;
+      this.data2 = this.prestationService.sheet2;
+      this.testFile2 = this.prestationService.sheet2;  // copy to selection
+      this.files2 = this.prestationService.sheet2 // copy to filter
+      // initialize all selectedCellsState to false
+      this.prestationService.sheet2.forEach(element => {
+        this.selectedCellsState.push(Array.from({length: this.displayedColumns2.length - 1}, () => false))
+      });
+      this.displayedColumns2.forEach(item => {
+        this.getOption2(item);
+      })
     }
 
-    this.LAST_EDITABLE_ROW = this.data.length - 1;
-    this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
-    this.testFile = this.data;
-    // initialize all selectedCellsState to false
-    this.data.forEach(element => {
-      this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
-    });
-    this.displayedColumns.forEach(item => {
-      this.getOption(item);
-    })
+    this.test()
   }
 
   test() {
     console.log(this.sheet1);
+    console.warn("1",this.data);
+    console.warn("2",this.data2)
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -130,7 +172,111 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         this.options.push(obj);
       }
     })
+  console.warn("op1",this.options)
   }
+
+  getOption2(filter) {
+    let options = [];
+    options = this.testFile2.map((item) => item[filter]);
+    options = options.filter(function (value, index, options) {
+
+      return options.indexOf(value) == index && value !== "";
+    });
+    this.displayedColumns2.forEach((item, key) => {
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: options
+        };
+        this.options2.push(obj);
+      }
+    })
+  console.warn("ops2",this.options2)
+  }
+
+ /* change color of the selected column header on file livraison*/
+
+  changeSelectedOptionColor(filter) {
+    if (filter.columnProp && filter.modelValue != "") {
+      document.getElementById(filter.columnProp).style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp).style.color = "white";
+    }
+  }
+
+  filterChange(filter) {
+      this.initSelectedCells();     // init selected cells
+    console.error("files",this.files)
+    console.error("filter",filter)
+    this.files = this.testFile.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    return this.files.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+
+    });
+  }
+  getIntersection(filter) {
+    return this.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+
+  setFilteredItemsOptions(filter) {
+    // check if filter is already selected
+
+    const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
+    this.changeSelectedOptionColor(filter);
+    if (filterExists == false) { this.filterValues.push(filter) }
+    // if only one select is selected
+    if (this.filterValues.length == 1) {
+      this.files = this.filterChange(filter);
+    }
+    else {
+
+      // if already another select is active merge the results
+      if (filterExists == false) {
+
+        this.data = this.getIntersection(filter)
+      }
+      else {
+        this.data = this.files;
+        this.filterValues.forEach(element => {
+          this.data = this.data.filter(x => element.modelValue.includes(x[element.columnProp]));
+        });
+        this.data = this.data.filter((object, index) => index === this.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+      }
+
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "" || filter.modelValue.length == 0) {
+
+      this.filterValues = this.filterValues.filter(item => item.columnProp != filter.columnProp);
+      if (this.filterValues.length == 0) {
+        this.data = this.testFile;
+        this.data = this.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+      }
+      else if (this.filterValues.length == 1) {
+        this.data = this.filterChange(this.filterValues[0])
+      }
+      else {
+        this.filterValues = this.filterValues.filter(function (item) {
+
+          return item.columnProp !== filter.columnProp;
+        })
+        this.data = this.testFile;
+        this.filterValues.forEach(element => {
+          this.data = this.data.filter(x => element.modelValue.includes(x[element.columnProp]));
+        });
+      }
+
+    }
+
+  }
+
+
   /**
     * @param rowId
     * @param colId
@@ -179,9 +325,9 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
         }
         this.prestationService.setSheet1(true);
-        // this.updateSelectedCellsState(this.tableMouseDown.colId, 
-        //   this.tableMouseUp.colId, 
-        //   this.tableMouseDown.rowId, 
+        // this.updateSelectedCellsState(this.tableMouseDown.colId,
+        //   this.tableMouseUp.colId,
+        //   this.tableMouseDown.rowId,
         //   this.tableMouseUp.rowId);
         this.updateSelectedCellsState(this.prestationService.gettableMouseDown().colId,
           this.prestationService.gettableMouseUp().colId,
@@ -484,7 +630,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   //   this.prestationService.settableMouseDown(undefined);
   //   this.prestationService.settableMouseUp(undefined);
 
-  //     }    
+  //     }
   //   }
   // }
   // }

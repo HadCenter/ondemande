@@ -113,9 +113,19 @@
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"
+                          <th *ngFor="let row of fileMagistor?.columns ; let i = index" id={{options[i].columnProp}}
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
+
+                            <mat-form-field class="form-column" appearance="fill">
+                              <mat-select multiple [(ngModel)]="options[i].modelValue"
+                                          (selectionChange)="setFilteredItemsOptions(options[i],$event)">
+                                <mat-select-trigger>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let item of options[i].options" [value]="item">{{item}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
 
                           </th>
                         </tr>
@@ -174,10 +184,18 @@
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
+                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
-
+                            <mat-form-field class="form-column" appearance="fill">
+                              <mat-select multiple [(ngModel)]="options2[i].modelValue"
+                                          (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
+                                <mat-select-trigger>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let item of options2[i].options" [value]="item">{{item}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
                           </th>
                         </tr>
                       </thead>
@@ -397,10 +415,18 @@
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"
+                          <th *ngFor="let row of fileMagistor?.columns ; let i = index" id={{options[i].columnProp}}
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
-
+                            <mat-form-field class="form-column" appearance="fill">
+                              <mat-select multiple [(ngModel)]="options[i].modelValue"
+                                          (selectionChange)="setFilteredItemsOptions(options[i],$event)">
+                                <mat-select-trigger>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let item of options[i].options" [value]="item">{{item}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
                           </th>
                         </tr>
                       </thead>
@@ -462,10 +488,18 @@
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
+                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
-
+                            <mat-form-field class="form-column" appearance="fill">
+                              <mat-select multiple [(ngModel)]="options2[i].modelValue"
+                                          (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
+                                <mat-select-trigger>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let item of options2[i].options" [value]="item">{{item}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
                           </th>
                         </tr>
                       </thead>
@@ -690,7 +724,7 @@
               <table mat-table id='mytable' *ngIf="typeFileREC" [dataSource]="copyfileMagistor" style
                 class="table-rec mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
                 <ng-container matColumnDef="REMARQUE">
-                  <th class="titre-column-magistor" id="REMARQUE" mat-header-cell *matHeaderCellDef> 
+                  <th class="titre-column-magistor" id="REMARQUE" mat-header-cell *matHeaderCellDef>
                     REMARQUE
                   </th>
                   <td mat-cell *matCellDef="let element ;" id="REMARQUEmagistor"
@@ -907,10 +941,18 @@
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"
+                          <th *ngFor="let row of fileMagistor?.columns ; let i = index" id={{options[i].columnProp}}
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
-
+                            <mat-form-field class="form-column" appearance="fill">
+                              <mat-select multiple [(ngModel)]="options[i].modelValue"
+                                          (selectionChange)="setFilteredItemsOptions(options[i],$event)">
+                                <mat-select-trigger>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let item of options[i].options" [value]="item">{{item}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
                           </th>
                         </tr>
                       </thead>
@@ -971,10 +1013,18 @@
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index"
+                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
-
+                            <mat-form-field class="form-column" appearance="fill">
+                              <mat-select multiple [(ngModel)]="options2[i].modelValue"
+                                          (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
+                                <mat-select-trigger>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let item of options2[i].options" [value]="item">{{item}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
                           </th>
                         </tr>
                       </thead>

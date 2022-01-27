@@ -23,8 +23,12 @@ export class DetailsFileMagistorComponent implements OnInit {
   file: any;
   testFile: any = [];
   testFile2: any = [];
+  testValidFile: any = [];
+  testValidFile2: any = [];
   files: any = [];
   files2: any = [];
+  filesValid: any = [];
+  filesValid2: any = [];
   searchItems: any = [];
   filterValues: any = [];
   fileMagistor: any;
@@ -144,7 +148,7 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyfileMagistor = JSON.parse(JSON.stringify(this.fileMagistor));
         this.copyfileMagistor.rows.splice(0, 0, this.copyfileMagistor.columns);
         this.copyfileMagistor = this.convertToArrayOfObjects(this.copyfileMagistor.rows);
-        this.testFile = this.copyfileMagistor;   //copy to use on selection
+        this.testValidFile = this.copyfileMagistor;   //copy to use on selection
         this.files = this.copyfileMagistor;    // copy to filter *
         this.displayedColumns = (Object.keys(this.copyfileMagistor[0]));
 
@@ -171,11 +175,12 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
     this.fileService.getLogisticFileContent(data).subscribe(res => {
       this.fileMagistor2 = res;
+      console.log("fileMagostore2",this.fileMagistor2);
       if (this.fileMagistor2.rows.length > 0) {
         this.copyfileMagistor2 = JSON.parse(JSON.stringify(this.fileMagistor2));
         this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);
         this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
-        this.testFile2 = this.copyfileMagistor2;   //copy to use on selection
+        this.testValidFile2 = this.copyfileMagistor2;   //copy to use on selection
         this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
 
          // get select options file Magistor 2
@@ -334,7 +339,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     */
   getOption(filter) {
     let options = [];
-    options = this.testFile.map((item) => item[filter]);
+    options = this.testValidFile.map((item) => item[filter]);
     options = options.filter(function (value, index, options) {
 
       return options.indexOf(value) == index && value !== "";
@@ -352,7 +357,7 @@ export class DetailsFileMagistorComponent implements OnInit {
 
   getOption2(filter) {
       let options = [];
-      options = this.testFile2.map((item) => item[filter]);
+      options = this.testValidFile2.map((item) => item[filter]);
       options = options.filter(function (value, index, options) {
 
         return options.indexOf(value) == index && value !== "";
@@ -382,7 +387,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
   filterItemsValid(filterValue: string) {
-    return this.files.filter((item) => {
+    return this.filesValid.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
@@ -406,10 +411,12 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
   filterChange(filter) {
+    console.warn('tetsttstsFIle',this.testValidFile);
+    console.warn('*****0',this.filesValid)
     //  this.initSelectedCells();     // init selected cells
-    this.files = this.testFile.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    this.filesValid = this.testValidFile.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
 
-    return this.files.filter(function (item) {
+    return this.filesValid.filter(function (item) {
       console.warn(filter.modelValue.indexOf(item[filter.columnProp]) !== -1);
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
 
@@ -418,9 +425,9 @@ export class DetailsFileMagistorComponent implements OnInit {
 
   filterChange2(filter) {
     //  this.initSelectedCells();     // init selected cells
-    this.files2 = this.testFile2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
-  console.warn("ffffff",this.files2)
-    return this.files2.filter(function (item) {
+    this.filesValid2 = this.testValidFile2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+  console.warn("ffffff",this.filesValid2)
+    return this.filesValid2.filter(function (item) {
       console.warn(filter.modelValue.indexOf(item[filter.columnProp]) !== -1);
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
 
@@ -607,7 +614,7 @@ export class DetailsFileMagistorComponent implements OnInit {
       }
     });
     this.filterValues = [];
-    this.copyfileMagistor = this.testFile;
+    this.copyfileMagistor = this.testValidFile;
     this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
   }
 
@@ -696,6 +703,10 @@ export class DetailsFileMagistorComponent implements OnInit {
     if (filter.modelValue.length !== 0) {
       // if only one select is selected
       if (this.filterValues.length == 1) {
+        console.error(this.fileMagistor);
+        console.error(this.copyfileMagistor);
+        console.error(this.testValidFile);
+        console.error(this.filterValues)
         this.copyfileMagistor = this.filterChange(filter);
         if (this.copyfileMagistor.length>=1){
           this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
@@ -715,7 +726,7 @@ export class DetailsFileMagistorComponent implements OnInit {
               this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
             }
         } else {
-          this.copyfileMagistor = this.files;
+          this.copyfileMagistor = this.filesValid;
           this.filterValues.forEach(element => {
             this.copyfileMagistor = this.copyfileMagistor.filter(x => element.modelValue.includes(x[element.columnProp]));
           });
@@ -733,7 +744,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
       this.filterValues = this.filterValues.filter(item => item.columnProp != filter.columnProp);
       if (this.filterValues.length == 0) {
-        this.copyfileMagistor = this.testFile;
+        this.copyfileMagistor = this.testValidFile;
         this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
         if (this.copyfileMagistor.length>=1) {
           this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
@@ -757,7 +768,7 @@ export class DetailsFileMagistorComponent implements OnInit {
 
           return item.columnProp !== filter.columnProp;
         })
-        this.copyfileMagistor = this.testFile;
+        this.copyfileMagistor = this.testValidFile;
         this.filterValues.forEach(element => {
           this.copyfileMagistor = this.copyfileMagistor.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
@@ -805,7 +816,7 @@ export class DetailsFileMagistorComponent implements OnInit {
             this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
           }
         } else {
-          this.copyfileMagistor2 = this.files2;
+          this.copyfileMagistor2 = this.filesValid2;
           this.filterValues2.forEach(element => {
             this.copyfileMagistor2 = this.copyfileMagistor2.filter(x => element.modelValue.includes(x[element.columnProp]));
           });
@@ -823,7 +834,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
       this.filterValues2 = this.filterValues2.filter(item => item.columnProp != filter.columnProp);
       if (this.filterValues2.length == 0) {
-        this.copyfileMagistor2 = this.testFile2;
+        this.copyfileMagistor2 = this.testValidFile2;
         this.copyfileMagistor2 = this.copyfileMagistor2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
         if (this.copyfileMagistor2.length>=1) {
           this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
@@ -846,7 +857,7 @@ export class DetailsFileMagistorComponent implements OnInit {
 
           return item.columnProp !== filter.columnProp;
         })
-        this.copyfileMagistor2 = this.testFile2;
+        this.copyfileMagistor2 = this.testValidFile2;
         this.filterValues2.forEach(element => {
           this.copyfileMagistor2 = this.copyfileMagistor2.filter(x => element.modelValue.includes(x[element.columnProp]));
         });

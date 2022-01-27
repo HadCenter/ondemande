@@ -34,12 +34,12 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   selectedCellsState: boolean[][] = [
     // [false, false, false],
   ];
-  testFile: any;
-  files:any =[];
-  options: any = [];
-  testFile2: any;
-  files2:any =[];
-  options2: any = [];
+  testFileError: any;
+  fileError:any =[];
+  optionsError: any = [];
+  testFileError2: any;
+  fileError2:any =[];
+  options2Error: any = [];
   copyData: any;
   tableMouseDown: MouseEvent;
   tableMouseUp: MouseEvent;
@@ -52,7 +52,8 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   FIRST_EDITABLE_COL: number = 0;                       // first column is not editable --> so start from index 1
   LAST_EDITABLE_COL: number = 0;
   clickCorrection: boolean = false;
-  filterValues: any = [];
+  filterValuesError: any = [];
+  filterValuesError2: any = [];
   private displayedColumns2: string[];
   private data2: any;
   constructor(private eRef: ElementRef,
@@ -99,8 +100,8 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.LAST_EDITABLE_ROW = this.data.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
       this.data=this.prestationService.sheet1;
-      this.testFile = this.data;  // copy to selection
-      this.files=this.data // copy to filter
+      this.testFileError = this.data;  // copy to selection
+      this.fileError=this.data // copy to filter
       // initialize all selectedCellsState to false
       this.data.forEach(element => {
         this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
@@ -126,8 +127,8 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.LAST_EDITABLE_ROW = this.prestationService.sheet2.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumns2.length - 1;
       this.data2 = this.prestationService.sheet2;
-      this.testFile2 = this.prestationService.sheet2;  // copy to selection
-      this.files2 = this.prestationService.sheet2 // copy to filter
+      this.testFileError2 = this.prestationService.sheet2;  // copy to selection
+      this.fileError2 = this.prestationService.sheet2 // copy to filter
       // initialize all selectedCellsState to false
       this.prestationService.sheet2.forEach(element => {
         this.selectedCellsState.push(Array.from({length: this.displayedColumns2.length - 1}, () => false))
@@ -153,64 +154,85 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     });
   }
   /**
-    * Get options inside selects
+    * Get optionsError inside selects
     * @param filter
     */
   getOption(filter) {
-    let options = [];
-    options = this.testFile.map((item) => item[filter]);
-    options = options.filter(function (value, index, options) {
+    let optionsError = [];
+    optionsError = this.testFileError.map((item) => item[filter]);
+    optionsError = optionsError.filter(function (value, index, optionsError) {
 
-      return options.indexOf(value) == index && value !== "";
+      return optionsError.indexOf(value) == index && value !== "";
     });
     this.displayedColumns.forEach((item, key) => {
       if (item == filter) {
         var obj = {
           columnProp: item,
-          options: options
+          options: optionsError
         };
-        this.options.push(obj);
+        this.optionsError.push(obj);
       }
     })
-  console.warn("op1",this.options)
+  console.warn("op1",this.optionsError)
   }
 
   getOption2(filter) {
-    let options = [];
-    options = this.testFile2.map((item) => item[filter]);
-    options = options.filter(function (value, index, options) {
+    let optionsError = [];
+    optionsError = this.testFileError2.map((item) => item[filter]);
+    optionsError = optionsError.filter(function (value, index, optionsError) {
 
-      return options.indexOf(value) == index && value !== "";
+      return optionsError.indexOf(value) == index && value !== "";
     });
     this.displayedColumns2.forEach((item, key) => {
       if (item == filter) {
         var obj = {
           columnProp: item,
-          options: options
+          options: optionsError
         };
-        this.options2.push(obj);
+        this.options2Error.push(obj);
       }
     })
-  console.warn("ops2",this.options2)
+  console.warn("ops2",this.options2Error)
   }
 
  /* change color of the selected column header on file livraison*/
 
   changeSelectedOptionColor(filter) {
+    console.warn('filter color',filter)
     if (filter.columnProp && filter.modelValue != "") {
-      document.getElementById(filter.columnProp).style.color = "#00bcd4";
+      document.getElementById(filter.columnProp+"ERROR").style.color = "#00bcd4";
     }
     else {
-      document.getElementById(filter.columnProp).style.color = "white";
+      document.getElementById(filter.columnProp+"ERROR").style.color = "white";
+    }
+  }
+
+  changeSelectedOptionColor2(filter) {
+    console.warn('filter color',filter)
+    if (filter.columnProp && filter.modelValue != "") {
+      document.getElementById(filter.columnProp+"ERROR2").style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp+"ERROR2").style.color = "white";
     }
   }
 
   filterChange(filter) {
       this.initSelectedCells();     // init selected cells
-    console.error("files",this.files)
+    console.error("files",this.fileError)
     console.error("filter",filter)
-    this.files = this.testFile.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
-    return this.files.filter(function (item) {
+    this.fileError = this.testFileError.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    return this.fileError.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+
+    });
+  }
+  filterChange2(filter) {
+    this.initSelectedCells();     // init selected cells
+    console.error("files",this.fileError2)
+    console.error("filter",filter)
+    this.fileError2 = this.testFileError2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    return this.fileError2.filter(function (item) {
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
 
     });
@@ -222,16 +244,24 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
     });
   }
+  getIntersection2(filter) {
+    return this.data2.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
 
   setFilteredItemsOptions(filter) {
     // check if filter is already selected
 
-    const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
+    const filterExists = this.filterValuesError.some(f => f.columnProp === filter.columnProp);
     this.changeSelectedOptionColor(filter);
-    if (filterExists == false) { this.filterValues.push(filter) }
+    if (filterExists == false) { this.filterValuesError.push(filter) }
     // if only one select is selected
-    if (this.filterValues.length == 1) {
-      this.files = this.filterChange(filter);
+    if (this.filterValuesError.length == 1) {
+      this.fileError = this.filterChange(filter);
+      this.data = this.fileError;
     }
     else {
 
@@ -241,8 +271,8 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         this.data = this.getIntersection(filter)
       }
       else {
-        this.data = this.files;
-        this.filterValues.forEach(element => {
+        this.data = this.fileError;
+        this.filterValuesError.forEach(element => {
           this.data = this.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
         this.data = this.data.filter((object, index) => index === this.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
@@ -253,21 +283,21 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     // if selected is deactivate
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
 
-      this.filterValues = this.filterValues.filter(item => item.columnProp != filter.columnProp);
-      if (this.filterValues.length == 0) {
-        this.data = this.testFile;
+      this.filterValuesError = this.filterValuesError.filter(item => item.columnProp != filter.columnProp);
+      if (this.filterValuesError.length == 0) {
+        this.data = this.testFileError;
         this.data = this.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
       }
-      else if (this.filterValues.length == 1) {
-        this.data = this.filterChange(this.filterValues[0])
+      else if (this.filterValuesError.length == 1) {
+        this.data = this.filterChange(this.filterValuesError[0])
       }
       else {
-        this.filterValues = this.filterValues.filter(function (item) {
+        this.filterValuesError = this.filterValuesError.filter(function (item) {
 
           return item.columnProp !== filter.columnProp;
         })
-        this.data = this.testFile;
-        this.filterValues.forEach(element => {
+        this.data = this.testFileError;
+        this.filterValuesError.forEach(element => {
           this.data = this.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
       }
@@ -275,7 +305,59 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     }
 
   }
+  setFilteredItemsOptions2(filter) {
+    // check if filter is already selected
 
+    const filterExists = this.filterValuesError2.some(f => f.columnProp === filter.columnProp);
+    this.changeSelectedOptionColor2(filter);
+    if (filterExists == false) { this.filterValuesError2.push(filter) }
+    // if only one select is selected
+    if (this.filterValuesError2.length == 1) {
+      this.fileError2 = this.filterChange2(filter);
+      this.data2= this.fileError2;
+    }
+    else {
+
+      // if already another select is active merge the results
+      if (filterExists == false) {
+
+        this.data2 = this.getIntersection2(filter)
+      }
+      else {
+        this.data2 = this.fileError2;
+        this.filterValuesError2.forEach(element => {
+          this.data2 = this.data2.filter(x => element.modelValue.includes(x[element.columnProp]));
+        });
+        this.data2 = this.data2.filter((object, index) => index === this.data2.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+      }
+
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "" || filter.modelValue.length == 0) {
+
+      this.filterValuesError2 = this.filterValuesError2 .filter(item => item.columnProp != filter.columnProp);
+      if (this.filterValuesError2 .length == 0) {
+        this.data2 = this.testFileError2;
+        this.data2 = this.data2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+      }
+      else if (this.filterValuesError2 .length == 1) {
+        this.data2 = this.filterChange2(this.filterValuesError2 [0])
+      }
+      else {
+        this.filterValuesError2  = this.filterValuesError2 .filter(function (item) {
+
+          return item.columnProp !== filter.columnProp;
+        })
+        this.data2 = this.testFileError2;
+        this.filterValuesError2.forEach(element => {
+          this.data2 = this.data2.filter(x => element.modelValue.includes(x[element.columnProp]));
+        });
+      }
+
+    }
+
+  }
 
   /**
     * @param rowId

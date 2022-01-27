@@ -41,6 +41,8 @@ export class DetailsFileMagistorComponent implements OnInit {
   copyerrorfileMagistor2: any;
   displayedColumns: any;
   displayedColumns2: any
+  displayedColumnsError: any;
+  displayedColumnsError2: any;
   public snackAction = 'Ok';
   public errorValidation = "Un fichier de même type existe"
   typeFileART: boolean = false;
@@ -214,17 +216,17 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.correctedErrorfileMagistor = this.copyerrorfileMagistor;
         this.testFile = this.copyerrorfileMagistor;   //copy to use on selection
         this.files = this.copyerrorfileMagistor;    // copy to filter *
-        this.displayedColumns = (Object.keys(this.copyerrorfileMagistor[0]));
-        this.displayedColumns.unshift(this.displayedColumns.pop());
+        this.displayedColumnsError = (Object.keys(this.copyerrorfileMagistor[0]));
+        this.displayedColumnsError.unshift(this.displayedColumnsError.pop());
         this.LAST_EDITABLE_ROW = this.copyerrorfileMagistor.length - 1;
-        this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
+        this.LAST_EDITABLE_COL = this.displayedColumnsError.length - 1;
 
         // initialize all selectedCellsState to false
         this.copyerrorfileMagistor.forEach(element => {
-          this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
+          this.selectedCellsState.push(Array.from({ length: this.displayedColumnsError.length - 1 }, () => false))
         });
         // get select options
-        this.displayedColumns.forEach(item => {
+        this.displayedColumnsError.forEach(item => {
           this.getOption(item);
         })
       }
@@ -243,8 +245,8 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyerrorfileMagistor2 = JSON.parse(JSON.stringify(this.errorfileMagistor2));
         this.copyerrorfileMagistor2.rows.splice(0, 0, this.copyerrorfileMagistor2.columns);
         this.copyerrorfileMagistor2 = this.convertToArrayOfObjects(this.copyerrorfileMagistor2.rows);
-        this.displayedColumns2 = (Object.keys(this.copyerrorfileMagistor2[0]));
-        this.displayedColumns2.unshift(this.displayedColumns2.pop());
+        this.displayedColumnsError2 = (Object.keys(this.copyerrorfileMagistor2[0]));
+        this.displayedColumnsError2.unshift(this.displayedColumnsError2.pop());
         this.correctedErrorfileMagistor2 = this.copyerrorfileMagistor2;
       }
       this.showLoader = false;
@@ -410,13 +412,10 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
   filterChange(filter) {
-    console.warn('tetsttstsFIle',this.testValidFile);
-    console.warn('*****0',this.filesValid)
     //  this.initSelectedCells();     // init selected cells
     this.filesValid = this.testValidFile.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
 
     return this.filesValid.filter(function (item) {
-      console.warn(filter.modelValue.indexOf(item[filter.columnProp]) !== -1);
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
 
     });
@@ -425,9 +424,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   filterChange2(filter) {
     //  this.initSelectedCells();     // init selected cells
     this.filesValid2 = this.testValidFile2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
-  console.warn("ffffff",this.filesValid2)
     return this.filesValid2.filter(function (item) {
-      console.warn(filter.modelValue.indexOf(item[filter.columnProp]) !== -1);
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
 
     });
@@ -702,19 +699,13 @@ export class DetailsFileMagistorComponent implements OnInit {
 
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
-    console.error('exists',filterExists)
     this.changeSelectedOptionColor(filter);
     if (filterExists == false) { this.filterValues.push(filter) }
-    console.warn('this.filterValues',this.filterValues)
 
     // if check and not uncheck
     if (filter.modelValue.length !== 0) {
       // if only one select is selected
       if (this.filterValues.length == 1) {
-        console.error(this.fileMagistor);
-        console.error(this.copyfileMagistor);
-        console.error(this.testValidFile);
-        console.error(this.filterValues)
         this.copyfileMagistor = this.filterChange(filter);
         if (this.copyfileMagistor.length>=1){
           this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
@@ -803,9 +794,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     if (filter.modelValue.length !== 0) {
       // if only one select is selected
       if (this.filterValues2.length == 1) {
-        console.log(filter, this.filterValues2)
         this.copyfileMagistor2 = this.filterChange2(filter);
-        console.error("*****",this.copyfileMagistor2);
         if (this.copyfileMagistor2.length>=1) {
           this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
         }

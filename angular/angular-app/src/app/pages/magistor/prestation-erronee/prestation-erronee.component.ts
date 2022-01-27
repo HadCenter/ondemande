@@ -93,7 +93,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
             this.data[i]['REMARQUE'] = this.data[i]['REMARQUE'].split(';').join('\n');
           }
         }
-        console.warn('data',this.data)
 
       }
       this.LAST_EDITABLE_ROW = this.data.length - 1;
@@ -111,7 +110,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
     if (this.prestationService.sheet2) {
       this.displayedColumns2 = (Object.keys(this.prestationService.sheet2[0]));
-      console.error("é/*/*/", this.displayedColumns2)
       if (!this.oneBloc) {
         this.displayedColumns2.unshift(this.displayedColumns2.pop());
         for (var i = 0; i < this.prestationService.sheet2.length; i++) {
@@ -120,7 +118,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
             this.prestationService.sheet2[i]['REMARQUE'] = this.prestationService.sheet2[i]['REMARQUE'].split(';').join('\n');
           }
         }
-        console.warn('data', this.data)
 
       }
       this.LAST_EDITABLE_ROW = this.prestationService.sheet2.length - 1;
@@ -170,7 +167,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         this.optionsError.push(obj);
       }
     })
-  console.warn("op1",this.optionsError)
+
   }
 
   getOption2(filter) {
@@ -189,13 +186,11 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         this.options2Error.push(obj);
       }
     })
-  console.warn("ops2",this.options2Error)
   }
 
  /* change color of the selected column header on file livraison*/
 
   changeSelectedOptionColor(filter) {
-    console.warn('filter color',filter)
     if (filter.columnProp && filter.modelValue != "") {
       document.getElementById(filter.columnProp+"ERROR").style.color = "#00bcd4";
     }
@@ -205,7 +200,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   }
 
   changeSelectedOptionColor2(filter) {
-    console.warn('filter color',filter)
     if (filter.columnProp && filter.modelValue != "") {
       document.getElementById(filter.columnProp+"ERROR2").style.color = "#00bcd4";
     }
@@ -216,8 +210,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
   filterChange(filter) {
       this.initSelectedCells();     // init selected cells
-    console.error("files",this.fileError)
-    console.error("filter",filter)
     this.fileError = this.testFileError.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
     return this.fileError.filter(function (item) {
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
@@ -226,8 +218,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   }
   filterChange2(filter) {
     this.initSelectedCells();     // init selected cells
-    console.error("files",this.fileError2)
-    console.error("filter",filter)
     this.fileError2 = this.testFileError2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
     return this.fileError2.filter(function (item) {
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
@@ -674,7 +664,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         console.log('--update: 22' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
         this.copyData = dataCopy;
-        console.log(this.copyData);
         this.changedDataEvent.emit(this.copyData);
 
       } else {

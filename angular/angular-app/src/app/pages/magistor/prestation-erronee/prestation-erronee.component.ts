@@ -143,8 +143,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
   test() {
     console.log(this.sheet1);
-    console.warn("1",this.data);
-    console.warn("2",this.data2)
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -544,9 +542,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       //this.openSnackBar('changement detecté dans la feuille 1', 'Fermé');
       if (this.tableMouseDown.cellsType === this.tableMouseUp.cellsType) {
         //convert every rows to object
-        console.log("rrrr1111111 = ", this.copyData);
         const dataCopy = this.copyData.slice();// copy and mutate
-        console.log("after slice111111     : ", dataCopy);
         let startCol: number;
         let endCol: number;
         let startRow: number;
@@ -599,7 +595,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
         this.copyData = dataCopy;
-        console.log(this.copyData);
         this.changedDataEvent.emit(this.copyData);
       } else {
         this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'Fermé');
@@ -626,7 +621,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
       if (this.tableMouseDown2.cellsType === this.tableMouseUp2.cellsType) {
         //convert every rows to object
-        console.log("rrrr = ", this.copyData);
         const dataCopy = this.copyData.slice();// copy and mutate
         console.log("after slice     : ", dataCopy);
         let startCol: number;

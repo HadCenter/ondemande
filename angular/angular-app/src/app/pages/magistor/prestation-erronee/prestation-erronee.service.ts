@@ -10,13 +10,27 @@ export class PrestationErroneeService {
   tableMouseUp2: any;
   tableMouseUp: any;
   LastTableClickedis1: boolean;
-  constructor() { }
+  i=0;
+  sheet2:any;
+  constructor() {
+
+  }
   setSheet1(data) {
     this.sheet1 = data;
   }
 
   isSheet1() {
     return this.sheet1;
+  }
+  saveData(data){
+    this.i++;
+    console.error(this.i)
+    if (this.i==1){
+      this.sheet1=data;
+    }
+    else if (this.i==2){
+      this.sheet2=data;
+    }
   }
 
   settableMouseDown2(data) {

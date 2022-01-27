@@ -22,8 +22,10 @@ export interface MouseEvent {
 export class DetailsFileMagistorComponent implements OnInit {
   file: any;
   testFile: any = [];
+  testFile2: any = [];
   files: any = [];
-  searchItems: any =[];
+  files2: any = [];
+  searchItems: any = [];
   filterValues: any = [];
   fileMagistor: any;
   errorfileMagistor: any;
@@ -41,6 +43,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   typeFileREC: boolean = false;
   typeFileCDC: boolean = false;
   options: any = [];
+  options2: any= [];
   tableMouseDown: MouseEvent;
   tableMouseUp: MouseEvent;
   newCellValue: string = '';
@@ -65,6 +68,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   validateClicked : boolean = false;
   dataChanged: boolean = false;
   dialogRef: MatDialogRef<ConfirmDialogComponent>;
+   filterValues2: any =[];
 
   constructor(private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
@@ -135,7 +139,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     console.log(data);
     this.fileService.getLogisticFileContent(data).subscribe(res => {
       this.fileMagistor = res;
-      console.log(this.fileMagistor.rows);
+      console.log("fileMagostore",this.fileMagistor);
       if (this.fileMagistor.rows.length > 0) {
         this.copyfileMagistor = JSON.parse(JSON.stringify(this.fileMagistor));
         this.copyfileMagistor.rows.splice(0, 0, this.copyfileMagistor.columns);
@@ -171,8 +175,13 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyfileMagistor2 = JSON.parse(JSON.stringify(this.fileMagistor2));
         this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);
         this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
+        this.testFile2 = this.copyfileMagistor2;   //copy to use on selection
+        this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
 
-        //this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
+         // get select options file Magistor 2
+                this.displayedColumns2.forEach(item => {
+                  this.getOption2(item);
+                })
       }
       if (this.file.number_annomalies == 0) {
         this.showLoader = false;
@@ -344,6 +353,24 @@ export class DetailsFileMagistorComponent implements OnInit {
     })
   }
 
+  getOption2(filter) {
+      let options = [];
+      options = this.testFile2.map((item) => item[filter]);
+      options = options.filter(function (value, index, options) {
+
+        return options.indexOf(value) == index && value !== "";
+      });
+      this.displayedColumns2.forEach((item, key) => {
+        if (item == filter) {
+          var obj = {
+            columnProp: item,
+            options: options
+          };
+          this.options2.push(obj);
+        }
+      })
+    }
+
 
   /**** Filter items on valid file */
   setFilteredItemsValid() {
@@ -360,7 +387,13 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
 
+  getIntersection2(filter) {
+    return this.copyfileMagistor2.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
 
+    });
+  }
 
 
   getIntersection(filter) {
@@ -373,8 +406,21 @@ export class DetailsFileMagistorComponent implements OnInit {
 
   filterChange(filter) {
     //  this.initSelectedCells();     // init selected cells
-    this.files = this.files.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    this.files = this.testFile.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+
     return this.files.filter(function (item) {
+      console.warn(filter.modelValue.indexOf(item[filter.columnProp]) !== -1);
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+
+    });
+  }
+
+  filterChange2(filter) {
+    //  this.initSelectedCells();     // init selected cells
+    this.files2 = this.testFile2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+  console.warn("ffffff",this.files2)
+    return this.files2.filter(function (item) {
+      console.warn(filter.modelValue.indexOf(item[filter.columnProp]) !== -1);
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
 
     });
@@ -389,6 +435,15 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
     else {
       document.getElementById(filter.columnProp).style.color = "white";
+    }
+  }
+
+  changeSelectedOptionColor2(filter) {
+    if (filter.columnProp && filter.modelValue != "") {
+      document.getElementById(filter.columnProp+"2").style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp+"2").style.color = "white";
     }
   }
 
@@ -610,39 +665,91 @@ export class DetailsFileMagistorComponent implements OnInit {
       horizontalPosition: 'center',
     });
   }
+
+  convertArrayofObjectsToEmptyRows (displayedColumns){
+    let output = {
+      columns: displayedColumns,
+      rows: [],
+
+    }
+    return output;
+  }
+  convertArrayofObjectToRowsColumns (arrayOfObject){
+
+    let output = {
+      columns: (Object.keys(arrayOfObject[0])),
+      rows: arrayOfObject.reduce((acc, obj) => [...acc, Object.values(obj).map(y => y)], []),
+    }
+    return output;
+  }
   setFilteredItemsOptions(filter) {
+
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
+    console.error('exists',filterExists)
     this.changeSelectedOptionColor(filter);
     if (filterExists == false) { this.filterValues.push(filter) }
-    // if only one select is selected
-    if (this.filterValues.length == 1) {
-      this.copyfileMagistor = this.filterChange(filter);
-    }
-    else {
-      // if already another select is active merge the results
-      if (filterExists == false) {
-        this.copyfileMagistor = this.getIntersection(filter)
-      }
-      else {
-        this.copyfileMagistor = this.files;
-        this.filterValues.forEach(element => {
-          this.copyfileMagistor = this.copyfileMagistor.filter(x => element.modelValue.includes(x[element.columnProp]));
-        });
-        this.copyfileMagistor = this.copyfileMagistor.filter((object, index) => index === this.copyfileMagistor.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-      }
-    }
+    console.warn('this.filterValues',this.filterValues)
 
+    // if check and not uncheck
+    if (filter.modelValue.length !== 0) {
+      // if only one select is selected
+      if (this.filterValues.length == 1) {
+        this.copyfileMagistor = this.filterChange(filter);
+        if (this.copyfileMagistor.length>=1){
+          this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+        }
+        else {
+         this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+        }
+
+      } else {
+        // if already another select is active merge the results
+        if (filterExists == false) {
+          this.copyfileMagistor = this.getIntersection(filter)
+            if (this.copyfileMagistor.length>=1){
+            this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+            }
+            else {
+              this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+            }
+        } else {
+          this.copyfileMagistor = this.files;
+          this.filterValues.forEach(element => {
+            this.copyfileMagistor = this.copyfileMagistor.filter(x => element.modelValue.includes(x[element.columnProp]));
+          });
+          this.copyfileMagistor = this.copyfileMagistor.filter((object, index) => index === this.copyfileMagistor.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+          if (this.copyfileMagistor.length>=1) {
+            this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+          }
+          else {
+            this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+          }
+        }
+      }
+    }
     // if selected is deactivate
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
-
       this.filterValues = this.filterValues.filter(item => item.columnProp != filter.columnProp);
       if (this.filterValues.length == 0) {
         this.copyfileMagistor = this.testFile;
         this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+        if (this.copyfileMagistor.length>=1) {
+          this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+        }
+        else {
+          this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+        }
+
       }
       else if (this.filterValues.length == 1) {
-        this.copyfileMagistor = this.filterChange(this.filterValues[0])
+        this.copyfileMagistor = this.filterChange(this.filterValues[0]);
+        if (this.copyfileMagistor.length>=1) {
+          this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+        }
+        else{
+          this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+        }
       }
       else {
         this.filterValues = this.filterValues.filter(function (item) {
@@ -653,11 +760,105 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.filterValues.forEach(element => {
           this.copyfileMagistor = this.copyfileMagistor.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
+        if (this.copyfileMagistor.length>=1) {
+          this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+        }
+        else{
+          this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+        }
       }
     }
 
   }
 
+  setFilteredItemsOptions2(filter) {
+
+    // check if filter is already selected
+    const filterExists = this.filterValues2.some(f => f.columnProp === filter.columnProp);
+    this.changeSelectedOptionColor2(filter);
+    if (filterExists == false) { this.filterValues2.push(filter) }
+
+
+    // if check and not uncheck
+    if (filter.modelValue.length !== 0) {
+      // if only one select is selected
+      if (this.filterValues2.length == 1) {
+        console.log(filter, this.filterValues2)
+        this.copyfileMagistor2 = this.filterChange2(filter);
+        console.error("*****",this.copyfileMagistor2);
+        if (this.copyfileMagistor2.length>=1) {
+          this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
+        }
+        else{
+          this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        }
+
+      } else {
+        // if already another select is active merge the results
+        if (filterExists == false) {
+          this.copyfileMagistor2 = this.getIntersection2(filter)
+          if (this.copyfileMagistor2.length>=1) {
+            this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
+          }
+          else{
+            this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+          }
+        } else {
+          this.copyfileMagistor2 = this.files2;
+          this.filterValues2.forEach(element => {
+            this.copyfileMagistor2 = this.copyfileMagistor2.filter(x => element.modelValue.includes(x[element.columnProp]));
+          });
+          this.copyfileMagistor2 = this.copyfileMagistor2.filter((object, index) => index === this.copyfileMagistor2.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+          if (this.copyfileMagistor2.length>=1) {
+            this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
+          }
+          else{
+            this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+          }
+        }
+      }
+    }
+    // if selected is deactivate
+    if (filter.modelValue == "" || filter.modelValue.length == 0) {
+      this.filterValues2 = this.filterValues2.filter(item => item.columnProp != filter.columnProp);
+      if (this.filterValues2.length == 0) {
+        this.copyfileMagistor2 = this.testFile2;
+        this.copyfileMagistor2 = this.copyfileMagistor2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+        if (this.copyfileMagistor2.length>=1) {
+          this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
+        }
+        else{
+          this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        }
+      }
+      else if (this.filterValues2.length == 1) {
+        this.copyfileMagistor2 = this.filterChange2(this.filterValues2[0]);
+        if (this.copyfileMagistor2.length>=1) {
+          this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
+        }
+        else{
+          this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        }
+      }
+      else {
+        this.filterValues2 = this.filterValues2.filter(function (item) {
+
+          return item.columnProp !== filter.columnProp;
+        })
+        this.copyfileMagistor2 = this.testFile2;
+        this.filterValues2.forEach(element => {
+          this.copyfileMagistor2 = this.copyfileMagistor2.filter(x => element.modelValue.includes(x[element.columnProp]));
+        });
+        if (this.copyfileMagistor2.length>=1) {
+          this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
+        }
+        else{
+          this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        }
+      }
+    }
+
+  }
 
   convertToArrayOfObjects(data) {
     var keys = data.shift(),

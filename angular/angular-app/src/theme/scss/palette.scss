@@ -7,7 +7,9 @@ $color-red: #f44336;
 $color-light-blue: #03a9f4;
 $color-blue: #4176fb;
 $color-orange: #ffc107;
+$color-orange2: #ffd700;
 $color-amber: #ff9800;
+$color-amber2: #af6900;
 $color-teal: #00bcd4;
 $color-purple: #7726d3;
 $color-green: #00d45a;
@@ -26,6 +28,7 @@ $color-secondary: rgb(244, 67, 54);
 $color-baby-blue: rgb(116, 199, 209);
 $color-cerulean: rgb(80, 150, 215);
 $color-mint: rgb(96, 196, 150);
+$color-dark-green: rgb(0, 119, 64);
 $color-grey-500: unquote("rgb(#{$palette-grey-500})");
 
 .text-color--smoke {
@@ -40,6 +43,9 @@ $color-grey-500: unquote("rgb(#{$palette-grey-500})");
 
 .color--dark-gray {
   background-color: $color-dark-gray;
+}
+.color--dark-green {
+  background-color: $color-dark-green;
 }
 
 .color--smooth-gray {
@@ -60,6 +66,14 @@ $color-grey-500: unquote("rgb(#{$palette-grey-500})");
 
 .color--orange {
   background-color: $color-orange !important;
+}
+
+.color--orange2 {
+  background-color: $color-orange2 !important;
+}
+
+.color--amber2 {
+  background-color: $color-amber2 !important;
 }
 
 .color-text--orange {
@@ -90,6 +104,14 @@ $color-grey-500: unquote("rgb(#{$palette-grey-500})");
   color: $color-light-blue !important;
 }
 
+.color--baby-blue {
+  background-color: $color-baby-blue !important;
+}
+
+.color-text--baby-blue {
+  color: $color-baby-blue !important;
+}
+
 .color--purple {
   background-color: $color-purple !important;
 }
@@ -104,4 +126,20 @@ $color-grey-500: unquote("rgb(#{$palette-grey-500})");
 
 .color-text--teal {
   color: $color-teal !important;
+}
+
+.color--mint {
+  background-color: $color-mint !important;
+}
+
+.color-text--mint {
+  color: $color-mint !important;
+}
+
+.color-text--dark-gray {
+  color: $color-dark-gray !important;
+}
+
+.color-text--black {
+  color: $color-black !important;
 }

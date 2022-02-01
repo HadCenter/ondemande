@@ -14,7 +14,7 @@ class TokenAuthMiddleware(MiddlewareMixin):
         view_name = '.'.join((view_func.__module__, view_func.__name__))
         print(view_name)
         # If the view name is in our exclusion list, exit early
-        exclusion_list=['accounts.api.LoginAPI','accounts.views.forgetPassword']
+        exclusion_list=['accounts.api.LoginAPI','accounts.views.forgetPassword','embededPowerBI.views.updatePowerBiRefreshButtonStatusWS','talendEsb.views.updateMetaDataFileInTableTransactionsLivraisonWS','core.views.updateMetaDataFileInTableCoreEDIFileWS','core.views.updateMetaDataFileInTableCoreLogisticFileWS']
         if view_name in exclusion_list:
             return None
 

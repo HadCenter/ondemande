@@ -31,11 +31,17 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   typeFileREC: boolean = false;
   typeFileCDC: boolean = false;
   displayedColumns: any;
+  shiftedDisplayedColumns: any;
+  shiftedDisplayedColumns2: any;
   selectedCellsState: boolean[][] = [
     // [false, false, false],
   ];
-  testFile: any;
-  options: any = [];
+  testFileError: any;
+  fileError: any = [];
+  optionsError: any = [];
+  testFileError2: any;
+  fileError2: any = [];
+  options2Error: any = [];
   copyData: any;
   tableMouseDown: MouseEvent;
   tableMouseUp: MouseEvent;
@@ -48,7 +54,10 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   FIRST_EDITABLE_COL: number = 0;                       // first column is not editable --> so start from index 1
   LAST_EDITABLE_COL: number = 0;
   clickCorrection: boolean = false;
-
+  filterValuesError: any = [];
+  filterValuesError2: any = [];
+  private displayedColumns2: string[];
+  private data2: any;
   constructor(private eRef: ElementRef,
     private prestationService: PrestationErroneeService,
     private _snackBar: MatSnackBar) {
@@ -56,12 +65,10 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
   }
   ngOnChanges(changes: SimpleChanges): void {
-    //console.log("changes happend");
-    console.log("data changes happend   ", changes.data.currentValue);
     this.data = changes.data.currentValue;
     this.originData = changes.originData.currentValue;
-    //throw new Error('Method not implemented.');
-    console.log("origindata changes happend   ", changes.originData.currentValue);
+
+    //this.prestationService.saveData(this.data)
 
   }
 
@@ -76,33 +83,67 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     else if (this.typeFile == "CDC01") {
       this.typeFileCDC = true;
     }
-    this.displayedColumns = (Object.keys(this.data[0]));
-    //si ce n'est pas un seul bloc alors affiche la colonne remarque en premier
-    if (!this.oneBloc) {
-      this.displayedColumns.unshift(this.displayedColumns.pop());
-      for (var i = 0; i < this.data.length; i++) {
-        //si ça contient plusieurs remarques alors affiche chaque remarque dans une ligne
-        if (this.data[i]['REMARQUE'].includes(";")) {
-          this.data[i]['REMARQUE'] = this.data[i]['REMARQUE'].split(';').join('\n');
+
+
+    if (this.sheet1) {
+
+      this.displayedColumns = (Object.keys(this.data[0]));
+      this.shiftedDisplayedColumns = (Object.keys(this.data[0]));
+      if (!this.oneBloc) {
+        this.displayedColumns.unshift(this.displayedColumns.pop());
+        this.shiftedDisplayedColumns.pop();
+        for (var i = 0; i < this.data.length; i++) {
+          //si ça contient plusieurs remarques alors affiche chaque remarque dans une ligne
+          if (this.data[i]['REMARQUE'].includes(";")) {
+            this.data[i]['REMARQUE'] = this.data[i]['REMARQUE'].split(';').join('\n');
+          }
         }
       }
+      this.LAST_EDITABLE_ROW = this.data.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
+      //this.data=this.prestationService.sheet1;
+      this.testFileError = this.data;  // copy to selection
+      this.fileError = this.data // copy to filter
+      // initialize all selectedCellsState to false
+      this.data.forEach(element => {
+        this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
+      });
+      this.displayedColumns.forEach(item => {
+        this.getOption(item);
+      })
+    } else {
+      this.data2 = this.data;
+      this.displayedColumns2 = (Object.keys(this.data2[0]));      
+      this.shiftedDisplayedColumns2 = (Object.keys(this.data2[0]));
+
+      if (!this.oneBloc) {
+        this.displayedColumns2.unshift(this.displayedColumns2.pop());
+        this.shiftedDisplayedColumns2.pop();
+
+        for (var i = 0; i < this.data2.length; i++) {
+          //si ça contient plusieurs remarques alors affiche chaque remarque dans une ligne
+          if (this.data2[i]['REMARQUE'].includes(";")) {
+            this.data2[i]['REMARQUE'] = this.data2[i]['REMARQUE'].split(';').join('\n');
+          }
+        }
+
+      }
+      this.LAST_EDITABLE_ROW = this.data2.length - 1;
+      this.LAST_EDITABLE_COL = this.displayedColumns2.length - 1;
+      this.testFileError2 = this.data2;  // copy to selection
+      this.fileError2 = this.data2 // copy to filter
+      // initialize all selectedCellsState to false
+      this.data2.forEach(element => {
+        this.selectedCellsState.push(Array.from({ length: this.displayedColumns2.length - 1 }, () => false))
+      });
+      this.displayedColumns2.forEach(item => {
+        this.getOption2(item);
+      })
     }
 
-    this.LAST_EDITABLE_ROW = this.data.length - 1;
-    this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
-    this.testFile = this.data;
-    // initialize all selectedCellsState to false
-    this.data.forEach(element => {
-      this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
-    });
-    this.displayedColumns.forEach(item => {
-      this.getOption(item);
-    })
   }
 
-  test() {
-    console.log(this.sheet1);
-  }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,
@@ -111,38 +152,216 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     });
   }
   /**
-    * Get options inside selects
+    * Get optionsError inside selects
     * @param filter
     */
   getOption(filter) {
-    let options = [];
-    options = this.testFile.map((item) => item[filter]);
-    options = options.filter(function (value, index, options) {
+    let optionsError = [];
+    optionsError = this.testFileError.map((item) => item[filter]);
+    optionsError = optionsError.filter(function (value, index, optionsError) {
 
-      return options.indexOf(value) == index && value !== "";
+      return optionsError.indexOf(value) == index && value !== "";
     });
     this.displayedColumns.forEach((item, key) => {
       if (item == filter) {
         var obj = {
           columnProp: item,
-          options: options
+          options: optionsError
         };
-        this.options.push(obj);
+        this.optionsError.push(obj);
+      }
+    })
+
+  }
+
+  getOption2(filter) {
+    let optionsError = [];
+    optionsError = this.testFileError2.map((item) => item[filter]);
+    optionsError = optionsError.filter(function (value, index, optionsError) {
+
+      return optionsError.indexOf(value) == index && value !== "";
+    });
+    this.displayedColumns2.forEach((item, key) => {
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: optionsError
+        };
+        this.options2Error.push(obj);
       }
     })
   }
+
+  /* change color of the selected column header on file livraison*/
+
+  changeSelectedOptionColor(filter) {
+    if (filter.columnProp && filter.modelValue != "") {
+      document.getElementById(filter.columnProp + "ERROR").style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp + "ERROR").style.color = "white";
+    }
+  }
+
+  changeSelectedOptionColor2(filter) {
+    if (filter.columnProp && filter.modelValue != "") {
+      document.getElementById(filter.columnProp + "ERROR2").style.color = "#00bcd4";
+    }
+    else {
+      document.getElementById(filter.columnProp + "ERROR2").style.color = "white";
+    }
+  }
+
+  filterChange(filter) {
+    this.initSelectedCells();     // init selected cells
+    this.fileError = this.testFileError;
+    return this.fileError.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+
+    });
+  }
+  filterChange2(filter) {
+    this.initSelectedCells();     // init selected cells
+    this.fileError2 = this.testFileError2;
+    return this.fileError2.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+
+    });
+  }
+  getIntersection(filter) {
+    return this.data.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+  getIntersection2(filter) {
+    return this.data2.filter(function (item) {
+      return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
+      // return item[filter.columnProp] == String(filter.modelValue);
+
+    });
+  }
+
+  setFilteredItemsOptions(filter) {
+    // check if filter is already selected
+
+    const filterExists = this.filterValuesError.some(f => f.columnProp === filter.columnProp);
+    this.changeSelectedOptionColor(filter);
+    if (filterExists == false) { this.filterValuesError.push(filter) }
+    // if only one select is selected
+    if (this.filterValuesError.length == 1) {
+      this.fileError = this.filterChange(filter);
+      this.data = this.fileError;
+    }
+    else {
+
+      // if already another select is active merge the results
+      if (filterExists == false) {
+
+        this.data = this.getIntersection(filter)
+      }
+      else {
+        this.data = this.fileError;
+        this.filterValuesError.forEach(element => {
+          this.data = this.data.filter(x => element.modelValue.includes(x[element.columnProp]));
+        });
+        this.data = this.data.filter((object, index) => index === this.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+      }
+
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "" || filter.modelValue.length == 0) {
+
+      this.filterValuesError = this.filterValuesError.filter(item => item.columnProp != filter.columnProp);
+      if (this.filterValuesError.length == 0) {
+        this.data = this.testFileError;
+        //this.data = this.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+      }
+      else if (this.filterValuesError.length == 1) {
+        this.data = this.filterChange(this.filterValuesError[0])
+      }
+      else {
+        this.filterValuesError = this.filterValuesError.filter(function (item) {
+
+          return item.columnProp !== filter.columnProp;
+        })
+        this.data = this.testFileError;
+        this.filterValuesError.forEach(element => {
+          this.data = this.data.filter(x => element.modelValue.includes(x[element.columnProp]));
+        });
+      }
+
+    }
+
+  }
+  setFilteredItemsOptions2(filter) {
+    // check if filter is already selected
+
+    const filterExists = this.filterValuesError2.some(f => f.columnProp === filter.columnProp);
+    this.changeSelectedOptionColor2(filter);
+    if (filterExists == false) { this.filterValuesError2.push(filter) }
+    // if only one select is selected
+    if (this.filterValuesError2.length == 1) {
+      this.fileError2 = this.filterChange2(filter);
+      this.data2 = this.fileError2;
+    }
+    else {
+
+      // if already another select is active merge the results
+      if (filterExists == false) {
+
+        this.data2 = this.getIntersection2(filter)
+      }
+      else {
+        this.data2 = this.fileError2;
+        this.filterValuesError2.forEach(element => {
+          this.data2 = this.data2.filter(x => element.modelValue.includes(x[element.columnProp]));
+        });
+        this.data2 = this.data2.filter((object, index) => index === this.data2.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+      }
+
+    }
+
+    // if selected is deactivate
+    if (filter.modelValue == "" || filter.modelValue.length == 0) {
+
+      this.filterValuesError2 = this.filterValuesError2.filter(item => item.columnProp != filter.columnProp);
+      if (this.filterValuesError2.length == 0) {
+        this.data2 = this.testFileError2;
+        //this.data2 = this.data2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+      }
+      else if (this.filterValuesError2.length == 1) {
+        this.data2 = this.filterChange2(this.filterValuesError2[0])
+      }
+      else {
+        this.filterValuesError2 = this.filterValuesError2.filter(function (item) {
+
+          return item.columnProp !== filter.columnProp;
+        })
+        this.data2 = this.testFileError2;
+        this.filterValuesError2.forEach(element => {
+          this.data2 = this.data2.filter(x => element.modelValue.includes(x[element.columnProp]));
+        });
+      }
+
+    }
+
+  }
+
   /**
     * @param rowId
     * @param colId
     * @param cellsType
     */
   onMouseDown(rowId: number, colId: number, cellsType: string) {
-    if (this.clickCorrection == false) {
+    if (this.clickCorrection == false && cellsType != 'REMARQUE') {
       //this.tableMouseDown = { rowId: rowId, colId: colId, cellsType: cellsType };
       this.prestationService.settableMouseDown({ rowId: rowId, colId: colId, cellsType: cellsType });
       this.prestationService.settableMouseUp2(undefined);
       this.prestationService.settableMouseDown2(undefined);
-      console.log("MOUSE 1 DOWN  ", this.prestationService.gettableMouseDown());
+      //console.log("MOUSE 1 DOWN  ", this.prestationService.gettableMouseDown());
     }
     else {  //disable click after click correction
       return false;
@@ -161,8 +380,8 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     this.prestationService.settableMouseUp2(undefined);
     this.prestationService.settableMouseDown2(undefined);
     //this.prestationService.setLastTableClicked(true);
-    if (this.clickCorrection == false) {
-      console.log("MOUSE 1 UP  ", this.prestationService.gettableMouseUp());
+    if (this.clickCorrection == false && cellsType != 'REMARQUE') {
+      //console.log("MOUSE 1 UP  ", this.prestationService.gettableMouseUp());
       //this.tableMouseUp = { rowId: rowId, colId: colId, cellsType: cellsType };
       this.prestationService.settableMouseUp({ rowId: rowId, colId: colId, cellsType: cellsType });
 
@@ -170,7 +389,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         this.newCellValue = '';
         if (document.querySelector('td.selected') !== null) {
           document.querySelector('td.selected').classList.remove('selected');
-          console.log("found selected and removed");
+          //console.log("found selected and removed");
           // this.tableMouseDown2 = undefined;
           // this.tableMouseUp2 = undefined;
           this.prestationService.settableMouseUp2(undefined);
@@ -179,15 +398,15 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
         }
         this.prestationService.setSheet1(true);
-        // this.updateSelectedCellsState(this.tableMouseDown.colId, 
-        //   this.tableMouseUp.colId, 
-        //   this.tableMouseDown.rowId, 
+        // this.updateSelectedCellsState(this.tableMouseDown.colId,
+        //   this.tableMouseUp.colId,
+        //   this.tableMouseDown.rowId,
         //   this.tableMouseUp.rowId);
         this.updateSelectedCellsState(this.prestationService.gettableMouseDown().colId,
           this.prestationService.gettableMouseUp().colId,
           this.prestationService.gettableMouseDown().rowId,
           this.prestationService.gettableMouseUp().rowId);
-        console.log("MOUSE 1 UP 2ND ", this.prestationService.gettableMouseUp());
+        //console.log("MOUSE 1 UP 2ND ", this.prestationService.gettableMouseUp());
 
       }
     }
@@ -235,7 +454,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       if (this.prestationService.gettableMouseDown2()) {
         if (document.querySelector('td.selected') !== null) {
           document.querySelector('td.selected').classList.remove('selected');
-          console.log("MOUSE 2 UP  ", "found selected and removed");
+          //console.log("MOUSE 2 UP  ", "found selected and removed");
           this.prestationService.settableMouseUp(undefined);
           this.prestationService.settableMouseDown(undefined);
 
@@ -316,9 +535,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       //this.openSnackBar('changement detecté dans la feuille 1', 'Fermé');
       if (this.tableMouseDown.cellsType === this.tableMouseUp.cellsType) {
         //convert every rows to object
-        console.log("rrrr1111111 = ", this.copyData);
         const dataCopy = this.copyData.slice();// copy and mutate
-        console.log("after slice111111     : ", dataCopy);
         let startCol: number;
         let endCol: number;
         let startRow: number;
@@ -342,14 +559,14 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
         //--Edit cells from the same column
         if (startCol === endCol) {
-          console.log(endCol, '  --Edit cells from the same column', startCol);
+          //console.log(endCol, '  --Edit cells from the same column', startCol);
           for (let i = startRow; i <= endRow; i++) {
             //change color after modify value
             this.copyData.forEach((element, index) => {
               if (index == i) {
                 if (element[element.startCol] !== dataCopy[i][this.originData.columns[startCol]]) {    // TO IMPROVE
                   var column = this.originData.columns[startCol];
-                  console.log("column : ", column);
+                  //console.log("column : ", column);
                   var container = document.querySelectorAll<HTMLElement>("#" + column + "magistor");
                   container[index].style.setProperty("color", "green", "important");
                 }
@@ -360,7 +577,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
           }
         } else {
           //--Edit cells starting and ending not on the same column
-          console.log('--Edit cells starting and ending not on the same column');
+          //console.log('--Edit cells starting and ending not on the same column');
 
           for (let i = startRow; i <= endRow; i++) {
             for (let j = startCol; j <= endCol; j++) {
@@ -368,10 +585,9 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
             }
           }
         }
-        console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
+        //console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
         this.copyData = dataCopy;
-        console.log(this.copyData);
         this.changedDataEvent.emit(this.copyData);
       } else {
         this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'Fermé');
@@ -398,9 +614,8 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
       if (this.tableMouseDown2.cellsType === this.tableMouseUp2.cellsType) {
         //convert every rows to object
-        console.log("rrrr = ", this.copyData);
         const dataCopy = this.copyData.slice();// copy and mutate
-        console.log("after slice     : ", dataCopy);
+        //console.log("after slice     : ", dataCopy);
         let startCol: number;
         let endCol: number;
         let startRow: number;
@@ -424,14 +639,14 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
         //--Edit cells from the same column
         if (startCol === endCol) {
-          console.log(endCol, '  --Edit cells from the same column 22', startCol);
+          //console.log(endCol, '  --Edit cells from the same column 22', startCol);
           for (let i = startRow; i <= endRow; i++) {
             //change color after modify value
             this.copyData.forEach((element, index) => {
               if (index == i) {
                 if (element[element.startCol] !== dataCopy[i][this.originData.columns[startCol]]) {    // TO IMPROVE
                   var column = this.originData.columns[startCol];
-                  console.log("column 2: ", column);
+                  //console.log("column 2: ", column);
                   var container = document.querySelectorAll<HTMLElement>("#" + column + "magistor2");
                   container[index].style.setProperty("color", "green", "important");
                 }
@@ -442,7 +657,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
           }
         } else {
           //--Edit cells starting and ending not on the same column
-          console.log('--Edit cells starting and ending not on the same column 22');
+          //console.log('--Edit cells starting and ending not on the same column 22');
 
           for (let i = startRow; i <= endRow; i++) {
             for (let j = startCol; j <= endCol; j++) {
@@ -450,10 +665,9 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
             }
           }
         }
-        console.log('--update: 22' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
+        //console.log('--update: 22' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
         this.copyData = dataCopy;
-        console.log(this.copyData);
         this.changedDataEvent.emit(this.copyData);
 
       } else {
@@ -484,7 +698,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   //   this.prestationService.settableMouseDown(undefined);
   //   this.prestationService.settableMouseUp(undefined);
 
-  //     }    
+  //     }
   //   }
   // }
   // }
@@ -515,7 +729,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
     //If no cell is selected then ignore keyUp event
     if (this.prestationService.isSheet1() && this.sheet1) {
-      console.log("ONKEY UP SHEET 1  ", this.sheet1 + " :: " + event.key);
+      //console.log("ONKEY UP SHEET 1  ", this.sheet1 + " :: " + event.key);
       // this.tableMouseDown2 = undefined;
       // this.tableMouseUp2 = undefined;
       this.prestationService.settableMouseDown2(undefined);
@@ -541,7 +755,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.prestationService.settableMouseDown(undefined);
       this.prestationService.settableMouseUp(undefined);
 
-      console.log("ONKEY UP SHEET 2  " + this.sheet1 + " :: " + event.key);
+      //console.log("ONKEY UP SHEET 2  " + this.sheet1 + " :: " + event.key);
       // console.log(JSON.stringify(this.tableMouseDown2) + " poop " + JSON.stringify(this.tableMouseUp2));
       if (this.prestationService.gettableMouseDown2() != undefined && this.prestationService.gettableMouseUp2() != undefined) {
         if (event.key === 'Backspace') { // 'delete' key is pressed

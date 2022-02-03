@@ -31,14 +31,16 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   typeFileREC: boolean = false;
   typeFileCDC: boolean = false;
   displayedColumns: any;
+  shiftedDisplayedColumns: any;
+  shiftedDisplayedColumns2: any;
   selectedCellsState: boolean[][] = [
     // [false, false, false],
   ];
   testFileError: any;
-  fileError:any =[];
+  fileError: any = [];
   optionsError: any = [];
   testFileError2: any;
-  fileError2:any =[];
+  fileError2: any = [];
   options2Error: any = [];
   copyData: any;
   tableMouseDown: MouseEvent;
@@ -63,13 +65,10 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
   }
   ngOnChanges(changes: SimpleChanges): void {
-    //console.log("changes happend");
-    console.log("data changes happend   ", changes.data.currentValue);
     this.data = changes.data.currentValue;
     this.originData = changes.originData.currentValue;
-    //throw new Error('Method not implemented.');
-    this.prestationService.saveData( this.data)
-    console.log("origindata changes happend   ", changes.originData.currentValue);
+
+    //this.prestationService.saveData(this.data)
 
   }
 
@@ -85,22 +84,26 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.typeFileCDC = true;
     }
 
+
+    if (this.sheet1) {
+
       this.displayedColumns = (Object.keys(this.data[0]));
+      this.shiftedDisplayedColumns = (Object.keys(this.data[0]));
       if (!this.oneBloc) {
         this.displayedColumns.unshift(this.displayedColumns.pop());
+        this.shiftedDisplayedColumns.pop();
         for (var i = 0; i < this.data.length; i++) {
           //si ça contient plusieurs remarques alors affiche chaque remarque dans une ligne
           if (this.data[i]['REMARQUE'].includes(";")) {
             this.data[i]['REMARQUE'] = this.data[i]['REMARQUE'].split(';').join('\n');
           }
         }
-
       }
       this.LAST_EDITABLE_ROW = this.data.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
-      this.data=this.prestationService.sheet1;
+      //this.data=this.prestationService.sheet1;
       this.testFileError = this.data;  // copy to selection
-      this.fileError=this.data // copy to filter
+      this.fileError = this.data // copy to filter
       // initialize all selectedCellsState to false
       this.data.forEach(element => {
         this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
@@ -108,39 +111,39 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.displayedColumns.forEach(item => {
         this.getOption(item);
       })
+    } else {
+      this.data2 = this.data;
+      this.displayedColumns2 = (Object.keys(this.data2[0]));      
+      this.shiftedDisplayedColumns2 = (Object.keys(this.data2[0]));
 
-    if (this.prestationService.sheet2) {
-      this.displayedColumns2 = (Object.keys(this.prestationService.sheet2[0]));
       if (!this.oneBloc) {
         this.displayedColumns2.unshift(this.displayedColumns2.pop());
-        for (var i = 0; i < this.prestationService.sheet2.length; i++) {
+        this.shiftedDisplayedColumns2.pop();
+
+        for (var i = 0; i < this.data2.length; i++) {
           //si ça contient plusieurs remarques alors affiche chaque remarque dans une ligne
-          if (this.prestationService.sheet2[i]['REMARQUE'].includes(";")) {
-            this.prestationService.sheet2[i]['REMARQUE'] = this.prestationService.sheet2[i]['REMARQUE'].split(';').join('\n');
+          if (this.data2[i]['REMARQUE'].includes(";")) {
+            this.data2[i]['REMARQUE'] = this.data2[i]['REMARQUE'].split(';').join('\n');
           }
         }
 
       }
-      this.LAST_EDITABLE_ROW = this.prestationService.sheet2.length - 1;
+      this.LAST_EDITABLE_ROW = this.data2.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumns2.length - 1;
-      this.data2 = this.prestationService.sheet2;
-      this.testFileError2 = this.prestationService.sheet2;  // copy to selection
-      this.fileError2 = this.prestationService.sheet2 // copy to filter
+      this.testFileError2 = this.data2;  // copy to selection
+      this.fileError2 = this.data2 // copy to filter
       // initialize all selectedCellsState to false
-      this.prestationService.sheet2.forEach(element => {
-        this.selectedCellsState.push(Array.from({length: this.displayedColumns2.length - 1}, () => false))
+      this.data2.forEach(element => {
+        this.selectedCellsState.push(Array.from({ length: this.displayedColumns2.length - 1 }, () => false))
       });
       this.displayedColumns2.forEach(item => {
         this.getOption2(item);
       })
     }
 
-    this.test()
   }
 
-  test() {
-    console.log(this.sheet1);
-  }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,
@@ -189,29 +192,29 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     })
   }
 
- /* change color of the selected column header on file livraison*/
+  /* change color of the selected column header on file livraison*/
 
   changeSelectedOptionColor(filter) {
     if (filter.columnProp && filter.modelValue != "") {
-      document.getElementById(filter.columnProp+"ERROR").style.color = "#00bcd4";
+      document.getElementById(filter.columnProp + "ERROR").style.color = "#00bcd4";
     }
     else {
-      document.getElementById(filter.columnProp+"ERROR").style.color = "white";
+      document.getElementById(filter.columnProp + "ERROR").style.color = "white";
     }
   }
 
   changeSelectedOptionColor2(filter) {
     if (filter.columnProp && filter.modelValue != "") {
-      document.getElementById(filter.columnProp+"ERROR2").style.color = "#00bcd4";
+      document.getElementById(filter.columnProp + "ERROR2").style.color = "#00bcd4";
     }
     else {
-      document.getElementById(filter.columnProp+"ERROR2").style.color = "white";
+      document.getElementById(filter.columnProp + "ERROR2").style.color = "white";
     }
   }
 
   filterChange(filter) {
-      this.initSelectedCells();     // init selected cells
-    this.fileError = this.testFileError.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    this.initSelectedCells();     // init selected cells
+    this.fileError = this.testFileError;
     return this.fileError.filter(function (item) {
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
 
@@ -219,7 +222,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   }
   filterChange2(filter) {
     this.initSelectedCells();     // init selected cells
-    this.fileError2 = this.testFileError2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+    this.fileError2 = this.testFileError2;
     return this.fileError2.filter(function (item) {
       return filter.modelValue.indexOf(item[filter.columnProp]) !== -1
 
@@ -274,7 +277,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.filterValuesError = this.filterValuesError.filter(item => item.columnProp != filter.columnProp);
       if (this.filterValuesError.length == 0) {
         this.data = this.testFileError;
-        this.data = this.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+        //this.data = this.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
       }
       else if (this.filterValuesError.length == 1) {
         this.data = this.filterChange(this.filterValuesError[0])
@@ -302,7 +305,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     // if only one select is selected
     if (this.filterValuesError2.length == 1) {
       this.fileError2 = this.filterChange2(filter);
-      this.data2= this.fileError2;
+      this.data2 = this.fileError2;
     }
     else {
 
@@ -324,16 +327,16 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     // if selected is deactivate
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
 
-      this.filterValuesError2 = this.filterValuesError2 .filter(item => item.columnProp != filter.columnProp);
-      if (this.filterValuesError2 .length == 0) {
+      this.filterValuesError2 = this.filterValuesError2.filter(item => item.columnProp != filter.columnProp);
+      if (this.filterValuesError2.length == 0) {
         this.data2 = this.testFileError2;
-        this.data2 = this.data2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
+        //this.data2 = this.data2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
       }
-      else if (this.filterValuesError2 .length == 1) {
-        this.data2 = this.filterChange2(this.filterValuesError2 [0])
+      else if (this.filterValuesError2.length == 1) {
+        this.data2 = this.filterChange2(this.filterValuesError2[0])
       }
       else {
-        this.filterValuesError2  = this.filterValuesError2 .filter(function (item) {
+        this.filterValuesError2 = this.filterValuesError2.filter(function (item) {
 
           return item.columnProp !== filter.columnProp;
         })
@@ -353,12 +356,12 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     * @param cellsType
     */
   onMouseDown(rowId: number, colId: number, cellsType: string) {
-    if (this.clickCorrection == false) {
+    if (this.clickCorrection == false && cellsType != 'REMARQUE') {
       //this.tableMouseDown = { rowId: rowId, colId: colId, cellsType: cellsType };
       this.prestationService.settableMouseDown({ rowId: rowId, colId: colId, cellsType: cellsType });
       this.prestationService.settableMouseUp2(undefined);
       this.prestationService.settableMouseDown2(undefined);
-      console.log("MOUSE 1 DOWN  ", this.prestationService.gettableMouseDown());
+      //console.log("MOUSE 1 DOWN  ", this.prestationService.gettableMouseDown());
     }
     else {  //disable click after click correction
       return false;
@@ -377,8 +380,8 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     this.prestationService.settableMouseUp2(undefined);
     this.prestationService.settableMouseDown2(undefined);
     //this.prestationService.setLastTableClicked(true);
-    if (this.clickCorrection == false) {
-      console.log("MOUSE 1 UP  ", this.prestationService.gettableMouseUp());
+    if (this.clickCorrection == false && cellsType != 'REMARQUE') {
+      //console.log("MOUSE 1 UP  ", this.prestationService.gettableMouseUp());
       //this.tableMouseUp = { rowId: rowId, colId: colId, cellsType: cellsType };
       this.prestationService.settableMouseUp({ rowId: rowId, colId: colId, cellsType: cellsType });
 
@@ -386,7 +389,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         this.newCellValue = '';
         if (document.querySelector('td.selected') !== null) {
           document.querySelector('td.selected').classList.remove('selected');
-          console.log("found selected and removed");
+          //console.log("found selected and removed");
           // this.tableMouseDown2 = undefined;
           // this.tableMouseUp2 = undefined;
           this.prestationService.settableMouseUp2(undefined);
@@ -403,7 +406,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
           this.prestationService.gettableMouseUp().colId,
           this.prestationService.gettableMouseDown().rowId,
           this.prestationService.gettableMouseUp().rowId);
-        console.log("MOUSE 1 UP 2ND ", this.prestationService.gettableMouseUp());
+        //console.log("MOUSE 1 UP 2ND ", this.prestationService.gettableMouseUp());
 
       }
     }
@@ -451,7 +454,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       if (this.prestationService.gettableMouseDown2()) {
         if (document.querySelector('td.selected') !== null) {
           document.querySelector('td.selected').classList.remove('selected');
-          console.log("MOUSE 2 UP  ", "found selected and removed");
+          //console.log("MOUSE 2 UP  ", "found selected and removed");
           this.prestationService.settableMouseUp(undefined);
           this.prestationService.settableMouseDown(undefined);
 
@@ -556,14 +559,14 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
         //--Edit cells from the same column
         if (startCol === endCol) {
-          console.log(endCol, '  --Edit cells from the same column', startCol);
+          //console.log(endCol, '  --Edit cells from the same column', startCol);
           for (let i = startRow; i <= endRow; i++) {
             //change color after modify value
             this.copyData.forEach((element, index) => {
               if (index == i) {
                 if (element[element.startCol] !== dataCopy[i][this.originData.columns[startCol]]) {    // TO IMPROVE
                   var column = this.originData.columns[startCol];
-                  console.log("column : ", column);
+                  //console.log("column : ", column);
                   var container = document.querySelectorAll<HTMLElement>("#" + column + "magistor");
                   container[index].style.setProperty("color", "green", "important");
                 }
@@ -574,7 +577,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
           }
         } else {
           //--Edit cells starting and ending not on the same column
-          console.log('--Edit cells starting and ending not on the same column');
+          //console.log('--Edit cells starting and ending not on the same column');
 
           for (let i = startRow; i <= endRow; i++) {
             for (let j = startCol; j <= endCol; j++) {
@@ -582,7 +585,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
             }
           }
         }
-        console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
+        //console.log('--update: ' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
         this.copyData = dataCopy;
         this.changedDataEvent.emit(this.copyData);
@@ -612,7 +615,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       if (this.tableMouseDown2.cellsType === this.tableMouseUp2.cellsType) {
         //convert every rows to object
         const dataCopy = this.copyData.slice();// copy and mutate
-        console.log("after slice     : ", dataCopy);
+        //console.log("after slice     : ", dataCopy);
         let startCol: number;
         let endCol: number;
         let startRow: number;
@@ -636,14 +639,14 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
         //--Edit cells from the same column
         if (startCol === endCol) {
-          console.log(endCol, '  --Edit cells from the same column 22', startCol);
+          //console.log(endCol, '  --Edit cells from the same column 22', startCol);
           for (let i = startRow; i <= endRow; i++) {
             //change color after modify value
             this.copyData.forEach((element, index) => {
               if (index == i) {
                 if (element[element.startCol] !== dataCopy[i][this.originData.columns[startCol]]) {    // TO IMPROVE
                   var column = this.originData.columns[startCol];
-                  console.log("column 2: ", column);
+                  //console.log("column 2: ", column);
                   var container = document.querySelectorAll<HTMLElement>("#" + column + "magistor2");
                   container[index].style.setProperty("color", "green", "important");
                 }
@@ -654,7 +657,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
           }
         } else {
           //--Edit cells starting and ending not on the same column
-          console.log('--Edit cells starting and ending not on the same column 22');
+          //console.log('--Edit cells starting and ending not on the same column 22');
 
           for (let i = startRow; i <= endRow; i++) {
             for (let j = startCol; j <= endCol; j++) {
@@ -662,7 +665,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
             }
           }
         }
-        console.log('--update: 22' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
+        //console.log('--update: 22' + startRow + ', ' + startCol + ' to ' + endRow + ', ' + endCol);
 
         this.copyData = dataCopy;
         this.changedDataEvent.emit(this.copyData);
@@ -726,7 +729,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
     //If no cell is selected then ignore keyUp event
     if (this.prestationService.isSheet1() && this.sheet1) {
-      console.log("ONKEY UP SHEET 1  ", this.sheet1 + " :: " + event.key);
+      //console.log("ONKEY UP SHEET 1  ", this.sheet1 + " :: " + event.key);
       // this.tableMouseDown2 = undefined;
       // this.tableMouseUp2 = undefined;
       this.prestationService.settableMouseDown2(undefined);
@@ -752,7 +755,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.prestationService.settableMouseDown(undefined);
       this.prestationService.settableMouseUp(undefined);
 
-      console.log("ONKEY UP SHEET 2  " + this.sheet1 + " :: " + event.key);
+      //console.log("ONKEY UP SHEET 2  " + this.sheet1 + " :: " + event.key);
       // console.log(JSON.stringify(this.tableMouseDown2) + " poop " + JSON.stringify(this.tableMouseUp2));
       if (this.prestationService.gettableMouseDown2() != undefined && this.prestationService.gettableMouseUp2() != undefined) {
         if (event.key === 'Backspace') { // 'delete' key is pressed

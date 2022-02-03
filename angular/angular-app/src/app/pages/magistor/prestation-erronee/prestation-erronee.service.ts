@@ -30,6 +30,7 @@ export class PrestationErroneeService {
     }
     else if (this.i==2){
       this.sheet2=data;
+      this.i=0;
     }
   }
 

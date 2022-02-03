@@ -63,10 +63,10 @@ export class PowerbiEmbeddedService {
             name: 'Type',
 
         },
-        // {
-        //     name: 'Dernière actualisation',
+        {
+            name: 'Dernière actualisation',
 
-        // },
+        },
         // {
         //     name: 'Statut',
 

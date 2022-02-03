@@ -16,7 +16,7 @@ import { PowerbiEmbeddedService } from './powerbi-embedded.service';
 export class PowerbiEmbeddedComponent implements OnInit {
   reports = [];
   copyReportsPerPagination = [];
-  show = true;
+  showLoader = true;
   canRefreshBD: boolean;
   public currentPage = 1;
   private countPerPage = 8;
@@ -62,26 +62,26 @@ export class PowerbiEmbeddedComponent implements OnInit {
     });
   }
 
-  getbtnRefreshDBState(){
+  getbtnRefreshDBState() {
     this.pbiService.getRefreshDBState().subscribe(res => {
-      if(res.status == "En cours" || res.status == "En attente"){
+      if (res.status == "En cours" || res.status == "En attente") {
         this.canRefreshBD = false;
-      }else{
+      } else {
         this.canRefreshBD = true;
       }
 
     })
   }
 
-  getbtnRefreshDBStateAndShowSnackBar(){
+  getbtnRefreshDBStateAndShowSnackBar() {
     this.pbiService.getRefreshDBState().subscribe(res => {
-      if(res.status == "En cours" || res.status == "En attente"){
+      if (res.status == "En cours" || res.status == "En attente") {
         this.canRefreshBD = false;
         this.openSnackBar("Actualisation de la base de données en cours... ", "Ok", 8000);
-      }else if (res.status == "Terminé"){
+      } else if (res.status == "Terminé") {
         this.canRefreshBD = true;
         this.openSnackBar("La base de données a été actualisé avec succès ", "Ok", 10000);
-      }else{
+      } else {
         this.canRefreshBD = true;
         this.openSnackBar("Une erreur est survenue lors de l'actualisation de la base de données, veuillez réessayer!", "Ok", 10000);
       }
@@ -200,19 +200,21 @@ export class PowerbiEmbeddedComponent implements OnInit {
         this.reports.shift(); //supprime le rapprt : Report Usage Metrics Report qui crée 
         this.reports.forEach((element, index, array) => {
           this.pbiService.getDatasetState(element.datasetId).subscribe(res => {
-            if(res.value.length > 0){
+            if (res.value.length > 0) {
               element.refreshDate = res.value[0].endTime;//retourne la derniere actualisation
-              element.refreshState = res.value[0].status;  
-            }else{
+              element.refreshState = res.value[0].status;
+            } else {
               element.refreshDate = "";
-              element.refreshState = "";  
+              element.refreshState = "";
+            }
+            if (index === array.length - 1) {
+              this.showLoader = false;
             }
           });
         });
         this.copyReportsPerPagination = this.reports;
         this.numPage = Math.ceil(res.value.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
-        this.show = false;
       },
         //error => console.log(error)
         );

@@ -323,17 +323,20 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
   getColor(ch) {
-    if (ch === 'En attente' || ch === 'à vérifier') {
+    if (ch === 'à vérifier') {
       return 'blue';
-    } else if (ch === 'Validé' || ch === 'Terminé') {
+    } else if (ch === 'Terminé') {
       return 'green';
-    } else if (ch === 'En cours') {
-      return 'orange';
+    } else if (ch.toLowerCase() === 'en cours') {
+      return 'orange2 color-text--dark-gray';
+    }else if (ch === 'En attente') {
+      return 'amber color-text--dark-gray';
+    }else if (ch === 'Validé') {
+      return 'dark-green';
     } else {
       return 'red';
     }
   }
-
 
   /**
     * Get options inside selects

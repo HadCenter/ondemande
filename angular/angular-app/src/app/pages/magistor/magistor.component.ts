@@ -62,7 +62,7 @@ export class MagistorComponent implements OnInit {
       return 'blue';
     } else if (ch === 'Terminé') {
       return 'green';
-    } else if (ch === 'En cours') {
+    } else if (ch.toLowerCase() === 'en cours') {
       return 'orange2 color-text--dark-gray';
     }else if (ch === 'En attente') {
       return 'amber color-text--dark-gray';
@@ -223,7 +223,7 @@ export class MagistorComponent implements OnInit {
         file.ButtonValidateActivated=false;
         file.ButtonCorrecteActiveted =true;
         file.ButtonInvalidateActivated = true;
-        file.status ='Validé';
+        file.status ='en cours';
       }else if(res.message == "file validated echec"){
         this.openSnackBar(this.errorValidation,this.snackAction);
       }

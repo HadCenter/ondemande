@@ -23,6 +23,10 @@ body {
   padding-left: 20px;
   box-sizing: border-box;
 }
-
-
-
+.mat-dialog-container {
+  background: #444 !important;
+  overflow: hidden !important;
+}
+::ng-deep .mat-dialog-container {background: #444 !important;
+  overflow: hidden !important;
+}

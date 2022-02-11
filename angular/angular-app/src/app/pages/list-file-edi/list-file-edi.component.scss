@@ -99,7 +99,8 @@ span.mat-button-wrapper {
     color: white;
   }
   .mat-dialog-container {
-    background-color: #444;
+    background: #444 !important;
+    overflow: hidden !important;
 }
 
 .mat-dialog-title {

@@ -24,6 +24,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { CreateUserService } from './dialog/create-user.service';
 import { LoaderModule } from 'app/components/loader/loader.module';
 import { DetailsUserService } from './dialog-details-user/details-user.service';
+import { PowerbiEmbeddedService } from '../powerbi-embedded/powerbi-embedded.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 
@@ -53,12 +55,14 @@ import { DetailsUserService } from './dialog-details-user/details-user.service';
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    LoaderModule
+    LoaderModule,
+    MatAutocompleteModule
   ],
   providers: [
     UsersService,
     CreateUserService,
     DetailsUserService,
+    PowerbiEmbeddedService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
 })

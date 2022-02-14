@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/services';
 import { interpolateObject } from 'd3';
+import { DetailsUserService } from '../details-user/details-user.service';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { PowerbiEmbeddedService } from './powerbi-embedded.service';
 
@@ -37,12 +38,19 @@ export class PowerbiEmbeddedComponent implements OnInit {
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private pbiService: PowerbiEmbeddedService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private userService: DetailsUserService) { }
 
   ngOnInit() {
     this.getbtnRefreshDBState();
     this.getCapacityState(10000);
-    this.getReports();
+
+    if (JSON.parse(localStorage.getItem('currentUser')).role == "SuperAdmin") {
+      this.getReports();
+    } else {
+      this.getUserReports();
+    };
+
     this.authService.userData.subscribe(user => this.user = user);
     this.listenToWebSocket();
 
@@ -219,6 +227,44 @@ export class PowerbiEmbeddedComponent implements OnInit {
         error => console.log(error));
   }
 
+  public getUserReports() {
+    var userIdReports = [];
+
+    this.pbiService.getUserReport(JSON.parse(localStorage.getItem('currentUser')).id)
+      .subscribe(res => {
+        //userIdReports = JSON.parse(localStorage.getItem('currentUser')).reports_id;
+        this.userService.get(JSON.parse(localStorage.getItem('currentUser')).id).subscribe(user => {
+          userIdReports = user.reports_id
+          res.forEach(element => {
+            if (userIdReports.includes(element.id)) {
+              this.reports.push(element);
+            }
+          });
+          console.log(this.reports);
+          this.reports.forEach((element, index, array) => {
+            this.pbiService.getDatasetState(element.datasetId).subscribe(res => {
+              if (res.value.length > 0) {
+                element.refreshDate = res.value[0].endTime;//retourne la derniere actualisation
+                element.refreshState = res.value[0].status;
+              } else {
+                element.refreshDate = "";
+                element.refreshState = "";
+              }
+              if (index === array.length - 1) {
+                this.showLoader = false;
+              }
+            });
+          });
+          if (this.reports.length == 0) {
+            this.showLoader = false;
+          }
+          this.copyReportsPerPagination = this.reports;
+          this.numPage = Math.ceil(this.reports.length / this.countPerPage);
+          this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage);
+        });
+      },
+        error => console.log(error));
+  }
 
   public showDetailReport(row) {
     console.log(row.id);

@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 urlpatterns = [
     path("getSingleReport/<str:id>", views.getEmbedParamsForSingleReport, name = "get-single-report" ),
-    path("getAllReports/", views.getMultipleReports, name = "get-single-report" ),
+    path("getAllReports/", views.getMultipleReports, name = "get-all-reports" ),
+    path("getUserReports/<str:id>", views.getUserReports, name = "get-user-reports" ),
     path("getUserToken/", views.getUserToken, name = "get-user-token" ),
     path("resume/", views.resume, name = "resume-capacity" ),
     path("suspend/", views.suspend, name = "suspend-capacity" ),

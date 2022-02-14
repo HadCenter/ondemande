@@ -25,6 +25,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { PowerbiEmbeddedService } from './powerbi-embedded.service';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { DetailsUserService } from '../details-user/details-user.service';
 
 
 
@@ -58,6 +59,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
   ],
   providers: [
+    DetailsUserService,
     PowerbiEmbeddedService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],

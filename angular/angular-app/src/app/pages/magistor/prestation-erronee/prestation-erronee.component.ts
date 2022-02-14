@@ -140,6 +140,57 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   test() {
     console.log(this.sheet1);
   }
+ /**
+  * Reset filter
+  */
+  resetFiltre2() {
+    const rows = document.getElementsByClassName('titre-column-magistor') as HTMLCollectionOf<HTMLElement>;
+    console.log("rrrr",rows)
+    for (let i = 0; i < rows.length; i++) {
+      rows[i].style.color = 'white';
+    }
+    for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+      for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+        this.selectedCellsState[i][j] = false;
+      }
+    }
+    // reset the selected filtre
+    this.options2Error.forEach(element => {
+      if (element.hasOwnProperty("modelValue")) {
+        element.modelValue = ""
+      }
+    });
+    this.filterValuesError2 = [];
+    this.data2 = this.testFileError2;
+    this.data2 = this.data2.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
+  }
+
+   /**
+    * Reset filter
+    */
+    resetFiltre() {
+      const rows = document.getElementsByClassName('titre-column-magistor') as HTMLCollectionOf<HTMLElement>;
+      console.log("rrrr",rows)
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].style.color = 'white';
+      }
+      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+          this.selectedCellsState[i][j] = false;
+        }
+      }
+      // reset the selected filtre
+      this.optionsError.forEach(element => {
+        if (element.hasOwnProperty("modelValue")) {
+          element.modelValue = ""
+        }
+      });
+      this.filterValuesError = [];
+      this.data = this.testFileError;
+      this.data = this.data.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
+    }
+
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,

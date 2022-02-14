@@ -590,6 +590,43 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
   }
 
+
+ /**
+  * Reset filter
+  */
+  resetFiltre2() {
+    const rows = document.getElementsByClassName('details-line') as HTMLCollectionOf<HTMLElement>;
+    console.warn('rrr',rows)
+    for (let i = 0; i < rows.length; i++) {
+      rows[i].style.color = 'white';
+    }
+    for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+      for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+        this.selectedCellsState[i][j] = false;
+      }
+    }
+    // reset the selected filtre
+    this.options2.forEach(element => {
+      if (element.hasOwnProperty("modelValue")) {
+        element.modelValue = ""
+      }
+    });
+    this.filterValues2 = [];
+    this.copyfileMagistor2 = this.testValidFile2;
+    this.copyfileMagistor2 = this.copyfileMagistor2.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
+                if (this.copyfileMagistor2.length>=1){
+                  this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2)
+                }
+                else {
+                 this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+                }
+
+
+  }
+
+
+
+
   /**
   * Reset filter
   */
@@ -609,8 +646,15 @@ export class DetailsFileMagistorComponent implements OnInit {
       }
     });
     this.filterValues = [];
-    this.copyfileMagistor = this.testValidFile;
-    this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
+    this.fileMagistor = this.testValidFile;
+      this.copyfileMagistor = this.testValidFile;
+        this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
+            if (this.copyfileMagistor.length>=1){
+              this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+            }
+            else {
+             this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+            }
   }
   // reset the selected filtre
   this.options.forEach(element => {

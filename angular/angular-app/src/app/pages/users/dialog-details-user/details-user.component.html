@@ -12,7 +12,7 @@
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
             [class.is-invalid]="username.invalid && (username.dirty || username.touched)"
             [class.is-valid]="username.valid && (username.dirty || username.touched)">
-            <label for="username" style="color:gray; font: 13px Arial, sans-serif;">Name</label>
+            <label for="username" style="color:gray; font: 13px Arial, sans-serif;">Nom</label>
             <br>
             <input formControlName="username" (change)="onInputChange($event)" [(ngModel)]="currentUser.username"
               class="mdl-textfield__input" type="text" id="username">
@@ -41,7 +41,7 @@
           </div>
           <div>
             <mat-form-field appearance="fill">
-              <mat-select [(value)]="role"  formControlName="profile">
+              <mat-select [(value)]="role" formControlName="profile">
                 <mat-option value="Admin">Admin</mat-option>
                 <mat-option value="SuperAdmin">SuperAdmin</mat-option>
               </mat-select>
@@ -49,13 +49,14 @@
           </div>
           <div>
             <mat-form-field appearance="fill">
-              <mat-select [(value)]="activated"  formControlName="status">
+              <mat-select [(value)]="activated" formControlName="status">
                 <mat-option value="Actif">Actif</mat-option>
                 <mat-option value="Non actif">Non actif</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-          <div *ngIf="profile.value == 'Admin'">
+          <div *ngIf="profile.value == 'Admin'" style="display: grid">
+            <label style="color:gray; font: 13px Arial, sans-serif;">Rapport</label>
             <mat-form-field class="select-filter" appearance="fill">
               <input type="text" placeholder="{{
                 (selectedRapports?.length >0 ) ? selectedRapports?.length + ' rapports séléctionnés' : 'Sélectionner...'
@@ -69,6 +70,10 @@
                 </mat-checkbox>
               </mat-option>
             </mat-autocomplete>
+            <mat-checkbox [checked]="canUpdateCapacity" (change)="checkCapacity()" (click)="$event.stopPropagation()">
+              Actualisation de le capacité PowerBI
+            </mat-checkbox>
+
           </div>
 
         </div>

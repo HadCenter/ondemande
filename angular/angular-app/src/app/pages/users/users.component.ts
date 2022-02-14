@@ -287,7 +287,7 @@ export class DialogDetailsUser extends UpgradableComponent {
     public dialogRef: MatDialogRef<DialogDetailsUser>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     super();
-    this.currentUser = this.data.currentUser;
+    this.currentUser = Object.assign({},this.data.currentUser);;
     this.role = this.currentUser.role;
     this.activated = this.getStatus(this.currentUser.is_active);
     if (this.currentUser.reports_id) {

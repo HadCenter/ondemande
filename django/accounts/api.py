@@ -52,7 +52,7 @@ class RegisterAPI(generics.GenericAPIView):
 		base64_message = encodeToken
 		current_site = get_current_site(request)
 		current_site_domain = current_site.domain.split(':')[0]
-		absurl = f'http://{current_site_domain}/#/user-password?token={base64_message}'
+		absurl = f'http://{current_site_domain}/#/user-password?token={encodeToken}'
 		email_body = f'Bonjour,\n\nVotre compte onDemand a été créé le {date_time}.\n\n' \
 					 'Afin de confirmer la création de votre compte, nous vous invitons à cliquer sur ' + \
 					 absurl + '.\n\n'+\

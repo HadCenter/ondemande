@@ -3,12 +3,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
+import { PowerbiEmbeddedService } from '../powerbi-embedded/powerbi-embedded.service';
 import { DetailsUserService } from './dialog-details-user/details-user.service';
 import { CreateUserService } from './dialog/create-user.service';
 import { UsersService } from './users.service';
 
 export interface DialogData {
-  id: "0";
+  currentUser: User;
 }
 
 @Component({
@@ -58,7 +59,7 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
     }
     this.currentPage = this.copyUsersPerPagination.length > 0 ? 1 : 0;
     this.numPage = Math.ceil(this.copyUsersPerPagination.length / this.countPerPage);
-    this.advancedTable = this.copyUsersPerPagination.slice(0,this.countPerPage);
+    this.advancedTable = this.copyUsersPerPagination.slice(0, this.countPerPage);
   }
   filterItems(filterValue) {
     return this.users.filter((item) => {
@@ -70,12 +71,10 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
     this.usersService.getAllUsers()
       .subscribe(res => {
         this.users = res;
-        for(var i= 0; i < res.length; i++)
-        {
-          if(res[i].is_active == true)
-          {
+        for (var i = 0; i < res.length; i++) {
+          if (res[i].is_active == true) {
             res[i].status = "Actif"
-          }else{
+          } else {
             res[i].status = "Non actif"
           }
         }
@@ -119,11 +118,10 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
     });
   }
 
-  openUpdateUser(id) {
-    //console.log("id,", id)
+  openUpdateUser(user) {
     const dialogRef = this.matDialog.open(DialogDetailsUser, {
       data: {
-        id: id
+        currentUser: user
       }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -150,10 +148,16 @@ export class DialogCreateUser extends UpgradableComponent {
   public error: string;
   public listItems: Array<string> = ["Admin", "SuperAdmin"];
   showloader = false;
+  allComplete: boolean = false;
+  rapportControl = new FormControl();
+  selectedRapports = new Array<any>();
+  public rapports = [];
+
   constructor(private createuserService: CreateUserService,
     public dialogRef: MatDialogRef<DialogCreateUser>,
     private fb: FormBuilder,
-    private router: Router) {
+    private router: Router,
+    private pbi: PowerbiEmbeddedService) {
     super();
 
     this.signupForm = this.fb.group({
@@ -170,9 +174,33 @@ export class DialogCreateUser extends UpgradableComponent {
   }
 
   public ngOnInit() {
+    this.pbi.getAllReports().subscribe(res => {
+      this.rapports = res.value;
+      this.rapports.shift();
+      this.rapports.forEach(element => {
+        element.selected = false;
+      });
+      console.log(this.rapports);
+    })
     this.signupForm.valueChanges.subscribe(() => {
       this.error = null;
     });
+  }
+
+  toggleSelection(rapport) {
+    rapport.selected = !rapport.selected;
+    if (rapport.selected) {
+      this.selectedRapports.push(rapport.id);
+    } else {
+      const i = this.selectedRapports.findIndex(
+        value =>
+          value.id === rapport.id
+      );
+      this.selectedRapports.splice(i, 1);
+    }
+    //this.selectedClientsNames = this.selectedClients.map(client => client.clientName);
+    this.rapportControl.setValue('');
+    console.log(this.selectedRapports);
   }
   public onInputChange(event) {
     event.target.required = true;
@@ -183,6 +211,8 @@ export class DialogCreateUser extends UpgradableComponent {
     formData.append('email', this.signupForm.get('email').value);
     formData.append('username', this.signupForm.get('username').value);
     formData.append('role', this.signupForm.get('role').value);
+    formData.append('reports_id', this.selectedRapports.toString());
+
     if (this.signupForm.valid) {
       this.showloader = true;
       this.createuserService.signup(formData)
@@ -193,11 +223,14 @@ export class DialogCreateUser extends UpgradableComponent {
           },
           error => {
             this.showloader = false;
-            this.error = "L'email est déja utilisé"; 
-            //console.log(error); 
+            this.error = "L'email est déja utilisé"; console.log(error);
           });
     }
   }
+  setAll(completed: boolean) {
+    console.log(completed);
+  }
+
 }
 
 export class User {
@@ -206,6 +239,7 @@ export class User {
   email?: string;
   is_active?: string;
   role?: string;
+  reports_id: string;
   last_login?: string;
 }
 
@@ -218,7 +252,8 @@ export class DialogDetailsUser extends UpgradableComponent {
     username: '',
     email: '',
     is_active: '',
-    role : '',
+    role: '',
+    reports_id: '',
     last_login: ''
   };
   public updateForm: FormGroup;
@@ -228,16 +263,28 @@ export class DialogDetailsUser extends UpgradableComponent {
   public status;
   public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
   public error: string;
-  public role: string;
-  public activated: string;
+  public role: string = "Admin";
+  public activated: string = "Non actif";
   public listItems: Array<string> = ["Admin", "SuperAdmin"];
   showloader = false;
-  constructor(private userService: DetailsUserService,
+  rapportControl = new FormControl();
+  selectedRapports = new Array<any>();
+  public rapports = [];
+
+  constructor(
+    private pbi: PowerbiEmbeddedService,
+    private userService: DetailsUserService,
     private fb: FormBuilder, private router: Router,
     private route: ActivatedRoute,
     public dialogRef: MatDialogRef<DialogDetailsUser>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     super();
+    this.currentUser = this.data.currentUser;
+    this.role = this.currentUser.role;
+    this.activated = this.getStatus(this.currentUser.is_active);
+    if (this.currentUser.reports_id) {
+      this.selectedRapports = this.currentUser.reports_id.split(',');
+    }
     this.updateForm = this.fb.group({
       username: new FormControl('', [
         Validators.required,
@@ -245,10 +292,10 @@ export class DialogDetailsUser extends UpgradableComponent {
       email: new FormControl('', [
         Validators.pattern(this.emailPattern),
       ]),
-      profile: new FormControl('', [
+      profile: new FormControl(this.role, [
         Validators.required,
       ]),
-      status: new FormControl('', [
+      status: new FormControl(this.activated, [
         Validators.required,
       ])
     });
@@ -260,9 +307,40 @@ export class DialogDetailsUser extends UpgradableComponent {
   }
 
   ngOnInit(): void {
-    this.getUser(this.data.id);
+    //this.getUser(this.data.currentUser.id);
+    this.pbi.getAllReports().subscribe(res => {
+      this.rapports = res.value;
+      this.rapports.shift();
+      this.rapports.forEach(element => {
+        if (this.selectedRapports.includes(element.id)) {
+          element.selected = true;
+
+        } else {
+          element.selected = false;
+        }
+      });
+    })
+
 
   }
+
+
+  toggleSelection(rapport) {
+    rapport.selected = !rapport.selected;
+    if (rapport.selected) {
+      this.selectedRapports.push(rapport.id);
+    } else {
+      const i = this.selectedRapports.findIndex(
+        value =>
+          value.id === rapport.id
+      );
+      this.selectedRapports.splice(i, 1);
+    }
+    //this.selectedClientsNames = this.selectedClients.map(client => client.clientName);
+    this.rapportControl.setValue('');
+    console.log(this.selectedRapports);
+  }
+
   public getStatus(is_active) {
     if (is_active === true) {
       return "Actif";
@@ -280,13 +358,17 @@ export class DialogDetailsUser extends UpgradableComponent {
       this.currentUser['is_active'] = 'false';
     }
     this.currentUser['role'] = this.role;
-    //console.log(this.currentUser);
+    this.currentUser['reports_id'] = this.selectedRapports.toString();
+    console.log(this.currentUser);
     this.showloader = true;
     this.userService.update(this.currentUser.id, this.currentUser)
       .subscribe(
         response => {
           this.showloader = false;
           this.dialogRef.close('submit');
+          if(JSON.parse(localStorage.getItem('currentUser')).id == this.currentUser.id){
+            localStorage.setItem('currentUser',JSON.stringify(this.currentUser));
+          }
         });
 
   }
@@ -298,6 +380,7 @@ export class DialogDetailsUser extends UpgradableComponent {
           this.currentUser = data;
           this.role = this.currentUser.role;
           this.activated = this.getStatus(this.currentUser.is_active);
+          this.selectedRapports = this.currentUser.reports_id.split(',');
         },
         error => {
           //console.log(error);

@@ -21,6 +21,11 @@ export class PowerbiEmbeddedService {
      }
    );
  }
+
+ getUserReport(id : string): Observable<any> {
+
+  return this.httpClient.get<any>(`${this.url}/getUserReports/${id}`);
+}
   getAllReports(): Observable<any> {
 
     return this.httpClient.get<any>(`${this.url}/getAllReports`);
@@ -52,7 +57,7 @@ export class PowerbiEmbeddedService {
     return this.httpClient.get<any>(`${this.url}/getPowerBiRefreshButtonStatus`);
   }
 
-
+  
   public getAdvancedHeaders() {
     return [
         {

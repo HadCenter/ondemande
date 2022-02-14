@@ -7,6 +7,9 @@ from requests.models import Response
 
 # Create your views here.
 from rest_framework.decorators import api_view
+from rest_framework.renderers import JSONRenderer
+
+from accounts.models import Account
 from .models import PowerBiRTLog
 from embededPowerBI.powerBIEmbedService import PbiEmbedService
 from .config import BaseConfig
@@ -37,13 +40,31 @@ def getMultipleReports(request):
     return HttpResponse(api_response, content_type="application/json")
 
 @api_view(['GET'])
+def getUserReports(request,id):
+    baseConfigInstance = BaseConfig()
+    powerBIEmbedServiceInstance = PbiEmbedService()
+    # response = powerBIEmbedServiceInstance.get_embed_params_for_multiple_reports(baseConfigInstance.WORKSPACE_ID,id)
+    # return HttpResponse(response, content_type="application/json")
+    report_url = f'https://api.powerbi.com/v1.0/myorg/groups/{baseConfigInstance.WORKSPACE_ID}/reports/'
+    api_response = requests.get(report_url, headers=powerBIEmbedServiceInstance.get_request_header())
+    response = json.loads(api_response.content)['value']
+    account = Account.objects.get(pk=id)
+    account_reports = []
+    if(account.reports_id):
+        account_reports = account.reports_id.split(',')
+    reports = []
+    for item in response:
+        if(item['id'] in account_reports):
+            reports.append(item)
+    return HttpResponse(JSONRenderer().render(reports), content_type="application/json")
+
+@api_view(['GET'])
 def getUserToken(request):
     aadService = AadService();
     if cache.get('my_token') is None:
         aadService.get_access_token()
 
     return cache.get('my_token')
-
 
 @api_view(['GET'])
 def resume(self):

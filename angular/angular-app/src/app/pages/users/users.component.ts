@@ -151,6 +151,8 @@ export class DialogCreateUser extends UpgradableComponent {
   rapportControl = new FormControl();
   selectedRapports = new Array<any>();
   public rapports = [];
+  public canUpdateCapacity: boolean = false;
+
 
   constructor(private createuserService: CreateUserService,
     public dialogRef: MatDialogRef<DialogCreateUser>,
@@ -204,6 +206,9 @@ export class DialogCreateUser extends UpgradableComponent {
   public onInputChange(event) {
     event.target.required = true;
   }
+  public checkCapacity(){
+    this.canUpdateCapacity = !this.canUpdateCapacity;
+  }
   public login() {
     this.error = null;
     const formData = new FormData();
@@ -211,6 +216,7 @@ export class DialogCreateUser extends UpgradableComponent {
     formData.append('username', this.signupForm.get('username').value);
     formData.append('role', this.signupForm.get('role').value);
     formData.append('reports_id', this.selectedRapports.toString());
+    formData.append('canUpdateCapacity', this.canUpdateCapacity.toString());
 
     if (this.signupForm.valid) {
       this.showloader = true;
@@ -239,6 +245,7 @@ export class User {
   is_active?: string;
   role?: string;
   reports_id: string;
+  canUpdateCapacity: boolean;
   last_login?: string;
 }
 
@@ -253,6 +260,7 @@ export class DialogDetailsUser extends UpgradableComponent {
     is_active: '',
     role: '',
     reports_id: '',
+    canUpdateCapacity: false,
     last_login: ''
   };
   public updateForm: FormGroup;
@@ -264,6 +272,7 @@ export class DialogDetailsUser extends UpgradableComponent {
   public error: string;
   public role: string = "Admin";
   public activated: string = "Non actif";
+  public canUpdateCapacity: boolean;
   public listItems: Array<string> = ["Admin", "SuperAdmin"];
   showloader = false;
   rapportControl = new FormControl();
@@ -284,6 +293,7 @@ export class DialogDetailsUser extends UpgradableComponent {
     if (this.currentUser.reports_id) {
       this.selectedRapports = this.currentUser.reports_id.split(',');
     }
+    this.canUpdateCapacity = this.currentUser.canUpdateCapacity;
     this.updateForm = this.fb.group({
       username: new FormControl('', [
         Validators.required,
@@ -323,7 +333,9 @@ export class DialogDetailsUser extends UpgradableComponent {
 
   }
 
-
+  public checkCapacity(){
+    this.canUpdateCapacity = !this.canUpdateCapacity;
+  }
   toggleSelection(rapport) {
     rapport.selected = !rapport.selected;
     if (rapport.selected) {
@@ -358,7 +370,7 @@ export class DialogDetailsUser extends UpgradableComponent {
     }
     this.currentUser['role'] = this.role;
     this.currentUser['reports_id'] = this.selectedRapports.toString();
-    console.log(this.currentUser);
+    this.currentUser['canUpdateCapacity'] = this.canUpdateCapacity;
     this.showloader = true;
     this.userService.update(this.currentUser.id, this.currentUser)
       .subscribe(

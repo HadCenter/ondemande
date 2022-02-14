@@ -48,7 +48,7 @@
           [bg]="'transparant'" [show]="btnClicked"></app-loader> -->
 
       </button>
-      <button *ngIf="(user.role == 'SuperAdmin') && (capacityState == 'Succeeded' || capacityState == 'Pausing' )"
+      <button *ngIf="(user.role == 'SuperAdmin' || user.canUpdateCapacity) && (capacityState == 'Succeeded' || capacityState == 'Pausing' )"
         matTooltip="Statut actuel : actif" (click)="openConfirmDialog('suspendre')"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
         [disabled]="btnClicked">Suspendre capacité

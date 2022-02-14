@@ -15,7 +15,7 @@ class LoginSerializer(serializers.Serializer):
 class RegisterSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Account
-		fields = ('id', 'email', 'username', 'password', 'role', 'created_at','reports_id')
+		fields = ('id', 'email', 'username', 'password', 'role', 'created_at','reports_id','canUpdateCapacity')
 		extra_kwargs = {'password': {'write_only': True}}
 
 	def create(self, validated_data):
@@ -26,13 +26,14 @@ class RegisterSerializer(serializers.ModelSerializer):
 			role = validated_data["role"],
 			created_at=validated_data["created_at"],
 			reports_id=validated_data["reports_id"],
+			canUpdateCapacity=validated_data["canUpdateCapacity"],
 		)
 		return user
 
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Account
-		fields = ('id','email','username','is_active','role','reports_id' )
+		fields = ('id','email','username','is_active','role','reports_id','canUpdateCapacity' )
 
 
 

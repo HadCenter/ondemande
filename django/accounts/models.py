@@ -12,6 +12,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)
     role = models.CharField(max_length=200)
     created_at = models.DateTimeField(null=True)
+    reports_id = models.CharField(blank=True,null=True,max_length=20000)
     is_superuser = None
     last_login = None
     USERNAME_FIELD = 'email'

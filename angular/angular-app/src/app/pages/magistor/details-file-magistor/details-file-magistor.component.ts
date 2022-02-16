@@ -26,11 +26,14 @@ export class DetailsFileMagistorComponent implements OnInit {
   testValidFile: any = [];
   testValidFile2: any = [];
   files: any = [];
+  filesError:any =[];
   files2: any = [];
   filesValid: any = [];
   filesValid2: any = [];
   searchItems: any = [];
   filterValues: any = [];
+   public filterValue: any;
+   filterValue2:any;
   fileMagistor: any;
   errorfileMagistor: any;
   fileMagistor2: any;
@@ -183,6 +186,7 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);
         this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
         this.testValidFile2 = this.copyfileMagistor2;   //copy to use on selection
+          this.files2 = this.copyfileMagistor2;    // copy to filter *
         this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
 
          // get select options file Magistor 2
@@ -215,7 +219,7 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyerrorfileMagistor = this.convertToArrayOfObjects(this.copyerrorfileMagistor.rows);
         this.correctedErrorfileMagistor = this.copyerrorfileMagistor;
         this.testFile = this.copyerrorfileMagistor;   //copy to use on selection
-        this.files = this.copyerrorfileMagistor;    // copy to filter *
+        this.filesError = this.copyerrorfileMagistor;    // copy to filter *
         this.displayedColumnsError = (Object.keys(this.copyerrorfileMagistor[0]));
         this.displayedColumnsError.unshift(this.displayedColumnsError.pop());
         this.LAST_EDITABLE_ROW = this.copyerrorfileMagistor.length - 1;
@@ -381,9 +385,16 @@ export class DetailsFileMagistorComponent implements OnInit {
 
   /**** Filter items on valid file */
   setFilteredItemsValid() {
-    this.copyfileMagistor = this.filterItemsValid(this.searchItems);
-    if (this.searchItems === '') {
+    this.copyfileMagistor = this.filterItemsValid(this.filterValue);
+     if (this.copyfileMagistor.length>=1){
+                      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+                    }
+                     else {
+                     this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+                     }
+    if (this.filterValue === '') {
       this.copyfileMagistor = this.copyfileMagistor;
+  this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
     }
   }
 
@@ -392,10 +403,34 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
   filterItemsValid(filterValue: string) {
-    return this.filesValid.filter((item) => {
+    return this.files.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
+
+
+  /**** Filter items on valid file */
+    setFilteredItemsValid2() {
+      this.copyfileMagistor2 = this.filterItemsValid2(this.filterValue2);
+       if (this.copyfileMagistor2.length>=1){
+                        this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2)
+                      }
+                       else {
+                       this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+                       }
+      if (this.filterValue2 === '') {
+        this.copyfileMagistor2 = this.copyfileMagistor2;
+
+      }
+    }
+
+
+
+    filterItemsValid2(filterValue2: string) {
+      return this.files2.filter((item) => {
+        return JSON.stringify(item).toLowerCase().includes(filterValue2.toLowerCase());
+      });
+    }
 
 
   getIntersection2(filter) {
@@ -600,7 +635,6 @@ export class DetailsFileMagistorComponent implements OnInit {
   */
   resetFiltre2() {
     const rows = document.getElementsByClassName('details-line') as HTMLCollectionOf<HTMLElement>;
-    console.warn('rrr',rows)
     for (let i = 0; i < rows.length; i++) {
       rows[i].style.color = 'white';
     }
@@ -636,7 +670,6 @@ export class DetailsFileMagistorComponent implements OnInit {
   */
   resetFiltre() {
     const rows = document.getElementsByClassName('details-line') as HTMLCollectionOf<HTMLElement>;
-    console.warn('rrr',rows)
     for (let i = 0; i < rows.length; i++) {
       rows[i].style.color = 'white';
     }

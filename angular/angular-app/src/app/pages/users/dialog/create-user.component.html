@@ -38,7 +38,8 @@
               </span>
             </div>
           </div>
-          <div>
+          
+          <div style="margin-top:6px;" >
             <mat-form-field appearance="fill">
               <mat-label>Rôle</mat-label>
               <mat-select formControlName="role">
@@ -60,8 +61,8 @@
             </mat-form-field>
           </div> -->
           <div *ngIf="role.value == 'Admin'" style="display: grid"
-            class="mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--6-col-phone">
-            <label class="select-label">Rapport</label>
+            class="">
+            <label style="color:gray;">Rapport</label>
             <mat-form-field class="select-filter" appearance="fill">
               <input type="text" placeholder="{{
                   (selectedRapports?.length >0 ) ? selectedRapports?.length + ' rapports séléctionnés' : 'Sélectionner...'
@@ -75,6 +76,9 @@
                 </mat-checkbox>
               </mat-option>
             </mat-autocomplete>
+            <mat-checkbox [checked]="canUpdateCapacity" (change)="checkCapacity()" (click)="$event.stopPropagation()">
+              Actualisation de le capacité PowerBI
+            </mat-checkbox>
           </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">

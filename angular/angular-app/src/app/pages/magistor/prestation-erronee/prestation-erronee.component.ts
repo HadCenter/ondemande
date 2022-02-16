@@ -25,7 +25,8 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   @Input() originData: any;
   @Output() changedDataEvent = new EventEmitter<any>();
   @ViewChild('check') check: ElementRef;
-
+  filterValueError: any;
+  filterValueError2: any;
   typeFileART: boolean = false;
   typeFileREC: boolean = false;
   typeFileCDC: boolean = false;
@@ -150,7 +151,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   */
   resetFiltre2() {
     const rows = document.getElementsByClassName('titre-column-magistor') as HTMLCollectionOf<HTMLElement>;
-    console.log("rrrr",rows)
     for (let i = 0; i < rows.length; i++) {
       rows[i].style.color = 'white';
     }
@@ -175,7 +175,6 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     */
     resetFiltre() {
       const rows = document.getElementsByClassName('titre-column-magistor') as HTMLCollectionOf<HTMLElement>;
-      console.log("rrrr",rows)
       for (let i = 0; i < rows.length; i++) {
         rows[i].style.color = 'white';
       }
@@ -294,6 +293,43 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
     });
   }
+
+
+   /**** Filter items on error file */
+    setFilteredItemsError() {
+      this.data = this.filterItemsError(this.filterValueError);
+      if (this.filterValueError === '') {
+        this.data = this.data;
+
+      }
+    }
+
+
+    filterItemsError(filterValueError: string) {
+      return this.fileError.filter((item) => {
+        return JSON.stringify(item).toLowerCase().includes(filterValueError.toLowerCase());
+      });
+    }
+
+
+ /**** Filter items on error file */
+    setFilteredItemsError2() {
+      this.data2 = this.filterItemsError2(this.filterValueError2);
+      if (this.filterValueError2 === '') {
+        this.data2 = this.data2;
+
+      }
+    }
+
+
+    filterItemsError2(filterValueError2: string) {
+      return this.fileError2.filter((item) => {
+        return JSON.stringify(item).toLowerCase().includes(filterValueError2.toLowerCase());
+      });
+    }
+
+
+
 
   setFilteredItemsOptions(filter) {
     // check if filter is already selected

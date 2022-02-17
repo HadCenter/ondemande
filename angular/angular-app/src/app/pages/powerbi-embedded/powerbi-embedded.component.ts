@@ -51,7 +51,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
       this.getUserReports();
     };
 
-    this.authService.userData.subscribe(user => this.user = user);
+    //this.authService.userData.subscribe(user => this.user = user);
     this.listenToWebSocket();
 
   }
@@ -235,7 +235,8 @@ export class PowerbiEmbeddedComponent implements OnInit {
       .subscribe(res => {
         //userIdReports = JSON.parse(localStorage.getItem('currentUser')).reports_id;
         this.userService.get(JSON.parse(localStorage.getItem('currentUser')).id).subscribe(user => {
-          userIdReports = user.reports_id
+          this.user = user;
+          userIdReports = user.reports_id;
           res.forEach(element => {
             if (userIdReports.includes(element.id)) {
               this.reports.push(element);

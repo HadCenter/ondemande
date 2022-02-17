@@ -193,7 +193,7 @@
                       <thead>
                         <tr>
                           <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
-                            class="details-line-2 mdl-data-table__cell--non-numeric">
+                            class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options2[i].modelValue"

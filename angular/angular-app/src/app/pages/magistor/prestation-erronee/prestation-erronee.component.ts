@@ -150,7 +150,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   * Reset filter
   */
   resetFiltre2() {
-    const rows = document.getElementsByClassName('titre-column-magistor') as HTMLCollectionOf<HTMLElement>;
+    const rows = document.getElementsByClassName('titre-column-magistor2') as HTMLCollectionOf<HTMLElement>;
     for (let i = 0; i < rows.length; i++) {
       rows[i].style.color = 'white';
     }

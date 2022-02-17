@@ -157,7 +157,7 @@
               <ng-container *ngFor="let column of displayedColumns2" matColumnDef="{{column}}">
                 <div *ngIf="column != 'REMARQUE'">
 
-                  <th class="titre-column-magistor" id="{{column}}ERROR2" mat-header-cell *matHeaderCellDef>
+                  <th class="titre-column-magistor2" id="{{column}}ERROR2" mat-header-cell *matHeaderCellDef>
                     {{column}}
                     <mat-form-field class="form-column" appearance="fill">
                       <mat-select multiple [(ngModel)]="options2Error[displayedColumns2.indexOf(column)].modelValue"

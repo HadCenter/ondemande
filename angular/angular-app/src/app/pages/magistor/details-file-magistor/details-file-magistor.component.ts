@@ -438,7 +438,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
   filterItemsValid(filterValue: string) {
-    return this.files.filter((item) => {
+    return this.copyfileMagistor.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
@@ -669,7 +669,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   * Reset filter
   */
   resetFiltre2() {
-    const rows = document.getElementsByClassName('details-line') as HTMLCollectionOf<HTMLElement>;
+    const rows = document.getElementsByClassName('details-line2') as HTMLCollectionOf<HTMLElement>;
     for (let i = 0; i < rows.length; i++) {
       rows[i].style.color = 'white';
     }

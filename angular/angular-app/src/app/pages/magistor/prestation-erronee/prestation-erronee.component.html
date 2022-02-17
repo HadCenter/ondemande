@@ -44,7 +44,8 @@
 
           <div class="content-table">
             <table mat-table id='mytable' [dataSource]="data"
-              class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
+              class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)"
+              [ngClass]="{'table-width-100': typeFileREC}">
 
               <!-- <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
                 <th class="titre-column-magistor" id="REMARQUEERROR" mat-header-cell *matHeaderCellDef>

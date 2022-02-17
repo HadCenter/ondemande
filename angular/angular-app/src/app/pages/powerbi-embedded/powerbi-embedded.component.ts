@@ -51,7 +51,7 @@ export class PowerbiEmbeddedComponent implements OnInit {
       this.getUserReports();
     };
 
-    //this.authService.userData.subscribe(user => this.user = user);
+    this.authService.userData.subscribe(user => this.user = user);
     this.listenToWebSocket();
 
   }

@@ -115,7 +115,7 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor" class="content-table">
+                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -190,7 +190,7 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor2" class="content-table">
+                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -238,11 +238,11 @@
 
         </div>
         <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
-          <app-prestation-erronee *ngIf="fileMagistor" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
+          <app-prestation-erronee *ngIf="fileMagistor.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
                                   [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc" (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
 
-          <app-prestation-erronee *ngIf="fileMagistor2" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
+          <app-prestation-erronee *ngIf="fileMagistor2.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
                                   [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc" (changedDataEvent)="changedData2($event)">
           </app-prestation-erronee>
 
@@ -281,7 +281,7 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor" class="content-table">
+                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -363,7 +363,7 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor2" class="content-table">
+                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -451,7 +451,7 @@
                   <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
                     [show]="!(fileMagistor )"></app-loader>
 
-                  <div *ngIf="fileMagistor" class="content-table">
+                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -528,7 +528,7 @@
                   <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
                     [show]="!(fileMagistor2 )"></app-loader>
 
-                  <div *ngIf="fileMagistor2" class="content-table">
+                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -618,7 +618,7 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor" class="content-table">
+                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -704,7 +704,7 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor2" class="content-table">
+                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -1009,7 +1009,7 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor" class="content-table">
+                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -1085,7 +1085,7 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor2" class="content-table">
+                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -1134,11 +1134,11 @@
         </div>
 
         <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
-          <app-prestation-erronee *ngIf="fileMagistor" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
+          <app-prestation-erronee *ngIf="fileMagistor.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
                                   [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc" (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
 
-          <app-prestation-erronee *ngIf="fileMagistor2" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
+          <app-prestation-erronee *ngIf="fileMagistor2.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
                                   [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc" (changedDataEvent)="changedData2($event)">
           </app-prestation-erronee>
 
@@ -1175,7 +1175,7 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor" class="content-table">
+                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
@@ -1259,7 +1259,7 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor2" class="content-table">
+                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>

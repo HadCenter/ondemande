@@ -139,17 +139,22 @@ def seeContentLogisticFile(logisticFileName, folderLogisticFile, logisticSheetNa
     sftp_client.chdir(folderLogisticFilePath)
     os.chdir("media/files")
     sftp_client.get(sftp_client.getcwd() + "/" + logisticFileName, os.getcwd() + "/" + logisticFileName)
-    excelLogisticFile = pd.read_excel(logisticFileName, sheet_name=logisticSheetName)
-    excelfile = excelLogisticFile.fillna('')
-    columns = list(excelfile.columns)
-    for column in columns:
-        if (excelfile[column].dtype == np.dtype('datetime64[ns]')):
-            excelfile[column] = excelfile[column].dt.strftime("%d/%m/%Y")
-    rows = excelfile.values.tolist()
-    os.remove(logisticFileName)
-    responseObject = FileExcelContent(columns, rows)
-    os.chdir(DJANGO_DIRECTORY)
-    return responseObject
+    try:
+        excelLogisticFile = pd.read_excel(logisticFileName, sheet_name=logisticSheetName)
+        excelfile = excelLogisticFile.fillna('')
+        columns = list(excelfile.columns)
+        for column in columns:
+            if (excelfile[column].dtype == np.dtype('datetime64[ns]')):
+                excelfile[column] = excelfile[column].dt.strftime("%d/%m/%Y")
+        rows = excelfile.values.tolist()
+        os.remove(logisticFileName)
+        responseObject = FileExcelContent(columns, rows)
+        os.chdir(DJANGO_DIRECTORY)
+        return responseObject
+    except Exception as e:
+        response = FileExcelContent([], [])
+        return response
+
 
 
 def readLogisticFileFromLocalHost(logisticFileName):

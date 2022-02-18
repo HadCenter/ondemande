@@ -148,8 +148,9 @@ export class DetailsFileMagistorComponent implements OnInit {
     console.log(data);
     this.fileService.getLogisticFileContent(data).subscribe(res => {
       this.fileMagistor = res;
-      console.log("fileMagostore",this.fileMagistor);
       if (this.fileMagistor.rows.length > 0) {
+        console.log(this.fileMagistor.rows.length + "   : fileMagostore",this.fileMagistor);
+
         this.copyfileMagistor = JSON.parse(JSON.stringify(this.fileMagistor));
         this.copyfileMagistor.rows.splice(0, 0, this.copyfileMagistor.columns);
         this.copyfileMagistor = this.convertToArrayOfObjects(this.copyfileMagistor.rows);
@@ -230,9 +231,9 @@ export class DetailsFileMagistorComponent implements OnInit {
           this.selectedCellsState.push(Array.from({ length: this.displayedColumnsError.length - 1 }, () => false))
         });
         // get select options
-        this.displayedColumnsError.forEach(item => {
-          this.getOption(item);
-        })
+       // this.displayedColumnsError.forEach(item => {
+        //  this.getOptionError(item);
+        //})
       }
     })
 
@@ -382,6 +383,44 @@ export class DetailsFileMagistorComponent implements OnInit {
       })
     }
 
+  /**
+    * Get options inside selects
+    * @param filter
+    */
+   getOptionError(filter) {
+    let options = [];
+    options = this.testFile.map((item) => item[filter]);
+    options = options.filter(function (value, index, options) {
+
+      return options.indexOf(value) == index && value !== "";
+    });
+    this.displayedColumnsError.forEach((item, key) => {
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: options
+        };
+        this.options.push(obj);
+      }
+    })
+  }
+  getOptionError2(filter) {
+    let options = [];
+    options = this.testFile2.map((item) => item[filter]);
+    options = options.filter(function (value, index, options) {
+
+      return options.indexOf(value) == index && value !== "";
+    });
+    this.displayedColumnsError2.forEach((item, key) => {
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: options
+        };
+        this.options2.push(obj);
+      }
+    })
+  }
 
   /**** Filter items on valid file */
   setFilteredItemsValid() {

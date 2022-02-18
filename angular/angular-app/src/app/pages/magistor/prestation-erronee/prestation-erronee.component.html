@@ -151,7 +151,7 @@
 
           <div class="content-table">
             <table mat-table id='mytable2' [dataSource]="data2"
-              class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp2($event)">
+              class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp2($event)">
 
 
               <ng-container *ngFor="let column of displayedColumns2" matColumnDef="{{column}}">

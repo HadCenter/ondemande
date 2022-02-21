@@ -49,6 +49,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   arrayException: any = [];
   arrayMetaData: any = [];
   arrayMad: any = [];
+  showLoader: boolean = false;
   showLoaderLivraisonFile = true;
   showLoaderExceptionFile = true;
   showLoaderMetadataFile = true;
@@ -1504,6 +1505,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (this.verifRangeDateBeforeCorrection()) {
       this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
     } else {
+      this.showLoader = true;
       if (this.dataSource.data.length > 0) {
         this.columnsLivraison = Object.keys(this.dataSource.data[0]);
         this.rowsLivraison = this.dataSource.data.map(Object.values);

@@ -141,20 +141,12 @@
             <mat-panel-title>
               Afficher Log
             </mat-panel-title>
-            <!-- <mat-panel-description>
-                        <button (click)='deleteRows("wrong");$event.stopPropagation();' id="deleteWrongBtn"
-                            [disabled]=" rowsToDelete?.length==0 || alreadyClicked==true" style="margin-right: 5px;"
-                            class=" delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Effacer
-                        </button>
-                        <button (click)='correctionFile();$event.stopPropagation();'
-                            [disabled]="file?.wrongCommands == '_' ||  alreadyClicked==true"
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
-                        </button>
-                        <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
-                            les filtres
-                        </button>
-                    </mat-panel-description> -->
+                    <mat-panel-description>
+                      <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
+                          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                          les filtres
+                      </button>
+                  </mat-panel-description>
           </mat-expansion-panel-header>
 
           <div class="content-table">

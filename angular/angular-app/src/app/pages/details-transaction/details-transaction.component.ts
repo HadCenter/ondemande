@@ -866,7 +866,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
     }
-   
+
     // if selected is deactivate
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
 
@@ -1357,7 +1357,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSourceMAD.data = dataCopy;
         }
       } else {
-        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'Fermé');
+        this.openSnackBar('Les cellules sélectionnées n\'ont pas le même type.', 'Fermé', 5000);
       }
     }
   }
@@ -1392,7 +1392,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 */
   correctionFile(index) {
     if (this.verifRangeDateBeforeCorrection()) {
-      this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
+      this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction, 6000);
     } else {
       this.hideUiSelectionOnCorrection();  //hide ui selection on correction
       if (index == "livraison") {  // correction file livraison
@@ -1412,7 +1412,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             rows: this.copyDataSource.map(Object.values),
           }
         }
-        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
         this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
           //console.log('resultat correction exception', res);
           if (res.message == "ok") {
@@ -1438,7 +1438,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             rows: this.copyDataSourceException.map(Object.values),
           }
         }
-        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
         this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
           if (res.message == "ok") {
             this.router.navigate(['/list-transaction']);
@@ -1463,7 +1463,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             rows: this.copyDataSourceMetaData.map(Object.values),
           }
         }
-        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
         this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
           if (res.message == "ok") {
             this.router.navigate(['/list-transaction']);
@@ -1488,7 +1488,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             rows: this.copyDataSourceMad.map(Object.values),
           }
         }
-        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
         this.service.correctMadFile(this.fileTocheck).subscribe(res => {
           if (res.message == "ok") {
             this.router.navigate(['/list-transaction']);
@@ -1503,7 +1503,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
  */
   correctionAllFile() {
     if (this.verifRangeDateBeforeCorrection()) {
-      this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
+      this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction,4000);
     } else {
       this.showLoader = true;
       if (this.dataSource.data.length > 0) {
@@ -1543,12 +1543,20 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       }
       console.warn('file to check', this.fileTocheck)
-      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
+      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
       this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
         if (res.message == "ok") {
           this.router.navigate(['/list-transaction']);
+        }else{
+          this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction,12000);
+          this.router.navigate(['/list-transaction']);
         }
-      })
+      },
+        err => {
+          this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction,12000);
+          this.router.navigate(['/list-transaction']);
+        }
+      )
     }
   }
   verifRangeDateBeforeCorrection() {
@@ -1588,9 +1596,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
     }
   }
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string, duration : number) {
     this._snackBar.open(message, action, {
-      duration: 4500,
+      duration: duration,
       verticalPosition: 'top',
       horizontalPosition: 'center',
     });

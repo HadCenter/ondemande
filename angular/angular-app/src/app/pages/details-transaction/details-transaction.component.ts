@@ -835,6 +835,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     }
   }
   setFilteredItemsOptions(filter) {
+    console.log(this.dataSource.data);
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
     //  let selected=filter.columnProp;
@@ -1507,20 +1508,20 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     } else {
       this.showLoader = true;
       if (this.dataSource.data.length > 0) {
-        this.columnsLivraison = Object.keys(this.dataSource.data[0]);
-        this.rowsLivraison = this.dataSource.data.map(Object.values);
+        this.columnsLivraison = Object.keys(this.copyDataSource[0]);
+        this.rowsLivraison = this.copyDataSource.map(Object.values);
       }
       if (this.dataSourceException.data.length > 0) {
-        this.columnsException = Object.keys(this.dataSourceException.data[0]);
-        this.rowsException = this.dataSourceException.data.map(Object.values);
+        this.columnsException = Object.keys(this.copyDataSourceException[0]);
+        this.rowsException = this.copyDataSourceException.map(Object.values);
       }
       if (this.dataSourceMetaData.data.length > 0) {
-        this.columnsMetaData = Object.keys(this.dataSourceMetaData.data[0]);
-        this.rowsMetaData = this.dataSourceMetaData.data.map(Object.values);
+        this.columnsMetaData = Object.keys(this.copyDataSourceMetaData[0]);
+        this.rowsMetaData = this.copyDataSourceMetaData.map(Object.values);
       }
       if (this.dataSourceMAD.data.length > 0) {
-        this.columnsMad = Object.keys(this.dataSourceMAD.data[0]);
-        this.rowsMad = this.dataSourceMAD.data.map(Object.values);
+        this.columnsMad = Object.keys(this.copyDataSourceMad[0]);
+        this.rowsMad = this.copyDataSourceMad.map(Object.values);
       }
       this.fileTocheck = {
         transaction_id: this.transaction.transaction_id,

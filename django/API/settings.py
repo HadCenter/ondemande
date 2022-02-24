@@ -180,6 +180,11 @@ LOGGING ={
             'handlers':['console','file'],
             'level':'DEBUG',
             'propagate': True,
+        },
+        'daphne':{
+            'handlers':['file'],
+            'level':'DEBUG',
+            'propagate': True,
         }
     },
     'handlers':{

@@ -175,8 +175,9 @@ LOGGING ={
     'version':1,
     'loggers':{
         'django':{
-            'handlers':['console'],
-            'level':'DEBUG'
+            'handlers':['console','file'],
+            'level':'DEBUG',
+            'propagate': True,
         }
     },
     'handlers':{
@@ -184,7 +185,13 @@ LOGGING ={
             'level':'INFO',
             'class': 'logging.StreamHandler',
             'formatter':'simpleRe',
-        }
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': "django.log",
+            'formatter': 'simpleRe',
+        },
     },
     'formatters':{
         'simpleRe': {

@@ -8,10 +8,12 @@ from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp
 from .transactionFileService import sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison
 from django.http import JsonResponse
+from API.settings import SECRET_KEY
+import jwt
 
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
-from .models import SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
+from .models import InterventionFacturationTransport, SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
 import pandas as pd
 import jsonpickle
 import os
@@ -196,6 +198,15 @@ def correctLivraisonFile(request):
 @api_view(['POST'])
 def correctAllFiles(request):
 	transaction_id = request.data['transaction_id']
+
+	token = request.META['HTTP_AUTHORIZATION'] # Get token
+	token = token.replace("Bearer ","")
+	response = jwt.decode(token,SECRET_KEY,algorithms="HS256")
+	interventionToSave = InterventionFacturationTransport()
+	interventionToSave.id_admin_id = response['id']
+	interventionToSave.id_transaction_id = transaction_id
+	interventionToSave.save()
+
 	transaction = TransactionsLivraison.objects.get(id=transaction_id)
 	transaction.statut = "En attente"
 	transaction.save()

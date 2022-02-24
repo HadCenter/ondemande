@@ -442,7 +442,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
   filterItemsValid(filterValue: string) {
-    return this.copyfileMagistor.filter((item) => {
+    return this.files.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValue.toLowerCase());
     });
   }

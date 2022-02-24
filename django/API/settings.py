@@ -177,15 +177,10 @@ LOGGING ={
     'version':1,
     'loggers':{
         'django':{
-            'handlers':['console','file'],
+            'handlers':['error'],
             'level':'DEBUG',
             'propagate': True,
         },
-        'daphne':{
-            'handlers':['file'],
-            'level':'DEBUG',
-            'propagate': True,
-        }
     },
     'handlers':{
         'console':{
@@ -194,15 +189,23 @@ LOGGING ={
             'formatter':'simpleRe',
         },
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': "django.log",
+            'filename': "daphne.log",
             'formatter': 'simpleRe',
         },
+        'error': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': "DaphneError.log",
+            'formatter': 'simpleRe',
+        },
+        
     },
     'formatters':{
         'simpleRe': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+
+            'format': 'daphne output {levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         }
 

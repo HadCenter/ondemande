@@ -198,6 +198,7 @@ def correctLivraisonFile(request):
 @api_view(['POST'])
 def correctAllFiles(request):
 	transaction_id = request.data['transaction_id']
+	transaction = TransactionsLivraison.objects.get(id=transaction_id)
 
 	token = request.META['HTTP_AUTHORIZATION'] # Get token
 	token = token.replace("Bearer ","")
@@ -207,9 +208,6 @@ def correctAllFiles(request):
 	interventionToSave.id_transaction_id = transaction_id
 	interventionToSave.save()
 
-	transaction = TransactionsLivraison.objects.get(id=transaction_id)
-	transaction.statut = "En attente"
-	transaction.save()
 	fileReplacementLivraison = request.data['fileReplacementLivraison']
 	fileReplacementMAD = request.data['fileReplacementMAD']
 	fileReplacementMetadata = request.data['fileReplacementMetadata']
@@ -256,6 +254,9 @@ def correctAllFiles(request):
 	jobs_to_start.append(madPlanJobList[4])
 
 	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id,jobs_to_start =jobs_to_start,destination_folder="to_correct")
+
+	transaction.statut = "En attente"
+	transaction.save()
 
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 

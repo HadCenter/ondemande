@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from core.models import AccountsAccount
 # Create your models here.
 
 class SendMadPostProcessPostObject:
@@ -45,6 +46,19 @@ class RabbitMqMessagesForJobToStart:
         self.webhook = webhook
         self.payloadToSendToTalend = payloadToSendToTalend
         self.environnement = environnement
+
+class InterventionFacturationTransport(models.Model):
+    id = models.IntegerField(primary_key=True)
+    id_admin = models.ForeignKey(AccountsAccount ,db_column="id_admin", on_delete= models.DO_NOTHING )
+    id_transaction = models.ForeignKey(TransactionsLivraison ,db_column="id_transaction", on_delete= models.CASCADE )
+    execution_time = models.DateTimeField(auto_now =True)
+
+    class Meta:
+        managed = False
+        db_table = 'intervention_Facturation_transport'
+
+
+
 
 @receiver(post_save, sender=TransactionsLivraison)
 def send_message_to_frontend_when_transactionFile_updated(sender, instance=None, created=False, **kwargs):

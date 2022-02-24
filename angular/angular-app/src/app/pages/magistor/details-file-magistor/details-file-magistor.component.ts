@@ -104,7 +104,7 @@ export class DetailsFileMagistorComponent implements OnInit {
           this.typeFileCDC = true;
           this.secondSheet = "LCD01";
         }
-        if (this.file.status == "En attente" || (this.file.status == "Validé" && this.file.number_annomalies == 0) || this.file.status == "Terminé") {
+        if (this.file.status == "En attente" || (this.file.status == "en cours" && this.file.number_annomalies == 0) || this.file.status == "Terminé") {
           this.oneBloc = true;
           this.fileName = this.file.logisticFileName.name;
         } else {
@@ -265,7 +265,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     this.errorfileMagistor = undefined;
     this.fileMagistor2 = undefined;
     this.errorfileMagistor2 = undefined;
-    if (this.file.status == "En attente" || (this.file.status == "Validé" && this.file.number_annomalies == 0) || this.file.status == "Terminé") {
+    if (this.file.status == "En attente" || (this.file.status == "en cours" && this.file.number_annomalies == 0) || this.file.status == "Terminé") {
       this.oneBloc = true;
       this.fileName = this.file.logisticFileName.name;
     } else {
@@ -304,7 +304,7 @@ export class DetailsFileMagistorComponent implements OnInit {
           this.typeFileCDC = true;
           this.secondSheet = "LCD01";
         }
-        if (this.file.status == "En attente" || (this.file.status == "Validé" && this.file.number_annomalies == 0) || this.file.status == "Terminé") {
+        if (this.file.status == "En attente" || (this.file.status == "en cours" && this.file.number_annomalies == 0) || this.file.status == "Terminé") {
           this.oneBloc = true;
           this.fileName = this.file.logisticFileName.name;
         } else {
@@ -1105,7 +1105,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     //console.log("copy rows : ", this.copyfileMagistor.map(Object.values));
     this.openSnackBar("Demande de modification envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck);
-    if (this.file.status == "Validé") {
+    if (this.file.status == "en cours") {
       this.fileService.correctAndValidateLogisticFile(this.fileTocheck).subscribe(res => {
         if (res.message == "file validated successfully") {
           this.actualiser2();
@@ -1135,7 +1135,7 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.file.ButtonValidateActivated = false;
         this.file.ButtonCorrecteActiveted = true;
         this.file.ButtonInvalidateActivated = true;
-        this.file.status = 'Validé';
+        this.file.status = 'en cours';
       } else if (res.message == "file validated echec") {
         this.openSnackBar(this.errorValidation, this.snackAction);
       }

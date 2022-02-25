@@ -466,7 +466,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         //Select automatique of column in Exception bloc
         this.copyFilterException.forEach(el => {
           if (element.taskId == el.taskId) {
-            el.toDelete = 1;
+            el.isDeleted = 1;
             if (!this.rowsToDeleteException.includes(el.taskId)) {
               this.rowsToDeleteException.push(el.taskId);
             }

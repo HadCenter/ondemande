@@ -446,7 +446,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           element.toDelete = 0;
           //UnSelect automatique of column in Exception bloc
           if (element.taskId == el.taskId) {
-            el.toDelete = 0;
+            el.isDeleted = 0;
             if (this.rowsToDeleteException.includes(el.taskId)) {
               this.rowsToDeleteException.splice(this.rowsToDeleteException.indexOf(el.taskId), 1);
 

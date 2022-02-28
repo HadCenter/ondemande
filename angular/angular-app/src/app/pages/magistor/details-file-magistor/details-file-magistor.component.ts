@@ -26,14 +26,14 @@ export class DetailsFileMagistorComponent implements OnInit {
   testValidFile: any = [];
   testValidFile2: any = [];
   files: any = [];
-  filesError:any =[];
+  filesError: any = [];
   files2: any = [];
   filesValid: any = [];
   filesValid2: any = [];
   searchItems: any = [];
   filterValues: any = [];
-   public filterValue: any;
-   filterValue2:any;
+  public filterValue: any;
+  filterValue2: any;
   fileMagistor: any;
   errorfileMagistor: any;
   fileMagistor2: any;
@@ -52,7 +52,7 @@ export class DetailsFileMagistorComponent implements OnInit {
   typeFileREC: boolean = false;
   typeFileCDC: boolean = false;
   options: any = [];
-  options2: any= [];
+  options2: any = [];
   tableMouseDown: MouseEvent;
   tableMouseUp: MouseEvent;
   newCellValue: string = '';
@@ -74,10 +74,10 @@ export class DetailsFileMagistorComponent implements OnInit {
   correctedErrorfileMagistor2: any;
   showLoader: boolean = true;
   correctClicked: boolean = false;
-  validateClicked : boolean = false;
+  validateClicked: boolean = false;
   dataChanged: boolean = false;
   dialogRef: MatDialogRef<ConfirmDialogComponent>;
-   filterValues2: any =[];
+  filterValues2: any = [];
 
   constructor(private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
@@ -91,7 +91,10 @@ export class DetailsFileMagistorComponent implements OnInit {
     this.fileService.getFile(this.route.snapshot.params.id).subscribe(
       resp => {
         this.file = resp;
-        this.name_file=this.file.logisticFileName.name;
+        if(this.file.status == "En cours" ){
+          this.router.navigate(['/logistique']);
+        }
+        this.name_file = this.file.logisticFileName.name;
         if (this.file.logisticFileType == "ART01") {
           this.typeFileART = true;
           this.secondSheet = "CND01";
@@ -124,16 +127,17 @@ export class DetailsFileMagistorComponent implements OnInit {
           this.getWrongFiles();
 
         }
-      })
+      });
+    this.listenToWebSocket();
   }
 
   listenToWebSocket() {
     this.magistorService.messages.subscribe(msg => {
       console.log("Response from websocket: ", JSON.parse(msg));
-      //localStorage.setItem('wslogistic', JSON.stringify(JSON.parse(msg)));
-      if(JSON.parse(msg).stateLogistic === "table logisticFile updated")
-      {
+      if (JSON.parse(msg).stateLogistic === "table logisticFile updated") {
+        if(this.file.status == "en cours" ){
         this.actualiser2();
+        }
       }
     });
   }
@@ -149,7 +153,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     this.fileService.getLogisticFileContent(data).subscribe(res => {
       this.fileMagistor = res;
       if (this.fileMagistor.rows.length > 0) {
-        console.log(this.fileMagistor.rows.length + "   : fileMagostore",this.fileMagistor);
+        console.log(this.fileMagistor.rows.length + "   : fileMagostore", this.fileMagistor);
 
         this.copyfileMagistor = JSON.parse(JSON.stringify(this.fileMagistor));
         this.copyfileMagistor.rows.splice(0, 0, this.copyfileMagistor.columns);
@@ -181,19 +185,19 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
     this.fileService.getLogisticFileContent(data).subscribe(res => {
       this.fileMagistor2 = res;
-      console.log("fileMagostore2",this.fileMagistor2);
+      console.log("fileMagostore2", this.fileMagistor2);
       if (this.fileMagistor2.rows.length > 0) {
         this.copyfileMagistor2 = JSON.parse(JSON.stringify(this.fileMagistor2));
         this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);
         this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
         this.testValidFile2 = this.copyfileMagistor2;   //copy to use on selection
-          this.files2 = this.copyfileMagistor2;    // copy to filter *
+        this.files2 = this.copyfileMagistor2;    // copy to filter *
         this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
 
-         // get select options file Magistor 2
-                this.displayedColumns2.forEach(item => {
-                  this.getOption2(item);
-                })
+        // get select options file Magistor 2
+        this.displayedColumns2.forEach(item => {
+          this.getOption2(item);
+        })
       }
       if (this.file.number_annomalies == 0) {
         this.showLoader = false;
@@ -231,7 +235,7 @@ export class DetailsFileMagistorComponent implements OnInit {
           this.selectedCellsState.push(Array.from({ length: this.displayedColumnsError.length - 1 }, () => false))
         });
         // get select options
-       // this.displayedColumnsError.forEach(item => {
+        // this.displayedColumnsError.forEach(item => {
         //  this.getOptionError(item);
         //})
       }
@@ -286,12 +290,17 @@ export class DetailsFileMagistorComponent implements OnInit {
 
   }
   actualiser2() {
-    this.showLoader = true;
+    //this.showLoader = true;
     this.dataChanged = false;
 
     this.fileService.getFile(this.route.snapshot.params.id).subscribe(
       resp => {
         this.file = resp;
+        console.error(this.file.status);
+        if(this.file.status == "En cours" ){
+          this.router.navigate(['/logistique']);
+        }
+
         if (this.file.logisticFileType == "ART01") {
           this.typeFileART = true;
           this.secondSheet = "CND01";
@@ -334,9 +343,9 @@ export class DetailsFileMagistorComponent implements OnInit {
       return 'green';
     } else if (ch.toLowerCase() === 'en cours') {
       return 'orange2 color-text--dark-gray';
-    }else if (ch === 'En attente') {
+    } else if (ch === 'En attente') {
       return 'amber color-text--dark-gray';
-    }else if (ch === 'Validé') {
+    } else if (ch === 'Validé') {
       return 'dark-green';
     } else {
       return 'red';
@@ -366,28 +375,28 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
   getOption2(filter) {
-      let options = [];
-      options = this.testValidFile2.map((item) => item[filter]);
-      options = options.filter(function (value, index, options) {
+    let options = [];
+    options = this.testValidFile2.map((item) => item[filter]);
+    options = options.filter(function (value, index, options) {
 
-        return options.indexOf(value) == index && value !== "";
-      });
-      this.displayedColumns2.forEach((item, key) => {
-        if (item == filter) {
-          var obj = {
-            columnProp: item,
-            options: options
-          };
-          this.options2.push(obj);
-        }
-      })
-    }
+      return options.indexOf(value) == index && value !== "";
+    });
+    this.displayedColumns2.forEach((item, key) => {
+      if (item == filter) {
+        var obj = {
+          columnProp: item,
+          options: options
+        };
+        this.options2.push(obj);
+      }
+    })
+  }
 
   /**
     * Get options inside selects
     * @param filter
     */
-   getOptionError(filter) {
+  getOptionError(filter) {
     let options = [];
     options = this.testFile.map((item) => item[filter]);
     options = options.filter(function (value, index, options) {
@@ -425,15 +434,15 @@ export class DetailsFileMagistorComponent implements OnInit {
   /**** Filter items on valid file */
   setFilteredItemsValid() {
     this.copyfileMagistor = this.filterItemsValid(this.filterValue);
-     if (this.copyfileMagistor.length>=1){
-                      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
-                    }
-                     else {
-                     this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
-                     }
+    if (this.copyfileMagistor.length >= 1) {
+      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+    }
+    else {
+      this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+    }
     if (this.filterValue === '') {
       this.copyfileMagistor = this.copyfileMagistor;
-  this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
     }
   }
 
@@ -449,27 +458,27 @@ export class DetailsFileMagistorComponent implements OnInit {
 
 
   /**** Filter items on valid file */
-    setFilteredItemsValid2() {
-      this.copyfileMagistor2 = this.filterItemsValid2(this.filterValue2);
-       if (this.copyfileMagistor2.length>=1){
-                        this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2)
-                      }
-                       else {
-                       this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
-                       }
-      if (this.filterValue2 === '') {
-        this.copyfileMagistor2 = this.copyfileMagistor2;
-
-      }
+  setFilteredItemsValid2() {
+    this.copyfileMagistor2 = this.filterItemsValid2(this.filterValue2);
+    if (this.copyfileMagistor2.length >= 1) {
+      this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2)
     }
-
-
-
-    filterItemsValid2(filterValue2: string) {
-      return this.files2.filter((item) => {
-        return JSON.stringify(item).toLowerCase().includes(filterValue2.toLowerCase());
-      });
+    else {
+      this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
     }
+    if (this.filterValue2 === '') {
+      this.copyfileMagistor2 = this.copyfileMagistor2;
+
+    }
+  }
+
+
+
+  filterItemsValid2(filterValue2: string) {
+    return this.files2.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterValue2.toLowerCase());
+    });
+  }
 
 
   getIntersection2(filter) {
@@ -522,10 +531,10 @@ export class DetailsFileMagistorComponent implements OnInit {
 
   changeSelectedOptionColor2(filter) {
     if (filter.columnProp && filter.modelValue != "") {
-      document.getElementById(filter.columnProp+"2").style.color = "#00bcd4";
+      document.getElementById(filter.columnProp + "2").style.color = "#00bcd4";
     }
     else {
-      document.getElementById(filter.columnProp+"2").style.color = "white";
+      document.getElementById(filter.columnProp + "2").style.color = "white";
     }
   }
 
@@ -669,9 +678,9 @@ export class DetailsFileMagistorComponent implements OnInit {
   }
 
 
- /**
-  * Reset filter
-  */
+  /**
+   * Reset filter
+   */
   resetFiltre2() {
     const rows = document.getElementsByClassName('details-line2') as HTMLCollectionOf<HTMLElement>;
     for (let i = 0; i < rows.length; i++) {
@@ -691,12 +700,12 @@ export class DetailsFileMagistorComponent implements OnInit {
     this.filterValues2 = [];
     this.copyfileMagistor2 = this.testValidFile2;
     this.copyfileMagistor2 = this.copyfileMagistor2.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
-                if (this.copyfileMagistor2.length>=1){
-                  this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2)
-                }
-                else {
-                 this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
-                }
+    if (this.copyfileMagistor2.length >= 1) {
+      this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2)
+    }
+    else {
+      this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+    }
 
 
   }
@@ -725,14 +734,14 @@ export class DetailsFileMagistorComponent implements OnInit {
     });
     this.filterValues = [];
     this.fileMagistor = this.testValidFile;
-      this.copyfileMagistor = this.testValidFile;
-        this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
-            if (this.copyfileMagistor.length>=1){
-              this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
-            }
-            else {
-             this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
-            }
+    this.copyfileMagistor = this.testValidFile;
+    this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
+    if (this.copyfileMagistor.length >= 1) {
+      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+    }
+    else {
+      this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+    }
   }
 
 
@@ -791,7 +800,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     });
   }
 
-  convertArrayofObjectsToEmptyRows (displayedColumns){
+  convertArrayofObjectsToEmptyRows(displayedColumns) {
     let output = {
       columns: displayedColumns,
       rows: [],
@@ -799,7 +808,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
     return output;
   }
-  convertArrayofObjectToRowsColumns (arrayOfObject){
+  convertArrayofObjectToRowsColumns(arrayOfObject) {
 
     let output = {
       columns: (Object.keys(arrayOfObject[0])),
@@ -819,34 +828,34 @@ export class DetailsFileMagistorComponent implements OnInit {
       // if only one select is selected
       if (this.filterValues.length == 1) {
         this.copyfileMagistor = this.filterChange(filter);
-        if (this.copyfileMagistor.length>=1){
+        if (this.copyfileMagistor.length >= 1) {
           this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
         }
         else {
-         this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
         }
 
       } else {
         // if already another select is active merge the results
         if (filterExists == false) {
           this.copyfileMagistor = this.getIntersection(filter)
-            if (this.copyfileMagistor.length>=1){
+          if (this.copyfileMagistor.length >= 1) {
             this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
-            }
-            else {
-              this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
-            }
+          }
+          else {
+            this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+          }
         } else {
           this.copyfileMagistor = this.filesValid;
           this.filterValues.forEach(element => {
             this.copyfileMagistor = this.copyfileMagistor.filter(x => element.modelValue.includes(x[element.columnProp]));
           });
           this.copyfileMagistor = this.copyfileMagistor.filter((object, index) => index === this.copyfileMagistor.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-          if (this.copyfileMagistor.length>=1) {
+          if (this.copyfileMagistor.length >= 1) {
             this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
           }
           else {
-            this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+            this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
           }
         }
       }
@@ -857,21 +866,21 @@ export class DetailsFileMagistorComponent implements OnInit {
       if (this.filterValues.length == 0) {
         this.copyfileMagistor = this.testValidFile;
         this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
-        if (this.copyfileMagistor.length>=1) {
+        if (this.copyfileMagistor.length >= 1) {
           this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
         }
         else {
-          this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
         }
 
       }
       else if (this.filterValues.length == 1) {
         this.copyfileMagistor = this.filterChange(this.filterValues[0]);
-        if (this.copyfileMagistor.length>=1) {
+        if (this.copyfileMagistor.length >= 1) {
           this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
         }
-        else{
-          this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+        else {
+          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
         }
       }
       else {
@@ -883,11 +892,11 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.filterValues.forEach(element => {
           this.copyfileMagistor = this.copyfileMagistor.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        if (this.copyfileMagistor.length>=1) {
+        if (this.copyfileMagistor.length >= 1) {
           this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
         }
-        else{
-          this.fileMagistor=this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+        else {
+          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
         }
       }
     }
@@ -907,22 +916,22 @@ export class DetailsFileMagistorComponent implements OnInit {
       // if only one select is selected
       if (this.filterValues2.length == 1) {
         this.copyfileMagistor2 = this.filterChange2(filter);
-        if (this.copyfileMagistor2.length>=1) {
+        if (this.copyfileMagistor2.length >= 1) {
           this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
         }
-        else{
-          this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        else {
+          this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
         }
 
       } else {
         // if already another select is active merge the results
         if (filterExists == false) {
           this.copyfileMagistor2 = this.getIntersection2(filter)
-          if (this.copyfileMagistor2.length>=1) {
+          if (this.copyfileMagistor2.length >= 1) {
             this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
           }
-          else{
-            this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+          else {
+            this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
           }
         } else {
           this.copyfileMagistor2 = this.filesValid2;
@@ -930,11 +939,11 @@ export class DetailsFileMagistorComponent implements OnInit {
             this.copyfileMagistor2 = this.copyfileMagistor2.filter(x => element.modelValue.includes(x[element.columnProp]));
           });
           this.copyfileMagistor2 = this.copyfileMagistor2.filter((object, index) => index === this.copyfileMagistor2.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
-          if (this.copyfileMagistor2.length>=1) {
+          if (this.copyfileMagistor2.length >= 1) {
             this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
           }
-          else{
-            this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+          else {
+            this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
           }
         }
       }
@@ -945,20 +954,20 @@ export class DetailsFileMagistorComponent implements OnInit {
       if (this.filterValues2.length == 0) {
         this.copyfileMagistor2 = this.testValidFile2;
         this.copyfileMagistor2 = this.copyfileMagistor2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
-        if (this.copyfileMagistor2.length>=1) {
+        if (this.copyfileMagistor2.length >= 1) {
           this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
         }
-        else{
-          this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        else {
+          this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
         }
       }
       else if (this.filterValues2.length == 1) {
         this.copyfileMagistor2 = this.filterChange2(this.filterValues2[0]);
-        if (this.copyfileMagistor2.length>=1) {
+        if (this.copyfileMagistor2.length >= 1) {
           this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
         }
-        else{
-          this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        else {
+          this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
         }
       }
       else {
@@ -970,11 +979,11 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.filterValues2.forEach(element => {
           this.copyfileMagistor2 = this.copyfileMagistor2.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
-        if (this.copyfileMagistor2.length>=1) {
+        if (this.copyfileMagistor2.length >= 1) {
           this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
         }
-        else{
-          this.fileMagistor2=this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        else {
+          this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
         }
       }
     }
@@ -1132,10 +1141,13 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.file.status = 'en cours';
       } else if (res.message == "file validated echec") {
         this.openSnackBar(this.errorValidation, this.snackAction);
+        this.validateClicked = true;
       }
     },
       (err) => {
         this.openSnackBar(this.errorValidation, this.snackAction);
+        this.validateClicked = false;
+
       })
   }
   invalidateFile() {
@@ -1151,6 +1163,7 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.file.ButtonValidateActivated = true;
         this.file.ButtonCorrecteActiveted = false;
         this.file.ButtonInvalidateActivated = false;
+        this.validateClicked = false;
         if (this.file.number_annomalies == 0) {
           this.file.status = 'En attente';
         } else {
@@ -1162,6 +1175,7 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.file.ButtonValidateActivated = true;
         this.file.ButtonCorrecteActiveted = false;
         this.file.ButtonInvalidateActivated = false;
+        this.validateClicked = false;
         if (this.file.number_annomalies == 0) {
           this.file.status = 'En attente';
         } else {
@@ -1182,7 +1196,7 @@ export class DetailsFileMagistorComponent implements OnInit {
       console.log('resultat correction', res);
       if (res.message == "ok") {
         this.router.navigate(['/logistique']);
-        }
+      }
     })
   }
 
@@ -1226,7 +1240,7 @@ export class DetailsFileMagistorComponent implements OnInit {
 
   }
   openConfirmDialog(decision) {
-    if(!this.dataChanged){
+    if (!this.dataChanged) {
       if (decision == 'valider') {
         this.validateFile();
       } else if (decision == 'corriger') {
@@ -1234,7 +1248,7 @@ export class DetailsFileMagistorComponent implements OnInit {
       }
 
     }
-    else{
+    else {
       this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
         disableClose: false
       });

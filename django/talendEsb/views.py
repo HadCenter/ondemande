@@ -10,7 +10,7 @@ from .transactionFileService import sendTransactionParamsToExecutionServerInCsvF
 from django.http import JsonResponse
 from API.settings import SECRET_KEY
 import jwt
-
+import os
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
 from .models import InterventionFacturationTransport, SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
@@ -224,33 +224,37 @@ def correctAllFiles(request):
 	fileNameException = "Livraisons_Exception.xlsx"
 	jobs_to_start = []
 
-	if fileReplacementLivraison != None :
+	if len(fileReplacementLivraison['columns']) > 0 :
 		df = pd.DataFrame(fileReplacementLivraison['rows'], columns=fileReplacementLivraison['columns'])
 
 		df.to_excel(fileNameLivraison, index=False)
 		sftp.put(localpath=fileNameLivraison, remotepath=transaction.fichier_livraison_sftp)
 		jobs_to_start.append(madPlanJobList[8])
+		os.remove(fileNameLivraison)
 
-	if fileReplacementMAD != None :
+	if len(fileReplacementMAD['columns']) > 0 :
 		df = pd.DataFrame(fileReplacementMAD['rows'], columns=fileReplacementMAD['columns'])
 
 		df.to_excel(fileNameMAD, index=False)
 		sftp.put(localpath=fileNameMAD, remotepath=transaction.fichier_mad_sftp)
 		jobs_to_start.append(madPlanJobList[7])
+		os.remove(fileNameMAD)
 
-	if fileReplacementMetadata != None :
+	if len(fileReplacementMetadata['columns']) > 0 :
 		df = pd.DataFrame(fileReplacementMetadata['rows'], columns=fileReplacementMetadata['columns'])
 
 		df.to_excel(fileNameMetadata, index=False)
 		sftp.put(localpath=fileNameMetadata, remotepath=transaction.fichier_metadata_sftp)
 		jobs_to_start.append(madPlanJobList[6])
+		os.remove(fileNameMetadata)
 
-	if fileReplacementException != None :
+	if len(fileReplacementException['columns']) > 0 :
 		df = pd.DataFrame(fileReplacementException['rows'], columns=fileReplacementException['columns'])
 
 		df.to_excel(fileNameException, index=False)
 		sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
 		jobs_to_start.append(madPlanJobList[5])
+		os.remove(fileNameException)
 
 	jobs_to_start.append(madPlanJobList[0])
 	jobs_to_start.append(madPlanJobList[1])

@@ -33,7 +33,14 @@ i.commande-complete.material-icons {
   padding: 2px;
   margin-right: 4px;
 }
-
+.material-icons-custom {
+  padding: 0px!important;
+  margin: 0px!important;
+}
+.delete-button{
+  min-width: 20px;
+  padding: 0 8px;
+}
 td.mdl-data-table__cell--non-numeric.task-done {
   color: #fff;
   cursor: pointer;

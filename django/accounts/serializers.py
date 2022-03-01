@@ -33,7 +33,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Account
-		fields = ('id','email','username','is_active','role','reports_id','canUpdateCapacity' )
-
+		fields = ('id','email','username','is_active','role','reports_id','canUpdateCapacity','is_deleted' )
 
 

@@ -1,6 +1,7 @@
 import { Component, OnInit, HostBinding, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { PowerbiEmbeddedService } from '../powerbi-embedded/powerbi-embedded.service';
@@ -128,10 +129,21 @@ export class UsersComponent extends UpgradableComponent implements OnInit {
       if (result != undefined) {
         this.actualiser();
       }
-
     });
   }
 
+  openDeleteUser(user) {
+    const dialogRef = this.matDialog.open(DialogDeleteUser, {
+      data: {
+        currentUser: user
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) {
+        this.actualiser();
+      }
+    });
+  }
 }
 
 
@@ -248,6 +260,7 @@ export class User {
   reports_id: string;
   canUpdateCapacity: boolean;
   last_login?: string;
+  is_deleted?: boolean;
 }
 
 @Component({
@@ -262,7 +275,8 @@ export class DialogDetailsUser extends UpgradableComponent {
     role: '',
     reports_id: '',
     canUpdateCapacity: false,
-    last_login: ''
+    last_login: '',
+    is_deleted : false,
   };
   public updateForm: FormGroup;
   public username;
@@ -401,3 +415,74 @@ export class DialogDetailsUser extends UpgradableComponent {
 
 }
 
+@Component({
+  templateUrl: './dialog-delete-user/delete-user.component.html',
+  styleUrls: ['./dialog-delete-user/delete-user.component.scss']
+})
+export class DialogDeleteUser extends UpgradableComponent {
+  currentUser: User = {
+    username: '',
+    email: '',
+    is_active: '',
+    role: '',
+    reports_id: '',
+    canUpdateCapacity: false,
+    last_login: '',
+    is_deleted: false,
+  };
+  public updateForm: FormGroup;
+  public username;
+  public profile;
+  public email;
+  public status;
+  public emailPattern = '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
+  public error: string;
+  public role: string = "Admin";
+  public activated: string = "Non actif";
+  public canUpdateCapacity: boolean;
+  public listItems: Array<string> = ["Admin", "SuperAdmin"];
+  showloader = false;
+  rapportControl = new FormControl();
+  selectedRapports = new Array<any>();
+  public rapports = [];
+
+  constructor(
+    private userService: DetailsUserService,
+    public dialogRef: MatDialogRef<DialogDeleteUser>,
+    private _snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    super();
+    this.currentUser = Object.assign({},this.data.currentUser);
+    console.log(this.currentUser);
+  }
+
+  ngOnInit(): void {
+
+  }
+
+
+  deleteUser(){
+    this.currentUser['is_deleted'] = true;
+    this.showloader = true;
+    this.userService.update(this.currentUser.id, this.currentUser)
+      .subscribe(
+        response => {
+          this.showloader = false;
+          this.dialogRef.close('submit');
+          this.openSnackBar("l'utilisateur est supprimé", "Ok",3500);
+        });
+
+  }
+
+  cancel(){
+    this.dialogRef.close();
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this._snackBar.open(message, action, {
+      duration: duration,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
+}

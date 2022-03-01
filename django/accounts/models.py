@@ -14,6 +14,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(null=True)
     reports_id = models.CharField(blank=True,null=True,max_length=20000)
     canUpdateCapacity = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
     is_superuser = None
     last_login = None
     USERNAME_FIELD = 'email'

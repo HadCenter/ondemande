@@ -17,23 +17,23 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
 
   constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) {
     super();
-    if (localStorage.getItem('currentUser')){
-        this.router.navigate(['/home']);
-      }
-    else{
-        this.loginForm = this.fb.group({
-          password: new FormControl('', Validators.required),
-          email: new FormControl('', [
-            Validators.required,
-            Validators.pattern(this.emailPattern),
-    
-          ]),
-        });
-        this.email = this.loginForm.get('email');
-        this.password = this.loginForm.get('password');
-      }
+    if (localStorage.getItem('currentUser')) {
+      this.router.navigate(['/home']);
+    }
+    else {
+      this.loginForm = this.fb.group({
+        password: new FormControl('', Validators.required),
+        email: new FormControl('', [
+          Validators.required,
+          Validators.pattern(this.emailPattern),
 
-   
+        ]),
+      });
+      this.email = this.loginForm.get('email');
+      this.password = this.loginForm.get('password');
+    }
+
+
   }
 
   public ngOnInit() {
@@ -48,7 +48,12 @@ export class LoginComponent extends BlankLayoutCardComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.getRawValue())
         .subscribe(res => this.router.navigate(['/home']),
-          error => this.error = "Utilisateur n'est pas actif/n'existe pas");
+          error => {
+            this.error = error.error.message;
+            if(this.error === undefined){
+              this.error = "Le mot de passe est incorrect";
+            }
+          });
     }
   }
   public onInputChange(event) {

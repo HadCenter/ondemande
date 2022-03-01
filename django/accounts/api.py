@@ -16,9 +16,14 @@ from API.settings import SECRET_KEY
 class LoginAPI(generics.GenericAPIView):
 	serializer_class = LoginSerializer
 	def post(self, request, *args, **kwargs):
-		user = Account.objects.get(email=request.data['email'])
+		try:
+			user = Account.objects.get(email=request.data['email'])
+		except Exception as e:
+			return Response({"message" : "l'utilisateur n'existe pas"}, status=status.HTTP_400_BAD_REQUEST)
 		if(user.is_active == False):
 			return Response({"message" : "l'utilisateur n'est pas active"}, status=status.HTTP_400_BAD_REQUEST)
+		if(user.is_deleted == True):
+			return Response({"message" : "l'utilisateur n'existe pas"}, status=status.HTTP_400_BAD_REQUEST)
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		user = serializer.validated_data

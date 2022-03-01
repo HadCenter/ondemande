@@ -16,14 +16,14 @@ from django.utils.http import urlsafe_base64_decode
 from django.core.mail import EmailMessage
 @api_view(['GET'])
 def userList(request):
-    users = Account.objects.all().order_by('-id')
+    users = Account.objects.filter(is_deleted = False).order_by('-id')
     serializer = UserSerializer(users, many= True)
     return Response(serializer.data)
 
 @api_view(['GET', 'PUT'])
 def user_detail(request, pk):
     try:
-        user = Account.objects.get(pk=pk)
+        user = Account.objects.get(pk=pk, is_deleted = False)
     except Account.DoesNotExist:
         return JsonResponse({'message': 'le client n''existe pas !'}, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
@@ -85,7 +85,7 @@ def token_status (request):
     c = now.replace(tzinfo=datetime.timezone.utc) - account.created_at
     print("COMPARE IS :  ",c)
     minutes = c.total_seconds() / 60
-    if minutes > 2880 or account.is_active == True:
+    if minutes > 2880 or account.is_active == True or account.is_deleted == True:
         return Response({'error': 'Token is not valide'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'message' : 'token est encore valide'}, status = status.HTTP_200_OK)
@@ -97,7 +97,7 @@ def forgetPassword(request):
         account = Account.objects.get(email=request.data['email'])
     except :
         return Response({'message':'Utilisateur n\'est pas actif/n\'existe pas'},status.HTTP_200_OK)
-    if(account.is_active == False):
+    if(account.is_active == False or account.is_deleted == True):
         return Response({'message':'Utilisateur n\'est pas actif/n\'existe pas'},status.HTTP_200_OK)
     payload = {
         'id': account.id,

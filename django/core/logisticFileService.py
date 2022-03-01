@@ -179,7 +179,8 @@ def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile)
         sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
         destinationPath = "/IN"
         copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
-        LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False,ButtonInvalidateActivated=True,status='en cours')
+        #LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False,ButtonInvalidateActivated=True,status='en cours')
+        updateMetaDataFileInTableCoreLogisticFile(folderLogisticFile,"en cours")
         return True
 
 
@@ -203,9 +204,11 @@ def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
     sftp_client = connect()
     LogistFileExist = logisticFileExistInFolderIN(sftp_client,logisticFileName)
     if(int(LogisticFile.objects.get(pk=idLogisticFile).number_annomalies) > 0):
-        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='à vérifier')
+        #LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='à vérifier')
+        updateMetaDataFileInTableCoreLogisticFile(idLogisticFile,"à vérifier")
     else:
-        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
+        updateMetaDataFileInTableCoreLogisticFile(idLogisticFile,"En attente")
+        #LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
 
     if(LogistFileExist == False):
         return False
@@ -221,10 +224,15 @@ def updateMetaDataFileInTableCoreLogisticFile(logisticFileId, logisticFileStatus
         logisticFile.ButtonValidateActivated = False
         logisticFile.ButtonInvalidateActivated = False
 
-    elif(logisticFileStatus.casefold() == "à vérifier".casefold()):
+    elif(logisticFileStatus.casefold() in (status.casefold() for status in ["Echec","à vérifier","En attente"])):
         logisticFile.ButtonCorrecteActiveted = False
         logisticFile.ButtonValidateActivated = True
         logisticFile.ButtonInvalidateActivated = False
+
+    elif(logisticFileStatus.casefold() == "en cours".casefold()):
+        logisticFile.ButtonCorrecteActiveted = False
+        logisticFile.ButtonValidateActivated = False
+        logisticFile.ButtonInvalidateActivated = True
 
     logisticFile.save()
 

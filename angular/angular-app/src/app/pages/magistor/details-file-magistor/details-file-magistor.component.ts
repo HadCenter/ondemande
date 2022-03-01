@@ -91,7 +91,7 @@ export class DetailsFileMagistorComponent implements OnInit {
     this.fileService.getFile(this.route.snapshot.params.id).subscribe(
       resp => {
         this.file = resp;
-        if(this.file.status == "En cours" ){
+        if (this.file.status == "En cours") {
           this.router.navigate(['/logistique']);
         }
         this.name_file = this.file.logisticFileName.name;
@@ -135,9 +135,8 @@ export class DetailsFileMagistorComponent implements OnInit {
     this.magistorService.messages.subscribe(msg => {
       console.log("Response from websocket: ", JSON.parse(msg));
       if (JSON.parse(msg).stateLogistic === "table logisticFile updated") {
-        if(this.file.status == "en cours" ){
-        this.actualiser2();
-        }
+        this.actualiser2(this.file.status);
+
       }
     });
   }
@@ -289,15 +288,17 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
 
   }
-  actualiser2() {
+  actualiser2(previousFileStatus: string) {
     //this.showLoader = true;
     this.dataChanged = false;
 
     this.fileService.getFile(this.route.snapshot.params.id).subscribe(
       resp => {
         this.file = resp;
-        console.error(this.file.status);
-        if(this.file.status == "En cours" ){
+        if (this.file.status != previousFileStatus) {
+          this.showLoader = true;
+        }
+        if (this.file.status == "En cours") {
           this.router.navigate(['/logistique']);
         }
 
@@ -326,12 +327,10 @@ export class DetailsFileMagistorComponent implements OnInit {
           this.terminated = true;
         }
 
-
         this.getValidFiles();
 
         if (this.file.number_annomalies != 0) {
           this.getWrongFiles();
-
         }
       })
   }
@@ -1117,7 +1116,8 @@ export class DetailsFileMagistorComponent implements OnInit {
     if (this.file.status == "en cours") {
       this.fileService.correctAndValidateLogisticFile(this.fileTocheck).subscribe(res => {
         if (res.message == "file validated successfully") {
-          this.actualiser2();
+          this.showLoader = true;
+          this.actualiser2(this.file.status);
         }
       })
     } else {

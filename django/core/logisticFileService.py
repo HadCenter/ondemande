@@ -231,11 +231,11 @@ def updateMetaDataFileInTableCoreLogisticFile(logisticFileId, logisticFileStatus
         logisticFile.ButtonValidateActivated = True
         logisticFile.ButtonInvalidateActivated = False
 
-    elif(logisticFileStatus.casefold() == "en cours".casefold()):
+    elif(logisticFileStatus == "en cours"):
         logisticFile.ButtonCorrecteActiveted = False
         logisticFile.ButtonValidateActivated = False
         logisticFile.ButtonInvalidateActivated = True
-
+        print("validaaaated clicked")
     logisticFile.save()
 
 def createFileLogisticFromColumnAndRows(LogisticFileId, columns1, rows1, columns2, rows2):

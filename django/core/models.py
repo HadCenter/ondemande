@@ -52,7 +52,7 @@ class LogisticFile(models.Model):
     created_at = models.DateTimeField(auto_now_add =True)
     status = models.CharField(max_length=200,default= 'En attente')
     number_annomalies = models.IntegerField(default=0)
-    clientName = models.CharField(max_length=200,default= 'REDLEAN_T')
+    clientName = models.CharField(max_length=200)
     archived = models.BooleanField(default=False)
     ButtonCorrecteActiveted = models.BooleanField(default=False)
     ButtonValidateActivated = models.BooleanField(default=True)

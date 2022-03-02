@@ -6,6 +6,8 @@ import paramiko
 import logging
 import pandas as pd
 import numpy as np
+from sftpConnectionToExecutionServer.views import sftp
+
 from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 from django.conf import settings
 DJANGO_DIRECTORY = settings.BASE_DIR
@@ -19,8 +21,8 @@ def removeLogisticFileFromServer(fileName):
     os.remove(fileName)
     os.chdir(DJANGO_DIRECTORY)
 
-def traceLogisticFileInDB(fileName, typeLogisticFile):
-    logisticFileObject = LogisticFile(logisticFile=fileName, logisticFileType=typeLogisticFile)
+def traceLogisticFileInDB(fileName, typeLogisticFile, clientName):
+    logisticFileObject = LogisticFile(logisticFile=fileName, logisticFileType=typeLogisticFile, clientName = clientName)
     logisticFileObject.save()
     idFileInDB = logisticFileObject.id
     return idFileInDB
@@ -56,17 +58,44 @@ def saveUploadedLogisticFile(request_file):
     path = "media/files/"
     pathLogisticFile = path + logisticFile
     dataFrameLogisticFile = pd.read_excel(pathLogisticFile)
-    if ( "OP_CODE" not in dataFrameLogisticFile.columns):
+    dataFrameLogisticFile.fillna('')
+    if ( "OP_CODE" not in dataFrameLogisticFile.columns or "CODE_SOC" not in dataFrameLogisticFile.columns):
         os.remove(pathLogisticFile)
         return False
     else:
+        clientName = getClientNameFromExcel(pathLogisticFile, dataFrameLogisticFile)
         typeLogisticFile = dataFrameLogisticFile["OP_CODE"].values[0]
         fileName = typeLogisticFile + timestr + extension
         os.rename(r'media/files/{}'.format(logisticFile), r'media/files/{}'.format(fileName))
-        idFileInDB = traceLogisticFileInDB(fileName, typeLogisticFile)
-        sftp_client = connect()
+        idFileInDB = traceLogisticFileInDB(fileName, typeLogisticFile, clientName)
+        sftp_client = connect(clientName, getFTPCredentials(clientName))
         uploadLogisticFileInSFtpServer(sftp_client, fileName, idFileInDB)
         return True
+
+
+def getClientNameFromExcel(pathLogisticFile, dataFrameLogisticFile):
+    #read from first sheet
+    if(not dataFrameLogisticFile["CODE_SOC"].isnull().values.all()): #check that the column is not empty
+        clientName = dataFrameLogisticFile["CODE_SOC"]
+        for client in clientName:
+            if(not pd.isna(client)):
+                return client
+    #read from the second sheet
+    else:
+        xls = pd.ExcelFile(pathLogisticFile)
+        sheets = xls.sheet_names
+        xls.close()
+        df = pd.read_excel(pathLogisticFile, sheet_name=sheets[1])
+        if(not df["CODE_SOC"].isnull().values.all()):  #check that the column is not empty
+            clientName = df["CODE_SOC"]
+            for client in clientName:
+                if(not pd.isna(client)):
+                    return client
+
+            
+
+
+
 
 def get_extension(filename):
     basename = os.path.basename(filename)  # os independent
@@ -95,12 +124,12 @@ def uploadLogisticFileInSFtpServer(sftp_client , fileName , idFileInDB ):
     os.remove(fileName)
     os.chdir(DJANGO_DIRECTORY)
 
-def connect():
+def connect(username, password):
     ssh = paramiko.SSHClient()
 
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-    ssh.connect(hostname='talend.ecolotrans.net', username='REDLEAN_T', password='rV53PjKsu6JEJ22m', port='2022')
+    ssh.connect(hostname='talend.ecolotrans.net', username=username, password=password, port='2022')
 
     sftp_client = ssh.open_sftp()
     return  sftp_client
@@ -137,7 +166,8 @@ def getSingleLogisticFileDetail(key):
 def seeContentLogisticFile(logisticFileName, folderLogisticFile, logisticSheetName):
     os.chdir(DJANGO_DIRECTORY)
     folderLogisticFilePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
-    sftp_client = connect()
+    clientName = LogisticFile.objects.get(pk=folderLogisticFile).clientName
+    sftp_client = connect(clientName, getFTPCredentials(clientName))
     sftp_client.chdir(folderLogisticFilePath)
     os.chdir("media/files")
     sftp_client.get(sftp_client.getcwd() + "/" + logisticFileName, os.getcwd() + "/" + logisticFileName)
@@ -166,14 +196,16 @@ def readLogisticFileFromLocalHost(logisticFileName):
 
 
 def downloadImportedLogisticFile(logisticFileName,folderLogisticFile):
-    sftp_client = connect()
+    clientName = LogisticFile.objects.get(pk=folderLogisticFile).clientName
+    sftp_client = connect(clientName, getFTPCredentials(clientName))
     sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
     copyLogisticFileFromMagistorTransToLocalHost(sftp_client=sftp_client,logisticFileName=logisticFileName,source=sourcePath)
     logisticFile = readLogisticFileFromLocalHost(logisticFileName)
     return logisticFile
 
 def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile):
-    sftp_client = connect()
+    clientName = LogisticFile.objects.get(pk=folderLogisticFile).clientName
+    sftp_client = connect(clientName, getFTPCredentials(clientName))
     typeLogistFileExist = logisticFileTypeExistInSftpServer(sftp_client,typeLogisticFile)
     if(typeLogistFileExist):
         return False
@@ -203,7 +235,8 @@ def deleteLogisticFileFromInFolder(sftp_client, FolderInPath, logisticFileName):
 
 
 def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
-    sftp_client = connect()
+    clientName = LogisticFile.objects.get(pk=idLogisticFile).clientName
+    sftp_client = connect(clientName, getFTPCredentials(clientName))
     LogistFileExist = logisticFileExistInFolderIN(sftp_client,logisticFileName)
     if(int(LogisticFile.objects.get(pk=idLogisticFile).number_annomalies) > 0):
         #LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='à vérifier')
@@ -245,7 +278,8 @@ def createFileLogisticFromColumnAndRows(LogisticFileId, columns1, rows1, columns
     fileName : str
     columns1HasRemarque : bool = False
     columns2HasRemarque : bool = False
-    sftp_client = connect()
+    clientName = logisticFile.clientName
+    sftp_client = connect(clientName, getFTPCredentials(clientName))
     fileName = logisticFile.logisticFile.name
     sftp_client.get(sourcePath +  "/" + fileName, fileName)
     excelfile = pd.ExcelFile(fileName)
@@ -301,7 +335,8 @@ def createFileLogisticFromColumnAndRows(LogisticFileId, columns1, rows1, columns
     return fileName
 
 def validateAndReplaceLogisticFile(logisticFileName, folderLogisticFile):
-    sftp_client = connect()
+    clientName = LogisticFile.objects.get(pk=folderLogisticFile).clientName
+    sftp_client = connect(clientName, getFTPCredentials(clientName))
     LogistFileExist = LogisticFileExistInSftpServer(sftp_client,logisticFileName)
     typeLogistFileExist = logisticFileTypeExistInSftpServer(sftp_client,logisticFileName[0:5])
     if (not(LogistFileExist) and typeLogistFileExist):
@@ -323,5 +358,14 @@ def LogisticFileExistInSftpServer(sftp_client,logisticFileName):
             LogistFileExist = True
     return LogistFileExist
 
+def getFTPCredentials(username):
+    fileName = "MagistorOnDemandClients.xlsx"
+    remotePath = "/home/talend/projects/ftpfiles/IN/MagistorOnDemand"
 
-
+    sftp.get(remotePath + "/"+fileName, os.getcwd() + "/" + fileName )
+    excelfile = pd.read_excel(fileName)
+    excelfile = excelfile.fillna('')
+    password = excelfile.loc[excelfile['Name'] == username]
+    os.remove(fileName)
+    for el in password['Key']:
+        return el

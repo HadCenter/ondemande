@@ -303,7 +303,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
 
 
-
     }
     else if (typeFile == "mad") {
       //uncheck delete rowId from rowstoDelete
@@ -337,7 +336,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         rows: this.dataSourceException.data.map(Object.values),
       }
     }
-    // console.error("**", this.fileTocheck)
     this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
         console.warn("ok");
@@ -358,7 +356,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         rows: this.dataSource.data.map(Object.values),
       }
     }
-    // console.error("**", this.fileTocheck)
     this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
         console.warn("ok");
@@ -379,7 +376,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         rows: this.dataSourceMAD.data.map(Object.values),
       }
     }
-    // console.error("**", this.fileTocheck)
     this.service.correctMadFile(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
         console.warn("ok");
@@ -917,9 +913,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     this.changeSelectedOptionExceptionColor(filter)
     if (filterExists == false) { this.filterExceptionValues.push(filter) }
     // if only one select is selected
+    console.warn("this.filterExceptionValues",this.filterExceptionValues)
     if (this.filterExceptionValues.length == 1) {
       this.dataSourceException.data = this.filterExceptionChange(filter);
     }
+
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
@@ -1431,7 +1429,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
           }
         }
-
         this.fileTocheck = {
           transaction_id: this.transaction.transaction_id,
           fileReplacement: {
@@ -1502,64 +1499,64 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   /**
  * Correct all transaction files
  */
-  correctionAllFile() {
-    if (this.verifRangeDateBeforeCorrection()) {
-      this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction,4000);
-    } else {
-      this.showLoader = true;
-      if (this.dataSource.data.length > 0) {
-        this.columnsLivraison = Object.keys(this.copyDataSource[0]);
-        this.rowsLivraison = this.copyDataSource.map(Object.values);
-      }
-      if (this.dataSourceException.data.length > 0) {
-        this.columnsException = Object.keys(this.copyDataSourceException[0]);
-        this.rowsException = this.copyDataSourceException.map(Object.values);
-      }
-      if (this.dataSourceMetaData.data.length > 0) {
-        this.columnsMetaData = Object.keys(this.copyDataSourceMetaData[0]);
-        this.rowsMetaData = this.copyDataSourceMetaData.map(Object.values);
-      }
-      if (this.dataSourceMAD.data.length > 0) {
-        this.columnsMad = Object.keys(this.copyDataSourceMad[0]);
-        this.rowsMad = this.copyDataSourceMad.map(Object.values);
-      }
-      this.fileTocheck = {
-        transaction_id: this.transaction.transaction_id,
-        fileReplacementLivraison: {
-          columns: this.columnsLivraison,
-          rows: this.rowsLivraison,
-        },
-        fileReplacementMAD: {
-          columns: this.columnsMad,
-          rows: this.rowsMad,
-        },
-        fileReplacementMetadata: {
-          columns: this.columnsMetaData,
-          rows: this.rowsMetaData,
-        },
-        fileReplacementException: {
-          columns: this.columnsException,
-          rows: this.rowsException,
-        },
-
-      }
-      console.warn('file to check', this.fileTocheck)
-      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
-      this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
-        if (res.message == "ok") {
-          this.router.navigate(['/list-transaction']);
-        }else{
-          this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction,12000);
-          this.router.navigate(['/list-transaction']);
-        }
-      },
-        err => {
-          this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction,12000);
-          this.router.navigate(['/list-transaction']);
-        }
-      )
+correctionAllFile() {
+  if (this.verifRangeDateBeforeCorrection()) {
+    this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction,4000);
+  } else {
+    this.showLoader = true;
+    if (this.dataSource.data.length > 0) {
+      this.columnsLivraison = Object.keys(this.copyDataSource[0]);
+      this.rowsLivraison = this.copyDataSource.map(Object.values);
     }
+    if (this.dataSourceException.data.length > 0) {
+      this.columnsException = Object.keys(this.copyDataSourceException[0]);
+      this.rowsException = this.copyDataSourceException.map(Object.values);
+    }
+    if (this.dataSourceMetaData.data.length > 0) {
+      this.columnsMetaData = Object.keys(this.copyDataSourceMetaData[0]);
+      this.rowsMetaData = this.copyDataSourceMetaData.map(Object.values);
+    }
+    if (this.dataSourceMAD.data.length > 0) {
+      this.columnsMad = Object.keys(this.copyDataSourceMad[0]);
+      this.rowsMad = this.copyDataSourceMad.map(Object.values);
+    }
+    this.fileTocheck = {
+      transaction_id: this.transaction.transaction_id,
+      fileReplacementLivraison: {
+        columns: this.columnsLivraison,
+        rows: this.rowsLivraison,
+      },
+      fileReplacementMAD: {
+        columns: this.columnsMad,
+        rows: this.rowsMad,
+      },
+      fileReplacementMetadata: {
+        columns: this.columnsMetaData,
+        rows: this.rowsMetaData,
+      },
+      fileReplacementException: {
+        columns: this.columnsException,
+        rows: this.rowsException,
+      },
+
+    }
+    console.warn('file to check', this.fileTocheck)
+    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
+    this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
+      if (res.message == "ok") {
+        this.router.navigate(['/list-transaction']);
+      }else{
+        this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction,12000);
+        this.router.navigate(['/list-transaction']);
+      }
+    },
+      err => {
+        this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction,12000);
+        this.router.navigate(['/list-transaction']);
+      }
+    )
   }
+}
   verifRangeDateBeforeCorrection() {
     const startDate = (this.transaction.start_date.substr(0, 19)).split('-');
     const endDate = ((this.transaction.end_date.substr(0, 19)).split('-'));

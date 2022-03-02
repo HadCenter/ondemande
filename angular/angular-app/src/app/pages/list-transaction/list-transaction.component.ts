@@ -47,7 +47,7 @@ export class ListTransactionComponent implements OnInit {
       const end = ((element.end_date.substr(0, 19)).split('-'));
       var thisDate = creatAt[2].split('T');
       var time = thisDate[1].split(':');
-      var currentTimeZoneOffsetInHours = ((new Date().getTimezoneOffset() / 60));      
+      var currentTimeZoneOffsetInHours = ((new Date().getTimezoneOffset() / 60));
       time[0] = (parseInt(time[0]) - currentTimeZoneOffsetInHours).toString();  //affich l'heure selon l'heure de pc de l'user
       thisDate[1] = [time[0], time[1], time[2]].join(":");
       var thisDate2 = start[2].split('T');
@@ -291,12 +291,13 @@ export class DailogGenerateTransaction {
     const formData = new FormData();
     formData.append('start_date', start_date);
     formData.append('end_date',end_date);
-    console.warn("start_date =",start_date);
-    console.warn("end_date =",end_date);
+    // console.warn("start_date =",start_date);
+    // console.warn("end_date =",end_date);
     const start = moment(start_date, 'YYYY-MM-DD');
     const end   = moment(end_date, 'YYYY-MM-DD');
     const rangeTransaction = moment.range(start, end);
     var rangeExist = false;
+    var rangeEncours =false;
     this.receivedTransactionsFromParentComponent.copy_transactions.forEach(element => {
       if (element.statut == "En attente")
       {
@@ -307,13 +308,29 @@ export class DailogGenerateTransaction {
            rangeExist = true;
          }
       }
+      else if (element.statut == "En cours")
+      {
+         var formatStartDate = element.start_date.split("-").reverse().join("-");
+         var formatEndDate = element.end_date.split("-").reverse().join("-");
+         var rangeElement = moment.range(formatStartDate, formatEndDate);
+         if (rangeElement.overlaps(rangeTransaction, { adjacent: true })){
+           rangeEncours = true;
+         }
+      }
+      
     });
     if (rangeExist)
     {
         this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
         this.showloader = false;
         this.dialogRef.close('submit');
-    }else{
+    }
+    else if (rangeEncours){
+      this.openSnackBar("Une transaction est déjà en cours avec les dates sélectionnées", this.snackAction);
+      this.showloader = false;
+      this.dialogRef.close('submit');
+    }
+    else{
      this.service_genererTransaction.genererTransaction(formData).subscribe(
       (res) => {
         this.showloader = false;

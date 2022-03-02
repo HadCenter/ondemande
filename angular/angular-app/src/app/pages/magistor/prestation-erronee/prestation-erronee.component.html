@@ -43,7 +43,7 @@
           </mat-expansion-panel-header>
 
           <div class="content-table">
-            <table mat-table id='mytable' [dataSource]="data"
+            <table mat-table id='mytable' [dataSource]="data" [ngClass] = "{'table-width-100':typeFileREC}"
               class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
 
               <!-- <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">

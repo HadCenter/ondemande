@@ -296,14 +296,24 @@ export class DailogGenerateTransaction {
     const end   = moment(end_date, 'YYYY-MM-DD');
     const rangeTransaction = moment.range(start, end);
     var rangeExist = false;
+    var rangeEncours =false;
     this.receivedTransactionsFromParentComponent.copy_transactions.forEach(element => {
-      if (element.statut == "En attente" || element.statut == "En cours")
+      if (element.statut == "En attente")
       {
          var formatStartDate = element.start_date.split("-").reverse().join("-");
          var formatEndDate = element.end_date.split("-").reverse().join("-");
          var rangeElement = moment.range(formatStartDate, formatEndDate);
          if (rangeElement.overlaps(rangeTransaction, { adjacent: true })){
            rangeExist = true;
+         }
+      }
+      else if (element.statut == "En cours")
+      {
+         var formatStartDate = element.start_date.split("-").reverse().join("-");
+         var formatEndDate = element.end_date.split("-").reverse().join("-");
+         var rangeElement = moment.range(formatStartDate, formatEndDate);
+         if (rangeElement.overlaps(rangeTransaction, { adjacent: true })){
+           rangeEncours = true;
          }
       }
       
@@ -313,7 +323,13 @@ export class DailogGenerateTransaction {
         this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction);
         this.showloader = false;
         this.dialogRef.close('submit');
-    }else{
+    }
+    else if (rangeEncours){
+      this.openSnackBar("Une transaction est déjà en cours avec les dates sélectionnées", this.snackAction);
+      this.showloader = false;
+      this.dialogRef.close('submit');
+    }
+    else{
      this.service_genererTransaction.genererTransaction(formData).subscribe(
       (res) => {
         this.showloader = false;

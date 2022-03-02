@@ -87,9 +87,9 @@ export class MagistorComponent implements OnInit {
         this.copyFilesPerPagination = this.files;
         console.log('files', this.files)
         this.show = false;
-        /*this.numPage = Math.ceil(res.length / this.countPerPage);
+        this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage); /****to display */
-        this.advancedTable = this.files;
+       // this.advancedTable = this.files;
         console.log("advanced", this.advancedTable)
         this.copy_advancedTable = this.advancedTable; /***copy for filter */
         this.allTable = this.advancedTable; /****all content */
@@ -97,9 +97,10 @@ export class MagistorComponent implements OnInit {
       },
         error => console.log(error));
   }
+  
 
   public getAdvancedTablePage(page, countPerPage) {
-    return this.fichiers.slice((page - 1) * countPerPage, page * countPerPage);
+    return this.files.slice((page - 1) * countPerPage, page * countPerPage);
   }
   /* available sort value:
 -1 - desc; 	0 - no sorting; 1 - asc; null - disabled */
@@ -170,24 +171,24 @@ export class MagistorComponent implements OnInit {
   }
 
   public changePage(page, force = false) {
-    /*if (page !== this.currentPage || force) {
+    if (page !== this.currentPage || force) {
       this.currentPage = page;
       this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
-    }*/
+    }
   }
   setFilteredItems() {
-    this.advancedTable = this.filterItems(this.filterValue);
+    this.copyFilesPerPagination = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
     }
-    // this.currentPage = this.copyFilesPerPagination.length > 0 ? 1 : 0;
-    // this.numPage = Math.ceil(this.copyFilesPerPagination.length / this.countPerPage);
-    // this.advancedTable = this.copyFilesPerPagination.slice(0, this.countPerPage);
+    this.currentPage = this.copyFilesPerPagination.length > 0 ? 1 : 0;
+    this.numPage = Math.ceil(this.copyFilesPerPagination.length / this.countPerPage);
+    this.advancedTable = this.copyFilesPerPagination.slice(0, this.countPerPage);
   }
 
   filterItems(filterValue) {
     let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
-    return this.copy_advancedTable.filter((item) => {
+    return this.files.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
     });
   }

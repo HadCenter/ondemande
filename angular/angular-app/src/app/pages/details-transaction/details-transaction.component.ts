@@ -262,7 +262,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           }
         }
       })
-console.error("/*/*/*",this.dataSourceException.data)
 
       // console.warn(row);
       // location.reload();
@@ -301,7 +300,6 @@ console.error("/*/*/*",this.dataSourceException.data)
           }
         }
       })
-console.error("/*/*/*",this.dataSourceException.data)
 
 
 
@@ -338,7 +336,6 @@ console.error("/*/*/*",this.dataSourceException.data)
         rows: this.dataSourceException.data.map(Object.values),
       }
     }
-    // console.error("**", this.fileTocheck)
     this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
         console.warn("ok");
@@ -359,7 +356,6 @@ console.error("/*/*/*",this.dataSourceException.data)
         rows: this.dataSource.data.map(Object.values),
       }
     }
-    // console.error("**", this.fileTocheck)
     this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
         console.warn("ok");
@@ -380,7 +376,6 @@ console.error("/*/*/*",this.dataSourceException.data)
         rows: this.dataSourceMAD.data.map(Object.values),
       }
     }
-    // console.error("**", this.fileTocheck)
     this.service.correctMadFile(this.fileTocheck).subscribe(res => {
       if (res.message == "ok") {
         console.warn("ok");
@@ -921,7 +916,6 @@ console.error("/*/*/*",this.dataSourceException.data)
     console.warn("this.filterExceptionValues",this.filterExceptionValues)
     if (this.filterExceptionValues.length == 1) {
       this.dataSourceException.data = this.filterExceptionChange(filter);
-      console.error("/*/*/*",this.dataSourceException.data)
     }
 
     else {
@@ -1099,7 +1093,6 @@ console.error("/*/*/*",this.dataSourceException.data)
   filterExceptionChange(filter) {
     this.fileSelected = "exception";
     this.initSelectedCells();     // init selected cells
-    console.error(this.copySelectionException)
     this.copySelectionException = this.copySelectionException.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
     return this.copySelectionException.filter(function (item) {
       return item[filter.columnProp] == String(filter.modelValue);
@@ -1436,7 +1429,6 @@ console.error("/*/*/*",this.dataSourceException.data)
 
           }
         }
-        console.error("***",this.copyDataSourceException)
         this.fileTocheck = {
           transaction_id: this.transaction.transaction_id,
           fileReplacement: {

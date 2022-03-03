@@ -21,6 +21,12 @@
             <label *ngIf="!transaction" class="details-label">-</label>
           </div>
           <div class="content-label">
+            <label class="details-label">Dernière modification </label>
+            <label *ngIf="transaction" class="details-label">{{transaction?.modified_at | date:"dd-MM-yyyy 'à'
+              HH:mm"}}</label>
+            <label *ngIf="!transaction" class="details-label">-</label>
+          </div>
+          <div class="content-label">
             <label class="details-label">Date Début </label>
             <label *ngIf="transaction" class="details-label">{{transaction?.start_date | date:"dd-MM-yyyy"}}</label>
             <label *ngIf="!transaction" class="details-label">-</label>

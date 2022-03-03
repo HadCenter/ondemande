@@ -2,6 +2,7 @@ from django.http import HttpResponse
 import requests
 from rest_framework.decorators import api_view
 # import pdb
+import datetime
 from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
@@ -260,6 +261,7 @@ def correctAllFiles(request):
 	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transaction.id,jobs_to_start =jobs_to_start,destination_folder="to_correct")
 
 	transaction.statut = "En attente"
+	transaction.modified_at = datetime.datetime.now()
 	transaction.save()
 
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
@@ -287,7 +289,7 @@ def startEngineOnMadFiles(madObjectToPost :  SendMadPostProcessPostObject):
 def getAllTransactionMadLivraison (request):
 	response = []
 	for transactionDB in TransactionsLivraison.objects.all().order_by('-created_at') :
-		t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp,created_at = transactionDB.created_at)
+		t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp,created_at = transactionDB.created_at, modified_at = transactionDB.modified_at)
 		response.append(t)
 	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
 
@@ -297,7 +299,7 @@ def getAllTransactionMadLivraison (request):
 def getSingleTransactionMadLivraison (request,pk):
 
 	transactionDB =  TransactionsLivraison.objects.get(id = pk)
-	t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp,created_at = transactionDB.created_at)
+	t = TransactionsLivraisonMadDto(transaction_id = transactionDB.id ,start_date = transactionDB.start_date,end_date = transactionDB.end_date,statut = transactionDB.statut,fichier_livraison_sftp = transactionDB.fichier_livraison_sftp,fichier_exception_sftp = transactionDB.fichier_exception_sftp,fichier_metadata_sftp = transactionDB.fichier_metadata_sftp,fichier_mad_sftp = transactionDB.fichier_mad_sftp,created_at = transactionDB.created_at, modified_at = transactionDB.modified_at)
 
 	return HttpResponse(jsonpickle.encode(t,unpicklable=False), content_type="application/json")
 

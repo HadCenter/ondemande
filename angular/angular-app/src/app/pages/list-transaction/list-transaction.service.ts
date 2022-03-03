@@ -35,6 +35,11 @@ export class ListTransactionService {
 
       },
       {
+        name: 'Dernière modification',
+        sort: 0,
+
+      },
+      {
         name: 'Date Début',
         sort: 0,
 

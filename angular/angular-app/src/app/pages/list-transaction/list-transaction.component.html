@@ -37,6 +37,7 @@
           <tbody>
             <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
               <td class="mdl-data-table__cell--non-numeric">{{ row.created_at | mypipe: 31: "dd/MM/yyyy 'à' HH:mm"}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ row.modified_at | mypipe: 31: "dd/MM/yyyy 'à' HH:mm"}}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.start_date | mypipe: 31: "dd/MM/yyyy"}}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ row.end_date | mypipe: 31: "dd/MM/yyyy"}}</td>
               <td class="mdl-data-table__cell--non-numeric">

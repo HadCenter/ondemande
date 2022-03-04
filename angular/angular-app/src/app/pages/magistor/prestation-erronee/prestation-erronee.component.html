@@ -24,6 +24,8 @@
             [(ngModel)]="filterValueError" placeholder="Rechercher" autocomplete="off" />
           <label class="mdl-textfield__label" for="search2"></label>
         </div>
+        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+        </base-pagination>
       </div>
     </base-card-title>
     <base-card-body class="content-file-line">
@@ -43,7 +45,7 @@
           </mat-expansion-panel-header>
 
           <div class="content-table">
-            <table mat-table id='mytable' [dataSource]="data" [ngClass] = "{'table-width-100':typeFileREC}"
+            <table mat-table id='mytable' [dataSource]="advancedTable" [ngClass] = "{'table-width-100':typeFileREC}"
               class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
 
               <!-- <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
@@ -131,6 +133,8 @@
             [(ngModel)]="filterValueError2" placeholder="Rechercher" autocomplete="off" />
           <label class="mdl-textfield__label" for="search2"></label>
         </div>
+        <base-pagination [numPage]="numPage2" [currentPage]="currentPage2" (changePage)="changePage2($event)">
+        </base-pagination>
       </div>
     </base-card-title>
     <base-card-body class="content-file-line">
@@ -149,7 +153,7 @@
           </mat-expansion-panel-header>
 
           <div class="content-table">
-            <table mat-table id='mytable2' [dataSource]="data2"
+            <table mat-table id='mytable2' [dataSource]="advancedTable2"
               class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp2($event)">
 
 

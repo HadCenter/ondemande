@@ -45,18 +45,34 @@ class RegisterAPI(generics.GenericAPIView):
 		request.data['created_at'] = datetime.datetime.now()
 		request.data['password'] = password
 		request.data._mutable = _mutable
-		serializer = self.get_serializer(data=request.data)
-		serializer.is_valid(raise_exception=True)
+		try:
+			serializer = self.get_serializer(data=request.data)
+			serializer.is_valid(raise_exception=True)
+		except Exception as e:
+			try:
+				usr = Account.objects.get(email = request.data['email'], is_deleted = True)
+				usr.is_deleted = False
+				usr.username = request.data['username']
+				usr.role = request.data['role']
+				usr.reports_id = request.data['reports_id']
+				usr.canUpdateCapacity = request.data['canUpdateCapacity'] == "true"
+				usr.save()
+				return Response({"user":["added"]})
+			except Exception as e1:
+				print(e1)
+				return Response({"email":["account with this email already exists."]}, status=status.HTTP_400_BAD_REQUEST)
+				
 		user = serializer.save()
+
 		now = datetime.datetime.now()
 		date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
 		id = user.id
 		token = secrets.token_hex(16) + str(id)
 		encodeToken = urlsafe_base64_encode(smart_bytes(token))
-		base64_message = encodeToken.decode('ascii')
+		#base64_message = encodeToken.decode('ascii')
 		current_site = get_current_site(request)
 		current_site_domain = current_site.domain.split(':')[0]
-		absurl = f'http://{current_site_domain}/#/user-password?token={base64_message}'
+		absurl = f'http://{current_site_domain}/#/user-password?token={encodeToken}'
 		email_body = f'Bonjour,\n\nVotre compte onDemand a été créé le {date_time}.\n\n' \
 					 'Afin de confirmer la création de votre compte, nous vous invitons à cliquer sur ' + \
 					 absurl + '.\n\n'+\

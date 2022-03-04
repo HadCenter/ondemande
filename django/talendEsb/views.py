@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp
-from .transactionFileService import sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison
+from .transactionFileService import downloadLivraisonFileFromFTP, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison
 from django.http import JsonResponse
 from API.settings import SECRET_KEY
 import jwt
@@ -315,4 +315,19 @@ def updateMetaDataFileInTableTransactionsLivraisonWS(request):
 
     updateMetaDataFileInTableTransactionsLivraison(transactionId=transactionId, transactionStatus=transactionStatus)
     return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def downloadLivraisonFile(request):
+    transactionId = request.data['transaction_id']
+    LivraisonFileName = request.data['fileName']
+    #LivraisonFileName = datetime.datetime.now().strftime("%d_%m_%Y")+"_fichierlivraison.xlsx"
+    livraisonFile = downloadLivraisonFileFromFTP(transactionId, LivraisonFileName)
+    response = HttpResponse(livraisonFile, content_type="application/xls")
+    response['Content-Disposition'] = "attachment; filename={0}".format(LivraisonFileName)
+    response['Content-Length'] = os.path.getsize(LivraisonFileName)
+    os.remove(LivraisonFileName)
+    return response
+
+
 

@@ -46,8 +46,7 @@
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
           transaction
         </button>
-        <button (click)='correctionAllFile();$event.stopPropagation();'
-        [disabled]="showLoader"
+        <button (click)='correctionAllFile();$event.stopPropagation();' [disabled]="showLoader"
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
         </button>
       </div>
@@ -86,9 +85,15 @@
                   <button (click)='correctionFile("livraison");$event.stopPropagation();'
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
                   </button> -->
-                    <button (click)='resetFiltre("livraison");$event.stopPropagation();' style="margin-left: 5px;"
+                    <button (click)='resetFiltre("livraison");$event.stopPropagation();' style="margin-right: 7px;"
                       class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                       les filtres
+                    </button>
+                    <button (click)='downloadFile("livraison");$event.stopPropagation();'
+                      class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">
+                      <span class="material-icons btndownload">
+                        download
+                      </span>
                     </button>
                   </mat-panel-description>
                 </mat-expansion-panel-header>

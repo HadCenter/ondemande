@@ -115,8 +115,12 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.LAST_EDITABLE_ROW = this.data.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumns.length - 1;
       //this.data=this.prestationService.sheet1;
+      this.copyFilesErrorPerPagination = this.data;
       this.testFileError = this.data;  // copy to selection
       this.fileError = this.data // copy to filter
+
+      this.numPage = Math.ceil(this.data.length / this.countPerPage);
+      this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage); /****to display */
       // initialize all selectedCellsState to false
       this.data.forEach(element => {
         this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
@@ -146,6 +150,10 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.copyFilesErrorPerPagination2 = this.data2;
       this.testFileError2 = this.data2;  // copy to selection
       this.fileError2 = this.data2 // copy to filter
+
+      this.numPage2 = Math.ceil(this.data2.length / this.countPerPage2);
+      this.advancedTable2 = this.getAdvancedTablePage2(1, this.countPerPage2); /****to display */
+
       // initialize all selectedCellsState to false
       this.data2.forEach(element => {
         this.selectedCellsState.push(Array.from({ length: this.displayedColumns2.length - 1 }, () => false))
@@ -157,12 +165,30 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
 
   }
 
-  test() {
-    console.log(this.sheet1);
+  public getAdvancedTablePage(page, countPerPage) {
+    return this.data.slice((page - 1) * countPerPage, page * countPerPage);
   }
- /**
-  * Reset filter
-  */
+  public getAdvancedTablePage2(page, countPerPage2) {
+    return this.data2.slice((page - 1) * countPerPage2, page * countPerPage2);
+  }
+
+  public changePage2(page, force = false) {
+    if (page !== this.currentPage2 || force) {
+      this.currentPage2 = page;
+      this.advancedTable2 = this.getAdvancedTablePage2(page, this.countPerPage2);
+    }
+  }
+
+  public changePage(page, force = false) {
+    if (page !== this.currentPage || force) {
+      this.currentPage = page;
+      this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
+    }
+  }
+
+  /**
+   * Reset filter
+   */
   resetFiltre2() {
     const rows = document.getElementsByClassName('titre-column-magistor2') as HTMLCollectionOf<HTMLElement>;
     for (let i = 0; i < rows.length; i++) {
@@ -182,31 +208,37 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     this.filterValuesError2 = [];
     this.data2 = this.testFileError2;
     this.data2 = this.data2.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
+    this.currentPage2 = this.data2.length > 0 ? 1 : 0;
+    this.numPage2 = Math.ceil(this.data2.length / this.countPerPage2);
+    this.advancedTable2 = this.data2.slice(0, this.countPerPage2);
   }
 
-   /**
-    * Reset filter
-    */
-    resetFiltre() {
-      const rows = document.getElementsByClassName('titre-column-magistor') as HTMLCollectionOf<HTMLElement>;
-      for (let i = 0; i < rows.length; i++) {
-        rows[i].style.color = 'white';
-      }
-      for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
-        for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
-          this.selectedCellsState[i][j] = false;
-        }
-      }
-      // reset the selected filtre
-      this.optionsError.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
-        }
-      });
-      this.filterValuesError = [];
-      this.data = this.testFileError;
-      this.data = this.data.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
+  /**
+   * Reset filter
+   */
+  resetFiltre() {
+    const rows = document.getElementsByClassName('titre-column-magistor') as HTMLCollectionOf<HTMLElement>;
+    for (let i = 0; i < rows.length; i++) {
+      rows[i].style.color = 'white';
     }
+    for (let i = this.FIRST_EDITABLE_ROW; i <= this.LAST_EDITABLE_ROW; i++) {
+      for (let j = this.FIRST_EDITABLE_COL; j <= this.LAST_EDITABLE_COL; j++) {
+        this.selectedCellsState[i][j] = false;
+      }
+    }
+    // reset the selected filtre
+    this.optionsError.forEach(element => {
+      if (element.hasOwnProperty("modelValue")) {
+        element.modelValue = ""
+      }
+    });
+    this.filterValuesError = [];
+    this.data = this.testFileError;
+    this.data = this.data.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
+    this.currentPage = this.data.length > 0 ? 1 : 0;
+    this.numPage = Math.ceil(this.data.length / this.countPerPage);
+    this.advancedTable = this.data.slice(0, this.countPerPage);
+  }
 
 
   openSnackBar(message: string, action: string) {
@@ -309,38 +341,45 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   }
 
 
-   /**** Filter items on error file */
-    setFilteredItemsError() {
-      this.data = this.filterItemsError(this.filterValueError);
-      if (this.filterValueError === '') {
-        this.data = this.data;
-
-      }
+  /**** Filter items on error file */
+  setFilteredItemsError() {
+    this.copyFilesErrorPerPagination = this.filterItemsError(this.filterValueError);
+    if (this.filterValueError === '') {
+      this.advancedTable = this.advancedTable;
     }
+    this.currentPage = this.copyFilesErrorPerPagination.length > 0 ? 1 : 0;
+    this.numPage = Math.ceil(this.copyFilesErrorPerPagination.length / this.countPerPage);
+    this.advancedTable = this.copyFilesErrorPerPagination.slice(0, this.countPerPage);
+  }
 
 
-    filterItemsError(filterValueError: string) {
-      return this.fileError.filter((item) => {
-        return JSON.stringify(item).toLowerCase().includes(filterValueError.toLowerCase());
-      });
+  filterItemsError(filterValueError: string) {
+    return this.testFileError.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterValueError.toLowerCase());
+    });
+  }
+
+
+  /**** Filter items on error file */
+  setFilteredItemsError2() {
+
+    this.copyFilesErrorPerPagination2 = this.filterItemsError2(this.filterValueError2);
+    if (this.filterValueError2 === '') {
+      this.advancedTable2 = this.advancedTable2;
     }
+    this.currentPage2 = this.copyFilesErrorPerPagination2.length > 0 ? 1 : 0;
+    this.numPage2 = Math.ceil(this.copyFilesErrorPerPagination2.length / this.countPerPage2);
+    this.advancedTable2 = this.copyFilesErrorPerPagination2.slice(0, this.countPerPage2);
 
 
- /**** Filter items on error file */
-    setFilteredItemsError2() {
-      this.data2 = this.filterItemsError2(this.filterValueError2);
-      if (this.filterValueError2 === '') {
-        this.data2 = this.data2;
-
-      }
-    }
+  }
 
 
-    filterItemsError2(filterValueError2: string) {
-      return this.fileError2.filter((item) => {
-        return JSON.stringify(item).toLowerCase().includes(filterValueError2.toLowerCase());
-      });
-    }
+  filterItemsError2(filterValueError2: string) {
+    return this.testFileError2.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterValueError2.toLowerCase());
+    });
+  }
 
 
 
@@ -353,15 +392,25 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     if (filterExists == false) { this.filterValuesError.push(filter) }
     // if only one select is selected
     if (this.filterValuesError.length == 1) {
+
       this.fileError = this.filterChange(filter);
       this.data = this.fileError;
+      this.currentPage = this.data.length > 0 ? 1 : 0;
+      this.numPage = Math.ceil(this.data.length / this.countPerPage);
+      this.advancedTable = this.data.slice(0, this.countPerPage);
+
+
+      //   this.data = this.fileError;
     }
     else {
 
       // if already another select is active merge the results
       if (filterExists == false) {
 
-        this.data = this.getIntersection(filter)
+        this.data = this.getIntersection(filter);
+        this.currentPage = this.data.length > 0 ? 1 : 0;
+        this.numPage = Math.ceil(this.data.length / this.countPerPage);
+        this.advancedTable = this.data.slice(0, this.countPerPage);
       }
       else {
         this.data = this.fileError;
@@ -369,6 +418,9 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
           this.data = this.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
         this.data = this.data.filter((object, index) => index === this.data.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.currentPage = this.data.length > 0 ? 1 : 0;
+        this.numPage = Math.ceil(this.data.length / this.countPerPage);
+        this.advancedTable = this.data.slice(0, this.countPerPage);
       }
 
     }
@@ -379,10 +431,16 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.filterValuesError = this.filterValuesError.filter(item => item.columnProp != filter.columnProp);
       if (this.filterValuesError.length == 0) {
         this.data = this.testFileError;
+        this.currentPage = this.data.length > 0 ? 1 : 0;
+        this.numPage = Math.ceil(this.data.length / this.countPerPage);
+        this.advancedTable = this.data.slice(0, this.countPerPage);
         //this.data = this.data.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
       }
       else if (this.filterValuesError.length == 1) {
-        this.data = this.filterChange(this.filterValuesError[0])
+        this.data = this.filterChange(this.filterValuesError[0]);
+        this.currentPage = this.data.length > 0 ? 1 : 0;
+        this.numPage = Math.ceil(this.data.length / this.countPerPage);
+        this.advancedTable = this.data.slice(0, this.countPerPage);
       }
       else {
         this.filterValuesError = this.filterValuesError.filter(function (item) {
@@ -393,6 +451,9 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         this.filterValuesError.forEach(element => {
           this.data = this.data.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
+        this.currentPage = this.data.length > 0 ? 1 : 0;
+        this.numPage = Math.ceil(this.data.length / this.countPerPage);
+        this.advancedTable = this.data.slice(0, this.countPerPage);
       }
 
     }
@@ -408,13 +469,19 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
     if (this.filterValuesError2.length == 1) {
       this.fileError2 = this.filterChange2(filter);
       this.data2 = this.fileError2;
+      this.currentPage2 = this.data2.length > 0 ? 1 : 0;
+      this.numPage2 = Math.ceil(this.data2.length / this.countPerPage2);
+      this.advancedTable2 = this.data2.slice(0, this.countPerPage2);
     }
     else {
 
       // if already another select is active merge the results
       if (filterExists == false) {
 
-        this.data2 = this.getIntersection2(filter)
+        this.data2 = this.getIntersection2(filter);
+        this.currentPage2 = this.data2.length > 0 ? 1 : 0;
+        this.numPage2 = Math.ceil(this.data2.length / this.countPerPage2);
+        this.advancedTable2 = this.data2.slice(0, this.countPerPage2);
       }
       else {
         this.data2 = this.fileError2;
@@ -422,6 +489,9 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
           this.data2 = this.data2.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
         this.data2 = this.data2.filter((object, index) => index === this.data2.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
+        this.currentPage2 = this.data2.length > 0 ? 1 : 0;
+        this.numPage2 = Math.ceil(this.data2.length / this.countPerPage2);
+        this.advancedTable2 = this.data2.slice(0, this.countPerPage2);
       }
 
     }
@@ -432,10 +502,16 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       this.filterValuesError2 = this.filterValuesError2.filter(item => item.columnProp != filter.columnProp);
       if (this.filterValuesError2.length == 0) {
         this.data2 = this.testFileError2;
+        this.currentPage2 = this.data2.length > 0 ? 1 : 0;
+        this.numPage2 = Math.ceil(this.data2.length / this.countPerPage2);
+        this.advancedTable2 = this.data2.slice(0, this.countPerPage2);
         //this.data2 = this.data2.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
       }
       else if (this.filterValuesError2.length == 1) {
-        this.data2 = this.filterChange2(this.filterValuesError2[0])
+        this.data2 = this.filterChange2(this.filterValuesError2[0]);
+        this.currentPage2 = this.data2.length > 0 ? 1 : 0;
+        this.numPage2 = Math.ceil(this.data2.length / this.countPerPage2);
+        this.advancedTable2 = this.data2.slice(0, this.countPerPage2);
       }
       else {
         this.filterValuesError2 = this.filterValuesError2.filter(function (item) {
@@ -446,6 +522,9 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
         this.filterValuesError2.forEach(element => {
           this.data2 = this.data2.filter(x => element.modelValue.includes(x[element.columnProp]));
         });
+        this.currentPage2 = this.data2.length > 0 ? 1 : 0;
+        this.numPage2 = Math.ceil(this.data2.length / this.countPerPage2);
+        this.advancedTable2 = this.data2.slice(0, this.countPerPage2);
       }
 
     }

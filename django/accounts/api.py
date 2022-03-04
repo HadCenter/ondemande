@@ -46,9 +46,25 @@ class RegisterAPI(generics.GenericAPIView):
 		request.data['created_at'] = datetime.datetime.now()
 		request.data['password'] = password
 		request.data._mutable = _mutable
-		serializer = self.get_serializer(data=request.data)
-		serializer.is_valid(raise_exception=True)
+		try:
+			serializer = self.get_serializer(data=request.data)
+			serializer.is_valid(raise_exception=True)
+		except Exception as e:
+			try:
+				usr = Account.objects.get(email = request.data['email'], is_deleted = True)
+				usr.is_deleted = False
+				usr.username = request.data['username']
+				usr.role = request.data['role']
+				usr.reports_id = request.data['reports_id']
+				usr.canUpdateCapacity = request.data['canUpdateCapacity'] == "true"
+				usr.save()
+				return Response({"user":["added"]})
+			except Exception as e1:
+				print(e1)
+				return Response({"email":["account with this email already exists."]}, status=status.HTTP_400_BAD_REQUEST)
+				
 		user = serializer.save()
+
 		now = datetime.datetime.now()
 		date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
 		id = user.id

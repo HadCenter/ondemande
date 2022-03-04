@@ -8,6 +8,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import * as Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { event } from 'd3';
+import { saveAs } from 'file-saver';
+import { DatePipe } from '@angular/common';
 
 const moment = extendMoment(Moment);
 
@@ -20,7 +22,8 @@ export interface MouseEvent {
 @Component({
   selector: 'app-details-transaction',
   templateUrl: './details-transaction.component.html',
-  styleUrls: ['./details-transaction.component.scss']
+  styleUrls: ['./details-transaction.component.scss'],
+  providers: [DatePipe]
 })
 export class DetailsTransactionComponent extends UpgradableComponent implements OnInit {
   copy_transactions: any = [];
@@ -115,7 +118,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
   constructor(private route: ActivatedRoute,
     public service: DetailsTransactionService,
-    private _snackBar: MatSnackBar, private router: Router,) { super(); }
+    private _snackBar: MatSnackBar, private router: Router,
+    private datePipe: DatePipe) { super(); }
 
   ngOnInit(): void {
     this.service.getDetailTransaction(this.route.snapshot.params.id).subscribe(res => {
@@ -913,7 +917,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     this.changeSelectedOptionExceptionColor(filter)
     if (filterExists == false) { this.filterExceptionValues.push(filter) }
     // if only one select is selected
-    console.warn("this.filterExceptionValues",this.filterExceptionValues)
+    console.warn("this.filterExceptionValues", this.filterExceptionValues)
     if (this.filterExceptionValues.length == 1) {
       this.dataSourceException.data = this.filterExceptionChange(filter);
     }
@@ -1411,7 +1415,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             rows: this.copyDataSource.map(Object.values),
           }
         }
-        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
+        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction, 4000);
         this.service.correctLivraisonFile(this.fileTocheck).subscribe(res => {
           //console.log('resultat correction exception', res);
           if (res.message == "ok") {
@@ -1436,7 +1440,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             rows: this.copyDataSourceException.map(Object.values),
           }
         }
-        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
+        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction, 4000);
         this.service.correctExceptionFile(this.fileTocheck).subscribe(res => {
           if (res.message == "ok") {
             this.router.navigate(['/list-transaction']);
@@ -1461,7 +1465,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             rows: this.copyDataSourceMetaData.map(Object.values),
           }
         }
-        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
+        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction, 4000);
         this.service.correctMetaDataFile(this.fileTocheck).subscribe(res => {
           if (res.message == "ok") {
             this.router.navigate(['/list-transaction']);
@@ -1486,7 +1490,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             rows: this.copyDataSourceMad.map(Object.values),
           }
         }
-        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
+        this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction, 4000);
         this.service.correctMadFile(this.fileTocheck).subscribe(res => {
           if (res.message == "ok") {
             this.router.navigate(['/list-transaction']);
@@ -1499,64 +1503,64 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   /**
  * Correct all transaction files
  */
-correctionAllFile() {
-  if (this.verifRangeDateBeforeCorrection()) {
-    this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction,4000);
-  } else {
-    this.showLoader = true;
-    if (this.dataSource.data.length > 0) {
-      this.columnsLivraison = Object.keys(this.copyDataSource[0]);
-      this.rowsLivraison = this.copyDataSource.map(Object.values);
-    }
-    if (this.dataSourceException.data.length > 0) {
-      this.columnsException = Object.keys(this.copyDataSourceException[0]);
-      this.rowsException = this.copyDataSourceException.map(Object.values);
-    }
-    if (this.dataSourceMetaData.data.length > 0) {
-      this.columnsMetaData = Object.keys(this.copyDataSourceMetaData[0]);
-      this.rowsMetaData = this.copyDataSourceMetaData.map(Object.values);
-    }
-    if (this.dataSourceMAD.data.length > 0) {
-      this.columnsMad = Object.keys(this.copyDataSourceMad[0]);
-      this.rowsMad = this.copyDataSourceMad.map(Object.values);
-    }
-    this.fileTocheck = {
-      transaction_id: this.transaction.transaction_id,
-      fileReplacementLivraison: {
-        columns: this.columnsLivraison,
-        rows: this.rowsLivraison,
-      },
-      fileReplacementMAD: {
-        columns: this.columnsMad,
-        rows: this.rowsMad,
-      },
-      fileReplacementMetadata: {
-        columns: this.columnsMetaData,
-        rows: this.rowsMetaData,
-      },
-      fileReplacementException: {
-        columns: this.columnsException,
-        rows: this.rowsException,
-      },
+  correctionAllFile() {
+    if (this.verifRangeDateBeforeCorrection()) {
+      this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction, 4000);
+    } else {
+      this.showLoader = true;
+      if (this.dataSource.data.length > 0) {
+        this.columnsLivraison = Object.keys(this.copyDataSource[0]);
+        this.rowsLivraison = this.copyDataSource.map(Object.values);
+      }
+      if (this.dataSourceException.data.length > 0) {
+        this.columnsException = Object.keys(this.copyDataSourceException[0]);
+        this.rowsException = this.copyDataSourceException.map(Object.values);
+      }
+      if (this.dataSourceMetaData.data.length > 0) {
+        this.columnsMetaData = Object.keys(this.copyDataSourceMetaData[0]);
+        this.rowsMetaData = this.copyDataSourceMetaData.map(Object.values);
+      }
+      if (this.dataSourceMAD.data.length > 0) {
+        this.columnsMad = Object.keys(this.copyDataSourceMad[0]);
+        this.rowsMad = this.copyDataSourceMad.map(Object.values);
+      }
+      this.fileTocheck = {
+        transaction_id: this.transaction.transaction_id,
+        fileReplacementLivraison: {
+          columns: this.columnsLivraison,
+          rows: this.rowsLivraison,
+        },
+        fileReplacementMAD: {
+          columns: this.columnsMad,
+          rows: this.rowsMad,
+        },
+        fileReplacementMetadata: {
+          columns: this.columnsMetaData,
+          rows: this.rowsMetaData,
+        },
+        fileReplacementException: {
+          columns: this.columnsException,
+          rows: this.rowsException,
+        },
 
+      }
+      console.warn('file to check', this.fileTocheck)
+      this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction, 4000);
+      this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
+        if (res.message == "ok") {
+          this.router.navigate(['/list-transaction']);
+        } else {
+          this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction, 12000);
+          this.router.navigate(['/list-transaction']);
+        }
+      },
+        err => {
+          this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction, 12000);
+          this.router.navigate(['/list-transaction']);
+        }
+      )
     }
-    console.warn('file to check', this.fileTocheck)
-    this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction,4000);
-    this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
-      if (res.message == "ok") {
-        this.router.navigate(['/list-transaction']);
-      }else{
-        this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction,12000);
-        this.router.navigate(['/list-transaction']);
-      }
-    },
-      err => {
-        this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction,12000);
-        this.router.navigate(['/list-transaction']);
-      }
-    )
   }
-}
   verifRangeDateBeforeCorrection() {
     const startDate = (this.transaction.start_date.substr(0, 19)).split('-');
     const endDate = ((this.transaction.end_date.substr(0, 19)).split('-'));
@@ -1594,13 +1598,34 @@ correctionAllFile() {
       }
     }
   }
-  openSnackBar(message: string, action: string, duration : number) {
+  openSnackBar(message: string, action: string, duration: number) {
     this._snackBar.open(message, action, {
       duration: duration,
       verticalPosition: 'top',
       horizontalPosition: 'center',
     });
   }
-}
 
+  downloadFile(typeFile) {
+
+    if (typeFile == "livraison") {
+      var today_date = this.datePipe.transform(new Date(), 'dd_MM_YYYY');
+
+      var fileToDownload = {
+        transaction_id: this.route.snapshot.params.id,
+        fileName: today_date + "_fichierlivraison.xlsx"
+      }
+
+      this.openSnackBar("Téléchargement du fichier en cours..", this.snackAction, 10000);
+
+      this.service.importLivraisonFile(fileToDownload).subscribe(res => {
+        saveAs(res, fileToDownload.fileName);
+        this.openSnackBar("Le fichier est téléchargé avec succès.", this.snackAction, 4500);
+
+      }, 
+      error => this.openSnackBar("Une erreur s'est produite lors du chargement du fichier..", this.snackAction, 4500)
+      );
+    }
+  }
+}
 

@@ -1,7 +1,11 @@
+from datetime import datetime
 import pandas as pd
 import os
 from sftpConnectionToExecutionServer.views import sftp
 from .models import TransactionsLivraison
+from django.conf import settings
+
+DJANGO_DIRECTORY = settings.BASE_DIR
 
 def sendTransactionParamsToExecutionServerInCsvFile(transaction_id, jobs_to_start, destination_folder):
     fileName = str(transaction_id) + ".csv"
@@ -24,3 +28,18 @@ def updateMetaDataFileInTableTransactionsLivraison(transactionId, transactionSta
     transaction = TransactionsLivraison.objects.get(pk=transactionId)
     transaction.statut = transactionStatus
     transaction.save()
+
+def downloadLivraisonFileFromFTP(transactionId, LivraisonFileName):
+    transaction = TransactionsLivraison.objects.get(id=transactionId)
+    
+    sftp.get(transaction.fichier_livraison_sftp, os.getcwd() + "/" + LivraisonFileName )
+    LivraisonFile = readLivraisonFileFromLocalHost(LivraisonFileName)
+
+    return LivraisonFile
+
+
+def readLivraisonFileFromLocalHost(LivraisonFileName):
+    with open(LivraisonFileName, 'rb') as f:
+        LivraisonFile = f.read()
+    return LivraisonFile
+

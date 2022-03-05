@@ -35,4 +35,8 @@ public getAllTransactions(): Observable<any> {
   return this.http.get(`${this.url1}/getAllTransactionMadLivraison`);
 }
 
+public importLivraisonFile(data): Observable<any> {
+  return this.http.post(`${this.url1}/downloadLivraisonFile`,data, { responseType: "blob" });
+}
+
 }

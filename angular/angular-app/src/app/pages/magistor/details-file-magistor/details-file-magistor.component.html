@@ -96,6 +96,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -113,11 +115,11 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid?.rows" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor?.columns ; let i = index" id={{options[i].columnProp}}
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
@@ -136,7 +138,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
@@ -172,6 +174,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -188,11 +192,11 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid2?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
                             class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -209,7 +213,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid2?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                       <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                         (change)="selectDeleteRowValidFile (i)">
@@ -260,6 +264,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -279,11 +285,11 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid?.rows" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor?.columns ; let i = index" id={{options[i].columnProp}}
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -300,7 +306,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
@@ -326,7 +332,7 @@
           </base-card>
           <!------------------------------------- FEUILLE ART01 --------------------------------------->
           <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
-         <app-prestation-erronee *ngIf="errorfileMagistor?.rows.length > 0" [typeFile]="file?.logisticFileType"
+         <app-prestation-erronee *ngIf="errorfileMagistor?.rows?.length > 0" [typeFile]="file?.logisticFileType"
             [originData]="errorfileMagistor" [data]="copyerrorfileMagistor" [sheet1]="true"
             (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
@@ -344,6 +350,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -361,11 +369,11 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid2?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
                             class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -382,7 +390,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid2?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
@@ -430,6 +438,9 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePageREC)="changePageValid($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -449,11 +460,11 @@
                   <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
                     [show]="!(fileMagistor )"></app-loader>
 
-                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor?.columns ; let i = index" id={{options[i].columnProp}}
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -470,7 +481,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                       <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                         (change)="selectDeleteRowValidFile (i)">
@@ -507,6 +518,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePageREC)="changePageValid2($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -526,11 +539,11 @@
                   <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
                     [show]="!(fileMagistor2 )"></app-loader>
 
-                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid2?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
                             class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -547,7 +560,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid2?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                     <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                       (change)="selectDeleteRowValidFile (i)">
@@ -600,6 +613,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -616,11 +631,11 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor?.columns ; let i = index"  id={{options[i].columnProp}}
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index"  id={{options[i].columnProp}}
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -637,7 +652,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
@@ -685,6 +700,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -702,11 +719,11 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid2?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
                             class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -723,7 +740,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid2?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
@@ -991,6 +1008,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -1007,11 +1026,11 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid?.rows" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor?.columns ; let i = index" id={{options[i].columnProp}}
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -1028,7 +1047,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                     <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                       (change)="selectDeleteRowValidFile (i)">
@@ -1066,6 +1085,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -1083,11 +1104,11 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid2?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
                             class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -1104,7 +1125,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid2?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                   <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                     (change)="selectDeleteRowValidFile (i)">
@@ -1157,6 +1178,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -1173,11 +1196,11 @@
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <div *ngIf="fileMagistor.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid?.rows" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor?.columns ; let i = index" id={{options[i].columnProp}}
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
                             class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -1194,7 +1217,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">
@@ -1240,6 +1263,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                </base-pagination>
               </div>
             </base-card-title>
             <base-card-body class="content-file-line">
@@ -1257,11 +1282,11 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div *ngIf="fileMagistor2.rows.length > 0" class="content-table">
+                  <div *ngIf="advancedTableValid2?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of fileMagistor2?.columns ; let i = index" id={{options2[i].columnProp}}2
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
                             class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' " >{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
@@ -1278,7 +1303,7 @@
                       </thead>
                       <tbody>
 
-                        <tr *ngFor="let item of fileMagistor2?.rows  | slice:0:limit; let i = index;">
+                        <tr *ngFor="let item of advancedTableValid2?.rows  | slice:0:limit; let i = index;">
                           <!-- <td>
                         <mat-checkbox color="warn" (click)="$event.stopPropagation()"
                           (change)="selectDeleteRowValidFile (i)">

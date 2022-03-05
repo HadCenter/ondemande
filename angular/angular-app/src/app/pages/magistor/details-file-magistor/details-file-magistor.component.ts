@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,HostListener} from '@angular/core';
 import { DetailsFileMagistorService } from './details-file-magistor.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PrestationErroneeService } from '../prestation-erronee/prestation-erronee.service';
 import { MagistorService } from '../magistor.service';
@@ -79,6 +78,19 @@ export class DetailsFileMagistorComponent implements OnInit {
   dialogRef: MatDialogRef<ConfirmDialogComponent>;
   filterValues2: any = [];
 
+  public currentPageValid = 1;
+  private countPerPageValid = 5;
+  public numPageValid = 1;
+  public advancedTableValid = {};
+  copyFilesValidPerPagination = [];
+
+  public currentPageValid2 = 1;
+  private countPerPageValid2 = 5;
+  public numPageValid2 = 1;
+  public advancedTableValid2 = {};
+  copyFilesValidPerPagination2 = [];
+
+
   constructor(private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
     public router: Router,
@@ -148,17 +160,20 @@ export class DetailsFileMagistorComponent implements OnInit {
       "folderLogisticFile": this.file.idLogisticFile,
       "logisticSheetName": this.file.logisticFileType,
     }
-    console.log(data);
+
     this.fileService.getLogisticFileContent(data).subscribe(res => {
       this.fileMagistor = res;
       if (this.fileMagistor.rows.length > 0) {
-        console.log(this.fileMagistor.rows.length + "   : fileMagostore", this.fileMagistor);
-
+        this.copyFilesValidPerPagination = this.fileMagistor;
         this.copyfileMagistor = JSON.parse(JSON.stringify(this.fileMagistor));
         this.copyfileMagistor.rows.splice(0, 0, this.copyfileMagistor.columns);
         this.copyfileMagistor = this.convertToArrayOfObjects(this.copyfileMagistor.rows);
+
         this.testValidFile = this.copyfileMagistor;   //copy to use on selection
         this.files = this.copyfileMagistor;    // copy to filter *
+
+        this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+        this.advancedTableValid = this.getAdvancedTablePageValid(1, this.countPerPageValid); /****to display */
         this.displayedColumns = (Object.keys(this.copyfileMagistor[0]));
 
         this.LAST_EDITABLE_ROW = this.copyfileMagistor.length - 1;
@@ -168,8 +183,6 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyfileMagistor.forEach(element => {
           this.selectedCellsState.push(Array.from({ length: this.displayedColumns.length - 1 }, () => false))
         });
-
-
         // get select options
         this.displayedColumns.forEach(item => {
           this.getOption(item);
@@ -184,13 +197,18 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
     this.fileService.getLogisticFileContent(data).subscribe(res => {
       this.fileMagistor2 = res;
-      console.log("fileMagostore2", this.fileMagistor2);
+
       if (this.fileMagistor2.rows.length > 0) {
+        this.copyFilesValidPerPagination2 = this.fileMagistor2;
         this.copyfileMagistor2 = JSON.parse(JSON.stringify(this.fileMagistor2));
         this.copyfileMagistor2.rows.splice(0, 0, this.copyfileMagistor2.columns);
         this.copyfileMagistor2 = this.convertToArrayOfObjects(this.copyfileMagistor2.rows);
+
         this.testValidFile2 = this.copyfileMagistor2;   //copy to use on selection
         this.files2 = this.copyfileMagistor2;    // copy to filter *
+        this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+        this.advancedTableValid2 = this.getAdvancedTablePageValid2(1, this.countPerPageValid2); /****to display */
+
         this.displayedColumns2 = (Object.keys(this.copyfileMagistor2[0]));
 
         // get select options file Magistor 2
@@ -204,6 +222,37 @@ export class DetailsFileMagistorComponent implements OnInit {
     })
   }
 
+  public getAdvancedTablePageValid(page, countPerPage) {
+    let obj = {
+      columns: this.fileMagistor.columns,
+      rows: this.fileMagistor.rows.slice((page - 1) * countPerPage, page * countPerPage)
+    }
+    return obj
+
+  }
+
+  public getAdvancedTablePageValid2(page, countPerPage) {
+    let obj = {
+      columns: this.fileMagistor2.columns,
+      rows: this.fileMagistor2.rows.slice((page - 1) * countPerPage, page * countPerPage)
+    }
+    return obj
+
+  }
+
+  public changePageValid(page, force = false) {
+    if (page !== this.currentPageValid || force) {
+      this.currentPageValid = page;
+      this.advancedTableValid = this.getAdvancedTablePageValid(page, this.countPerPageValid);
+    }
+  }
+
+  public changePageValid2(page, force = false) {
+    if (page !== this.currentPageValid2 || force) {
+      this.currentPageValid2 = page;
+      this.advancedTableValid2 = this.getAdvancedTablePageValid2(page, this.countPerPageValid2);
+    }
+  }
 
   getWrongFiles() {
     this.fileName = this.file.logisticFileName.name;
@@ -216,7 +265,6 @@ export class DetailsFileMagistorComponent implements OnInit {
     }
     this.fileService.getLogisticFileContent(data_error).subscribe(res => {
       this.errorfileMagistor = res;
-
       if (this.errorfileMagistor.rows.length > 0) {
         this.copyerrorfileMagistor = JSON.parse(JSON.stringify(this.errorfileMagistor));
         this.copyerrorfileMagistor.rows.splice(0, 0, this.copyerrorfileMagistor.columns);
@@ -434,14 +482,32 @@ export class DetailsFileMagistorComponent implements OnInit {
   setFilteredItemsValid() {
     this.copyfileMagistor = this.filterItemsValid(this.filterValue);
     if (this.copyfileMagistor.length >= 1) {
-      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+
+      this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+      this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+      this.advancedTableValid = {
+        columns: this.fileMagistor.columns,
+        rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
+      }
     }
     else {
-      this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+      this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns);
+      this.advancedTableValid = {
+        columns: this.fileMagistor.columns,
+        rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
+      }
     }
     if (this.filterValue === '') {
       this.copyfileMagistor = this.copyfileMagistor;
-      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+
+      this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+      this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+      this.advancedTableValid = {
+        columns: this.fileMagistor.columns,
+        rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
+      }
     }
   }
 
@@ -460,14 +526,34 @@ export class DetailsFileMagistorComponent implements OnInit {
   setFilteredItemsValid2() {
     this.copyfileMagistor2 = this.filterItemsValid2(this.filterValue2);
     if (this.copyfileMagistor2.length >= 1) {
-      this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2)
+      this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
+
+      this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+      this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+      this.advancedTableValid2 = {
+        columns: this.fileMagistor2.columns,
+        rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
+      }
     }
     else {
-      this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+      this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2);
+      this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+      this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+      this.advancedTableValid2 = {
+        columns: this.fileMagistor2.columns,
+        rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
+      }
     }
     if (this.filterValue2 === '') {
       this.copyfileMagistor2 = this.copyfileMagistor2;
+      this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
 
+      this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+      this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+      this.advancedTableValid2 = {
+        columns: this.fileMagistor2.columns,
+        rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
+      }
     }
   }
 
@@ -700,10 +786,22 @@ export class DetailsFileMagistorComponent implements OnInit {
     this.copyfileMagistor2 = this.testValidFile2;
     this.copyfileMagistor2 = this.copyfileMagistor2.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
     if (this.copyfileMagistor2.length >= 1) {
-      this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2)
+      this.fileMagistor2 = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor2);
+      this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+      this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+      this.advancedTableValid2 = {
+        columns: this.fileMagistor2.columns,
+        rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
+      }
     }
     else {
-      this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+      this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2);
+      this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+      this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+      this.advancedTableValid2 = {
+        columns: this.fileMagistor2.columns,
+        rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
+      }
     }
 
 
@@ -732,14 +830,25 @@ export class DetailsFileMagistorComponent implements OnInit {
       }
     });
     this.filterValues = [];
-    this.fileMagistor = this.testValidFile;
     this.copyfileMagistor = this.testValidFile;
     this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.OP_CODE > b.OP_CODE) ? 1 : -1);
     if (this.copyfileMagistor.length >= 1) {
-      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+      this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+      this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+      this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+      this.advancedTableValid = {
+        columns: this.fileMagistor.columns,
+        rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
+      }
     }
     else {
       this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+    }
+    this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+    this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+    this.advancedTableValid = {
+      columns: this.fileMagistor.columns,
+      rows: this.fileMagistor?.rows.slice(0, this.countPerPageValid)
     }
   }
 
@@ -828,10 +937,18 @@ export class DetailsFileMagistorComponent implements OnInit {
       if (this.filterValues.length == 1) {
         this.copyfileMagistor = this.filterChange(filter);
         if (this.copyfileMagistor.length >= 1) {
-          this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+          this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+
         }
         else {
-          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns);
+
+        }
+        this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+        this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+        this.advancedTableValid = {
+          columns: this.fileMagistor.columns,
+          rows: this.fileMagistor?.rows.slice(0, this.countPerPageValid)
         }
 
       } else {
@@ -839,11 +956,20 @@ export class DetailsFileMagistorComponent implements OnInit {
         if (filterExists == false) {
           this.copyfileMagistor = this.getIntersection(filter)
           if (this.copyfileMagistor.length >= 1) {
-            this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+            this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+
           }
           else {
-            this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+            this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns);
+
           }
+          this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+          this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+          this.advancedTableValid = {
+            columns: this.fileMagistor.columns,
+            rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
+          }
+
         } else {
           this.copyfileMagistor = this.filesValid;
           this.filterValues.forEach(element => {
@@ -851,11 +977,20 @@ export class DetailsFileMagistorComponent implements OnInit {
           });
           this.copyfileMagistor = this.copyfileMagistor.filter((object, index) => index === this.copyfileMagistor.findIndex(obj => JSON.stringify(obj) === JSON.stringify(object)));
           if (this.copyfileMagistor.length >= 1) {
-            this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+            this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+
           }
           else {
-            this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+            this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns);
+
           }
+          this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+          this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+          this.advancedTableValid = {
+            columns: this.fileMagistor.columns,
+            rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
+          }
+
         }
       }
     }
@@ -866,10 +1001,19 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyfileMagistor = this.testValidFile;
         this.copyfileMagistor = this.copyfileMagistor.sort((a, b) => (a.Remarque_id > b.Remarque_id) ? 1 : -1);
         if (this.copyfileMagistor.length >= 1) {
+
           this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+
         }
         else {
-          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns);
+
+        }
+        this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+        this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+        this.advancedTableValid = {
+          columns: this.fileMagistor.columns,
+          rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
         }
 
       }
@@ -877,10 +1021,19 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyfileMagistor = this.filterChange(this.filterValues[0]);
         if (this.copyfileMagistor.length >= 1) {
           this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+
         }
         else {
-          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns);
+
         }
+        this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+        this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+        this.advancedTableValid = {
+          columns: this.fileMagistor.columns,
+          rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
+        }
+
       }
       else {
         this.filterValues = this.filterValues.filter(function (item) {
@@ -890,12 +1043,26 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.copyfileMagistor = this.testValidFile;
         this.filterValues.forEach(element => {
           this.copyfileMagistor = this.copyfileMagistor.filter(x => element.modelValue.includes(x[element.columnProp]));
+
+          // this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+          // this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+          // this.advancedTableValid = {
+          //   columns: this.fileMagistor.columns,
+          //   rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
+          // }
         });
         if (this.copyfileMagistor.length >= 1) {
-          this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor)
+          this.fileMagistor = this.convertArrayofObjectToRowsColumns(this.copyfileMagistor);
+
         }
         else {
-          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns)
+          this.fileMagistor = this.convertArrayofObjectsToEmptyRows(this.displayedColumns);
+        }
+        this.currentPageValid = this.fileMagistor.rows.length > 0 ? 1 : 0;
+        this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
+        this.advancedTableValid = {
+          columns: this.fileMagistor.columns,
+          rows: this.fileMagistor.rows.slice(0, this.countPerPageValid)
         }
       }
     }
@@ -922,6 +1089,13 @@ export class DetailsFileMagistorComponent implements OnInit {
           this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
         }
 
+        this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+        this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+        this.advancedTableValid2 = {
+          columns: this.fileMagistor2.columns,
+          rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
+        }
+
       } else {
         // if already another select is active merge the results
         if (filterExists == false) {
@@ -932,6 +1106,14 @@ export class DetailsFileMagistorComponent implements OnInit {
           else {
             this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
           }
+
+          this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+          this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+          this.advancedTableValid2 = {
+            columns: this.fileMagistor2.columns,
+            rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
+          }
+
         } else {
           this.copyfileMagistor2 = this.filesValid2;
           this.filterValues2.forEach(element => {
@@ -943,6 +1125,12 @@ export class DetailsFileMagistorComponent implements OnInit {
           }
           else {
             this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+          }
+          this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+          this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+          this.advancedTableValid2 = {
+            columns: this.fileMagistor2.columns,
+            rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
           }
         }
       }
@@ -959,6 +1147,12 @@ export class DetailsFileMagistorComponent implements OnInit {
         else {
           this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
         }
+        this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+        this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+        this.advancedTableValid2 = {
+          columns: this.fileMagistor2.columns,
+          rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
+        }
       }
       else if (this.filterValues2.length == 1) {
         this.copyfileMagistor2 = this.filterChange2(this.filterValues2[0]);
@@ -967,6 +1161,12 @@ export class DetailsFileMagistorComponent implements OnInit {
         }
         else {
           this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        }
+        this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+        this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+        this.advancedTableValid2 = {
+          columns: this.fileMagistor2.columns,
+          rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
         }
       }
       else {
@@ -983,6 +1183,12 @@ export class DetailsFileMagistorComponent implements OnInit {
         }
         else {
           this.fileMagistor2 = this.convertArrayofObjectsToEmptyRows(this.displayedColumns2)
+        }
+        this.currentPageValid2 = this.fileMagistor2.rows.length > 0 ? 1 : 0;
+        this.numPageValid2 = Math.ceil(this.fileMagistor2.rows.length / this.countPerPageValid2);
+        this.advancedTableValid2 = {
+          columns: this.fileMagistor2.columns,
+          rows: this.fileMagistor2.rows.slice(0, this.countPerPageValid2)
         }
       }
     }

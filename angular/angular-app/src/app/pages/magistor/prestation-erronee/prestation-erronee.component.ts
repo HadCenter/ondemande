@@ -58,6 +58,19 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
   filterValuesError2: any = [];
   private displayedColumns2: string[];
   private data2: any;
+
+  public currentPage = 1;
+  private countPerPage = 5;
+  public numPage = 1;
+  public advancedTable = [];
+  copyFilesErrorPerPagination = [];
+
+  public currentPage2 = 1;
+  private countPerPage2 = 5;
+  public numPage2 = 1;
+  public advancedTable2 = [];
+  copyFilesErrorPerPagination2 = [];
+
   constructor(private eRef: ElementRef,
     private prestationService: PrestationErroneeService,
     private _snackBar: MatSnackBar) {
@@ -130,6 +143,7 @@ export class PrestationErroneeComponent extends UpgradableComponent implements O
       }
       this.LAST_EDITABLE_ROW = this.data2.length - 1;
       this.LAST_EDITABLE_COL = this.displayedColumns2.length - 1;
+      this.copyFilesErrorPerPagination2 = this.data2;
       this.testFileError2 = this.data2;  // copy to selection
       this.fileError2 = this.data2 // copy to filter
       // initialize all selectedCellsState to false

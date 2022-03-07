@@ -54,7 +54,7 @@ class InterventionFacturationTransport(models.Model):
     id_admin = models.ForeignKey(AccountsAccount ,db_column="id_admin", on_delete= models.DO_NOTHING )
     id_transaction = models.ForeignKey(TransactionsLivraison ,db_column="id_transaction", on_delete= models.CASCADE )
     execution_time = models.DateTimeField(auto_now =True)
-
+    typeTransaction = models.CharField(max_length=12)
     class Meta:
         managed = False
         db_table = 'intervention_Facturation_transport'

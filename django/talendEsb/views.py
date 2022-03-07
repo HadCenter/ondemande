@@ -99,6 +99,18 @@ def integrerMADFile(request):
 def genererMADFile(request):
 	transactionToInsert = TransactionsLivraison(start_date= request.data['start_date'] , end_date =request.data['end_date'] , statut="En attente")
 	transactionToInsert.save()
+	transaction_id = transactionToInsert.id
+
+	token = request.META['HTTP_AUTHORIZATION'] # Get token
+	token = token.replace("Bearer ","")
+	response = jwt.decode(token,SECRET_KEY,algorithms="HS256")
+
+	interventionToSave = InterventionFacturationTransport()
+	interventionToSave.id_admin_id = response['id']
+	interventionToSave.id_transaction_id = transaction_id
+	interventionToSave.typeTransaction = "generation"
+	interventionToSave.save()
+
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[0])
 	jobs_to_start.append(madPlanJobList[1])
@@ -212,6 +224,7 @@ def correctAllFiles(request):
 	interventionToSave = InterventionFacturationTransport()
 	interventionToSave.id_admin_id = response['id']
 	interventionToSave.id_transaction_id = transaction_id
+	interventionToSave.typeTransaction = "correction"
 	interventionToSave.save()
 
 	fileReplacementLivraison = request.data['fileReplacementLivraison']

@@ -29,17 +29,36 @@ def updateMetaDataFileInTableTransactionsLivraison(transactionId, transactionSta
     transaction.statut = transactionStatus
     transaction.save()
 
-def downloadLivraisonFileFromFTP(transactionId, LivraisonFileName):
+def downloadLivraisonFileFromFTP(transactionId, LivraisonFileName, clientList):
     transaction = TransactionsLivraison.objects.get(id=transactionId)
     
     sftp.get(transaction.fichier_livraison_sftp, os.getcwd() + "/" + LivraisonFileName )
-    LivraisonFile = readLivraisonFileFromLocalHost(LivraisonFileName)
+    if len(clientList) > 0:
+
+        LivraisonFile = readLivraisonFileForCertainClients(LivraisonFileName, clientList)
+    else:
+        LivraisonFile = readLivraisonFileFromLocalHost(LivraisonFileName)
+
 
     return LivraisonFile
+
+
+def readLivraisonFileForCertainClients(LivraisonFileName, clientList):
+    with open(LivraisonFileName, 'rb') as f:
+        LivraisonFile = f.read()
+
+    excelfile = pd.read_excel(LivraisonFile)
+    excelfile = excelfile.fillna('')
+    df = excelfile.loc[excelfile['Expediteur'].isin(clientList)]
+    os.remove(LivraisonFileName)
+    df.to_excel(LivraisonFileName, index=False)
+    with open(LivraisonFileName, 'rb') as file:
+        LivraisonFile2 = file.read()
+
+    return LivraisonFile2
 
 
 def readLivraisonFileFromLocalHost(LivraisonFileName):
     with open(LivraisonFileName, 'rb') as f:
         LivraisonFile = f.read()
     return LivraisonFile
-

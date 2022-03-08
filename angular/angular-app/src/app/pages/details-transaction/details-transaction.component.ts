@@ -1639,8 +1639,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
 
   openSelectClientDialog(clients) {
-    var clientslist = [];
-
     this.dialogRef = this.dialog.open(SelectClientDialogComponent, {
       width: '450px',
       panelClass:'select-client-container',
@@ -1648,9 +1646,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       disableClose: false
     });
     this.dialogRef.componentInstance.liste_clients = [];
-    var clientslist = [];
     this.updateDialogData();
-    //this.dialogRef.componentInstance.liste_clients = clientslist;
 
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -1661,7 +1657,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   updateDialogData(){
-    this.dataSource.data.forEach(element => {
+    this.arrayLivraison.fileContent.forEach(element => {
       if (!this.dialogRef.componentInstance.liste_clients.includes(element.Expediteur)) {
         this.dialogRef.componentInstance.liste_clients.push(element.Expediteur);
       }

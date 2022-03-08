@@ -1,0 +1,37 @@
+<!-- <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--3-col-phone content" > -->
+<div class='dialog-content'>
+    <base-card class="card-dialog">
+        <base-card-title class="">
+            <h2 class="mdl-card__title-text">Télécharger fichier de livraison</h2>
+        </base-card-title>
+
+
+        <base-card-body  class="no-padding">
+            <div mat-dialog-content>
+                <h6 class="text-color--white"> Veuillez sélectionner les expéditeurs </h6>
+            </div>
+            <mat-selection-list>
+                <mat-list-option [selected]="toggle" (click)="selectAll()">
+                    Sélectionner tout
+                </mat-list-option>
+            </mat-selection-list>
+            <app-loader [position]="'fixed'" [width]="'400px'" [height]="'45%'" [bg]="'transparant'" [show]="liste_clients.length == 0">
+            </app-loader>
+    
+            <mat-selection-list #allSelected [(ngModel)]="selectedClients" (ngModelChange)="onChange($event)">
+
+                <mat-list-option *ngFor="let client of liste_clients" [value]="client">
+                    {{client}}
+                </mat-list-option>
+            </mat-selection-list>
+
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
+                <button class="mdl-button mdl-js-button mdl-button--raised color--light-gray" type="button"
+                    (click)="dialogRef.close()">Annuler</button>
+                &nbsp;
+                <button class="mdl-button mdl-js-button mdl-button--raised button--colored-teal" type="button"
+                    (click)="dialogRef.close('true')" [disabled]="!isclientSelected">Télécharger</button>
+            </div>
+        </base-card-body>
+    </base-card>
+</div>

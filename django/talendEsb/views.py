@@ -334,8 +334,11 @@ def updateMetaDataFileInTableTransactionsLivraisonWS(request):
 def downloadLivraisonFile(request):
     transactionId = request.data['transaction_id']
     LivraisonFileName = request.data['fileName']
+    clientList = ""
+    if 'clientList' in request.data:
+        clientList = request.data['clientList']
     #LivraisonFileName = datetime.datetime.now().strftime("%d_%m_%Y")+"_fichierlivraison.xlsx"
-    livraisonFile = downloadLivraisonFileFromFTP(transactionId, LivraisonFileName)
+    livraisonFile = downloadLivraisonFileFromFTP(transactionId, LivraisonFileName, clientList)
     response = HttpResponse(livraisonFile, content_type="application/xls")
     response['Content-Disposition'] = "attachment; filename={0}".format(LivraisonFileName)
     response['Content-Length'] = os.path.getsize(LivraisonFileName)

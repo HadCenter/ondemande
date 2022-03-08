@@ -15,9 +15,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import {MyCustomPaginatorIntl} from './paginator-frensh';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectClientDialogComponent } from './select-client-dialog/select-client-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
-  declarations: [DetailsTransactionComponent],
+  declarations: [DetailsTransactionComponent, SelectClientDialogComponent],
   imports: [
     CommonModule,
     DetailsTransactionRoutingModule,
@@ -33,12 +36,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     LoaderModule,
     MatPaginatorModule,
     MatCheckboxModule,
-
+    MatDialogModule,
+    MatListModule
   ],
   providers: [
     DetailsTransactionService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
     { provide: MatPaginatorIntl, useClass: MyCustomPaginatorIntl}
   ],
+  entryComponents: [SelectClientDialogComponent]
 })
 export class DetailsTransactionModule { }

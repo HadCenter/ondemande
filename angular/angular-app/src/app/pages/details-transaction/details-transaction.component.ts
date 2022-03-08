@@ -10,6 +10,8 @@ import { extendMoment } from 'moment-range';
 import { event } from 'd3';
 import { saveAs } from 'file-saver';
 import { DatePipe } from '@angular/common';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SelectClientDialogComponent } from './select-client-dialog/select-client-dialog.component';
 
 const moment = extendMoment(Moment);
 
@@ -113,13 +115,16 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   rowsMad: any = [];
   allLivraison: boolean = false;
   allException: boolean = false;
+  dialogRef: MatDialogRef<SelectClientDialogComponent>;
 
 
 
   constructor(private route: ActivatedRoute,
     public service: DetailsTransactionService,
     private _snackBar: MatSnackBar, private router: Router,
-    private datePipe: DatePipe) { super(); }
+    private datePipe: DatePipe,
+    public dialog: MatDialog,
+  ) { super(); }
 
   ngOnInit(): void {
     this.service.getDetailTransaction(this.route.snapshot.params.id).subscribe(res => {
@@ -143,8 +148,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.displayedColumnsLivraison.forEach(item => {
           this.getOption(item);
         })
-
+        if (this.dialogRef && this.dialogRef.componentInstance) {
+          this.updateDialogData();
+        }
       }
+      this.showLoaderLivraisonFile = false;
+
       if (res.exception !== null && Object.keys(res.exception).length !== 0) {
         this.dataSourceException.paginator = this.paginator.toArray()[1];
         this.arrayException = res.exception;
@@ -161,6 +170,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.getOptionException(item);
         })
       }
+      this.showLoaderExceptionFile = false;
 
       if (res.metadata !== null && Object.keys(res.metadata).length !== 0) {
         this.dataSourceMetaData.paginator = this.paginator.toArray()[2];
@@ -179,6 +189,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.getOptionMetaData(item);
         })
       }
+      this.showLoaderMetadataFile = false;
 
       if (res.mad !== null && Object.keys(res.mad).length !== 0) {
         this.dataSourceMAD.paginator = this.paginator.toArray()[3];
@@ -197,9 +208,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         })
       }
 
-      this.showLoaderLivraisonFile = false;
-      this.showLoaderExceptionFile = false;
-      this.showLoaderMetadataFile = false;
       this.showLoaderMadFile = false;
     })
     this.getTransactions();
@@ -1606,14 +1614,15 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     });
   }
 
-  downloadFile(typeFile) {
+  downloadFile(typeFile, clientList) {
 
     if (typeFile == "livraison") {
       var today_date = this.datePipe.transform(new Date(), 'dd_MM_YYYY');
 
       var fileToDownload = {
         transaction_id: this.route.snapshot.params.id,
-        fileName: today_date + "_fichierlivraison.xlsx"
+        fileName: today_date + "_fichierlivraison.xlsx",
+        clientList: clientList
       }
 
       this.openSnackBar("Téléchargement du fichier en cours..", this.snackAction, 10000);
@@ -1622,10 +1631,42 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         saveAs(res, fileToDownload.fileName);
         this.openSnackBar("Le fichier est téléchargé avec succès.", this.snackAction, 4500);
 
-      }, 
-      error => this.openSnackBar("Une erreur s'est produite lors du chargement du fichier..", this.snackAction, 4500)
+      },
+        error => this.openSnackBar("Une erreur s'est produite lors du chargement du fichier..", this.snackAction, 4500)
       );
     }
+  }
+
+
+  openSelectClientDialog(clients) {
+    var clientslist = [];
+
+    this.dialogRef = this.dialog.open(SelectClientDialogComponent, {
+      width: '450px',
+      panelClass:'select-client-container',
+
+      disableClose: false
+    });
+    this.dialogRef.componentInstance.liste_clients = [];
+    var clientslist = [];
+    this.updateDialogData();
+    //this.dialogRef.componentInstance.liste_clients = clientslist;
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.downloadFile("livraison", this.dialogRef.componentInstance.selectedClients);
+      }
+      this.dialogRef = null;
+    });
+  }
+
+  updateDialogData(){
+    this.dataSource.data.forEach(element => {
+      if (!this.dialogRef.componentInstance.liste_clients.includes(element.Expediteur)) {
+        this.dialogRef.componentInstance.liste_clients.push(element.Expediteur);
+      }
+    });
+
   }
 }
 

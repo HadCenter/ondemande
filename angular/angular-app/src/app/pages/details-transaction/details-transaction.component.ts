@@ -403,7 +403,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   getOptionMetaData(filter) {
     let optionsMetaData = [];
     optionsMetaData = this.arrayMetaData.options[filter];
-    optionsMetaData = optionsMetaData.filter(item => item !== "")
+    optionsMetaData = optionsMetaData.filter(item => item !== "");
+    if (filter == "Date") {
+      optionsMetaData = optionsMetaData.sort();
+    }
     this.displayedColumnsMetadata.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -421,7 +424,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   getOptionMAD(filter) {
     let optionsMad = [];
     optionsMad = this.arrayMad.options[filter]
-    optionsMad = optionsMad.filter(item => item !== "")
+    optionsMad = optionsMad.filter(item => item !== "");
+    if (filter == "Date") {
+      optionsMad = optionsMad.sort();
+    }
     this.displayedColumnsMad.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -632,7 +638,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     let options = [];
     options = this.arrayLivraison.options[filter];
     options = options.filter(item => item !== "")
+    if (filter == "Date") {
+      options = options.sort();
+    }
     this.displayedColumnsLivraison.forEach((item, key) => {
+
       if (item == filter) {
         var obj = {
           columnProp: item,
@@ -646,7 +656,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   getOptionException(filter) {
     let optionsException = [];
     optionsException = this.arrayException.options[filter]
-    optionsException = optionsException.filter(item => item !== "")
+    optionsException = optionsException.filter(item => item !== "");
+    if (filter == "Date") {
+      optionsException = optionsException.sort();
+    }
     this.displayedColumnsException.forEach((item, key) => {
       if (item == filter) {
         var obj = {
@@ -1292,8 +1305,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                   }
                   /******* */
                   else {
-                    if(this.displayedColumnsException.indexOf(this.displayedColumnsLivraison[startCol]) > -1){
-                      el[this.displayedColumnsLivraison[startCol]] = text  
+                    if (this.displayedColumnsException.indexOf(this.displayedColumnsLivraison[startCol]) > -1) {
+                      el[this.displayedColumnsLivraison[startCol]] = text
                     }
                   }
 
@@ -1324,8 +1337,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                   }
                   /******* */
                   else {
-                    if(this.displayedColumnsLivraison.indexOf(this.displayedColumnsException[startCol]) > -1){
-                      el[this.displayedColumnsException[startCol]] = text  
+                    if (this.displayedColumnsLivraison.indexOf(this.displayedColumnsException[startCol]) > -1) {
+                      el[this.displayedColumnsException[startCol]] = text
                     }
                   }
 
@@ -1645,7 +1658,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   openSelectClientDialog(clients) {
     this.dialogRef = this.dialog.open(SelectClientDialogComponent, {
       width: '450px',
-      panelClass:'select-client-container',
+      panelClass: 'select-client-container',
 
       disableClose: false
     });
@@ -1660,7 +1673,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     });
   }
 
-  updateDialogData(){
+  updateDialogData() {
     this.arrayLivraison.fileContent.forEach(element => {
       if (!this.dialogRef.componentInstance.liste_clients.includes(element.Expediteur)) {
         this.dialogRef.componentInstance.liste_clients.push(element.Expediteur);

@@ -1284,7 +1284,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                   }
                   /******* */
                   else {
-                    el[this.displayedColumnsLivraison[startCol]] = text
+                    if(this.displayedColumnsException.indexOf(this.displayedColumnsLivraison[startCol]) > -1){
+                      el[this.displayedColumnsLivraison[startCol]] = text  
+                    }
                   }
 
                 }
@@ -1314,7 +1316,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                   }
                   /******* */
                   else {
-                    el[this.displayedColumnsException[startCol]] = text
+                    if(this.displayedColumnsLivraison.indexOf(this.displayedColumnsException[startCol]) > -1){
+                      el[this.displayedColumnsException[startCol]] = text  
+                    }
                   }
 
                 }

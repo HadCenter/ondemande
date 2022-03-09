@@ -176,12 +176,17 @@ LOGGING ={
     'version':1,
     'loggers':{
         'django':{
-            'handlers':['console','file'],
+            'handlers':['console'],
             'level':'DEBUG',
             'propagate': True,
         },
         'magistor':{
             'handlers':['magistorFile'],
+            'level':'DEBUG',
+            'propagate': True,
+        },
+         'auth':{
+            'handlers':['authFile'],
             'level':'DEBUG',
             'propagate': True,
         },
@@ -192,16 +197,22 @@ LOGGING ={
             'class': 'logging.StreamHandler',
             'formatter':'simpleRe',
         },
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': "django.log",
-            'formatter': 'simpleRe',
-        },
+        # 'file': {
+        #     'level': 'INFO',
+        #     'class': 'logging.FileHandler',
+        #     'filename': "django.log",
+        #     'formatter': 'simpleRe',
+        # },
         'magistorFile': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': "magistor.log",
+            'formatter': 'simpleRe',
+        },
+        'authFile': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': "auth.log",
             'formatter': 'simpleRe',
         },
     },

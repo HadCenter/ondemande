@@ -164,7 +164,7 @@ def LogisticFileCreate(request, format=None):
 
 @api_view(['POST'])
 def validateLogisticFileWS(request):
-    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
+    #idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
 
     logisticFilename = request.data['logisticFileName']
     folderLogisticFile = request.data['folderLogisticFile']
@@ -567,7 +567,7 @@ def DoInterventionAsAdminForEdiFileAndChangeFile(request):
 
 @api_view(['POST'])
 def downloadImportedLogisticFileWS(request):
-    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
+    #idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
     logisticFileName = request.data['logisticFileName']
     folderLogisticFile = request.data['folderLogisticFile']
     logisticFile = downloadImportedLogisticFile(logisticFileName,folderLogisticFile)
@@ -581,7 +581,7 @@ def downloadImportedLogisticFileWS(request):
 
 @api_view(['POST'])
 def deleteNotValidateLogisticFileWS(request):
-    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
+    #idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
 
     logisticFileName = request.data['logisticFileName']
     idLogisticFile = request.data['idLogisticFile']
@@ -611,7 +611,7 @@ def updateMetaDataFileInTableCoreLogisticFileWS(request):
 
 @api_view(['POST'])
 def createLogisticFileFromColumnAndRows(request):
-    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
+    #idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
 
     columns1 = request.data['columns1']
     rows1 = request.data['rows1error']

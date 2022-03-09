@@ -181,23 +181,34 @@ LOGGING ={
             'level':'DEBUG',
             'propagate': True,
         },
+        'magistor':{
+            'handlers':['magistorFile'],
+            'level':'DEBUG',
+            'propagate': True,
+        },
+         'auth':{
+            'handlers':['authFile'],
+            'level':'DEBUG',
+            'propagate': True,
+        },
     },
     'handlers':{
-        'console':{
-            'level':'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter':'simpleRe',
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': "daphne.log",
-            'formatter': 'simpleRe',
-        },
         'error': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': "DaphneError.log",
+            'formatter': 'simpleRe',
+        },
+        'magistorFile': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': "magistor.log",
+            'formatter': 'simpleRe',
+        },
+        'authFile': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': "auth.log",
             'formatter': 'simpleRe',
         },
         

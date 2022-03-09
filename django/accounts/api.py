@@ -1,4 +1,5 @@
 
+import logging
 from django.contrib.sites.shortcuts import get_current_site
 import jwt
 import datetime
@@ -32,6 +33,8 @@ class LoginAPI(generics.GenericAPIView):
 			'iat' : datetime.datetime.utcnow()
 		}
 		token = jwt.encode(payload,SECRET_KEY,algorithm='HS256').decode('utf-8')
+		authLogger = logging.getLogger('auth')
+		authLogger.info("LOGIN : the user {} with id {} just connected!".format(user.email, user.id))
 		return Response({
 			'user': UserSerializer(user).data,
 			'token': token

@@ -1,3 +1,4 @@
+import logging
 import pytz
 import datetime
 import jwt
@@ -71,6 +72,10 @@ def update_reset_user_password(request):
             account.save()
             token_object = Tokensforgetpassword.objects.get(token=token,account=account)
             token_object.delete()
+
+            authLogger = logging.getLogger('auth')
+            authLogger.info("UPDATED PASSWORDD : the user {} with id {} just updated his password!".format(account.email, account.id))
+
             return JsonResponse(user_serializer.data)
 
 @api_view(['POST'])
@@ -93,6 +98,9 @@ def token_status (request):
 
 @api_view(['POST'])
 def forgetPassword(request):
+    authLogger = logging.getLogger('auth')
+    authLogger.info("FORGET PASSWORD : the user {} just demanded a new password!".format(request.data['email']))
+
     try:
         account = Account.objects.get(email=request.data['email'])
     except :

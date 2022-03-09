@@ -215,6 +215,12 @@ LOGGING ={
             'filename': "auth.log",
             'formatter': 'simpleRe',
         },
+        'magistorFile': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': "magistor.log",
+            'formatter': 'simpleRe',
+        },
     },
     'formatters':{
         'simpleRe': {

@@ -7,6 +7,8 @@ import shutil
 import time
 from os import listdir
 from os.path import isfile, join
+from API.settings import SECRET_KEY
+import jwt
 
 import jsonpickle
 import numpy as np
@@ -118,11 +120,15 @@ def clientList(request):
     listClients = getAllClientList()
 
     return HttpResponse(jsonpickle.encode(listClients, unpicklable=False), content_type="application/json")
+magistorLogger = logging.getLogger('magistor')
 
 @api_view(['GET'])
 def logisticFileList(request):
 
     listLogisticFiles = getAllLogisticFileList()
+
+    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
+    magistorLogger.info(" GET /logisticFileList by user : {}".format(idUser))
 
     return HttpResponse(jsonpickle.encode(listLogisticFiles, unpicklable=False), content_type="application/json")
 
@@ -144,21 +150,31 @@ def LogisticFileCreate(request, format=None):
     clientName = CLIENT_TEST
     logisticFile = request.FILES['logisticFile']
     key = KEY_TEST
+    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
+
     logisticFileSaved = saveUploadedLogisticFile(logisticFile)
+
+
     if(logisticFileSaved):
+        magistorLogger.info("Magistor File imported successfully by {} ".format(idUser))
         return JsonResponse({'message': 'file saved successfully'}, status=status.HTTP_201_CREATED)
     else:
+        magistorLogger.warning("Magistor import File echec by {} ".format(idUser))
         return JsonResponse({'message': 'file save echec'}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST'])
 def validateLogisticFileWS(request):
+    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
+
     logisticFilename = request.data['logisticFileName']
     folderLogisticFile = request.data['folderLogisticFile']
     typeLogisticFile = request.data['typeLogisticFile']
     logisticFileValidated = validateLogisticFile(logisticFilename, folderLogisticFile, typeLogisticFile)
     if(logisticFileValidated):
+        magistorLogger.info("Magistor : success on validate File {} with id {} by user {} ".format(logisticFilename, folderLogisticFile, idUser))
         return JsonResponse({'message': 'file validated successfully'}, status=status.HTTP_200_OK)
     else:
+        magistorLogger.warning("Magistor: ECHEC validate File {} with id {} by user {} ".format(logisticFilename, folderLogisticFile, idUser))
         return JsonResponse({'message': 'file validated echec'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -542,6 +558,7 @@ def DoInterventionAsAdminForEdiFileAndChangeFile(request):
 
 @api_view(['POST'])
 def downloadImportedLogisticFileWS(request):
+    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
     logisticFileName = request.data['logisticFileName']
     folderLogisticFile = request.data['folderLogisticFile']
     logisticFile = downloadImportedLogisticFile(logisticFileName,folderLogisticFile)
@@ -549,13 +566,19 @@ def downloadImportedLogisticFileWS(request):
     response['Content-Disposition'] = "attachment; filename={0}".format(logisticFileName)
     response['Content-Length'] = os.path.getsize(logisticFileName)
     os.remove(logisticFileName)
+    magistorLogger.info("Magistor : download File {} with id {} by user {} ".format(logisticFileName, folderLogisticFile, idUser))
+
     return response
 
 @api_view(['POST'])
 def deleteNotValidateLogisticFileWS(request):
+    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
+
     logisticFileName = request.data['logisticFileName']
     idLogisticFile = request.data['idLogisticFile']
     logisticFileDeleted = deleteNotValidateLogisticFile(logisticFileName, idLogisticFile)
+    magistorLogger.info("Magistor invalidate File {} with id {} by user {} ".format(logisticFileName, idLogisticFile, idUser))
+
     if(logisticFileDeleted):
         return JsonResponse({'message': 'file deleted successfully'}, status=status.HTTP_200_OK)
     else:
@@ -579,6 +602,8 @@ def updateMetaDataFileInTableCoreLogisticFileWS(request):
 
 @api_view(['POST'])
 def createLogisticFileFromColumnAndRows(request):
+    idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
+
     columns1 = request.data['columns1']
     rows1 = request.data['rows1error']
     columns2 = request.data['columns2']
@@ -586,6 +611,7 @@ def createLogisticFileFromColumnAndRows(request):
 
     fileId = request.data['fileId']
     createFileLogisticFromColumnAndRows(fileId, columns1, rows1, columns2, rows2)
+    magistorLogger.info("Magistor: correct on File with id {} by user {} ".format(fileId, idUser))
 
     return JsonResponse({'message': 'success'}, status=status.HTTP_200_OK)
 
@@ -605,3 +631,9 @@ def createLogisticFileAndValidateFile(request):
         return JsonResponse({'message': 'file validated successfully'}, status=status.HTTP_200_OK)
     else:
         return JsonResponse({'message': 'file validated echec'}, status=status.HTTP_200_OK)
+
+
+def getIdFromAuthToken(token):
+    token = token.replace("Bearer ","")
+    response = jwt.decode(token,SECRET_KEY,algorithms="HS256")
+    return response['id']

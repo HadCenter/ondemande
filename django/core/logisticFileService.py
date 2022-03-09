@@ -6,10 +6,14 @@ import paramiko
 import logging
 import pandas as pd
 import numpy as np
+from sftpConnectionToExecutionServer.views import sftp
+from API.settings import SECRET_KEY
+import jwt
+
 from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 from django.conf import settings
 DJANGO_DIRECTORY = settings.BASE_DIR
-logger = logging.getLogger('django')
+magistorLogger = logging.getLogger('magistor')
 
 FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "TransMagistorPreprod"
 
@@ -66,6 +70,7 @@ def saveUploadedLogisticFile(request_file):
         idFileInDB = traceLogisticFileInDB(fileName, typeLogisticFile)
         sftp_client = connect()
         uploadLogisticFileInSFtpServer(sftp_client, fileName, idFileInDB)
+        magistorLogger.info("Magistor File type {} ".format(typeLogisticFile))
         return True
 
 def get_extension(filename):

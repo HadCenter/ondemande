@@ -179,7 +179,12 @@ LOGGING ={
             'handlers':['console','file'],
             'level':'DEBUG',
             'propagate': True,
-        }
+        },
+        'magistor':{
+            'handlers':['magistorFile'],
+            'level':'DEBUG',
+            'propagate': True,
+        },
     },
     'handlers':{
         'console':{
@@ -191,6 +196,12 @@ LOGGING ={
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': "django.log",
+            'formatter': 'simpleRe',
+        },
+        'magistorFile': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': "magistor.log",
             'formatter': 'simpleRe',
         },
     },

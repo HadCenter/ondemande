@@ -72,7 +72,7 @@ def saveUploadedLogisticFile(request_file):
         idFileInDB = traceLogisticFileInDB(fileName, typeLogisticFile, clientName)
         sftp_client = connect(clientName, getFTPCredentials(clientName))
         uploadLogisticFileInSFtpServer(sftp_client, fileName, idFileInDB)
-        magistorLogger.info("Magistor File type {} ".format(typeLogisticFile))
+        #magistorLogger.info("Magistor File type {} ".format(typeLogisticFile))
         return True
 
 

@@ -135,6 +135,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       if (res.livraison !== null && Object.keys(res.livraison).length !== 0) {
         this.dataSource.paginator = this.paginator.toArray()[0];
+
         this.arrayLivraison = res.livraison;
         this.dataSource.data = this.arrayLivraison.fileContent;
         this.dataSource.data = this.dataSource.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
@@ -275,9 +276,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       })
 
-      // console.warn(row);
-      // location.reload();
-
     }
     else if (typeFile == "livraison") {
       //uncheck delete rowId from rowstoDelete
@@ -402,8 +400,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   */
   getOptionMetaData(filter) {
     let optionsMetaData = [];
-    optionsMetaData = this.arrayMetaData.options[filter];
-    optionsMetaData = optionsMetaData.filter(item => item !== "");
+
+    optionsMetaData = this.dataSourceMetaData.data.map((item) => item[filter]);
+    optionsMetaData = optionsMetaData.filter(function (value, index) {
+      return optionsMetaData.indexOf(value) == index && value != "";
+    });
+
     if (filter == "Date") {
       optionsMetaData = optionsMetaData.sort();
     }
@@ -423,8 +425,13 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 */
   getOptionMAD(filter) {
     let optionsMad = [];
-    optionsMad = this.arrayMad.options[filter]
-    optionsMad = optionsMad.filter(item => item !== "");
+  
+    optionsMad = this.dataSourceMAD.data.map((item) => item[filter]);
+    optionsMad = optionsMad.filter(function (value, index) {
+      return optionsMad.indexOf(value) == index && value != "";
+    });
+
+
     if (filter == "Date") {
       optionsMad = optionsMad.sort();
     }
@@ -544,6 +551,27 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 */
   resetFiltre(file) {
     if (file == "livraison") {
+      this.dataSource.data = this.copySelectionLivraison;
+      this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      this.onChangeOptions();
+
+      //reset the selected filtre
+      this.options.forEach(element => {
+        this.filterValues.forEach(el => {
+          if (element.columnProp == el.columnProp) {
+            element.modelValue = '';
+          }
+        });
+      });
+
+      // this.filterValues.forEach(element => {
+      //   if (element.hasOwnProperty("modelValue")) {
+      //     element.modelValue = ''
+      //   }
+      // });
+
+      this.filterValues = [];
+
       // reset header colors
       const rows = document.getElementsByClassName('titre-column') as HTMLCollectionOf<HTMLElement>;
       for (let i = 0; i < rows.length; i++) {
@@ -554,17 +582,33 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.selectedCellsState[i][j] = false;
         }
       }
-      // reset the selected filtre
-      this.options.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
-        }
-      });
-      this.dataSource.data = this.copySelectionLivraison;
-      this.filterValues = [];
-      this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+
+
+
     }
     else if (file == "exception") {
+
+      this.dataSourceException.data = this.copySelectionException;
+      this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      this.onChangeOptionsException();
+      //reset the selected filtre
+      this.optionsException.forEach(element => {
+        this.filterExceptionValues.forEach(el => {
+          if (element.columnProp == el.columnProp) {
+            element.modelValue = '';
+          }
+        });
+      });
+
+      // this.filterExceptionValues.forEach(element => {
+      //   if (element.hasOwnProperty("modelValue")) {
+      //     element.modelValue = ""
+      //   }
+      // })
+
+      this.filterExceptionValues = [];
+
+      //reset colors
       const rows = document.getElementsByClassName('titre-column-exception') as HTMLCollectionOf<HTMLElement>;
       for (let i = 0; i < rows.length; i++) {
         rows[i].style.color = 'white';
@@ -576,17 +620,14 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
 
       }
-      // reset the selected filtre
-      this.optionsException.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
-        }
-      })
-      this.dataSourceException.data = this.copySelectionException;
-      this.filterExceptionValues = [];
-      this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+
+
     }
     else if (file == "metadata") {
+      this.dataSourceMetaData.data = this.copySelectionMetaData;
+      this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      this.onChangeOptionsMetaData();
+      //reset colors
       const rows = document.getElementsByClassName('titre-column-metadata') as HTMLCollectionOf<HTMLElement>;
       for (let i = 0; i < rows.length; i++) {
         rows[i].style.color = 'white';
@@ -597,18 +638,25 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
 
       }
-      // reset the selected filtre
+      //reset the selected filtre
       this.optionsMetaData.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
-        }
-      })
-      this.dataSourceMetaData.data = this.copySelectionMetaData;
+        this.filterMetaDataValues.forEach(el => {
+          if (element.columnProp == el.columnProp) {
+            element.modelValue = '';
+          }
+        });
+      });
+
       this.filterMetaDataValues = [];
-      this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+
     }
 
     else { //MAD
+
+      this.dataSourceMAD.data = this.copySelectionMad;
+      this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
+      this.onChangeOptionsMad();
+      //reset colors
       const rows = document.getElementsByClassName('titre-column-mad') as HTMLCollectionOf<HTMLElement>;
       for (let i = 0; i < rows.length; i++) {
         rows[i].style.color = 'white';
@@ -618,15 +666,17 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.selectedCellsStateMad[i][j] = false;
         }
       }
-      // reset the selected filtre
+
+      //reset the selected filtre
       this.optionsMad.forEach(element => {
-        if (element.hasOwnProperty("modelValue")) {
-          element.modelValue = ""
-        }
-      })
-      this.dataSourceMAD.data = this.copySelectionMad;
+        this.filterMadValues.forEach(el => {
+          if (element.columnProp == el.columnProp) {
+            element.modelValue = '';
+          }
+        });
+      });
+
       this.filterMadValues = [];
-      this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
     }
 
   }
@@ -636,8 +686,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   */
   getOption(filter) {
     let options = [];
-    options = this.arrayLivraison.options[filter];
-    options = options.filter(item => item !== "")
+
+    options = this.dataSource.data.map((item) => item[filter]);
+    options = options.filter(function (value, index, options) {
+      return options.indexOf(value) == index && value != "";
+    });
+
     if (filter == "Date") {
       options = options.sort();
     }
@@ -648,15 +702,23 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           columnProp: item,
           options: options
         };
-        this.options.push(obj)
+        this.options.push(obj);
+
       }
+
     })
   }
 
+
+
   getOptionException(filter) {
     let optionsException = [];
-    optionsException = this.arrayException.options[filter]
-    optionsException = optionsException.filter(item => item !== "");
+
+    optionsException = this.dataSourceException.data.map((item) => item[filter]);
+    optionsException = optionsException.filter(function (value, index) {
+      return optionsException.indexOf(value) == index && value != "";
+    });
+
     if (filter == "Date") {
       optionsException = optionsException.sort();
     }
@@ -691,6 +753,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (this.filterValueLivraison === '') {
       this.dataSource.data = this.dataSource.data;
     }
+
+    this.onChangeOptions();
   }
 
   filterItemsLivraison(filterValueLivraison: string) {
@@ -699,6 +763,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     });
   }
 
+
   /**** Filter items */
   setFilteredItemsException() {
     this.dataSourceException.data = this.filterItemsException(this.filterValueException);
@@ -706,6 +771,14 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.dataSourceException.data = this.dataSourceException.data;
     }
 
+    this.onChangeOptionsException()
+
+  }
+
+  filterItemsException(filterItemsException: string) {
+    return this.copyFilterException.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterItemsException.toLowerCase());
+    });
   }
 
   /**** Filter items */
@@ -714,6 +787,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (this.filterValuemetadata === '') {
       this.dataSourceMetaData.data = this.dataSourceMetaData.data;
     }
+    this.onChangeOptionsMetaData()
   }
 
   filterItemsMetadata(filterItemsMetadata: string) {
@@ -727,6 +801,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (this.filterValueMad === '') {
       this.dataSourceMAD.data = this.dataSourceMAD.data;
     }
+    this.onChangeOptionsMad();
   }
 
   filterItemsMAD(filterItemsMAD: string) {
@@ -735,14 +810,33 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     });
   }
 
-  filterItemsException(filterItemsException: string) {
-    return this.copyFilterException.filter((item) => {
-      return JSON.stringify(item).toLowerCase().includes(filterItemsException.toLowerCase());
-    });
+
+
+  onChangeOptions() {
+    this.options = [];
+    this.displayedColumnsLivraison.forEach(item => { this.getOption(item); })
   }
+
+  onChangeOptionsException() {
+    this.optionsException = [];
+    this.displayedColumnsException.forEach(item => { this.getOptionException(item); })
+  }
+
+  onChangeOptionsMetaData() {
+    this.optionsMetaData = [];
+    this.displayedColumnsMetadata.forEach(item => { this.getOptionMetaData(item); })
+  }
+
+  onChangeOptionsMad() {
+    this.optionsMad = [];
+    this.displayedColumnsMad.forEach(item => { this.getOptionMAD(item); })
+  }
+
+
+
   /**
-* Initialise the selected cells
-*/
+  * Initialise the selected cells
+  */
   initSelectedCells() {
     if (this.fileSelected == "livraison") {
       this.LAST_EDITABLE_ROW = this.dataSource.data.length - 1;
@@ -809,8 +903,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   /**
-* change color of the selected column header on file livraison
-*/
+  * change color of the selected column header on file livraison
+  */
   changeSelectedOptionColor(filter) {
     if (filter.columnProp && filter.modelValue != "") {
       document.getElementById(filter.columnProp).style.color = "#00bcd4";
@@ -820,11 +914,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     }
   }
   /**
-* change color of the selected column header on file exception
-*/
+  * change color of the selected column header on file exception
+  */
   changeSelectedOptionExceptionColor(filter) {
     if (filter.columnProp && filter.modelValue != "") {
-      // console.warn(filter.columnProp, filter.columnProp + "Exception")
       document.getElementById(filter.columnProp + "Exception").style.color = "#00bcd4";
     }
     else {
@@ -832,11 +925,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     }
   }
   /**
-* change color of the selected column header on file metaData
-*/
+  * change color of the selected column header on file metaData
+  */
   changeSelectedOptionMetaDataColor(filter) {
     if (filter.columnProp && filter.modelValue != "") {
-      // console.warn(filter.columnProp, filter.columnProp + "MetaData")
       document.getElementById(filter.columnProp + "MetaData").style.color = "#00bcd4";
     }
     else {
@@ -844,11 +936,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     }
   }
   /**
-* change color of the selected column header on file MAD
-*/
+  * change color of the selected column header on file MAD
+  */
   changeSelectedOptionMadColor(filter) {
     if (filter.columnProp && filter.modelValue != "") {
-      // console.warn(filter.columnProp, filter.columnProp + "Mad")
       document.getElementById(filter.columnProp + "Mad").style.color = "#00bcd4";
     }
     else {
@@ -893,6 +984,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
 
       this.filterValues = this.filterValues.filter(item => item.columnProp != filter.columnProp);
+
       if (this.filterValues.length == 0) {
         this.dataSource.data = this.copySelectionLivraison;
         this.dataSource.data = this.dataSource.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
@@ -928,7 +1020,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
 
     }
-
+    this.onChangeOptions();
   }
 
 
@@ -938,7 +1030,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     this.changeSelectedOptionExceptionColor(filter)
     if (filterExists == false) { this.filterExceptionValues.push(filter) }
     // if only one select is selected
-    console.warn("this.filterExceptionValues", this.filterExceptionValues)
     if (this.filterExceptionValues.length == 1) {
       this.dataSourceException.data = this.filterExceptionChange(filter);
     }
@@ -1002,7 +1093,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
 
     }
-
+    this.onChangeOptionsException();
   }
 
   setFilteredItemsMetaDataOptions(filter) {
@@ -1049,10 +1140,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         });
       }
     }
-
+    this.onChangeOptionsMetaData();
   }
 
   setFilteredItemsMadOptions(filter) {
+
     // check if filter is already selected
     const filterExists = this.filterMadValues.some(f => f.columnProp === filter.columnProp);
     this.changeSelectedOptionMadColor(filter);
@@ -1070,6 +1162,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         }
       }
       else {
+
         this.dataSourceMAD.data = this.copyFilterMad;
         this.filterMadValues.forEach(element => {
           this.dataSourceMAD.data = this.dataSourceMAD.data.filter(x => element.modelValue.includes(x[element.columnProp]));
@@ -1081,7 +1174,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
     }
     // if selected is deactivate
-    if (filter.modelValue == "") {
+    if (filter.modelValue == "" || filter.modelValue.length == 0) {
       if (this.filterMadValues.length == 1) {
         this.dataSourceMAD.data = this.copySelectionMad;
         this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Expediteur > b.Expediteur) ? 1 : -1);
@@ -1095,12 +1188,13 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         });
       }
     }
+    this.onChangeOptionsMad();
   }
 
   /**
-* Get lignes when filter mad change
-* @param filter
-*/
+  * Get lignes when filter mad change
+  * @param filter
+  */
   filterMadChange(filter) {
     this.fileSelected = "mad";
     this.initSelectedCells();     // init selected cells
@@ -1112,9 +1206,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
 
   /**
-* Get lignes when filter exception change
-* @param filter
-*/
+  * Get lignes when filter exception change
+  * @param filter
+  */
   filterExceptionChange(filter) {
     this.fileSelected = "exception";
     this.initSelectedCells();     // init selected cells
@@ -1141,10 +1235,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     return index;
   }
   /**
- * @param rowId
- * @param colId
- * @param cellsType
- */
+  * @param rowId
+  * @param colId
+  * @param cellsType
+  */
   onMouseDown(rowId: number, colId: number, cellsType: string, file) {
     if (this.clickCorrection == false) {
       if (file == "livraison") {
@@ -1392,10 +1486,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
 
   /**
-* After the user enters a new value, all selected cells must be updated
-* document:keyup
-* @param event
-*/
+  * After the user enters a new value, all selected cells must be updated
+  * document:keyup
+  * @param event
+  */
   @HostListener('document:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent): void {
     // If no cell is selected then ignore keyUp event
@@ -1416,8 +1510,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   /**
-* Correct the file
-*/
+  * Correct the file
+  */
   correctionFile(index) {
     if (this.verifRangeDateBeforeCorrection()) {
       this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction, 6000);
@@ -1526,8 +1620,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   /**
- * Correct all transaction files
- */
+  * Correct all transaction files
+  */
   correctionAllFile() {
     if (this.verifRangeDateBeforeCorrection()) {
       this.openSnackBar("Une transaction est déjà en attente avec les dates sélectionnées", this.snackAction, 4000);
@@ -1613,8 +1707,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   }
 
   /**
- * Hide ui selection red rectangle
- */
+  * Hide ui selection red rectangle
+  */
   hideUiSelectionOnCorrection() {
     if (document.querySelector('.selected')) {
       var inputs = document.querySelectorAll(".selected");

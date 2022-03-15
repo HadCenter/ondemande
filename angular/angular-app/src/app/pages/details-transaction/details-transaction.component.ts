@@ -113,9 +113,14 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   rowsMetaData: any = [];
   columnsMad: any = [];
   rowsMad: any = [];
+  copyDatatoSearch: any =[];
+  copyDataExceptiontoSearch: any =[];
+  copyDataMetaDatatoSearch: any =[];
+  copyDataMADtoSearch: any =[];
   allLivraison: boolean = false;
   allException: boolean = false;
   dialogRef: MatDialogRef<SelectClientDialogComponent>;
+  
 
 
 
@@ -141,6 +146,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.dataSource.data = this.dataSource.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
         this.copySelectionLivraison = this.dataSource.data  //copy to use on selection
         this.copyFilterLivraison = this.dataSource.data;
+        this.copyDatatoSearch = this.dataSource.data;
         this.copyDataSource = this.dataSource.data; // copy to correction
         this.dataSource.data.forEach(element => {
           this.selectedCellsState.push(Array.from({ length: Object.keys(this.dataSource.data[0]).length - 1 }, () => false))
@@ -162,6 +168,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
         this.copySelectionException = this.dataSourceException.data  //copy to use on selection
         this.copyFilterException = this.dataSourceException.data;
+        this.copyDataExceptiontoSearch = this.dataSourceException.data;
         this.copyDataSourceException = this.dataSourceException.data; // copy to correction
         this.dataSourceException.data.forEach(element => {
           this.selectedCellsStateException.push(Array.from({ length: Object.keys(this.dataSourceException.data[0]).length - 1 }, () => false))
@@ -180,6 +187,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
         this.copySelectionMetaData = this.dataSourceMetaData.data  //copy to use on selection
         this.copyFilterMetaData = this.dataSourceMetaData.data;
+        this.copyDataMetaDatatoSearch= this.dataSourceMetaData.data;
         this.copyDataSourceMetaData = this.dataSourceMetaData.data; // copy to correction
         this.dataSourceMetaData.data.forEach(element => {
           this.selectedCellsStateMetaData.push(Array.from({ length: Object.keys(this.dataSourceMetaData.data[0]).length - 1 }, () => false))
@@ -199,6 +207,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.taskId < b.taskId) ? 1 : -1);
         this.copySelectionMad = this.dataSourceMAD.data  //copy to use on selection
         this.copyFilterMad = this.dataSourceMAD.data;
+        this.copyDataMADtoSearch= this.dataSourceMAD.data;
         this.copyDataSourceMad = this.dataSourceMAD.data; // copy to correction
         this.dataSourceMAD.data.forEach(element => {
           this.selectedCellsStateMad.push(Array.from({ length: Object.keys(this.dataSourceMAD.data[0]).length - 1 }, () => false))
@@ -749,16 +758,23 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
   /**** Filter items */
   setFilteredItemsLivraison() {
-    this.dataSource.data = this.filterItemsLivraison(this.filterValueLivraison);
-    if (this.filterValueLivraison === '') {
-      this.dataSource.data = this.dataSource.data;
+    if (this.dataSource.data.length>=1){
+      this.filterValues.forEach(element => {
+      this.changeSelectedOptionColor(element);
+      });
     }
-
+    this.dataSource.data = this.filterItemsLivraison(this.filterValueLivraison);
+    
+    if (this.filterValueLivraison === '') {
+      this.dataSource.data = this.copyDatatoSearch;
+    }
     this.onChangeOptions();
+
+   
   }
 
   filterItemsLivraison(filterValueLivraison: string) {
-    return this.copyFilterLivraison.filter((item) => {
+    return this.copyDatatoSearch.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterValueLivraison.toLowerCase());
     });
   }
@@ -766,46 +782,62 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
   /**** Filter items */
   setFilteredItemsException() {
+    if (this.dataSourceException.data.length>=1){
+    this.filterExceptionValues.forEach(element => {
+      this.changeSelectedOptionExceptionColor(element);
+    })
+  }
     this.dataSourceException.data = this.filterItemsException(this.filterValueException);
     if (this.filterValueException === '') {
-      this.dataSourceException.data = this.dataSourceException.data;
+      this.dataSourceException.data = this.copyDataExceptiontoSearch;
     }
 
-    this.onChangeOptionsException()
+    this.onChangeOptionsException();
 
   }
 
-  filterItemsException(filterItemsException: string) {
-    return this.copyFilterException.filter((item) => {
-      return JSON.stringify(item).toLowerCase().includes(filterItemsException.toLowerCase());
+  filterItemsException(filterValueException: string) {
+    return this.copyDataExceptiontoSearch.filter((item) => {
+      return JSON.stringify(item).toLowerCase().includes(filterValueException.toLowerCase());
     });
   }
 
   /**** Filter items */
   setFilteredItemsMetadata() {
+    if (this.dataSourceMetaData.data.length>=1){
+    this.filterMetaDataValues.forEach(element => {
+      this.changeSelectedOptionMetaDataColor(element);
+    })
+  }
     this.dataSourceMetaData.data = this.filterItemsMetadata(this.filterValuemetadata);
     if (this.filterValuemetadata === '') {
-      this.dataSourceMetaData.data = this.dataSourceMetaData.data;
+      this.dataSourceMetaData.data = this.copyDataMetaDatatoSearch;
     }
-    this.onChangeOptionsMetaData()
+    this.onChangeOptionsMetaData();
   }
 
   filterItemsMetadata(filterItemsMetadata: string) {
-    return this.copyFilterMetaData.filter((item) => {
+    return this.copyDataMetaDatatoSearch.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterItemsMetadata.toLowerCase());
     });
   }
   /**** Filter items */
   setFilteredItemsMAD() {
+    if (this.dataSourceMAD.data.length>=1){
+      this.filterMadValues.forEach(element => {
+       this.changeSelectedOptionMadColor(element);
+      })
+    }
     this.dataSourceMAD.data = this.filterItemsMAD(this.filterValueMad);
     if (this.filterValueMad === '') {
-      this.dataSourceMAD.data = this.dataSourceMAD.data;
+      this.dataSourceMAD.data = this.copyDataMADtoSearch;
     }
     this.onChangeOptionsMad();
+   
   }
 
   filterItemsMAD(filterItemsMAD: string) {
-    return this.copyFilterMad.filter((item) => {
+    return this.copyDataMADtoSearch.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(filterItemsMAD.toLowerCase());
     });
   }
@@ -947,7 +979,6 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     }
   }
   setFilteredItemsOptions(filter) {
-    console.log(this.dataSource.data);
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
     //  let selected=filter.columnProp;
@@ -958,7 +989,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // if only one select is selected
     if (this.filterValues.length == 1) {
       this.dataSource.data = this.filterChange(filter);
-
+      this.copyDatatoSearch= this.dataSource.data;
     }
     else {
       // if already another select is active merge the results
@@ -978,6 +1009,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSource.data.push({})
         }
       }
+      this.copyDatatoSearch= this.dataSource.data;
     }
 
     // if selected is deactivate
@@ -1005,6 +1037,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSource.data.push({})
         }
       }
+      this.copyDatatoSearch= this.dataSource.data;
     }
     //update selected all chebox
     if (this.rowsToDeleteLivraison.length == this.dataSource.data.length) {
@@ -1032,6 +1065,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // if only one select is selected
     if (this.filterExceptionValues.length == 1) {
       this.dataSourceException.data = this.filterExceptionChange(filter);
+      this.copyDataExceptiontoSearch= this.dataSourceException.data;
     }
 
     else {
@@ -1052,6 +1086,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSourceException.data.push({})
         }
       }
+      this.copyDataExceptiontoSearch= this.dataSourceException.data;
     }
 
     // if selected is deactivate
@@ -1078,6 +1113,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSourceException.data.push({})
         }
       }
+      this.copyDataExceptiontoSearch= this.dataSourceException.data;
     }
     // update select all checkbox
     if (this.rowsToDeleteException.length == this.dataSourceException.data.length) {
@@ -1104,6 +1140,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // if only one select is selected
     if (this.filterMetaDataValues.length == 1) {
       this.dataSourceMetaData.data = this.filterMetaDataChange(filter);
+      this.copyDataMetaDatatoSearch =this.dataSourceMetaData.data;
     }
     else {
       // if already another select is active merge the results
@@ -1123,6 +1160,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSourceMetaData.data.push({})
         }
       }
+      this.copyDataMetaDatatoSearch =this.dataSourceMetaData.data;
     }
 
     // if selected is deactivate
@@ -1139,6 +1177,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSourceMetaData.data = this.filterMetaDataChange(element)
         });
       }
+      this.copyDataMetaDatatoSearch =this.dataSourceMetaData.data;
     }
     this.onChangeOptionsMetaData();
   }
@@ -1152,6 +1191,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // if only one select is selected
     if (this.filterMadValues.length == 1) {
       this.dataSourceMAD.data = this.filterMadChange(filter);
+      this.copyDataMADtoSearch =this.dataSourceMAD.data;
     }
     else {
       // if already another select is active merge the results
@@ -1172,6 +1212,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSourceMAD.data.push({})
         }
       }
+      this.copyDataMADtoSearch =this.dataSourceMAD.data;
     }
     // if selected is deactivate
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
@@ -1187,6 +1228,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           this.dataSourceMAD.data = this.filterMadChange(element)
         });
       }
+      this.copyDataMADtoSearch =this.dataSourceMAD.data;
     }
     this.onChangeOptionsMad();
   }

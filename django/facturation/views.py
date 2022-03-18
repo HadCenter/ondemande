@@ -93,7 +93,7 @@ def caculateFacturationForClient(request):
 @api_view(['POST'])
 def caculateFacturationByDate(request):
     total = 0
-    untreatedFacturation = Facturation.objects.filter(total_jour=None, total_nuit=None, total_province = None)
+    untreatedFacturation = Facturation.objects.filter(total_jour=None)
     for fact in untreatedFacturation:
         if(fact.prep_jour != None):
             print("prep jour in not null")
@@ -148,6 +148,7 @@ def addFacturation(request):
         try:
             facturationDB.save()
         except Exception as e:
+            print(e)
             return JsonResponse({'message': 'date already exists'}, status=status.HTTP_200_OK)
 
     return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)

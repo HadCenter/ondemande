@@ -36,7 +36,7 @@ class Facturation(models.Model):
     id = models.IntegerField(primary_key=True)
     code_client = models.CharField(max_length=45)
     nom_client = models.CharField(max_length=45)
-    date = models.DateTimeField(unique=True)
+    date = models.DateField(unique=True)
     prep_jour = models.IntegerField()
     prep_nuit = models.IntegerField()
     prep_province = models.IntegerField()

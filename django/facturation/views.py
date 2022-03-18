@@ -1,7 +1,5 @@
-from asyncio.windows_events import NULL
 from core.models import Client
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
 import jsonpickle
 from rest_framework import status
 from rest_framework.decorators import api_view

@@ -5,7 +5,7 @@ import { ThemeModule } from 'theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { ListFacturationPreparationComponent } from './list-facturation-preparation.component';
-// import { MatCardModule } from '@angular/material/card';
+import { LoaderModule } from 'app/components/loader/loader.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,7 @@ import { ListFacturationPreparationComponent } from './list-facturation-preparat
   imports: [
     CommonModule,
     FormsModule,
-    // MatCardModule,
+    LoaderModule,
     ReactiveFormsModule,
     ThemeModule,
     MatFormFieldModule,

@@ -66,3 +66,17 @@ app-loader.loader{
      left: 74%;
      position: absolute;
  }
+
+ .mdl-data-table td:first-of-type{
+    padding-left: 12vh;
+ }
+ .mdl-data-table th:first-of-type{
+    padding-left: 12vh;
+ }
+ .mdl-data-table {
+    width: 100%;
+    overflow-x: auto;
+}
+base-card-body.mdl-card__supporting-text {
+    padding: 0px 16px;
+}

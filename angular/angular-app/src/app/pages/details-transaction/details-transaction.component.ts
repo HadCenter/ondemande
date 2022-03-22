@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, OnInit, HostListener, ViewChild, QueryList, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsTransactionService } from './details-transaction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UpgradableComponent } from 'theme/components/upgradable';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Moment from 'moment';
 import { extendMoment } from 'moment-range';

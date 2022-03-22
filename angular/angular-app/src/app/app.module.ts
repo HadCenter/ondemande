@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
+
 @NgModule({
   declarations: [AppComponent,],
   imports: [

@@ -72,10 +72,10 @@ def downloadKayserFiles(LivraisonFile):
     excelfile = excelfile.fillna('')
     excelfile = excelfile.loc[excelfile['Expediteur'] == Kayser_Client]
 
-    CDG_Livraisons_df = excelfile.loc[excelfile['Contact'].str.contains("Charles") == True]
-    ORLY_Livraisons_df = excelfile.loc[excelfile['Contact'].str.contains("Orly") == True]
-    montparnasse_df = excelfile.loc[(excelfile['Type_de_Service'].str.contains("LIVRAISON") == True) & (excelfile['Contact'].str.contains("Charles") == False) & (excelfile['Contact'].str.contains("Orly") == False)]
-    all_enlevement_df = excelfile.loc[(excelfile['Type_de_Service'].str.contains("ENLEVEMENT") == True) & (excelfile['Contact'].str.contains("Charles") == False) & (excelfile['Contact'].str.contains("Orly") == False)]
+    CDG_Livraisons_df = excelfile.loc[excelfile['Contact'].str.casefold().str.contains("charles") == True]
+    ORLY_Livraisons_df = excelfile.loc[excelfile['Contact'].str.casefold().str.contains("orly") == True]
+    montparnasse_df = excelfile.loc[(excelfile['Type_de_Service'].str.contains("LIVRAISON") == True) & (excelfile['Contact'].str.casefold().str.contains("charles") == False) & (excelfile['Contact'].str.casefold().str.contains("orly") == False)]
+    all_enlevement_df = excelfile.loc[(excelfile['Type_de_Service'].str.contains("ENLEVEMENT") == True) & (excelfile['Contact'].str.casefold().str.contains("charles") == False) & (excelfile['Contact'].str.casefold().str.contains("orly") == False)]
     
     CDG_Livraisons_df = CDG_Livraisons_df.append(all_enlevement_df.loc[all_enlevement_df['Tournee'].isin(CDG_Livraisons_df['Tournee'].values)], ignore_index=True)
     CDG_Livraisons_df.sort_values(by = ['Tournee'], inplace=True)
@@ -89,5 +89,5 @@ def downloadKayserFiles(LivraisonFile):
     current_date = datetime.datetime.now().strftime("%d_%m_%Y")
     CDG_Livraisons_df.to_excel(current_date+"_CDG_Livraisons.xlsx", index=False)
     ORLY_Livraisons_df.to_excel(current_date+"_ORL_Livraisons.xlsx", index=False)
-    montparnasse_df.to_excel(current_date+"_Montparnasse.xlsx", index=False)
+    montparnasse_df.to_excel(current_date+"_Montparnasse_Livraisons.xlsx", index=False)
 

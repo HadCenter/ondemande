@@ -340,11 +340,17 @@ def downloadLivraisonFile(request):
 	if 'clientList' in request.data:
 		clientList = request.data['clientList']
 	current_date = datetime.datetime.now().strftime("%d_%m_%Y")
-	LivraisonFileName = current_date+"_fichierlivraison.xlsx"
+	LivraisonFileName = current_date+"_Livraisons.xlsx"
 	kayserisFound,livraisonFile = downloadLivraisonFileFromFTP(transactionId, LivraisonFileName, clientList)
 	if(kayserisFound):
+		excelfile = pd.read_excel(LivraisonFileName)
+		if(len(excelfile) == 0):
+    		#return a zip containing 3 files in the list down below without Livraisons.xlsx beacause it is empty
+			os.remove(LivraisonFileName)
+			return getfiles([current_date+"_CDG_Livraisons.xlsx", current_date+"_ORL_Livraisons.xlsx",current_date+"_Montparnasse_Livraisons.xlsx"])
+
     	#return a zip containing th 4 files in the list down below
-		return getfiles([current_date+"_CDG_Livraisons.xlsx", current_date+"_ORL_Livraisons.xlsx",current_date+"_Montparnasse.xlsx",LivraisonFileName])
+		return getfiles([current_date+"_CDG_Livraisons.xlsx", current_date+"_ORL_Livraisons.xlsx",current_date+"_Montparnasse_Livraisons.xlsx",LivraisonFileName])
 	else:
     	#return a xlsx file date_fichierlivraison.xlsx
 		response = HttpResponse(livraisonFile, content_type="application/xls")

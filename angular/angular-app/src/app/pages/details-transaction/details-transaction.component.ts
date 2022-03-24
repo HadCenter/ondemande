@@ -1915,17 +1915,22 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
     if (typeFile == "livraison") {
       var today_date = this.datePipe.transform(new Date(), 'dd_MM_YYYY');
+      var fileName= today_date + "_fichierlivraison.xlsx";
 
       var fileToDownload = {
         transaction_id: this.route.snapshot.params.id,
-        fileName: today_date + "_fichierlivraison.xlsx",
         clientList: clientList
       }
 
       this.openSnackBar("Téléchargement du fichier en cours..", this.snackAction, 10000);
 
       this.service.importLivraisonFile(fileToDownload).subscribe(res => {
-        saveAs(res, fileToDownload.fileName);
+        //if response is a zip, download zip file else download xlsx
+        if(res.type.toString().includes("zip")){
+          saveAs(res, fileName.replace("xlsx","zip"));
+        }else{
+          saveAs(res, fileName);
+        }
         this.openSnackBar("Le fichier est téléchargé avec succès.", this.snackAction, 4500);
 
       },

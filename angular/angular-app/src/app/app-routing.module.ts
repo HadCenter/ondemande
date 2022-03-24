@@ -25,6 +25,7 @@ const routes: Routes = [
       { path: 'details-user/:id', loadChildren: () => import('./pages/details-user/details-user.module').then(m => m.DetailsUserModule), canActivate: [AuthGuard] },
       { path: 'facturation-logistique', loadChildren: () => import('./pages/facturation-logistique/facturation-logistique.module').then(m => m.FacturationLogistiqueModule), canActivate: [AuthGuard] },
       { path: 'facturation-preparation', loadChildren: () => import('./pages/list-facturation-preparation/list-facturation-preparation.module').then(m => m.ListFacturationPreparationModule), canActivate: [AuthGuard] },
+      { path: 'configuration-critere/:id', loadChildren: () => import('./pages/config-critere/config-critere.module').then(m => m.ConfigCritereModule), canActivate: [AuthGuard] },
       { path: 'rapports', loadChildren: () => import('./pages/powerbi-embedded/powerbi-embedded.module').then(m => m.PowerbiEmbeddedModule), canActivate: [AuthGuard] },
       { path: 'details-rapport/:id', loadChildren: () => import('./pages/details-kpi-powerbi/details-kpi-powerbi.module').then(m => m.DetailsKpiPowerbiModule), canActivate: [AuthGuard] },
 

@@ -12,6 +12,8 @@ from django.http import JsonResponse
 from API.settings import SECRET_KEY
 import jwt
 import os
+import io
+import zipfile
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
 from .models import InterventionFacturationTransport, SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
@@ -332,18 +334,43 @@ def updateMetaDataFileInTableTransactionsLivraisonWS(request):
 
 @api_view(['POST'])
 def downloadLivraisonFile(request):
-    transactionId = request.data['transaction_id']
-    LivraisonFileName = request.data['fileName']
-    clientList = ""
-    if 'clientList' in request.data:
-        clientList = request.data['clientList']
-    #LivraisonFileName = datetime.datetime.now().strftime("%d_%m_%Y")+"_fichierlivraison.xlsx"
-    livraisonFile = downloadLivraisonFileFromFTP(transactionId, LivraisonFileName, clientList)
-    response = HttpResponse(livraisonFile, content_type="application/xls")
-    response['Content-Disposition'] = "attachment; filename={0}".format(LivraisonFileName)
-    response['Content-Length'] = os.path.getsize(LivraisonFileName)
-    os.remove(LivraisonFileName)
-    return response
+	transactionId = request.data['transaction_id']
+	#LivraisonFileName = request.data['fileName']
+	clientList = ""
+	if 'clientList' in request.data:
+		clientList = request.data['clientList']
+	current_date = datetime.datetime.now().strftime("%d_%m_%Y")
+	LivraisonFileName = current_date+"_Livraisons.xlsx"
+	kayserisFound,livraisonFile = downloadLivraisonFileFromFTP(transactionId, LivraisonFileName, clientList)
+	if(kayserisFound):
+		excelfile = pd.read_excel(LivraisonFileName)
+		if(len(excelfile) == 0):
+    		#return a zip containing 3 files in the list down below without Livraisons.xlsx beacause it is empty
+			os.remove(LivraisonFileName)
+			return getfiles([current_date+"_CDG_Livraisons.xlsx", current_date+"_ORL_Livraisons.xlsx",current_date+"_Montparnasse_Livraisons.xlsx"])
+
+    	#return a zip containing th 4 files in the list down below
+		return getfiles([current_date+"_CDG_Livraisons.xlsx", current_date+"_ORL_Livraisons.xlsx",current_date+"_Montparnasse_Livraisons.xlsx",LivraisonFileName])
+	else:
+    	#return a xlsx file date_fichierlivraison.xlsx
+		response = HttpResponse(livraisonFile, content_type="application/xls")
+		response['Content-Disposition'] = "attachment; filename={0}".format(LivraisonFileName)
+		response['Content-Length'] = os.path.getsize(LivraisonFileName)
+		os.remove(LivraisonFileName)
+		return response
 
 
-
+def getfiles(filesList):
+	# Create zip
+	buffer = io.BytesIO()
+	zip_file = zipfile.ZipFile(buffer, 'w')
+	for filename in filesList:
+		zip_file.writestr(filename, open(filename,'rb').read())
+	zip_file.close()
+	# Return zip
+	response = HttpResponse(buffer.getvalue())
+	response['Content-Type'] = 'application/x-zip-compressed'
+	response['Content-Disposition'] = 'attachment; filename=livraison.zip'
+	for filename in filesList:
+		os.remove(filename)
+	return response

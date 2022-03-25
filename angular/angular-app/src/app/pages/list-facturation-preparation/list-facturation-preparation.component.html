@@ -8,7 +8,7 @@
       </base-pagination>
     </base-card-title>
 
- 
+
   <base-card-body class="no-padding">
     <table *ngIf="advancedTable.length > 0" aria-describedby="clients-table"
       class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone mdl-data-table mdl-js-data-table   sorting-table">
@@ -32,7 +32,7 @@
           <td class="mdl-data-table__cell--non-numeric">{{ row.code_client}}</td>
 
           <td class="column-actions mdl-data-table__cell--non-numeric">
-            <button style="margin-left: 3px;"
+            <button style="margin-left: 3px;" (click)="gotoConfiguration(row.code_client)"
               class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Configuration
             </button>
             <button style="margin-left: 3px;"

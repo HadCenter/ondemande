@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ListFacturationPreparationService } from './list-facturation-preparation.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-list-facturation-preparation',
   templateUrl: './list-facturation-preparation.component.html',
@@ -19,7 +20,7 @@ export class ListFacturationPreparationComponent implements OnInit {
   };
   public advancedHeaders = this.service.getAdvancedHeaders();
 
-  constructor(private service: ListFacturationPreparationService,) { }
+  constructor(private service: ListFacturationPreparationService, private router: Router,) { }
 
   ngOnInit(): void {
     this.getClients();
@@ -37,7 +38,7 @@ export class ListFacturationPreparationComponent implements OnInit {
       },
         error => console.log(error));
   }
-  
+
   public getAdvancedTablePage(page, countPerPage) {
     return this.clientsPerPagination.slice((page - 1) * countPerPage, page * countPerPage);
   }
@@ -103,4 +104,7 @@ export class ListFacturationPreparationComponent implements OnInit {
     return array.sort(compareFunction);
   }
 
+  gotoConfiguration(code_client) {
+    this.router.navigate(['/configuration-critere', code_client])
+  }
 }

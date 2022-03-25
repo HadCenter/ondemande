@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { List } from 'postcss/lib/list';
 import { FacturationPreparationService } from '../facturation-preparation/facturation-preparation.service';
 import { AddFactureService } from './add-facture.service';
@@ -13,6 +14,7 @@ export class AddFactureComponent implements OnInit {
   public advancedHeaders = this.service.getAdvancedHeaders();
   public monthDays: any;
   public nextMonth: any;
+  public code_client: any;
   JourPreparations: any = [];
   NuitPreparations: any = [];
   ProvincePreparations: any = [];
@@ -21,9 +23,13 @@ export class AddFactureComponent implements OnInit {
   existingFacturation: any;
   constructor(private service: AddFactureService,
     private facturationService: FacturationPreparationService,
-    private datePipe: DatePipe) { }
+    private datePipe: DatePipe,
+    private router: Router,
+    private route: ActivatedRoute,
+    ) { }
 
   ngOnInit(): void {
+    this.code_client = this.route.snapshot.params.client
     this.get_days_list();
 
   }
@@ -39,7 +45,7 @@ export class AddFactureComponent implements OnInit {
     this.mois = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() + 1, 1), 'MM-yyyy');
     this.client_name = this.facturationService.getClient();
     var data = {
-      "code_client": "C081",
+      "code_client": this.code_client,
       "mois": this.mois
     }
     this.facturationService.getFacturationForClients(data).subscribe(res => {
@@ -69,45 +75,50 @@ export class AddFactureComponent implements OnInit {
     return true;
   }
 
-  getExistingFacturation() {
-    var data = {
-      "code_client": "C081",
-      // "mois": this.mois
-      "mois": "04-2022"
-    }
-    this.facturationService.getFacturationForClients(data).subscribe(res => {
-      this.existingFacturation = res;
-      console.log(this.existingFacturation);
-    },
-      err => { })
-  }
 
   insertFacturation() {
     let preparations: any = [];
-    var data = {
+    let data = {
       code_client: "C081",
       date: "",
       prep_jour: "",
       prep_nuit: ""
     }
 
-    this.monthDays.forEach(element => {
-      //console.log(this.datePipe.transform(element, 'yyyy-MM-dd'));
-    });
-
-    console.log(this.monthDays[0]);
-
-    for (var i = 0; i < this.monthDays.length; i++) {
+    for (var i = 0; i < this.JourPreparations.length; i++) {
       data.date = this.datePipe.transform(this.monthDays[i], 'yyyy-MM-dd');
-      console.log(data.date);
       data.prep_jour = this.JourPreparations[i].toString();
       data.prep_nuit = this.NuitPreparations[i].toString();
-      console.log(data);
-      preparations.push(data);
+      preparations.push(
+        {
+          code_client: "C081",
+          date: data.date,
+          prep_jour: data.prep_jour,
+          prep_nuit: data.prep_nuit
+        }
+      );
     }
-    //console.log({preparations: preparations});
-    console.log(preparations);
+    console.log({preparations: preparations});
+    this.service.addFacturation({preparations: preparations}).subscribe(res =>{
+      this.monthDays = [];
+      this.JourPreparations = [];
+      this.NuitPreparations = [];
+      this.ProvincePreparations = [];
+    
+      this.get_days_list();
 
+    })
+  }
+
+  randomize(){
+    for (var i = this.JourPreparations.length; i < this.monthDays.length; i++) {
+      var min =1;
+      var max = 11;
+      this.JourPreparations[i] = Math.floor(Math.random() * (max - min + 1) + min);
+
+      this.NuitPreparations[i] = Math.floor(Math.random() * (max - min + 1) + min);
+
+    }
   }
 
 }

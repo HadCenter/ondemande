@@ -59,7 +59,9 @@ def getFacturationForDateRange(code_client, mois):
 
 def getMonthsFacturationForClient(code_client):
     factList = Facturation.objects.filter(code_client = code_client)
-    nom_client = factList[0].nom_client
+    nom_client = ""
+    if(len(factList)>0):
+        nom_client = factList[0].nom_client
     listMonths= list()
     for critere in factList:
         if(critere.date.strftime("%m-%Y") not in listMonths):

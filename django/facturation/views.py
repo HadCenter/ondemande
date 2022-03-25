@@ -184,7 +184,15 @@ def addFacturation(request):
             facturationDB.save()
         except Exception as e:
             print(e)
-            return JsonResponse({'message': 'date already exists'}, status=status.HTTP_200_OK)
+            #the below code allow backend to modify inserted preparations
+            # facturationDB = Facturation.objects.get(date= prep['date'])
+            # if('prep_jour' in prep):
+            #     facturationDB.prep_jour = prep['prep_jour']
+            # if('prep_nuit' in prep):
+            #     facturationDB.prep_nuit = prep['prep_nuit']
+            # if('prep_province' in prep):
+            #     facturationDB.prep_province = prep['prep_province']
+            # facturationDB.save()
 
     return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)
 

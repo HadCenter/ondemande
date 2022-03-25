@@ -112,7 +112,7 @@ def caculateFacturationForClient(request):
     nbre_preparateur = request.data['nbre_preparateur']
     criteres = getMatriceForParam(code_client, param)
 
-    unitéManut = ( int(nbre_preparateur) * int(criteres['TP']) * 60 ) / int(criteres["productivité"])
+    unitéManut = ( int(nbre_preparateur) * int(criteres['TP']) * 60 ) / int(criteres["productivite"])
     coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
     coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.')))
     total = coutProdAvecMarge * unitéManut
@@ -159,7 +159,7 @@ def caculateFacturationByDate(request):
 
 
 def getFacturationTotal(nbre_preparateur, criteres):
-    unitéManut = ( int(nbre_preparateur) * int(criteres["TP"]) * 60 ) / int(criteres["productivité"])
+    unitéManut = ( int(nbre_preparateur) * int(criteres["TP"]) * 60 ) / int(criteres["productivite"])
     coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
     coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.')))
     total = coutProdAvecMarge * unitéManut

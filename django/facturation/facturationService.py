@@ -1,3 +1,4 @@
+from datetime import datetime
 from .models import Facturation, FacturationInfo, MatriceFacturation, MatriceFacturationInfo
 
 def getAllClientsinDB():
@@ -15,6 +16,7 @@ def getMatriceForParam(code_client: str, param : str):
     diction = {}
     for critere in criteresList:
         diction['param']=param
+        diction['nom_client']=critere.nom_client
         diction[critere.key]= critere.value
     return diction
 
@@ -41,8 +43,11 @@ def getMatrice(param : str):
         listCritereMatrice.append(critereResponse)
     return listCritereMatrice
 
-def getFacturationForDateRange(code_client, date1, date2):
-    factList = Facturation.objects.filter(code_client = code_client, date__range = (date1,date2))
+def getFacturationForDateRange(code_client, mois):
+    month = datetime.strptime(mois, "%m-%Y").date().strftime("%m")
+    year = datetime.strptime(mois, "%m-%Y").date().strftime("%Y")
+    #factList = Facturation.objects.filter(code_client = code_client, date__range = (date1,date2))
+    factList = Facturation.objects.filter(code_client = code_client, date__month = month, date__year = year)
     listCritereMatrice= list()
     for critere in factList:
         critereResponse = FacturationInfo(date= critere.date, code_client=critere.code_client,
@@ -51,3 +56,12 @@ def getFacturationForDateRange(code_client, date1, date2):
                                  total_nuit = critere.total_nuit , total_province= critere.total_province )
         listCritereMatrice.append(critereResponse)
     return listCritereMatrice
+
+def getMonthsFacturationForClient(code_client):
+    factList = Facturation.objects.filter(code_client = code_client)
+    nom_client = factList[0].nom_client
+    listMonths= list()
+    for critere in factList:
+        if(critere.date.strftime("%m-%Y") not in listMonths):
+            listMonths.append(critere.date.strftime("%m-%Y"))
+    return nom_client,listMonths

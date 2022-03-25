@@ -4,7 +4,7 @@ import jsonpickle
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from .facturationService import getFacturationForDateRange, getMatriceForClient, getMatriceForParam, getAllClientsinDB
+from .facturationService import getFacturationForDateRange, getMatriceForClient, getMatriceForParam, getAllClientsinDB, getMonthsFacturationForClient
 
 from .models import MatriceFacturation, Facturation
 
@@ -188,11 +188,42 @@ def addFacturation(request):
 
     return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+def addMonthFacturation(request):
+    preparations = request.data['preparations']
+    code_client = request.data['code_client']
+    dates = request.data['date']
+    code_client = request.data['code_client']
+    for prep in preparations:
+        facturationDB = Facturation()
+        facturationDB.code_client = prep['code_client']
+        print(prep['code_client'])
+        facturationDB.nom_client = Client.objects.get(code_client=prep['code_client']).nom_client
+        facturationDB.date = prep['date']
+        if('prep_jour' in prep):
+            facturationDB.prep_jour = prep['prep_jour']
+        if('prep_nuit' in prep):
+            facturationDB.prep_nuit = prep['prep_nuit']
+        if('prep_province' in prep):
+            facturationDB.prep_province = prep['prep_province']
+        try:
+            facturationDB.save()
+        except Exception as e:
+            print(e)
+            return JsonResponse({'message': 'date already exists'}, status=status.HTTP_200_OK)
+
+    return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def getFacturation(request):
     code_client = request.data['code_client']
-    date1 = request.data['date1']
-    date2 = request.data['date2']
-    fact = getFacturationForDateRange(code_client, date1, date2)
+    mois = request.data['mois']
+    fact = getFacturationForDateRange(code_client, mois)
     return HttpResponse(jsonpickle.encode(fact, unpicklable=False), content_type="application/json")
+
+
+@api_view(['POST'])
+def getMonthFacturation(request):
+    code_client = request.data['code_client']
+    nom_client,fact = getMonthsFacturationForClient(code_client)
+    return HttpResponse(jsonpickle.encode({'nom_client': nom_client, 'months':fact}, unpicklable=False), content_type="application/json")

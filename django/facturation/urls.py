@@ -9,6 +9,8 @@ urlpatterns = [
     path("caculateFacturationForClient/", views.caculateFacturationForClient, name = "caculateFacturationForClient" ),
     path("caculateFacturationByDate/", views.caculateFacturationByDate, name = "caculateFacturationByDate" ),
     path("addFacturation/", views.addFacturation, name = "addFacturationinDB" ),
+    path("addMonthFacturation/", views.addMonthFacturation, name = "addMonthFacturationinDB" ),
     path("getFacturationForClient/", views.getFacturation, name = "getFacturationfromDB" ),
+    path("getMonthListFacturationForClient/", views.getMonthFacturation, name = "getMonthFacturationfromDB" ),
 
 ]

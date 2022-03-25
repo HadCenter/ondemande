@@ -42,7 +42,7 @@ text-align: center;
 
 
 
-mat-form-field.mat-form-field {
+mat-form-field.mat-form-field.form-critere {
   text-align: center ;
   background-color: transparent
 }
@@ -57,7 +57,7 @@ mat-form-field.mat-form-field-disabled {
   background-color: transparent;
 }
 .mat-form-field-wrapper {
-  padding-bottom: 1.34375em;
+  padding-bottom: 1.34375em !important  ;
 }
 .mat-form-field-ripple {
   background-color: #00bcd4;
@@ -69,6 +69,10 @@ mat-form-field.mat-form-field-disabled {
   /* color: rgba(0, 0, 0, 0.38); */
   color: #fff;
   font-size: 1rem;
+}
+.mat-form-field-flex {
+
+  width: 100%;
 }
 
 

@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfigCritereService } from './config-critere.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-config-critere',
   templateUrl: './config-critere.component.html',
@@ -15,7 +16,7 @@ export class ConfigCritereComponent implements OnInit {
   copy_matrice: any = [];
   newArray: any[];
 
-  constructor(private route: ActivatedRoute, private service: ConfigCritereService) { }
+  constructor(private route: ActivatedRoute, private service: ConfigCritereService,private _snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
     let data = {
@@ -58,34 +59,38 @@ export class ConfigCritereComponent implements OnInit {
   }
 
   updateMatrice() {
-    let params = [];
-    let keys = [];
-    this.newArray = [];
-    this.matrice.forEach((element) => {
-      params.push(element.param);
-      keys = Object.keys(element)
-      keys.shift();
-      this.newArray = this.convertToArrayOfArray(this.matrice);
-      console.warn('keys', keys);
-      console.log('newArray', this.newArray)
-      console.warn('paraù', params)
-    });
+    if (this.checkIfValueEmpty(this.matrice)) {
+      let params = [];
+      let keys = [];
+      this.newArray = [];
+      this.matrice.forEach((element) => {
+        params.push(element.param);
+        keys = Object.keys(element)
+        keys.shift();
+        this.newArray = this.convertToArrayOfArray(this.matrice);
+       /* console.warn('keys', keys);
+        console.log('newArray', this.newArray)
+        console.warn('paraù', params)*/
+      });
 
-    
-    let dataToUpdate = {
-      "param": params,
-      "code_client": "C081",
-      "keys": keys,
+
+      let dataToUpdate = {
+        "param": params,
+        "code_client": "C081",
+        "keys": keys,
+      }
+      for (let i = 0; i <= params.length - 1; i++) {
+        dataToUpdate[params[i]] = this.newArray[i];
+        (dataToUpdate[params[i]]).shift()
+      }
+      console.error(dataToUpdate)
+      this.service.updateAllMatrice(dataToUpdate).subscribe(res => {
+        console.log("res", res)
+      })
     }
-    for (let i = 0; i <= params.length - 1; i++) {
-      dataToUpdate[params[i]] = this.newArray[i];
-      (dataToUpdate[params[i]]).shift()
+    else {
+      this.openSnackBar('Veuillez remplir tous les champs nécessaires !', 'Fermé');
     }
-    console.error(dataToUpdate)
-    this.service.updateAllMatrice(dataToUpdate).subscribe(res=>{
-      console.log("res",res)
-    })
-   
 
 
   }
@@ -97,6 +102,19 @@ export class ConfigCritereComponent implements OnInit {
       });
     });
 
+  }
+
+  checkIfValueEmpty(arr) {
+    return arr.every(item => item.productivité && item.CHP && item.TP && item.CHC && item.forfaitNbHeure && item.forfaitNbHeureCoord && item.marge);
+
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 4500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
   }
 
 

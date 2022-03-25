@@ -13,6 +13,6 @@ export class ConfigCritereService {
     return this.http.post(`${this.url}/facturation/getMatricePerClient/`, data);
   }
 public updateAllMatrice (data): Observable<any> {
- return this.http.post(`${this.url}/facturation/updateAllMatrice`, data);
+ return this.http.post(`${this.url}/facturation/updateAllMatrice/`, data);
   }
 }

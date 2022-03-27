@@ -4,7 +4,7 @@
   "newProjectRoot": "projects",
   "projects": {
     "material-angular-dashboard": {
-      "root": "app",
+      "root": "",
       "sourceRoot": "src",
       "projectType": "application",
       "architect": {
@@ -87,7 +87,7 @@
       }
     },
     "material-angular-dashboard-e2e": {
-      "root": "e2e",
+      "root": "",
       "sourceRoot": "",
       "projectType": "application"
     }

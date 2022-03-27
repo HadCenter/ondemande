@@ -4,7 +4,7 @@
   "newProjectRoot": "projects",
   "projects": {
     "material-angular-dashboard": {
-      "root": "",
+      "root": "app",
       "sourceRoot": "src",
       "projectType": "application",
       "architect": {
@@ -24,7 +24,7 @@
             ],
             "scripts": [
               "node_modules/material-design-lite/material.js",
-              "node_modules/powerbi-client/dist/powerbi.min.js", 
+              "node_modules/powerbi-client/dist/powerbi.min.js",
               "node_modules/powerbi-models/dist/models.min.js"
 
             ],
@@ -87,7 +87,7 @@
       }
     },
     "material-angular-dashboard-e2e": {
-      "root": "",
+      "root": "e2e",
       "sourceRoot": "",
       "projectType": "application"
     }

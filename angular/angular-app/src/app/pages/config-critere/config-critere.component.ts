@@ -15,6 +15,7 @@ export class ConfigCritereComponent implements OnInit {
   marge: any;
   copy_matrice: any = [];
   newArray: any[];
+  showLoaderMatrice= true;
 
   constructor(private route: ActivatedRoute, private service: ConfigCritereService,private _snackBar: MatSnackBar,) { }
 
@@ -31,8 +32,7 @@ export class ConfigCritereComponent implements OnInit {
       this.copy_matrice = [...res];
       this.matrice = res;
       if (this.matrice.length >= 1) {
-        this.productivite = this.matrice[0].productivité;
-        this.marge = this.matrice[0].marge;
+        this.showLoaderMatrice=false;
       }
 
     })
@@ -41,14 +41,17 @@ export class ConfigCritereComponent implements OnInit {
 
   addNewCrietere() {
     let obj = {
-      CHC: "",
+      nom_client:this.matrice[0].nom_client,
+      param: "",
+      productivite: this.matrice[0].productivite,
       CHP: "",
-      TP: "",
+      CHC: "",
       forfaitNbHeure: "",
       forfaitNbHeureCoord: "",
-      marge: "",
-      param: "",
-      productivité: "",
+      TP: "",
+      marge: this.matrice[0].marge,
+
+
     }
     this.matrice.push(obj);
   }
@@ -58,7 +61,22 @@ export class ConfigCritereComponent implements OnInit {
     return index;
   }
 
+  updateProductivite(string){
+    this.matrice.forEach(element => {
+      element.productivite=string;
+    });
+  }
+
+  updateMarge(string){
+    this.matrice.forEach(element => {
+      element.marge=string;
+    });
+  }
+
+
   updateMatrice() {
+    this.updateProductivite(this.matrice[0].productivite);
+    this.updateMarge(this.matrice[0].marge)
     if (this.checkIfValueEmpty(this.matrice)) {
       let params = [];
       let keys = [];
@@ -66,24 +84,22 @@ export class ConfigCritereComponent implements OnInit {
       this.matrice.forEach((element) => {
         params.push(element.param);
         keys = Object.keys(element)
-        keys.shift();
-        this.newArray = this.convertToArrayOfArray(this.matrice);
-       /* console.warn('keys', keys);
-        console.log('newArray', this.newArray)
-        console.warn('paraù', params)*/
+        keys.splice(0,2);
+
       });
 
-
+      this.newArray = this.convertToArrayOfArray(this.matrice);
+      console.error( this.newArray )
       let dataToUpdate = {
         "param": params,
-        "code_client": "C081",
+        "code_client": this.matrice[0].nom_client,
         "keys": keys,
       }
       for (let i = 0; i <= params.length - 1; i++) {
         dataToUpdate[params[i]] = this.newArray[i];
-        (dataToUpdate[params[i]]).shift()
+        (dataToUpdate[params[i]]).splice(0,2)
       }
-      console.error(dataToUpdate)
+      console.log("dataToUpdate",dataToUpdate)
       this.service.updateAllMatrice(dataToUpdate).subscribe(res => {
         console.log("res", res)
       })
@@ -105,7 +121,7 @@ export class ConfigCritereComponent implements OnInit {
   }
 
   checkIfValueEmpty(arr) {
-    return arr.every(item => item.productivité && item.CHP && item.TP && item.CHC && item.forfaitNbHeure && item.forfaitNbHeureCoord && item.marge);
+    return arr.every(item => item.productivite && item.CHP && item.TP && item.CHC && item.forfaitNbHeure && item.forfaitNbHeureCoord && item.marge);
 
   }
 

@@ -44,7 +44,9 @@ text-align: center;
 
 mat-form-field.mat-form-field.form-critere {
   text-align: center ;
-  background-color: transparent
+  background-color: transparent;
+  margin-left: 4px;
+    margin-right: 4px;
 }
 mat-form-field.mat-form-field-disabled {
   text-align: center ;
@@ -73,6 +75,11 @@ mat-form-field.mat-form-field-disabled {
 .mat-form-field-flex {
 
   width: 100%;
+}
+
+.nom-client{
+  font-weight: 500;
+  padding-left: 5px;
 }
 
 

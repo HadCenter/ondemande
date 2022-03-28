@@ -1,6 +1,15 @@
 span.mat-button-wrapper {
     color: white !important;
     }
+
+.custom-snackbar button
+{
+  span.mat-button-wrapper {
+  color: #ff4081 !important;
+}
+}
+  
+
 body {
   padding-top: 20px;
   padding-left: 20px;

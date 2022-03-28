@@ -30,7 +30,8 @@ export class ConfigCritereComponent implements OnInit {
   getMatrice(code_client) {
     this.service.getMatricePerClient(code_client).subscribe(res => {
       console.warn(res);
-      this.copy_matrice = [...res];
+      this.copy_matrice = JSON.parse(JSON.stringify(res));
+      // this.copy_matrice = [...res];
       this.matrice = res;
       if (this.matrice.length >= 1) {
         this.showLoaderMatrice = false;
@@ -58,27 +59,18 @@ export class ConfigCritereComponent implements OnInit {
   }
 
 
-  customTrackBy(index: number, obj: any) {
-    return index;
+  /***************check two array are equals **********/
+  equals(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
   }
-
-  updateProductivite(string) {
-    this.matrice.forEach(element => {
-      element.productivite = string;
-    });
-  }
-
-  updateMarge(string) {
-    this.matrice.forEach(element => {
-      element.marge = string;
-    });
-  }
-
-
+  /****************Update matrice ************************/
   updateMatrice() {
     this.updateProductivite(this.matrice[0].productivite);
     this.updateMarge(this.matrice[0].marge);
-    if (this.checkIfValueEmpty(this.matrice)) {
+    if (this.equals(this.matrice, this.copy_matrice) == true) {
+      this.openSnackBar('Aucune modification efféctuée!', 'Fermé');
+    }
+    else if (this.checkIfValueEmpty(this.matrice)) {
       let params = [];
       let keys = [];
       this.newArray = [];
@@ -111,7 +103,6 @@ export class ConfigCritereComponent implements OnInit {
       this.openSnackBar('Veuillez remplir tous les champs nécessaires !', 'Fermé');
     }
 
-
   }
 
   convertToArrayOfArray(arr) {
@@ -133,9 +124,24 @@ export class ConfigCritereComponent implements OnInit {
       duration: 4500,
       verticalPosition: 'top',
       horizontalPosition: 'center',
+      panelClass: ['custom-snackbar']
     });
   }
 
+  customTrackBy(index: number, obj: any) {
+    return index;
+  }
 
+  updateProductivite(string) {
+    this.matrice.forEach(element => {
+      element.productivite = string;
+    });
+  }
+
+  updateMarge(string) {
+    this.matrice.forEach(element => {
+      element.marge = string;
+    });
+  }
 
 }

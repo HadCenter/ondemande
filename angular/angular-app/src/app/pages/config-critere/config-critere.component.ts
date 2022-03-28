@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigCritereService } from './config-critere.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
@@ -15,8 +15,10 @@ export class ConfigCritereComponent implements OnInit {
   marge: any;
   copy_matrice: any = [];
   newArray: any[];
+  showLoaderMatrice = true;
 
-  constructor(private route: ActivatedRoute, private service: ConfigCritereService,private _snackBar: MatSnackBar,) { }
+  constructor(private route: ActivatedRoute, public router: Router,
+    private service: ConfigCritereService, private _snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
     let data = {
@@ -27,12 +29,12 @@ export class ConfigCritereComponent implements OnInit {
 
   getMatrice(code_client) {
     this.service.getMatricePerClient(code_client).subscribe(res => {
-      console.warn(res)
-      this.copy_matrice = [...res];
+      console.warn(res);
+      this.copy_matrice = JSON.parse(JSON.stringify(res));
+      // this.copy_matrice = [...res];
       this.matrice = res;
       if (this.matrice.length >= 1) {
-        this.productivite = this.matrice[0].productivité;
-        this.marge = this.matrice[0].marge;
+        this.showLoaderMatrice = false;
       }
 
     })
@@ -41,57 +43,65 @@ export class ConfigCritereComponent implements OnInit {
 
   addNewCrietere() {
     let obj = {
-      CHC: "",
+      code_client: this.route.snapshot.params.id,
+      param: "",
+      productivite: this.matrice[0].productivite,
       CHP: "",
-      TP: "",
+      CHC: "",
       forfaitNbHeure: "",
       forfaitNbHeureCoord: "",
-      marge: "",
-      param: "",
-      productivité: "",
+      TP: "",
+      marge: this.matrice[0].marge,
+
+
     }
     this.matrice.push(obj);
   }
 
 
-  customTrackBy(index: number, obj: any) {
-    return index;
+  /***************check two array are equals **********/
+  equals(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
   }
-
+  /****************Update matrice ************************/
   updateMatrice() {
-    if (this.checkIfValueEmpty(this.matrice)) {
+    this.updateProductivite(this.matrice[0].productivite);
+    this.updateMarge(this.matrice[0].marge);
+    if (this.equals(this.matrice, this.copy_matrice) == true) {
+      this.openSnackBar('Aucune modification efféctuée!', 'Fermé');
+    }
+    else if (this.checkIfValueEmpty(this.matrice)) {
       let params = [];
       let keys = [];
       this.newArray = [];
       this.matrice.forEach((element) => {
         params.push(element.param);
         keys = Object.keys(element)
-        keys.shift();
-        this.newArray = this.convertToArrayOfArray(this.matrice);
-       /* console.warn('keys', keys);
-        console.log('newArray', this.newArray)
-        console.warn('paraù', params)*/
+        keys.splice(0, 2);
+
       });
 
-
+      this.newArray = this.convertToArrayOfArray(this.matrice);
       let dataToUpdate = {
         "param": params,
-        "code_client": "C081",
+        "code_client": this.route.snapshot.params.id,
         "keys": keys,
       }
       for (let i = 0; i <= params.length - 1; i++) {
         dataToUpdate[params[i]] = this.newArray[i];
-        (dataToUpdate[params[i]]).shift()
+        (dataToUpdate[params[i]]).splice(0, 2)
       }
-      console.error(dataToUpdate)
+
+      console.log("dataToUpdate", dataToUpdate)
       this.service.updateAllMatrice(dataToUpdate).subscribe(res => {
-        console.log("res", res)
+        console.log("res", res);
+        this.openSnackBar('Modification effectuée avec succées', 'Fermé');
+        this.router.navigate(['/facturation-preparation']);
       })
     }
     else {
       this.openSnackBar('Veuillez remplir tous les champs nécessaires !', 'Fermé');
     }
-
 
   }
 
@@ -105,7 +115,7 @@ export class ConfigCritereComponent implements OnInit {
   }
 
   checkIfValueEmpty(arr) {
-    return arr.every(item => item.productivité && item.CHP && item.TP && item.CHC && item.forfaitNbHeure && item.forfaitNbHeureCoord && item.marge);
+    return arr.every(item => item.productivite && item.CHP && item.TP && item.CHC && item.forfaitNbHeure && item.forfaitNbHeureCoord && item.marge);
 
   }
 
@@ -114,8 +124,24 @@ export class ConfigCritereComponent implements OnInit {
       duration: 4500,
       verticalPosition: 'top',
       horizontalPosition: 'center',
+      panelClass: ['custom-snackbar']
     });
   }
 
+  customTrackBy(index: number, obj: any) {
+    return index;
+  }
+
+  updateProductivite(string) {
+    this.matrice.forEach(element => {
+      element.productivite = string;
+    });
+  }
+
+  updateMarge(string) {
+    this.matrice.forEach(element => {
+      element.marge = string;
+    });
+  }
 
 }

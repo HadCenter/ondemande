@@ -2,7 +2,8 @@
   <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
     <base-card-title class="reorder-card">
       <div class='card-title'>
-        <label>Configuration des paramètres pour : Nom client</label>
+        <label>Configuration des paramètres pour </label>
+        <label class="nom-client">{{matrice[0]?.nom_client}}</label>
         <div class="mdl-layout-spacer"></div>
         <button (click)='updateMatrice()'
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Modifier
@@ -10,8 +11,9 @@
       </div>
 
     </base-card-title>
-    <base-card-body class="content-card-line">
-      <div *ngIf="matrice.length>=1">
+    <base-card-body *ngIf="matrice.length>=1" class="content-card-line">
+   
+      <div>
         <div>
           <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
 
@@ -29,9 +31,9 @@
           </div>
           <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
             <label>(sec)</label>
-            <mat-form-field class="form-critere"  appearance="fill">
+            <mat-form-field class="form-critere"  appearance="fill" >
 
-              <input matInput type="number" [(ngModel)]="productivite">
+              <input matInput type="number"[(ngModel)]="matrice[0].productivite">
             </mat-form-field>
           </div>
         </div>
@@ -203,7 +205,7 @@
 
                 <mat-form-field class="form-critere" appearance="fill">
 
-                  <input matInput type="number" [(ngModel)]="marge">
+                  <input matInput type="number" [(ngModel)]="matrice[0].marge">
                 </mat-form-field>
                 %
               </div>

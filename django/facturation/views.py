@@ -114,9 +114,9 @@ def caculateFacturationForClient(request):
 
     unitéManut = ( int(nbre_preparateur) * int(criteres['TP']) * 60 ) / int(criteres["productivite"])
     coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
-    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.')))
+    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.'))/100)
     total = coutProdAvecMarge * unitéManut
-    #unitéManut = ((int(nbre_preparateur) * int(criteres["CHP"]) * criteres["forfaitNbHeure"]) + (criteres["CHC"] * criteres["forfaitNbHeureCoord"]))/ (1-criteres["marge"])
+    #unitéManut = ((int(nbre_preparateur) * int(criteres["CHP"]) * criteres["forfaitNbHeure"]) + (criteres["CHC"] * criteres["forfaitNbHeureCoord"]))/ (1-criteres["marge"]/100)
     print(unitéManut)
     print(coutProdSansMarge)
     print(coutProdAvecMarge)
@@ -161,7 +161,7 @@ def caculateFacturationByDate(request):
 def getFacturationTotal(nbre_preparateur, criteres):
     unitéManut = ( int(nbre_preparateur) * int(criteres["TP"]) * 60 ) / int(criteres["productivite"])
     coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
-    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.')))
+    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.'))/100)
     total = coutProdAvecMarge * unitéManut
     return total
 

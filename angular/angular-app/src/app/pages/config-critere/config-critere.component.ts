@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigCritereService } from './config-critere.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
@@ -15,9 +15,10 @@ export class ConfigCritereComponent implements OnInit {
   marge: any;
   copy_matrice: any = [];
   newArray: any[];
-  showLoaderMatrice= true;
+  showLoaderMatrice = true;
 
-  constructor(private route: ActivatedRoute, private service: ConfigCritereService,private _snackBar: MatSnackBar,) { }
+  constructor(private route: ActivatedRoute, public router: Router,
+    private service: ConfigCritereService, private _snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
     let data = {
@@ -28,11 +29,11 @@ export class ConfigCritereComponent implements OnInit {
 
   getMatrice(code_client) {
     this.service.getMatricePerClient(code_client).subscribe(res => {
-      console.warn(res)
+      console.warn(res);
       this.copy_matrice = [...res];
       this.matrice = res;
       if (this.matrice.length >= 1) {
-        this.showLoaderMatrice=false;
+        this.showLoaderMatrice = false;
       }
 
     })
@@ -41,7 +42,7 @@ export class ConfigCritereComponent implements OnInit {
 
   addNewCrietere() {
     let obj = {
-      nom_client:this.matrice[0].nom_client,
+      code_client: this.route.snapshot.params.id,
       param: "",
       productivite: this.matrice[0].productivite,
       CHP: "",
@@ -61,22 +62,22 @@ export class ConfigCritereComponent implements OnInit {
     return index;
   }
 
-  updateProductivite(string){
+  updateProductivite(string) {
     this.matrice.forEach(element => {
-      element.productivite=string;
+      element.productivite = string;
     });
   }
 
-  updateMarge(string){
+  updateMarge(string) {
     this.matrice.forEach(element => {
-      element.marge=string;
+      element.marge = string;
     });
   }
 
 
   updateMatrice() {
     this.updateProductivite(this.matrice[0].productivite);
-    this.updateMarge(this.matrice[0].marge)
+    this.updateMarge(this.matrice[0].marge);
     if (this.checkIfValueEmpty(this.matrice)) {
       let params = [];
       let keys = [];
@@ -84,24 +85,26 @@ export class ConfigCritereComponent implements OnInit {
       this.matrice.forEach((element) => {
         params.push(element.param);
         keys = Object.keys(element)
-        keys.splice(0,2);
+        keys.splice(0, 2);
 
       });
 
       this.newArray = this.convertToArrayOfArray(this.matrice);
-      console.error( this.newArray )
       let dataToUpdate = {
         "param": params,
-        "code_client": this.matrice[0].nom_client,
+        "code_client": this.route.snapshot.params.id,
         "keys": keys,
       }
       for (let i = 0; i <= params.length - 1; i++) {
         dataToUpdate[params[i]] = this.newArray[i];
-        (dataToUpdate[params[i]]).splice(0,2)
+        (dataToUpdate[params[i]]).splice(0, 2)
       }
-      console.log("dataToUpdate",dataToUpdate)
+
+      console.log("dataToUpdate", dataToUpdate)
       this.service.updateAllMatrice(dataToUpdate).subscribe(res => {
-        console.log("res", res)
+        console.log("res", res);
+        this.openSnackBar('Modification effectuée avec succées', 'Fermé');
+        this.router.navigate(['/facturation-preparation']);
       })
     }
     else {
@@ -132,6 +135,7 @@ export class ConfigCritereComponent implements OnInit {
       horizontalPosition: 'center',
     });
   }
+
 
 
 }

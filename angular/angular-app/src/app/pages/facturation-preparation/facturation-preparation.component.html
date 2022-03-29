@@ -31,9 +31,9 @@
           <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
 
 
-            <td class="mdl-data-table__cell--non-numeric">{{ row }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ dates[i] }}</td>
 
-            <td class="column-actions mdl-data-table__cell--non-numeric">
+            <td *ngIf="i != 0" class="column-actions mdl-data-table__cell--non-numeric">
               <button style="margin-left: 3px;" (click)="opendetailsDialog(row)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Aperçu
               </button>
@@ -42,6 +42,15 @@
               </button>
               <button style="margin-left: 3px;"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Imprimer
+              </button>
+
+            </td>
+            <td *ngIf="i == 0" class="column-actions mdl-data-table__cell--non-numeric">
+              <button style="margin-left: 3px;" (click)="navigatetoAddFacturation()"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Editer
+              </button>
+              <button style="margin-left: 3px;" (click)="opendetailsDialog(row)"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Aperçu
               </button>
 
             </td>

@@ -107,4 +107,8 @@ export class ListFacturationPreparationComponent implements OnInit {
   gotoConfiguration(code_client) {
     this.router.navigate(['/configuration-critere', code_client])
   }
+
+  gotoFacturation(code_client){
+    this.router.navigate(['/liste-facturation-preparation', code_client])
+  }
 }

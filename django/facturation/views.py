@@ -112,11 +112,11 @@ def caculateFacturationForClient(request):
     nbre_preparateur = request.data['nbre_preparateur']
     criteres = getMatriceForParam(code_client, param)
 
-    unitéManut = ( int(nbre_preparateur) * int(criteres['TP']) * 60 ) / int(criteres["productivité"])
+    unitéManut = ( int(nbre_preparateur) * int(criteres['TP']) * 60 ) / int(criteres["productivite"])
     coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
-    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.')))
+    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.'))/100)
     total = coutProdAvecMarge * unitéManut
-    #unitéManut = ((int(nbre_preparateur) * int(criteres["CHP"]) * criteres["forfaitNbHeure"]) + (criteres["CHC"] * criteres["forfaitNbHeureCoord"]))/ (1-criteres["marge"])
+    #unitéManut = ((int(nbre_preparateur) * int(criteres["CHP"]) * criteres["forfaitNbHeure"]) + (criteres["CHC"] * criteres["forfaitNbHeureCoord"]))/ (1-criteres["marge"]/100)
     print(unitéManut)
     print(coutProdSansMarge)
     print(coutProdAvecMarge)
@@ -159,9 +159,9 @@ def caculateFacturationByDate(request):
 
 
 def getFacturationTotal(nbre_preparateur, criteres):
-    unitéManut = ( int(nbre_preparateur) * int(criteres["TP"]) * 60 ) / int(criteres["productivité"])
+    unitéManut = ( int(nbre_preparateur) * int(criteres["TP"]) * 60 ) / int(criteres["productivite"])
     coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
-    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.')))
+    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.'))/100)
     total = coutProdAvecMarge * unitéManut
     return total
 
@@ -184,7 +184,15 @@ def addFacturation(request):
             facturationDB.save()
         except Exception as e:
             print(e)
-            return JsonResponse({'message': 'date already exists'}, status=status.HTTP_200_OK)
+            #the below code allow backend to modify inserted preparations
+            # facturationDB = Facturation.objects.get(date= prep['date'])
+            # if('prep_jour' in prep):
+            #     facturationDB.prep_jour = prep['prep_jour']
+            # if('prep_nuit' in prep):
+            #     facturationDB.prep_nuit = prep['prep_nuit']
+            # if('prep_province' in prep):
+            #     facturationDB.prep_province = prep['prep_province']
+            # facturationDB.save()
 
     return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)
 

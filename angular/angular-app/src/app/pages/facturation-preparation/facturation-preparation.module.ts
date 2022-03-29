@@ -27,6 +27,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     FacturationPreparationRoutingModule
   ],
   providers: [
+    DatePipe,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
 

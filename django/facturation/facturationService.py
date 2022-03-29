@@ -47,7 +47,7 @@ def getFacturationForDateRange(code_client, mois):
     month = datetime.strptime(mois, "%m-%Y").date().strftime("%m")
     year = datetime.strptime(mois, "%m-%Y").date().strftime("%Y")
     #factList = Facturation.objects.filter(code_client = code_client, date__range = (date1,date2))
-    factList = Facturation.objects.filter(code_client = code_client, date__month = month, date__year = year)
+    factList = Facturation.objects.filter(code_client = code_client, date__month = month, date__year = year).order_by('date')
     listCritereMatrice= list()
     for critere in factList:
         critereResponse = FacturationInfo(date= critere.date, code_client=critere.code_client,
@@ -58,7 +58,7 @@ def getFacturationForDateRange(code_client, mois):
     return listCritereMatrice
 
 def getMonthsFacturationForClient(code_client):
-    factList = Facturation.objects.filter(code_client = code_client)
+    factList = Facturation.objects.filter(code_client = code_client).order_by('date')
     nom_client = ""
     if(len(factList)>0):
         nom_client = factList[0].nom_client

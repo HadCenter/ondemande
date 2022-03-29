@@ -30,11 +30,11 @@ export class FacturationPreparationComponent implements OnInit {
     private datePipe: DatePipe
   ) { }
   ngOnInit(): void {
-    this.getFacturation(this.route.snapshot.params.client);
+    this.client_code = this.route.snapshot.params.client;
+    this.getFacturation(this.client_code);
   }
 
   getFacturation(client_code) {
-    this.client_code = client_code;
     var data = {
       "code_client": client_code
     }
@@ -92,6 +92,7 @@ export class FacturationPreparationComponent implements OnInit {
       disableClose: false
     });
     this.dialogRef.componentInstance.mois = data;
+    this.dialogRef.componentInstance.code_client = this.client_code;
     // if (decision == 'activer') {
     //   this.dialogRef.componentInstance.confirmMessage = "Voulez-vous activer la capacité ?"
     // } else if (decision == 'suspendre') {
@@ -114,8 +115,8 @@ export class FacturationPreparationComponent implements OnInit {
     this.router.navigate([`/details-facture/${this.client_code}/${data}`]);
   }
 
-  navigatetoAddFacturation() {
-    this.router.navigate([`/add-facture/${this.client_code}`]);
+  navigatetoAddFacturation(data) {
+    this.router.navigate([`/add-facture/${this.client_code}/${data}`]);
   }
 
 }

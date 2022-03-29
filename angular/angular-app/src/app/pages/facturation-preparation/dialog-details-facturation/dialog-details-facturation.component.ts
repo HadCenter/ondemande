@@ -24,6 +24,7 @@ export class DialogDetailsFacturationComponent implements OnInit {
   public mois : any;
   public nom_mois: any;
   public client_name:string="";
+  public code_client:any;
   public readonly sortOrder = {
     asc: 1,
     desc: -1,
@@ -31,7 +32,7 @@ export class DialogDetailsFacturationComponent implements OnInit {
 
   ngOnInit(): void {
     var data= {
-      "code_client": "C081",
+      "code_client": this.code_client,
       "mois": this.mois
     }
     var date = this.mois.split('-');

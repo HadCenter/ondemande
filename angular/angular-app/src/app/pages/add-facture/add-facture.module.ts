@@ -12,6 +12,7 @@ import { LoaderModule } from 'app/components/loader/loader.module';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // the second parameter 'fr' is optional
 registerLocaleData(localeFr);
@@ -29,7 +30,8 @@ registerLocaleData(localeFr);
     MatFormFieldModule,
     MatDialogModule,
     MatInputModule,
-    AddFactureRoutingModule
+    AddFactureRoutingModule,
+    MatSnackBarModule
   ],
   providers: [
     DatePipe,

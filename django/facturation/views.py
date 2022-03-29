@@ -157,6 +157,36 @@ def caculateFacturationByDate(request):
 
     return HttpResponse(jsonpickle.encode(total, unpicklable=False), content_type="application/json")
 
+def calculateMonthFacturationForClient(code_client):
+    total = 0
+    untreatedFacturation = Facturation.objects.filter(code_client = code_client, date__lt=None)
+    for fact in untreatedFacturation:
+        if(fact.prep_jour != None):
+            print("prep jour in not null")
+            criteres = getMatriceForParam(fact.code_client, "midi")
+            total = getFacturationTotal(fact.prep_jour, criteres)
+            fact.total_jour = total
+            fact.save()
+    untreatedFacturation = Facturation.objects.filter( total_nuit=None)
+    for fact in untreatedFacturation:
+        if(fact.prep_nuit != None):
+            print("prep soir in not null")
+            criteres = getMatriceForParam(fact.code_client, "soir")
+            total = getFacturationTotal(fact.prep_nuit, criteres)
+            fact.total_nuit = total
+            fact.save()
+    untreatedFacturation = Facturation.objects.filter(total_province = None)
+    for fact in untreatedFacturation:
+        if(fact.prep_province != None):
+            print("prep province in not null")
+            criteres = getMatriceForParam(fact.code_client, "province")
+            print(criteres)
+            total = getFacturationTotal(fact.prep_province, criteres)
+            print(fact.prep_province)
+            fact.total_province = total
+            fact.save()
+
+    return HttpResponse(jsonpickle.encode(total, unpicklable=False), content_type="application/json")
 
 def getFacturationTotal(nbre_preparateur, criteres):
     unitéManut = ( int(nbre_preparateur) * int(criteres["TP"]) * 60 ) / int(criteres["productivite"])
@@ -169,30 +199,53 @@ def getFacturationTotal(nbre_preparateur, criteres):
 def addFacturation(request):
     preparations = request.data['preparations']
     for prep in preparations:
+        code_client = prep['code_client']
         facturationDB = Facturation()
-        facturationDB.code_client = prep['code_client']
-        print(prep['code_client'])
-        facturationDB.nom_client = Client.objects.get(code_client=prep['code_client']).nom_client
+        facturationDB.code_client = code_client
+        facturationDB.nom_client = Client.objects.get(code_client=code_client).nom_client
         facturationDB.date = prep['date']
         if('prep_jour' in prep):
             facturationDB.prep_jour = prep['prep_jour']
+            critere_jour = getMatriceForParam(code_client, "midi")
+            total_jour = getFacturationTotal(prep['prep_jour'], critere_jour)
+            facturationDB.total_jour = total_jour
+
         if('prep_nuit' in prep):
             facturationDB.prep_nuit = prep['prep_nuit']
+            critere_nuit = getMatriceForParam(code_client, "soir")
+            total_nuit = getFacturationTotal(prep['prep_nuit'], critere_nuit)
+            facturationDB.total_nuit = total_nuit
+
         if('prep_province' in prep):
             facturationDB.prep_province = prep['prep_province']
+            critere_province = getMatriceForParam(code_client, "province")
+            total_province = getFacturationTotal(prep['prep_province'], critere_province)
+            facturationDB.total_province = total_province
+
         try:
             facturationDB.save()
         except Exception as e:
             print(e)
             #the below code allow backend to modify inserted preparations
-            # facturationDB = Facturation.objects.get(date= prep['date'])
-            # if('prep_jour' in prep):
-            #     facturationDB.prep_jour = prep['prep_jour']
-            # if('prep_nuit' in prep):
-            #     facturationDB.prep_nuit = prep['prep_nuit']
-            # if('prep_province' in prep):
-            #     facturationDB.prep_province = prep['prep_province']
-            # facturationDB.save()
+            facturationDB = Facturation.objects.get(date= prep['date'], code_client=code_client)
+            if('prep_jour' in prep):
+                facturationDB.prep_jour = prep['prep_jour']
+                critere_jour = getMatriceForParam(code_client, "midi")
+                total_jour = getFacturationTotal(prep['prep_jour'], critere_jour)
+                facturationDB.total_jour = total_jour
+
+            if('prep_nuit' in prep):
+                facturationDB.prep_nuit = prep['prep_nuit']
+                critere_nuit = getMatriceForParam(code_client, "soir")
+                total_nuit = getFacturationTotal(prep['prep_nuit'], critere_nuit)
+                facturationDB.total_nuit = total_nuit
+
+            if('prep_province' in prep):
+                facturationDB.prep_province = prep['prep_province']
+                critere_province = getMatriceForParam(code_client, "province")
+                total_province = getFacturationTotal(prep['prep_province'], critere_province)
+                facturationDB.total_nuit = total_province
+            facturationDB.save()
 
     return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)
 

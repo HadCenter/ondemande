@@ -1,7 +1,7 @@
 <div class="content-labels">
   <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
     <base-card-title class="reorder-card">
-      <div class='card-title'>
+      <div class='custom-card-title'>
         <label>Configuration des paramètres pour </label>
         <label class="nom-client">{{matrice[0]?.nom_client}}</label>
         <div class="mdl-layout-spacer"></div>
@@ -12,17 +12,17 @@
 
     </base-card-title>
     <base-card-body *ngIf="matrice.length>=1" class="content-card-line">
-   
-      <div>
-        <div>
-          <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
 
-            <div style="padding-left:9px">
+      <div class="custom-card bloc-productivite" >
+        <div >
+          <div class="content-title-productivite mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+
+            <div>
               <label class="label-title">Productivité</label>
             </div>
           </div>
         </div>
-        <div class="mdl-grid">
+        <div class="mdl-grid" style="padding-top: 0px ;padding-bottom:0px">
           <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
             <label>Unité</label>
             <mat-form-field  appearance="fill" style="background-color: transparent;">
@@ -43,7 +43,7 @@
       <div>
 
         <div class="mdl-grid">
-          <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+          <div class=" custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
             <div style="    display: grid;">
               <div>
                 <label class="label-title">Coût horaire PREP</label>
@@ -70,7 +70,7 @@
           </div>
 
 
-          <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+          <div class="custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
             <div style="    display: grid;
             ">
               <div style="text-align: initial;">
@@ -105,7 +105,7 @@
       <div>
 
         <div class="mdl-grid">
-          <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+          <div class=" custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
             <div style="    display: grid;
           ">
               <div>
@@ -132,7 +132,7 @@
           </div>
 
 
-          <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+          <div class="custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
             <div style="    display: grid;
             ">
               <div style="text-align: initial;">
@@ -167,7 +167,7 @@
       <div>
 
         <div class="mdl-grid">
-          <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+          <div class=" custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
             <div style="    display: grid;
           ">
               <div>
@@ -195,8 +195,8 @@
           </div>
 
 
-          <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-            <div style="    display: grid;
+          <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+            <div class="custom-card" style="    display: grid;
             ">
               <div style="text-align: initial;">
                 <label class="label-title">Marge</label>

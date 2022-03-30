@@ -85,6 +85,38 @@ def updateAllMatriceForClient(request):
 
     return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+def updateAllMatriceForClientV2(request):
+    try:
+        params = request.data['parameters']
+        code_client = request.data['code_client']
+    except Exception as e:
+        print(e)
+        return JsonResponse({'message': 'Body parametres are empty or incorrect'}, status=status.HTTP_403_FORBIDDEN)
+
+    for element in params:
+        element.pop("nom_client", None)
+        param = element.pop("param",None)
+        print(element)
+        for key in element:
+            try:
+                critere = MatriceFacturation.objects.get(param = param, code_client = code_client, key = key)
+                critere.value = element[key]
+                critere.save() 
+            except Exception as e:
+                if ( "matching query does not exist." in str(e)):
+                    critere = MatriceFacturation()
+                    critere.code_client = code_client
+                    try:
+                        critere.nom_client = Client.objects.get(code_client=code_client).nom_client
+                    except Exception as e:
+                        return JsonResponse({'message': 'client introuvable'}, status=status.HTTP_400_BAD_REQUEST)
+
+                    critere.param = param
+                    critere.key = key
+                    critere.value = element[key]
+                    critere.save() 
+    return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def getMatriceByParam(request):

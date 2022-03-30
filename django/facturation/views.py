@@ -244,7 +244,7 @@ def addFacturation(request):
                 facturationDB.prep_province = prep['prep_province']
                 critere_province = getMatriceForParam(code_client, "province")
                 total_province = getFacturationTotal(prep['prep_province'], critere_province)
-                facturationDB.total_nuit = total_province
+                facturationDB.total_province = total_province
             facturationDB.save()
 
     return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)

@@ -117,19 +117,22 @@ export class AddFactureComponent implements OnInit {
       code_client: this.code_client,
       date: "",
       prep_jour: "",
-      prep_nuit: ""
+      prep_nuit: "",
+      prep_province: ""
     }
     
     for (var i = 0; i < this.JourPreparations.length; i++) {
       data.date = this.datePipe.transform(this.monthDays[i], 'yyyy-MM-dd');
       data.prep_jour = this.JourPreparations[i].toString();
       data.prep_nuit = this.NuitPreparations[i].toString();
+      data.prep_province = this.ProvincePreparations[i].toString();
       preparations.push(
         {
           code_client: this.code_client,
           date: data.date,
           prep_jour: data.prep_jour,
-          prep_nuit: data.prep_nuit
+          prep_nuit: data.prep_nuit,
+          prep_province: data.prep_province
         }
       );
     }

@@ -1,8 +1,8 @@
-<base-card style="margin : 1rem 4rem; box-shadow: none; ">
+<base-card style="margin : 1rem 4rem; height : fit-content;">
     <base-card-title>
         <h1 class="mdl-card__title-text">Informations Facturation du mois {{mois}} pour le client {{client_name}} </h1>
     </base-card-title>
-    <base-card-body class="scroll-body no-padding">
+    <base-card-body class="no-padding">
         <app-loader [width]="'100%'" [position]="'sticky'" [height]="'60vh'" [bg]="'transparant'"
             [show]="advancedTable.length == 0">
         </app-loader>

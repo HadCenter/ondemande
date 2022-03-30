@@ -71,26 +71,28 @@ export class ConfigCritereComponent implements OnInit {
       this.openSnackBar('Aucune modification efféctuée!', 'Fermé');
     }
     else if (this.checkIfValueEmpty(this.matrice)) {
-      let params = [];
-      let keys = [];
-      this.newArray = [];
-      this.matrice.forEach((element) => {
-        params.push(element.param);
-        keys = Object.keys(element)
-        keys.splice(0, 2);
+    //  let params = [];
+    //  let keys = [];
+   //   this.newArray = [];
+      // this.matrice.forEach((element) => {
+      //   params.push(element.param);
+      //   keys = Object.keys(element)
+      //   keys.splice(0, 2);
 
-      });
+      // });
 
-      this.newArray = this.convertToArrayOfArray(this.matrice);
+   //   this.newArray = this.convertToArrayOfArray(this.matrice);
       let dataToUpdate = {
-        "param": params,
+        // "param": params,
         "code_client": this.route.snapshot.params.id,
-        "keys": keys,
+        "parameters": this.matrice,
+        
+        // "keys": keys,
       }
-      for (let i = 0; i <= params.length - 1; i++) {
-        dataToUpdate[params[i]] = this.newArray[i];
-        (dataToUpdate[params[i]]).splice(0, 2)
-      }
+      // for (let i = 0; i <= params.length - 1; i++) {
+      //   dataToUpdate[params[i]] = this.newArray[i];
+      //   (dataToUpdate[params[i]]).splice(0, 2)
+      // }
 
       console.log("dataToUpdate", dataToUpdate)
       this.service.updateAllMatrice(dataToUpdate).subscribe(res => {

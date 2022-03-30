@@ -11,10 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ConfigCritereComponent implements OnInit {
   matrice: any = [];
   unite: any = 1;
-  productivite: any = "";
-  marge: any;
   copy_matrice: any = [];
-  newArray: any[];
   showLoaderMatrice = true;
 
   constructor(private route: ActivatedRoute, public router: Router,
@@ -34,7 +31,7 @@ export class ConfigCritereComponent implements OnInit {
       // this.copy_matrice = [...res];
       this.matrice = res;
       if (this.matrice.length >= 1) {
-        this.showLoaderMatrice = false;
+       this.showLoaderMatrice = false;
       }
 
     })
@@ -65,34 +62,18 @@ export class ConfigCritereComponent implements OnInit {
   }
   /****************Update matrice ************************/
   updateMatrice() {
+  
     this.updateProductivite(this.matrice[0].productivite);
     this.updateMarge(this.matrice[0].marge);
     if (this.equals(this.matrice, this.copy_matrice) == true) {
       this.openSnackBar('Aucune modification efféctuée!', 'Fermé');
     }
     else if (this.checkIfValueEmpty(this.matrice)) {
-    //  let params = [];
-    //  let keys = [];
-   //   this.newArray = [];
-      // this.matrice.forEach((element) => {
-      //   params.push(element.param);
-      //   keys = Object.keys(element)
-      //   keys.splice(0, 2);
-
-      // });
-
-   //   this.newArray = this.convertToArrayOfArray(this.matrice);
+      this.showLoaderMatrice=true;
       let dataToUpdate = {
-        // "param": params,
         "code_client": this.route.snapshot.params.id,
         "parameters": this.matrice,
-        
-        // "keys": keys,
       }
-      // for (let i = 0; i <= params.length - 1; i++) {
-      //   dataToUpdate[params[i]] = this.newArray[i];
-      //   (dataToUpdate[params[i]]).splice(0, 2)
-      // }
 
       console.log("dataToUpdate", dataToUpdate)
       this.service.updateAllMatrice(dataToUpdate).subscribe(res => {
@@ -107,14 +88,14 @@ export class ConfigCritereComponent implements OnInit {
 
   }
 
-  convertToArrayOfArray(arr) {
-    return arr.map(function (obj) {
-      return Object.keys(obj).map(function (key) {
-        return obj[key];
-      });
-    });
+  // convertToArrayOfArray(arr) {
+  //   return arr.map(function (obj) {
+  //     return Object.keys(obj).map(function (key) {
+  //       return obj[key];
+  //     });
+  //   });
 
-  }
+  // }
 
   checkIfValueEmpty(arr) {
     return arr.every(item => item.productivite && item.CHP && item.TP && item.CHC && item.forfaitNbHeure && item.forfaitNbHeureCoord && item.marge);

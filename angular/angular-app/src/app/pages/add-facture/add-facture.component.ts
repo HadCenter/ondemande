@@ -69,7 +69,7 @@ export class AddFactureComponent implements OnInit {
   }
 
   daysInMonth(month, year) {
-    return new Date(year, month +1, 0).getDate();
+    return new Date(year, month + 1, 0).getDate();
   }
 
   get_days_list() {
@@ -113,34 +113,34 @@ export class AddFactureComponent implements OnInit {
     let preparations: any = [];
     this.openSnackBar("Le calcul de la facturation est en cours, veuillez patienter", "Ok", 5000);
 
-    let data = {
-      code_client: this.code_client,
-      date: "",
-      prep_jour: "",
-      prep_nuit: "",
-      prep_province: ""
-    }
-    
-    for (var i = 0; i < this.JourPreparations.length; i++) {
+    let max_prep = Math.max(this.JourPreparations.length, this.NuitPreparations.length, this.ProvincePreparations.length)
+    for (var i = 0; i < max_prep; i++) {
+      let data = {
+        code_client: this.code_client,
+        date: "",
+        prep_jour: undefined,
+        prep_nuit: undefined,
+        prep_province: undefined
+      }  
       data.date = this.datePipe.transform(this.monthDays[i], 'yyyy-MM-dd');
-      data.prep_jour = this.JourPreparations[i].toString();
-      data.prep_nuit = this.NuitPreparations[i].toString();
-      data.prep_province = this.ProvincePreparations[i].toString();
+      if (this.JourPreparations[i]) {
+        data.prep_jour = this.JourPreparations[i].toString();
+      }
+      if (this.NuitPreparations[i]) {
+        data.prep_nuit = this.NuitPreparations[i].toString();
+      }
+      if (this.ProvincePreparations[i]) {
+        data.prep_province = this.ProvincePreparations[i].toString();
+      }
       preparations.push(
-        {
-          code_client: this.code_client,
-          date: data.date,
-          prep_jour: data.prep_jour,
-          prep_nuit: data.prep_nuit,
-          prep_province: data.prep_province
-        }
+        data
       );
     }
     this.monthDays = [];
     this.JourPreparations = [];
     this.NuitPreparations = [];
     this.ProvincePreparations = [];
-    
+
     this.service.addFacturation({ preparations: preparations }).subscribe(res => {
       //this.get_days_list();
       this.router.navigate(['/liste-facturation-preparation', this.code_client])

@@ -97,7 +97,6 @@ def updateAllMatriceForClientV2(request):
     for element in params:
         element.pop("nom_client", None)
         param = element.pop("param",None)
-        print(element)
         for key in element:
             try:
                 critere = MatriceFacturation.objects.get(param = param, code_client = code_client, key = key)
@@ -149,13 +148,29 @@ def caculateFacturationForClient(request):
     coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.'))/100)
     total = coutProdAvecMarge * unitéManut
     #unitéManut = ((int(nbre_preparateur) * int(criteres["CHP"]) * criteres["forfaitNbHeure"]) + (criteres["CHC"] * criteres["forfaitNbHeureCoord"]))/ (1-criteres["marge"]/100)
-    print(unitéManut)
-    print(coutProdSansMarge)
-    print(coutProdAvecMarge)
-    print(total) 
     if(len(criteres) == 0):
         return JsonResponse({'message': 'Client or param not found'}, status=status.HTTP_404_NOT_FOUND)
     return HttpResponse(jsonpickle.encode(total, unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def caculateFacturationByUnite(request):
+    param = request.data['param']
+    code_client = request.data['code_client']
+    nbre_preparateur = request.data['nbre_preparateur']
+    manutention_reel = request.data['manutention']
+
+    criteres = getMatriceForParam(code_client, param)
+
+    unitéManut = ( int(nbre_preparateur) * int(criteres['TP']) * 60 ) / int(criteres["productivite"])
+    if(manutention_reel < unitéManut):
+        return JsonResponse({'message': 'unité manutention doivent être sup à unité manut pour le nbre prepateur indiqué.'}, status=status.HTTP_404_NOT_FOUND)
+    coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
+    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.'))/100)
+    total = coutProdAvecMarge * manutention_reel
+    if(len(criteres) == 0):
+        return JsonResponse({'message': 'Client or param not found'}, status=status.HTTP_404_NOT_FOUND)
+    return HttpResponse(jsonpickle.encode(total, unpicklable=False), content_type="application/json")
+
 
 @api_view(['POST'])
 def caculateFacturationByDate(request):
@@ -163,7 +178,6 @@ def caculateFacturationByDate(request):
     untreatedFacturation = Facturation.objects.filter(total_jour=None)
     for fact in untreatedFacturation:
         if(fact.prep_jour != None):
-            print("prep jour in not null")
             criteres = getMatriceForParam(fact.code_client, "midi")
             total = getFacturationTotal(fact.prep_jour, criteres)
             fact.total_jour = total
@@ -171,7 +185,6 @@ def caculateFacturationByDate(request):
     untreatedFacturation = Facturation.objects.filter( total_nuit=None)
     for fact in untreatedFacturation:
         if(fact.prep_nuit != None):
-            print("prep soir in not null")
             criteres = getMatriceForParam(fact.code_client, "soir")
             total = getFacturationTotal(fact.prep_nuit, criteres)
             fact.total_nuit = total
@@ -179,11 +192,8 @@ def caculateFacturationByDate(request):
     untreatedFacturation = Facturation.objects.filter(total_province = None)
     for fact in untreatedFacturation:
         if(fact.prep_province != None):
-            print("prep province in not null")
             criteres = getMatriceForParam(fact.code_client, "province")
-            print(criteres)
             total = getFacturationTotal(fact.prep_province, criteres)
-            print(fact.prep_province)
             fact.total_province = total
             fact.save()
 
@@ -194,7 +204,6 @@ def calculateMonthFacturationForClient(code_client):
     untreatedFacturation = Facturation.objects.filter(code_client = code_client, date__lt=None)
     for fact in untreatedFacturation:
         if(fact.prep_jour != None):
-            print("prep jour in not null")
             criteres = getMatriceForParam(fact.code_client, "midi")
             total = getFacturationTotal(fact.prep_jour, criteres)
             fact.total_jour = total
@@ -202,7 +211,6 @@ def calculateMonthFacturationForClient(code_client):
     untreatedFacturation = Facturation.objects.filter( total_nuit=None)
     for fact in untreatedFacturation:
         if(fact.prep_nuit != None):
-            print("prep soir in not null")
             criteres = getMatriceForParam(fact.code_client, "soir")
             total = getFacturationTotal(fact.prep_nuit, criteres)
             fact.total_nuit = total
@@ -210,11 +218,8 @@ def calculateMonthFacturationForClient(code_client):
     untreatedFacturation = Facturation.objects.filter(total_province = None)
     for fact in untreatedFacturation:
         if(fact.prep_province != None):
-            print("prep province in not null")
             criteres = getMatriceForParam(fact.code_client, "province")
-            print(criteres)
             total = getFacturationTotal(fact.prep_province, criteres)
-            print(fact.prep_province)
             fact.total_province = total
             fact.save()
 
@@ -290,7 +295,6 @@ def addMonthFacturation(request):
     for prep in preparations:
         facturationDB = Facturation()
         facturationDB.code_client = prep['code_client']
-        print(prep['code_client'])
         facturationDB.nom_client = Client.objects.get(code_client=prep['code_client']).nom_client
         facturationDB.date = prep['date']
         if('prep_jour' in prep):

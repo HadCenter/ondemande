@@ -3,10 +3,10 @@
   <h1 class="mdl-card__title-text">Informations Facturation du mois {{nom_mois}} pour le client {{client_name}}</h1>
 </base-card-title>
 <base-card-body class="scroll-body no-padding">
-<app-loader [width]="'100%'" [position]="'sticky'" [height]="'60vh'" [bg]="'transparant'" [show]="advancedTable.length == 0">
+<app-loader [width]="'100%'" [position]="'sticky'" [height]="'60vh'" [bg]="'transparant'" [show]="!advancedTable">
 </app-loader>
 
-<table *ngIf="advancedTable.length > 0" aria-describedby="clients-table"
+<table *ngIf="advancedTable" aria-describedby="clients-table"
     class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone mdl-data-table mdl-js-data-table   sorting-table">
     <thead>
       <tr>
@@ -33,5 +33,6 @@
       </tr>
     </tbody>
   </table>
+  <h6 style='text-align: center;' *ngIf="advancedTable?.length == 0">Pas de facturation pour le moment.</h6>
 </base-card-body>
 </base-card>

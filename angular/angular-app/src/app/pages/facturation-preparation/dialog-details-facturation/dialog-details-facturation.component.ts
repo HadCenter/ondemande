@@ -19,7 +19,7 @@ export class DialogDetailsFacturationComponent implements OnInit {
   public currentPage = 1;
   private countPerPage = 8;
   public numPage = 0;
-  public advancedTable = [];
+  public advancedTable : Array<any>;
   show = true;
   public mois : any;
   public nom_mois: any;
@@ -40,7 +40,9 @@ export class DialogDetailsFacturationComponent implements OnInit {
     this.client_name = this.service.getClient();
     this.service.getFacturationForClients(data).subscribe(res => {
       this.advancedTable = res;
-      this.advancedHeaders = Object.keys(this.advancedTable[0]);
+      if(res.length > 0){
+        this.advancedHeaders = Object.keys(this.advancedTable[0]);  
+      }
     },
       error => console.log(error));
   }

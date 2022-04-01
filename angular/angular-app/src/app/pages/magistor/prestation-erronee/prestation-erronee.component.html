@@ -35,17 +35,20 @@
             <mat-panel-title>
               Afficher Log
             </mat-panel-title>
-             <mat-panel-description>
+            <mat-panel-description>
 
-                        <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
-                            les filtres
-                        </button>
-                    </mat-panel-description>
+              <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
+                *ngIf="data.length!==0"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                les filtres
+              </button>
+            </mat-panel-description>
           </mat-expansion-panel-header>
 
           <div class="content-table">
-            <table mat-table id='mytable' [dataSource]="advancedTable" [ngClass] = "{'table-width-100':typeFileREC}"
+            <div *ngIf="data.length==0">Pas de prestation</div>
+            <table *ngIf="data.length!==0" mat-table id='mytable' [dataSource]="advancedTable"
+              [ngClass]="{'table-width-100':typeFileREC}"
               class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
 
               <!-- <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
@@ -145,15 +148,17 @@
               Afficher Log
             </mat-panel-title>
             <mat-panel-description>
-                        <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
-                            les filtres
-                        </button>
-                    </mat-panel-description>
+              <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
+                *ngIf="data2.length!==0 "
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                les filtres
+              </button>
+            </mat-panel-description>
           </mat-expansion-panel-header>
 
           <div class="content-table">
-            <table mat-table id='mytable2' [dataSource]="advancedTable2"
+            <div *ngIf="data2.length==0">Pas de prestation</div>
+            <table *ngIf="data2.length!==0" mat-table id='mytable2' [dataSource]="advancedTable2"
               class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp2($event)">
 
 

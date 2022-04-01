@@ -1,4 +1,4 @@
-import { Component, OnInit ,HostListener} from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { DetailsFileMagistorService } from './details-file-magistor.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -174,6 +174,7 @@ export class DetailsFileMagistorComponent implements OnInit {
 
         this.numPageValid = Math.ceil(this.fileMagistor.rows.length / this.countPerPageValid);
         this.advancedTableValid = this.getAdvancedTablePageValid(1, this.countPerPageValid); /****to display */
+
         this.displayedColumns = (Object.keys(this.copyfileMagistor[0]));
 
         this.LAST_EDITABLE_ROW = this.copyfileMagistor.length - 1;
@@ -220,6 +221,7 @@ export class DetailsFileMagistorComponent implements OnInit {
         this.showLoader = false;
       }
     })
+
   }
 
   public getAdvancedTablePageValid(page, countPerPage) {

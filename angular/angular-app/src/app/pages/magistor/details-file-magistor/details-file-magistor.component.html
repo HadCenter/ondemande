@@ -43,31 +43,32 @@
             <label class="mdl-textfield__label" for="search1"></label>
           </div>
         </div> -->
-          <button  [disabled]="file?.status=='Terminé'" (click)='saveModificationsOnFile();$event.stopPropagation();' style="margin: 3px; "
-            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">
+        <button [disabled]="file?.status=='Terminé'" (click)='saveModificationsOnFile();$event.stopPropagation();'
+          style="margin: 3px; "
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">
 
-            <i class="material-icons ">save</i>
-            Enregistrer
+          <i class="material-icons ">save</i>
+          Enregistrer
+        </button>
+
+        <!----[disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'" !-->
+        <div>
+          <button (click)='openConfirmDialog("valider");$event.stopPropagation();' style="margin: 1px;"
+            [disabled]="validateClicked==true || terminated || file?.ButtonValidateActivated==false"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
           </button>
 
-          <!----[disabled]="file?.number_annomalies>=1 || file?.status !=='Terminé'" !-->
-          <div>
-            <button (click)='openConfirmDialog("valider");$event.stopPropagation();' style="margin: 1px;"
-              [disabled]="validateClicked==true || terminated || file?.ButtonValidateActivated==false"
-              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Valider
-            </button>
+          <button (click)='invalidateFile()' style="margin: 1px;"
+            [disabled]="correctClicked==true || terminated || file?.ButtonInvalidateActivated==false"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Dévalider
+          </button>
 
-            <button (click)='invalidateFile()' style="margin: 1px;"
-              [disabled]="correctClicked==true || terminated || file?.ButtonInvalidateActivated==false"
-              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Dévalider
-            </button>
-
-            <!-- <button (click)='openConfirmDialog("corriger");$event.stopPropagation();' style="margin: 1px;"
+          <!-- <button (click)='openConfirmDialog("corriger");$event.stopPropagation();' style="margin: 1px;"
               [disabled]="correctClicked==true ||terminated || file?.ButtonCorrecteActiveted==false"
               class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Corriger
             </button> -->
-          </div>
-          <!-- <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
+        </div>
+        <!-- <button (click)='resetFiltre("metadata");$event.stopPropagation();' style="margin-left: 5px;"
             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
             les filtres
           </button> -->
@@ -98,7 +99,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid"
+                  (changePage)="changePageValid($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -112,22 +114,24 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        *ngIf="fileMagistor?.rows.length!==0"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
+                  <div *ngIf="fileMagistor?.rows.length==0">Pas de prestation</div>
                   <div *ngIf="advancedTableValid?.rows" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
-                            class="details-line mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index"
+                            id={{options[i].columnProp}} class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
 
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions(options[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions(options[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options[i].options" [value]="item">{{item}}
@@ -176,7 +180,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2"
+                  (changePage)="changePageValid2($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -189,21 +194,23 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        *ngIf="fileMagistor2?.rows.length!==0"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
+                  <div *ngIf="fileMagistor2?.rows.length==0">Pas de prestation</div>
                   <div *ngIf="advancedTableValid2?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
-                            class="details-line2 mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index"
+                            id={{options2[i].columnProp}}2 class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options2[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options2[i].options" [value]="item">{{item}}
@@ -242,12 +249,14 @@
 
         </div>
         <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
-          <app-prestation-erronee *ngIf="fileMagistor.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
-                                  [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc" (changedDataEvent)="changedData($event)">
+          <app-prestation-erronee *ngIf="fileMagistor.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="fileMagistor" [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc"
+            (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
 
-          <app-prestation-erronee *ngIf="fileMagistor2.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
-                                  [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc" (changedDataEvent)="changedData2($event)">
+          <app-prestation-erronee *ngIf="fileMagistor2.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="fileMagistor2" [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc"
+            (changedDataEvent)="changedData2($event)">
           </app-prestation-erronee>
 
         </div>
@@ -266,7 +275,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid"
+                  (changePage)="changePageValid($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -281,22 +291,23 @@
 
                     <mat-panel-description>
                       <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        *ngIf="fileMagistor?.rows.length!==0"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-
+                  <div *ngIf="fileMagistor?.rows.length==0">Pas de prestation</div>
                   <div *ngIf="advancedTableValid?.rows" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
-                            class="details-line mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index"
+                            id={{options[i].columnProp}} class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions(options[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions(options[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options[i].options" [value]="item">{{item}}
@@ -334,7 +345,7 @@
           </base-card>
           <!------------------------------------- FEUILLE ART01 --------------------------------------->
           <!-------------------------------------------- PRESTATIONS ERRONEES --------------------------------------->
-         <app-prestation-erronee *ngIf="errorfileMagistor?.rows?.length > 0" [typeFile]="file?.logisticFileType"
+          <app-prestation-erronee *ngIf="errorfileMagistor?.rows?.length > 0" [typeFile]="file?.logisticFileType"
             [originData]="errorfileMagistor" [data]="copyerrorfileMagistor" [sheet1]="true"
             (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
@@ -352,7 +363,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2"
+                  (changePage)="changePageValid2($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -365,22 +377,23 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        *ngIf="fileMagistor2?.rows.length!==0"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-
+                  <div *ngIf="fileMagistor2?.rows.length==0">Pas de prestation</div>
                   <div *ngIf="advancedTableValid2?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
-                            class="details-line2 mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index"
+                            id={{options2[i].columnProp}}2 class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options2[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options2[i].options" [value]="item">{{item}}
@@ -441,7 +454,8 @@
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
 
-                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePageREC)="changePageValid($event)">
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid"
+                  (changePageREC)="changePageValid($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -454,7 +468,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
@@ -466,12 +480,12 @@
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
-                            class="details-line mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index"
+                            id={{options[i].columnProp}} class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions(options[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions(options[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options[i].options" [value]="item">{{item}}
@@ -520,7 +534,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePageREC)="changePageValid2($event)">
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2"
+                  (changePageREC)="changePageValid2($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -533,7 +548,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
@@ -545,12 +560,12 @@
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
-                            class="details-line2 mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index"
+                            id={{options2[i].columnProp}}2 class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options2[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options2[i].options" [value]="item">{{item}}
@@ -615,7 +630,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid"
+                  (changePage)="changePageValid($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -628,7 +644,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
@@ -637,12 +653,12 @@
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index"  id={{options[i].columnProp}}
-                            class="details-line mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index"
+                            id={{options[i].columnProp}} class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions(options[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions(options[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options[i].options" [value]="item">{{item}}
@@ -702,7 +718,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2"
+                  (changePage)="changePageValid2($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -715,7 +732,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
@@ -725,12 +742,12 @@
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
-                            class="details-line2 mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index"
+                            id={{options2[i].columnProp}}2 class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options2[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options2[i].options" [value]="item">{{item}}
@@ -1010,7 +1027,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid"
+                  (changePage)="changePageValid($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -1023,7 +1041,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
@@ -1032,12 +1050,12 @@
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
-                            class="details-line mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index"
+                            id={{options[i].columnProp}} class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions(options[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions(options[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options[i].options" [value]="item">{{item}}
@@ -1087,7 +1105,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2"
+                  (changePage)="changePageValid2($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -1100,7 +1119,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
@@ -1110,12 +1129,12 @@
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
-                            class="details-line2 mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index"
+                            id={{options2[i].columnProp}}2 class="details-line2 mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options2[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options2[i].options" [value]="item">{{item}}
@@ -1155,12 +1174,14 @@
         </div>
 
         <div *ngIf="!terminated && oneBloc && fileMagistor && fileMagistor2">
-          <app-prestation-erronee *ngIf="fileMagistor.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="fileMagistor"
-                                  [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc" (changedDataEvent)="changedData($event)">
+          <app-prestation-erronee *ngIf="fileMagistor.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="fileMagistor" [data]="copyfileMagistor" [sheet1]="true" [oneBloc]="oneBloc"
+            (changedDataEvent)="changedData($event)">
           </app-prestation-erronee>
 
-          <app-prestation-erronee *ngIf="fileMagistor2.rows.length > 0" [typeFile]="file?.logisticFileType" [originData]="fileMagistor2"
-                                  [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc" (changedDataEvent)="changedData2($event)">
+          <app-prestation-erronee *ngIf="fileMagistor2.rows.length > 0" [typeFile]="file?.logisticFileType"
+            [originData]="fileMagistor2" [data]="copyfileMagistor2" [sheet1]="false" [oneBloc]="oneBloc"
+            (changedDataEvent)="changedData2($event)">
           </app-prestation-erronee>
 
         </div>
@@ -1180,7 +1201,8 @@
                     [(ngModel)]="filterValue" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid" (changePage)="changePageValid($event)">
+                <base-pagination [numPage]="numPageValid" [currentPage]="currentPageValid"
+                  (changePage)="changePageValid($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -1193,21 +1215,23 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        *ngIf="fileMagistor?.rows.length!==0"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
+                  <div *ngIf="fileMagistor?.rows.length==0">Pas de prestation</div>
                   <div *ngIf="advancedTableValid?.rows" class="content-table">
                     <table class="table-validator mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index" id={{options[i].columnProp}}
-                            class="details-line mdl-data-table__cell--non-numeric">
+                          <th *ngFor="let row of advancedTableValid?.columns ; let i = index"
+                            id={{options[i].columnProp}} class="details-line mdl-data-table__cell--non-numeric">
                             <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions(options[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions(options[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options[i].options" [value]="item">{{item}}
@@ -1265,7 +1289,8 @@
                     [(ngModel)]="filterValue2" placeholder="Rechercher" autocomplete="off" />
                   <label class="mdl-textfield__label" for="search2"></label>
                 </div>
-                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2" (changePage)="changePageValid2($event)">
+                <base-pagination [numPage]="numPageValid2" [currentPage]="currentPageValid2"
+                  (changePage)="changePageValid2($event)">
                 </base-pagination>
               </div>
             </base-card-title>
@@ -1278,22 +1303,23 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
-                              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                        *ngIf="fileMagistor2?.rows.length!==0"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
                         les filtres
                       </button>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-
+                  <div *ngIf="fileMagistor2?.rows.length==0">Pas de prestation</div>
                   <div *ngIf="advancedTableValid2?.rows" class="content-table">
                     <table class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table">
                       <thead>
                         <tr>
-                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index" id={{options2[i].columnProp}}2
-                            class="details-line2 mdl-data-table__cell--non-numeric">
-                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' " >{{row}}</span>
+                          <th *ngFor="let row of advancedTableValid2?.columns ; let i = index"
+                            id={{options2[i].columnProp}}2 class="details-line2 mdl-data-table__cell--non-numeric">
+                            <span *ngIf="row !=='Delete' && row !=='rowId'&& row !=='selected' ">{{row}}</span>
                             <mat-form-field class="form-column" appearance="fill">
                               <mat-select multiple [(ngModel)]="options2[i].modelValue"
-                                          (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
+                                (selectionChange)="setFilteredItemsOptions2(options2[i],$event)">
                                 <mat-select-trigger>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let item of options2[i].options" [value]="item">{{item}}

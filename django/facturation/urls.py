@@ -14,4 +14,5 @@ urlpatterns = [
     path("addMonthFacturation/", views.addMonthFacturation, name = "addMonthFacturationinDB" ), #n'est pas utilisé
     path("getFacturationForClient/", views.getFacturation, name = "getFacturationfromDB" ), #en utilisation
     path("getMonthListFacturationForClient/", views.getMonthFacturation, name = "getMonthFacturationfromDB" ),#en utilisation
+    path("getMonthFacturationWithTotal/", views.getMonthFacturationWithTotal, name = "getMonthFacturationfromDBWithTotal" ),#en cours de dev
 ]

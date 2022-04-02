@@ -1,5 +1,6 @@
 from datetime import datetime
 from .models import Facturation, FacturationInfo, MatriceFacturation, MatriceFacturationInfo
+from django.db.models import Sum
 
 def getAllClientsinDB():
     clientList = MatriceFacturation.objects.all()
@@ -59,11 +60,14 @@ def getFacturationForDateRange(code_client, mois):
 
 def getMonthsFacturationForClient(code_client):
     factList = Facturation.objects.filter(code_client = code_client).order_by('date')
+    somme_fact = Facturation.objects.values('date').order_by('date').annotate(total_price=Sum('total_jour'))
     nom_client = ""
     if(len(factList)>0):
         nom_client = factList[0].nom_client
     listMonths= list()
+    sum_month = list() 
     for critere in factList:
+        somme = 0
         if(critere.date.strftime("%m-%Y") not in listMonths):
             listMonths.append(critere.date.strftime("%m-%Y"))
     return nom_client,listMonths

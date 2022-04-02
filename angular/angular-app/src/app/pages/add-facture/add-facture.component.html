@@ -24,7 +24,11 @@
                 class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone mdl-data-table mdl-js-data-table   sorting-table">
                 <thead>
                     <tr>
-                        <th *ngFor="let header of advancedHeaders" class="mdl-data-table__cell--non-numeric">
+                        <th class="mdl-data-table__cell--non-numeric">
+                            <span>Jour</span>
+                        </th>
+
+                        <th *ngFor="let header of advancedHeaders" class="mdl-data-table__cell--non-numeric" colspan="2">
 
                             <span>{{ header.name }}</span>
                         </th>
@@ -39,15 +43,27 @@
                             <input class="tab-input" [(ngModel)]="JourPreparations[i]" (keypress)="numberOnly($event)"
                                 placeholder="1,2..">
                         </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input"  (keypress)="numberOnly($event)"
+                                placeholder="Unité Manut.">
+                        </td>
 
                         <td class="mdl-data-table__cell--non-numeric">
                             <input class="tab-input" [(ngModel)]="NuitPreparations[i]" (keypress)="numberOnly($event)"
                                 placeholder="1,2..">
                         </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input"  (keypress)="numberOnly($event)"
+                                placeholder="Unité Manut.">
+                        </td>
 
                         <td class="mdl-data-table__cell--non-numeric">
                             <input class="tab-input" [(ngModel)]="ProvincePreparations[i]"
                                 (keypress)="numberOnly($event)" placeholder="1,2..">
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" 
+                                (keypress)="numberOnly($event)" placeholder="Unité Manut.">
                         </td>
 
                         <!-- <td class="column-actions mdl-data-table__cell--non-numeric">

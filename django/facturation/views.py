@@ -4,9 +4,11 @@ import jsonpickle
 from rest_framework import status
 from rest_framework.decorators import api_view
 
+
 from .facturationService import getFacturationForDateRange, getMatriceForClient, getMatriceForParam, getAllClientsinDB, getMonthsFacturationForClient
 
 from .models import MatriceFacturation, Facturation
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -324,3 +326,42 @@ def getMonthFacturation(request):
     code_client = request.data['code_client']
     nom_client,fact = getMonthsFacturationForClient(code_client)
     return HttpResponse(jsonpickle.encode({'nom_client': nom_client, 'months':fact}, unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def getMonthFacturationWithTotal(request):
+    code_client = request.data['code_client']
+    factList = Facturation.objects.filter(code_client = code_client).order_by('date')
+    if(len(factList)>0):
+        nom_client = factList[0].nom_client
+        current_month = factList[0].date.strftime("%m-%Y")
+    
+    somme = 0
+    listMonths= list()
+    for critere in factList:
+        if(critere.date.strftime("%m-%Y") == current_month):
+            if(critere.total_jour != None):
+                somme += critere.total_jour 
+            if(critere.total_nuit != None):
+                somme += critere.total_nuit
+            if(critere.total_province != None):
+                somme += critere.total_province
+        else:
+            print(critere.date.strftime("%m-%Y"))
+            diction = {}
+            diction['month']=current_month
+            diction['total']=somme
+            listMonths.append(diction)
+            current_month = critere.date.strftime("%m-%Y")
+            somme = 0
+            if(critere.total_jour != None):
+                somme += critere.total_jour 
+            if(critere.total_nuit != None):
+                somme += critere.total_nuit
+            if(critere.total_province != None):
+                somme += critere.total_province
+    diction = {}
+    diction['month']=current_month
+    diction['total']=somme
+    listMonths.append(diction)
+
+    return HttpResponse(jsonpickle.encode({'nom_client': nom_client, 'months':listMonths}, unpicklable=False), content_type="application/json")

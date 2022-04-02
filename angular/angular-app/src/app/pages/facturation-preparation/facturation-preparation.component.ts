@@ -40,10 +40,12 @@ export class FacturationPreparationComponent implements OnInit {
     }
     this.service.getMonthListFacturationForClient(data).subscribe(res => {
       this.advancedTable = res.months.reverse();
+      console.log(this.advancedTable);
+
       var first_iteration = true;
       var today = new Date();
       this.advancedTable.forEach(element => {
-        var date = element.split('-');
+        var date = element.month.split('-');
         //var nom_mois = new Date(parseInt(date[1]), parseInt(date[0]) - 1, 1).toLocaleString('default', { month: 'long' }).toLocaleUpperCase();
         var month = new Date(parseInt(date[1]), parseInt(date[0]) +1, 1);
         var nextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 1);
@@ -52,7 +54,7 @@ export class FacturationPreparationComponent implements OnInit {
         console.log(Date.parse(month.toDateString()), '==', Date.parse(nextMonth.toDateString()));
 
             if((Date.parse(month.toDateString()) == Date.parse(nextMonth.toDateString()))){
-              this.advancedTable.unshift(this.datePipe.transform(new Date(parseInt(date[1]), parseInt(date[0]), 1), 'MM-yyyy') );
+              this.advancedTable.unshift({"month":this.datePipe.transform(new Date(parseInt(date[1]), parseInt(date[0]), 1), 'MM-yyyy'), "total":0} );
               //this.advancedTable.unshift(new Date(parseInt(date[1]), parseInt(date[0]), 1).toLocaleString('default', { month: 'long' }).toLocaleUpperCase() );
   
             }
@@ -68,7 +70,7 @@ export class FacturationPreparationComponent implements OnInit {
         this.advancedTable.push(this.datePipe.transform(new Date(today.getFullYear(), today.getMonth() + 1, 1), 'MM-yyyy') );
       }
       this.advancedTable.forEach(element =>{
-        var date = element.split('-');
+        var date = element.month.split('-');
         this.dates.push(new Date(parseInt(date[1]), parseInt(date[0])-1 , 1).toLocaleString('default', { month: 'long', year: 'numeric' }).toLocaleUpperCase())
       })
       console.log(this.advancedTable);

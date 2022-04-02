@@ -16,7 +16,7 @@ export class FacturationPreparationService {
     return this.http.post(`${this.url}/getFacturationForClient/`, data);
   }
   public getMonthListFacturationForClient (data) : Observable<any> {
-    return this.http.post(`${this.url}/getMonthListFacturationForClient/`, data);
+    return this.http.post(`${this.url}/getMonthFacturationWithTotal/`, data);
   }
 
   public setClient(client_name){
@@ -31,6 +31,11 @@ export class FacturationPreparationService {
     return [
       {
         name: 'Mois',
+        sort: 0,
+
+      },
+      {
+        name: 'Total du mois',
         sort: 0,
 
       },

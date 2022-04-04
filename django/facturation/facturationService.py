@@ -44,7 +44,7 @@ def getMatrice(param : str):
         listCritereMatrice.append(critereResponse)
     return listCritereMatrice
 
-def getFacturationForDateRange(code_client, mois):
+def getFacturationForMonth(code_client, mois):
     month = datetime.strptime(mois, "%m-%Y").date().strftime("%m")
     year = datetime.strptime(mois, "%m-%Y").date().strftime("%Y")
     #factList = Facturation.objects.filter(code_client = code_client, date__range = (date1,date2))
@@ -52,9 +52,12 @@ def getFacturationForDateRange(code_client, mois):
     listCritereMatrice= list()
     for critere in factList:
         critereResponse = FacturationInfo(date= critere.date, code_client=critere.code_client,
-                                 prep_jour=critere.prep_jour, prep_nuit=critere.prep_nuit,
-                                 prep_province=critere.prep_province, total_jour=critere.total_jour,
-                                 total_nuit = critere.total_nuit , total_province= critere.total_province )
+                                 prep_jour=critere.prep_jour, UM_jour=critere.UM_jour,
+                                  prep_nuit=critere.prep_nuit, UM_nuit=critere.UM_nuit,
+                                 prep_province=critere.prep_province, UM_province=critere.UM_province,
+                                  total_jour=critere.total_jour, total_nuit = critere.total_nuit , 
+                                  total_province= critere.total_province, diff_jour=critere.diff_jour,
+                                 diff_nuit = critere.diff_nuit , diff_province= critere.diff_province )
         listCritereMatrice.append(critereResponse)
     return listCritereMatrice
 

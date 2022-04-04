@@ -19,6 +19,9 @@ export class AddFactureComponent implements OnInit {
   JourPreparations: any = [];
   NuitPreparations: any = [];
   ProvincePreparations: any = [];
+  UM_jour: any = [];
+  UM_nuit: any = [];
+  UM_province: any = [];
   client_name: string = "";
   mois: string;
   existingFacturation: any;
@@ -92,6 +95,9 @@ export class AddFactureComponent implements OnInit {
             this.JourPreparations.push(element.prep_jour);
             this.NuitPreparations.push(element.prep_nuit);
             this.ProvincePreparations.push(element.prep_province);
+            this.UM_jour.push(element.UM_jour);
+            this.UM_nuit.push(element.UM_nuit);
+            this.UM_province.push(element.UM_province);
           }
         });
       }
@@ -119,9 +125,12 @@ export class AddFactureComponent implements OnInit {
         code_client: this.code_client,
         date: "",
         prep_jour: undefined,
+        UM_jour: undefined,
         prep_nuit: undefined,
-        prep_province: undefined
-      }  
+        UM_nuit: undefined,
+        prep_province: undefined,
+        UM_province: undefined
+      }
       data.date = this.datePipe.transform(this.monthDays[i], 'yyyy-MM-dd');
       if (this.JourPreparations[i]) {
         data.prep_jour = this.JourPreparations[i].toString();
@@ -132,6 +141,15 @@ export class AddFactureComponent implements OnInit {
       if (this.ProvincePreparations[i]) {
         data.prep_province = this.ProvincePreparations[i].toString();
       }
+      if (this.UM_jour[i]) {
+        data.UM_jour = this.UM_jour[i].toString();
+      }
+      if (this.UM_nuit[i]) {
+        data.UM_nuit = this.UM_nuit[i].toString();
+      }
+      if (this.UM_province[i]) {
+        data.UM_province = this.UM_province[i].toString();
+      }
       preparations.push(
         data
       );
@@ -140,6 +158,9 @@ export class AddFactureComponent implements OnInit {
     this.JourPreparations = [];
     this.NuitPreparations = [];
     this.ProvincePreparations = [];
+    this.UM_jour = [];
+    this.UM_nuit = [];
+    this.UM_province = [];
 
     this.service.addFacturation({ preparations: preparations }).subscribe(res => {
       //this.get_days_list();

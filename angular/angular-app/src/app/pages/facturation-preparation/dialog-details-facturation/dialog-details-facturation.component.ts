@@ -28,6 +28,9 @@ export class DialogDetailsFacturationComponent implements OnInit {
   public sum_jour: number = 0;
   public sum_nuit: number = 0;
   public sum_province: number = 0;
+  public sum_diff_jour: number = 0;
+  public sum_diff_nuit: number = 0;
+  public sum_diff_province: number = 0;
   public readonly sortOrder = {
     asc: 1,
     desc: -1,
@@ -50,6 +53,9 @@ export class DialogDetailsFacturationComponent implements OnInit {
           this.sum_jour += element.total_jour;
           this.sum_nuit += element.total_nuit;
           this.sum_province += element.total_province;
+          this.sum_diff_jour += element.diff_jour;
+          this.sum_diff_nuit += element.diff_nuit;
+          this.sum_diff_province += element.diff_province;  
         })
       }
     },

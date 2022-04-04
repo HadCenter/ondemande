@@ -44,7 +44,7 @@
                                 placeholder="1,2..">
                         </td>
                         <td class="mdl-data-table__cell--non-numeric">
-                            <input class="tab-input"  (keypress)="numberOnly($event)"
+                            <input class="tab-input" [(ngModel)]="UM_jour[i]" (keypress)="numberOnly($event)"
                                 placeholder="Unité Manut.">
                         </td>
 
@@ -53,7 +53,7 @@
                                 placeholder="1,2..">
                         </td>
                         <td class="mdl-data-table__cell--non-numeric">
-                            <input class="tab-input"  (keypress)="numberOnly($event)"
+                            <input class="tab-input" [(ngModel)]="UM_nuit[i]" (keypress)="numberOnly($event)"
                                 placeholder="Unité Manut.">
                         </td>
 
@@ -62,7 +62,7 @@
                                 (keypress)="numberOnly($event)" placeholder="1,2..">
                         </td>
                         <td class="mdl-data-table__cell--non-numeric">
-                            <input class="tab-input" 
+                            <input class="tab-input" [(ngModel)]="UM_province[i]"
                                 (keypress)="numberOnly($event)" placeholder="Unité Manut.">
                         </td>
 

@@ -329,7 +329,7 @@ def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> Transactio
         options.Express.add(x[14])
         options.Remarque.add(x[15])
         options.isDeleted.add(x[16])
-        options.billingRoundName.add(x[17])
+        options.billingRoundName.add(x[18])
     return TransactionFileContentAndOptions(fileContent = fileContentObjects , options = options )
 
 def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> TransactionFileContentAndOptions:
@@ -358,7 +358,7 @@ def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> Transactio
         options.sourceHubName.add(x[15])
         options.isExpress.add(x[16])
         options.toDelete.add(x[17])
-        options.billingRoundName.add(x[18])
+        options.billingRoundName.add(x[19])
 
     return TransactionFileContentAndOptions(fileContent=fileContentObjects, options=options)
 

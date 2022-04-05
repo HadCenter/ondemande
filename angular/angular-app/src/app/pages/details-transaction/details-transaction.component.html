@@ -343,10 +343,10 @@
                           </mat-select>
                         </mat-form-field>
                       </th>
-                      <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mousedown)="onMouseDown(i, 12, 'Round_Name','livraison')"
+                      <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                        <!-- (mousedown)="onMouseDown(i, 12, 'Round_Name','livraison')"
                         (mouseup)="onMouseUp(i, 12, 'Round_Name','livraison')"
-                        [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][12], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][12]}">
+                        [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][12], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][12]}"> -->
                         {{element.Round_Name}} </td>
                     </ng-container>
 
@@ -385,8 +385,8 @@
                         </mat-form-field>
                       </th>
                       <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                        (mousedown)="onMouseDown(i, 14, 'isExpress','livraison')"
-                        (mouseup)="onMouseUp(i, 14, 'isExpress','livraison')"
+                        (mousedown)="onMouseDown(i, 14, 'total_price','livraison')"
+                        (mouseup)="onMouseUp(i, 14, 'total_price','livraison')"
                         [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][14], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][14]}">
                         {{element.total_price}} </td>
                     </ng-container>
@@ -404,7 +404,10 @@
                           </mat-select>
                         </mat-form-field>
                       </th>
-                      <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                      <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
+                      (mousedown)="onMouseDown(i, 15, 'billingRoundName','livraison')"
+                      (mouseup)="onMouseUp(i, 15, 'billingRoundName','livraison')"
+                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][15], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][15]}">
                         {{element.billingRoundName}} </td>
                     </ng-container>
 

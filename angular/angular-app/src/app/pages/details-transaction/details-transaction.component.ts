@@ -1830,11 +1830,13 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     } else {
       this.showLoader = true;
       if (this.dataSource.data.length > 0) {
+        this.copyDataSource.map(element => element.Round_Name = element.billingRoundName);
         this.copyDataSource.map(element => delete element.billingRoundName);
         this.columnsLivraison = Object.keys(this.copyDataSource[0]);
         this.rowsLivraison = this.copyDataSource.map(Object.values);
       }
       if (this.dataSourceException.data.length > 0) {
+        this.copyDataSource.map(element => element.Round_Name = element.billingRoundName);
         this.copyDataSourceException.map(element => delete element.billingRoundName);
         this.columnsException = Object.keys(this.copyDataSourceException[0]);
         this.rowsException = this.copyDataSourceException.map(Object.values);

@@ -1869,19 +1869,19 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       }
       console.warn('file to check', this.fileTocheck)
       this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction, 4000);
-      // this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
-      //   if (res.message == "ok") {
-      //     this.router.navigate(['/list-transaction']);
-      //   } else {
-      //     this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction, 12000);
-      //     this.router.navigate(['/list-transaction']);
-      //   }
-      // },
-      //   err => {
-      //     this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction, 12000);
-      //     this.router.navigate(['/list-transaction']);
-      //   }
-      // )
+      this.service.correctAllFiles(this.fileTocheck).subscribe(res => {
+        if (res.message == "ok") {
+          this.router.navigate(['/list-transaction']);
+        } else {
+          this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction, 12000);
+          this.router.navigate(['/list-transaction']);
+        }
+      },
+        err => {
+          this.openSnackBar("Une erreur est survenue, veuillez réessayer", this.snackAction, 12000);
+          this.router.navigate(['/list-transaction']);
+        }
+      )
     }
   }
   verifRangeDateBeforeCorrection() {

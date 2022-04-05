@@ -193,7 +193,7 @@ class kpi2WithFiltersDto:
 
 
 class transactionFileColumnsException:
-    def __init__(self, Tournee, taskId, itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom,Item___Type,Item___Quantite,Code_postal,Round_Name,Express,Remarque,isDeleted, billingRoundName):
+    def __init__(self, Tournee, taskId, itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom,Item___Type,Item___Quantite,Code_postal,Round_Name,Express,Remarque,isDeleted,Contact, billingRoundName):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -211,9 +211,10 @@ class transactionFileColumnsException:
         self.Express = Express
         self.Remarque = Remarque
         self.isDeleted = isDeleted
+        self.Contact = Contact
         self.billingRoundName = billingRoundName
 class transactionFileColumnsLivraison:
-    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,total_price,Round_Name,sourceHubName,isExpress,toDelete,billingRoundName):
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,total_price,Round_Name,sourceHubName,isExpress,toDelete,Contact,billingRoundName):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -232,6 +233,7 @@ class transactionFileColumnsLivraison:
         self.sourceHubName = sourceHubName
         self.isExpress = isExpress
         self.toDelete = toDelete
+        self.Contact = Contact
         self.billingRoundName = billingRoundName
 class transactionFileColumnsMetadata:
     def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name,sourceClosureDate,realInfoHasPrepared,status,metadataFACTURATION):

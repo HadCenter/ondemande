@@ -8,7 +8,7 @@ import { WebsocketService } from 'app/services/websocket.service';
 export class HomeService {
 
   private url = `${environment.apiBaseUrl}/api`;
-  public WS_URL = "ws://13.36.210.39:8000/ws/notifications"
+  public WS_URL = "ws://15.236.177.152:8000/ws/notifications"
   public messages: Subject<any>;
   constructor(private http: HttpClient,private wsService: WebsocketService) {
     this.messages = <Subject<any>>wsService.connect(environment.WS_URL).map(

@@ -58,12 +58,16 @@ export class MagistorComponent implements OnInit {
     });
   }
   getColor(ch) {
-    if (ch === 'En attente') {
+    if (ch === 'à vérifier') {
       return 'blue';
-    } else if (ch === 'Validé') {
+    } else if (ch === 'Terminé') {
       return 'green';
-    } else if (ch === 'En cours') {
-      return 'orange';
+    } else if (ch.toLowerCase() === 'en cours') {
+      return 'orange2 color-text--dark-gray';
+    }else if (ch === 'En attente') {
+      return 'amber color-text--dark-gray';
+    }else if (ch === 'Validé') {
+      return 'dark-green';
     } else {
       return 'red';
     }
@@ -83,7 +87,7 @@ export class MagistorComponent implements OnInit {
         this.copyFilesPerPagination = this.files;
         //console.log('files', this.files)
         this.show = false;
-        /*this.numPage = Math.ceil(res.length / this.countPerPage);
+        this.numPage = Math.ceil(res.length / this.countPerPage);
         this.advancedTable = this.getAdvancedTablePage(1, this.countPerPage); /****to display */
         this.advancedTable = this.files;
         //console.log("advanced", this.advancedTable)
@@ -94,9 +98,10 @@ export class MagistorComponent implements OnInit {
         //error => console.log(error)
         );
   }
+  
 
   public getAdvancedTablePage(page, countPerPage) {
-    return this.fichiers.slice((page - 1) * countPerPage, page * countPerPage);
+    return this.files.slice((page - 1) * countPerPage, page * countPerPage);
   }
   /* available sort value:
 -1 - desc; 	0 - no sorting; 1 - asc; null - disabled */
@@ -167,30 +172,30 @@ export class MagistorComponent implements OnInit {
   }
 
   public changePage(page, force = false) {
-    /*if (page !== this.currentPage || force) {
+    if (page !== this.currentPage || force) {
       this.currentPage = page;
       this.advancedTable = this.getAdvancedTablePage(page, this.countPerPage);
-    }*/
+    }
   }
   setFilteredItems() {
-    this.advancedTable = this.filterItems(this.filterValue);
+    this.copyFilesPerPagination = this.filterItems(this.filterValue);
     if (this.filterValue === '') {
       this.advancedTable = this.advancedTable;
     }
-    // this.currentPage = this.copyFilesPerPagination.length > 0 ? 1 : 0;
-    // this.numPage = Math.ceil(this.copyFilesPerPagination.length / this.countPerPage);
-    // this.advancedTable = this.copyFilesPerPagination.slice(0, this.countPerPage);
+    this.currentPage = this.copyFilesPerPagination.length > 0 ? 1 : 0;
+    this.numPage = Math.ceil(this.copyFilesPerPagination.length / this.countPerPage);
+    this.advancedTable = this.copyFilesPerPagination.slice(0, this.countPerPage);
   }
 
   filterItems(filterValue) {
     let _filterValue = !filterValue.includes('/') ? filterValue : filterValue.split('/').join('-');
-    return this.copy_advancedTable.filter((item) => {
+    return this.files.filter((item) => {
       return JSON.stringify(item).toLowerCase().includes(_filterValue.toLowerCase());
     });
   }
   /******Open dialog Import File */
   openDialog() {
-    const dialogRef = this.dialog.open(DialogImportFile);
+    const dialogRef = this.dialog.open(DialogImportFile,{ panelClass: 'custom-modalbox'});
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
         this.actualiser();
@@ -220,7 +225,9 @@ export class MagistorComponent implements OnInit {
         file.ButtonValidateActivated=false;
         file.ButtonCorrecteActiveted =true;
         file.ButtonInvalidateActivated = true;
-        file.status ='Validé';
+        file.status ='en cours';
+      }else if(res.message == "file validated echec"){
+        this.openSnackBar(this.errorValidation,this.snackAction);
       }
     },
     (err) => {
@@ -238,20 +245,28 @@ export class MagistorComponent implements OnInit {
         file.ButtonValidateActivated =true;
         file.ButtonCorrecteActiveted =false;
         file.ButtonInvalidateActivated =false;
-        file.status ='En attente';
+        if(file.number_annomalies == 0){
+          file.status ='En attente';
+        }else {
+          file.status ='à vérifier';
+        }
       }
     },
     (err) => {
       file.ButtonValidateActivated=true;
       file.ButtonCorrecteActiveted =false;
       file.ButtonInvalidateActivated = false;
-      file.status ='En attente';
-    })
+      if(file.number_annomalies == 0){
+        file.status ='En attente';
+      }else {
+        file.status ='à vérifier';
+      }    })
   }
   correctionFile(file) {
     this.fileTocheck = [{
       Magistor_Current_Client: file.clientName,
-      Magistor_Current_File: file.logisticFileType.slice(0, 3)
+      Magistor_Current_File: file.logisticFileType.slice(0, 3),
+      Magistor_File_Id: file.idLogisticFile.toString()
     }]
     this.openSnackBar("Demande de correction envoyée, l’action pourrait prendre quelques minutes", this.snackAction);
     console.warn("**file to check**", this.fileTocheck)

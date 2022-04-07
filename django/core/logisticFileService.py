@@ -6,10 +6,14 @@ import paramiko
 import logging
 import pandas as pd
 import numpy as np
+from sftpConnectionToExecutionServer.views import sftp
+from API.settings import SECRET_KEY
+import jwt
+
 from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 from django.conf import settings
 DJANGO_DIRECTORY = settings.BASE_DIR
-logger = logging.getLogger('django')
+magistorLogger = logging.getLogger('magistor')
 
 FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES = "TransMagistorProd"
 
@@ -66,6 +70,7 @@ def saveUploadedLogisticFile(request_file):
         idFileInDB = traceLogisticFileInDB(fileName, typeLogisticFile)
         sftp_client = connect()
         uploadLogisticFileInSFtpServer(sftp_client, fileName, idFileInDB)
+        magistorLogger.info("Magistor File type {} ".format(typeLogisticFile))
         return True
 
 def get_extension(filename):
@@ -132,24 +137,29 @@ def getSingleLogisticFileDetail(key):
                                             ButtonInvalidateActivated= logisticFileDB.ButtonInvalidateActivated)
     return logisticFileResponse
 
-def seeContentLogisticFile(logisticFileName, folderLogisticFile):
+def seeContentLogisticFile(logisticFileName, folderLogisticFile, logisticSheetName):
     os.chdir(DJANGO_DIRECTORY)
     folderLogisticFilePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
     sftp_client = connect()
     sftp_client.chdir(folderLogisticFilePath)
     os.chdir("media/files")
     sftp_client.get(sftp_client.getcwd() + "/" + logisticFileName, os.getcwd() + "/" + logisticFileName)
-    excelLogisticFile = pd.read_excel(logisticFileName)
-    excelfile = excelLogisticFile.fillna('')
-    columns = list(excelfile.columns)
-    for column in columns:
-        if (excelfile[column].dtype == np.dtype('datetime64[ns]')):
-            excelfile[column] = excelfile[column].dt.strftime("%d/%m/%Y")
-    rows = excelfile.values.tolist()
-    os.remove(logisticFileName)
-    responseObject = FileExcelContent(columns, rows)
-    os.chdir(DJANGO_DIRECTORY)
-    return responseObject
+    try:
+        excelLogisticFile = pd.read_excel(logisticFileName, sheet_name=logisticSheetName)
+        excelfile = excelLogisticFile.fillna('')
+        columns = list(excelfile.columns)
+        for column in columns:
+            if (excelfile[column].dtype == np.dtype('datetime64[ns]')):
+                excelfile[column] = excelfile[column].dt.strftime("%d/%m/%Y")
+        rows = excelfile.values.tolist()
+        os.remove(logisticFileName)
+        responseObject = FileExcelContent(columns, rows)
+        os.chdir(DJANGO_DIRECTORY)
+        return responseObject
+    except Exception as e:
+        response = FileExcelContent([], [])
+        return response
+
 
 
 def readLogisticFileFromLocalHost(logisticFileName):
@@ -174,7 +184,8 @@ def validateLogisticFile(logisticFileName, folderLogisticFile, typeLogisticFile)
         sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
         destinationPath = "/IN"
         copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
-        LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False,ButtonInvalidateActivated=True,status='Validé')
+        #LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False,ButtonInvalidateActivated=True,status='en cours')
+        updateMetaDataFileInTableCoreLogisticFile(folderLogisticFile,"en cours")
         return True
 
 
@@ -197,30 +208,123 @@ def deleteLogisticFileFromInFolder(sftp_client, FolderInPath, logisticFileName):
 def deleteNotValidateLogisticFile(logisticFileName, idLogisticFile):
     sftp_client = connect()
     LogistFileExist = logisticFileExistInFolderIN(sftp_client,logisticFileName)
+    if(int(LogisticFile.objects.get(pk=idLogisticFile).number_annomalies) > 0):
+        #LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='à vérifier')
+        updateMetaDataFileInTableCoreLogisticFile(idLogisticFile,"à vérifier")
+    else:
+        updateMetaDataFileInTableCoreLogisticFile(idLogisticFile,"En attente")
+        #LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
+
     if(LogistFileExist == False):
-        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
         return False
     else:
         deleteLogisticFileFromInFolder(sftp_client= sftp_client, FolderInPath= "/IN", logisticFileName=logisticFileName)
-        LogisticFile.objects.filter(pk=idLogisticFile).update(ButtonCorrecteActiveted=False,ButtonValidateActivated=True,ButtonInvalidateActivated=False,status='En attente')
         return True
 
 def updateMetaDataFileInTableCoreLogisticFile(logisticFileId, logisticFileStatus):
     logisticFile = LogisticFile.objects.get(pk=logisticFileId)
     logisticFile.status = logisticFileStatus
-    if(logisticFileStatus.casefold() in (status.casefold() for status in ["En attente d'un moteur","En cours","Invalide","Terminé"])):
+    if(logisticFileStatus in (status for status in ["En attente d'un moteur","En cours","Invalide","Terminé"])):
         logisticFile.ButtonCorrecteActiveted = False
         logisticFile.ButtonValidateActivated = False
         logisticFile.ButtonInvalidateActivated = False
 
-    elif(logisticFileStatus.casefold() == "à vérifier".casefold()):
+    elif(logisticFileStatus.casefold() in (status.casefold() for status in ["Echec","à vérifier","En attente"])):
         logisticFile.ButtonCorrecteActiveted = False
         logisticFile.ButtonValidateActivated = True
         logisticFile.ButtonInvalidateActivated = False
 
+    elif(logisticFileStatus == "en cours"):
+        logisticFile.ButtonCorrecteActiveted = False
+        logisticFile.ButtonValidateActivated = False
+        logisticFile.ButtonInvalidateActivated = True
     logisticFile.save()
 
+def createFileLogisticFromColumnAndRows(LogisticFileId, columns1, rows1, columns2, rows2):
+    os.chdir(DJANGO_DIRECTORY)
+    os.chdir("media/files")
+    logisticFile = LogisticFile.objects.get(pk=LogisticFileId)
+    sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,LogisticFileId)
+    fileName : str
+    columns1HasRemarque : bool = False
+    columns2HasRemarque : bool = False
+    sftp_client = connect()
+    fileName = logisticFile.logisticFile.name
+    sftp_client.get(sourcePath +  "/" + fileName, fileName)
+    excelfile = pd.ExcelFile(fileName)
+    FileSheets = excelfile.sheet_names
+    excelfile.close()
 
+    df = pd.DataFrame(rows1, columns=columns1)
+    df2 = pd.DataFrame(rows2, columns=columns2)
+    df.rename(columns={'LONGUEUR_UNITAIRE':'LONGEUR_UNITAIRE'}, inplace = True)
+    df2.rename(columns={'LONGUEUR':'LONGEUR'}, inplace = True)
+
+    for element in columns1:
+        if(element == 'REMARQUE'):
+            dfwithoutRemarque = df.drop("REMARQUE", axis=1)
+            columns1HasRemarque = True
+
+    for element in columns2:
+        if(element == 'REMARQUE'):
+            df2withoutRemarque = df2.drop("REMARQUE", axis=1)
+            columns2HasRemarque = True
+
+
+    if(columns1HasRemarque or columns2HasRemarque):
+        transIdFileException = fileName[0:3] + fileName[5:]
+        transIdFileException = transIdFileException.replace('.xlsx', '_Exceptions.xlsx')
+        with pd.ExcelWriter(fileName) as writer:  
+            df.to_excel(writer, sheet_name=FileSheets[0], index=False)
+            df2.to_excel(writer, sheet_name=FileSheets[1], index= False)
+
+        sftp_client.put(fileName, sourcePath + "/" + transIdFileException)
+        os.remove(fileName)
+
+        transIdFileCorrect = fileName[0:3] + fileName[5:]
+        transIdFileCorrect = transIdFileCorrect.replace('.xlsx', '_Correct.xlsx')
+        sftp_client.get(sourcePath +  "/" + transIdFileCorrect, transIdFileCorrect)
+
+        fichier_correct = pd.read_excel(transIdFileCorrect, sheet_name=FileSheets[0])
+        fichier_correct.rename(columns={'LONGUEUR_UNITAIRE':'LONGEUR_UNITAIRE'}, inplace = True)
+        df = dfwithoutRemarque.append(fichier_correct, ignore_index=True)
+
+        fichier_correct2 = pd.read_excel(transIdFileCorrect, sheet_name=FileSheets[1])
+        fichier_correct2.rename(columns={'LONGUEUR':'LONGEUR'}, inplace = True)
+        df2 = df2withoutRemarque.append(fichier_correct2, ignore_index=True)
+
+    with pd.ExcelWriter(fileName) as writer:  
+        df.to_excel(writer, sheet_name=FileSheets[0], index=False)
+        df2.to_excel(writer, sheet_name=FileSheets[1], index= False)
+
+    sftp_client.put(fileName, sourcePath + "/" + fileName)
+
+    os.remove(fileName)
+    os.chdir(DJANGO_DIRECTORY)
+    return fileName
+
+def validateAndReplaceLogisticFile(logisticFileName, folderLogisticFile):
+    sftp_client = connect()
+    LogistFileExist = LogisticFileExistInSftpServer(sftp_client,logisticFileName)
+    typeLogistFileExist = logisticFileTypeExistInSftpServer(sftp_client,logisticFileName[0:5])
+    if (not(LogistFileExist) and typeLogistFileExist):
+        return False
+    else:
+        sourcePath = "/{}/{}".format(FOLDER_NAME_FOR_IMPORTED_LOGISTIC_FILES,folderLogisticFile)
+        destinationPath = "/IN"
+        copyLogisticFileFromMagistorTransToIN(sftp_client= sftp_client,logisticFileName=logisticFileName,source= sourcePath,destination= destinationPath)
+        #LogisticFile.objects.filter(pk=folderLogisticFile).update(ButtonCorrecteActiveted=True,ButtonValidateActivated=False,ButtonInvalidateActivated=True,status='Validé')
+        return True
+
+
+def LogisticFileExistInSftpServer(sftp_client,logisticFileName):
+    INFolderPath = "/IN"
+    sftp_client.chdir(INFolderPath)
+    LogistFileExist = False
+    for logisticFile in sftp_client.listdir():
+        if (logisticFile == logisticFileName):
+            LogistFileExist = True
+    return LogistFileExist
 
 
 

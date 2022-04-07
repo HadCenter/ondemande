@@ -1,0 +1,207 @@
+<div (mousedown)="onMouseDownAll()" #check>
+  <!-------------------------------------------- SHEET1 --------------------------------------->
+
+  <base-card *ngIf="sheet1" class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <base-card-title class="reorder">
+      <div id="conteneur">
+        <div *ngIf="typeFileART">
+          <label *ngIf="!oneBloc" class="label-wrong">Articles : Prestations erronées</label>
+          <label *ngIf="oneBloc" class="">Articles</label>
+        </div>
+        <div *ngIf="typeFileCDC">
+          <label *ngIf="!oneBloc" class="label-wrong">Commandes : Prestations erronées</label>
+          <label *ngIf="oneBloc" class="">Commandes</label>
+        </div>
+        <div *ngIf="typeFileREC">
+          <label *ngIf="!oneBloc" class="label-wrong">Réceptions : Prestations erronées</label>
+          <label *ngIf="oneBloc" class="">Réceptions</label>
+        </div>
+
+      </div>
+      <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+        <div class="mdl-textfield label-search">
+          <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsError()"
+            [(ngModel)]="filterValueError" placeholder="Rechercher" autocomplete="off" />
+          <label class="mdl-textfield__label" for="search2"></label>
+        </div>
+        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+        </base-pagination>
+      </div>
+    </base-card-title>
+    <base-card-body class="content-file-line">
+      <mat-accordion>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Afficher Log
+            </mat-panel-title>
+             <mat-panel-description>
+
+                        <button (click)='resetFiltre();$event.stopPropagation();' style="margin-left: 5px;"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                            les filtres
+                        </button>
+                    </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="content-table">
+            <table mat-table id='mytable' [dataSource]="advancedTable" [ngClass] = "{'table-width-100':typeFileREC}"
+              class="table-validator mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp($event)">
+
+              <!-- <ng-container *ngIf="!oneBloc" matColumnDef="REMARQUE">
+                <th class="titre-column-magistor" id="REMARQUEERROR" mat-header-cell *matHeaderCellDef>
+                  REMARQUE
+                  <mat-form-field class="form-column" appearance="fill">
+                    <mat-select multiple [(ngModel)]="optionsError[0].modelValue"
+                      (selectionChange)="setFilteredItemsOptions(optionsError[0],$event)">
+                      <mat-select-trigger>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let item of optionsError[0].options" [value]="item">{{item}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </th>
+                <td mat-cell *matCellDef="let element ;" id="REMARQUEmagistor"
+                  class="center-cell-prestationsErronnees label-remarque">
+                  {{element.REMARQUE}} </td>
+              </ng-container> -->
+
+              <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{column}}">
+                <div *ngIf="column != 'REMARQUE'">
+                  <th class="titre-column-magistor" id="{{column}}ERROR" mat-header-cell *matHeaderCellDef>
+                    {{column}}
+                    <mat-form-field class="form-column" appearance="fill">
+                      <mat-select multiple [(ngModel)]="optionsError[displayedColumns.indexOf(column)].modelValue"
+                        (selectionChange)="setFilteredItemsOptions(optionsError[displayedColumns.indexOf(column)],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of optionsError[displayedColumns.indexOf(column)].options"
+                          [value]="item">{{item}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </th>
+                  <td mat-cell *matCellDef="let element ; let i = index;" id="{{column}}magistor"
+                    (mousedown)="onMouseDown(i, shiftedDisplayedColumns.indexOf(column) , column)"
+                    (mouseup)="onMouseUp(i, shiftedDisplayedColumns.indexOf(column), column)"
+                    [ngClass]="{'selected': selectedCellsState[i][shiftedDisplayedColumns.indexOf(column)] }">
+                    {{element[column] }} </td>
+                </div>
+
+                <div *ngIf="column == 'REMARQUE'">
+                  <th class="titre-column-magistor" id="{{column}}ERROR" mat-header-cell *matHeaderCellDef>
+                    {{column}}
+                  </th>
+                  <td mat-cell *matCellDef="let element ; let i = index;" id="{{column}}magistor"
+                    class="center-cell-prestationsErronnees label-remarque">
+                    {{element[column] }}</td>
+                </div>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true">
+
+              </tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </base-card-body>
+  </base-card>
+
+  <!------------------------------------- SHEET2 --------------------------------------->
+  <base-card *ngIf="!sheet1 " class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <base-card-title class="reorder">
+      <div id="conteneur">
+        <div *ngIf="typeFileART">
+          <label *ngIf="!oneBloc" class="label-wrong">Conditionnement : Prestations erronées</label>
+          <label *ngIf="oneBloc" class="">Conditionnement</label>
+        </div>
+        <div *ngIf="typeFileREC">
+          <label *ngIf="!oneBloc" class="label-wrong">Lignes de réceptions : Prestations erronées</label>
+          <label *ngIf="oneBloc" class="">Lignes de réceptions</label>
+        </div>
+        <div *ngIf="typeFileCDC">
+          <label *ngIf="!oneBloc" class="label-wrong">Lignes de commandes : Prestations erronées</label>
+          <label *ngIf="oneBloc" class="">Lignes de commandes</label>
+        </div>
+
+      </div>
+      <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+        <div class="mdl-textfield label-search">
+          <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItemsError2()"
+            [(ngModel)]="filterValueError2" placeholder="Rechercher" autocomplete="off" />
+          <label class="mdl-textfield__label" for="search2"></label>
+        </div>
+        <base-pagination [numPage]="numPage2" [currentPage]="currentPage2" (changePage)="changePage2($event)">
+        </base-pagination>
+      </div>
+    </base-card-title>
+    <base-card-body class="content-file-line">
+      <mat-accordion>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Afficher Log
+            </mat-panel-title>
+                    <mat-panel-description>
+                      <button (click)='resetFiltre2();$event.stopPropagation();' style="margin-left: 5px;"
+                          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Réinitialiser
+                          les filtres
+                      </button>
+                  </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="content-table">
+            <table mat-table id='mytable2' [dataSource]="advancedTable2"
+              class="table-width-100 mdl-data-table mdl-js-data-table  sorting-table" (keyup)="onKeyUp2($event)">
+
+
+              <ng-container *ngFor="let column of displayedColumns2" matColumnDef="{{column}}">
+                <div *ngIf="column != 'REMARQUE'">
+
+                  <th class="titre-column-magistor2" id="{{column}}ERROR2" mat-header-cell *matHeaderCellDef>
+                    {{column}}
+                    <mat-form-field class="form-column" appearance="fill">
+                      <mat-select multiple [(ngModel)]="options2Error[displayedColumns2.indexOf(column)].modelValue"
+                        (selectionChange)="setFilteredItemsOptions2(options2Error[displayedColumns2.indexOf(column)],$event)">
+                        <mat-select-trigger>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let item of options2Error[displayedColumns2.indexOf(column)].options"
+                          [value]="item">{{item}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                  </th>
+                  <td mat-cell *matCellDef="let element ; let i = index;" id="{{column}}magistor2"
+                    (mousedown)="onMouseDown2(i, shiftedDisplayedColumns2.indexOf(column), column)"
+                    (mouseup)="onMouseUp2(i, shiftedDisplayedColumns2.indexOf(column), column)"
+                    [ngClass]="{'selected': selectedCellsState[i][shiftedDisplayedColumns2.indexOf(column)] }">
+                    {{element[column] }}</td>
+
+                </div>
+                <div *ngIf="column == 'REMARQUE'">
+                  <th class="titre-column-magistor" id="{{column}}ERROR" mat-header-cell *matHeaderCellDef>
+                    {{column}}
+                  </th>
+                  <td mat-cell *matCellDef="let element ; let i = index;" id="{{column}}magistor2"
+                    class="center-cell-prestationsErronnees label-remarque">
+                    {{element[column] }}</td>
+                </div>
+
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns2 ; sticky: true">
+
+              </tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+            </table>
+          </div>
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </base-card-body>
+  </base-card>
+
+</div>

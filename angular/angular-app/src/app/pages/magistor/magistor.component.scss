@@ -15,7 +15,11 @@ body {
     overflow: hidden;
     white-space: nowrap;
   }
-
+  .dialog {
+    background: #444;
+    border: none;
+    box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
+    width: 280px; }
   .ui-tables {
     .mdl-card,
     .mdl-card__supporting-text {
@@ -51,3 +55,21 @@ table.table-list {
   cursor: pointer;
 }
 
+// .dialog-container-custom .mat-dialog-container {
+// 	overflow: hidden !important;
+// 	background: #444 !important;
+// }
+
+.mat-dialog-container {
+  background: #444 !important;
+  overflow: hidden !important;
+}
+// ::ng-deep.mat-dialog-container {
+//   background: red !important;
+// }
+.custom-modalbox {
+  mat-dialog-container {
+    background: #444 !important;
+     overflow: hidden !important;
+  }
+}

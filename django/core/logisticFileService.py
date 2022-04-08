@@ -61,14 +61,19 @@ def saveUploadedLogisticFile(request_file):
     dataFrameLogisticFile.fillna('')
     if ( "OP_CODE" not in dataFrameLogisticFile.columns or "CODE_SOC" not in dataFrameLogisticFile.columns):
         os.remove(pathLogisticFile)
-        return False
+        return False,"Unkown File Type"
     else:
         clientName = getClientNameFromExcel(pathLogisticFile, dataFrameLogisticFile)
         typeLogisticFile = dataFrameLogisticFile["OP_CODE"].values[0]
         fileName = typeLogisticFile + timestr + extension
         os.rename(r'media/files/{}'.format(logisticFile), r'media/files/{}'.format(fileName))
+        try:
+            sftp_client = connect(clientName, getFTPCredentials(clientName))
+        except Exception as e:
+            print(e)
+            os.remove(path + fileName)
+            return False,"Client not found"
         idFileInDB = traceLogisticFileInDB(fileName, typeLogisticFile, clientName)
-        sftp_client = connect(clientName, getFTPCredentials(clientName))
         uploadLogisticFileInSFtpServer(sftp_client, fileName, idFileInDB)
         magistorLogger.info("Magistor File type {} ".format(typeLogisticFile))
         return True

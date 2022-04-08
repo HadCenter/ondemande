@@ -47,7 +47,7 @@ export class MagistorService {
 
       },
       {
-        name: 'Nombres Annomalies ',
+        name: 'Nombres Anomalies ',
         sort: null,
 
       },

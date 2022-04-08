@@ -152,7 +152,7 @@ def LogisticFileCreate(request, format=None):
     key = KEY_TEST
     idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
 
-    logisticFileSaved = saveUploadedLogisticFile(logisticFile)
+    logisticFileSaved,msg = saveUploadedLogisticFile(logisticFile)
 
 
     if(logisticFileSaved):

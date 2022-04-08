@@ -204,10 +204,10 @@ export class MagistorComponent implements OnInit {
     });
   }
   public actualiser() {
-    this.advancedTable = [];
-    this.copy_advancedTable = [];
-    this.files = [];
-    this.show = true;
+    // this.advancedTable = [];
+    // this.copy_advancedTable = [];
+    // this.files = [];
+    // this.show = true;
     this.getFiles();
   }
   gotoDetails(row) {
@@ -398,9 +398,9 @@ export class DialogImportFile {
         if (err.error.message == "file save echec") {
           this.error = "Type de fichier incorrecte";
         }
-        // else if (err.error.includes("'OP_CODE'")) {
-        //   this.error = "Type de fichier incorrecte";
-        // }
+        else if (err.error.message == "Client not found") {
+          this.error = "Le client est introuvable";
+        }
         else {
           this.error = "Veuillez télécharger un fichier";
         }

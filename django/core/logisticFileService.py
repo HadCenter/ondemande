@@ -363,8 +363,8 @@ def LogisticFileExistInSftpServer(sftp_client,logisticFileName):
     return LogistFileExist
 
 def getFTPCredentials(username):
-    fileName = "MagistorOnDemandClients.xlsx"
-    remotePath = "/home/talend/projects/ftpfiles/IN/MagistorOnDemand"
+    fileName = "MagistorClients.xlsx"
+    remotePath = "/home/talend/projects/ftpfiles/IN"
 
     sftp.get(remotePath + "/"+fileName, os.getcwd() + "/" + fileName )
     excelfile = pd.read_excel(fileName)

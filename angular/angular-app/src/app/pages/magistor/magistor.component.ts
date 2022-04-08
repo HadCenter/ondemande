@@ -203,10 +203,10 @@ export class MagistorComponent implements OnInit {
     });
   }
   public actualiser() {
-    this.advancedTable = [];
-    this.copy_advancedTable = [];
-    this.files = [];
-    this.show = true;
+    // this.advancedTable = [];
+    // this.copy_advancedTable = [];
+    // this.files = [];
+    // this.show = true;
     this.getFiles();
   }
   gotoDetails(row) {

@@ -76,7 +76,7 @@ def saveUploadedLogisticFile(request_file):
         idFileInDB = traceLogisticFileInDB(fileName, typeLogisticFile, clientName)
         uploadLogisticFileInSFtpServer(sftp_client, fileName, idFileInDB)
         magistorLogger.info("Magistor File type {} ".format(typeLogisticFile))
-        return True
+        return True,"success"
 
 
 def getClientNameFromExcel(pathLogisticFile, dataFrameLogisticFile):

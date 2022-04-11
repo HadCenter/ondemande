@@ -160,7 +160,7 @@ def LogisticFileCreate(request, format=None):
         return JsonResponse({'message': 'file saved successfully'}, status=status.HTTP_201_CREATED)
     else:
         magistorLogger.warning("Magistor import File echec by {} ".format(idUser))
-        return JsonResponse({'message': 'file save echec'}, status=status.HTTP_403_FORBIDDEN)
+        return JsonResponse({'message': msg}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST'])
 def validateLogisticFileWS(request):

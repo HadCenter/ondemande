@@ -198,10 +198,18 @@ export class MagistorComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogImportFile,{ panelClass: 'custom-modalbox'});
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
+        this.resetData();
         this.actualiser();
       }
 
     });
+  }
+  public resetData(){
+    this.advancedTable = [];
+    this.copy_advancedTable = [];
+    this.files = [];
+    this.show = true;
+
   }
   public actualiser() {
     // this.advancedTable = [];

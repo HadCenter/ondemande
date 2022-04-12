@@ -1836,7 +1836,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.rowsLivraison = this.copyDataSource.map(Object.values);
       }
       if (this.dataSourceException.data.length > 0) {
-        this.copyDataSource.map(element => element.Round_Name = element.billingRoundName);
+        this.copyDataSourceException.map(element => element.Round_Name = element.billingRoundName);
         this.copyDataSourceException.map(element => delete element.billingRoundName);
         this.columnsException = Object.keys(this.copyDataSourceException[0]);
         this.rowsException = this.copyDataSourceException.map(Object.values);

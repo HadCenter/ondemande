@@ -1,14 +1,22 @@
+from csv import excel
+from fileinput import filename
+import os
+from tkinter.ttk import Separator
+import pandas as pd 
 from core.models import Client
 from django.http import HttpResponse, JsonResponse
 import jsonpickle
 from rest_framework import status
 from rest_framework.decorators import api_view
 
+from core.ediFileService import connect
+
 
 from .facturationService import getFacturationForMonth, getMatriceForClient, getMatriceForParam, getAllClientsinDB, getMonthsFacturationForClient
 
-from .models import MatriceFacturation, Facturation
-from django.db.models import Sum
+from .models import Conditionnement, MatriceFacturation, Facturation
+from django.conf import settings
+DJANGO_DIRECTORY = settings.BASE_DIR
 
 # Create your views here.
 
@@ -386,3 +394,78 @@ def getMonthFacturationWithTotal(request):
     listMonths.append(diction)
 
     return HttpResponse(jsonpickle.encode({'nom_client': nom_client, 'months':listMonths}, unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def CalculateRealUM(request):
+    somme_UM = 0
+    nbre_fichier = 0
+    nom_client = request.data['nom_client']
+    jour = request.data['jour']
+    # CRP01220331232759
+    ftp = connect()
+    path_racine = "/maGistor_2/Clients"
+    sous_racine = "OUT/CRP/.archive"
+    path_client = path_racine + '/' + nom_client + '/' +sous_racine
+    os.chdir(DJANGO_DIRECTORY)
+    os.chdir("media/files")
+    ftp.cwd(path_client)
+    for name in ftp.nlst():
+        if "CRP01220331" in name:
+            nbre_fichier += 1
+            with open(name, "wb") as file:
+                commande = "RETR " + name
+                ftp.retrbinary(commande, file.write)
+            filename = name.split('csv', 1)[0]+'csv'
+            try:
+                os.rename(name, filename)
+            except Exception as e:
+                print(e)
+                continue
+            csvfile = pd.read_csv(filename, delimiter=";")
+            csvfile.to_excel('tmp.xlsx', index = None, header=True)
+            os.remove(filename)
+            excelfile = pd.read_excel('tmp.xlsx', usecols="J,K")
+            somme_UM += CalculRealUM(excelfile)
+
+    # excelfile = pd.read_excel(fileName)
+    # excelfile = excelfile.fillna('')
+    # columns = list(excelfile.columns)
+
+
+
+
+
+    # with open(fileName, 'rb') as f:
+    #     file = f.read()
+
+    #os.remove('tmp.xlsx')
+    # df.to_excel(LivraisonFileName, index=False)
+
+    return HttpResponse(jsonpickle.encode({'Unité Mautention':somme_UM, ' fichier_parcourue': nbre_fichier}, unpicklable=False), content_type="application/json")
+
+def CalculRealUM(excelfile: pd.DataFrame):
+    df = excelfile.fillna('')
+    df["TYPE_COND"] = ""
+    df["QTE_BD"] = ""
+    df["UM"] = ""
+    print(df.columns.values)
+    somme_UM = 0
+    for row in df.values:
+        list_article = Conditionnement.objects.filter(CODE_ARTICLE = row[0])
+        if(len(list_article) == 1):
+            row[2] = list_article[0].TYPE_COND
+        elif(len(list_article) > 1):
+            for element in list_article:
+                if(element.QTE <= row[1] and row[1]%element.QTE == 0):
+                    row[2] = element.TYPE_COND
+                    row[3] = element.QTE
+                try:
+                    row[4] = row[1] / row[3]
+                except Exception: 
+                    continue
+        if(row[4] != ''):
+            somme_UM += row[4]
+        print(row)
+    print(somme_UM)
+    return somme_UM
+

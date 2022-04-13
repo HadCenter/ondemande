@@ -1568,14 +1568,14 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                 dataCopy[i][this.displayedColumnsLivraison[15]] = text;
               }
               dataCopy.forEach(element => {
-                if(element.Tournee == dataCopy[i]['Tournee'] && element.Expediteur == dataCopy[i]['Expediteur'] && element.Date == dataCopy[i]['Date']){
+                if(element.Tournee == dataCopy[i]['Tournee'] ){
                   element.Round_Name = text;
                   element.billingRoundName = text;
                 }
               });
               /**if we modify a column of the livraison file it will be automatically modified at the level of the exception file */
               this.dataSourceException.data.forEach(el => {
-                if(el.Tournee == dataCopy[i]['Tournee'] && el.Expediteur == dataCopy[i]['Expediteur'] && el.Date == dataCopy[i]['Date']){
+                if(el.Tournee == dataCopy[i]['Tournee'] ){
                   el.Round_Name = text;
                   el.billingRoundName = text;
                 }
@@ -1618,14 +1618,14 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                 dataCopy[i][this.displayedColumnsException[14]] = text;
               }
               dataCopy.forEach(element => {
-                if(element.Tournee == dataCopy[i]['Tournee'] && element.Expediteur == dataCopy[i]['Expediteur'] && element.Date == dataCopy[i]['Date']){
+                if(element.Tournee == dataCopy[i]['Tournee']){
                   element.Round_Name = text;
                   element.billingRoundName = text;
                 }
               });
               /**if we modify a column of the exception file it will be automatically modified at the level of the delivery file */
               this.dataSource.data.forEach(el => {
-                if(el.Tournee == dataCopy[i]['Tournee'] && el.Expediteur == dataCopy[i]['Expediteur'] && el.Date == dataCopy[i]['Date']){
+                if(el.Tournee == dataCopy[i]['Tournee'] ){
                   el.Round_Name = text;
                   el.billingRoundName = text;
                 }

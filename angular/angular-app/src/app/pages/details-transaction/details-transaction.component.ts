@@ -1567,8 +1567,18 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
               if (this.displayedColumnsLivraison[startCol] == "Round_Name") {
                 dataCopy[i][this.displayedColumnsLivraison[15]] = text;
               }
+              dataCopy.forEach(element => {
+                if(element.Tournee == dataCopy[i]['Tournee'] ){
+                  element.Round_Name = text;
+                  element.billingRoundName = text;
+                }
+              });
               /**if we modify a column of the livraison file it will be automatically modified at the level of the exception file */
               this.dataSourceException.data.forEach(el => {
+                if(el.Tournee == dataCopy[i]['Tournee'] ){
+                  el.Round_Name = text;
+                  el.billingRoundName = text;
+                }
                 if (dataCopy[i].taskId == el.taskId) {
                   /*****processing of fields with different column names */
                   if (this.displayedColumnsLivraison[startCol] == "isExpress") {
@@ -1607,8 +1617,18 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
               if (this.displayedColumnsException[startCol] == "Round_Name") {
                 dataCopy[i][this.displayedColumnsException[14]] = text;
               }
+              dataCopy.forEach(element => {
+                if(element.Tournee == dataCopy[i]['Tournee']){
+                  element.Round_Name = text;
+                  element.billingRoundName = text;
+                }
+              });
               /**if we modify a column of the exception file it will be automatically modified at the level of the delivery file */
               this.dataSource.data.forEach(el => {
+                if(el.Tournee == dataCopy[i]['Tournee'] ){
+                  el.Round_Name = text;
+                  el.billingRoundName = text;
+                }
                 if (dataCopy[i].taskId == el.taskId) {
                   /*****processing of fields with different column names */
                   if (this.displayedColumnsException[startCol] == "Express") {
@@ -1633,8 +1653,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                       //if change Round_Name then change billingRoundName
                       if (this.displayedColumnsException[startCol] == "Round_Name") {
                         el[this.displayedColumnsException[14]] = text;
-                      }
-                      
+                      }                      
                     }
                   }
 
@@ -1836,10 +1855,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
         this.rowsLivraison = this.copyDataSource.map(Object.values);
       }
       if (this.dataSourceException.data.length > 0) {
-        this.copyDataSource.map(element => element.Round_Name = element.billingRoundName);
+        this.copyDataSourceException.map(element => element.Round_Name = element.billingRoundName);
         this.copyDataSourceException.map(element => delete element.billingRoundName);
         this.columnsException = Object.keys(this.copyDataSourceException[0]);
         this.rowsException = this.copyDataSourceException.map(Object.values);
+        console.log(this.copyDataSourceException);
+        
       }
       if (this.dataSourceMetaData.data.length > 0) {
         this.columnsMetaData = Object.keys(this.copyDataSourceMetaData[0]);

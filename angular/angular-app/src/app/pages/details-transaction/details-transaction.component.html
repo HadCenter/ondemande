@@ -391,6 +391,22 @@
                         {{element.total_price}} </td>
                     </ng-container>
 
+                    <!-- billingRoundName Column -->
+                    <ng-container matColumnDef="billingRoundName">
+                      <th id="billingRoundName" class="titre-column" mat-header-cell *matHeaderCellDef> billingRoundName
+                        <mat-form-field class="form-column" appearance="fill" *ngIf="options">
+                          <mat-select class="filter-column" matNativeControl name="{{options[15].columnProp}}"
+                            [(ngModel)]="options[15].modelValue"
+                            (selectionChange)="setFilteredItemsOptions(options[15],$event)">
+                            <mat-option value="">-- Select {{options[15].columnProp}}--</mat-option>
+                            <mat-option [value]="item" *ngFor="let item of options[15].options"><label>{{item}}</label>
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </th>
+                      <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index">
+                        {{element.billingRoundName}} </td>
+                    </ng-container>
 
 
 
@@ -774,6 +790,25 @@
                         {{element.Express}} </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="billingRoundName">
+                      <th id="billingRoundNameException" class="titre-column-exception" mat-header-cell *matHeaderCellDef>
+                        billingRoundName
+                        <mat-form-field class="form-column" appearance="fill">
+                          <mat-select class="filter-column" matNativeControl name="{{optionsException[14].columnProp}}"
+                            [(ngModel)]="optionsException[14].modelValue"
+                            (selectionChange)="setFilteredItemsExceptionOptions(optionsException[14],$event)">
+                            <mat-option value="">-- Select {{optionsException[14].columnProp}}--</mat-option>
+                            <mat-option [value]="item" *ngFor="let item of optionsException[14].options">
+                              <label>{{item}}</label>
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+
+                      </th>
+                      <td mat-cell #cellException class="center-cell-transactionsFiles"
+                        *matCellDef="let element ; let i = index">
+                        {{element.billingRoundName}} </td>
+                    </ng-container>
 
                     <!-- isDeleted Column -->
                     <ng-container matColumnDef="isDeleted">

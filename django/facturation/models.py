@@ -80,3 +80,12 @@ class Conditionnement(models.Model):
     class Meta:
         managed = False
         db_table = 'conditionnement'
+
+class FacturationHolidays(models.Model):
+    id = models.IntegerField(primary_key=True)
+    marge = models.IntegerField()
+    weekends = models.CharField(max_length=45)
+    holidays = models.CharField(max_length=200)
+    class Meta:
+        managed = False
+        db_table = 'Facturation_holidays'

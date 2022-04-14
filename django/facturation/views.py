@@ -14,7 +14,7 @@ from core.ediFileService import connect
 
 from .facturationService import getFacturationForMonth, getMatriceForClient, getMatriceForParam, getAllClientsinDB, getMonthsFacturationForClient
 
-from .models import Conditionnement, MatriceFacturation, Facturation
+from .models import Conditionnement, FacturationHolidays, MatriceFacturation, Facturation
 from django.conf import settings
 DJANGO_DIRECTORY = settings.BASE_DIR
 
@@ -469,3 +469,27 @@ def CalculRealUM(excelfile: pd.DataFrame):
     print(somme_UM)
     return somme_UM
 
+@api_view(['GET'])
+def getHolidays(request):
+    facturationHolidays = FacturationHolidays.objects.get(id=1)
+    response = {"holidays":facturationHolidays.holidays, "weekends":facturationHolidays.weekends, "marge":facturationHolidays.marge}
+    return HttpResponse(jsonpickle.encode(response, unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def updateHolidays(request):
+    try:
+        holidays = request.data['holidays']
+        weekends = request.data['weekends']
+        marge = request.data['marge']
+    except Exception as e:
+        return JsonResponse({'message': 'params missing'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        facturationHolidays = FacturationHolidays.objects.get(id=1)
+        facturationHolidays.holidays = holidays
+        facturationHolidays.weekends = weekends
+        facturationHolidays.marge = marge
+        facturationHolidays.save()
+    except Exception as e:
+        return JsonResponse({'message': 'error occured'}, status=status.HTTP_404_NOT_FOUND)
+
+    return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)

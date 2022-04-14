@@ -16,4 +16,6 @@ urlpatterns = [
     path("getMonthListFacturationForClient/", views.getMonthFacturation, name = "getMonthFacturationfromDB" ),#en utilisation
     path("getMonthFacturationWithTotal/", views.getMonthFacturationWithTotal, name = "getMonthFacturationfromDBWithTotal" ),#en cours de dev
     path("CalculateRealUM/", views.CalculateRealUM, name = "CalculateRealUM" ),#en cours de dev 
+    path("getHolidays/", views.getHolidays, name = "get-holidays" ),#en cours de dev 
+    path("updateHolidays/", views.updateHolidays, name = "update-holidays" ),#en cours de dev 
 ]

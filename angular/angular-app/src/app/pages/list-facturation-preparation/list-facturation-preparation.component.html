@@ -6,49 +6,56 @@
       <div class="mdl-layout-spacer"></div>
       <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
       </base-pagination>
+      <button style="margin-left: 3px;" (click)="gotoConfigurationHolidays()"
+        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Config. Jour Férié
+      </button>
+      <button style="margin-left: 3px;" (click)="gotoConfigurationWeekends()"
+        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Config. Week-end
+      </button>
     </base-card-title>
 
 
-  <base-card-body class="no-padding">
-    <table *ngIf="advancedTable.length > 0" aria-describedby="clients-table"
-      class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone mdl-data-table mdl-js-data-table   sorting-table">
-      <thead>
-        <tr>
-          <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
-            (click)="changeSorting(header, i)">
+    <base-card-body class="no-padding">
+      <table *ngIf="advancedTable.length > 0" aria-describedby="clients-table"
+        class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone mdl-data-table mdl-js-data-table   sorting-table">
+        <thead>
+          <tr>
+            <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
+              (click)="changeSorting(header, i)">
 
-            <span>{{ header.name }}</span>
-            <em *ngIf="header.sort !== null " class="material-icons sorting" [class.asc]="header.sort === sortOrder.asc"
-              [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</em>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+              <span>{{ header.name }}</span>
+              <em *ngIf="header.sort !== null " class="material-icons sorting"
+                [class.asc]="header.sort === sortOrder.asc"
+                [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</em>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
 
-        <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
+          <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
 
 
-          <td class="mdl-data-table__cell--non-numeric">{{ row.nom_client }}</td>
-          <td class="mdl-data-table__cell--non-numeric">{{ row.code_client}}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.nom_client }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.code_client}}</td>
 
-          <td class="column-actions mdl-data-table__cell--non-numeric">
-            <button style="margin-left: 3px;" (click)="gotoConfiguration(row.code_client)"
-              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Configuration
-            </button>
-            <!-- <button style="margin-left: 3px;"
+            <td class="column-actions mdl-data-table__cell--non-numeric">
+              <button style="margin-left: 3px;" (click)="gotoConfiguration(row.code_client)"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Configuration
+              </button>
+              <!-- <button style="margin-left: 3px;"
               class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Saisie
               du mois
             </button> -->
-            <button style="margin-left: 3px;" (click)="gotoFacturation(row.code_client)"
-              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Liste
-              des factures
-            </button>
+              <button style="margin-left: 3px;" (click)="gotoFacturation(row.code_client)"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Liste
+                des factures
+              </button>
 
-          </td>
+            </td>
 
-        </tr>
-      </tbody>
-    </table>
-  </base-card-body>
-</base-card>
+          </tr>
+        </tbody>
+      </table>
+    </base-card-body>
+  </base-card>
 </div>

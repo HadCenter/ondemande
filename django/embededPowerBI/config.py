@@ -18,7 +18,7 @@ class BaseConfig(object):
     CLIENT_ID = 'fd7442da-454e-4d29-8a8d-a5f27d3f8396'
 
     # Client Secret (App Secret) of the AAD app. Required only for ServicePrincipal authentication mode.
-    CLIENT_SECRET = 'Q6D7Q~wdT70wxhycvnVoVSGcnDLxWgvTSIb.S'
+    CLIENT_SECRET = 'GQT8Q~LzulCuTY-MpSTYZCMQPRP5rueGcsuvyaQy'
 
     # Scope of AAD app. Use the below configuration to use all the permissions provided in the AAD app through Azure portal.
     SCOPE = ['https://analysis.windows.net/powerbi/api/.default']

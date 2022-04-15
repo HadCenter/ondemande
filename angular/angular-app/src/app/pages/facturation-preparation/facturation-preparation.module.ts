@@ -1,5 +1,6 @@
 import { LOCALE_ID, NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 
 import { FacturationPreparationRoutingModule } from './facturation-preparation-routing.module';
 import { FacturationPreparationComponent } from './facturation-preparation.component';
@@ -10,6 +11,7 @@ import { ThemeModule } from 'theme';
 import { DialogDetailsFacturationComponent } from './dialog-details-facturation/dialog-details-facturation.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
+registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { MatDialogModule } from '@angular/material/dialog';
   providers: [
     DatePipe,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+    {provide: LOCALE_ID, useValue: 'fr' }
+
   ],
 
 })

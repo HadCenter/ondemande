@@ -21,7 +21,7 @@
         <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
 
 
-          <td class="mdl-data-table__cell--non-numeric">{{ row.date | date:"dd/MM/yyyy" }}</td>
+          <td class="mdl-data-table__cell--non-numeric">{{ row.date | date:'EEEE d MMM y' }} <span *ngIf="checkIfWeekendOrHoliday(row.date)">*</span></td>
           <td class="mdl-data-table__cell--non-numeric">{{ row.code_client}}</td>
           <td class="mdl-data-table__cell--non-numeric">{{ row.prep_jour}}</td>
           <td class="mdl-data-table__cell--non-numeric">{{ row.UM_jour}}</td>

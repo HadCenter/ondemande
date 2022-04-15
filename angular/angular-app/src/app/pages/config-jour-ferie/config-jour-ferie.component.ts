@@ -14,15 +14,6 @@ import { Router } from '@angular/router';
 })
 export class ConfigJourFerieComponent implements OnInit {
   jourFerieList: string[] = [];
-  WeekDays2: any[] = [
-    { "jour": "Lundi", "selected": false },
-    { "jour": "Mardi", "selected": false },
-    { "jour": "Mercredi", "selected": false },
-    { "jour": "Jeudi", "selected": false },
-    { "jour": "Vendredi", "selected": false },
-    { "jour": "Samedi", "selected": false },
-    { "jour": "Dimanche", "selected": false }
-  ]
   WeekDays: any[] = [
     "Lundi",
     "Mardi",
@@ -63,11 +54,13 @@ export class ConfigJourFerieComponent implements OnInit {
   getHolidays() {
     this.configjourferieService.getHolidays().subscribe(res => {
       this.showLoader = false;
-
       this.jourFerieList = res.holidays.split(',');
       this.marge = res.marge;
-      this.selectedDays = res.weekends.split(',');
       this.copy_matrice = res;
+      var selectedDaysNumbers = res.weekends.split(',');
+      selectedDaysNumbers.forEach(element => {
+        this.selectedDays.push(this.WeekDays[element]);
+      });
     })
   }
   /***************check two array are equals **********/
@@ -75,9 +68,15 @@ export class ConfigJourFerieComponent implements OnInit {
     return JSON.stringify(a) === JSON.stringify(b);
   }
   updateHolidays() {
+    var selectedDaysNumbers: number[]=[];
+    this.WeekDays.forEach(day=>{
+      if(this.selectedDays.includes(day)){
+        selectedDaysNumbers.push(this.WeekDays.indexOf(day))
+      }
+    })
     var data = {
       "holidays": this.jourFerieList.join(),
-      "weekends": this.selectedDays.join(),
+      "weekends": selectedDaysNumbers.join(),
       "marge": this.marge
     }
     if (this.equals(data, this.copy_matrice) == true) {

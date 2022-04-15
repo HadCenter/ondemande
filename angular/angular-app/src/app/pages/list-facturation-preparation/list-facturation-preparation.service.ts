@@ -20,7 +20,7 @@ export class ListFacturationPreparationService {
 
       },
       {
-        name: 'Code CLient',
+        name: 'Code Client',
         sort: 0,
 
       },

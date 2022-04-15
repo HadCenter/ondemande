@@ -10,6 +10,7 @@ import { LoaderModule } from 'app/components/loader/loader.module';
 import { ThemeModule } from 'theme';
 import { DialogDetailsFacturationComponent } from './dialog-details-facturation/dialog-details-facturation.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 registerLocaleData(localeFr);
 
@@ -26,6 +27,7 @@ registerLocaleData(localeFr);
     ThemeModule,
     MatFormFieldModule,
     MatDialogModule,
+    MatSnackBarModule,
     FacturationPreparationRoutingModule
   ],
   providers: [

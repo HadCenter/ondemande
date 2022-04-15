@@ -372,6 +372,42 @@ def getFacturation(request):
 
 
 @api_view(['POST'])
+def downloadExcelFacturation(request):
+    code_client = request.data['code_client']
+    mois = request.data['mois']
+    fileName = "Preparation_"+Client.objects.get(code_client=code_client).nom_client+"_"+mois+".xlsx"
+    columns = []
+    rows = []
+    fact = getFacturationForMonth(code_client, mois)
+    for f in fact:
+        row = []
+        for key in f.__dict__:
+            if key not in columns:
+                columns.append(key)
+            if key == "date":
+                row.append(f.__dict__[key].strftime("%d/%m/%y"))
+            else:
+                row.append(f.__dict__[key])
+        rows.append(row)
+    #print(fact[0].total_jour)
+    createFileFacturationFromColumnAndRows(columns, rows, fileName)
+    with open(fileName, 'rb') as f:
+        file = f.read()
+    response = HttpResponse(file, content_type="application/xls")
+    response['Content-Disposition'] = "attachment; filename={0}".format(fileName)
+    response['Content-Length'] = os.path.getsize(fileName)
+    os.remove(fileName)
+    return response
+
+    return JsonResponse({'columns': columns, 'rows': rows}, status=status.HTTP_200_OK)
+
+    return HttpResponse(jsonpickle.encode(fact[0].keys(), unpicklable=False), content_type="application/json")
+def createFileFacturationFromColumnAndRows(columns, rows, fileName):
+    df = pd.DataFrame(rows, columns=columns)
+    df.to_excel(fileName, index=False)
+
+
+@api_view(['POST'])
 def getMonthFacturation(request):
     code_client = request.data['code_client']
     nom_client,fact = getMonthsFacturationForClient(code_client)

@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfigJourFerieService } from 'app/pages/config-jour-ferie/config-jour-ferie.service';
 import { FacturationPreparationService } from '../facturation-preparation.service';
+import { saveAs } from 'file-saver';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dialog-details-facturation',
@@ -14,6 +16,7 @@ export class DialogDetailsFacturationComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<DialogDetailsFacturationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private service: FacturationPreparationService,
+    private _snackBar: MatSnackBar,
     private configJourFerieService: ConfigJourFerieService) { }
 
   public advancedHeaders: any = [];
@@ -86,6 +89,26 @@ export class DialogDetailsFacturationComponent implements OnInit {
     }
     return false
   }
+  downloadFile(){
+    this.openSnackBar('Téléchargement du fichier en cours...', 'Ok');
+    var data = {
+      "code_client": this.code_client,
+      "mois": this.mois
+    }
+    this.service.downloadFacturationFile(data)
+    .subscribe(res => {
+      this.openSnackBar('Le fichier est téléchargé avec succès.', 'Ok');
+      saveAs(res, "Preparation_"+this.client_name+"_"+this.mois+".xlsx");
+    }, error => this.openSnackBar('Une erreur est survenue', 'Ok'));
 
+  }
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 4500,
+      // verticalPosition: 'bottom',
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
 
 }

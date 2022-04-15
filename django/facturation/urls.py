@@ -18,4 +18,6 @@ urlpatterns = [
     path("CalculateRealUM/", views.CalculateRealUM, name = "CalculateRealUM" ),#en cours de dev 
     path("getHolidays/", views.getHolidays, name = "get-holidays" ),#en cours de dev 
     path("updateHolidays/", views.updateHolidays, name = "update-holidays" ),#en cours de dev 
+    path("downloadFacturationPreparation/", views.downloadExcelFacturation, name = "downloadExcelFacturation" ), #en cours de dev
+
 ]

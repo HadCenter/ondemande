@@ -7,10 +7,10 @@
       <div class="mdl-layout-spacer"></div>
       <!-- <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
       </base-pagination> -->
-      <button style="margin-left: 3px;" (click)="navigatetoAddFacturation()"
+      <!-- <button style="margin-left: 3px;" (click)="navigatetoAddFacturation()"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Ajouter
         Facturation
-      </button>
+      </button> -->
 
     </base-card-title>
 
@@ -42,9 +42,13 @@
               <button style="margin-left: 3px;" (click)="opendetails(row.month)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Afficher
               </button>
-              <button style="margin-left: 3px;"
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Imprimer
-              </button>
+              <!-- <button style="margin-left: 3px;" (click)="downloadFile(row.month)"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Télécharger
+              </button> -->
+              <span (click)="downloadFile(row.month);$event.stopPropagation();"
+              class="download material-icons">
+              download
+              </span>
 
             </td>
             <td *ngIf="i == 1 || i == 0" class="column-actions mdl-data-table__cell--non-numeric">
@@ -54,7 +58,16 @@
               <button style="margin-left: 3px;" (click)="opendetailsDialog(row.month)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Aperçu
               </button>
-
+              <button style="margin-left: 3px;" (click)="opendetails(row.month)"
+              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Afficher
+            </button>
+              <!-- <button style="margin-left: 3px;" (click)="downloadFile(row.month)"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Télécharger
+              </button> -->
+              <span (click)="downloadFile(row.month);$event.stopPropagation();"
+              class="download material-icons">
+              download
+              </span>
             </td>
 
           </tr>

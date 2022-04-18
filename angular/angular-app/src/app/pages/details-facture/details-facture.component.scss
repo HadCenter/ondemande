@@ -68,10 +68,10 @@ app-loader.loader{
  }
 
  .mdl-data-table td:first-of-type{
-    padding-left: 12vh;
+    padding-left: 1vh;
  }
  .mdl-data-table th:first-of-type{
-    padding-left: 12vh;
+    padding-left: 1vh;
  }
  .mdl-data-table {
     width: 100%;
@@ -80,6 +80,12 @@ app-loader.loader{
 base-card-body.mdl-card__supporting-text {
     padding: 0px 16px;
 }
+.download {
+  padding-left: inherit;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
 // tr:nth-child(even){
 //   background-color: red;
 // }

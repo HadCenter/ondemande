@@ -29,6 +29,7 @@ const routes: Routes = [
       { path: 'add-facture/:client/:date', loadChildren: () => import('./pages/add-facture/add-facture.module').then(m => m.AddFactureModule), canActivate: [AuthGuard] },
       { path: 'details-facture/:client/:facture', loadChildren: () => import('./pages/details-facture/details-facture.module').then(m => m.DetailsFactureModule), canActivate: [AuthGuard] },
       { path: 'configuration-critere/:id', loadChildren: () => import('./pages/config-critere/config-critere.module').then(m => m.ConfigCritereModule), canActivate: [AuthGuard] },
+      { path: 'config-jour-ferie', loadChildren: () => import('./pages/config-jour-ferie/config-jour-ferie.module').then(m => m.ConfigJourFerieModule), canActivate: [AuthGuard] },
       { path: 'rapports', loadChildren: () => import('./pages/powerbi-embedded/powerbi-embedded.module').then(m => m.PowerbiEmbeddedModule), canActivate: [AuthGuard] },
       { path: 'details-rapport/:id', loadChildren: () => import('./pages/details-kpi-powerbi/details-kpi-powerbi.module').then(m => m.DetailsKpiPowerbiModule), canActivate: [AuthGuard] },
 

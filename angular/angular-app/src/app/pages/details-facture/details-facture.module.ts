@@ -8,6 +8,7 @@ import { LoaderModule } from 'app/components/loader/loader.module';
 import { ThemeModule } from 'theme';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     ThemeModule,
     MatFormFieldModule,
     MatDialogModule,
+    MatSnackBarModule,
     DetailsFactureRoutingModule
   ]
 })

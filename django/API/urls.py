@@ -33,5 +33,6 @@ urlpatterns = [
     path('swagger/', schema_view ,name = "docs"),
     path('rabbitMQ/',include('rabbitMQ.urls')),
     path('embededPowerBI/',include('embededPowerBI.urls')),
+    path('facturation/',include('facturation.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

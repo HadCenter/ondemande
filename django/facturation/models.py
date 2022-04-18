@@ -38,22 +38,36 @@ class Facturation(models.Model):
     nom_client = models.CharField(max_length=45)
     date = models.DateField(unique=True)
     prep_jour = models.IntegerField()
+    UM_jour = models.IntegerField()
     prep_nuit = models.IntegerField()
+    UM_nuit = models.IntegerField()
     prep_province = models.IntegerField()
+    UM_province = models.IntegerField()
     total_jour = models.FloatField(max_length=45)
     total_nuit = models.FloatField(max_length=45)
     total_province = models.FloatField(max_length=45)
+    diff_jour = models.FloatField(max_length=45)
+    diff_nuit = models.FloatField(max_length=45)
+    diff_province = models.FloatField(max_length=45)
+
     class Meta:
         managed = False
         db_table = 'facturation_preparation'
 
 class FacturationInfo:
-    def __init__(self,date: Date, code_client: str, prep_jour : int , prep_nuit: int, prep_province: int, total_jour: str, total_nuit:str, total_province:str):
+    def __init__(self,date: Date, code_client: str, prep_jour : int , UM_jour:int, prep_nuit: int,UM_nuit:int, prep_province: int, UM_province: int, total_jour: str, total_nuit:str, total_province:str,diff_jour: str, diff_nuit:str, diff_province:str):
         self.date = date
         self.code_client = code_client
         self.prep_jour = prep_jour
+        self.UM_jour = UM_jour
         self.prep_nuit = prep_nuit
+        self.UM_nuit = UM_nuit
         self.prep_province = prep_province
+        self.UM_province = UM_province
         self.total_jour = total_jour
         self.total_nuit = total_nuit
         self.total_province = total_province
+        self.diff_jour = diff_jour
+        self.diff_nuit = diff_nuit
+        self.diff_province = diff_province
+        

@@ -1,3 +1,15 @@
+span.mat-button-wrapper {
+    color: white !important;
+    }
+
+.custom-snackbar button
+{
+  span.mat-button-wrapper {
+  color: #ff4081 !important;
+}
+}
+
+
 body {
   padding-top: 20px;
   padding-left: 20px;
@@ -23,7 +35,7 @@ body {
 text-align: center;
 }
 
-.card-title{
+.custom-card-title{
   display: contents;
 }
 ::ng-deep.mat-mini-fab{
@@ -42,9 +54,11 @@ text-align: center;
 
 
 
-mat-form-field.mat-form-field {
+mat-form-field.mat-form-field.form-critere {
   text-align: center ;
-  background-color: transparent
+  background-color: transparent;
+  margin-left: 4px;
+    margin-right: 4px;
 }
 mat-form-field.mat-form-field-disabled {
   text-align: center ;
@@ -57,7 +71,7 @@ mat-form-field.mat-form-field-disabled {
   background-color: transparent;
 }
 .mat-form-field-wrapper {
-  padding-bottom: 1.34375em;
+  padding-bottom: 1.34375em !important  ;
 }
 .mat-form-field-ripple {
   background-color: #00bcd4;
@@ -70,6 +84,26 @@ mat-form-field.mat-form-field-disabled {
   color: #fff;
   font-size: 1rem;
 }
+.mat-form-field-flex {
 
+  width: 100%;
+}
+
+.nom-client{
+  font-weight: 500;
+  padding-left: 5px;
+}
+.custom-card{
+  padding: 8px 16px;
+  background-color: #333;
+  z-index: 1;
+}
+.bloc-productivite{
+  margin: 16px;
+}
+.content-title-productivite{
+  margin-top: 0px;
+    margin-bottom: 0px;
+}
 
 

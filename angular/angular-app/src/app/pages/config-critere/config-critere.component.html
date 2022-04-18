@@ -1,8 +1,9 @@
 <div class="content-labels">
   <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
     <base-card-title class="reorder-card">
-      <div class='card-title'>
-        <label>Configuration des paramètres pour : Nom client</label>
+      <div class='custom-card-title'>
+        <label>Configuration des paramètres pour </label>
+        <label class="nom-client">{{matrice[0]?.nom_client}}</label>
         <div class="mdl-layout-spacer"></div>
         <button (click)='updateMatrice()'
           class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Modifier
@@ -10,209 +11,213 @@
       </div>
 
     </base-card-title>
-    <base-card-body class="content-card-line">
-      <div *ngIf="matrice.length>=1">
+    <app-loader [width]="'100%'" [position]="'initial'" [height]="'75vh'" [bg]="'transparant'" [show]="showLoaderMatrice">
+    </app-loader>
+    <base-card-body *ngIf="matrice.length>=1" class="content-card-line">
+
+        <div class="custom-card bloc-productivite">
+          <div>
+            <div
+              class="content-title-productivite mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+
+              <div>
+                <label class="label-title">Productivité</label>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-grid" style="padding-top: 0px ;padding-bottom:0px">
+            <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <label>Unité</label>
+              <mat-form-field appearance="fill" style="background-color: transparent;">
+                <input matInput [(ngModel)]="unite" disabled>
+              </mat-form-field>
+            </div>
+            <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <label>(sec)</label>
+              <mat-form-field class="form-critere" appearance="fill">
+
+                <input matInput type="number" [(ngModel)]="matrice[0].productivite">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+
         <div>
-          <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
 
-            <div style="padding-left:9px">
-              <label class="label-title">Productivité</label>
-            </div>
-          </div>
-        </div>
-        <div class="mdl-grid">
-          <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-            <label>Unité</label>
-            <mat-form-field appearance="fill" style="background-color: transparent;">
-              <input matInput [(ngModel)]="unite" disabled>
-            </mat-form-field>
-          </div>
-          <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-            <label>(sec)</label>
-            <mat-form-field appearance="fill">
-
-              <input matInput type="number" [(ngModel)]="productivite">
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-
-
-      <div>
-
-        <div class="mdl-grid">
-          <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-            <div style="    display: grid;">
-              <div>
-                <label class="label-title">Coût horaire PREP</label>
-              </div>
-              <div class="bloc-input" *ngFor="let item of matrice; let i = index; trackBy:customTrackBy">
-                <div class="content-bloc">
-                  <mat-form-field appearance="fill">
-
-                    <input matInput [(ngModel)]="item.param" [disabled]="i<=copy_matrice.length-1">
-                  </mat-form-field>
-
-                  <button class="btn-add" mat-mini-fab *ngIf="i>=matrice.length-1" (click)="addNewCrietere()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-
+          <div class="mdl-grid">
+            <div class=" custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;">
+                <div>
+                  <label class="label-title">Coût horaire PREP</label>
                 </div>
-                <mat-form-field appearance="fill">
+                <div class="bloc-input" *ngFor="let item of matrice; let i = index; trackBy:customTrackBy">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
 
-                  <input matInput type="number" [(ngModel)]="item.CHP">
-                </mat-form-field>
+                      <input matInput [(ngModel)]="item.param" [disabled]="i<=copy_matrice.length-1">
+                    </mat-form-field>
+
+                    <button class="btn-add" mat-mini-fab *ngIf="i>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+
+                  </div>
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" [(ngModel)]="item.CHP">
+                  </mat-form-field>
+                </div>
               </div>
+
             </div>
 
-          </div>
 
-
-          <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-            <div style="    display: grid;
+            <div class="custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;
             ">
-              <div style="text-align: initial;">
-                <label class="label-title">Coût horaire COORD</label>
-              </div>
-              <div class="bloc-input" *ngFor="let item of matrice; let j = index;">
-                <div class="content-bloc">
-                  <mat-form-field appearance="fill">
-
-                    <input matInput [(ngModel)]="item.param" [disabled]="j<=copy_matrice.length-1">
-                  </mat-form-field>
-
-                  <button class="btn-add" mat-mini-fab *ngIf="j>=matrice.length-1" (click)="addNewCrietere()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-
+                <div style="text-align: initial;">
+                  <label class="label-title">Coût horaire COORD</label>
                 </div>
-                <mat-form-field appearance="fill">
+                <div class="bloc-input" *ngFor="let item of matrice; let j = index;">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
 
-                  <input matInput type="number" [(ngModel)]="item.CHC">
-                </mat-form-field>
+                      <input matInput [(ngModel)]="item.param" [disabled]="j<=copy_matrice.length-1">
+                    </mat-form-field>
+
+                    <button class="btn-add" mat-mini-fab *ngIf="j>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+
+                  </div>
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" [(ngModel)]="item.CHC">
+                  </mat-form-field>
+                </div>
               </div>
             </div>
+
           </div>
-
         </div>
-      </div>
 
 
-      <!--*************************************************-->
+        <!--*************************************************-->
 
-      <div>
+        <div>
 
-        <div class="mdl-grid">
-          <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-            <div style="    display: grid;
+          <div class="mdl-grid">
+            <div class=" custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;
           ">
-              <div>
-                <label class="label-title">Forfait nbre heure</label>
-              </div>
-              <div class="bloc-input" *ngFor="let item of matrice; let k = index;">
-                <div class="content-bloc">
-                  <mat-form-field appearance="fill">
-
-                    <input matInput [(ngModel)]="item.param" [disabled]="k<=copy_matrice.length-1">
-                  </mat-form-field>
-
-                  <button class="btn-add" mat-mini-fab *ngIf="k>=matrice.length-1" (click)="addNewCrietere()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-
+                <div>
+                  <label class="label-title">Forfait nbre heure</label>
                 </div>
-                <mat-form-field appearance="fill">
+                <div class="bloc-input" *ngFor="let item of matrice; let k = index;">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
 
-                  <input matInput type="number" [(ngModel)]="item.forfaitNbHeure">
-                </mat-form-field>
+                      <input matInput [(ngModel)]="item.param" [disabled]="k<=copy_matrice.length-1">
+                    </mat-form-field>
+
+                    <button class="btn-add" mat-mini-fab *ngIf="k>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+
+                  </div>
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" [(ngModel)]="item.forfaitNbHeure">
+                  </mat-form-field>
+                </div>
               </div>
             </div>
-          </div>
 
 
-          <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-            <div style="    display: grid;
+            <div class="custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;
             ">
-              <div style="text-align: initial;">
-                <label class="label-title">Forfait nbre heure</label>
-              </div>
-              <div class="bloc-input" *ngFor="let item of matrice; let l = index;">
-                <div class="content-bloc">
-                  <mat-form-field appearance="fill">
-
-                    <input matInput [(ngModel)]="item.param" [disabled]="l<=copy_matrice.length-1">
-                  </mat-form-field>
-
-                  <button class="btn-add" mat-mini-fab *ngIf="l>=matrice.length-1" (click)="addNewCrietere()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-
+                <div style="text-align: initial;">
+                  <label class="label-title">Forfait nbre heure COORD</label>
                 </div>
-                <mat-form-field appearance="fill">
+                <div class="bloc-input" *ngFor="let item of matrice; let l = index;">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
 
-                  <input matInput type="number" [(ngModel)]="item.forfaitNbHeureCoord">
-                </mat-form-field>
+                      <input matInput [(ngModel)]="item.param" [disabled]="l<=copy_matrice.length-1">
+                    </mat-form-field>
+
+                    <button class="btn-add" mat-mini-fab *ngIf="l>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+
+                  </div>
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" [(ngModel)]="item.forfaitNbHeureCoord">
+                  </mat-form-field>
+                </div>
               </div>
             </div>
+
           </div>
-
         </div>
-      </div>
 
 
-      <!--*************************************************-->
+        <!--*************************************************-->
 
-      <div>
+        <div>
 
-        <div class="mdl-grid">
-          <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-            <div style="    display: grid;
+          <div class="mdl-grid">
+            <div class=" custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;
           ">
-              <div>
-                <label class="label-title">Temps préparation (min)</label>
-              </div>
-              <div class="bloc-input" *ngFor="let item of matrice; let m = index;">
-                <div class="content-bloc">
-                  <mat-form-field appearance="fill">
-
-                    <input matInput [(ngModel)]="item.param" [disabled]="m<=copy_matrice.length-1">
-                  </mat-form-field>
-
-                  <button class="btn-add" mat-mini-fab *ngIf="m>=matrice.length-1" (click)="addNewCrietere()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-
+                <div>
+                  <label class="label-title">Temps préparation (min)</label>
                 </div>
+                <div class="bloc-input" *ngFor="let item of matrice; let m = index;">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
 
-                <mat-form-field appearance="fill">
+                      <input matInput [(ngModel)]="item.param" [disabled]="m<=copy_matrice.length-1">
+                    </mat-form-field>
 
-                  <input matInput type="number" [(ngModel)]="item.TP">
-                </mat-form-field>
+                    <button class="btn-add" mat-mini-fab *ngIf="m>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+
+                  </div>
+
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" [(ngModel)]="item.TP">
+                  </mat-form-field>
+                </div>
               </div>
             </div>
-          </div>
 
 
-          <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
-            <div style="    display: grid;
+            <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div class="custom-card" style="    display: grid;
             ">
-              <div style="text-align: initial;">
-                <label class="label-title">Marge</label>
-              </div>
-              <div class="bloc-input">
+                <div style="text-align: initial;">
+                  <label class="label-title">Marge</label>
+                </div>
+                <div class="bloc-input">
 
-                <mat-form-field appearance="fill">
+                  <mat-form-field class="form-critere" appearance="fill">
 
-                  <input matInput type="number" [(ngModel)]="marge">
-                </mat-form-field>
-                %
+                    <input matInput type="number" [(ngModel)]="matrice[0].marge">
+                  </mat-form-field>
+                  %
+                </div>
               </div>
             </div>
+
           </div>
-
         </div>
-      </div>
-
+     
     </base-card-body>
   </base-card>
 </div>

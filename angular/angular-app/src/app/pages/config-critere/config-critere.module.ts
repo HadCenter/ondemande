@@ -10,6 +10,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { LoaderModule } from 'app/components/loader/loader.module';
 @NgModule({
   declarations: [ConfigCritereComponent],
   imports: [
@@ -21,7 +23,9 @@ import {MatIconModule} from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule,
+    LoaderModule
   ],
   providers: [
     ConfigCritereService,

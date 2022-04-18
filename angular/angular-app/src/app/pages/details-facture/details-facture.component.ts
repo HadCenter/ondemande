@@ -8,6 +8,12 @@ import { FacturationPreparationService } from '../facturation-preparation/factur
   styleUrls: ['./details-facture.component.scss']
 })
 export class DetailsFactureComponent implements OnInit {
+  sum_jour: number = 0;
+  sum_nuit: number = 0;
+  sum_province: number = 0;
+  sum_diff_jour: number = 0;
+  sum_diff_nuit: number = 0;
+  sum_diff_province: number = 0;
 
   constructor(private route: ActivatedRoute,
     private service: FacturationPreparationService) { }
@@ -44,6 +50,16 @@ export class DetailsFactureComponent implements OnInit {
     this.service.getFacturationForClients(data).subscribe(res => {
       this.advancedTable = res;
       this.advancedHeaders = Object.keys(this.advancedTable[0]);
+      this.advancedTable.forEach(element => {
+        console.log(element.total_jour);
+        this.sum_jour += element.total_jour;
+        this.sum_nuit += element.total_nuit;
+        this.sum_province += element.total_province;
+        this.sum_diff_jour += element.diff_jour;
+        this.sum_diff_nuit += element.diff_nuit;
+        this.sum_diff_province += element.diff_province;
+      })
+
     },
       error => console.log(error));
   }

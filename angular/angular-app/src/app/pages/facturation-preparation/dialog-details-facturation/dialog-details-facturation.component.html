@@ -1,6 +1,11 @@
 <base-card style="box-shadow: none; ">
   <base-card-title>
     <h1 class="mdl-card__title-text">Informations Facturation du mois {{nom_mois}} pour le client {{client_name}}</h1>
+    <div class="mdl-layout-spacer"></div>
+    <span (click)="downloadFile();$event.stopPropagation();"
+                class="download material-icons">
+                download
+              </span>
   </base-card-title>
   <base-card-body class="scroll-body no-padding" style="padding: 0 16px 0 0;">
     <app-loader [width]="'100%'" [position]="'sticky'" [height]="'60vh'" [bg]="'transparant'" [show]="!advancedTable">
@@ -21,7 +26,7 @@
         <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
 
 
-          <td class="mdl-data-table__cell--non-numeric">{{ row.date | date:"dd/MM/yyyy" }}</td>
+          <td class="mdl-data-table__cell--non-numeric">{{ row.date | date:'EEEE d MMM y' }} <span *ngIf="checkIfWeekendOrHoliday(row.date)">*</span></td>
           <td class="mdl-data-table__cell--non-numeric">{{ row.code_client}}</td>
           <td class="mdl-data-table__cell--non-numeric">{{ row.prep_jour}}</td>
           <td class="mdl-data-table__cell--non-numeric">{{ row.UM_jour}}</td>
@@ -73,7 +78,7 @@
         </tr>
 
       </tbody>
-
+      <p>* : jour férié</p>
     </table>
     <h6 style='text-align: center;' *ngIf="advancedTable?.length == 0">Pas de facturation pour le moment.</h6>
   </base-card-body>

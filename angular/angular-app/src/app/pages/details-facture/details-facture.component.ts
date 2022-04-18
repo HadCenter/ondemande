@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FacturationPreparationService } from '../facturation-preparation/facturation-preparation.service';
+import { saveAs } from 'file-saver';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-details-facture',
@@ -16,6 +18,8 @@ export class DetailsFactureComponent implements OnInit {
   sum_diff_province: number = 0;
 
   constructor(private route: ActivatedRoute,
+    private _snackBar: MatSnackBar
+,
     private service: FacturationPreparationService) { }
 
   public advancedHeaders: any = [];
@@ -63,6 +67,27 @@ export class DetailsFactureComponent implements OnInit {
     },
       error => console.log(error));
   }
+  downloadFile() {
+    this.openSnackBar('Téléchargement du fichier en cours...', 'Ok');
+    var data = {
+      "code_client": this.client,
+      "mois": this.moisFacture
+    }
+    this.service.downloadFacturationFile(data)
+      .subscribe(res => {
+        this.openSnackBar('Le fichier est téléchargé avec succès.', 'Ok');
+        saveAs(res, "Preparation_" + this.client_name + "_" + this.moisFacture + ".xlsx");
+      }, error => this.openSnackBar('Une erreur est survenue', 'Ok')
+      );
 
+  }
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 4500,
+      // verticalPosition: 'bottom',
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
 
 }

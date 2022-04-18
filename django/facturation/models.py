@@ -71,3 +71,21 @@ class FacturationInfo:
         self.diff_nuit = diff_nuit
         self.diff_province = diff_province
         
+class Conditionnement(models.Model):
+    ID_CND = models.IntegerField(primary_key=True)
+    CODE_SOC = models.CharField(max_length=45)
+    TYPE_COND = models.IntegerField()
+    CODE_ARTICLE = models.CharField(max_length=45)
+    QTE = models.FloatField(max_length=45)
+    class Meta:
+        managed = False
+        db_table = 'conditionnement'
+
+class FacturationHolidays(models.Model):
+    id = models.IntegerField(primary_key=True)
+    marge = models.IntegerField()
+    weekends = models.CharField(max_length=45)
+    holidays = models.CharField(max_length=200)
+    class Meta:
+        managed = False
+        db_table = 'Facturation_holidays'

@@ -111,4 +111,7 @@ export class ListFacturationPreparationComponent implements OnInit {
   gotoFacturation(code_client){
     this.router.navigate(['/liste-facturation-preparation', code_client])
   }
+  gotoConfigurationHolidays(){
+    this.router.navigate(['/config-jour-ferie'])
+  }
 }

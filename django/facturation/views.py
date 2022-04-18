@@ -420,6 +420,9 @@ def getMonthFacturationWithTotal(request):
     if(len(factList)>0):
         nom_client = factList[0].nom_client
         current_month = factList[0].date.strftime("%m-%Y")
+    else:
+        return HttpResponse(jsonpickle.encode({'nom_client': nom_client, 'months':[]}, unpicklable=False), content_type="application/json")
+
     
     somme = 0
     listMonths= list()

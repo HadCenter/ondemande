@@ -1566,13 +1566,14 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
               dataCopy[i][this.displayedColumnsLivraison[startCol]] = text;
               if (this.displayedColumnsLivraison[startCol] == "Round_Name") {
                 dataCopy[i][this.displayedColumnsLivraison[15]] = text;
+                dataCopy.forEach(element => {
+                  if(element.Tournee == dataCopy[i]['Tournee'] ){
+                    element.Round_Name = text;
+                    element.billingRoundName = text;
+                  }
+                });
               }
-              dataCopy.forEach(element => {
-                if(element.Tournee == dataCopy[i]['Tournee'] ){
-                  element.Round_Name = text;
-                  element.billingRoundName = text;
-                }
-              });
+              
               /**if we modify a column of the livraison file it will be automatically modified at the level of the exception file */
               this.dataSourceException.data.forEach(el => {
                 if(el.Tournee == dataCopy[i]['Tournee'] ){
@@ -1616,13 +1617,14 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
               //if change Round_Name then change billingRoundName
               if (this.displayedColumnsException[startCol] == "Round_Name") {
                 dataCopy[i][this.displayedColumnsException[14]] = text;
+                dataCopy.forEach(element => {
+                  if(element.Tournee == dataCopy[i]['Tournee']){
+                    element.Round_Name = text;
+                    element.billingRoundName = text;
+                  }
+                });
               }
-              dataCopy.forEach(element => {
-                if(element.Tournee == dataCopy[i]['Tournee']){
-                  element.Round_Name = text;
-                  element.billingRoundName = text;
-                }
-              });
+              
               /**if we modify a column of the exception file it will be automatically modified at the level of the delivery file */
               this.dataSource.data.forEach(el => {
                 if(el.Tournee == dataCopy[i]['Tournee'] ){

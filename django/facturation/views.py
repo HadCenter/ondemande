@@ -18,6 +18,7 @@ def getListClient(request):
 
 @api_view(['POST'])
 def updateAllMatriceForClientV2(request):
+    listOfParams = []
     try:
         params = request.data['parameters']
         code_client = request.data['code_client']
@@ -28,6 +29,8 @@ def updateAllMatriceForClientV2(request):
     for element in params:
         element.pop("nom_client", None)
         param = element.pop("param",None)
+        if(param not in listOfParams):
+            listOfParams.append(param)
         for key in element:
             try:
                 critere = MatriceFacturation.objects.get(param = param, code_client = code_client, key = key)
@@ -45,7 +48,11 @@ def updateAllMatriceForClientV2(request):
                     critere.param = param
                     critere.key = key
                     critere.value = element[key]
-                    critere.save() 
+                    critere.save()
+    matrice = MatriceFacturation.objects.filter(code_client=code_client)
+    for mat in matrice:
+        if(mat.param not in listOfParams):
+            mat.delete()
     return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])

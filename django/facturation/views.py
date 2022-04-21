@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from core.ediFileService import connect
 from .facturationService import CalculRealUM, calculateTotals, createFileFacturationFromColumnAndRows, getFacturationForMonth, getMatriceForClient, getMatriceForParam, getAllClientsinDB
 from .models import FacturationHolidays, MatriceFacturation, Facturation
+from random import randrange
 from django.conf import settings
 DJANGO_DIRECTORY = settings.BASE_DIR
 
@@ -25,6 +26,16 @@ def updateAllMatriceForClientV2(request):
     except Exception as e:
         print(e)
         return JsonResponse({'message': 'Body parametres are empty or incorrect'}, status=status.HTTP_403_FORBIDDEN)
+    try:
+        nom_client=request.data['nom_client']
+        client = Client() 
+        client.nom_client=nom_client
+        code_client = "F"+str(randrange(1000)+1)
+        client.code_client = code_client
+        client.id_salesforce=code_client
+        client.save()
+    except Exception as e:
+        print(e)
 
     for element in params:
         element.pop("nom_client", None)
@@ -53,7 +64,7 @@ def updateAllMatriceForClientV2(request):
     for mat in matrice:
         if(mat.param not in listOfParams):
             mat.delete()
-    return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)
+    return JsonResponse({'message': 'updated successfully','code_client':code_client}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def getMatriceByClient(request):

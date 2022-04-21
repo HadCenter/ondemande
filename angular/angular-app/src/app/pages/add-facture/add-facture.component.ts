@@ -154,6 +154,7 @@ export class AddFactureComponent implements OnInit {
         data
       );
     }
+    var old_monthDays = this.monthDays;
     this.monthDays = [];
     this.JourPreparations = [];
     this.NuitPreparations = [];
@@ -169,18 +170,17 @@ export class AddFactureComponent implements OnInit {
       this.openSnackBar("La facture est enregistré avec succès!", "Ok", 5000);
 
     },
-      err => this.openSnackBar("Une erreur est survenue, veuillez réessayer. ", "Ok", 5000)
+      err => {
+        if(err.error.message == "veuiller remplir la matrice du client"){
+          this.openSnackBar("Veuiller remplir la matrice du client avant d'insérer une facture.", "Ok", 10000);
+          this.router.navigate(['/configuration-critere', this.code_client]);
+        }else{
+          this.openSnackBar("Une erreur est survenue, veuillez réessayer. ", "Ok", 5000);
+          this.monthDays = old_monthDays;
+        }
+      }
     )
   }
-
-  // randomize(){
-  //   for (var i = this.JourPreparations.length; i < this.monthDays.length; i++) {
-  //     var min =1;
-  //     var max = 11;
-  //     this.JourPreparations[i] = Math.floor(Math.random() * (max - min + 1) + min);
-  //     this.NuitPreparations[i] = Math.floor(Math.random() * (max - min + 1) + min);
-  //   }
-  // }
 
 }
 

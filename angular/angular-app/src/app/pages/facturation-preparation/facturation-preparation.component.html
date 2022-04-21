@@ -3,8 +3,20 @@
     [show]="advancedTable.length == 0"></app-loader>
   <base-card>
     <base-card-title>
-      <h1 class="mdl-card__title-text">Liste des facturations préparation pour le client : {{nom_client}} </h1>
+    <span (click)="backToPreviousPage();$event.stopPropagation();"
+              class="pointer material-icons">
+              arrow_back
+              </span>
+                    <div class="mdl-layout-spacer"></div>
+
+      <h1 class="mdl-card__title-text" style='text-align: center;'>Liste des facturations préparation pour le client : {{nom_client}} </h1>
       <div class="mdl-layout-spacer"></div>
+      <span (click)="$event.stopPropagation();"
+      class="download material-icons"
+      style="visibility: hidden;">
+      arrow_forward
+      </span>
+
       <!-- <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
       </base-pagination> -->
       <!-- <button style="margin-left: 3px;" (click)="navigatetoAddFacturation()"
@@ -45,7 +57,7 @@
               <!-- <button style="margin-left: 3px;" (click)="downloadFile(row.month)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Télécharger
               </button> -->
-              <span (click)="downloadFile(row.month);$event.stopPropagation();"
+              <span (click)="downloadFile(row);$event.stopPropagation();"
               class="download material-icons">
               download
               </span>
@@ -64,7 +76,7 @@
               <!-- <button style="margin-left: 3px;" (click)="downloadFile(row.month)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Télécharger
               </button> -->
-              <span (click)="downloadFile(row.month);$event.stopPropagation();"
+              <span (click)="downloadFile(row);$event.stopPropagation();"
               class="download material-icons">
               download
               </span>

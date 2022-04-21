@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FacturationPreparationService } from '../facturation-preparation/facturation-preparation.service';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,8 +18,8 @@ export class DetailsFactureComponent implements OnInit {
   sum_diff_province: number = 0;
 
   constructor(private route: ActivatedRoute,
-    private _snackBar: MatSnackBar
-,
+    private _snackBar: MatSnackBar,
+    private router: Router,
     private service: FacturationPreparationService) { }
 
   public advancedHeaders: any = [];
@@ -28,7 +28,7 @@ export class DetailsFactureComponent implements OnInit {
   public currentPage = 1;
   private countPerPage = 8;
   public numPage = 0;
-  public advancedTable = [];
+  public advancedTable : Array<any>;
   show = true;
   public moisFacture: any;
   public mois: any;
@@ -55,7 +55,6 @@ export class DetailsFactureComponent implements OnInit {
       this.advancedTable = res;
       this.advancedHeaders = Object.keys(this.advancedTable[0]);
       this.advancedTable.forEach(element => {
-        console.log(element.total_jour);
         this.sum_jour += element.total_jour;
         this.sum_nuit += element.total_nuit;
         this.sum_province += element.total_province;
@@ -65,7 +64,10 @@ export class DetailsFactureComponent implements OnInit {
       })
 
     },
-      error => console.log(error));
+      error => {
+        this.openSnackBar('Une erreur est survenue', 'Ok');
+        this.backToPreviousPage();
+      });
   }
   downloadFile() {
     this.openSnackBar('Téléchargement du fichier en cours...', 'Ok');
@@ -79,8 +81,12 @@ export class DetailsFactureComponent implements OnInit {
         saveAs(res, "Preparation_" + this.client_name + "_" + this.moisFacture + ".xlsx");
       }, error => this.openSnackBar('Une erreur est survenue', 'Ok')
       );
-
   }
+
+  backToPreviousPage(){
+    this.router.navigate([`/liste-facturation-preparation/${this.client}`]);
+  }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,

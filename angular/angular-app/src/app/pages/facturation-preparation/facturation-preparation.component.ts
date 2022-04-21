@@ -43,8 +43,6 @@ export class FacturationPreparationComponent implements OnInit {
     }
     this.service.getMonthListFacturationForClient(data).subscribe(res => {
       this.advancedTable = res.months.reverse();
-      console.log(this.advancedTable);
-
       var first_iteration = true;
       var today = new Date();
       this.advancedTable.forEach(element => {
@@ -54,34 +52,30 @@ export class FacturationPreparationComponent implements OnInit {
         var nextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 1);
 
         if (first_iteration) {
-          console.log(Date.parse(month.toDateString()), '==', Date.parse(nextMonth.toDateString()));
-
           if ((Date.parse(month.toDateString()) == Date.parse(nextMonth.toDateString()))) {
             this.advancedTable.unshift({ "month": this.datePipe.transform(new Date(parseInt(date[1]), parseInt(date[0]), 1), 'MM-yyyy'), "total": 0 });
             //this.advancedTable.unshift(new Date(parseInt(date[1]), parseInt(date[0]), 1).toLocaleString('default', { month: 'long' }).toLocaleUpperCase() );
-
           }
           first_iteration = false;
-
         }
-
-        // if (first_iteration) {
-        // }
-        //this.dates.push(new Date(parseInt(date[1]), parseInt(date[0]) , 1).toLocaleString('default', { month: 'long' }).toLocaleUpperCase())
       })
+
       if (this.advancedTable.length == 0) {
-        this.advancedTable.push(this.datePipe.transform(new Date(today.getFullYear(), today.getMonth() + 1, 1), 'MM-yyyy'));
+        this.advancedTable.push({"month":this.datePipe.transform(new Date(today.getFullYear(), today.getMonth() + 1, 1), 'MM-yyyy'), "total": 0 });
+        this.advancedTable.push({"month":this.datePipe.transform(new Date(today.getFullYear(), today.getMonth(), 1), 'MM-yyyy'), "total": 0 });
       }
+
       this.advancedTable.forEach(element => {
         var date = element.month.split('-');
         this.dates.push(new Date(parseInt(date[1]), parseInt(date[0]) - 1, 1).toLocaleString('default', { month: 'long', year: 'numeric' }).toLocaleUpperCase())
       })
-      console.log(this.advancedTable);
-      console.log(this.dates);
       this.nom_client = res.nom_client;
       this.service.setClient(this.nom_client);
     },
-      err => { })
+      err => { 
+        this.openSnackBar('Une erreur est survenue', 'Ok');
+        this.backToPreviousPage();
+      })
   }
 
 
@@ -98,25 +92,13 @@ export class FacturationPreparationComponent implements OnInit {
     });
     this.dialogRef.componentInstance.mois = data;
     this.dialogRef.componentInstance.code_client = this.client_code;
-    // if (decision == 'activer') {
-    //   this.dialogRef.componentInstance.confirmMessage = "Voulez-vous activer la capacité ?"
-    // } else if (decision == 'suspendre') {
-    //   this.dialogRef.componentInstance.confirmMessage = "Voulez-vous suspendre la capacité ?"
-    // }
     this.dialogRef.afterClosed().subscribe(result => {
-      // if (result) {
-      //   if (decision == 'activer') {
-      //     this.activerCapacite();
-      //   } else if (decision == 'suspendre') {
-      //     this.suspendreCapacite();
-      //   }
-      // }
+
       this.dialogRef = null;
     });
   }
 
   opendetails(data) {
-    console.log(data);
     this.router.navigate([`/details-facture/${this.client_code}/${data}`]);
   }
 
@@ -124,20 +106,27 @@ export class FacturationPreparationComponent implements OnInit {
     this.router.navigate([`/add-facture/${this.client_code}/${data}`]);
   }
 
-  downloadFile(month) {
+  downloadFile(data) {
+    if(data.total>0){
     this.openSnackBar('Téléchargement du fichier en cours...', 'Ok');
-    var data = {
+    var body = {
       "code_client": this.client_code,
-      "mois": month
+      "mois": data.month
     }
-    this.service.downloadFacturationFile(data)
+    this.service.downloadFacturationFile(body)
       .subscribe(res => {
         this.openSnackBar('Le fichier est téléchargé avec succès.', 'Ok');
-        saveAs(res, "Preparation_" + this.nom_client + "_" + month + ".xlsx");
+        saveAs(res, "Preparation_" + this.nom_client + "_" + data.month + ".xlsx");
       }, error => this.openSnackBar('Une erreur est survenue', 'Ok')
       );
-
+    }else{
+      this.openSnackBar('Facture vide, rien à télécharger.', 'Ok');
+    }
   }
+  backToPreviousPage(){
+    this.router.navigate([`/facturation-preparation/`]);
+  }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4500,

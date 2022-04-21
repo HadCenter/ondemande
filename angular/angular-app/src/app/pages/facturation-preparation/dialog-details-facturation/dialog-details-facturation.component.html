@@ -2,7 +2,7 @@
   <base-card-title>
     <h1 class="mdl-card__title-text">Informations Facturation du mois {{nom_mois}} pour le client {{client_name}}</h1>
     <div class="mdl-layout-spacer"></div>
-    <span (click)="downloadFile();$event.stopPropagation();"
+    <span *ngIf="advancedTable && advancedTable?.length > 0" (click)="downloadFile();$event.stopPropagation();"
                 class="download material-icons">
                 download
               </span>
@@ -78,7 +78,7 @@
         </tr>
 
       </tbody>
-      <p>* : jour férié</p>
+      <p class="red-color">* : jour férié</p>
     </table>
     <h6 style='text-align: center;' *ngIf="advancedTable?.length == 0">Pas de facturation pour le moment.</h6>
   </base-card-body>

@@ -1,18 +1,24 @@
 <base-card style="margin : 1rem 4rem; height : fit-content;">
     <base-card-title>
+    <span (click)="backToPreviousPage();$event.stopPropagation();"
+    class="pointer material-icons">
+    arrow_back
+    </span>
+          <div class="mdl-layout-spacer"></div>
+
         <h1 class="mdl-card__title-text">Informations Facturation du mois {{mois}} pour le client {{client_name}} </h1>
         <div class="mdl-layout-spacer"></div>
-        <span (click)="downloadFile();$event.stopPropagation();"
+        <span *ngIf="advancedTable && advancedTable?.length > 0" (click)="downloadFile();$event.stopPropagation();"
                     class="download material-icons">
                     download
                   </span>    
     </base-card-title>
     <base-card-body class="no-padding" style="padding: 0;">
         <app-loader [width]="'100%'" [position]="'sticky'" [height]="'60vh'" [bg]="'transparant'"
-            [show]="advancedTable.length == 0">
+            [show]="!advancedTable">
         </app-loader>
 
-        <table *ngIf="advancedTable.length > 0" aria-describedby="details-facture-client-table"
+        <table *ngIf="advancedTable && advancedTable?.length > 0" aria-describedby="details-facture-client-table"
             class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone mdl-data-table mdl-js-data-table   sorting-table">
             <thead>
                 <tr>
@@ -79,6 +85,8 @@
                 </tr>
 
             </tbody>
+            <p class="red-color">* : jour férié</p>
         </table>
+        <h6 style='text-align: center;' *ngIf="advancedTable?.length == 0">Pas de facturation pour le moment.</h6>
     </base-card-body>
 </base-card>

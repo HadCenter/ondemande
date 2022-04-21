@@ -55,7 +55,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput [(ngModel)]="item.param" [disabled]="i<=copy_matrice.length-1">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="i<=copy_matrice.length-2">
                     </mat-form-field>
 
                     <button class="btn-add" mat-mini-fab *ngIf="i>=matrice.length-1" (click)="addNewCrietere()">
@@ -65,7 +65,7 @@
                   </div>
                   <mat-form-field class="form-critere" appearance="fill">
 
-                    <input matInput type="number" [(ngModel)]="item.CHP">
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.CHP">
                   </mat-form-field>
                 </div>
               </div>
@@ -83,7 +83,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput [(ngModel)]="item.param" [disabled]="j<=copy_matrice.length-1">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="j<=copy_matrice.length-2">
                     </mat-form-field>
 
                     <button class="btn-add" mat-mini-fab *ngIf="j>=matrice.length-1" (click)="addNewCrietere()">
@@ -93,7 +93,7 @@
                   </div>
                   <mat-form-field class="form-critere" appearance="fill">
 
-                    <input matInput type="number" [(ngModel)]="item.CHC">
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.CHC">
                   </mat-form-field>
                 </div>
               </div>
@@ -118,7 +118,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput [(ngModel)]="item.param" [disabled]="k<=copy_matrice.length-1">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="k<=copy_matrice.length-2">
                     </mat-form-field>
 
                     <button class="btn-add" mat-mini-fab *ngIf="k>=matrice.length-1" (click)="addNewCrietere()">
@@ -128,7 +128,7 @@
                   </div>
                   <mat-form-field class="form-critere" appearance="fill">
 
-                    <input matInput type="number" [(ngModel)]="item.forfaitNbHeure">
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.forfaitNbHeure">
                   </mat-form-field>
                 </div>
               </div>
@@ -145,7 +145,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput [(ngModel)]="item.param" [disabled]="l<=copy_matrice.length-1">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="l<=copy_matrice.length-2">
                     </mat-form-field>
 
                     <button class="btn-add" mat-mini-fab *ngIf="l>=matrice.length-1" (click)="addNewCrietere()">
@@ -155,7 +155,7 @@
                   </div>
                   <mat-form-field class="form-critere" appearance="fill">
 
-                    <input matInput type="number" [(ngModel)]="item.forfaitNbHeureCoord">
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.forfaitNbHeureCoord">
                   </mat-form-field>
                 </div>
               </div>
@@ -180,7 +180,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput [(ngModel)]="item.param" [disabled]="m<=copy_matrice.length-1">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="m<=copy_matrice.length-2">
                     </mat-form-field>
 
                     <button class="btn-add" mat-mini-fab *ngIf="m>=matrice.length-1" (click)="addNewCrietere()">
@@ -191,7 +191,7 @@
 
                   <mat-form-field class="form-critere" appearance="fill">
 
-                    <input matInput type="number" [(ngModel)]="item.TP">
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.TP">
                   </mat-form-field>
                 </div>
               </div>

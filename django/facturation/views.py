@@ -1,101 +1,20 @@
-from calendar import week
-from csv import excel
-from datetime import datetime
-from fileinput import filename
 import os
-from tkinter.ttk import Separator
 import pandas as pd 
 from core.models import Client
 from django.http import HttpResponse, JsonResponse
 import jsonpickle
 from rest_framework import status
 from rest_framework.decorators import api_view
-
 from core.ediFileService import connect
-
-
-from .facturationService import getFacturationForMonth, getMatriceForClient, getMatriceForParam, getAllClientsinDB, getMonthsFacturationForClient
-
-from .models import Conditionnement, FacturationHolidays, MatriceFacturation, Facturation
+from .facturationService import CalculRealUM, calculateTotals, createFileFacturationFromColumnAndRows, getFacturationForMonth, getMatriceForClient, getMatriceForParam, getAllClientsinDB
+from .models import FacturationHolidays, MatriceFacturation, Facturation
 from django.conf import settings
 DJANGO_DIRECTORY = settings.BASE_DIR
-
-# Create your views here.
-
 
 @api_view(['GET'])
 def getListClient(request):
     listClient = getAllClientsinDB()
     return HttpResponse(jsonpickle.encode(listClient, unpicklable=False), content_type="application/json")
-
-
-
-
-@api_view(['POST'])
-def updateMatriceForClient(request):
-    try:
-        param = request.data['param']
-        code_client = request.data['code_client']
-        keys= request.data['keys']
-        values = request.data['values']
-    except Exception:
-        return JsonResponse({'message': 'Body parametres are empty or incorrect'}, status=status.HTTP_403_FORBIDDEN)
-
-    for idx, key in enumerate(keys):
-        try:
-            critere = MatriceFacturation.objects.get(param = param, code_client = code_client, key = key)
-            critere.value = values[idx]
-            critere.save() 
-        except Exception as e:
-            if ( "matching query does not exist." in str(e)):
-                critere = MatriceFacturation()
-                critere.code_client = code_client
-                try:
-                    critere.nom_client = Client.objects.get(code_client=code_client).nom_client
-                except Exception as e:
-                    return JsonResponse({'message': 'client introuvable'}, status=status.HTTP_400_BAD_REQUEST)
-
-                critere.param = param
-                critere.key = key
-                critere.value = values[idx]
-                critere.save() 
-
-    return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)
-
-@api_view(['POST'])
-def updateAllMatriceForClient(request):
-    try:
-        parameters : list = []
-        params = request.data['param']
-        code_client = request.data['code_client']
-        keys= request.data['keys']
-        for i,param in enumerate(params):
-            parameters.append(request.data[param])
-    except Exception as e:
-        print(e)
-        return JsonResponse({'message': 'Body parametres are empty or incorrect'}, status=status.HTTP_403_FORBIDDEN)
-
-    for i,param in enumerate(params):
-        for idx, key in enumerate(keys):
-            try:
-                critere = MatriceFacturation.objects.get(param = params[i], code_client = code_client, key = key)
-                critere.value = parameters[i][idx]
-                critere.save() 
-            except Exception as e:
-                if ( "matching query does not exist." in str(e)):
-                    critere = MatriceFacturation()
-                    critere.code_client = code_client
-                    try:
-                        critere.nom_client = Client.objects.get(code_client=code_client).nom_client
-                    except Exception as e:
-                        return JsonResponse({'message': 'client introuvable'}, status=status.HTTP_400_BAD_REQUEST)
-
-                    critere.param = param
-                    critere.key = key
-                    critere.value = parameters[i][idx]
-                    critere.save() 
-
-    return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def updateAllMatriceForClientV2(request):
@@ -130,39 +49,12 @@ def updateAllMatriceForClientV2(request):
     return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
-def getMatriceByParam(request):
-    param = request.data['param']
-    code_client = request.data['code_client']
-    criteres = getMatriceForParam(code_client, param)
-    if(len(criteres) == 0):
-        return JsonResponse({'message': 'Client or param not found'}, status=status.HTTP_404_NOT_FOUND)
-    return HttpResponse(jsonpickle.encode(criteres, unpicklable=False), content_type="application/json")
-
-
-@api_view(['POST'])
 def getMatriceByClient(request):
     code_client = request.data['code_client']
     criteres = getMatriceForClient(code_client)
     if(len(criteres) == 0):
         return JsonResponse({'message': 'Client not found'}, status=status.HTTP_404_NOT_FOUND)
     return HttpResponse(jsonpickle.encode(criteres, unpicklable=False), content_type="application/json")
-
-
-@api_view(['POST'])
-def caculateFacturationForClient(request):
-    param = request.data['param']
-    code_client = request.data['code_client']
-    nbre_preparateur = request.data['nbre_preparateur']
-    criteres = getMatriceForParam(code_client, param)
-
-    unitéManut = ( int(nbre_preparateur) * int(criteres['TP']) * 60 ) / int(criteres["productivite"])
-    coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
-    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.'))/100)
-    total = coutProdAvecMarge * unitéManut
-    #unitéManut = ((int(nbre_preparateur) * int(criteres["CHP"]) * criteres["forfaitNbHeure"]) + (criteres["CHC"] * criteres["forfaitNbHeureCoord"]))/ (1-criteres["marge"]/100)
-    if(len(criteres) == 0):
-        return JsonResponse({'message': 'Client or param not found'}, status=status.HTTP_404_NOT_FOUND)
-    return HttpResponse(jsonpickle.encode(total, unpicklable=False), content_type="application/json")
 
 @api_view(['POST'])
 def caculateFacturationByUnite(request):
@@ -183,185 +75,31 @@ def caculateFacturationByUnite(request):
         return JsonResponse({'message': 'Client or param not found'}, status=status.HTTP_404_NOT_FOUND)
     return HttpResponse(jsonpickle.encode(total, unpicklable=False), content_type="application/json")
 
-
-@api_view(['POST'])
-def caculateFacturationByDate(request):
-    total = 0
-    untreatedFacturation = Facturation.objects.filter(total_jour=None)
-    for fact in untreatedFacturation:
-        if(fact.prep_jour != None):
-            criteres = getMatriceForParam(fact.code_client, "midi")
-            total = getFacturationTotal(fact.prep_jour, criteres)
-            fact.total_jour = total
-            fact.save()
-    untreatedFacturation = Facturation.objects.filter( total_nuit=None)
-    for fact in untreatedFacturation:
-        if(fact.prep_nuit != None):
-            criteres = getMatriceForParam(fact.code_client, "soir")
-            total = getFacturationTotal(fact.prep_nuit, criteres)
-            fact.total_nuit = total
-            fact.save()
-    untreatedFacturation = Facturation.objects.filter(total_province = None)
-    for fact in untreatedFacturation:
-        if(fact.prep_province != None):
-            criteres = getMatriceForParam(fact.code_client, "province")
-            total = getFacturationTotal(fact.prep_province, criteres)
-            fact.total_province = total
-            fact.save()
-
-    return HttpResponse(jsonpickle.encode(total, unpicklable=False), content_type="application/json")
-
-def calculateMonthFacturationForClient(code_client):
-    total = 0
-    untreatedFacturation = Facturation.objects.filter(code_client = code_client, date__lt=None)
-    for fact in untreatedFacturation:
-        if(fact.prep_jour != None):
-            criteres = getMatriceForParam(fact.code_client, "midi")
-            total = getFacturationTotal(fact.prep_jour, criteres)
-            fact.total_jour = total
-            fact.save()
-    untreatedFacturation = Facturation.objects.filter( total_nuit=None)
-    for fact in untreatedFacturation:
-        if(fact.prep_nuit != None):
-            criteres = getMatriceForParam(fact.code_client, "soir")
-            total = getFacturationTotal(fact.prep_nuit, criteres)
-            fact.total_nuit = total
-            fact.save()
-    untreatedFacturation = Facturation.objects.filter(total_province = None)
-    for fact in untreatedFacturation:
-        if(fact.prep_province != None):
-            criteres = getMatriceForParam(fact.code_client, "province")
-            total = getFacturationTotal(fact.prep_province, criteres)
-            fact.total_province = total
-            fact.save()
-
-    return HttpResponse(jsonpickle.encode(total, unpicklable=False), content_type="application/json")
-
-def getFacturationTotal(nbre_preparateur, criteres):
-    unitéManut = getUM(nbre_preparateur, criteres)
-    coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
-    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.'))/100)
-    total = coutProdAvecMarge * unitéManut
-    return total
-
-def getFacturationTotalWithDepassement(nbre_preparateur, criteres, manutention_reel):
-    unitéManut = getUM(nbre_preparateur, criteres)
-    coutProdSansMarge = ((int(nbre_preparateur) * int(criteres["CHP"]) * int(criteres["forfaitNbHeure"])) + (int(criteres["CHC"]) * int(criteres["forfaitNbHeureCoord"])))/ (unitéManut)
-    coutProdAvecMarge = coutProdSansMarge/(1- float(criteres["marge"].replace(',','.'))/100)
-    total = coutProdAvecMarge * float(manutention_reel)
-    diff = total - (coutProdAvecMarge * unitéManut)
-    return total, diff
-
-def getUM(nbre_preparateur, criteres):
-    unitéManut = ( int(nbre_preparateur) * int(criteres["TP"]) * 60 ) / int(criteres["productivite"])
-    return unitéManut
-
 @api_view(['POST'])
 def addFacturation(request):
     preparations = request.data['preparations']
     facturationHolidays = FacturationHolidays.objects.get(id=1)
-
     for prep in preparations:
         code_client = prep['code_client']
-        facturationDB = Facturation()
-        facturationDB.code_client = code_client
-        facturationDB.nom_client = Client.objects.get(code_client=code_client).nom_client
-        facturationDB.date = prep['date']
-        calculateTotals(facturationDB,prep,code_client, prep['date'], facturationHolidays)
-        
         try:
-            facturationDB.save()
-        except Exception as e:
-            print(e)
-            #the below code allow backend to modify inserted preparations
             facturationDB = Facturation.objects.get(date= prep['date'], code_client=code_client)
-            calculateTotals(facturationDB,prep,code_client, prep['date'], facturationHolidays)
-            facturationDB.save()
-
-    return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)
-
-def calculateTotals(facturationDB,prep,code_client, date, facturationHolidays):
-    if('prep_jour' in prep):
-        facturationDB.prep_jour = prep['prep_jour']
-        critere_jour = getMatriceForParam(code_client, "midi")
-        total_jour = getFacturationTotal(prep['prep_jour'], critere_jour)
-        total_jour = addMargeToTotalIfWeekend(total_jour, date, facturationHolidays)
-        facturationDB.total_jour = total_jour
-        facturationDB.diff_jour = 0
-        facturationDB.UM_jour = getUM(prep['prep_jour'], critere_jour)
-        if('UM_jour' in prep and facturationDB.UM_jour < float(prep['UM_jour'])):
-            facturationDB.UM_jour = prep['UM_jour']
-            total_jour, diff_jour = getFacturationTotalWithDepassement(prep['prep_jour'], critere_jour, prep['UM_jour'])
-            total_jour = addMargeToTotalIfWeekend(total_jour, date, facturationHolidays)
-            facturationDB.total_jour = total_jour
-            facturationDB.diff_jour = diff_jour
-
-    if('prep_nuit' in prep):
-        facturationDB.prep_nuit = prep['prep_nuit']
-        critere_nuit = getMatriceForParam(code_client, "soir")
-        total_nuit = getFacturationTotal(prep['prep_nuit'], critere_nuit)
-        total_nuit = addMargeToTotalIfWeekend(total_nuit, date, facturationHolidays)
-        facturationDB.total_nuit = total_nuit
-        facturationDB.diff_nuit = 0
-        facturationDB.UM_nuit = getUM(prep['prep_nuit'], critere_nuit)
-        if('UM_nuit' in prep and facturationDB.UM_nuit < float(prep['UM_nuit'])):
-            facturationDB.UM_nuit = prep['UM_nuit']
-            total_nuit, diff_nuit = getFacturationTotalWithDepassement(prep['prep_nuit'], critere_nuit, prep['UM_nuit'])
-            total_nuit = addMargeToTotalIfWeekend(total_nuit, date, facturationHolidays)
-            facturationDB.total_nuit = total_nuit
-            facturationDB.diff_nuit = diff_nuit
-
-
-    if('prep_province' in prep):
-        facturationDB.prep_province = prep['prep_province']
-        critere_province = getMatriceForParam(code_client, "province")
-        total_province = getFacturationTotal(prep['prep_province'], critere_province)
-        total_province = addMargeToTotalIfWeekend(total_province, date, facturationHolidays)
-        facturationDB.total_province = total_province
-        facturationDB.diff_province = 0
-        facturationDB.UM_province = getUM(prep['prep_province'], critere_province)
-        if('UM_province' in prep and facturationDB.UM_province < float(prep['UM_province'])):
-            facturationDB.UM_province = prep['UM_province']
-            total_province, diff_province = getFacturationTotalWithDepassement(prep['prep_province'], critere_province, prep['UM_province'])
-            total_province = addMargeToTotalIfWeekend(total_province, date, facturationHolidays)
-            facturationDB.total_province = total_province
-            facturationDB.diff_province = diff_province
-
-def addMargeToTotalIfWeekend(total, date, facturationHolidays):
-    holidaysList =facturationHolidays.holidays.split(',')
-    weekendsDaysList = facturationHolidays.weekends.split(',')
-    for holiday in holidaysList:
-        if date == holiday:
-            total = total * (1 +facturationHolidays.marge /100)
-    for weekend in weekendsDaysList:
-        if int(weekend) == datetime.strptime(date, "%Y-%m-%d").date().weekday():
-            total = total * (1 +facturationHolidays.marge /100)
-    return(total)
-
-@api_view(['POST'])
-def addMonthFacturation(request):
-    preparations = request.data['preparations']
-    code_client = request.data['code_client']
-    dates = request.data['date']
-    code_client = request.data['code_client']
-    for prep in preparations:
-        facturationDB = Facturation()
-        facturationDB.code_client = prep['code_client']
-        facturationDB.nom_client = Client.objects.get(code_client=prep['code_client']).nom_client
-        facturationDB.date = prep['date']
-        if('prep_jour' in prep):
-            facturationDB.prep_jour = prep['prep_jour']
-        if('prep_nuit' in prep):
-            facturationDB.prep_nuit = prep['prep_nuit']
-        if('prep_province' in prep):
-            facturationDB.prep_province = prep['prep_province']
-        try:
+            response = calculateTotals(facturationDB,prep,code_client, prep['date'], facturationHolidays)
+            if(not response):
+                return JsonResponse({'message': 'veuiller remplir la matrice du client'}, status=status.HTTP_400_BAD_REQUEST)
             facturationDB.save()
         except Exception as e:
             print(e)
-            return JsonResponse({'message': 'date already exists'}, status=status.HTTP_200_OK)
-
+            #the below code allow backend to insert new preparations
+            facturationDB = Facturation()
+            facturationDB.code_client = code_client
+            facturationDB.nom_client = Client.objects.get(code_client=code_client).nom_client
+            facturationDB.date = prep['date']
+            response = calculateTotals(facturationDB,prep,code_client, prep['date'], facturationHolidays)
+            if(not response):
+                return JsonResponse({'message': 'veuiller remplir la matrice du client'}, status=status.HTTP_400_BAD_REQUEST)
+            facturationDB.save()
     return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)
+
 
 @api_view(['POST'])
 def getFacturation(request):
@@ -369,7 +107,6 @@ def getFacturation(request):
     mois = request.data['mois']
     fact = getFacturationForMonth(code_client, mois)
     return HttpResponse(jsonpickle.encode(fact, unpicklable=False), content_type="application/json")
-
 
 @api_view(['POST'])
 def downloadExcelFacturation(request):
@@ -389,7 +126,6 @@ def downloadExcelFacturation(request):
             else:
                 row.append(f.__dict__[key])
         rows.append(row)
-    #print(fact[0].total_jour)
     createFileFacturationFromColumnAndRows(columns, rows, fileName)
     with open(fileName, 'rb') as f:
         file = f.read()
@@ -399,20 +135,6 @@ def downloadExcelFacturation(request):
     os.remove(fileName)
     return response
 
-    return JsonResponse({'columns': columns, 'rows': rows}, status=status.HTTP_200_OK)
-
-    return HttpResponse(jsonpickle.encode(fact[0].keys(), unpicklable=False), content_type="application/json")
-def createFileFacturationFromColumnAndRows(columns, rows, fileName):
-    df = pd.DataFrame(rows, columns=columns)
-    df.to_excel(fileName, index=False)
-
-
-@api_view(['POST'])
-def getMonthFacturation(request):
-    code_client = request.data['code_client']
-    nom_client,fact = getMonthsFacturationForClient(code_client)
-    return HttpResponse(jsonpickle.encode({'nom_client': nom_client, 'months':fact}, unpicklable=False), content_type="application/json")
-
 @api_view(['POST'])
 def getMonthFacturationWithTotal(request):
     code_client = request.data['code_client']
@@ -421,7 +143,11 @@ def getMonthFacturationWithTotal(request):
         nom_client = factList[0].nom_client
         current_month = factList[0].date.strftime("%m-%Y")
     else:
-        return HttpResponse(jsonpickle.encode({'nom_client': Client.objects.get(code_client=code_client).nom_client, 'months':[]}, unpicklable=False), content_type="application/json")
+        try:
+            nom_client = Client.objects.get(code_client=code_client).nom_client
+        except Exception:
+            nom_client=""
+        return HttpResponse(jsonpickle.encode({'nom_client': nom_client , 'months':[]}, unpicklable=False), content_type="application/json")
 
     
     somme = 0
@@ -486,47 +212,8 @@ def CalculateRealUM(request):
             excelfile = pd.read_excel('tmp.xlsx', usecols="J,K")
             somme_UM += CalculRealUM(excelfile)
 
-    # excelfile = pd.read_excel(fileName)
-    # excelfile = excelfile.fillna('')
-    # columns = list(excelfile.columns)
-
-
-
-
-
-    # with open(fileName, 'rb') as f:
-    #     file = f.read()
-
-    #os.remove('tmp.xlsx')
-    # df.to_excel(LivraisonFileName, index=False)
-
     return HttpResponse(jsonpickle.encode({'Unité Mautention':somme_UM, ' fichier_parcourue': nbre_fichier}, unpicklable=False), content_type="application/json")
 
-def CalculRealUM(excelfile: pd.DataFrame):
-    df = excelfile.fillna('')
-    df["TYPE_COND"] = ""
-    df["QTE_BD"] = ""
-    df["UM"] = ""
-    print(df.columns.values)
-    somme_UM = 0
-    for row in df.values:
-        list_article = Conditionnement.objects.filter(CODE_ARTICLE = row[0])
-        if(len(list_article) == 1):
-            row[2] = list_article[0].TYPE_COND
-        elif(len(list_article) > 1):
-            for element in list_article:
-                if(element.QTE <= row[1] and row[1]%element.QTE == 0):
-                    row[2] = element.TYPE_COND
-                    row[3] = element.QTE
-                try:
-                    row[4] = row[1] / row[3]
-                except Exception: 
-                    continue
-        if(row[4] != ''):
-            somme_UM += row[4]
-        print(row)
-    print(somme_UM)
-    return somme_UM
 
 @api_view(['GET'])
 def getHolidays(request):

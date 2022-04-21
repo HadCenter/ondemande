@@ -39,6 +39,7 @@ export class DialogAddClientComponent implements OnInit {
   showLoaderDialog = true;
   selectedClient: any;
   code_client: string = "";
+  nom_client: string = undefined;
   error: string;
   constructor(private route: ActivatedRoute,
     public router: Router,
@@ -75,13 +76,23 @@ export class DialogAddClientComponent implements OnInit {
 
   submit() {
     this.showLoaderDialog = true;
-    let dataToUpdate = {
+    var dataToUpdate : any;
+    if(!this.nom_client){
+      this.nom_client = this.clientControl.value;
+      dataToUpdate = {
+        "code_client": this.code_client,
+        "nom_client": this.nom_client,
+        "parameters": this.matrice,
+      }
+    }else {
+      dataToUpdate = {
       "code_client": this.code_client,
       "parameters": this.matrice,
     }
+  }
     this.service.updateAllMatrice(dataToUpdate).subscribe(res => {
       this.openSnackBar('Modification effectuée avec succées', 'Fermé');
-      this.dialogRef.close(this.code_client);
+      this.dialogRef.close(res.code_client);
       this.showLoaderDialog = false;
     }, err=> {
       this.openSnackBar('Une erreur est survenue', 'Ok');
@@ -93,6 +104,7 @@ export class DialogAddClientComponent implements OnInit {
   changeSelectedClient(client: Client, event: any) {
     if (event.isUserInput) {
       this.code_client = client.codeClient;
+      this.nom_client = client.nomClient;
       this.matrice.forEach(element => {
         element.code_client = client.codeClient;
       });

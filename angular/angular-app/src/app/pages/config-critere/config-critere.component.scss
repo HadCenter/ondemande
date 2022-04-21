@@ -44,6 +44,10 @@ text-align: center;
 .btn-add.mat-mini-fab{
   background-color:#00bcd4;
 }
+.btn-remove.mat-mini-fab{
+  background-color: red;
+  margin: 0 10px;
+}
 .content-bloc{
   display: inline-grid; place-items: center;
 }

@@ -1,0 +1,84 @@
+<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'"
+        [show]="monthDays.length == 0"></app-loader>
+    <base-card>
+        <base-card-title>
+            <h1 class="mdl-card__title-text">Préparer facture {{ monthInLetters }} pour le client {{client_name}} :</h1>
+            <div class="mdl-layout-spacer"></div>
+            <!-- <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+        </base-pagination> -->
+            <!-- <button style="margin-left: 3px;" (click)="randomize()"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">hasard
+            </button> -->
+
+            <button style="margin-left: 3px;" (click)="insertFacturation()"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Ajouter
+                Facturation
+            </button>
+
+        </base-card-title>
+
+
+        <base-card-body class="no-padding">
+            <table aria-describedby="clients-table"
+                class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone mdl-data-table mdl-js-data-table   sorting-table">
+                <thead>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric">
+                            <span>Jour</span>
+                        </th>
+
+                        <th *ngFor="let header of advancedHeaders" class="mdl-data-table__cell--non-numeric" colspan="2">
+
+                            <span>{{ header.name }}</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let day of monthDays; let i = index">
+
+                        <td class="mdl-data-table__cell--non-numeric">{{ day | date:'EEEE d MMM y' }}</td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" [(ngModel)]="JourPreparations[i]" (keypress)="numberOnly($event)"
+                                placeholder="1,2..">
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" [(ngModel)]="UM_jour[i]" (keypress)="numberOnly($event)"
+                                placeholder="Unité Manut.">
+                        </td>
+
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" [(ngModel)]="NuitPreparations[i]" (keypress)="numberOnly($event)"
+                                placeholder="1,2..">
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" [(ngModel)]="UM_nuit[i]" (keypress)="numberOnly($event)"
+                                placeholder="Unité Manut.">
+                        </td>
+
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" [(ngModel)]="ProvincePreparations[i]"
+                                (keypress)="numberOnly($event)" placeholder="1,2..">
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" [(ngModel)]="UM_province[i]"
+                                (keypress)="numberOnly($event)" placeholder="Unité Manut.">
+                        </td>
+
+                        <!-- <td class="column-actions mdl-data-table__cell--non-numeric">
+                            <button style="margin-left: 3px;" (click)="opendetailsDialog(row)"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Afficher
+                            </button>
+                            <button style="margin-left: 3px;"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Imprimer
+                            </button>
+
+                        </td> -->
+
+                    </tr>
+                </tbody>
+            </table>
+        </base-card-body>
+    </base-card>
+</div>

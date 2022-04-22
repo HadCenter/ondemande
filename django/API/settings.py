@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'talendEsb',
     'channels',
     'websocket',
-    'embededPowerBI'
+    'embededPowerBI',
+    'facturation'
 ]
 
 MIDDLEWARE = [

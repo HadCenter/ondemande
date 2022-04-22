@@ -1,0 +1,117 @@
+span.mat-button-wrapper {
+    color: white !important;
+    }
+
+.custom-snackbar button
+{
+  span.mat-button-wrapper {
+  color: #ff4081 !important;
+}
+}
+
+
+body {
+  padding-top: 20px;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+.content-labels {
+  display: flex;
+  align-items: center;
+}
+.content-card-line {
+  padding: 20px 16px !important;
+}
+.reorder-card {
+  display: flex;
+  justify-content: space-between;
+}
+#conteneur {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.bloc-input{
+text-align: center;
+}
+
+.custom-card-title{
+  display: contents;
+}
+::ng-deep.mat-mini-fab{
+  background-color: #00bcd4 !important;
+}
+.btn-add.mat-mini-fab{
+  background-color:#00bcd4;
+}
+.btn-remove.mat-mini-fab{
+  background-color: red;
+  margin: 0 10px;
+}
+.content-bloc{
+  display: inline-grid; place-items: center;
+}
+.label-title{
+  font-weight: 600;
+  font-size: small;
+}
+
+
+
+mat-form-field.mat-form-field.form-critere {
+  text-align: center ;
+  background-color: transparent;
+  margin-left: 4px;
+    margin-right: 4px;
+}
+mat-form-field.mat-form-field-disabled {
+  text-align: center ;
+  background-color: transparent
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: transparent;
+}
+.mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-flex{
+  background-color: transparent;
+}
+.mat-form-field-wrapper {
+  padding-bottom: 1.34375em !important  ;
+}
+.mat-form-field-ripple {
+  background-color: #00bcd4;
+}
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+  /* color: rgba(0, 0, 0, 0.38); */
+  color: #fff;
+  font-size: 1rem;
+}
+.mat-form-field-flex {
+
+  width: 100%;
+}
+
+.nom-client{
+  font-weight: 500;
+  padding-left: 5px;
+}
+.custom-card{
+  padding: 8px 16px;
+  background-color: #333;
+  z-index: 1;
+}
+.bloc-productivite{
+  margin: 16px;
+}
+.content-title-productivite{
+  margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: gray !important;
+  opacity: 1; /* Firefox */
+}

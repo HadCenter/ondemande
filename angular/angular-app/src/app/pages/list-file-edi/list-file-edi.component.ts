@@ -1,9 +1,9 @@
-import { Component, HostBinding, Inject } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { ListFileEdiService } from './list-file-edi.service';
 import { saveAs } from 'file-saver';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ImportFileEdiService } from './dialog/import-file-edi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';

@@ -1,0 +1,294 @@
+<div class="content-labels">
+  <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <base-card-title class="reorder-card">
+      <div class='custom-card-title'>
+        <label>Configuration des paramètres pour </label>
+        <label class="nom-client">{{matrice[0]?.nom_client}}</label>
+        <div class="mdl-layout-spacer"></div>
+        <button (click)='updateMatrice()'
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Modifier
+        </button>
+      </div>
+
+    </base-card-title>
+    <app-loader [width]="'100%'" [position]="'initial'" [height]="'75vh'" [bg]="'transparant'" [show]="showLoaderMatrice">
+    </app-loader>
+    <base-card-body *ngIf="matrice.length>=1" class="content-card-line">
+
+        <div class="custom-card bloc-productivite">
+          <div>
+            <div
+              class="content-title-productivite mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+
+              <div>
+                <label class="label-title">Productivité</label>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-grid" style="padding-top: 0px ;padding-bottom:0px">
+            <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <label>Unité</label>
+              <mat-form-field appearance="fill" style="background-color: transparent;">
+                <input matInput [(ngModel)]="unite" disabled>
+              </mat-form-field>
+            </div>
+            <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <label>(sec)</label>
+              <mat-form-field class="form-critere" appearance="fill">
+
+                <input matInput type="number" [(ngModel)]="matrice[0].productivite">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+
+        <div>
+
+          <div class="mdl-grid">
+            <div class=" custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;">
+                <div>
+                  <label class="label-title">Coût horaire PREP</label>
+                </div>
+                <div class="bloc-input" *ngFor="let item of matrice; let i = index; trackBy:customTrackBy">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
+
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="i<=matrice.length-2">
+                    </mat-form-field>
+                    <div>
+                      <button class="btn-remove" mat-mini-fab *ngIf="i>=matrice.length-1" (click)="removeCrietere()"
+                        [disabled]="matrice.length == 1">
+                        <mat-icon>remove</mat-icon>
+                      </button>  
+                    <button class="btn-add" mat-mini-fab *ngIf="i>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    </div>
+
+                  </div>
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.CHP">
+                  </mat-form-field>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;
+            ">
+                <div style="text-align: initial;">
+                  <label class="label-title">Coût horaire COORD</label>
+                </div>
+                <div class="bloc-input" *ngFor="let item of matrice; let j = index;">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
+
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="j<=matrice.length-2">
+                    </mat-form-field>
+                    <div>
+                      <button class="btn-remove" mat-mini-fab *ngIf="j>=matrice.length-1" (click)="removeCrietere()"
+                        [disabled]="matrice.length == 1">
+                        <mat-icon>remove</mat-icon>
+                      </button>  
+                    <button class="btn-add" mat-mini-fab *ngIf="j>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+
+                  </div>
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.CHC">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!--*************************************************-->
+
+        <div>
+
+          <div class="mdl-grid">
+            <div class=" custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;
+          ">
+                <div>
+                  <label class="label-title">Forfait nbre heure</label>
+                </div>
+                <div class="bloc-input" *ngFor="let item of matrice; let k = index;">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
+
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="k<=matrice.length-2">
+                    </mat-form-field>
+                    <div>
+                      <button class="btn-remove" mat-mini-fab *ngIf="k>=matrice.length-1" (click)="removeCrietere()"
+                        [disabled]="matrice.length == 1">
+                        <mat-icon>remove</mat-icon>
+                      </button>  
+
+                    <button class="btn-add" mat-mini-fab *ngIf="k>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    </div>
+                  </div>
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.forfaitNbHeure">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;
+            ">
+                <div style="text-align: initial;">
+                  <label class="label-title">Forfait nbre heure COORD</label>
+                </div>
+                <div class="bloc-input" *ngFor="let item of matrice; let l = index;">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
+
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="l<=matrice.length-2">
+                    </mat-form-field>
+                    <div>
+                      <button class="btn-remove" mat-mini-fab *ngIf="l>=matrice.length-1" (click)="removeCrietere()"
+                        [disabled]="matrice.length == 1">
+                        <mat-icon>remove</mat-icon>
+                      </button>  
+
+                    <button class="btn-add" mat-mini-fab *ngIf="l>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    </div>
+                  </div>
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.forfaitNbHeureCoord">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!--*************************************************-->
+
+        <div>
+
+          <div class="mdl-grid">
+            <div class=" custom-card mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div style="    display: grid;
+          ">
+                <div>
+                  <label class="label-title">Temps préparation (min)</label>
+                </div>
+                <div class="bloc-input" *ngFor="let item of matrice; let m = index;">
+                  <div class="content-bloc">
+                    <mat-form-field class="form-critere" appearance="fill">
+
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="m<=matrice.length-2">
+                    </mat-form-field>
+                    <div>
+                      <button class="btn-remove" mat-mini-fab *ngIf="m>=matrice.length-1" (click)="removeCrietere()"
+                        [disabled]="matrice.length == 1">
+                        <mat-icon>remove</mat-icon>
+                      </button>  
+
+                    <button class="btn-add" mat-mini-fab *ngIf="m>=matrice.length-1" (click)="addNewCrietere()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    </div>
+                  </div>
+
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" placeholder="valeur" [(ngModel)]="item.TP">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+
+            <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <div class="custom-card" style="    display: grid;
+            ">
+                <div style="text-align: initial;">
+                  <label class="label-title">Marge</label>
+                </div>
+                <div class="bloc-input">
+
+                  <mat-form-field class="form-critere" appearance="fill">
+
+                    <input matInput type="number" [(ngModel)]="matrice[0].marge">
+                  </mat-form-field>
+                  %
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- <div class="custom-card bloc-productivite">
+          <div>
+            <div
+              class="content-title-productivite mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+
+              <div>
+                <label class="label-title">Conditionnement Weekend et Semaine</label>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-grid" style="padding-top: 0px ;padding-bottom:0px">
+            <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <label>Semaine</label>
+              <mat-form-field class="form-critere" appearance="fill">
+
+                <input matInput type="number" [(ngModel)]="unite">
+              </mat-form-field>
+            </div>
+            <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <label>Weekend</label>
+              <mat-form-field class="form-critere" appearance="fill">
+
+                <input matInput type="number" [(ngModel)]="matrice[0].productivite">
+              </mat-form-field>
+            </div>
+            <div class="bloc-input mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+              <label>Début Weekend</label>
+              <mat-form-field class="form-critere" appearance="fill">
+                <input matInput type="time" >
+              </mat-form-field>
+            </div>
+            <div class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone"
+            >
+              <label style="display: block;">Fin Weekend</label>
+              <mat-form-field class="bloc-input" appearance="fill" style="  display: flex; /* 2. display flex to the rescue */
+              flex-direction: row;
+            ">
+
+                <input matInput type="text" value="Dimanche" style="display: block;">
+                <input matInput type="time" style="display: block;">
+              </mat-form-field>
+            </div>
+
+          </div>
+        </div> -->
+
+    </base-card-body>
+  </base-card>
+</div>

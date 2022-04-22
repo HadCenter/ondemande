@@ -37,6 +37,7 @@ export class SidebarComponent extends BaseSidebarComponent {
         {
           name: "Facturation", children: [
             { name: 'Facturation transport', link: '/list-transaction' },
+            { name: 'Facturation préparation', link: '/facturation-preparation' },
             { name: 'Facturation logistique', link: '/facturation-logistique' },
           ]
           , icon: 'list'

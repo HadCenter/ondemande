@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpgradableComponent } from 'theme/components/upgradable';
 import { DetailsFileEdiService } from './details-file-edi.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 
 export interface MouseEvent {

@@ -1,6 +1,6 @@
 <base-card style="box-shadow: none; ">
   <base-card-title>
-    <h1 class="mdl-card__title-text">Informations facture préparation du mois {{nom_mois}} pour le client {{client_name}}</h1>
+    <h1 class="mdl-card__title-text">Facture {{nom_mois}} pour le client {{client_name}}</h1>
     <div class="mdl-layout-spacer"></div>
     <span *ngIf="advancedTable && advancedTable?.length > 0" (click)="downloadFile();$event.stopPropagation();"
                 class="download material-icons">

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FacturationPreparationService } from '../facturation-preparation/facturation-preparation.service';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfigJourFerieService } from '../config-jour-ferie/config-jour-ferie.service';
 
 @Component({
   selector: 'app-details-facture',
@@ -20,6 +21,7 @@ export class DetailsFactureComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private router: Router,
+    private configJourFerieService: ConfigJourFerieService,
     private service: FacturationPreparationService) { }
 
   public advancedHeaders: any = [];
@@ -34,12 +36,18 @@ export class DetailsFactureComponent implements OnInit {
   public mois: any;
   public client: any;
   public client_name:string="";
+  jourFerieList: string[] = [];
   public readonly sortOrder = {
     asc: 1,
     desc: -1,
   };
 
   ngOnInit(): void {
+    this.getFacturation();
+    this.getHolidaysAndWeekends();
+  }
+
+  getFacturation(){
     this.moisFacture = this.route.snapshot.params.facture;
     this.client = this.route.snapshot.params.client;
     var date = this.moisFacture.split('-');
@@ -82,7 +90,21 @@ export class DetailsFactureComponent implements OnInit {
       }, error => this.openSnackBar('Une erreur est survenue', 'Ok')
       );
   }
+  getHolidaysAndWeekends() {
+    this.configJourFerieService.getHolidays().subscribe(res => {
+      this.jourFerieList = res.holidays.split(',');
+    },
+      err => {
+        console.error(err)
+      })
+  }
 
+  checkIfWeekendOrHoliday(date): boolean {
+    if(this.jourFerieList.includes(date.substring(0,10))){
+      return true
+    }
+    return false
+  }
   backToPreviousPage(){
     this.router.navigate([`/liste-facturation-preparation/${this.client}`]);
   }

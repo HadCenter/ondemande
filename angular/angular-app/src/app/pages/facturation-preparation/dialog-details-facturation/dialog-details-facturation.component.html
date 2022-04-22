@@ -27,7 +27,6 @@
 
 
           <td class="mdl-data-table__cell--non-numeric">{{ row.date | date:'EEEE d MMM y' }} <span *ngIf="checkIfWeekendOrHoliday(row.date)">*</span></td>
-          <td class="mdl-data-table__cell--non-numeric">{{ row.code_client}}</td>
           <td class="mdl-data-table__cell--non-numeric">{{ row.prep_jour}}</td>
           <td class="mdl-data-table__cell--non-numeric">{{ row.UM_jour}}</td>
           <td class="mdl-data-table__cell--non-numeric">{{ row.prep_nuit}}</td>
@@ -49,7 +48,6 @@
           <td class="mdl-data-table__cell--non-numeric"></td>
           <td class="mdl-data-table__cell--non-numeric"></td>
           <td class="mdl-data-table__cell--non-numeric"></td>
-          <td class="mdl-data-table__cell--non-numeric"></td>
           <td class="mdl-data-table__cell--non-numeric"><b>Total :</b></td>
           <td class="mdl-data-table__cell--non-numeric">{{ sum_jour | number : '1.1-3' }}</td>
           <td class="mdl-data-table__cell--non-numeric">{{ sum_nuit | number : '1.1-3' }}</td>
@@ -60,7 +58,6 @@
 
         </tr>
         <tr style="background-color: #333;">
-          <td class="mdl-data-table__cell--non-numeric"></td>
           <td class="mdl-data-table__cell--non-numeric"></td>
           <td class="mdl-data-table__cell--non-numeric"></td>
           <td class="mdl-data-table__cell--non-numeric"></td>

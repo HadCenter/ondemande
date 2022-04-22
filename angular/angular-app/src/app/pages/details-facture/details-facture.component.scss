@@ -85,7 +85,9 @@ base-card-body.mdl-card__supporting-text {
   vertical-align: middle;
   cursor: pointer;
 }
-
+.scroll-body-details {
+  overflow: auto!important;
+}
 // tr:nth-child(even){
 //   background-color: red;
 // }

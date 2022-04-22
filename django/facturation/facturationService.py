@@ -51,8 +51,7 @@ def getFacturationForMonth(code_client, mois):
     factList = Facturation.objects.filter(code_client = code_client, date__month = month, date__year = year).order_by('date')
     listCritereMatrice= list()
     for critere in factList:
-        critereResponse = FacturationInfo(date= critere.date, code_client=critere.code_client,
-                                 prep_jour=critere.prep_jour, UM_jour=critere.UM_jour,
+        critereResponse = FacturationInfo(date= critere.date, prep_jour=critere.prep_jour, UM_jour=critere.UM_jour,
                                   prep_nuit=critere.prep_nuit, UM_nuit=critere.UM_nuit,
                                  prep_province=critere.prep_province, UM_province=critere.UM_province,
                                   total_jour=critere.total_jour, total_nuit = critere.total_nuit , 

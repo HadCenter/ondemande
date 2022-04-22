@@ -55,9 +55,8 @@ class Facturation(models.Model):
         db_table = 'facturation_preparation'
 
 class FacturationInfo:
-    def __init__(self,date: Date, code_client: str, prep_jour : int , UM_jour:int, prep_nuit: int,UM_nuit:int, prep_province: int, UM_province: int, total_jour: str, total_nuit:str, total_province:str,diff_jour: str, diff_nuit:str, diff_province:str):
+    def __init__(self,date: Date, prep_jour : int , UM_jour:int, prep_nuit: int,UM_nuit:int, prep_province: int, UM_province: int, total_jour: str, total_nuit:str, total_province:str,diff_jour: str, diff_nuit:str, diff_province:str):
         self.date = date
-        self.code_client = code_client
         self.prep_jour = prep_jour
         self.UM_jour = UM_jour
         self.prep_nuit = prep_nuit

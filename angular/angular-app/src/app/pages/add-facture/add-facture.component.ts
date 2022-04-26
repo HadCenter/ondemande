@@ -27,6 +27,10 @@ export class AddFactureComponent implements OnInit {
   existingFacturation: any;
   monthNumber: number;
   yearNumber: number;
+  UM_jour_one_prep: number;
+  UM_nuit_one_prep: number;
+  UM_province_one_prep: number;
+
 
   constructor(private service: AddFactureService,
     private facturationService: FacturationPreparationService,
@@ -75,6 +79,26 @@ export class AddFactureComponent implements OnInit {
     return new Date(year, month + 1, 0).getDate();
   }
 
+  changeUM(i,param){    
+    if(param == "jour" && this.UM_jour_one_prep ){
+      this.UM_jour[i] = parseInt(this.JourPreparations[i])*this.UM_jour_one_prep;
+      if(this.JourPreparations[i].length == 0){
+        this.UM_jour[i] = "";
+      }
+    }else if(param == "nuit" && this.UM_nuit_one_prep){
+      this.UM_nuit[i] = parseInt(this.NuitPreparations[i])*this.UM_nuit_one_prep;
+      if(this.NuitPreparations[i].length == 0){
+        this.UM_nuit[i] = "";
+      }
+      
+    }else if( param == "province" && this.UM_province_one_prep ){
+      this.UM_province[i] = parseInt(this.ProvincePreparations[i])*this.UM_province_one_prep;
+      if(this.ProvincePreparations[i].length == 0){
+        this.UM_province[i] = "";
+      }
+    }
+  }
+
   get_days_list() {
     this.monthInLetters = new Date(this.yearNumber, this.monthNumber, 1).toLocaleString('default', { month: 'long' }).toLocaleUpperCase();
     this.mois = this.datePipe.transform(new Date(this.yearNumber, this.monthNumber, 1), 'MM-yyyy');
@@ -86,7 +110,11 @@ export class AddFactureComponent implements OnInit {
       "mois": this.mois
     }
     this.facturationService.getFacturationForClients(data).subscribe(res => {
-      this.existingFacturation = res;
+      this.existingFacturation = res.facture;
+      this.UM_jour_one_prep = parseInt(res.UM_jour);
+      this.UM_nuit_one_prep = parseInt(res.UM_nuit);
+      this.UM_province_one_prep = parseInt(res.UM_province);
+
       for (let i = 1; i <= totalDaysInMonth; i++) {
         var monthDate = new Date(this.yearNumber, this.monthNumber, i);
         this.monthDays.push(monthDate);
@@ -106,8 +134,11 @@ export class AddFactureComponent implements OnInit {
     )
   }
 
-  numberOnly(event): boolean {
+  numberOnly(event,phrase): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
+    if((phrase == undefined || phrase.length == 0 ) && charCode == 48){
+      return false;
+    }
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
     }

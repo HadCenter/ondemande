@@ -59,12 +59,18 @@ export class FacturationPreparationComponent implements OnInit {
           first_iteration = false;
         }
       })
-
+      // console.log(today.getMonth()+1 + " :: "+this.advancedTable);
       if (this.advancedTable.length == 0) {
         this.advancedTable.push({"month":this.datePipe.transform(new Date(today.getFullYear(), today.getMonth() + 1, 1), 'MM-yyyy'), "total": 0 });
         this.advancedTable.push({"month":this.datePipe.transform(new Date(today.getFullYear(), today.getMonth(), 1), 'MM-yyyy'), "total": 0 });
       }
-
+      this.advancedTable.forEach(element => {
+        var date = element.month.split('-');
+        var currentMonth = parseInt(date[0]);
+        console.log(currentMonth);
+        
+        this.dates.push(new Date(parseInt(date[1]), parseInt(date[0]) - 1, 1).toLocaleString('default', { month: 'long', year: 'numeric' }).toLocaleUpperCase())
+      })
       this.advancedTable.forEach(element => {
         var date = element.month.split('-');
         this.dates.push(new Date(parseInt(date[1]), parseInt(date[0]) - 1, 1).toLocaleString('default', { month: 'long', year: 'numeric' }).toLocaleUpperCase())

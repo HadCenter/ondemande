@@ -57,8 +57,8 @@ export class DialogDetailsFacturationComponent implements OnInit {
     this.nom_mois = new Date(parseInt(date[1]), parseInt(date[0]) - 1, 1).toLocaleString('default', { month: 'long' }).toLocaleUpperCase();
     this.client_name = this.service.getClient();
     this.service.getFacturationForClients(data).subscribe(res => {
-      this.advancedTable = res;
-      if (res.length > 0) {
+      this.advancedTable = res.facture;
+      if (res.facture.length > 0) {
         this.advancedHeaders = Object.keys(this.advancedTable[0]);
         this.advancedTable.forEach(element => {
           this.sum_jour += element.total_jour;

@@ -60,7 +60,7 @@ export class DetailsFactureComponent implements OnInit {
       "mois": this.moisFacture
     }
     this.service.getFacturationForClients(data).subscribe(res => {
-      this.advancedTable = res;
+      this.advancedTable = res.facture;
       this.advancedHeaders = Object.keys(this.advancedTable[0]);
       this.advancedTable.forEach(element => {
         this.sum_jour += element.total_jour;

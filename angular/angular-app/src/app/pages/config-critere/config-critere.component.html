@@ -55,7 +55,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="i<=matrice.length-2">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" (ngModelChange)="item.param = $event.toLowerCase()" [disabled]="i<=matrice.length-2">
                     </mat-form-field>
                     <div>
                       <button class="btn-remove" mat-mini-fab *ngIf="i>=matrice.length-1" (click)="removeCrietere()"
@@ -88,7 +88,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="j<=matrice.length-2">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" (ngModelChange)="item.param = $event.toLowerCase()" [disabled]="j<=matrice.length-2">
                     </mat-form-field>
                     <div>
                       <button class="btn-remove" mat-mini-fab *ngIf="j>=matrice.length-1" (click)="removeCrietere()"
@@ -128,7 +128,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="k<=matrice.length-2">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" (ngModelChange)="item.param = $event.toLowerCase()" [disabled]="k<=matrice.length-2">
                     </mat-form-field>
                     <div>
                       <button class="btn-remove" mat-mini-fab *ngIf="k>=matrice.length-1" (click)="removeCrietere()"
@@ -160,7 +160,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="l<=matrice.length-2">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" (ngModelChange)="item.param = $event.toLowerCase()"  [disabled]="l<=matrice.length-2">
                     </mat-form-field>
                     <div>
                       <button class="btn-remove" mat-mini-fab *ngIf="l>=matrice.length-1" (click)="removeCrietere()"
@@ -200,7 +200,7 @@
                   <div class="content-bloc">
                     <mat-form-field class="form-critere" appearance="fill">
 
-                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" [disabled]="m<=matrice.length-2">
+                      <input matInput placeholder="midi, soir, province..." [(ngModel)]="item.param" (ngModelChange)="item.param = $event.toLowerCase()" [disabled]="m<=matrice.length-2">
                     </mat-form-field>
                     <div>
                       <button class="btn-remove" mat-mini-fab *ngIf="m>=matrice.length-1" (click)="removeCrietere()"

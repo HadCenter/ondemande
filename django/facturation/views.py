@@ -134,7 +134,7 @@ def downloadExcelFacturation(request):
     columns = []
     rows = []
     fact = getFacturationForMonth(code_client, mois)
-    for f in fact:
+    for f in fact["facture"]:
         row = []
         for key in f.__dict__:
             if key not in columns:

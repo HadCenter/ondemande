@@ -6,7 +6,7 @@ import jsonpickle
 from rest_framework import status
 from rest_framework.decorators import api_view
 from core.ediFileService import connect
-from .facturationService import CalculRealUM, calculateTotals, createFileFacturationFromColumnAndRows, getFacturationForMonth, getMatriceForClient, getMatriceForParam, getAllClientsinDB
+from .facturationService import CalculRealUM, calculateAllFacturationsForAllClients, calculateTotals, createFileFacturationFromColumnAndRows, getFacturationForMonth, getMatriceForClient, getMatriceForParam, getAllClientsinDB
 from .models import FacturationHolidays, MatriceFacturation, Facturation
 from random import randrange
 from django.conf import settings
@@ -134,7 +134,7 @@ def downloadExcelFacturation(request):
     columns = []
     rows = []
     fact = getFacturationForMonth(code_client, mois)
-    for f in fact:
+    for f in fact["facture"]:
         row = []
         for key in f.__dict__:
             if key not in columns:
@@ -255,5 +255,5 @@ def updateHolidays(request):
         facturationHolidays.save()
     except Exception as e:
         return JsonResponse({'message': 'error occured'}, status=status.HTTP_404_NOT_FOUND)
-
+    calculateAllFacturationsForAllClients()
     return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)

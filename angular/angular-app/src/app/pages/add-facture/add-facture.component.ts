@@ -68,7 +68,7 @@ export class AddFactureComponent implements OnInit {
       return false;
     }
 
-    if (this.monthNumber != date.getMonth() && this.monthNumber != date.getMonth() + 1) {
+    if (this. monthNumber != date.getMonth() - 1 &&  this.monthNumber != date.getMonth() && this.monthNumber != date.getMonth() + 1) {
       this.router.navigate(['/liste-facturation-preparation', this.code_client]);
       return false;
     }

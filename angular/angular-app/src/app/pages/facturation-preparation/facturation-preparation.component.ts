@@ -43,40 +43,37 @@ export class FacturationPreparationComponent implements OnInit {
     }
     this.service.getMonthListFacturationForClient(data).subscribe(res => {
       this.advancedTable = res.months.reverse();
-      var first_iteration = true;
-      var today = new Date();
-      this.advancedTable.forEach(element => {
-        var date = element.month.split('-');
-        //var nom_mois = new Date(parseInt(date[1]), parseInt(date[0]) - 1, 1).toLocaleString('default', { month: 'long' }).toLocaleUpperCase();
-        var month = new Date(parseInt(date[1]), parseInt(date[0]) + 1, 1);
-        var nextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 1);
-
-        if (first_iteration) {
-          if ((Date.parse(month.toDateString()) == Date.parse(nextMonth.toDateString()))) {
-            this.advancedTable.unshift({ "month": this.datePipe.transform(new Date(parseInt(date[1]), parseInt(date[0]), 1), 'MM-yyyy'), "total": 0 });
-            //this.advancedTable.unshift(new Date(parseInt(date[1]), parseInt(date[0]), 1).toLocaleString('default', { month: 'long' }).toLocaleUpperCase() );
-          }
-          first_iteration = false;
-        }
-      })
-      // console.log(today.getMonth()+1 + " :: "+this.advancedTable);
-      if (this.advancedTable.length == 0) {
-        this.advancedTable.push({"month":this.datePipe.transform(new Date(today.getFullYear(), today.getMonth() + 1, 1), 'MM-yyyy'), "total": 0 });
-        this.advancedTable.push({"month":this.datePipe.transform(new Date(today.getFullYear(), today.getMonth(), 1), 'MM-yyyy'), "total": 0 });
-      }
-      this.advancedTable.forEach(element => {
-        var date = element.month.split('-');
-        var currentMonth = parseInt(date[0]);
-        console.log(currentMonth);
-        
-        this.dates.push(new Date(parseInt(date[1]), parseInt(date[0]) - 1, 1).toLocaleString('default', { month: 'long', year: 'numeric' }).toLocaleUpperCase())
-      })
-      this.advancedTable.forEach(element => {
-        var date = element.month.split('-');
-        this.dates.push(new Date(parseInt(date[1]), parseInt(date[0]) - 1, 1).toLocaleString('default', { month: 'long', year: 'numeric' }).toLocaleUpperCase())
-      })
       this.nom_client = res.nom_client;
       this.service.setClient(this.nom_client);
+      var today = new Date();
+      var currentMonth = today.getMonth() + 1;
+      
+      //add current month if not already exist
+      if(!this.advancedTable.some(el => el.month == this.datePipe.transform(new Date(today.getFullYear(), today.getMonth(), 1), 'MM-yyyy'))){
+        this.advancedTable.unshift({ "month": this.datePipe.transform(new Date(today.getFullYear(), today.getMonth(), 1), 'MM-yyyy'), "total": 0 });
+      }
+
+      //add next month if not already exist
+      if(!this.advancedTable.some(el => el.month == this.datePipe.transform(new Date(today.getFullYear(), currentMonth, 1), 'MM-yyyy'))){
+        this.advancedTable.unshift({ "month": this.datePipe.transform(new Date(today.getFullYear(), currentMonth, 1), 'MM-yyyy'), "total": 0 });
+      }
+  
+      this.advancedTable.forEach(element => {
+        //permet l'edition du mois actuel(1ere condition) et du mois prochain(2eme condition) et le mois precedent pendant la premiere semaine du mois courant(3eme condition)
+        if(element.month == this.datePipe.transform(new Date(today.getFullYear(), today.getMonth(), 1), 'MM-yyyy') 
+        || element.month == this.datePipe.transform(new Date(today.getFullYear(), currentMonth, 1), 'MM-yyyy') 
+        || (element.month == this.datePipe.transform(new Date(today.getFullYear(), today.getMonth()-1, 1), 'MM-yyyy') && today.getDate() < 7)
+        ){
+          element.allowEdit = true;
+        }else{
+          element.allowEdit = false;
+        }
+
+        //add alphabetic date to elements
+        var date = element.month.split('-');
+        element.date = new Date(parseInt(date[1]), parseInt(date[0]) - 1, 1).toLocaleString('default', { month: 'long', year: 'numeric' }).toLocaleUpperCase();
+
+      })
     },
       err => { 
         this.openSnackBar('Une erreur est survenue', 'Ok');
@@ -129,6 +126,7 @@ export class FacturationPreparationComponent implements OnInit {
       this.openSnackBar('Facture vide, rien à télécharger.', 'Ok');
     }
   }
+  
   backToPreviousPage(){
     this.router.navigate([`/facturation-preparation/`]);
   }

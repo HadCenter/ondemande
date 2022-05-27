@@ -34,8 +34,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   fichierLivraison: any = [];
   fichierMad: any = [];
   fichierMetadata: any = [];
-  displayedColumnsLivraison: string[] = ['toDelete', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'isExpress', 'total_price','billingRoundName'];
-  displayedColumnsException: string[] = ['isDeleted', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque', 'Express', 'billingRoundName'];
+  displayedColumnsLivraison: string[] = ['toDelete', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'isExpress', 'total_price','billingRoundName','ref3'];
+  displayedColumnsException: string[] = ['isDeleted', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque', 'Express', 'billingRoundName','ref3'];
   displayedColumnsMetadata: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'sourceClosureDate', 'realInfoHasPrepared', 'status', 'metadataFACTURATION'];
   displayedColumnsMad: string[] = ['toDelete', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'StartTime', 'ClousureTime'];
   dataSource = new MatTableDataSource<any>(this.fichierLivraison);
@@ -1564,19 +1564,21 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           for (let i = startRow; i <= endRow; i++) {
             if (this.fileSelected == "livraison") {
               dataCopy[i][this.displayedColumnsLivraison[startCol]] = text;
-              if (this.displayedColumnsLivraison[startCol] == "Round_Name") {
+              if (this.displayedColumnsLivraison[startCol] == "ref3") {                
                 dataCopy[i][this.displayedColumnsLivraison[15]] = text;
+
+                dataCopy.forEach(element => {
+                  if(element.Tournee == dataCopy[i]['Tournee'] ){
+                    element.ref3 = text;
+                    element.billingRoundName = text;
+                  }
+                });
+  
               }
-              dataCopy.forEach(element => {
-                if(element.Tournee == dataCopy[i]['Tournee'] ){
-                  element.Round_Name = text;
-                  element.billingRoundName = text;
-                }
-              });
               /**if we modify a column of the livraison file it will be automatically modified at the level of the exception file */
               this.dataSourceException.data.forEach(el => {
-                if(el.Tournee == dataCopy[i]['Tournee'] && this.displayedColumnsLivraison[startCol] == "Round_Name" ){
-                  el.Round_Name = text;
+                if(el.Tournee == dataCopy[i]['Tournee'] && this.displayedColumnsLivraison[startCol] == "ref3" ){
+                  el.ref3 = text;
                   el.billingRoundName = text;
                 }
                 if (dataCopy[i].taskId == el.taskId) {
@@ -1600,8 +1602,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                   else {
                     if (this.displayedColumnsException.indexOf(this.displayedColumnsLivraison[startCol]) > -1) {
                       el[this.displayedColumnsLivraison[startCol]] = text
-                      //if change Round_Name then change billingRoundName
-                      if (this.displayedColumnsLivraison[startCol] == "Round_Name") {
+                      //if change ref3 then change billingRoundName
+                      if (this.displayedColumnsLivraison[startCol] == "ref3") {
                         el[this.displayedColumnsLivraison[15]] = text;
                       }
                     }
@@ -1613,20 +1615,20 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             }
             else if (this.fileSelected == "exception") {
               dataCopy[i][this.displayedColumnsException[startCol]] = text;
-              //if change Round_Name then change billingRoundName
-              if (this.displayedColumnsException[startCol] == "Round_Name") {
+              //if change ref3 then change billingRoundName
+              if (this.displayedColumnsException[startCol] == "ref3") {
                 dataCopy[i][this.displayedColumnsException[14]] = text;
+                dataCopy.forEach(element => {
+                  if(element.Tournee == dataCopy[i]['Tournee']){
+                    element.ref3 = text;
+                    element.billingRoundName = text;
+                  }
+                });  
               }
-              dataCopy.forEach(element => {
-                if(element.Tournee == dataCopy[i]['Tournee']){
-                  element.Round_Name = text;
-                  element.billingRoundName = text;
-                }
-              });
               /**if we modify a column of the exception file it will be automatically modified at the level of the delivery file */
               this.dataSource.data.forEach(el => {
-                if(el.Tournee == dataCopy[i]['Tournee'] && this.displayedColumnsLivraison[startCol] == "Round_Name" ){
-                  el.Round_Name = text;
+                if(el.Tournee == dataCopy[i]['Tournee'] && this.displayedColumnsLivraison[startCol] == "ref3" ){
+                  el.ref3 = text;
                   el.billingRoundName = text;
                 }
                 if (dataCopy[i].taskId == el.taskId) {
@@ -1650,8 +1652,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                   else {
                     if (this.displayedColumnsLivraison.indexOf(this.displayedColumnsException[startCol]) > -1) {
                       el[this.displayedColumnsException[startCol]] = text;
-                      //if change Round_Name then change billingRoundName
-                      if (this.displayedColumnsException[startCol] == "Round_Name") {
+                      //if change ref3 then change billingRoundName
+                      if (this.displayedColumnsException[startCol] == "ref3") {
                         el[this.displayedColumnsException[14]] = text;
                       }                      
                     }
@@ -1849,13 +1851,13 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     } else {
       this.showLoader = true;
       if (this.dataSource.data.length > 0) {
-        this.copyDataSource.map(element => element.Round_Name = element.billingRoundName);
+        this.copyDataSource.map(element => element.ref3 = element.billingRoundName);
         this.copyDataSource.map(element => delete element.billingRoundName);
         this.columnsLivraison = Object.keys(this.copyDataSource[0]);
         this.rowsLivraison = this.copyDataSource.map(Object.values);
       }
       if (this.dataSourceException.data.length > 0) {
-        this.copyDataSourceException.map(element => element.Round_Name = element.billingRoundName);
+        this.copyDataSourceException.map(element => element.ref3 = element.billingRoundName);
         this.copyDataSourceException.map(element => delete element.billingRoundName);
         this.columnsException = Object.keys(this.copyDataSourceException[0]);
         this.rowsException = this.copyDataSourceException.map(Object.values);

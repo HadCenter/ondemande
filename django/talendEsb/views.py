@@ -6,7 +6,7 @@ import datetime
 from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
-from sftpConnectionToExecutionServer.views import sftp
+from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
 from .transactionFileService import downloadLivraisonFileFromFTP, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison
 from django.http import JsonResponse
 from API.settings import SECRET_KEY
@@ -112,15 +112,19 @@ def genererMADFile(request):
 	interventionToSave.id_transaction_id = transaction_id
 	interventionToSave.typeTransaction = "generation"
 	interventionToSave.save()
-
+	
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[0])
 	jobs_to_start.append(madPlanJobList[1])
 	jobs_to_start.append(madPlanJobList[2])
 	jobs_to_start.append(madPlanJobList[3])
 	jobs_to_start.append(madPlanJobList[4])
-
-	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transactionToInsert.id, jobs_to_start =jobs_to_start,destination_folder="to_generate")
+	try:
+		sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transactionToInsert.id, jobs_to_start =jobs_to_start,destination_folder="to_generate")
+	except Exception as e:
+		print(e)
+		TransactionsLivraison.objects.filter(id=transaction_id).delete()
+		return Response({"message": "error occured"}, status=status.HTTP_400_BAD_REQUEST)
 
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
@@ -135,7 +139,11 @@ def correctExceptionFile(request):
 	transaction.statut = "En attente"
 	transaction.save()
 	df.to_excel(fileName, index=False)
-	sftp.put(localpath =  fileName ,remotepath= transaction.fichier_exception_sftp )
+	try:
+		sftp.put(localpath =  fileName ,remotepath= transaction.fichier_exception_sftp )
+	except Exception as e:
+		connect_sftp()
+		sftp.put(localpath =  fileName ,remotepath= transaction.fichier_exception_sftp )
 
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[5])
@@ -156,7 +164,11 @@ def correctMetadataFile(request):
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
 
 	df.to_excel(fileName, index=False)
-	sftp.put(localpath=fileName, remotepath=transaction.fichier_metadata_sftp)
+	try:
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_metadata_sftp)
+	except Exception as e:
+		connect_sftp()
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_metadata_sftp)
 
 
 
@@ -179,7 +191,11 @@ def correctMADFile(request):
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
 
 	df.to_excel(fileName, index=False)
-	sftp.put(localpath=fileName, remotepath=transaction.fichier_mad_sftp)
+	try:
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_mad_sftp)
+	except Exception as e:
+		connect_sftp()
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_mad_sftp)
 
 
 
@@ -201,7 +217,11 @@ def correctLivraisonFile(request):
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
 
 	df.to_excel(fileName, index=False)
-	sftp.put(localpath=fileName, remotepath=transaction.fichier_livraison_sftp)
+	try:
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_livraison_sftp)
+	except Exception as e:
+		connect_sftp()
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_livraison_sftp)
 
 
 
@@ -244,7 +264,12 @@ def correctAllFiles(request):
 		df = pd.DataFrame(fileReplacementLivraison['rows'], columns=fileReplacementLivraison['columns'])
 
 		df.to_excel(fileNameLivraison, index=False)
-		sftp.put(localpath=fileNameLivraison, remotepath=transaction.fichier_livraison_sftp)
+		try:
+			sftp.put(localpath=fileNameLivraison, remotepath=transaction.fichier_livraison_sftp)
+		except Exception as e:
+			connect_sftp()
+			sftp.put(localpath=fileNameLivraison, remotepath=transaction.fichier_livraison_sftp)
+
 		jobs_to_start.append(madPlanJobList[8])
 		os.remove(fileNameLivraison)
 
@@ -252,7 +277,12 @@ def correctAllFiles(request):
 		df = pd.DataFrame(fileReplacementMAD['rows'], columns=fileReplacementMAD['columns'])
 
 		df.to_excel(fileNameMAD, index=False)
-		sftp.put(localpath=fileNameMAD, remotepath=transaction.fichier_mad_sftp)
+		try:
+			sftp.put(localpath=fileNameMAD, remotepath=transaction.fichier_mad_sftp)
+		except Exception as e:
+			connect_sftp()
+			sftp.put(localpath=fileNameMAD, remotepath=transaction.fichier_mad_sftp)
+
 		jobs_to_start.append(madPlanJobList[7])
 		os.remove(fileNameMAD)
 
@@ -260,7 +290,12 @@ def correctAllFiles(request):
 		df = pd.DataFrame(fileReplacementMetadata['rows'], columns=fileReplacementMetadata['columns'])
 
 		df.to_excel(fileNameMetadata, index=False)
-		sftp.put(localpath=fileNameMetadata, remotepath=transaction.fichier_metadata_sftp)
+		try:
+			sftp.put(localpath=fileNameMetadata, remotepath=transaction.fichier_metadata_sftp)
+		except Exception as e:
+			connect_sftp()
+			sftp.put(localpath=fileNameMetadata, remotepath=transaction.fichier_metadata_sftp)
+
 		jobs_to_start.append(madPlanJobList[6])
 		os.remove(fileNameMetadata)
 
@@ -268,8 +303,13 @@ def correctAllFiles(request):
 		df = pd.DataFrame(fileReplacementException['rows'], columns=fileReplacementException['columns'])
 
 		df.to_excel(fileNameException, index=False)
-		sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
-		jobs_to_start.append(madPlanJobList[5])
+		try:
+			sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
+		except Exception as e:
+			connect_sftp()
+			sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
+
+		#jobs_to_start.append(madPlanJobList[5])
 		os.remove(fileNameException)
 
 	jobs_to_start.append(madPlanJobList[0])

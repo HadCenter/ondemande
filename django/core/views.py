@@ -23,7 +23,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework_swagger.views import get_swagger_view
-from sftpConnectionToExecutionServer.views import sftp
+from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
 from talendEsb.models import TransactionsLivraison
 from talendEsb.views import startEngineOnEdiFilesWithData
 
@@ -481,7 +481,11 @@ def seeFileContentMADFileCore(fileType, transaction_id):
             functionToUse = reading_list_transactionFileColumnsMad
         else:
             raise Exception("fileType not supported by server")
-        sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
+        try:
+            sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
+        except Exception as e:
+            connect_sftp()
+            sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
 
         excelfile = pd.read_excel(fileName)
         excelfile = excelfile.fillna('')

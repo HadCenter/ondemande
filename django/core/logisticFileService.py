@@ -6,7 +6,7 @@ import paramiko
 import logging
 import pandas as pd
 import numpy as np
-from sftpConnectionToExecutionServer.views import sftp
+from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
 
 from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 from django.conf import settings
@@ -365,8 +365,11 @@ def LogisticFileExistInSftpServer(sftp_client,logisticFileName):
 def getFTPCredentials(username):
     fileName = "MagistorOnDemandClients.xlsx"
     remotePath = "/home/talend/projects/ftpfiles/IN/MagistorOnDemand"
-
-    sftp.get(remotePath + "/"+fileName, os.getcwd() + "/" + fileName )
+    try:
+        sftp.get(remotePath + "/"+fileName, os.getcwd() + "/" + fileName )
+    except Exception as e:
+        connect_sftp()
+        sftp.get(remotePath + "/"+fileName, os.getcwd() + "/" + fileName )
     excelfile = pd.read_excel(fileName)
     excelfile = excelfile.fillna('')
     password = excelfile.loc[excelfile['Name'] == username]

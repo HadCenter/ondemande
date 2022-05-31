@@ -285,6 +285,7 @@ export class DailogGenerateTransaction {
     end_date: new FormControl()
   });
   receivedTransactionsFromParentComponent: any = [];
+  errorFound: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<DailogGenerateTransaction>,
@@ -302,6 +303,7 @@ export class DailogGenerateTransaction {
     this.dialogRef.close();
   }
   genererTransaction() {
+    this.errorFound = false;
     this.clicked = true;
     this.showloader = true;
     var start_date = this.toJSONLocal(this.range.value.start_date);
@@ -352,12 +354,12 @@ export class DailogGenerateTransaction {
      this.service_genererTransaction.genererTransaction(formData).subscribe(
       (res) => {
         this.showloader = false;
-        console.log(res);
         this.dialogRef.close('submit');
       },
       (err) => {
         this.showloader = false;
-        console.log(err);
+        this.clicked = false;
+        this.errorFound = true;
       }
      );
     }

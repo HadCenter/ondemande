@@ -336,9 +336,9 @@ def createFileFromColumnAndRows(request):
 
 def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> TransactionFileContentAndOptions:
     fileContentObjects = list()
-    options = transactionFileColumnsException(set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set())
+    options = transactionFileColumnsException(set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set())
     for x in df.values.tolist():
-        fileContentObjects.append(transactionFileColumnsException(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15],x[16],x[17],x[18],x[19]))
+        fileContentObjects.append(transactionFileColumnsException(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15],x[16],x[17],x[18]))
         options.Tournee.add(x[0])
         options.taskId.add(x[1])
         options.itemId.add(x[2])
@@ -358,18 +358,16 @@ def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> Transactio
         options.isDeleted.add(x[16])
         options.Contact.add(x[17])
         options.billingRoundName.add(x[18])
-        options.ref3.add(x[19])
-
     return TransactionFileContentAndOptions(fileContent = fileContentObjects , options = options )
 
 def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> TransactionFileContentAndOptions:
     fileContentObjects = list()
     options = transactionFileColumnsLivraison(set(), set(), set(), set(), set(), set(), set(), set(), set(), set(),
-                                              set(), set(), set(), set(), set(), set(), set(), set(),set(),set(),set())
+                                              set(), set(), set(), set(), set(), set(), set(), set(),set(),set())
     for x in df.values.tolist():
         fileContentObjects.append(
             transactionFileColumnsLivraison(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10], x[11],
-                                            x[12], x[13], x[14], x[15], x[16], x[17],x[18],x[19],x[20]))
+                                            x[12], x[13], x[14], x[15], x[16], x[17],x[18],x[19]))
         options.Tournee.add(x[0])
         options.taskId.add(x[1])
         options.itemId.add(x[2])
@@ -390,7 +388,6 @@ def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> Transactio
         options.toDelete.add(x[17])
         options.Contact.add(x[18])
         options.billingRoundName.add(x[19])
-        options.ref3.add(x[20])
 
     return TransactionFileContentAndOptions(fileContent=fileContentObjects, options=options)
 

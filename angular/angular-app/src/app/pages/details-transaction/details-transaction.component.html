@@ -408,25 +408,6 @@
                         {{element.billingRoundName}} </td>
                     </ng-container>
 
-                    <!-- ref3 Column -->
-                    <ng-container matColumnDef="ref3">
-                      <th id="ref3" class="titre-column" mat-header-cell *matHeaderCellDef> ref3
-                        <mat-form-field class="form-column" appearance="fill" *ngIf="options">
-                          <mat-select class="filter-column" matNativeControl name="{{options[16].columnProp}}"
-                            [(ngModel)]="options[16].modelValue"
-                            (selectionChange)="setFilteredItemsOptions(options[16],$event)">
-                            <mat-option value="">-- Select {{options[16].columnProp}}--</mat-option>
-                            <mat-option [value]="item" *ngFor="let item of options[16].options"><label>{{item}}</label>
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </th>
-                      <td mat-cell #cell class="center-cell-transactionsFiles" *matCellDef="let element ; let i = index"
-                      (mousedown)="onMouseDown(i, 16, 'isExpress','livraison')"
-                      (mouseup)="onMouseUp(i, 16, 'isExpress','livraison')"
-                      [ngClass]="{'selected': selectedCellsState[i+ paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][16], 'unselected': !selectedCellsState[i+paginator.toArray()[0].pageIndex*paginator.toArray()[0].pageSize][16]}">
-                        {{element.ref3}} </td>
-                    </ng-container>
 
 
 
@@ -827,29 +808,6 @@
                       <td mat-cell #cellException class="center-cell-transactionsFiles"
                         *matCellDef="let element ; let i = index">
                         {{element.billingRoundName}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="ref3">
-                      <th id="ref3Exception" class="titre-column-exception" mat-header-cell *matHeaderCellDef>
-                        ref3
-                        <mat-form-field class="form-column" appearance="fill">
-                          <mat-select class="filter-column" matNativeControl name="{{optionsException[15].columnProp}}"
-                            [(ngModel)]="optionsException[15].modelValue"
-                            (selectionChange)="setFilteredItemsExceptionOptions(optionsException[15],$event)">
-                            <mat-option value="">-- Select {{optionsException[15].columnProp}}--</mat-option>
-                            <mat-option [value]="item" *ngFor="let item of optionsException[15].options">
-                              <label>{{item}}</label>
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-
-                      </th>
-                      <td mat-cell #cellException class="center-cell-transactionsFiles"
-                        *matCellDef="let element ; let i = index"
-                        (mousedown)="onMouseDown(i, 15, 'Express','exception')"
-                        (mouseup)="onMouseUp(i, 15, 'Express','exception')"
-                        [ngClass]="{'selected': selectedCellsStateException[i+ paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][15], 'unselected': !selectedCellsStateException[i+paginator.toArray()[1].pageIndex*paginator.toArray()[1].pageSize][15]}">
-                        {{element.ref3}} </td>
                     </ng-container>
 
                     <!-- isDeleted Column -->

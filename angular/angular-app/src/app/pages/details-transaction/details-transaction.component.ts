@@ -1577,6 +1577,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
               /**if we modify a column of the livraison file it will be automatically modified at the level of the exception file */
               this.dataSourceException.data.forEach(el => {
                 if(el.Tournee == dataCopy[i]['Tournee'] && this.displayedColumnsLivraison[startCol] == "Round_Name" ){
+                  console.log("exception" + el.Tournee +"=="+ dataCopy[i]['Tournee']);
                   el.Round_Name = text;
                   el.billingRoundName = text;
                 }
@@ -1627,7 +1628,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
               
               /**if we modify a column of the exception file it will be automatically modified at the level of the delivery file */
               this.dataSource.data.forEach(el => {
-                if(el.Tournee == dataCopy[i]['Tournee'] && this.displayedColumnsLivraison[startCol] == "Round_Name" ){
+                if(el.Tournee == dataCopy[i]['Tournee'] && this.displayedColumnsException[startCol] == "Round_Name" ){
+                  console.log("exception" + el.Tournee +"=="+ dataCopy[i]['Tournee']);
                   el.Round_Name = text;
                   el.billingRoundName = text;
                 }

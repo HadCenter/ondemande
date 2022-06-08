@@ -43,28 +43,12 @@
           <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
 
 
-            <td class="mdl-data-table__cell--non-numeric">{{ dates[i] }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ row.date }}</td>
 
             <td class="mdl-data-table__cell--non-numeric">{{row.total | number : '1.1-3' }} €</td>
 
-            <td *ngIf="i > 1" class="column-actions mdl-data-table__cell--non-numeric">
-              <button style="margin-left: 3px;" (click)="opendetailsDialog(row.month)"
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Aperçu
-              </button>
-              <button style="margin-left: 3px;" (click)="opendetails(row.month)"
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Afficher
-              </button>
-              <!-- <button style="margin-left: 3px;" (click)="downloadFile(row.month)"
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Télécharger
-              </button> -->
-              <span (click)="downloadFile(row);$event.stopPropagation();"
-              class="download material-icons">
-              download
-              </span>
-
-            </td>
-            <td *ngIf="i == 1 || i == 0" class="column-actions mdl-data-table__cell--non-numeric">
-              <button style="margin-left: 3px;" (click)="navigatetoAddFacturation(row.month)"
+            <td  class="column-actions mdl-data-table__cell--non-numeric">
+              <button *ngIf="row.allowEdit" style="margin-left: 3px;" (click)="navigatetoAddFacturation(row.month)"
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Editer
               </button>
               <button style="margin-left: 3px;" (click)="opendetailsDialog(row.month)"

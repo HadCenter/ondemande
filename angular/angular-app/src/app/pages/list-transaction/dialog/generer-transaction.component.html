@@ -15,6 +15,7 @@
         <mat-datepicker-toggle class="icon-date" matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
+      <mat-error *ngIf="errorFound" style="margin-bottom: 5px;">Une erreur s'est produite, Veuillez réessayer</mat-error>
       <div style="text-align: center;">
         <button [disabled]="clicked || range.value.end_date == null || range.value.start_date == null" (click)="genererTransaction()" class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit">Générer</button>
       </div>

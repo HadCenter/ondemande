@@ -5,7 +5,7 @@ import os
 from django.core.cache import cache
 import json
 import requests
-from sftpConnectionToExecutionServer.views import sftp
+from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
 from .models import PlansFacturation, TransactionsLivraison
 from django.conf import settings
 from .configSF import ConfigSF
@@ -19,7 +19,12 @@ def sendTransactionParamsToExecutionServerInCsvFile(transaction_id, jobs_to_star
     remotePath = "/home/talend/projects/ftpfiles/IN/ondemand_dev/transactions/" + destination_folder + "/" + fileName
     df = pd.DataFrame([ [transaction_id, jobsToStartInOneString]], columns=['id', 'jobsToStart'])
     df.to_csv(fileName, index=False, sep=';')
-    sftp.put(localpath=fileName, remotepath=remotePath)
+    try:
+        sftp.put(localpath=fileName, remotepath=remotePath)
+    except Exception as e:
+        connect_sftp()
+        sftp.put(localpath=fileName, remotepath=remotePath)
+    
     os.remove(fileName)
 
 
@@ -37,8 +42,11 @@ def updateMetaDataFileInTableTransactionsLivraison(transactionId, transactionSta
 
 def downloadLivraisonFileFromFTP(transactionId, LivraisonFileName, clientList):
     transaction = TransactionsLivraison.objects.get(id=transactionId)
-    
-    sftp.get(transaction.fichier_livraison_sftp, os.getcwd() + "/" + LivraisonFileName )
+    try:
+        sftp.get(transaction.fichier_livraison_sftp, os.getcwd() + "/" + LivraisonFileName )
+    except Exception as e:
+        connect_sftp()
+        sftp.get(transaction.fichier_livraison_sftp, os.getcwd() + "/" + LivraisonFileName )
 
     LivraisonFile = readLivraisonFileForCertainClients(LivraisonFileName, clientList)
 

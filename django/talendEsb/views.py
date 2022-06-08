@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from xml.dom.minidom import Identified
 from django.http import HttpResponse
 import requests
@@ -509,11 +508,11 @@ def launchPlan(request):
 	try:
 		date = request.data['date']
 	except Exception as e:
-		date = NULL
+		date = None
 	try:
 		numFacture = request.data['numFacture']
 	except Exception as e:
-		numFacture = NULL
+		numFacture = None
 	try:
 		updatePlanStatus("En attente",plan, date, numFacture)
 	except Exception as e:

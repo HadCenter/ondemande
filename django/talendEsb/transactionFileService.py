@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import datetime
 import pandas as pd
 import os
@@ -250,12 +249,12 @@ def modifyFactureInSF(idFacture, price):
 
 
 def updatePlanStatus(status, plan, date, numFacture):
-    if(date is not NULL):
+    if(date is not None):
         month = date.split("-")[0]
         year = date.split("-")[1]
     planDB = PlansFacturation.objects.get(plan = plan)
     planDB.status = status
-    if(date is not NULL):
+    if(date is not None):
         planDB.month = month
         planDB.year = year
         planDB.numFacture = numFacture

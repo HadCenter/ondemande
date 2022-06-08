@@ -54,16 +54,7 @@ export class StatusJobsComponent implements OnInit {
   }
 
   actualiser(){
-    this.showLowder = true;
-
-    this.service.getAllFacturationPlans().subscribe(res => {
-      this.advancedTable = res;
-      this.showLowder = false;
-    },
-      err => {
-        this.showLowder = false;
-      })
-
+    this.getPlans();
   }
 
   executeJob(planData) {

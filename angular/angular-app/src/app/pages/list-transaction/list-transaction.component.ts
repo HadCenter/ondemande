@@ -103,6 +103,9 @@ export class ListTransactionComponent implements OnInit {
   public gotoDetails(row) {
     this.router.navigate(['/details-transaction', row.transaction_id])
   }
+  gotoFacturationTransport(){
+    this.router.navigate(['/facturation-transport'])
+  }
 
   public openDialog() {
     const dialogRef = this.dialog.open(DailogGenerateTransaction,{

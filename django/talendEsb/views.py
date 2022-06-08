@@ -1,3 +1,5 @@
+from asyncio.windows_events import NULL
+from xml.dom.minidom import Identified
 from django.http import HttpResponse
 import requests
 from rest_framework.decorators import api_view
@@ -7,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp
-from .transactionFileService import downloadLivraisonFileFromFTP, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison
+from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkFacturationBetweenSheets, checkFacturationForOneFile, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, generateSFTokens, getAllFacturationTransportFromFTP, modifyFactureInSF, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
 from django.http import JsonResponse
 from API.settings import SECRET_KEY
 import jwt
@@ -16,7 +18,7 @@ import io
 import zipfile
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
-from .models import InterventionFacturationTransport, SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
+from .models import InterventionFacturationTransport, PlanFacturationMetadata, PlansFacturation, SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
 import pandas as pd
 import jsonpickle
 import os
@@ -374,3 +376,116 @@ def getfiles(filesList):
 	for filename in filesList:
 		os.remove(filename)
 	return response
+
+
+@api_view(['GET'])
+def getAllFacturationTransport(request):
+	response = getAllFacturationTransportFromFTP()
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def downloadFacturationTransport(request):
+    fileTodownload = request.data['file']
+    file = FacturationTransportFileFromFTP(fileTodownload)
+    response = HttpResponse(file, content_type="application/xls")
+    response['Content-Disposition'] = "attachment; filename={0}".format(fileTodownload)
+    response['Content-Length'] = os.path.getsize(fileTodownload)
+    #os.remove(fileTodownload)
+    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
+
+    return response
+
+
+@api_view(['GET'])
+def test(request):
+	url = "https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI"
+	#response = checkFacturationBetweenSheets()
+	response = requests.get("https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI")    
+	file = open("test" + ".html", 'wb')
+	file.write(str.encode(response.text))
+	file.close()
+	
+	# res = urllib.request.urlopen("https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI")
+	# file = open("test33" + ".html", 'wb')
+	# file.write(res.read())
+	# file.close()
+
+	#pdfFileObj = open('https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI', 'rb')
+
+	return HttpResponse(jsonpickle.encode("okey",unpicklable=False), content_type="application/json")
+
+
+@api_view(['GET'])
+def GetAllFacturePDFFromSalesforce(request):
+	response = GetAllFacturePDFFromSF()
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
+
+
+@api_view(['POST'])
+def checkFacturationForFile(request):
+	file = request.data['file']
+	response = checkFacturationForOneFile(file)
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
+
+
+@api_view(['POST'])
+def downloadFacturePDFFromSalesforce(request):
+	FacturesIds = request.data['FacturesIds']
+	factNames = request.data['factNames']
+	nomsClients = request.data['nomsClients']
+	AccountsIds = request.data['AccountsIds']
+
+	res = downloadFacturePDFFromSF(FacturesIds, factNames, nomsClients, AccountsIds)
+	return HttpResponse(jsonpickle.encode(res,unpicklable=False), content_type="application/json")
+	#return JsonResponse(res, status=status.HTTP_200_OK)
+
+	#return response
+
+
+@api_view(['POST'])
+def changeFacturePriceSF(request):
+	idFacture = request.data['idFacture']
+	price = request.data['price']
+
+	res = modifyFactureInSF(idFacture,price)
+	if (res is None):
+		return JsonResponse({'message': 'error occured'}, status=status.HTTP_400_BAD_REQUEST)
+    		
+	return HttpResponse(jsonpickle.encode(res,unpicklable=False), content_type="application/json")
+
+
+@api_view(['GET'])
+def getAllJobPlans (request):
+	response = []
+	for planDB in PlansFacturation.objects.all():
+		t = PlanFacturationMetadata(id = planDB.id , plan= planDB.plan, status=planDB.status, derniere_execution= planDB.derniere_execution)
+		response.append(t)
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
+
+
+@api_view(['POST'])
+def launchPlan(request):
+	plan = request.data['plan']
+	try:
+		date = request.data['date']
+	except Exception as e:
+		date = NULL
+	try:
+		numFacture = request.data['numFacture']
+	except Exception as e:
+		numFacture = NULL
+	try:
+		updatePlanStatus("En attente",plan, date, numFacture)
+	except Exception as e:
+		return JsonResponse({'message': 'error occured'}, status=status.HTTP_400_BAD_REQUEST)
+    		
+	return HttpResponse(jsonpickle.encode("{'message':'plan launched'}",unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def changePlanStatusWS(request):
+	plan = request.data['plan']
+	status = request.data['status']
+
+	updatePlanStatutWS(plan, status)
+
+	return HttpResponse(jsonpickle.encode("{'message':'changes applied'}",unpicklable=False), content_type="application/json")

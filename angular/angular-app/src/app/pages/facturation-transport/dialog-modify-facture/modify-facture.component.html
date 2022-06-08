@@ -1,0 +1,37 @@
+<!-- <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--3-col-phone content" > -->
+<div class='dialog-content'>
+    <app-loader [position]="'absolute'" [width]="'290px'" [height]="'300px'" [bg]="'transparant'" [show]="submitClicked">
+    </app-loader>
+    <base-card class="card-dialog">
+        <base-card-title>
+            <h1 class="mdl-card__title-text">Modifier facture transport</h1>
+        </base-card-title>
+        <base-card-body class="no-padding">
+            <form [formGroup]="myForm" (submit)="updateFacturePrice(facture)" autocomplete="off" novalidate>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" >
+                        <label for="prixHT" style="color:gray; font: 13px Arial, sans-serif;">Prix HT</label>
+                        <br>
+                        <input formControlName="prixHT"
+                            [(ngModel)]="facture.RL_Prix_H_T__c" class="mdl-textfield__input" type="text" id="prixHT">
+                        <!-- <div *ngIf="prixHT.invalid && (prixHT.dirty || prixHT.touched)">
+                            <span *ngIf="prixHT.errors.required" class="mdl-textfield__error">
+                                Nom obligatoire.
+                            </span>
+                        </div> -->
+                        <div>
+                            <span *ngIf="apiErrorRaise" class="mdl-textfield__error" style="visibility:visible ;">
+                                Une erreur est survenue, réessayez plus tard
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
+                    <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue"
+                        type="submit"
+                        [disabled]="submitClicked || (copyfacture == facture.RL_Prix_H_T__c)">Modifer</button>
+                </div>
+            </form>
+        </base-card-body>
+    </base-card>
+</div>

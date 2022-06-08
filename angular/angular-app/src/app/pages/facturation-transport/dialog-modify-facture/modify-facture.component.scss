@@ -1,0 +1,34 @@
+.mdl-grid.center-items {
+    justify-content: center;
+  }
+  .content {
+  
+    margin-top: 100px;
+    margin-left: 25%;
+  }
+  .card-dialog
+  {
+    box-shadow:none;
+  }
+  .option-rapports{
+    width: fit-content !important; 
+    display: table-caption !important;
+    max-width: fit-content !important;
+  }
+  
+  .select-filter .mat-form-field-wrapper {
+    padding-bottom: 1.34375em;
+  }
+  .select-filter .mat-form-field-wrapper .mat-form-field-flex {
+    padding: 0.75em 0 0 0.75em;
+  }
+  .select-filter {
+    width: fit-content;
+    color: white!important;
+  }
+  
+  ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: gray !important;
+    opacity: 1; /* Firefox */
+  }

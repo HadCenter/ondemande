@@ -1,0 +1,23 @@
+
+à
+Xangular/angular-app/src/app/pages/list-transaction/dialog/generer-transaction.service.ts,a/5/a54344faf563563d15006dbf1d2a66fb48abc3bf
+P
+ angular/angular-app/package.json,4/5/455c503fbf2ed04d7be94be34aebdf816f9af2e4
+Ç
+Rangular/angular-app/src/app/pages/list-transaction/list-transaction.component.html,d/6/d68efeeec532c6debe1fd17dbfc7fbec833bdc9a
+Ä
+Pangular/angular-app/src/app/pages/list-transaction/list-transaction.component.ts,f/d/fdb2e7a7c124639d342379b3fe834b124b43a894
+ê
+`angular/angular-app/src/app/pages/magistor/details-file-magistor/details-file-magistor.module.ts,e/d/ed0451dc93f36067fce1d922cb3e79452d0bea52
+p
+@angular/angular-app/src/app/pages/magistor/magistor.component.ts,5/a/5afd2ce6a0337a6637ec4ebf193fc2671385bf39
+ë
+aangular/angular-app/src/app/pages/magistor/details-file-magistor/details-file-magistor.service.ts,c/1/c13a0004a02932341a8f22bddda4bb64725f6dca
+~
+Nangular/angular-app/src/app/pages/list-transaction/list-transaction.service.ts,3/4/34af5e6b2fd97b05a6f9639377831022f190c739
+à
+Xangular/angular-app/src/app/pages/details-transaction/details-transaction.component.html,b/2/b2de85b8ee4b42360b4f781cf9ee80348084be95
+z
+Jangular/angular-app/src/app/pages/list-file-edi/list-file-edi.component.ts,3/2/327b56198274955af6cb1f20b111d9074af41d46
+s
+Cangular/angular-app/src/app/components/sidebar/sidebar.component.ts,5/4/5475fe585d06fdb229884cbfe6a493ffd1f1b436

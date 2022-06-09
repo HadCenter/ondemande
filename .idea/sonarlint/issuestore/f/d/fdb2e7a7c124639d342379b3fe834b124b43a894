@@ -1,0 +1,12 @@
+
+Btypescript:S11102"!Remove these useless parentheses.(öıÀ€ÿÿÿÿÿ
+Htypescript:S1656è"+'this.advancedTable' is assigned to itself.(Ê¯ñò
+@typescript:S125ğ"Remove this commented out code.(„­öÜûÿÿÿÿ
+@typescript:S1186™"#Unexpected empty method 'ngOnInit'.(Åˆ³Â
+Gtypescript:S125¦"Remove this commented out code.(ÈÇ˜Éûÿÿÿÿ8®¡¶Şô/
+typescript:S2392°"eConsider moving declaration of 'formatStartDate' as it is referenced outside current binding context.(Œ­¿åûÿÿÿÿ8¯¡¶Şô/
+Œtypescript:S2392±"cConsider moving declaration of 'formatEndDate' as it is referenced outside current binding context.(¾ºÃùÿÿÿÿ8°¡¶Şô/
+‹typescript:S2392²"bConsider moving declaration of 'rangeElement' as it is referenced outside current binding context.(…ï¶“úÿÿÿÿ8°¡¶Şô/
+Ntypescript:S2814¹"%'formatStartDate' is already defined.(Œ­¿åûÿÿÿÿ8±¡¶Şô/
+Ltypescript:S2814º"#'formatEndDate' is already defined.(¾ºÃùÿÿÿÿ8±¡¶Şô/
+Ktypescript:S2814»""'rangeElement' is already defined.(…ï¶“úÿÿÿÿ8±¡¶Şô/

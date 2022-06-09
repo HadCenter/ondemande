@@ -12,6 +12,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { LoaderModule } from 'app/components/loader/loader.module';
+import { ListClientsService } from '../list-clients/list-clients.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 @NgModule({
   declarations: [ConfigCritereComponent],
   imports: [
@@ -25,9 +28,12 @@ import { LoaderModule } from 'app/components/loader/loader.module';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
+    MatAutocompleteModule,
+    MatCheckboxModule,
     LoaderModule
   ],
   providers: [
+    ListClientsService,
     ConfigCritereService,
   ],
 })

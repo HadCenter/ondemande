@@ -18,26 +18,41 @@ export class AddFactureService {
 
   public getAdvancedHeaders() {
     return [
-      {
-        name: 'Jour',
-        sort: 0,
+      // {
+      //   name: 'Jour',
+      //   sort: 0,
 
-      },
+      // },
       {
         name: 'IDF Jour',
         sort: 0,
 
       },
+      // {
+      //   name: 'UM IDF Jour',
+      //   sort: 0,
+
+      // },
       {
         name: 'IDF Nuit',
         sort: 0,
 
       },
+      // {
+      //   name: 'UM IDF Nuit',
+      //   sort: 0,
+
+      // },
       {
         name: 'IDF Province',
         sort: 0,
 
-      }
+      },
+      // {
+      //   name: 'UM IDF Province',
+      //   sort: 0,
+
+      // }
     ];
   }
 }

@@ -9,21 +9,23 @@ import { Observable } from 'rxjs';
 export class FacturationPreparationService {
 
   private url = `${environment.apiBaseUrl}/facturation`;
-  public client: string="";
+  public client: string = "";
   constructor(private http: HttpClient) { }
 
-  public getFacturationForClients (data) : Observable<any> {
+  public getFacturationForClients(data): Observable<any> {
     return this.http.post(`${this.url}/getFacturationForClient/`, data);
   }
-  public getMonthListFacturationForClient (data) : Observable<any> {
-    return this.http.post(`${this.url}/getMonthListFacturationForClient/`, data);
+  public getMonthListFacturationForClient(data): Observable<any> {
+    return this.http.post(`${this.url}/getMonthFacturationWithTotal/`, data);
   }
-
-  public setClient(client_name){
+  public downloadFacturationFile(data): Observable<any> {
+    return this.http.post(`${this.url}/downloadFacturationPreparation/`, data, { responseType: "blob" });
+  }
+  public setClient(client_name) {
     this.client = client_name;
   }
 
-  public getClient(){
+  public getClient() {
     return this.client;
   }
 
@@ -31,6 +33,11 @@ export class FacturationPreparationService {
     return [
       {
         name: 'Mois',
+        sort: 0,
+
+      },
+      {
+        name: 'Total du mois',
         sort: 0,
 
       },

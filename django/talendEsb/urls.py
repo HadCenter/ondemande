@@ -16,5 +16,15 @@ urlpatterns = [
     path('startEngineOnMagistorFiles', views.startEngineOnMagistorFiles),
     path('updateMetaDataFileInTableTransactionsLivraison', views.updateMetaDataFileInTableTransactionsLivraisonWS, name="updateMetaDataFileInTableTransactionsLivraison"),
     path('downloadLivraisonFile', views.downloadLivraisonFile, name= "downloadLivraisonFile"),
+    path('getAllFacturationTransport/', views.getAllFacturationTransport, name= "getAllFacturationTransport"),
+    path('downloadFacturationTransport/', views.downloadFacturationTransport, name= "downloadFacturationTransport"),
+    path('GetAllFacturePDFFromSalesforce/', views.GetAllFacturePDFFromSalesforce, name= "GetAllFacturePDFFromSalesforce"),
+    path('checkFacturationForFile/', views.checkFacturationForFile, name= "checkFacturationForFile"),
+    path('downloadFacturePDFFromSalesforce/', views.downloadFacturePDFFromSalesforce, name= "downloadFacturePDFFromSalesforce"),
+    path('changeFacturePrice/', views.changeFacturePriceSF, name= "changeFacturePriceSF"),
+    path('getAllJobPlans/', views.getAllJobPlans, name= "getAllJobPlans"),
+    path('launchPlan/', views.launchPlan, name= "launchPlan"),
+    path('changePlanStatusWS/', views.changePlanStatusWS, name= "changePlanStatusWS"),
+    path('test/', views.test, name= "test"),
 
 ]

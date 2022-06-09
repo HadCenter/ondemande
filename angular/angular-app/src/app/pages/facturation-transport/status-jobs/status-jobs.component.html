@@ -1,0 +1,66 @@
+<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="showLowder">
+    </app-loader>
+    <base-card>
+        <base-card-title>
+            <span (click)="backToPreviousPage();$event.stopPropagation();" class="pointer material-icons">
+                arrow_back
+            </span>
+            <div class="mdl-layout-spacer"></div>
+
+            <h1 class="mdl-card__title-text">Liste des jobs facturation transport</h1>
+            <div class="mdl-layout-spacer"></div>
+
+            <span class="pointer material-icons" style="visibility: hidden;">
+                arrow_back
+            </span>
+
+        </base-card-title>
+        <base-card-body *ngIf="advancedTable.length > 0" class="no-padding">
+            <table class="table-list mdl-data-table mdl-js-data-table sorting-table">
+                <thead>
+                    <tr>
+                        <th *ngFor="let header of advancedHeaders ; let i = index"
+                            class="mdl-data-table__cell--non-numeric" (click)="changeSorting(header, i)">
+                            <span>{{ header}}</span>
+                            <!-- <i *ngIf="header.sort !== null " class="material-icons sorting"
+                  [class.asc]="header.sort === sortOrder.asc"
+                  [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</i> -->
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
+                        <td class="mdl-data-table__cell--non-numeric">{{ row.plan }}</td>
+                        <td class="mdl-data-table__cell--non-numeric">{{ row.derniere_execution | date:"dd/MM/yyyy 'à' HH:mm" }}</td>
+                        <td *ngIf="row.status != 'unknown'" class="mdl-data-table__cell--non-numeric"><span
+                                class="border label label--mini"
+                                [ngClass]="{'color--green' : row.status=='Terminée', 'color--red' : row.status=='echec'}">{{
+                                row.status }}</span></td>
+
+                        <td class="column-actions mdl-data-table__cell--non-numeric">
+                            <button (click)="executeJob(row)"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                                [disabled]="row.status != 'Terminée' || !row.canBeExecuted">
+                                Exécuter
+                            </button>
+                            <button (click)="goTo(row.plan)"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                            style="margin-left: 5px;"
+                            [disabled]="row.status != 'Terminée' || !row.canBeExecuted">
+                            Vérifier
+                        </button>
+
+                        </td>
+                        <app-loader class="loader row" [width]="'100%'" [position]="'sticky'"
+                        [height]="'182px'" [bg]="'transparant'" [show]="row.status != 'Terminée'"></app-loader>
+            
+                        <!-- <app-loader *ngIf="row.statut== 'En attente'" class="loader" [width]="'100%'"
+                            [position]="'sticky'" [height]="'182px'" [bg]="'transparant'"
+                            [show]="row.statut== 'En attente'"></app-loader> -->
+                    </tr>
+                </tbody>
+            </table>
+        </base-card-body>
+    </base-card>
+</div>

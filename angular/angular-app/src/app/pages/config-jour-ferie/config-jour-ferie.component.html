@@ -1,0 +1,89 @@
+<div class="content-labels">
+    <base-card class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+        <base-card-title class="reorder-card">
+            <div class='custom-card-title'>
+                <label>Configuration des jours fériés </label>
+                <div class="mdl-layout-spacer"></div>
+                <button (click)='updateHolidays()'
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Modifier
+                </button>
+            </div>
+
+        </base-card-title>
+        <app-loader [width]="'100%'" [position]="'initial'" [height]="'75vh'" [bg]="'transparant'" [show]="showLoader">
+        </app-loader>
+        <base-card-body *ngIf="!showLoader" class="content-card-line">
+            <div>
+                <div class="mdl-grid">
+                    <div
+                        class=" mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+                        <div class="custom-card grey-background" style="display: grid; min-height: 30vh; height: fit-content;">
+                            <div>
+                                <label class="label-title">Jours fériés</label>
+                            </div>
+
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Choisir une date</mat-label>
+                                <input matInput placeholder="Ajouter jour(s) férié(s)" (dateChange)="setDate($event)"
+                                    [min]="minDate" [max]="maxDate" [matDatepicker]="picker">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                                <!-- <mat-error >Veuillez selectionner des dates dans la même année</mat-error> -->
+                            </mat-form-field>
+                            <mat-chip-list #selectedDatesList aria-label="Ajouter jour(s) férié(s)">
+                                <mat-chip *ngFor="let jour of jourFerieList" (removed)="remove(jour)">
+                                    {{jour | date:"dd/MM/yyyy"}}
+                                    <button matChipRemove>
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+                                </mat-chip>
+                            </mat-chip-list>
+
+                        </div>
+                        <div class="custom-card grey-background" style="margin-top: 20px; height: 22vh;">
+                            <div style="text-align: initial;">
+                                <label class="label-title">Marge</label>
+                            </div>
+                            <div class="bloc-input">
+
+                                <mat-form-field class="form-critere" appearance="fill">
+
+                                    <input matInput type="number" [(ngModel)]="marge">
+                                </mat-form-field>
+                                %
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <div
+                        class=" custom-card grey-background mdl-cell mdl-cell--6-col-desktop mdl-cell--6-col-tablet mdl-cell--6-col-phone">
+                        <div style="display: grid;">
+                            <div>
+                                <label class="label-title">Jour(s) Week-end</label>
+                            </div>
+                            <mat-selection-list #days>
+                                <mat-list-option *ngFor="let day of WeekDays" [value]="selectedDays"
+                                    [selected]="selectedDays?.includes(day)" (click)="updateSelectedDays(day)">
+                                    {{day}}
+                                </mat-list-option>
+                            </mat-selection-list>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!--*************************************************-->
+
+
+
+
+
+        </base-card-body>
+    </base-card>
+</div>

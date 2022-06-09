@@ -23,7 +23,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework_swagger.views import get_swagger_view
-from sftpConnectionToExecutionServer.views import sftp
+from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
 from talendEsb.models import TransactionsLivraison
 from talendEsb.views import startEngineOnEdiFilesWithData
 
@@ -152,7 +152,7 @@ def LogisticFileCreate(request, format=None):
     key = KEY_TEST
     # idUser = getIdFromAuthToken(request.META['HTTP_AUTHORIZATION'])
 
-    logisticFileSaved = saveUploadedLogisticFile(logisticFile)
+    logisticFileSaved,msg = saveUploadedLogisticFile(logisticFile)
 
 
     if(logisticFileSaved):
@@ -160,7 +160,7 @@ def LogisticFileCreate(request, format=None):
         return JsonResponse({'message': 'file saved successfully'}, status=status.HTTP_201_CREATED)
     else:
         # magistorLogger.warning("Magistor import File echec by {} ".format(idUser))
-        return JsonResponse({'message': 'file save echec'}, status=status.HTTP_403_FORBIDDEN)
+        return JsonResponse({'message': msg}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST'])
 def validateLogisticFileWS(request):
@@ -336,9 +336,9 @@ def createFileFromColumnAndRows(request):
 
 def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> TransactionFileContentAndOptions:
     fileContentObjects = list()
-    options = transactionFileColumnsException(set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set())
+    options = transactionFileColumnsException(set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set(),set())
     for x in df.values.tolist():
-        fileContentObjects.append(transactionFileColumnsException(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15],x[16]))
+        fileContentObjects.append(transactionFileColumnsException(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15],x[16],x[17],x[18]))
         options.Tournee.add(x[0])
         options.taskId.add(x[1])
         options.itemId.add(x[2])
@@ -356,16 +356,18 @@ def reading_list_transactionFileColumnsException(df: pd.DataFrame) -> Transactio
         options.Express.add(x[14])
         options.Remarque.add(x[15])
         options.isDeleted.add(x[16])
+        options.Contact.add(x[17])
+        options.billingRoundName.add(x[18])
     return TransactionFileContentAndOptions(fileContent = fileContentObjects , options = options )
 
 def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> TransactionFileContentAndOptions:
     fileContentObjects = list()
     options = transactionFileColumnsLivraison(set(), set(), set(), set(), set(), set(), set(), set(), set(), set(),
-                                              set(), set(), set(), set(), set(), set(), set(), set())
+                                              set(), set(), set(), set(), set(), set(), set(), set(),set(),set())
     for x in df.values.tolist():
         fileContentObjects.append(
             transactionFileColumnsLivraison(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10], x[11],
-                                            x[12], x[13], x[14], x[15], x[16], x[17]))
+                                            x[12], x[13], x[14], x[15], x[16], x[17],x[18],x[19]))
         options.Tournee.add(x[0])
         options.taskId.add(x[1])
         options.itemId.add(x[2])
@@ -384,6 +386,8 @@ def reading_list_transactionFileColumnsLivraison(df: pd.DataFrame) -> Transactio
         options.sourceHubName.add(x[15])
         options.isExpress.add(x[16])
         options.toDelete.add(x[17])
+        options.Contact.add(x[18])
+        options.billingRoundName.add(x[19])
 
     return TransactionFileContentAndOptions(fileContent=fileContentObjects, options=options)
 
@@ -474,7 +478,11 @@ def seeFileContentMADFileCore(fileType, transaction_id):
             functionToUse = reading_list_transactionFileColumnsMad
         else:
             raise Exception("fileType not supported by server")
-        sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
+        try:
+            sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
+        except Exception as e:
+            connect_sftp()
+            sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
 
         excelfile = pd.read_excel(fileName)
         excelfile = excelfile.fillna('')

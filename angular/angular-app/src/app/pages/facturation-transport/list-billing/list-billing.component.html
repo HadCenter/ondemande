@@ -1,0 +1,77 @@
+<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <app-loader [width]="'100%'" [position]="'sticky'" [height]="'450px'" [bg]="'transparant'" [show]="showLowder"></app-loader>
+    <base-card>
+      <base-card-title>
+      <span (click)="backToPreviousPage();$event.stopPropagation();"
+      class="pointer material-icons">
+      arrow_back
+      </span>
+      <div class="mdl-layout-spacer"></div>
+
+        <h1 class="mdl-card__title-text">Liste des fichiers BILLING</h1>
+        <div class="mdl-layout-spacer"></div>
+        <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+          <div class="mdl-textfield label-search">
+            <input class="mdl-textfield__input" type="text" id="search2" (input)="setFilteredItems()"
+              [(ngModel)]="filterValue" placeholder="Rechercher" />
+            <label class="mdl-textfield__label" for="search2"></label>
+          </div>
+        </div>
+        <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
+        </base-pagination>
+        <div id="conteneurDesBoutonsHeaderBaseCard">
+          <div class="boutonGenererTransaction">
+            <button (click)='gotoJobsPage()'
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+            style="margin-right: 5px;">appeler webhook
+            </button>
+
+            <!-- <button (click)='openDialog()'
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Générer une transaction
+            </button> -->
+          </div>
+        </div>
+      </base-card-title>
+      <base-card-body *ngIf="billing_list.length > 0" class="no-padding">
+        <table class="table-list mdl-data-table mdl-js-data-table sorting-table">
+          <thead>
+            <tr>
+              <th *ngFor="let header of advancedHeaders ; let i = index" class="mdl-data-table__cell--non-numeric"
+              (click)="changeSorting(header, i)">
+                <span>{{ header}}</span>
+                <!-- <i *ngIf="header.sort !== null " class="material-icons sorting"
+                  [class.asc]="header.sort === sortOrder.asc"
+                  [class.active]="header.sort === sortOrder.asc || header.sort === sortOrder.desc">sort</i> -->
+              </th>
+            </tr>
+          </thead>
+          <tbody>   
+            <tr *ngFor="let row of billing_list  | slice:0:limit; let i = index;">
+              <td class="mdl-data-table__cell--non-numeric">{{ row.name }}</td>
+              <td *ngIf="row.status != 'unknown'" class="mdl-data-table__cell--non-numeric" 
+              ><span class="border label label--mini" [ngClass]="{'color--green' : row.status=='Valide', 'color--red' : row.status=='Invalide'}">{{ row.status }}</span></td>
+              <td *ngIf="row.status == 'unknown'" class="mdl-data-table__cell--non-numeric">
+                <button (click)="verifyStatusForFile(row.name)"
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                >Vérifier
+                </button>
+              </td>
+
+              <td class="column-actions mdl-data-table__cell--non-numeric">
+                <button (click)="downloadFile(row)"
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                ><span class="download-icon material-icons">
+                    download
+                  </span>
+                </button>
+                
+    
+              </td>
+              <app-loader *ngIf="row.statut== 'En attente'" class="loader" [width]="'100%'" [position]="'sticky'"
+              [height]="'182px'" [bg]="'transparant'" [show]="row.statut== 'En attente'"></app-loader>
+            </tr>
+          </tbody>
+        </table>
+      </base-card-body>
+    </base-card>
+  </div>

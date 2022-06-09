@@ -59,6 +59,25 @@ class InterventionFacturationTransport(models.Model):
         managed = False
         db_table = 'intervention_Facturation_transport'
 
+class PlansFacturation(models.Model):
+    id = models.IntegerField(primary_key=True)
+    plan = models.CharField(max_length=45)
+    status = models.CharField(max_length=45)
+    month = models.IntegerField()
+    year = models.IntegerField()
+    numFacture = models.IntegerField()
+    derniere_execution = models.DateTimeField(auto_now =True)
+    class Meta:
+        managed = False
+        db_table = 'plans_facturation'
+
+
+class PlanFacturationMetadata:
+    def __init__(self,id,plan,status, derniere_execution):
+        self.id = id
+        self.plan = plan
+        self.status = status
+        self.derniere_execution = derniere_execution
 
 
 
@@ -70,6 +89,21 @@ def send_message_to_frontend_when_transactionFile_updated(sender, instance=None,
             "stateTransaction" : "table transactionFile updated",
             "stateLogistic": "table logisticFile not updated",
             "statePowerbi": "table powerbirtlog not updated"
+        }
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'notifications_room_group',
+            {
+                'type': 'send_message_to_frontend',
+                'message': messageToSend
+            }
+        )
+
+@receiver(post_save, sender=PlansFacturation)
+def send_message_to_frontend_when_plansFacturation_updated(sender, instance=None, created=False, **kwargs):
+    if not created:
+        messageToSend = {
+            "statePlans": "table plansFacturation updated"
         }
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(

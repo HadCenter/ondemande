@@ -25,10 +25,12 @@ const routes: Routes = [
       { path: 'details-user/:id', loadChildren: () => import('./pages/details-user/details-user.module').then(m => m.DetailsUserModule), canActivate: [AuthGuard] },
       { path: 'facturation-logistique', loadChildren: () => import('./pages/facturation-logistique/facturation-logistique.module').then(m => m.FacturationLogistiqueModule), canActivate: [AuthGuard] },
       { path: 'facturation-preparation', loadChildren: () => import('./pages/list-facturation-preparation/list-facturation-preparation.module').then(m => m.ListFacturationPreparationModule), canActivate: [AuthGuard] },
+      { path: 'facturation-transport', loadChildren: () => import('./pages/facturation-transport/facturation-transport.module').then(m => m.FacturationTransportModule), canActivate: [AuthGuard] },
       { path: 'liste-facturation-preparation/:client', loadChildren: () => import('./pages/facturation-preparation/facturation-preparation.module').then(m => m.FacturationPreparationModule), canActivate: [AuthGuard] },
       { path: 'add-facture/:client/:date', loadChildren: () => import('./pages/add-facture/add-facture.module').then(m => m.AddFactureModule), canActivate: [AuthGuard] },
       { path: 'details-facture/:client/:facture', loadChildren: () => import('./pages/details-facture/details-facture.module').then(m => m.DetailsFactureModule), canActivate: [AuthGuard] },
       { path: 'configuration-critere/:id', loadChildren: () => import('./pages/config-critere/config-critere.module').then(m => m.ConfigCritereModule), canActivate: [AuthGuard] },
+      { path: 'config-jour-ferie', loadChildren: () => import('./pages/config-jour-ferie/config-jour-ferie.module').then(m => m.ConfigJourFerieModule), canActivate: [AuthGuard] },
       { path: 'rapports', loadChildren: () => import('./pages/powerbi-embedded/powerbi-embedded.module').then(m => m.PowerbiEmbeddedModule), canActivate: [AuthGuard] },
       { path: 'details-rapport/:id', loadChildren: () => import('./pages/details-kpi-powerbi/details-kpi-powerbi.module').then(m => m.DetailsKpiPowerbiModule), canActivate: [AuthGuard] },
 

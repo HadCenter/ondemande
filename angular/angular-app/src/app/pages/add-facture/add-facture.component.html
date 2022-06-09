@@ -3,7 +3,7 @@
         [show]="monthDays.length == 0"></app-loader>
     <base-card>
         <base-card-title>
-            <h1 class="mdl-card__title-text">Préparer facturation {{ monthInLetters }} pour le client {{client_name}} :</h1>
+            <h1 class="mdl-card__title-text">Préparer facture {{ monthInLetters }} pour le client {{client_name}} :</h1>
             <div class="mdl-layout-spacer"></div>
             <!-- <base-pagination [numPage]="numPage" [currentPage]="currentPage" (changePage)="changePage($event)">
         </base-pagination> -->
@@ -24,7 +24,11 @@
                 class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone mdl-data-table mdl-js-data-table   sorting-table">
                 <thead>
                     <tr>
-                        <th *ngFor="let header of advancedHeaders" class="mdl-data-table__cell--non-numeric">
+                        <th class="mdl-data-table__cell--non-numeric">
+                            <span>Jour</span>
+                        </th>
+
+                        <th *ngFor="let header of advancedHeaders" class="mdl-data-table__cell--non-numeric" colspan="2">
 
                             <span>{{ header.name }}</span>
                         </th>
@@ -36,18 +40,30 @@
 
                         <td class="mdl-data-table__cell--non-numeric">{{ day | date:'EEEE d MMM y' }}</td>
                         <td class="mdl-data-table__cell--non-numeric">
-                            <input class="tab-input" [(ngModel)]="JourPreparations[i]" (keypress)="numberOnly($event)"
+                            <input class="tab-input" [(ngModel)]="JourPreparations[i]" (ngModelChange)="changeUM(i,'jour')" (keypress)="numberOnly($event,JourPreparations[i])"
                                 placeholder="1,2..">
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" [(ngModel)]="UM_jour[i]" (keypress)="numberOnly($event,UM_jour[i])"
+                                placeholder="Unité Manut.">
                         </td>
 
                         <td class="mdl-data-table__cell--non-numeric">
-                            <input class="tab-input" [(ngModel)]="NuitPreparations[i]" (keypress)="numberOnly($event)"
+                            <input class="tab-input" [(ngModel)]="NuitPreparations[i]" (ngModelChange)="changeUM(i,'nuit')" (keypress)="numberOnly($event,NuitPreparations[i])"
                                 placeholder="1,2..">
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" [(ngModel)]="UM_nuit[i]" (keypress)="numberOnly($event,UM_nuit[i])"
+                                placeholder="Unité Manut.">
                         </td>
 
                         <td class="mdl-data-table__cell--non-numeric">
-                            <input class="tab-input" [(ngModel)]="ProvincePreparations[i]"
-                                (keypress)="numberOnly($event)" placeholder="1,2..">
+                            <input class="tab-input" [(ngModel)]="ProvincePreparations[i]" (ngModelChange)="changeUM(i,'province')"
+                                (keypress)="numberOnly($event,ProvincePreparations[i])" placeholder="1,2..">
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <input class="tab-input" [(ngModel)]="UM_province[i]"
+                                (keypress)="numberOnly($event,UM_province[i])" placeholder="Unité Manut.">
                         </td>
 
                         <!-- <td class="column-actions mdl-data-table__cell--non-numeric">

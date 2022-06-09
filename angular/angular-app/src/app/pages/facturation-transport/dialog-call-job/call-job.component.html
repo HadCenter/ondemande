@@ -1,0 +1,49 @@
+<!-- <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--3-col-phone content" > -->
+<div class='dialog-content'>
+    <app-loader [position]="'absolute'" [width]="'290px'" [height]="'300px'" [bg]="'transparant'"
+        [show]="submitClicked">
+    </app-loader>
+    <base-card class="card-dialog">
+        <base-card-title>
+            <h1 class="mdl-card__title-text">Modifier facture transport</h1>
+        </base-card-title>
+        <base-card-body class="no-padding">
+            <form [formGroup]="myForm" (submit)="onSubmit()" autocomplete="off" novalidate>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                        <label for="numFacture" style="color:gray; font: 13px Arial, sans-serif;">Num facture</label>
+                        <br>
+                        <input formControlName="numFacture" [(ngModel)]="numFacture" class="mdl-textfield__input"
+                            type="text" id="numFacture">
+                        <!-- <div *ngIf="numFacture.invalid && (numFacture.dirty || numFacture.touched)">
+                                <span *ngIf="numFacture.errors.required" class="mdl-textfield__error">
+                                    Nom obligatoire.
+                                </span>
+                            </div> -->
+                        <div>
+                            <span *ngIf="apiErrorRaise" class="mdl-textfield__error" style="visibility:visible ;">
+                                Une erreur est survenue, réessayez plus tard
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                        <mat-form-field class="callJobDatePicker">
+                            <mat-label>mois et année</mat-label>
+                            <input matInput class="mdl-textfield__input" [matDatepicker]="dp" placeholder="Month and Year" [formControl]="date">
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                                (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
+                    <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit"
+                        [disabled]="submitClicked">Modifer</button>
+                </div>
+            </form>
+        </base-card-body>
+    </base-card>
+</div>

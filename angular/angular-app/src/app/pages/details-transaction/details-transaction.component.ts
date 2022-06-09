@@ -1109,14 +1109,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     }
   }
   setFilteredItemsOptions(filter) {
-
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
-    //  let selected=filter.columnProp;
     this.changeSelectedOptionColor(filter);
 
     if (this.filterValueLivraison !== "") { // test is search is empty
-      this.dataSource.data = this.copyDatatoFilter;
+      this.dataSource.data = this.copyDatatoSearch;
     }
 
     if (filterExists == false) { this.filterValues.push(filter) }
@@ -1128,6 +1126,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
+
         this.dataSource.data = this.getIntersection(filter);
         if (this.dataSource.data.length == 0) {
           this.dataSource.data.push({})
@@ -1153,8 +1152,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.filterValues = this.filterValues.filter(item => item.columnProp != filter.columnProp);
 
       if (this.filterValues.length == 0) {
+
         if (this.filterValueLivraison == '') { // test if search is empty
-          this.dataSource.data = this.copySelectionLivraison;
+          this.dataSource.data = this.copyDatatoSearch;
         }
         else {
           this.dataSource.data = this.copyDatatoFilter;
@@ -1202,7 +1202,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     const filterExists = this.filterExceptionValues.some(f => f.columnProp === filter.columnProp);
     this.changeSelectedOptionExceptionColor(filter);
     if (this.filterValueException !== "") { // test is search is empty
-      this.dataSourceException.data = this.copyDataExceptiontoFilter;
+      this.dataSourceException.data = this.copyDataExceptiontoSearch;
     }
     if (filterExists == false) { this.filterExceptionValues.push(filter) }
     // if only one select is selected
@@ -1238,7 +1238,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.filterExceptionValues = this.filterExceptionValues.filter(item => item.columnProp != filter.columnProp);
       if (this.filterExceptionValues.length == 0) {
         if (this.filterValueException !== "") { // test is search is empty
-          this.dataSourceException.data = this.copyDataExceptiontoFilter;
+          this.dataSourceException.data = this.copyDataExceptiontoSearch;
         }
         else {
           this.dataSourceException.data = this.copySelectionException;
@@ -1286,7 +1286,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     const filterExists = this.filterMetaDataValues.some(f => f.columnProp === filter.columnProp);
     this.changeSelectedOptionMetaDataColor(filter);
     if (this.filterValuemetadata !== "") { // test is search is empty
-      this.dataSourceMetaData.data = this.copyDataMetaDatatoFilter;
+      this.dataSourceMetaData.data = this.copyDataMetaDatatoSearch;
     }
     else {
       this.dataSourceMetaData.data = this.copySelectionMetaData;
@@ -1323,7 +1323,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.filterMetaDataValues = this.filterMetaDataValues.filter(item => item.columnProp != filter.columnProp);
       if (this.filterMetaDataValues.length == 0) {
         if (this.filterValuemetadata !== "") { // test is search is empty
-          this.dataSourceMetaData.data = this.copyDataMetaDatatoFilter;
+          this.dataSourceMetaData.data = this.copyDataMetaDatatoSearch;
         }
         else {
           this.dataSourceMetaData.data = this.copySelectionMetaData;
@@ -1354,7 +1354,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     const filterExists = this.filterMadValues.some(f => f.columnProp === filter.columnProp);
     this.changeSelectedOptionMadColor(filter);
     if (this.filterValueMad !== "") { // test is search is empty
-      this.dataSourceMAD.data = this.copyDataMADtoFilter;
+      this.dataSourceMAD.data = this.copyDataMADtoSearch;
     }
     if (filterExists == false) { this.filterMadValues.push(filter) }
     // if only one select is selected
@@ -1387,7 +1387,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
       if (this.filterMadValues.length == 0) {
         if (this.filterValueMad !== "") { // test is search is empty
-          this.dataSourceMAD.data = this.copyDataMADtoFilter;
+          this.dataSourceMAD.data = this.copyDataMADtoSearch;
         }
         else {
           this.dataSourceMAD.data = this.copySelectionMad;

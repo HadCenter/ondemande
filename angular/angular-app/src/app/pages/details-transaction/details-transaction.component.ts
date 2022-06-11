@@ -1237,11 +1237,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       this.filterExceptionValues = this.filterExceptionValues.filter(item => item.columnProp != filter.columnProp);
       if (this.filterExceptionValues.length == 0) {
-        if (this.filterValueException !== "") { // test is search is empty
+        if (this.filterValueException == "") { // test is search is empty
           this.dataSourceException.data = this.copyDataExceptiontoSearch;
         }
         else {
-          this.dataSourceException.data = this.copySelectionException;
+          this.dataSourceException.data = this.copyDataExceptiontoFilter;
         }
 
         this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
@@ -1322,11 +1322,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
       this.filterMetaDataValues = this.filterMetaDataValues.filter(item => item.columnProp != filter.columnProp);
       if (this.filterMetaDataValues.length == 0) {
-        if (this.filterValuemetadata !== "") { // test is search is empty
+        if (this.filterValuemetadata == "") { // test is search is empty
           this.dataSourceMetaData.data = this.copyDataMetaDatatoSearch;
         }
         else {
-          this.dataSourceMetaData.data = this.copySelectionMetaData;
+          this.dataSourceMetaData.data = this.copyDataMetaDatatoFilter;
         }
 
         this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
@@ -1386,11 +1386,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // if selected is deactivate
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
       if (this.filterMadValues.length == 0) {
-        if (this.filterValueMad !== "") { // test is search is empty
+        if (this.filterValueMad == "") { // test is search is empty
           this.dataSourceMAD.data = this.copyDataMADtoSearch;
         }
         else {
-          this.dataSourceMAD.data = this.copySelectionMad;
+          this.dataSourceMAD.data = this.copyDataMADtoFilter;
         }
 
         this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);

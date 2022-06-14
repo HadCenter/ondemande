@@ -34,8 +34,8 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
   fichierLivraison: any = [];
   fichierMad: any = [];
   fichierMetadata: any = [];
-  displayedColumnsLivraison: string[] = ['toDelete', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'isExpress', 'total_price'];
-  displayedColumnsException: string[] = ['isDeleted', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque', 'Express'];
+  displayedColumnsLivraison: string[] = ['toDelete', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'isExpress', 'total_price','billingRoundName'];
+  displayedColumnsException: string[] = ['isDeleted', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom', 'Item___Type', 'Item___Quantite', 'Code_postal', 'Round_Name', 'Remarque', 'Express', 'billingRoundName'];
   displayedColumnsMetadata: string[] = ['Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'sourceClosureDate', 'realInfoHasPrepared', 'status', 'metadataFACTURATION'];
   displayedColumnsMad: string[] = ['toDelete', 'Date', 'Expediteur', 'Activite', 'Categorie', 'Type_de_Service', 'ID_de_la_tache', 'Item___Nom_sous_categorie', 'Item___Type_unite_manutention', 'Item___Quantite', 'Code_postal', 'sourceHubName', 'Round_Name', 'StartTime', 'ClousureTime'];
   dataSource = new MatTableDataSource<any>(this.fichierLivraison);
@@ -1109,14 +1109,12 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     }
   }
   setFilteredItemsOptions(filter) {
-
     // check if filter is already selected
     const filterExists = this.filterValues.some(f => f.columnProp === filter.columnProp);
-    //  let selected=filter.columnProp;
     this.changeSelectedOptionColor(filter);
 
     if (this.filterValueLivraison !== "") { // test is search is empty
-      this.dataSource.data = this.copyDatatoFilter;
+      this.dataSource.data = this.copyDatatoSearch;
     }
 
     if (filterExists == false) { this.filterValues.push(filter) }
@@ -1128,6 +1126,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     else {
       // if already another select is active merge the results
       if (filterExists == false) {
+
         this.dataSource.data = this.getIntersection(filter);
         if (this.dataSource.data.length == 0) {
           this.dataSource.data.push({})
@@ -1153,8 +1152,9 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
       this.filterValues = this.filterValues.filter(item => item.columnProp != filter.columnProp);
 
       if (this.filterValues.length == 0) {
+
         if (this.filterValueLivraison == '') { // test if search is empty
-          this.dataSource.data = this.copySelectionLivraison;
+          this.dataSource.data = this.copyDatatoSearch;
         }
         else {
           this.dataSource.data = this.copyDatatoFilter;
@@ -1202,7 +1202,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     const filterExists = this.filterExceptionValues.some(f => f.columnProp === filter.columnProp);
     this.changeSelectedOptionExceptionColor(filter);
     if (this.filterValueException !== "") { // test is search is empty
-      this.dataSourceException.data = this.copyDataExceptiontoFilter;
+      this.dataSourceException.data = this.copyDataExceptiontoSearch;
     }
     if (filterExists == false) { this.filterExceptionValues.push(filter) }
     // if only one select is selected
@@ -1237,11 +1237,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
 
       this.filterExceptionValues = this.filterExceptionValues.filter(item => item.columnProp != filter.columnProp);
       if (this.filterExceptionValues.length == 0) {
-        if (this.filterValueException !== "") { // test is search is empty
-          this.dataSourceException.data = this.copyDataExceptiontoFilter;
+        if (this.filterValueException == "") { // test is search is empty
+          this.dataSourceException.data = this.copyDataExceptiontoSearch;
         }
         else {
-          this.dataSourceException.data = this.copySelectionException;
+          this.dataSourceException.data = this.copyDataExceptiontoFilter;
         }
 
         this.dataSourceException.data = this.dataSourceException.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
@@ -1286,7 +1286,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     const filterExists = this.filterMetaDataValues.some(f => f.columnProp === filter.columnProp);
     this.changeSelectedOptionMetaDataColor(filter);
     if (this.filterValuemetadata !== "") { // test is search is empty
-      this.dataSourceMetaData.data = this.copyDataMetaDatatoFilter;
+      this.dataSourceMetaData.data = this.copyDataMetaDatatoSearch;
     }
     else {
       this.dataSourceMetaData.data = this.copySelectionMetaData;
@@ -1322,11 +1322,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
       this.filterMetaDataValues = this.filterMetaDataValues.filter(item => item.columnProp != filter.columnProp);
       if (this.filterMetaDataValues.length == 0) {
-        if (this.filterValuemetadata !== "") { // test is search is empty
-          this.dataSourceMetaData.data = this.copyDataMetaDatatoFilter;
+        if (this.filterValuemetadata == "") { // test is search is empty
+          this.dataSourceMetaData.data = this.copyDataMetaDatatoSearch;
         }
         else {
-          this.dataSourceMetaData.data = this.copySelectionMetaData;
+          this.dataSourceMetaData.data = this.copyDataMetaDatatoFilter;
         }
 
         this.dataSourceMetaData.data = this.dataSourceMetaData.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
@@ -1354,7 +1354,7 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     const filterExists = this.filterMadValues.some(f => f.columnProp === filter.columnProp);
     this.changeSelectedOptionMadColor(filter);
     if (this.filterValueMad !== "") { // test is search is empty
-      this.dataSourceMAD.data = this.copyDataMADtoFilter;
+      this.dataSourceMAD.data = this.copyDataMADtoSearch;
     }
     if (filterExists == false) { this.filterMadValues.push(filter) }
     // if only one select is selected
@@ -1386,11 +1386,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     // if selected is deactivate
     if (filter.modelValue == "" || filter.modelValue.length == 0) {
       if (this.filterMadValues.length == 0) {
-        if (this.filterValueMad !== "") { // test is search is empty
-          this.dataSourceMAD.data = this.copyDataMADtoFilter;
+        if (this.filterValueMad == "") { // test is search is empty
+          this.dataSourceMAD.data = this.copyDataMADtoSearch;
         }
         else {
-          this.dataSourceMAD.data = this.copySelectionMad;
+          this.dataSourceMAD.data = this.copyDataMADtoFilter;
         }
 
         this.dataSourceMAD.data = this.dataSourceMAD.data.sort((a, b) => (a.Date < b.Date) ? 1 : -1);
@@ -1564,8 +1564,21 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
           for (let i = startRow; i <= endRow; i++) {
             if (this.fileSelected == "livraison") {
               dataCopy[i][this.displayedColumnsLivraison[startCol]] = text;
+              if (this.displayedColumnsLivraison[startCol] == "Round_Name") {
+                dataCopy[i][this.displayedColumnsLivraison[15]] = text;
+              }
+              dataCopy.forEach(element => {
+                if(element.Tournee == dataCopy[i]['Tournee'] ){
+                  element.Round_Name = text;
+                  element.billingRoundName = text;
+                }
+              });
               /**if we modify a column of the livraison file it will be automatically modified at the level of the exception file */
               this.dataSourceException.data.forEach(el => {
+                if(el.Tournee == dataCopy[i]['Tournee'] && this.displayedColumnsLivraison[startCol] == "Round_Name" ){
+                  el.Round_Name = text;
+                  el.billingRoundName = text;
+                }
                 if (dataCopy[i].taskId == el.taskId) {
                   /*****processing of fields with different column names */
                   if (this.displayedColumnsLivraison[startCol] == "isExpress") {
@@ -1587,6 +1600,10 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                   else {
                     if (this.displayedColumnsException.indexOf(this.displayedColumnsLivraison[startCol]) > -1) {
                       el[this.displayedColumnsLivraison[startCol]] = text
+                      //if change Round_Name then change billingRoundName
+                      if (this.displayedColumnsLivraison[startCol] == "Round_Name") {
+                        el[this.displayedColumnsLivraison[15]] = text;
+                      }
                     }
                   }
 
@@ -1596,8 +1613,22 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
             }
             else if (this.fileSelected == "exception") {
               dataCopy[i][this.displayedColumnsException[startCol]] = text;
+              //if change Round_Name then change billingRoundName
+              if (this.displayedColumnsException[startCol] == "Round_Name") {
+                dataCopy[i][this.displayedColumnsException[14]] = text;
+              }
+              dataCopy.forEach(element => {
+                if(element.Tournee == dataCopy[i]['Tournee']){
+                  element.Round_Name = text;
+                  element.billingRoundName = text;
+                }
+              });
               /**if we modify a column of the exception file it will be automatically modified at the level of the delivery file */
               this.dataSource.data.forEach(el => {
+                if(el.Tournee == dataCopy[i]['Tournee'] && this.displayedColumnsLivraison[startCol] == "Round_Name" ){
+                  el.Round_Name = text;
+                  el.billingRoundName = text;
+                }
                 if (dataCopy[i].taskId == el.taskId) {
                   /*****processing of fields with different column names */
                   if (this.displayedColumnsException[startCol] == "Express") {
@@ -1618,7 +1649,11 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
                   /******* */
                   else {
                     if (this.displayedColumnsLivraison.indexOf(this.displayedColumnsException[startCol]) > -1) {
-                      el[this.displayedColumnsException[startCol]] = text
+                      el[this.displayedColumnsException[startCol]] = text;
+                      //if change Round_Name then change billingRoundName
+                      if (this.displayedColumnsException[startCol] == "Round_Name") {
+                        el[this.displayedColumnsException[14]] = text;
+                      }                      
                     }
                   }
 
@@ -1814,12 +1849,18 @@ export class DetailsTransactionComponent extends UpgradableComponent implements 
     } else {
       this.showLoader = true;
       if (this.dataSource.data.length > 0) {
+        this.copyDataSource.map(element => element.Round_Name = element.billingRoundName);
+        this.copyDataSource.map(element => delete element.billingRoundName);
         this.columnsLivraison = Object.keys(this.copyDataSource[0]);
         this.rowsLivraison = this.copyDataSource.map(Object.values);
       }
       if (this.dataSourceException.data.length > 0) {
+        this.copyDataSourceException.map(element => element.Round_Name = element.billingRoundName);
+        this.copyDataSourceException.map(element => delete element.billingRoundName);
         this.columnsException = Object.keys(this.copyDataSourceException[0]);
         this.rowsException = this.copyDataSourceException.map(Object.values);
+        console.log(this.copyDataSourceException);
+        
       }
       if (this.dataSourceMetaData.data.length > 0) {
         this.columnsMetaData = Object.keys(this.copyDataSourceMetaData[0]);

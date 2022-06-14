@@ -47,6 +47,9 @@ export class ListTransactionComponent implements OnInit {
       var time = thisDate[1].split(':');
       var currentTimeZoneOffsetInHours = ((new Date().getTimezoneOffset() / 60));
       time[0] = (parseInt(time[0]) - currentTimeZoneOffsetInHours).toString();  //affich l'heure selon l'heure de pc de l'user
+      if(parseInt(time[0])>=24){
+        time[0]=(parseInt(time[0])-24).toString();      
+      }
       thisDate[1] = [time[0], time[1], time[2]].join(":");
       element.created_at = [thisDate[0], creatAt[1], creatAt[0]].join("-");
       element.created_at = [element.created_at, thisDate[1]].join(' à ')
@@ -63,7 +66,11 @@ export class ListTransactionComponent implements OnInit {
       const modifAt = (element.modified_at.substr(0, 19)).split('-');
       var thisDate4 = modifAt[2].split('T');
       var time2 = thisDate4[1].split(':');
+
       time2[0] = (parseInt(time2[0]) - currentTimeZoneOffsetInHours).toString();  //affich l'heure selon l'heure de pc de l'user
+      if(parseInt(time2[0])>=24){
+      time2[0]=(parseInt(time2[0])-24).toString();      
+      }
       thisDate4[1] = [time2[0], time2[1], time2[2]].join(":");
       element.modified_at = [thisDate4[0], modifAt[1], modifAt[0]].join("-");
       element.modified_at = [element.modified_at, thisDate4[1]].join(' à ')
@@ -95,6 +102,9 @@ export class ListTransactionComponent implements OnInit {
   }
   public gotoDetails(row) {
     this.router.navigate(['/details-transaction', row.transaction_id])
+  }
+  gotoFacturationTransport(){
+    this.router.navigate(['/facturation-transport'])
   }
 
   public openDialog() {
@@ -279,6 +289,7 @@ export class DailogGenerateTransaction {
     end_date: new FormControl()
   });
   receivedTransactionsFromParentComponent: any = [];
+  errorFound: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<DailogGenerateTransaction>,
@@ -296,6 +307,7 @@ export class DailogGenerateTransaction {
     this.dialogRef.close();
   }
   genererTransaction() {
+    this.errorFound = false;
     this.clicked = true;
     this.showloader = true;
     var start_date = this.toJSONLocal(this.range.value.start_date);
@@ -346,12 +358,12 @@ export class DailogGenerateTransaction {
      this.service_genererTransaction.genererTransaction(formData).subscribe(
       (res) => {
         this.showloader = false;
-        console.log(res);
         this.dialogRef.close('submit');
       },
       (err) => {
         this.showloader = false;
-        console.log(err);
+        this.clicked = false;
+        this.errorFound = true;
       }
      );
     }

@@ -1,0 +1,36 @@
+<div class="dialog-content">
+  <app-loader [position]="'absolute'" [width]="'390px'" [height]="'300px'" [bg]="'transparant'" [show]="showLoaderDialog">
+  </app-loader>
+  <base-card class="card-dialog">
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Ajouter client</h1>
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone mdl-grid center-items">
+        <div class="espace">
+          <label for="client" >Client</label>
+          <mat-form-field appearance="fill" style="background-color: transparent;">
+            <input type="text" aria-label="clients" matInput [matAutocomplete]="auto" [formControl]="clientControl" id="client">
+          </mat-form-field>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let client of filteredlistClient | async" [value]="client.nomClient"
+              (onSelectionChange)='changeSelectedClient(client, $event)'>
+              <!-- <mat-checkbox [checked]="selectedClient?.includes(client)" (change)="toggleSelection(client)"
+                        (click)="$event.stopPropagation()"> -->
+              {{ client.nomClient }}
+              <!-- </mat-checkbox> -->
+            </mat-option>
+          </mat-autocomplete>
+        </div>
+        <div class="full-size color-text--red" *ngIf="error"> {{ error }}</div>
+      </div>
+      <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone submit-cell mdl-grid center-items">
+        <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit"
+          (click)="submit();clicked = true;"
+          [disabled]="showLoaderDialog"
+          >Ajouter</button>
+      </div>
+    </base-card-body>
+  </base-card>
+
+</div>

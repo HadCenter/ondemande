@@ -1,3 +1,4 @@
+from xml.dom.minidom import Identified
 from django.http import HttpResponse
 import requests
 from rest_framework.decorators import api_view
@@ -6,8 +7,8 @@ import datetime
 from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
-from sftpConnectionToExecutionServer.views import sftp
-from .transactionFileService import downloadLivraisonFileFromFTP, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison
+from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
+from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkFacturationBetweenSheets, checkFacturationForOneFile, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, generateSFTokens, getAllFacturationTransportFromFTP, modifyFactureInSF, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
 from django.http import JsonResponse
 from API.settings import SECRET_KEY
 import jwt
@@ -16,7 +17,7 @@ import io
 import zipfile
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
-from .models import InterventionFacturationTransport, SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
+from .models import InterventionFacturationTransport, PlanFacturationMetadata, PlansFacturation, SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
 import pandas as pd
 import jsonpickle
 import os
@@ -112,15 +113,19 @@ def genererMADFile(request):
 	interventionToSave.id_transaction_id = transaction_id
 	interventionToSave.typeTransaction = "generation"
 	interventionToSave.save()
-
+	
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[0])
 	jobs_to_start.append(madPlanJobList[1])
 	jobs_to_start.append(madPlanJobList[2])
 	jobs_to_start.append(madPlanJobList[3])
 	jobs_to_start.append(madPlanJobList[4])
-
-	sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transactionToInsert.id, jobs_to_start =jobs_to_start,destination_folder="to_generate")
+	try:
+		sendTransactionParamsToExecutionServerInCsvFile(transaction_id=transactionToInsert.id, jobs_to_start =jobs_to_start,destination_folder="to_generate")
+	except Exception as e:
+		print(e)
+		TransactionsLivraison.objects.filter(id=transaction_id).delete()
+		return Response({"message": "error occured"}, status=status.HTTP_400_BAD_REQUEST)
 
 	return Response({"message": "ok"}, status=status.HTTP_200_OK)
 
@@ -135,7 +140,11 @@ def correctExceptionFile(request):
 	transaction.statut = "En attente"
 	transaction.save()
 	df.to_excel(fileName, index=False)
-	sftp.put(localpath =  fileName ,remotepath= transaction.fichier_exception_sftp )
+	try:
+		sftp.put(localpath =  fileName ,remotepath= transaction.fichier_exception_sftp )
+	except Exception as e:
+		connect_sftp()
+		sftp.put(localpath =  fileName ,remotepath= transaction.fichier_exception_sftp )
 
 	jobs_to_start = []
 	jobs_to_start.append(madPlanJobList[5])
@@ -156,7 +165,11 @@ def correctMetadataFile(request):
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
 
 	df.to_excel(fileName, index=False)
-	sftp.put(localpath=fileName, remotepath=transaction.fichier_metadata_sftp)
+	try:
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_metadata_sftp)
+	except Exception as e:
+		connect_sftp()
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_metadata_sftp)
 
 
 
@@ -179,7 +192,11 @@ def correctMADFile(request):
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
 
 	df.to_excel(fileName, index=False)
-	sftp.put(localpath=fileName, remotepath=transaction.fichier_mad_sftp)
+	try:
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_mad_sftp)
+	except Exception as e:
+		connect_sftp()
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_mad_sftp)
 
 
 
@@ -201,7 +218,11 @@ def correctLivraisonFile(request):
 	df = pd.DataFrame(fileReplacement['rows'], columns=fileReplacement['columns'])
 
 	df.to_excel(fileName, index=False)
-	sftp.put(localpath=fileName, remotepath=transaction.fichier_livraison_sftp)
+	try:
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_livraison_sftp)
+	except Exception as e:
+		connect_sftp()
+		sftp.put(localpath=fileName, remotepath=transaction.fichier_livraison_sftp)
 
 
 
@@ -244,7 +265,12 @@ def correctAllFiles(request):
 		df = pd.DataFrame(fileReplacementLivraison['rows'], columns=fileReplacementLivraison['columns'])
 
 		df.to_excel(fileNameLivraison, index=False)
-		sftp.put(localpath=fileNameLivraison, remotepath=transaction.fichier_livraison_sftp)
+		try:
+			sftp.put(localpath=fileNameLivraison, remotepath=transaction.fichier_livraison_sftp)
+		except Exception as e:
+			connect_sftp()
+			sftp.put(localpath=fileNameLivraison, remotepath=transaction.fichier_livraison_sftp)
+
 		jobs_to_start.append(madPlanJobList[8])
 		os.remove(fileNameLivraison)
 
@@ -252,7 +278,12 @@ def correctAllFiles(request):
 		df = pd.DataFrame(fileReplacementMAD['rows'], columns=fileReplacementMAD['columns'])
 
 		df.to_excel(fileNameMAD, index=False)
-		sftp.put(localpath=fileNameMAD, remotepath=transaction.fichier_mad_sftp)
+		try:
+			sftp.put(localpath=fileNameMAD, remotepath=transaction.fichier_mad_sftp)
+		except Exception as e:
+			connect_sftp()
+			sftp.put(localpath=fileNameMAD, remotepath=transaction.fichier_mad_sftp)
+
 		jobs_to_start.append(madPlanJobList[7])
 		os.remove(fileNameMAD)
 
@@ -260,7 +291,12 @@ def correctAllFiles(request):
 		df = pd.DataFrame(fileReplacementMetadata['rows'], columns=fileReplacementMetadata['columns'])
 
 		df.to_excel(fileNameMetadata, index=False)
-		sftp.put(localpath=fileNameMetadata, remotepath=transaction.fichier_metadata_sftp)
+		try:
+			sftp.put(localpath=fileNameMetadata, remotepath=transaction.fichier_metadata_sftp)
+		except Exception as e:
+			connect_sftp()
+			sftp.put(localpath=fileNameMetadata, remotepath=transaction.fichier_metadata_sftp)
+
 		jobs_to_start.append(madPlanJobList[6])
 		os.remove(fileNameMetadata)
 
@@ -268,8 +304,13 @@ def correctAllFiles(request):
 		df = pd.DataFrame(fileReplacementException['rows'], columns=fileReplacementException['columns'])
 
 		df.to_excel(fileNameException, index=False)
-		sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
-		jobs_to_start.append(madPlanJobList[5])
+		try:
+			sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
+		except Exception as e:
+			connect_sftp()
+			sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
+
+		#jobs_to_start.append(madPlanJobList[5])
 		os.remove(fileNameException)
 
 	jobs_to_start.append(madPlanJobList[0])
@@ -374,3 +415,116 @@ def getfiles(filesList):
 	for filename in filesList:
 		os.remove(filename)
 	return response
+
+
+@api_view(['GET'])
+def getAllFacturationTransport(request):
+	response = getAllFacturationTransportFromFTP()
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def downloadFacturationTransport(request):
+    fileTodownload = request.data['file']
+    file = FacturationTransportFileFromFTP(fileTodownload)
+    response = HttpResponse(file, content_type="application/xls")
+    response['Content-Disposition'] = "attachment; filename={0}".format(fileTodownload)
+    response['Content-Length'] = os.path.getsize(fileTodownload)
+    #os.remove(fileTodownload)
+    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
+
+    return response
+
+
+@api_view(['GET'])
+def test(request):
+	url = "https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI"
+	#response = checkFacturationBetweenSheets()
+	response = requests.get("https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI")    
+	file = open("test" + ".html", 'wb')
+	file.write(str.encode(response.text))
+	file.close()
+	
+	# res = urllib.request.urlopen("https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI")
+	# file = open("test33" + ".html", 'wb')
+	# file.write(res.read())
+	# file.close()
+
+	#pdfFileObj = open('https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI', 'rb')
+
+	return HttpResponse(jsonpickle.encode("okey",unpicklable=False), content_type="application/json")
+
+
+@api_view(['GET'])
+def GetAllFacturePDFFromSalesforce(request):
+	response = GetAllFacturePDFFromSF()
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
+
+
+@api_view(['POST'])
+def checkFacturationForFile(request):
+	file = request.data['file']
+	response = checkFacturationForOneFile(file)
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
+
+
+@api_view(['POST'])
+def downloadFacturePDFFromSalesforce(request):
+	FacturesIds = request.data['FacturesIds']
+	factNames = request.data['factNames']
+	nomsClients = request.data['nomsClients']
+	AccountsIds = request.data['AccountsIds']
+
+	res = downloadFacturePDFFromSF(FacturesIds, factNames, nomsClients, AccountsIds)
+	return HttpResponse(jsonpickle.encode(res,unpicklable=False), content_type="application/json")
+	#return JsonResponse(res, status=status.HTTP_200_OK)
+
+	#return response
+
+
+@api_view(['POST'])
+def changeFacturePriceSF(request):
+	idFacture = request.data['idFacture']
+	price = request.data['price']
+
+	res = modifyFactureInSF(idFacture,price)
+	if (res is None):
+		return JsonResponse({'message': 'error occured'}, status=status.HTTP_400_BAD_REQUEST)
+    		
+	return HttpResponse(jsonpickle.encode(res,unpicklable=False), content_type="application/json")
+
+
+@api_view(['GET'])
+def getAllJobPlans (request):
+	response = []
+	for planDB in PlansFacturation.objects.all():
+		t = PlanFacturationMetadata(id = planDB.id , plan= planDB.plan, status=planDB.status, derniere_execution= planDB.derniere_execution)
+		response.append(t)
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
+
+
+@api_view(['POST'])
+def launchPlan(request):
+	plan = request.data['plan']
+	try:
+		date = request.data['date']
+	except Exception as e:
+		date = None
+	try:
+		numFacture = request.data['numFacture']
+	except Exception as e:
+		numFacture = None
+	try:
+		updatePlanStatus("En attente",plan, date, numFacture)
+	except Exception as e:
+		return JsonResponse({'message': 'error occured'}, status=status.HTTP_400_BAD_REQUEST)
+    		
+	return HttpResponse(jsonpickle.encode("{'message':'plan launched'}",unpicklable=False), content_type="application/json")
+
+@api_view(['POST'])
+def changePlanStatusWS(request):
+	plan = request.data['plan']
+	status = request.data['status']
+
+	updatePlanStatutWS(plan, status)
+
+	return HttpResponse(jsonpickle.encode("{'message':'changes applied'}",unpicklable=False), content_type="application/json")

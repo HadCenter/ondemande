@@ -13,6 +13,7 @@ export class ConfigCritereComponent implements OnInit {
   unite: any = 1;
   copy_matrice: any = [];
   showLoaderMatrice = true;
+  removedCritere: any = [];
 
   constructor(private route: ActivatedRoute, public router: Router,
     private service: ConfigCritereService, private _snackBar: MatSnackBar,) { }
@@ -49,12 +50,16 @@ export class ConfigCritereComponent implements OnInit {
       forfaitNbHeureCoord: "",
       TP: "",
       marge: this.matrice[0].marge,
-
-
+    }
+    if(this.removedCritere.length >= 1){
+      obj= this.removedCritere.pop();
     }
     this.matrice.push(obj);
   }
 
+  removeCrietere(){
+    this.removedCritere.push(this.matrice.pop());
+  }
 
   /***************check two array are equals **********/
   equals(a, b) {

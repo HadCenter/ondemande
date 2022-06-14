@@ -6,9 +6,7 @@ import paramiko
 import logging
 import pandas as pd
 import numpy as np
-from sftpConnectionToExecutionServer.views import sftp
-from API.settings import SECRET_KEY
-import jwt
+from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
 
 from .models import LogisticFile, LogisticFileInfo, FileExcelContent
 from django.conf import settings
@@ -63,17 +61,22 @@ def saveUploadedLogisticFile(request_file):
     dataFrameLogisticFile.fillna('')
     if ( "OP_CODE" not in dataFrameLogisticFile.columns or "CODE_SOC" not in dataFrameLogisticFile.columns):
         os.remove(pathLogisticFile)
-        return False
+        return False,"Unkown File Type"
     else:
         clientName = getClientNameFromExcel(pathLogisticFile, dataFrameLogisticFile)
         typeLogisticFile = dataFrameLogisticFile["OP_CODE"].values[0]
         fileName = typeLogisticFile + timestr + extension
         os.rename(r'media/files/{}'.format(logisticFile), r'media/files/{}'.format(fileName))
+        try:
+            sftp_client = connect(clientName, getFTPCredentials(clientName))
+        except Exception as e:
+            print(e)
+            os.remove(path + fileName)
+            return False,"Client not found"
         idFileInDB = traceLogisticFileInDB(fileName, typeLogisticFile, clientName)
-        sftp_client = connect(clientName, getFTPCredentials(clientName))
         uploadLogisticFileInSFtpServer(sftp_client, fileName, idFileInDB)
         #magistorLogger.info("Magistor File type {} ".format(typeLogisticFile))
-        return True
+        return True,"success"
 
 
 def getClientNameFromExcel(pathLogisticFile, dataFrameLogisticFile):
@@ -364,8 +367,11 @@ def LogisticFileExistInSftpServer(sftp_client,logisticFileName):
 def getFTPCredentials(username):
     fileName = "MagistorOnDemandClients.xlsx"
     remotePath = "/home/talend/projects/ftpfiles/IN/MagistorOnDemand"
-
-    sftp.get(remotePath + "/"+fileName, os.getcwd() + "/" + fileName )
+    try:
+        sftp.get(remotePath + "/"+fileName, os.getcwd() + "/" + fileName )
+    except Exception as e:
+        connect_sftp()
+        sftp.get(remotePath + "/"+fileName, os.getcwd() + "/" + fileName )
     excelfile = pd.read_excel(fileName)
     excelfile = excelfile.fillna('')
     password = excelfile.loc[excelfile['Name'] == username]

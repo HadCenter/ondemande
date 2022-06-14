@@ -4,7 +4,7 @@ import { ConfigCritereComponent } from './config-critere.component';
 const routes: Routes = [{
                           path: '',
                           component: ConfigCritereComponent,
-                        }];
+                          }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

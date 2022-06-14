@@ -15,6 +15,11 @@
         </base-pagination>
         <div id="conteneurDesBoutonsHeaderBaseCard">
           <div class="boutonGenererTransaction">
+            <button (click)='gotoFacturationTransport()'
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+            style="margin-right: 5px;">Lancer Plans
+            </button>
+
             <button (click)='openDialog()'
             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button ">Générer une transaction
             </button>

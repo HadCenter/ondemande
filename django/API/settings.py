@@ -162,14 +162,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/files")
 
 # email stuff
 # EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_HOST_USER = 'onDemandSupport@redlean.io'
+EMAIL_HOST_USER = 'ecolotransondemand@gmail.com'
 # EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = 'Redlean5nsUC7K4i'
+EMAIL_HOST_PASSWORD = 'jrcixcfhbgymqpmq'
 # EMAIL_USE_TLS = True
 # DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
 EMAIL_PORT = 587
 # EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = 'onDemandSupport@redlean.io'
+DEFAULT_FROM_EMAIL = 'ecolotransondemand@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True

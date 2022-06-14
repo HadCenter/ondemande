@@ -158,10 +158,10 @@ def calculateTotals(facturationDB,prep,code_client, date, facturationHolidays):
     return True
 
 def addMargeToTotalIfWeekend(total, date, facturationHolidays):
-    holidaysList =facturationHolidays.holidays.split(',')
+    holidaysList = facturationHolidays.holidays.split(',')
     weekendsDaysList = facturationHolidays.weekends.split(',')
     for holiday in holidaysList:
-        if date == holiday:
+        if (date == holiday) and (str(datetime.strptime(date, "%Y-%m-%d").date().weekday()) not in weekendsDaysList):
             total = total * (1 +facturationHolidays.marge /100)
     for weekend in weekendsDaysList:
         if int(weekend) == datetime.strptime(date, "%Y-%m-%d").date().weekday():

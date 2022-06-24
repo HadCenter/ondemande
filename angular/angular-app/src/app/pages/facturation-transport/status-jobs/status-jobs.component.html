@@ -44,20 +44,27 @@
                                 [disabled]="row.status != 'Terminée' || !row.canBeExecuted">
                                 Exécuter
                             </button>
-                            <button (click)="goTo(row.plan)"
+                            <button (click)="verify(row)"
                             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                             style="margin-left: 5px;"
                             [disabled]="row.status != 'Terminée' || !row.canBeExecuted">
                             Vérifier
                         </button>
+                        <span [ngStyle]="{'opacity':row.verified == 'not validate' ? 1 : 0 }" style="margin-left:5px;vertical-align: bottom;">
+                            <mat-icon >warning</mat-icon>
+                        </span>
+                        <span [ngStyle]="{'opacity':row.verified == 'validate' ? 1 : 0 }" style="margin-left:5px;vertical-align: bottom;">
+                            <mat-icon >check</mat-icon>
+                        </span>
 
-                        </td>
+                        </td>            
                         <app-loader class="loader row" [width]="'100%'" [position]="'sticky'"
                         [height]="'182px'" [bg]="'transparant'" [show]="row.status != 'Terminée'"></app-loader>
             
                         <!-- <app-loader *ngIf="row.statut== 'En attente'" class="loader" [width]="'100%'"
                             [position]="'sticky'" [height]="'182px'" [bg]="'transparant'"
                             [show]="row.statut== 'En attente'"></app-loader> -->
+
                     </tr>
                 </tbody>
             </table>

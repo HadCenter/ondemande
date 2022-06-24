@@ -13,7 +13,7 @@ const routes: Routes = [{
   component: ListBillingComponent,
 },
 {
-  path: 'jobs',
+  path: 'factureSF',
   component: FacturationTransportComponent,
 }];
 

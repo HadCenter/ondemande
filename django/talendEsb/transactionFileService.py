@@ -1,4 +1,5 @@
 import datetime
+from fileinput import filename
 import pandas as pd
 import os
 from django.core.cache import cache
@@ -8,6 +9,7 @@ from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
 from .models import PlansFacturation, TransactionsLivraison
 from django.conf import settings
 from .configSF import ConfigSF
+import numpy as np
 DJANGO_DIRECTORY = settings.BASE_DIR
 Kayser_Client = "C328-LAGARDERE-ERIC KAYSER"
 
@@ -270,4 +272,55 @@ def updatePlanStatutWS(plan, status):
     planDB.save()
 
 
-    
+def checkMADFILE(file):
+    INFolderPath = "/var/www/talend/projects/ftpfiles/IN/"
+    sftp.chdir(INFolderPath)
+    planDB = PlansFacturation.objects.get(plan = "step 3")
+    date = planDB.derniere_execution.strftime("%d_%m_%Y_")
+    fileName = "DEV_" + date + file
+    try:
+        sftp.get(fileName, os.getcwd() + "/" + fileName)
+    except Exception as e:
+        if ( "No such file" in str(e)):
+            return("file not found")
+    os.remove(fileName)
+    return("file found")
+
+
+def removeClientsFromMADFileAndCopyFileToIN(transaction_id, clientList):
+    transaction = TransactionsLivraison.objects.get(id=transaction_id)
+    remotefilePath = transaction.fichier_mad_sftp
+    fileName = "ToVerifyQTE_MAD_Livraisons.xlsx"
+
+    globalInFolderPath = "/var/www/talend/projects/ftpfiles/IN"
+    try:
+        sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
+    except Exception as e:
+        print(e)
+        connect_sftp()
+        sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
+
+    fileNameOUT = removeSomeClients(fileName, clientList)
+
+    try:
+        sftp.put(os.getcwd() + '/' + fileNameOUT, globalInFolderPath+"/"+fileNameOUT)
+    except Exception as e:
+        connect_sftp()
+        sftp.put(os.getcwd() + '/' + fileNameOUT, globalInFolderPath+"/"+fileNameOUT)
+    os.remove(fileNameOUT)
+
+
+def removeSomeClients(fileName, clientList):
+    with open(fileName, 'rb') as f:
+        file = f.read()
+
+    excelfile = pd.read_excel(file)
+    excelfile = excelfile.fillna('')
+    df = excelfile.loc[np.invert(excelfile['Expediteur'].isin(clientList))]
+    os.remove(fileName)
+    current_date = datetime.datetime.now().strftime("%d_%m_%Y")
+    FileNameOUT = "DEV_"+current_date+"_ToVerifyQTE_MAD_Livraisons.xlsx"
+
+    df.to_excel(FileNameOUT, index=False)
+
+    return(FileNameOUT)

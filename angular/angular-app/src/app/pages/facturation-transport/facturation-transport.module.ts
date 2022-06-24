@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { FacturationTransportRoutingModule } from './facturation-transport-routing.module';
 import { FacturationTransportComponent } from './facturation-transport.component';
@@ -17,6 +17,8 @@ import { StatusJobsComponent } from './status-jobs/status-jobs.component';
 import { ModifyFactureComponent } from './dialog-modify-facture/modify-facture.component';
 import { CallJobComponent } from './dialog-call-job/call-job.component';
 import { MatInputModule } from '@angular/material/input';
+import { DialogSelectTransactionComponent } from './dialog-select-transaction/dialog-select-transaction.component';
+import {MatListModule} from '@angular/material/list';
 
 
 
@@ -28,6 +30,7 @@ import { MatInputModule } from '@angular/material/input';
     StatusJobsComponent,
     ModifyFactureComponent,
     CallJobComponent,
+    DialogSelectTransactionComponent,
   ],
   imports: [
     CommonModule,
@@ -42,9 +45,11 @@ import { MatInputModule } from '@angular/material/input';
     LoaderModule,
     MatIconModule,
     MatSnackBarModule,
-    MatInputModule
+    MatInputModule,
+    MatListModule
   ],
   providers: [
+    DatePipe,
     {provide: MAT_DATE_LOCALE, useValue: 'fr-FR' }
   ]
 })

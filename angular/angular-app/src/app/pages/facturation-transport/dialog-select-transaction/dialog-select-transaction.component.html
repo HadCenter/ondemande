@@ -1,0 +1,136 @@
+<!-- <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--3-col-phone content" > -->
+<div class="dialog-content">
+  <app-loader *ngIf="!submitClicked"
+    [position]="'absolute'"
+    [width]="'290px'"
+    [height]="'300px'"
+    [bg]="'transparant'"
+    [show]="showLowderListTransaction"
+  >
+  </app-loader>
+
+  <app-loader *ngIf="submitClicked"
+  [position]="'absolute'"
+  [width]="'432px'"
+  [height]="'550px'"
+  [bg]="'transparant'"
+  [show]="showLowderListTransaction"
+>
+</app-loader>
+
+  <base-card *ngIf="!submitClicked" class="card-dialog">
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Séléctionner transaction</h1>
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <form (submit)="submit()" autocomplete="off" novalidate>
+        <!-- <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size" >
+                            <label for="prixHT" style="color:gray; font: 13px Arial, sans-serif;">Prix HT</label>
+                            <br>
+                            <input formControlName="prixHT"
+                                [(ngModel)]="facture.RL_Prix_H_T__c" class="mdl-textfield__input" type="text" id="prixHT">
+                            <div>
+                                <span *ngIf="apiErrorRaise" class="mdl-textfield__error" style="visibility:visible ;">
+                                    Une erreur est survenue, réessayez plus tard
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+
+        <mat-selection-list
+          #transactions
+          [(ngModel)]="selectedTransaction"
+          [ngModelOptions]="{ standalone: true }"
+          [multiple]="false"
+        >
+          <mat-list-option
+            class="color-white"
+            *ngFor="let transact of listOfTransactions"
+            [value]="transact"
+          >
+            {{ transact.start_date | date: "dd/MM/yyyy" }} -
+            {{ transact.end_date | date: "dd/MM/yyyy" }} - {{ transact.modified_at  | date: "dd/MM/yyyy à HH:mm" }} - {{ transact.statut }}
+          </mat-list-option>
+        </mat-selection-list>
+        <mat-error *ngIf="selectedTransaction && selectedTransaction.length != 0 && selectedTransaction[0].statut != 'Terminé'">Transaction n'est pas encore Terminée</mat-error>
+
+        <div
+          class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items"
+        >
+          <button
+            class="mdl-button mdl-js-button mdl-button--raised color--light-blue"
+            type="submit"
+            [disabled]="submitClicked || !selectedTransaction || (selectedTransaction && selectedTransaction.length != 0 && selectedTransaction[0].statut != 'Terminé')"
+          >
+            LANCER FACTURATION
+          </button>
+        </div>
+      </form>
+    </base-card-body>
+  </base-card>
+
+  <base-card *ngIf="submitClicked" class="card-dialog">
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Supprimer clients de la facturation</h1>
+    </base-card-title>
+    <base-card-body class="no-padding">
+        <div mat-dialog-content>
+          <h6>            {{ selectedTransaction[0].start_date | date: "dd/MM/yyyy" }} -
+            {{ selectedTransaction[0].end_date | date: "dd/MM/yyyy" }} - {{ selectedTransaction[0].modified_at  | date: "dd/MM/yyyy à HH:mm" }} - {{ selectedTransaction[0].statut }}
+</h6>
+          <h6 class="text-color--white">
+            Veuillez sélectionner les expéditeurs à supprimer
+          </h6>
+        </div>
+        <!-- <mat-selection-list>
+          <mat-list-option [selected]="toggle" (click)="selectAll()">
+            Sélectionner tout
+          </mat-list-option>
+        </mat-selection-list> -->
+        <!-- <app-loader
+          [position]="'fixed'"
+          [width]="'400px'"
+          [height]="'45%'"
+          [bg]="'transparant'"
+          [show]="liste_clients.length == 0"
+        >
+        </app-loader> -->
+
+        <mat-selection-list
+          #allSelected
+          [(ngModel)]="selectedClients"
+          (ngModelChange)="onChange($event)"
+        >
+          <mat-list-option
+            class="color-white"
+            *ngFor="let client of liste_clients"
+            [value]="client"
+          >
+            {{ client }}
+          </mat-list-option>
+        </mat-selection-list>
+
+        <div
+          class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items"
+        >
+          <button
+            class="mdl-button mdl-js-button mdl-button--raised color--light-gray"
+            type="button"
+            (click)="submitClicked = false"
+          >
+            Retour
+          </button>
+          &nbsp;
+          <button
+            class="mdl-button mdl-js-button mdl-button--raised button--colored-teal"
+            type="button"
+            (click)="removeClientsAndFacturate()"
+            [disabled]="liste_clients.length == 0"
+          >
+            Lancer facturation
+          </button>
+        </div>
+    </base-card-body>
+  </base-card>
+</div>

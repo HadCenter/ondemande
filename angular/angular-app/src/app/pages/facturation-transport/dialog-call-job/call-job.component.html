@@ -5,7 +5,7 @@
     </app-loader>
     <base-card class="card-dialog">
         <base-card-title>
-            <h1 class="mdl-card__title-text">Modifier facture transport</h1>
+            <h1 class="mdl-card__title-text">Lancer step 4</h1>
         </base-card-title>
         <base-card-body class="no-padding">
             <form [formGroup]="myForm" (submit)="onSubmit()" autocomplete="off" novalidate>
@@ -28,10 +28,11 @@
                     </div>
                 </div>
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
+                    
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                        <label style="color:gray; font: 13px Arial, sans-serif;">Mois et année</label>
                         <mat-form-field class="callJobDatePicker">
-                            <mat-label>mois et année</mat-label>
-                            <input matInput class="mdl-textfield__input" [matDatepicker]="dp" placeholder="Month and Year" [formControl]="date">
+                            <input matInput class="mdl-textfield__input" [matDatepicker]="dp" [formControl]="date">
                             <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                             <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
                                 (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
@@ -41,7 +42,7 @@
                 </div>
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
                     <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit"
-                        [disabled]="submitClicked">Modifer</button>
+                        [disabled]="submitClicked || numFacture == 0">Lancer</button>
                 </div>
             </form>
         </base-card-body>

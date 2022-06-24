@@ -9,6 +9,8 @@ import { Observable, Subject } from 'rxjs';
 })
 export class FacturationTransportService {
   private url = `${environment.apiBaseUrl}/talendEsb`;
+  private url2 = `${environment.apiBaseUrl}/api`;
+
   public WS_URL = "ws://52.47.208.8:8000/ws/notifications"
   public messages: Subject<any>;
   data:any={};
@@ -48,7 +50,18 @@ export class FacturationTransportService {
   public launchPlan(data): Observable<any> {
     return this.http.post(`${this.url}/launchPlan/`,data);
   }
-
+  public getAllTransactions(): Observable<any> {
+    return this.http.get(`${this.url}/getAllTransactionMadLivraison`);
+  }
+  public seeAllFileTransaction (data): Observable<any> {
+    return  this.http.post(`${this.url2}/seeAllFileContentMADFile`,data);
+  }
+  public removeclientsandCopyMADFile(data): Observable<any> {
+    return this.http.post(`${this.url}/removeclientsandCopyMADFile/`,data);
+  }
+  public checkFileMAD(): Observable<any> {
+    return this.http.get(`${this.url}/checkFileMAD`);
+  }
   public getAdvancedHeaders() {
     return [
       {

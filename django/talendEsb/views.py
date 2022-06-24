@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
-from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkFacturationBetweenSheets, checkFacturationForOneFile, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, generateSFTokens, getAllFacturationTransportFromFTP, modifyFactureInSF, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
+from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkFacturationBetweenSheets, checkFacturationForOneFile, checkMADFILE, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, generateSFTokens, getAllFacturationTransportFromFTP, modifyFactureInSF, removeClientsFromMADFileAndCopyFileToIN, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
 from django.http import JsonResponse
 from API.settings import SECRET_KEY
 import jwt
@@ -366,11 +366,11 @@ def getSingleTransactionMadLivraison (request,pk):
 
 @api_view(['POST'])
 def updateMetaDataFileInTableTransactionsLivraisonWS(request):
-    transactionId = request.data['transactionId']
-    transactionStatus =  request.data['transactionStatus']
+	transactionId = request.data['transactionId']
+	transactionStatus =  request.data['transactionStatus']
 
-    updateMetaDataFileInTableTransactionsLivraison(transactionId=transactionId, transactionStatus=transactionStatus)
-    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
+	updateMetaDataFileInTableTransactionsLivraison(transactionId=transactionId, transactionStatus=transactionStatus)
+	return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -386,14 +386,14 @@ def downloadLivraisonFile(request):
 	if(kayserisFound):
 		excelfile = pd.read_excel(LivraisonFileName)
 		if(len(excelfile) == 0):
-    		#return a zip containing 3 files in the list down below without Livraisons.xlsx beacause it is empty
+			#return a zip containing 3 files in the list down below without Livraisons.xlsx beacause it is empty
 			os.remove(LivraisonFileName)
 			return getfiles([current_date+"_CDG_Livraisons.xlsx", current_date+"_ORL_Livraisons.xlsx",current_date+"_Montparnasse_Livraisons.xlsx"])
 
-    	#return a zip containing th 4 files in the list down below
+		#return a zip containing th 4 files in the list down below
 		return getfiles([current_date+"_CDG_Livraisons.xlsx", current_date+"_ORL_Livraisons.xlsx",current_date+"_Montparnasse_Livraisons.xlsx",LivraisonFileName])
 	else:
-    	#return a xlsx file date_fichierlivraison.xlsx
+		#return a xlsx file date_fichierlivraison.xlsx
 		response = HttpResponse(livraisonFile, content_type="application/xls")
 		response['Content-Disposition'] = "attachment; filename={0}".format(LivraisonFileName)
 		response['Content-Length'] = os.path.getsize(LivraisonFileName)
@@ -424,15 +424,15 @@ def getAllFacturationTransport(request):
 
 @api_view(['POST'])
 def downloadFacturationTransport(request):
-    fileTodownload = request.data['file']
-    file = FacturationTransportFileFromFTP(fileTodownload)
-    response = HttpResponse(file, content_type="application/xls")
-    response['Content-Disposition'] = "attachment; filename={0}".format(fileTodownload)
-    response['Content-Length'] = os.path.getsize(fileTodownload)
-    #os.remove(fileTodownload)
-    return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
+	fileTodownload = request.data['file']
+	file = FacturationTransportFileFromFTP(fileTodownload)
+	response = HttpResponse(file, content_type="application/xls")
+	response['Content-Disposition'] = "attachment; filename={0}".format(fileTodownload)
+	response['Content-Length'] = os.path.getsize(fileTodownload)
+	#os.remove(fileTodownload)
+	return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
 
-    return response
+	return response
 
 
 @api_view(['GET'])
@@ -489,7 +489,7 @@ def changeFacturePriceSF(request):
 	res = modifyFactureInSF(idFacture,price)
 	if (res is None):
 		return JsonResponse({'message': 'error occured'}, status=status.HTTP_400_BAD_REQUEST)
-    		
+			
 	return HttpResponse(jsonpickle.encode(res,unpicklable=False), content_type="application/json")
 
 
@@ -517,7 +517,7 @@ def launchPlan(request):
 		updatePlanStatus("En attente",plan, date, numFacture)
 	except Exception as e:
 		return JsonResponse({'message': 'error occured'}, status=status.HTTP_400_BAD_REQUEST)
-    		
+			
 	return HttpResponse(jsonpickle.encode("{'message':'plan launched'}",unpicklable=False), content_type="application/json")
 
 @api_view(['POST'])
@@ -528,3 +528,28 @@ def changePlanStatusWS(request):
 	updatePlanStatutWS(plan, status)
 
 	return HttpResponse(jsonpickle.encode("{'message':'changes applied'}",unpicklable=False), content_type="application/json")
+
+
+@api_view(['GET'])
+def checkFileMAD(request):
+	#file = request.data['file']
+	fileName = "ToVerifyQTE_MAD_Livraisons.xlsx"
+	response = checkMADFILE(fileName)
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
+
+
+@api_view(['POST'])
+def removeclientsandCopyMADFile(request):
+	try:
+		id = request.data['id']
+	except Exception as e:
+		return JsonResponse({'message': 'params missing'}, status=status.HTTP_400_BAD_REQUEST)
+
+	try:
+		clientsToRemove = request.data['clientsToRemove']
+	except Exception as e:
+		clientsToRemove = []
+
+	removeClientsFromMADFileAndCopyFileToIN(id, clientsToRemove)
+	updatePlanStatus("En attente","step 3", None, None)
+	return JsonResponse({'message': 'launched'}, status=status.HTTP_200_OK)

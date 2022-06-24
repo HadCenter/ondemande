@@ -41,8 +41,25 @@
 
 .callJobDatePicker {
     width: 100% !important;
-  }
+}
 
-  span.mat-button-wrapper {
+span.mat-button-wrapper {
     color: #00bcd4;
+}
+
+.mat-input-element{
+    caret-color: #00bcd4;
+}
+
+.mat-calendar-body-selected{
+    background-color: #00bcd4;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    color: #00bcd4!important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: red!important;
   }
+  

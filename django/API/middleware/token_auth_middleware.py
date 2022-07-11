@@ -1,6 +1,5 @@
 
 import jwt
-import datetime
 from rest_framework import status
 from rest_framework.response import Response
 from django.utils.deprecation import MiddlewareMixin
@@ -22,16 +21,6 @@ class TokenAuthMiddleware(MiddlewareMixin):
         # Check if auth token is valid
         try:
             token = request.META['HTTP_AUTHORIZATION'] # Get token
-            if("SALESFORCE-" in str(token)):
-                id = token.replace("SALESFORCE-","")
-                id = id.replace("Bearer ","")
-                print(id)
-                payload = {
-                    'id': id,
-                    'iat' : datetime.datetime.utcnow()
-                }
-                token = jwt.encode(payload,SECRET_KEY,algorithm='HS256').decode('utf-8')
-                request.META['HTTP_AUTHORIZATION'] = token
             token = token.replace("Bearer ","")
             response = jwt.decode(token,SECRET_KEY,algorithms="HS256")
             #print(response)

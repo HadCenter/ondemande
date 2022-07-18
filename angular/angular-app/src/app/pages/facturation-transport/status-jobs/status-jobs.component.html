@@ -21,7 +21,7 @@
                 <thead>
                     <tr>
                         <th *ngFor="let header of advancedHeaders ; let i = index"
-                            class="mdl-data-table__cell--non-numeric" (click)="changeSorting(header, i)">
+                            class="mdl-data-table__cell--non-numeric" >
                             <span>{{ header}}</span>
                             <!-- <i *ngIf="header.sort !== null " class="material-icons sorting"
                   [class.asc]="header.sort === sortOrder.asc"
@@ -41,15 +41,24 @@
                         <td class="column-actions mdl-data-table__cell--non-numeric">
                             <button (click)="executeJob(row)"
                                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
-                                [disabled]="row.status != 'Terminée' || !row.canBeExecuted">
+                                [disabled]="row.status != 'Terminée' || !row.canBeExecuted || ( i >= 1 && advancedTable[i-1].verified != 'validate')">
                                 Exécuter
                             </button>
                             <button (click)="verify(row)"
                             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
                             style="margin-left: 5px;"
-                            [disabled]="row.status != 'Terminée' || !row.canBeExecuted">
+                            [disabled]="row.status != 'Terminée' || !row.canBeExecuted || ( i >= 1 && advancedTable[i-1].verified != 'validate')">
                             Vérifier
                         </button>
+                        <button *ngIf="i == 1" (click)="downloadFileBilling(advancedTable[i-1].derniere_execution)"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button"
+                        style="margin-left: 5px;"
+                        [disabled]="row.status != 'Terminée' || !row.canBeExecuted || ( i >= 1 && advancedTable[i-1].verified != 'validate')">
+                        <span class="download-icon material-icons">
+                            download
+                          </span>
+                        </button>
+
                         <span [ngStyle]="{'opacity':row.verified == 'not validate' ? 1 : 0 }" style="margin-left:5px;vertical-align: bottom;">
                             <mat-icon >warning</mat-icon>
                         </span>

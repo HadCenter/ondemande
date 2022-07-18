@@ -8,13 +8,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
-from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkFacturationBetweenSheets, checkFacturationForOneFile, checkMADFILE, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, generateSFTokens, getAllFacturationTransportFromFTP, modifyFactureInSF, removeClientsFromMADFileAndCopyFileToIN, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
+from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkFacturationForOneFile, checkFilesExistance, downloadBillingFileAndFolder, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, getAllFacturationTransportFromFTP, modifyFactureInSF, removeClientsFromLivraisonFileAndCopyFileToIN, removeClientsFromMADFileAndCopyFileToIN, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
 from django.http import JsonResponse
 from API.settings import SECRET_KEY
 import jwt
 import os
 import io
 import zipfile
+import shutil
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/onDemandESB/e6cb39ecec634b44b99b40ab36eda213'
 # talendUrl = 'https://webhooks.eu.cloud.talend.com/OnDemand/d9454150cb0641658e132131bf6d585d'
 from .models import InterventionFacturationTransport, PlanFacturationMetadata, PlansFacturation, SendMadPostProcessPostObject , TransactionsLivraison , TransactionsLivraisonMadDto, RabbitMqMessagesForJobToStart
@@ -406,14 +407,23 @@ def getfiles(filesList):
 	buffer = io.BytesIO()
 	zip_file = zipfile.ZipFile(buffer, 'w')
 	for filename in filesList:
-		zip_file.writestr(filename, open(filename,'rb').read())
+		try:
+			zip_file.writestr(filename, open(filename,'rb').read())
+		except Exception as e:
+			empty_dir = zipfile.ZipInfo(filename + "/")
+			zip_file.writestr(empty_dir, "")
+
 	zip_file.close()
 	# Return zip
 	response = HttpResponse(buffer.getvalue())
 	response['Content-Type'] = 'application/x-zip-compressed'
 	response['Content-Disposition'] = 'attachment; filename=livraison.zip'
 	for filename in filesList:
-		os.remove(filename)
+		if(os.path.isfile(filename)):
+			os.remove(filename)
+		elif(os.path.isdir(filename)):
+			shutil.rmtree(filename)
+
 	return response
 
 
@@ -423,7 +433,7 @@ def getAllFacturationTransport(request):
 	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
 
 @api_view(['POST'])
-def downloadFacturationTransport(request):
+def downloadBillingFile(request):
 	fileTodownload = request.data['file']
 	file = FacturationTransportFileFromFTP(fileTodownload)
 	response = HttpResponse(file, content_type="application/xls")
@@ -432,26 +442,15 @@ def downloadFacturationTransport(request):
 	#os.remove(fileTodownload)
 	return JsonResponse({'message': 'done'}, status=status.HTTP_200_OK)
 
-	return response
 
+@api_view(['POST'])
+def downloadBillingZIPFile(request):
+	date = request.data['date']
+	filesList = downloadBillingFileAndFolder(date)
+	zip_file = getfiles(filesList)
+	shutil.rmtree(date)
+	return(zip_file)
 
-@api_view(['GET'])
-def test(request):
-	url = "https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI"
-	#response = checkFacturationBetweenSheets()
-	response = requests.get("https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI")    
-	file = open("test" + ".html", 'wb')
-	file.write(str.encode(response.text))
-	file.close()
-	
-	# res = urllib.request.urlopen("https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI")
-	# file = open("test33" + ".html", 'wb')
-	# file.write(res.read())
-	# file.close()
-
-	#pdfFileObj = open('https://ecolotrans--devbox1.my.salesforce.com/sfc/p/#1j0000008jHl/a/1j0000004oXL/afHslfOy3qjcKAsob2UL4oCMszmAHjprk53eJ8U8NzI', 'rb')
-
-	return HttpResponse(jsonpickle.encode("okey",unpicklable=False), content_type="application/json")
 
 
 @api_view(['GET'])
@@ -533,8 +532,7 @@ def changePlanStatusWS(request):
 @api_view(['GET'])
 def checkFileMAD(request):
 	#file = request.data['file']
-	fileName = "ToVerifyQTE_MAD_Livraisons.xlsx"
-	response = checkMADFILE(fileName)
+	response = checkFilesExistance()
 	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json")
 
 
@@ -551,5 +549,6 @@ def removeclientsandCopyMADFile(request):
 		clientsToRemove = []
 
 	removeClientsFromMADFileAndCopyFileToIN(id, clientsToRemove)
+	removeClientsFromLivraisonFileAndCopyFileToIN(id, clientsToRemove)
 	updatePlanStatus("En attente","step 3", None, None)
 	return JsonResponse({'message': 'launched'}, status=status.HTTP_200_OK)

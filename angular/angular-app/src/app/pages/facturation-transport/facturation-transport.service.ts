@@ -30,7 +30,10 @@ export class FacturationTransportService {
     return this.http.get(`${this.url}/getAllFacturationTransport`);
   }
   public downloadBillingFile(data): Observable<any> {
-    return this.http.post(`${this.url}/downloadFacturationTransport/`,data, { responseType: "blob" });
+    return this.http.post(`${this.url}/downloadBillingFile/`,data, { responseType: "blob" });
+  }
+  public downloadBillingZIP(data): Observable<any> {
+    return this.http.post(`${this.url}/downloadBillingFileAsZip/`,data, { responseType: "blob" });
   }
   public getAllFacturesPDFFromSalesforce(): Observable<any> {
     return this.http.get(`${this.url}/GetAllFacturePDFFromSalesforce`);

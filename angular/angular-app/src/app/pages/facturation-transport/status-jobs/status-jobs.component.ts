@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { CallJobComponent } from '../dialog-call-job/call-job.component';
 import { DialogSelectTransactionComponent } from '../dialog-select-transaction/dialog-select-transaction.component';
 import { FacturationTransportService } from '../facturation-transport.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-status-jobs',
@@ -117,7 +118,8 @@ export class StatusJobsComponent implements OnInit {
   }
   verify(row) {
     if (row.plan.includes('4')) {
-      this.goToBilling();
+      // this.goToBilling();
+      this.verifyStep4(row);
     } else if(row.plan.includes('3')){
       this.verifyStep3(row);
     }else {
@@ -147,6 +149,44 @@ export class StatusJobsComponent implements OnInit {
     })
 
   }
+
+  verifyStep4(row){
+    const file = "billing"+this.advancedTable[0].derniere_execution.substring(0,10)+".xlsx";
+    var data= {
+      "file": file
+    }
+    console.log(file);
+    this.service.checkFacturationstatusForFile(data).subscribe(
+      res => {
+        if (res.status == "Valide"){
+          row.verified = "validate";
+        }else{
+          row.verified = "not validate";
+        }
+      },
+      err => {
+        row.verified = "not validate";
+      }
+    )
+  }
+
+  downloadFileBilling(derniere_execution){
+    derniere_execution = derniere_execution.substring(0,10);
+    console.log(derniere_execution);
+    var data = {
+      'date':derniere_execution
+    }
+    this.openSnackBar("Téléchargement du fichier en cours...","Ok",4000)
+
+    this.service.downloadBillingZIP(data).subscribe(res => {
+      saveAs(res, derniere_execution);
+      this.openSnackBar("Téléchargement terminé avec succès.","Ok",4000)
+
+    })
+
+    
+  }
+
   openSnackBar(message: string, action: string, duration: number) {
     this._snackBar.open(message, action, {
       duration: duration,

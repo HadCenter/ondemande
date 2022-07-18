@@ -17,7 +17,8 @@ urlpatterns = [
     path('updateMetaDataFileInTableTransactionsLivraison', views.updateMetaDataFileInTableTransactionsLivraisonWS, name="updateMetaDataFileInTableTransactionsLivraison"),
     path('downloadLivraisonFile', views.downloadLivraisonFile, name= "downloadLivraisonFile"),
     path('getAllFacturationTransport/', views.getAllFacturationTransport, name= "getAllFacturationTransport"),
-    path('downloadFacturationTransport/', views.downloadFacturationTransport, name= "downloadFacturationTransport"),
+    path('downloadBillingFile/', views.downloadBillingFile, name= "downloadBillingFile"),
+    path('downloadBillingFileAsZip/', views.downloadBillingZIPFile, name= "downloadBillingZIPFile"),
     path('GetAllFacturePDFFromSalesforce/', views.GetAllFacturePDFFromSalesforce, name= "GetAllFacturePDFFromSalesforce"),
     path('checkFacturationForFile/', views.checkFacturationForFile, name= "checkFacturationForFile"),
     path('downloadFacturePDFFromSalesforce/', views.downloadFacturePDFFromSalesforce, name= "downloadFacturePDFFromSalesforce"),
@@ -27,7 +28,4 @@ urlpatterns = [
     path('changePlanStatusWS/', views.changePlanStatusWS, name= "changePlanStatusWS"),
     path('checkFileMAD/', views.checkFileMAD, name= "checkFileMAD"),
     path("removeclientsandCopyMADFile/", views.removeclientsandCopyMADFile, name = "removeclientsandCopyMADFile" ), #en cours de dev
-
-    path('test/', views.test, name= "test"),
-
 ]

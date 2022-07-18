@@ -12,6 +12,8 @@ from .configSF import ConfigSF
 import numpy as np
 DJANGO_DIRECTORY = settings.BASE_DIR
 Kayser_Client = "C328-LAGARDERE-ERIC KAYSER"
+env_folder = "ondemand_dev"
+globalInFolderPath = "/var/www/talend/projects/ftpfiles/IN"
 
 
 def sendTransactionParamsToExecutionServerInCsvFile(transaction_id, jobs_to_start, destination_folder):
@@ -130,9 +132,14 @@ def checkFacturationForOneFile(fileName):
 
 def checkFacturationBetweenSheets(file):
     INFolderPath = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator"
-    sftp.chdir(INFolderPath)
+    sftp.chdir(INFolderPath + "/" + env_folder)
+    try:
+        sftp.get(file, os.getcwd() + "/" + file)
+    except Exception as e:
+        os.remove(file)
+        return "Introuvable"
 
-    sftp.get(file, os.getcwd() + "/" + file)
+
     excelfile = pd.read_excel(file)
     excelfile = excelfile.fillna('')
 
@@ -146,7 +153,6 @@ def checkFacturationBetweenSheets(file):
 
         if((abs(montant_HT - total)) >= 0.1 and not(total < 400) ):
             os.remove(file)
-            print(num_fact+" invalide")
             return "Invalide"
     os.remove(file)
     return "Valide"
@@ -159,6 +165,54 @@ def FacturationTransportFileFromFTP(fileToDownload):
     with open(fileToDownload, 'rb') as f:
         file = f.read()
     return file
+
+def downloadBillingFileAndFolder(date):
+    os.chdir(DJANGO_DIRECTORY)
+    files = []
+
+    source = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator/" + env_folder
+    billingFile = "billing"+date+".xlsx"
+    download_file(source, billingFile)
+    files.append(billingFile)
+    
+    source = "/var/www/talend/projects/ftpfiles/OUT/comptabilite/" + env_folder
+    billingFile = "billing_comptabilite_analytique"+date+".csv"
+    download_file(source, billingFile)
+    files.append(billingFile)
+
+    billingFile = "billing_comptabilite"+date+".csv"
+    download_file(source, billingFile)
+    files.append(billingFile)
+
+    files = download_files(date, files)
+    return files
+
+def download_file(remote_path, filename):
+    try:
+        sftp.get(remote_path + "/" + filename, os.getcwd() + "/" + filename )
+    except Exception as e:
+        sftp.get(remote_path + "/" + filename, os.getcwd() + "/" + filename )
+
+def download_files(folder, files):
+    billingFolder = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator/"+ env_folder +"/"+ folder
+    sftp.chdir(billingFolder)
+
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    # files.append(folder)
+    for file in sftp.listdir():
+        if (file.__contains__(".xlsx")):
+            files.append(folder+"/"+file)
+            try:
+                sftp.chdir(billingFolder)
+                sftp.get(file , os.getcwd() + "/" + folder + "/" + file )
+            except Exception:
+                sftp.chdir(billingFolder)
+                sftp.get(file , os.getcwd() + "/" + folder + "/" + file )
+        else:
+            download_files(folder + "/" + file, files)
+            files.append(folder + "/" + file)
+    return files
 
 
 def generateSFTokens():
@@ -251,14 +305,11 @@ def modifyFactureInSF(idFacture, price):
 
 
 def updatePlanStatus(status, plan, date, numFacture):
-    if(date is not None):
-        month = date.split("-")[0]
-        year = date.split("-")[1]
     planDB = PlansFacturation.objects.get(plan = plan)
     planDB.status = status
     if(date is not None):
-        planDB.month = month
-        planDB.year = year
+        planDB.month = date.split("-")[0]
+        planDB.year = date.split("-")[1]
         planDB.numFacture = numFacture
     planDB.save()
     
@@ -272,18 +323,28 @@ def updatePlanStatutWS(plan, status):
     planDB.save()
 
 
-def checkMADFILE(file):
-    INFolderPath = "/var/www/talend/projects/ftpfiles/IN/"
-    sftp.chdir(INFolderPath)
+def checkFilesExistance():
+    file = "ToVerifyQTE_MAD_Livraisons.xlsx"
+    sftp.chdir(globalInFolderPath + "/" + env_folder)
     planDB = PlansFacturation.objects.get(plan = "step 3")
     date = planDB.derniere_execution.strftime("%d_%m_%Y_")
-    fileName = "DEV_" + date + file
+    fileName = date + file
     try:
-        sftp.get(fileName, os.getcwd() + "/" + fileName)
+        sftp.stat(fileName)
     except Exception as e:
         if ( "No such file" in str(e)):
             return("file not found")
-    os.remove(fileName)
+    # os.remove(fileName)
+
+    file = "Livraisons.xlsx"
+    sftp.chdir(globalInFolderPath + "/CleanServer/" + env_folder)
+    fileName = date + file
+    try:
+        sftp.stat(fileName)
+    except Exception as e:
+        if ( "No such file" in str(e)):
+            return("file not found")
+    # os.remove(fileName)
     return("file found")
 
 
@@ -292,7 +353,6 @@ def removeClientsFromMADFileAndCopyFileToIN(transaction_id, clientList):
     remotefilePath = transaction.fichier_mad_sftp
     fileName = "ToVerifyQTE_MAD_Livraisons.xlsx"
 
-    globalInFolderPath = "/var/www/talend/projects/ftpfiles/IN"
     try:
         sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
     except Exception as e:
@@ -303,10 +363,32 @@ def removeClientsFromMADFileAndCopyFileToIN(transaction_id, clientList):
     fileNameOUT = removeSomeClients(fileName, clientList)
 
     try:
-        sftp.put(os.getcwd() + '/' + fileNameOUT, globalInFolderPath+"/"+fileNameOUT)
+        sftp.put(os.getcwd() + '/' + fileNameOUT, globalInFolderPath+"/"+ env_folder + "/" +fileNameOUT)
     except Exception as e:
         connect_sftp()
-        sftp.put(os.getcwd() + '/' + fileNameOUT, globalInFolderPath+"/"+fileNameOUT)
+        sftp.put(os.getcwd() + '/' + fileNameOUT, globalInFolderPath+"/" + env_folder + "/" +fileNameOUT)
+    os.remove(fileNameOUT)
+
+def removeClientsFromLivraisonFileAndCopyFileToIN(transaction_id, clientList):
+    transaction = TransactionsLivraison.objects.get(id=transaction_id)
+    remotefilePath = transaction.fichier_livraison_sftp
+    fileName = "Livraisons.xlsx"
+    specificPath = "CleanServer"
+
+    try:
+        sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
+    except Exception as e:
+        print(e)
+        connect_sftp()
+        sftp.get(remotepath=remotefilePath, localpath=os.getcwd() + '/' + fileName)
+
+    fileNameOUT = removeSomeClients(fileName, clientList)
+
+    try:
+        sftp.put(os.getcwd() + '/' + fileNameOUT, globalInFolderPath + "/" + specificPath + "/" + env_folder + "/" +fileNameOUT)
+    except Exception as e:
+        connect_sftp()
+        sftp.put(os.getcwd() + '/' + fileNameOUT, globalInFolderPath + "/" + specificPath + "/" + env_folder + "/" +fileNameOUT)
     os.remove(fileNameOUT)
 
 
@@ -319,7 +401,8 @@ def removeSomeClients(fileName, clientList):
     df = excelfile.loc[np.invert(excelfile['Expediteur'].isin(clientList))]
     os.remove(fileName)
     current_date = datetime.datetime.now().strftime("%d_%m_%Y")
-    FileNameOUT = "DEV_"+current_date+"_ToVerifyQTE_MAD_Livraisons.xlsx"
+
+    FileNameOUT = current_date +"_"+fileName
 
     df.to_excel(FileNameOUT, index=False)
 

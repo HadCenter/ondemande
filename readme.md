@@ -31,6 +31,15 @@ pip install -r requirements.txt
 python manage.py runserver 0.0.0.0:8000
 ```
 
+Dans le fichier settings.py sous django/API, il faut configurer la base de données que l'application utilise.
+Lors d'une première installation, il faut migrer tous les models du backend dans la base de données d'ou on lance : 
+
+```bash
+cd django
+python manage.py makemigrations
+python manage.py migrate
+```
+
 
 #### front-end : angular
 *  [Angular](https://angular.io/)

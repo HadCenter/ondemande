@@ -99,3 +99,26 @@ def downloadKayserFiles(LivraisonFile):
     ORLY_Livraisons_df.to_excel(current_date+"_ORL_Livraisons.xlsx", index=False)
     montparnasse_df.to_excel(current_date+"_Montparnasse_Livraisons.xlsx", index=False)
 
+
+def deleteFilesForTransaction(id):
+    path = "/home/talend/projects/ftpfiles/IN" + "/" + "ondemand_preprod" + "/transactions" 
+    toGeneratePath = path + "/to_generate"
+    toCorrectPath = path + "/to_correct"
+    
+    sftp.chdir(toGeneratePath)
+    fileName = str(id) + ".csv"
+    try:
+        sftp.stat(fileName)
+        sftp.remove(fileName)
+    except Exception as e:
+        if ( "No such file" in str(e)):
+            return("file not found")
+    
+    sftp.chdir(toCorrectPath)
+    try:
+        sftp.stat(fileName)
+        sftp.remove(fileName)
+    except Exception as e:
+        if ( "No such file" in str(e)):
+            return("file not found")
+

@@ -16,5 +16,5 @@ urlpatterns = [
     path('startEngineOnMagistorFiles', views.startEngineOnMagistorFiles),
     path('updateMetaDataFileInTableTransactionsLivraison', views.updateMetaDataFileInTableTransactionsLivraisonWS, name="updateMetaDataFileInTableTransactionsLivraison"),
     path('downloadLivraisonFile', views.downloadLivraisonFile, name= "downloadLivraisonFile"),
-
+    path("deleteTransaction/", views.deleteTransaction, name = "deleteTransaction" ), #en cours de dev
 ]

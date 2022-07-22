@@ -27,6 +27,11 @@ export class ListTransactionService {
   public integrerTransaction(data): Observable<any> {
     return this.http.post(`${this.url}/integrerMADFile`, data);
   }
+
+  public deleteTransaction(data): Observable<any> {
+    return this.http.post(`${this.url}/deleteTransaction/`, data);
+  }
+
   public getAdvancedHeaders() {
     return [
       {

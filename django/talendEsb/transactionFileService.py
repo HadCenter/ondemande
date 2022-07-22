@@ -407,3 +407,26 @@ def removeSomeClients(fileName, clientList):
     df.to_excel(FileNameOUT, index=False)
 
     return(FileNameOUT)
+
+def deleteFilesForTransaction(id):
+    path = globalInFolderPath + "/" + env_folder + "/transactions" 
+    toGeneratePath = path + "/to_generate"
+    toCorrectPath = path + "/to_correct"
+    
+    sftp.chdir(toGeneratePath)
+    fileName = str(id) + ".csv"
+    try:
+        sftp.stat(fileName)
+        sftp.remove(fileName)
+    except Exception as e:
+        if ( "No such file" in str(e)):
+            return("file not found")
+    
+    sftp.chdir(toCorrectPath)
+    try:
+        sftp.stat(fileName)
+        sftp.remove(fileName)
+    except Exception as e:
+        if ( "No such file" in str(e)):
+            return("file not found")
+

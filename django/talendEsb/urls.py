@@ -28,4 +28,5 @@ urlpatterns = [
     path('changePlanStatusWS/', views.changePlanStatusWS, name= "changePlanStatusWS"),
     path('checkFileMAD/', views.checkFileMAD, name= "checkFileMAD"),
     path("removeclientsandCopyMADFile/", views.removeclientsandCopyMADFile, name = "removeclientsandCopyMADFile" ), #en cours de dev
+    path("deleteTransaction/", views.deleteTransaction, name = "deleteTransaction" ), #en cours de dev
 ]

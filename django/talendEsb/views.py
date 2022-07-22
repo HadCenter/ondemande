@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
-from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkFacturationForOneFile, checkFilesExistance, downloadBillingFileAndFolder, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, getAllFacturationTransportFromFTP, modifyFactureInSF, removeClientsFromLivraisonFileAndCopyFileToIN, removeClientsFromMADFileAndCopyFileToIN, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
+from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkFacturationForOneFile, checkFilesExistance, deleteFilesForTransaction, downloadBillingFileAndFolder, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, getAllFacturationTransportFromFTP, modifyFactureInSF, removeClientsFromLivraisonFileAndCopyFileToIN, removeClientsFromMADFileAndCopyFileToIN, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
 from django.http import JsonResponse
 from API.settings import SECRET_KEY
 import jwt
@@ -552,3 +552,12 @@ def removeclientsandCopyMADFile(request):
 	removeClientsFromLivraisonFileAndCopyFileToIN(id, clientsToRemove)
 	updatePlanStatus("En attente","step 3", None, None)
 	return JsonResponse({'message': 'launched'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def deleteTransaction(request):
+	transaction_id = request.data['transaction_id']
+	transactionToDelete = TransactionsLivraison.objects.get(id = transaction_id)
+	deleteFilesForTransaction(transaction_id)
+	transactionToDelete.delete()
+	return JsonResponse({'message': 'deleted'}, status=status.HTTP_200_OK)
+

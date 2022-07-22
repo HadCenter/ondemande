@@ -9,6 +9,7 @@ import { extendMoment } from 'moment-range';
 
 const moment = extendMoment(Moment);
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DialogDeleteTransactionComponent } from './dialog-delete-transaction/dialog-delete-transaction.component';
 @Component({
   selector: 'app-list-transaction',
   templateUrl: './list-transaction.component.html',
@@ -105,6 +106,19 @@ export class ListTransactionComponent implements OnInit {
   }
   gotoFacturationTransport(){
     this.router.navigate(['/facturation-transport'])
+  }
+
+  deleteTransaction(id){
+    const dialogRef = this.dialog.open(DialogDeleteTransactionComponent, {
+      data: {
+        transaction: id
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) {
+        this.actualiser();
+      }
+    });
   }
 
   public openDialog() {

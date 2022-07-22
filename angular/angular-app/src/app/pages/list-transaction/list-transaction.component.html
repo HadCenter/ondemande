@@ -61,9 +61,17 @@
                 >Détails
                 </button>
                 <!--"[disabled] = (row.statut !== 'Terminé')" -->
-                <button (click)="integrerTransaction(row.transaction_id)" [disabled] = "true" style="margin-left: 3px;"  
+                <button (click)="integrerTransaction(row.transaction_id)" [disabled] = "true" style="margin: 0 3px;"  
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
                 </button>
+                <button (click)="deleteTransaction(row)" style="margin-left: 3px; "  
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red dialog-button btn-delete">                      
+                <span class="material-icons btn-delete">
+                  delete
+                </span>
+
+              </button>
+
               </td>
               <app-loader *ngIf="row.statut== 'En attente'" class="loader" [width]="'100%'" [position]="'sticky'"
               [height]="'182px'" [bg]="'transparant'" [show]="row.statut== 'En attente'"></app-loader>

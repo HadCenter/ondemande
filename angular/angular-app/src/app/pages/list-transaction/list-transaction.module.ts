@@ -15,8 +15,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { Mypipe } from './mypipe';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { DialogDeleteTransactionComponent } from './dialog-delete-transaction/dialog-delete-transaction.component';
 @NgModule({
-  declarations: [ListTransactionComponent, DailogGenerateTransaction, Mypipe],
+  declarations: [ListTransactionComponent, DailogGenerateTransaction, Mypipe, DialogDeleteTransactionComponent],
   imports: [
     CommonModule,
     ListTransactionRoutingModule,

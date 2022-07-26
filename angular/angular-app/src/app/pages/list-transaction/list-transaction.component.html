@@ -64,7 +64,7 @@
                 <button (click)="integrerTransaction(row.transaction_id)" [disabled] = "true" style="margin: 0 3px;"  
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button">Intégrer
                 </button>
-                <button (click)="deleteTransaction(row)" style="margin-left: 3px; "  
+                <button *ngIf="user.role == 'SuperAdmin'" (click)="deleteTransaction(row)" style="margin-left: 3px; "  
                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red dialog-button btn-delete">                      
                 <span class="material-icons btn-delete">
                   delete

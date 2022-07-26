@@ -1,5 +1,5 @@
 from datetime import datetime
-from .models import Facturation, FacturationHolidays, FacturationInfo, MatriceFacturation, MatriceFacturationInfo, Conditionnement
+from .models import Facturation, FacturationHolidays, FacturationInfo, FacturationPreparation, FacturationPreparationInfo, MatriceFacturation, MatriceFacturationInfo, Conditionnement
 import pandas as pd
 from django.db.models import Q
 
@@ -49,15 +49,12 @@ def getFacturationForMonth(code_client, mois):
     month = datetime.strptime(mois, "%m-%Y").date().strftime("%m")
     year = datetime.strptime(mois, "%m-%Y").date().strftime("%Y")
     #factList = Facturation.objects.filter(code_client = code_client, date__range = (date1,date2))
-    factList = Facturation.objects.filter(code_client = code_client, date__month = month, date__year = year).order_by('date')
+    factList = FacturationPreparation.objects.filter(code_client = code_client, date__month = month, date__year = year).order_by('date')
     listCritereMatrice= list()
     for critere in factList:
-        critereResponse = FacturationInfo(date= critere.date, prep_jour=critere.prep_jour, UM_jour=critere.UM_jour,
-                                  prep_nuit=critere.prep_nuit, UM_nuit=critere.UM_nuit,
-                                 prep_province=critere.prep_province, UM_province=critere.UM_province,
-                                  total_jour=critere.total_jour, total_nuit = critere.total_nuit , 
-                                  total_province= critere.total_province, diff_jour=critere.diff_jour,
-                                 diff_nuit = critere.diff_nuit , diff_province= critere.diff_province )
+        critereResponse = FacturationPreparationInfo(date= critere.date, service=critere.service, 
+                                  prep=critere.prep, UM=critere.UM,
+                                  total= critere.total, diff=critere.diff )
         listCritereMatrice.append(critereResponse)
 
     UMs = getUMForOnePrep(code_client)
@@ -65,23 +62,32 @@ def getFacturationForMonth(code_client, mois):
     return UMs
     
 def getUMForOnePrep(code_client):
-    unitéManut_jour = ""
-    unitéManut_nuit = ""
-    unitéManut_province = ""
+    # unitéManut_jour = ""
+    # unitéManut_nuit = ""
+    # unitéManut_province = ""
 
-    critere_jour = getMatriceForParam(code_client, "midi")
-    if(not checkMatriceEmptyValues(critere_jour)):
-        unitéManut_jour = getUM(1, critere_jour)
+    # critere_jour = getMatriceForParam(code_client, "midi")
+    # if(not checkMatriceEmptyValues(critere_jour)):
+    #     unitéManut_jour = getUM(1, critere_jour)
 
-    critere_nuit = getMatriceForParam(code_client, "soir")
-    if(not checkMatriceEmptyValues(critere_nuit)):
-        unitéManut_nuit = getUM(1, critere_nuit)
+    # critere_nuit = getMatriceForParam(code_client, "soir")
+    # if(not checkMatriceEmptyValues(critere_nuit)):
+    #     unitéManut_nuit = getUM(1, critere_nuit)
 
-    critere_province = getMatriceForParam(code_client, "province")
-    if(not checkMatriceEmptyValues(critere_province)):
-        unitéManut_province = getUM(1, critere_province)
+    # critere_province = getMatriceForParam(code_client, "province")
+    # if(not checkMatriceEmptyValues(critere_province)):
+    #     unitéManut_province = getUM(1, critere_province)
+    UM = ""
+    responseDict = {"facture": []}
+    for item in getdistinctServicesForClient(code_client):
+        critere = getMatriceForParam(code_client, item)
+        if(not checkMatriceEmptyValues(critere)):
+            UM = getUM(1, critere)
+            responseDict['UM_'+item] = UM
 
-    return {"facture":[],"UM_jour":unitéManut_jour, "UM_nuit":unitéManut_nuit,"UM_province":unitéManut_province}
+    # return {"facture":[],"UM_jour":unitéManut_jour, "UM_nuit":unitéManut_nuit,"UM_province":unitéManut_province}
+    return responseDict
+
 
 def createFileFacturationFromColumnAndRows(columns, rows, fileName):
     df = pd.DataFrame(rows, columns=columns)
@@ -253,3 +259,68 @@ def recalculateTotal(facturationDB, facturationHolidays):
             total_province = addMargeToTotalIfWeekend(total_province, str(facturationDB.date)[0:10], facturationHolidays)
             facturationDB.total_province = total_province
             facturationDB.diff_province = diff_province
+
+
+def calculateServiceTotal(facturationDB,prep,code_client, date, facturationHolidays, current_service):
+    prep_service = "prep_"+current_service
+    UM_service = "UM_"+current_service
+    facturationDB.prep = prep['prep']
+    critere = getMatriceForParam(code_client, current_service)
+    if(checkMatriceEmptyValues(critere)):
+        return False
+    total = getFacturationTotal(prep["prep"], critere)
+    total = addMargeToTotalIfWeekend(total, date, facturationHolidays)
+    facturationDB.total = total
+    facturationDB.diff = 0
+    facturationDB.UM = getUM(prep["prep"], critere)
+    if("UM" in prep and facturationDB.UM < float(prep["UM"])):
+        facturationDB.UM = prep["UM"]
+        total, diff = getFacturationTotalWithDepassement(prep["prep"], critere, prep["UM"])
+        total = addMargeToTotalIfWeekend(total, date, facturationHolidays)
+        facturationDB.total = total
+        facturationDB.diff = diff
+
+    # if('prep_nuit' in prep):
+    #     facturationDB.prep_nuit = prep['prep_nuit']
+    #     critere_nuit = getMatriceForParam(code_client, "soir")
+    #     if(checkMatriceEmptyValues(critere_nuit)):
+    #         return False
+    #     total_nuit = getFacturationTotal(prep['prep_nuit'], critere_nuit)
+    #     total_nuit = addMargeToTotalIfWeekend(total_nuit, date, facturationHolidays)
+    #     facturationDB.total_nuit = total_nuit
+    #     facturationDB.diff_nuit = 0
+    #     facturationDB.UM_nuit = getUM(prep['prep_nuit'], critere_nuit)
+    #     if('UM_nuit' in prep and facturationDB.UM_nuit < float(prep['UM_nuit'])):
+    #         facturationDB.UM_nuit = prep['UM_nuit']
+    #         total_nuit, diff_nuit = getFacturationTotalWithDepassement(prep['prep_nuit'], critere_nuit, prep['UM_nuit'])
+    #         total_nuit = addMargeToTotalIfWeekend(total_nuit, date, facturationHolidays)
+    #         facturationDB.total_nuit = total_nuit
+    #         facturationDB.diff_nuit = diff_nuit
+    
+
+    # if('prep_province' in prep):
+    #     facturationDB.prep_province = prep['prep_province']
+    #     critere_province = getMatriceForParam(code_client, "province")
+    #     if(checkMatriceEmptyValues(critere_province)):
+    #         return False
+
+    #     total_province = getFacturationTotal(prep['prep_province'], critere_province)
+    #     total_province = addMargeToTotalIfWeekend(total_province, date, facturationHolidays)
+    #     facturationDB.total_province = total_province
+    #     facturationDB.diff_province = 0
+    #     facturationDB.UM_province = getUM(prep['prep_province'], critere_province)
+    #     if('UM_province' in prep and facturationDB.UM_province < float(prep['UM_province'])):
+    #         facturationDB.UM_province = prep['UM_province']
+    #         total_province, diff_province = getFacturationTotalWithDepassement(prep['prep_province'], critere_province, prep['UM_province'])
+    #         total_province = addMargeToTotalIfWeekend(total_province, date, facturationHolidays)
+    #         facturationDB.total_province = total_province
+    #         facturationDB.diff_province = diff_province
+    return True
+
+
+def getdistinctServicesForClient(code_client):
+    services = MatriceFacturation.objects.filter(code_client=code_client).values('param').distinct()
+    response = []
+    for item in services:
+        response.append(item['param'])
+    return response

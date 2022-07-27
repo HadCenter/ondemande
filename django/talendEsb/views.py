@@ -526,7 +526,7 @@ def changePlanStatusWS(request):
 
 	updatePlanStatutWS(plan, status)
 
-	return HttpResponse(jsonpickle.encode("{'message':'changes applied'}",unpicklable=False), content_type="application/json")
+	return HttpResponse(jsonpickle.encode("{'message':'done'}",unpicklable=False), content_type="application/json")
 
 
 @api_view(['GET'])

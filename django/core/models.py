@@ -193,7 +193,7 @@ class kpi2WithFiltersDto:
 
 
 class transactionFileColumnsException:
-    def __init__(self, Tournee, taskId, itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom,Item___Type,Item___Quantite,Code_postal,Round_Name,Express,Remarque,isDeleted,Contact, billingRoundName):
+    def __init__(self, Tournee, taskId, itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom,Item___Type,Item___Quantite,Code_postal,Round_Name,Express,Remarque,isDeleted,Contact, billingRoundName, ref3):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -213,8 +213,9 @@ class transactionFileColumnsException:
         self.isDeleted = isDeleted
         self.Contact = Contact
         self.billingRoundName = billingRoundName
+        self.ref3 = ref3
 class transactionFileColumnsLivraison:
-    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,total_price,Round_Name,sourceHubName,isExpress,toDelete,Contact,billingRoundName):
+    def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,total_price,Round_Name,sourceHubName,isExpress,toDelete,Contact,billingRoundName, ref3):
         self.Tournee = Tournee
         self.taskId = taskId
         self.itemId = itemId
@@ -235,6 +236,7 @@ class transactionFileColumnsLivraison:
         self.toDelete = toDelete
         self.Contact = Contact
         self.billingRoundName = billingRoundName
+        self.ref3 = ref3
 class transactionFileColumnsMetadata:
     def __init__(self,Tournee,taskId,itemId,Date,Expediteur,Activite,Categorie,Type_de_Service,ID_de_la_tache,Item___Nom_sous_categorie,Item___Type_unite_manutention,Item___Quantite,Code_postal,sourceHubName,Round_Name,sourceClosureDate,realInfoHasPrepared,status,metadataFACTURATION):
         self.Tournee = Tournee

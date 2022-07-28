@@ -311,7 +311,7 @@ def correctAllFiles(request):
 			connect_sftp()
 			sftp.put(localpath=fileNameException, remotepath=transaction.fichier_exception_sftp)
 
-		#jobs_to_start.append(madPlanJobList[5])
+		jobs_to_start.append(madPlanJobList[5])
 		os.remove(fileNameException)
 
 	jobs_to_start.append(madPlanJobList[0])

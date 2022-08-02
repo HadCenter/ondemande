@@ -88,3 +88,28 @@ class FacturationHolidays(models.Model):
     class Meta:
         managed = False
         db_table = 'Facturation_holidays'
+
+
+class FacturationPreparation(models.Model):
+    id = models.IntegerField(primary_key=True)
+    code_client = models.CharField(max_length=45)
+    nom_client = models.CharField(max_length=45)
+    date = models.DateField(unique=True)
+    service = models.CharField(max_length=20)
+    prep = models.IntegerField()
+    UM = models.IntegerField()
+    total = models.FloatField(max_length=45)
+    diff = models.FloatField(max_length=45)
+
+    class Meta:
+        managed = False
+        db_table = 'preparation_facturation'
+
+class FacturationPreparationInfo:
+    def __init__(self,date: Date, prep : int , UM:int, total: str,diff: str, service: str):
+        self.date = date
+        self.service = service
+        self.prep = prep
+        self.UM = UM
+        self.total = total
+        self.diff = diff

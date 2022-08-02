@@ -6,8 +6,8 @@ import jsonpickle
 from rest_framework import status
 from rest_framework.decorators import api_view
 from core.ediFileService import connect
-from .facturationService import CalculRealUM, calculateAllFacturationsForAllClients, calculateTotals, createFileFacturationFromColumnAndRows, getFacturationForMonth, getMatriceForClient, getMatriceForParam, getAllClientsinDB
-from .models import FacturationHolidays, MatriceFacturation, Facturation
+from .facturationService import CalculRealUM, calculateAllFacturationsForAllClients, calculateServiceTotal, calculateTotals, createFileFacturationFromColumnAndRows, getFacturationForMonth, getMatriceForClient, getMatriceForParam, getAllClientsinDB, getdistinctServicesForClient
+from .models import FacturationHolidays, FacturationPreparation, MatriceFacturation, Facturation
 from random import randrange
 from django.conf import settings
 DJANGO_DIRECTORY = settings.BASE_DIR
@@ -135,15 +135,40 @@ def downloadExcelFacturation(request):
     rows = []
     fact = getFacturationForMonth(code_client, mois)
     for f in fact["facture"]:
+        f.__dict__['prep_' + f.__dict__['service']] = f.__dict__['prep']
+        f.__dict__['UM_' + f.__dict__['service']] = f.__dict__['UM']
+        f.__dict__['total_' + f.__dict__['service']] = f.__dict__['total']
+        f.__dict__['diff_' + f.__dict__['service']] = f.__dict__['diff']
+        del f.__dict__['prep']
+        del f.__dict__['UM']
+        del f.__dict__['total']
+        del f.__dict__['diff']
+
+    for f in fact["facture"]:
+        for el in fact["facture"]:
+            if(el.__dict__['date'] == f.__dict__['date'] and el.__dict__['service'] != f.__dict__['service']):
+                f.__dict__.update(el.__dict__)
+    
+    unique_dates = []
+    for f in fact["facture"]:
+        del f.__dict__['service']
+        if(f.__dict__['date'] not in unique_dates):
+            unique_dates.append(f.__dict__['date'])
+        else:
+            del f.__dict__
+    
+    for f in fact["facture"]:
         row = []
         for key in f.__dict__:
             if key not in columns:
                 columns.append(key)
             if key == "date":
                 row.append(f.__dict__[key].strftime("%d/%m/%y"))
-            else:
+            else :
                 row.append(f.__dict__[key])
-        rows.append(row)
+        if(len(row)>0):
+            rows.append(row)
+
     createFileFacturationFromColumnAndRows(columns, rows, fileName)
     with open(fileName, 'rb') as f:
         file = f.read()
@@ -156,7 +181,7 @@ def downloadExcelFacturation(request):
 @api_view(['POST'])
 def getMonthFacturationWithTotal(request):
     code_client = request.data['code_client']
-    factList = Facturation.objects.filter(code_client = code_client).order_by('date')
+    factList = FacturationPreparation.objects.filter(code_client = code_client).order_by('date')
     if(len(factList)>0):
         nom_client = factList[0].nom_client
         current_month = factList[0].date.strftime("%m-%Y")
@@ -172,12 +197,8 @@ def getMonthFacturationWithTotal(request):
     listMonths= list()
     for critere in factList:
         if(critere.date.strftime("%m-%Y") == current_month):
-            if(critere.total_jour != None):
-                somme += critere.total_jour 
-            if(critere.total_nuit != None):
-                somme += critere.total_nuit
-            if(critere.total_province != None):
-                somme += critere.total_province
+            if(critere.total != None):
+                somme += critere.total 
         else:
             diction = {}
             diction['month']=current_month
@@ -185,12 +206,8 @@ def getMonthFacturationWithTotal(request):
             listMonths.append(diction)
             current_month = critere.date.strftime("%m-%Y")
             somme = 0
-            if(critere.total_jour != None):
-                somme += critere.total_jour 
-            if(critere.total_nuit != None):
-                somme += critere.total_nuit
-            if(critere.total_province != None):
-                somme += critere.total_province
+            if(critere.total != None):
+                somme += critere.total 
     diction = {}
     diction['month']=current_month
     diction['total']=somme
@@ -255,5 +272,60 @@ def updateHolidays(request):
         facturationHolidays.save()
     except Exception as e:
         return JsonResponse({'message': 'error occured'}, status=status.HTTP_404_NOT_FOUND)
-    calculateAllFacturationsForAllClients()
+    # calculateAllFacturationsForAllClients()
     return JsonResponse({'message': 'updated successfully'}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def addFacturationV2(request):
+    preparations = request.data['preparations']
+    facturationHolidays = FacturationHolidays.objects.get(id=1)
+    for prep in preparations:
+        code_client = prep['code_client']
+        current_service = prep['service']
+        try:
+            facturationDB = FacturationPreparation.objects.get(date= prep['date'], code_client=code_client, service= current_service)
+            response = calculateServiceTotal(facturationDB,prep,code_client, prep['date'], facturationHolidays, current_service)
+            if(not response):
+                return JsonResponse({'message': 'veuiller remplir la matrice du client'}, status=status.HTTP_400_BAD_REQUEST)
+            facturationDB.save()
+        except Exception as e:
+            # the below code allow backend to insert new preparations
+            getdistinctServicesForClient(code_client)
+            facturationDB = FacturationPreparation()
+            facturationDB.code_client = code_client
+            facturationDB.nom_client = Client.objects.get(code_client=code_client).nom_client
+            facturationDB.date = prep['date']
+            facturationDB.service = current_service
+            facturationDB.prep = prep['prep']
+            facturationDB.UM = prep['UM']
+            response = calculateServiceTotal(facturationDB,prep,code_client, prep['date'], facturationHolidays, current_service)
+            if(not response):
+                return JsonResponse({'message': 'veuiller remplir la matrice du client'}, status=status.HTTP_400_BAD_REQUEST)
+            facturationDB.save()
+    return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def copyDB(request):
+    old_facturation = Facturation.objects.filter(code_client = "C081")
+    for line in old_facturation:
+        for key in line.__dict__ :
+            if "prep" in key and line.__dict__[key] is not None:
+                new_facturation = FacturationPreparation()
+                new_facturation.date = line.__dict__['date']
+                new_facturation.code_client = line.__dict__['code_client']
+                new_facturation.nom_client = line.__dict__['nom_client']
+                if key == "prep_jour":
+                    new_facturation.service = "matin"
+                if key == "prep_nuit":
+                    new_facturation.service = "soir"
+                if key == "prep_province":
+                    new_facturation.service = "province"
+
+                new_facturation.prep = line.__dict__[key]
+                new_facturation.UM = line.__dict__['UM_'+key.replace('prep_','')]
+                new_facturation.total = line.__dict__['total_'+key.replace('prep_','')]
+                new_facturation.diff = line.__dict__['diff_'+key.replace('prep_','')]
+                new_facturation.save()
+    return JsonResponse({'message': 'added successfully'}, status=status.HTTP_200_OK)

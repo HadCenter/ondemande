@@ -13,7 +13,7 @@ export class AddFactureService {
 
 
   public addFacturation (data) : Observable<any> {
-    return this.http.post(`${this.url}/addFacturation/`, data);
+    return this.http.post(`${this.url}/addFacturationV2/`, data);
   }
 
   public getAdvancedHeaders() {

@@ -6,11 +6,13 @@ urlpatterns = [
     path("updateAllMatriceV2/", views.updateAllMatriceForClientV2, name = "update-all-matrice-pour-client-v2" ),#en utilisation
     path("caculateFacturationByManut/", views.caculateFacturationByUnite, name = "caculateFacturationForClientUnité Manutention" ),#en cours de dev
     path("addFacturation/", views.addFacturation, name = "addFacturationinDB" ), #en utilisation
+    path("addFacturationV2/", views.addFacturationV2, name = "addFacturationV2inDB" ), #en utilisation
     path("getFacturationForClient/", views.getFacturation, name = "getFacturationfromDB" ), #en utilisation
     path("getMonthFacturationWithTotal/", views.getMonthFacturationWithTotal, name = "getMonthFacturationfromDBWithTotal" ),#en cours de dev
     path("CalculateRealUM/", views.CalculateRealUM, name = "CalculateRealUM" ),#en cours de dev 
     path("getHolidays/", views.getHolidays, name = "get-holidays" ),#en cours de dev 
     path("updateHolidays/", views.updateHolidays, name = "update-holidays" ),#en cours de dev 
     path("downloadFacturationPreparation/", views.downloadExcelFacturation, name = "downloadExcelFacturation" ), #en cours de dev
+    path("copyDB/", views.copyDB, name = "copy" ), #pour developpement seulement !! à suppprimer
 
 ]

@@ -308,7 +308,7 @@ def addFacturationV2(request):
 
 @api_view(['GET'])
 def copyDB(request):
-    old_facturation = Facturation.objects.filter(code_client = "C081")
+    old_facturation = Facturation.objects.all()
     for line in old_facturation:
         for key in line.__dict__ :
             if "prep" in key and line.__dict__[key] is not None:

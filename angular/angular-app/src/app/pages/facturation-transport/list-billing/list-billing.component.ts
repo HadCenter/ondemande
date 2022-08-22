@@ -37,7 +37,7 @@ export class ListBillingComponent implements OnInit {
       'file':file
     }
     this.factTransportService.downloadBillingFile(data).subscribe(res => {
-      saveAs(res, file);
+      saveAs(res, file.name);
 
     })
   }

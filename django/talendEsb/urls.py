@@ -27,6 +27,7 @@ urlpatterns = [
     path('launchPlan/', views.launchPlan, name= "launchPlan"),
     path('changePlanStatusWS/', views.changePlanStatusWS, name= "changePlanStatusWS"),
     path('checkFileMAD/', views.checkFileMAD, name= "checkFileMAD"),
+    path('checkBillingFileInSalesforce/', views.checkBillingFileInSalesforce, name= "checkBillingFileInSalesforce"),
     path("removeclientsandCopyMADFile/", views.removeclientsandCopyMADFile, name = "removeclientsandCopyMADFile" ), #en cours de dev
     path("deleteTransaction/", views.deleteTransaction, name = "deleteTransaction" ), #en cours de dev
 ]

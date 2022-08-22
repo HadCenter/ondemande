@@ -65,6 +65,9 @@ export class FacturationTransportService {
   public checkFileMAD(): Observable<any> {
     return this.http.get(`${this.url}/checkFileMAD`);
   }
+  public checkBillingFileInSalesforce(data): Observable<any> {
+    return this.http.post(`${this.url}/checkBillingFileInSalesforce/`,data);
+  }
   public getAdvancedHeaders() {
     return [
       {

@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from core.models import EDIfile
 from sftpConnectionToExecutionServer.views import sftp, connect as connect_sftp
-from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkFacturationForOneFile, checkFilesExistance, deleteFilesForTransaction, downloadBillingFileAndFolder, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, getAllFacturationTransportFromFTP, modifyFactureInSF, removeClientsFromLivraisonFileAndCopyFileToIN, removeClientsFromMADFileAndCopyFileToIN, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
+from .transactionFileService import FacturationTransportFileFromFTP, GetAllFacturePDFFromSF, checkBillingFtpFileInSalesforce, checkFacturationForOneFile, checkFilesExistance, deleteFilesForTransaction, downloadBillingFileAndFolder, downloadFacturePDFFromSF, downloadLivraisonFileFromFTP, getAllFacturationTransportFromFTP, modifyFactureInSF, removeClientsFromLivraisonFileAndCopyFileToIN, removeClientsFromMADFileAndCopyFileToIN, sendTransactionParamsToExecutionServerInCsvFile, updateMetaDataFileInTableTransactionsLivraison, updatePlanStatus, updatePlanStatutWS
 from django.http import JsonResponse
 from API.settings import SECRET_KEY
 import jwt
@@ -434,7 +434,8 @@ def getAllFacturationTransport(request):
 
 @api_view(['POST'])
 def downloadBillingFile(request):
-	fileTodownload = request.data['file']
+	fileDict = request.data['file']
+	fileTodownload = fileDict['name']
 	file = FacturationTransportFileFromFTP(fileTodownload)
 	response = HttpResponse(file, content_type="application/xls")
 	response['Content-Disposition'] = "attachment; filename={0}".format(fileTodownload)
@@ -560,4 +561,11 @@ def deleteTransaction(request):
 	deleteFilesForTransaction(transaction_id)
 	transactionToDelete.delete()
 	return JsonResponse({'message': 'deleted'}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def checkBillingFileInSalesforce(request):
+	date = request.data['date']
+	response, status = checkBillingFtpFileInSalesforce(date)
+	return HttpResponse(jsonpickle.encode(response,unpicklable=False), content_type="application/json", status=status )
 

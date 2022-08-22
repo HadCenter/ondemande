@@ -10,6 +10,7 @@ from .models import PlansFacturation, TransactionsLivraison
 from django.conf import settings
 from .configSF import ConfigSF
 import numpy as np
+from rest_framework import status
 DJANGO_DIRECTORY = settings.BASE_DIR
 Kayser_Client = "C328-LAGARDERE-ERIC KAYSER"
 env_folder = "ondemand_dev"
@@ -111,7 +112,7 @@ def downloadKayserFiles(LivraisonFile):
 
 def getAllFacturationTransportFromFTP():
     INFolderPath = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator"
-    sftp.chdir(INFolderPath)
+    sftp.chdir(INFolderPath + "/" + env_folder)
     files = []
     count = 1
     status = "unknown"
@@ -146,10 +147,14 @@ def checkFacturationBetweenSheets(file):
     for idx,row in excelfile.iterrows():
         num_fact = str(int(row['Numero_de_facture']))
         montant_HT = row['Montant_HT']
-        print(file,'HT ',montant_HT)
-        sheet_df = pd.read_excel(file, sheet_name=num_fact)
+
+        try:
+            sheet_df = pd.read_excel(file, sheet_name=num_fact)
+        except Exception as e:
+            os.remove(file)
+            return "Feuille excel manquante"
+
         total = sheet_df['total_price'].sum()
-        print(file,"total in 2nd sheet", total)
 
         if((abs(montant_HT - total)) >= 0.1 and not(total < 400) ):
             os.remove(file)
@@ -160,7 +165,7 @@ def checkFacturationBetweenSheets(file):
 
 def FacturationTransportFileFromFTP(fileToDownload):
     os.chdir(DJANGO_DIRECTORY)
-    source = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator"
+    source = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator/" + env_folder 
     sftp.get(source + "/" + fileToDownload, os.getcwd() + "/" + fileToDownload )
     with open(fileToDownload, 'rb') as f:
         file = f.read()
@@ -172,33 +177,52 @@ def downloadBillingFileAndFolder(date):
 
     source = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator/" + env_folder
     billingFile = "billing"+date+".xlsx"
-    download_file(source, billingFile)
-    files.append(billingFile)
+    res = download_file(source, billingFile)
+    if(res):
+        files.append(billingFile)
     
     source = "/var/www/talend/projects/ftpfiles/OUT/comptabilite/" + env_folder
     billingFile = "billing_comptabilite_analytique"+date+".csv"
-    download_file(source, billingFile)
-    files.append(billingFile)
+    res = download_file(source, billingFile)
+    if(res):
+        files.append(billingFile)
 
     billingFile = "billing_comptabilite"+date+".csv"
-    download_file(source, billingFile)
-    files.append(billingFile)
+    res = download_file(source, billingFile)
+    if(res):
+        files.append(billingFile)
 
     files = download_files(date, files)
     return files
 
+
 def download_file(remote_path, filename):
+    try:
+        sftp.stat(remote_path + "/" + filename)
+    except Exception as e:
+        if ( "No such file" in str(e)):
+            return False
     try:
         sftp.get(remote_path + "/" + filename, os.getcwd() + "/" + filename )
     except Exception as e:
         sftp.get(remote_path + "/" + filename, os.getcwd() + "/" + filename )
+    return True
+
 
 def download_files(folder, files):
-    billingFolder = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator/"+ env_folder +"/"+ folder
-    sftp.chdir(billingFolder)
-
+    path = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator/"+ env_folder
+    billingFolder = path +"/"+ folder
     if not os.path.exists(folder):
         os.makedirs(folder)
+
+    try:
+        sftp.stat(billingFolder)
+    except Exception as e:
+        if ( "No such file" in str(e)):
+            return files
+
+    sftp.chdir(billingFolder)
+
     # files.append(folder)
     for file in sftp.listdir():
         if (file.__contains__(".xlsx")):
@@ -229,6 +253,9 @@ def generateSFTokens():
             cache.set('SF_token', api_response.json(), 7200) #expires after two hours 
         except KeyError:
             raise Exception(api_response['error_description'])
+    else:
+            raise Exception('Couldn\'t connect to salesforce')
+
  
 
 def GetAllFacturePDFFromSF():
@@ -430,3 +457,44 @@ def deleteFilesForTransaction(id):
         if ( "No such file" in str(e)):
             return("file not found")
 
+
+def checkBillingFtpFileInSalesforce(date):
+    INFolderPath = "/var/www/talend/projects/ftpfiles/OUT/Billing_generator"
+    sftp.chdir(INFolderPath + "/" + env_folder)
+    file = "billing"+date+".xlsx"
+    salesforceFacturations = GetAllFacturePDFFromSF()
+
+    # return salesforceFacturations
+    try:
+        sftp.get(file, os.getcwd() + "/" + file)
+    except Exception as e:
+        os.remove(file)
+        return "Introuvable", status.HTTP_404_NOT_FOUND
+
+
+    excelfile = pd.read_excel(file)
+    excelfile = excelfile.fillna('')
+
+    for idx,row in excelfile.iterrows():
+        num_fact = str(int(row['Numero_de_facture']))
+        montant_HT = row['Montant_HT']
+        current_item = None
+        current_item = next((item for item in salesforceFacturations if item["RL_Numero_de_facture__c"] == num_fact), None)
+        response = ""
+        if(current_item != None):
+            if(current_item['RL_Prix_H_T__c'] == montant_HT):
+                response = "Le montant de la facture est valide dans Salesforce", status.HTTP_200_OK
+            else:
+                res = modifyFactureInSF(str(current_item['Id']),montant_HT)
+                if (res != "message : ok"):
+                    os.remove(file)
+                    return "Impossible de mettre à jour le montant dans Salesforce", status.HTTP_400_BAD_REQUEST
+                response = "Le montant de la facture a été mise à jour avec succès", status.HTTP_200_OK
+
+        else:
+            os.remove(file)
+            print(str(current_item['Id']))
+            return "facture non trouvé dans Salesforce", status.HTTP_404_NOT_FOUND
+
+    os.remove(file)
+    return response

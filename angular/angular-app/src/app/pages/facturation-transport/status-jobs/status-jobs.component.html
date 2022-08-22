@@ -31,7 +31,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let row of advancedTable  | slice:0:limit; let i = index;">
-                        <td class="mdl-data-table__cell--non-numeric">{{ row.plan }}</td>
+                        <td class="mdl-data-table__cell--non-numeric pointer" (click)="goToPage(row)">{{ row.plan }}</td>
                         <td class="mdl-data-table__cell--non-numeric">{{ row.derniere_execution | date:"dd/MM/yyyy 'à' HH:mm" }}</td>
                         <td *ngIf="row.status != 'unknown'" class="mdl-data-table__cell--non-numeric"><span
                                 class="border label label--mini"

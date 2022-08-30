@@ -10,6 +10,7 @@ import { extendMoment } from 'moment-range';
 const moment = extendMoment(Moment);
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogDeleteTransactionComponent } from './dialog-delete-transaction/dialog-delete-transaction.component';
+import { AuthService } from 'app/services';
 @Component({
   selector: 'app-list-transaction',
   templateUrl: './list-transaction.component.html',
@@ -32,13 +33,16 @@ export class ListTransactionComponent implements OnInit {
   copy_transactions:any=[];
   showJobRun = false;
   public advancedHeaders = this.tablesService.getAdvancedHeaders();
+  user: any;
   constructor(private tablesService: ListTransactionService,
     private router: Router,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     this.listenToWebSocket();
     this.getTransactions();
+    this.authService.userData.subscribe(user => this.user = user);
   }
 
   formatDates(){

@@ -101,7 +101,7 @@ def downloadKayserFiles(LivraisonFile):
 
 
 def deleteFilesForTransaction(id):
-    path = "/home/talend/projects/ftpfiles/IN" + "/" + "ondemand_preprod" + "/transactions" 
+    path = "/home/talend/projects/ftpfiles/IN" + "/" + "ondemand_prod" + "/transactions" 
     toGeneratePath = path + "/to_generate"
     toCorrectPath = path + "/to_correct"
     

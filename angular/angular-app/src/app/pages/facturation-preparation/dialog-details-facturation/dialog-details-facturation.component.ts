@@ -141,7 +141,8 @@ export class DialogDetailsFacturationComponent implements OnInit {
           }
         });
 
-        this.advancedHeaders = Object.keys(this.advancedTable[0]);
+        this.advancedHeaders = this.getHeaders(this.advancedTable);
+        // this.advancedHeaders = Object.keys(this.advancedTable[0]);
         this.advancedHeaders.forEach((element) => {
           if (element.includes("total")) {
             this.totals.push(0);
@@ -197,6 +198,15 @@ export class DialogDetailsFacturationComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+  getHeaders(advancedTable: any[]): any {
+    let header = Object.keys(advancedTable[0]);
+    for (var i = 0; i < advancedTable.length; i++) {
+      if (header.length < Object.keys(advancedTable[i]).length) {
+        header = Object.keys(advancedTable[i]);
+      }
+    }
+    return header;
   }
 
   getHolidaysAndWeekends() {

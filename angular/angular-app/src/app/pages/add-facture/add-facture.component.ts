@@ -153,8 +153,8 @@ export class AddFactureComponent implements OnInit {
         this.services_list = this.advancedHeaders;
 
         this.services_list.forEach((element) => {
-          this.UM.push([]);
-          this.Preparations.push([]);
+          this.UM.push(Array(totalDaysInMonth).fill(''));
+          this.Preparations.push(Array(totalDaysInMonth).fill(''));
         });
         // this.UM_jour_one_prep = parseInt(res.UM_jour);
         // this.UM_nuit_one_prep = parseInt(res.UM_nuit);
@@ -173,12 +173,8 @@ export class AddFactureComponent implements OnInit {
               // this.UM_jour.push(element.UM_jour);
               // this.UM_nuit.push(element.UM_nuit);
               // this.UM_province.push(element.UM_province);
-              this.Preparations[
-                this.services_list.indexOf(element.service)
-              ].push(element.prep);
-              this.UM[this.services_list.indexOf(element.service)].push(
-                element.UM
-              );
+              this.Preparations[this.services_list.indexOf(element.service)][i-1]  = element.prep;
+              this.UM[this.services_list.indexOf(element.service)][i-1]  = element.UM;
             }
           });
         }

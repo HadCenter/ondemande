@@ -1,0 +1,69 @@
+<!-- <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--3-col-phone content"> -->
+  <div class='dialog-content'>
+    <app-loader [position]="'absolute'" [width]="'400px'" [height]="'350px'" [bg]="'transparant'" [show]="showloader">
+    </app-loader>
+    <base-card class="card-dialog">
+      <base-card-title>
+        <h1 class="mdl-card__title-text">Ajouter Frais</h1>
+      </base-card-title>
+      <base-card-body class="no-padding">
+        <form [formGroup]="signupForm" (submit)="login()" autocomplete="off" novalidate>
+          <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
+
+            <div style="margin-top:6px;" >
+              <mat-form-field appearance="fill">
+                <mat-label>Type Frais</mat-label>
+                <mat-select formControlName="type_Frais">
+                  <mat-option *ngFor="let dl of listItems" [value]="dl">
+                    {{dl}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div *ngIf="type_Frais.value == 'Prix Carburant'" style="display: grid"
+              class="">
+              <label style="color:gray;">Type carburant </label>
+              <mat-form-field class="select-filter" appearance="fill">
+                <mat-select formControlName="type_Carburant">
+                  <mat-option *ngFor="let rp of listType" value="selected" [value]="rp">
+                    {{rp}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
+              [class.is-invalid]="code_carburant.invalid && (code_carburant.dirty || code_carburant.touched)"
+              [class.is-valid]="code_carburant.valid && (code_carburant.dirty || code_carburant.touched)">
+              <input formControlName="code_carburant" (change)="onInputChange($event)" class="mdl-textfield__input" type="text"
+                id="code_carburant">
+              <label class="mdl-textfield__label" for="code_carburant">Code </label>
+  
+              <div *ngIf="code_carburant.invalid && (code_carburant.dirty || code_carburant.touched)">
+                <span *ngIf="code_carburant.errors.required" class="mdl-textfield__error">
+                  Code obligatoire.
+                </span>
+              </div>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
+              [class.is-invalid]="prix.invalid && (prix.dirty || prix.touched)"
+              [class.is-valid]="prix.valid && (prix.dirty || prix.touched)">
+              <input formControlName="prix" (change)="onInputChange($event)" class="mdl-textfield__input" type="text"
+                id="prix">
+              <label class="mdl-textfield__label" for="code_carburant">Prix</label>
+  
+              <div *ngIf="prix.invalid && (prix.dirty || prix.touched)">
+                <span *ngIf="prix.errors.required" class="mdl-textfield__error">
+                  prix obligatoire.
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
+            <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit"
+              [disabled]="signupForm.invalid">Ajouter</button>
+          </div>
+        </form>
+      </base-card-body>
+    </base-card>
+  </div>

@@ -13,7 +13,7 @@ import { DetailsTransactionComponent } from './details-transaction/details-trans
 import { FacturationLogistiqueComponent } from './facturation-logistique/facturation-logistique.component';
 import { PowerbiEmbeddedComponent } from './powerbi-embedded/powerbi-embedded.component';
 import { DetailsKpiPowerbiComponent } from './details-kpi-powerbi/details-kpi-powerbi.component';
-
+import { fraisComponent } from './frais/frais.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,7 +34,8 @@ import { DetailsKpiPowerbiComponent } from './details-kpi-powerbi/details-kpi-po
    DetailsTransactionComponent,
    FacturationLogistiqueComponent,
    PowerbiEmbeddedComponent,
-   DetailsKpiPowerbiComponent
+   DetailsKpiPowerbiComponent,
+   fraisComponent,
 
   ],
 

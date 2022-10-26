@@ -1,0 +1,87 @@
+<!-- <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--3-col-phone content" > -->
+<div class='dialog-content'>
+  <app-loader [position]="'absolute'" [width]="'400px'" [height]="'410px'" [bg]="'transparant'" [show]="showloader">
+  </app-loader>
+  <base-card class="card-dialog">
+    <base-card-title>
+      <h1 class="mdl-card__title-text">Mettre à jour votre utilisateur</h1>
+    </base-card-title>
+    <base-card-body class="no-padding">
+      <form [formGroup]="updateForm" (submit)="updateUser()" autocomplete="off" novalidate>
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--6-col-phone">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
+            [class.is-invalid]="username.invalid && (username.dirty || username.touched)"
+            [class.is-valid]="username.valid && (username.dirty || username.touched)">
+            <label for="username" style="color:gray; font: 13px Arial, sans-serif;">Nom</label>
+            <br>
+            <input formControlName="username" (change)="onInputChange($event)" [(ngModel)]="currentUser.username"
+              class="mdl-textfield__input" type="text" id="username">
+            <div *ngIf="username.invalid && (username.dirty || username.touched)">
+              <span *ngIf="username.errors.required" class="mdl-textfield__error">
+                Nom obligatoire.
+              </span>
+            </div>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size"
+            [class.is-invalid]="email.invalid && (email.dirty || email.touched)"
+            [class.is-valid]="email.valid && (email.dirty || email.touched)">
+            <label for="email" style="color:gray; font: 13px Arial, sans-serif;">Email</label>
+            <br>
+            <input formControlName="email" (change)="onInputChange($event)" [(ngModel)]="currentUser.email"
+              class="mdl-textfield__input" type="text" id="email">
+
+            <div *ngIf="email.invalid && (email.dirty || email.touched)">
+              <span *ngIf="email.errors.required" class="mdl-textfield__error">
+                Email obligatoire.
+              </span>
+              <span *ngIf="email.errors.pattern" class="mdl-textfield__error">
+                Email non valide.
+              </span>
+            </div>
+          </div>
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-select [(value)]="role" formControlName="profile">
+                <mat-option value="Admin">Admin</mat-option>
+                <mat-option value="SuperAdmin">SuperAdmin</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-select [(value)]="activated" formControlName="status">
+                <mat-option value="Actif">Actif</mat-option>
+                <mat-option value="Non actif">Non actif</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="profile.value == 'Admin'" style="display: grid">
+            <label style="color:gray; font: 13px Arial, sans-serif;">Rapport</label>
+            <mat-form-field class="select-filter" appearance="fill">
+              <input type="text" placeholder="{{
+                (selectedRapports?.length >0 ) ? selectedRapports?.length + ' rapports séléctionnés' : 'Sélectionner...'
+              }}" aria-label="rapports" matInput [matAutocomplete]="auto" [formControl]="rapportControl">
+            </mat-form-field>
+            <mat-autocomplete [panelWidth]="'auto'" #auto="matAutocomplete">
+              <mat-option class="option-rapports" *ngFor="let rapport of rapports" [value]="selectedRapports">
+                <mat-checkbox [checked]="rapport.selected" (change)="toggleSelection(rapport)"
+                  (click)="$event.stopPropagation()">
+                  {{ rapport.name }}
+                </mat-checkbox>
+              </mat-option>
+            </mat-autocomplete>
+            <mat-checkbox [checked]="canUpdateCapacity" (change)="checkCapacity()" (click)="$event.stopPropagation()">
+              Actualisation de le capacité PowerBI
+            </mat-checkbox>
+
+          </div>
+
+        </div>
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell mdl-grid center-items">
+          <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue" type="submit">Modifer</button>
+        </div>
+
+      </form>
+    </base-card-body>
+  </base-card>
+</div>

@@ -19,6 +19,7 @@ const routes: Routes = [
       { path: 'details-file-edi/:id', loadChildren: () => import('./pages/details-file-edi/details-file-edi.module').then(m => m.DetailsFileEdiModule), canActivate: [AuthGuard] },
       { path: 'details-transaction/:id', loadChildren: () => import('./pages/details-transaction/details-transaction.module').then(m => m.DetailsTransactionModule), canActivate: [AuthGuard] },
       { path: 'users', loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule), canActivate: [AuthGuard] },
+      { path: 'frais', loadChildren: () => import('./pages/frais/frais.module').then(m => m.fraisModule), canActivate: [AuthGuard] },
       { path: 'list-transaction', loadChildren: () => import('./pages/list-transaction/list-transaction.module').then(m => m.ListTransactionModule), canActivate: [AuthGuard] },
       { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule), canActivate: [AuthGuard] },
       { path: 'profil', loadChildren: () => import('./pages/profil/profil.module').then(m => m.ProfilModule), canActivate: [AuthGuard] },
@@ -33,7 +34,7 @@ const routes: Routes = [
       { path: 'config-jour-ferie', loadChildren: () => import('./pages/config-jour-ferie/config-jour-ferie.module').then(m => m.ConfigJourFerieModule), canActivate: [AuthGuard] },
       { path: 'rapports', loadChildren: () => import('./pages/powerbi-embedded/powerbi-embedded.module').then(m => m.PowerbiEmbeddedModule), canActivate: [AuthGuard] },
       { path: 'details-rapport/:id', loadChildren: () => import('./pages/details-kpi-powerbi/details-kpi-powerbi.module').then(m => m.DetailsKpiPowerbiModule), canActivate: [AuthGuard] },
-
+      { path: 'frais', loadChildren: () => import('./pages/frais/frais.module').then(m => m.fraisModule), canActivate: [AuthGuard] },
     ],
   },
   {

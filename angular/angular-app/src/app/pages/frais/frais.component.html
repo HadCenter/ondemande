@@ -1,0 +1,176 @@
+<div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--6-col-phone">
+    <app-loader [width]="'100%'" [position]="'sticky'"  [height]="'450px'" [bg]="'transparant'" [show]="show"></app-loader>
+    <base-card>
+        <base-card-title>
+          <h1 class="mdl-card__title-text">Liste des Frais variables</h1>
+          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-textfield-search mdl-js-textfield mdl-textfield--expandable search-table">
+            
+          </div>
+          <button (click)="openAddUser()"
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal dialog-button "
+                  >Ajouter Une Frais
+                </button>
+        </base-card-title>
+        <base-card-body class="no-padding">
+          
+        <div class="panel-group " id="accordion">
+          <div class="panel panel-default">
+            
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                <div class="panel-heading ">
+                  <h4 class="panel-title btn-default">
+                    Frais Carburants
+                  </h4>
+                </div>
+               </a>
+              
+            
+            <div id="collapse1" class="panel-collapse collapse in">
+              <div class="panel-body">
+                <table *ngIf="CarburantTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+                  <thead>
+                    <tr>
+                      <th *ngFor="let header of carburantHeaders " class="user-info mdl-data-table__cell--non-numeric">
+                        <span>{{ header.name }}</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of CarburantTable  | slice:0:limit; let i = index;">
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.code_Carburant }}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.type_Carburant }}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.dateupdate }}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.prix_Diesel }} {{row.unite}}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">
+                        &nbsp;
+                        <button (click)="openDeleteFrais(row, 'Carburant')"
+                          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red delete-button">Supprimer
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+              <div class="panel-heading ">
+                <h4 class="panel-title btn-default">
+                  
+                  Frais Pneumatique
+
+                </h4>
+              </div>
+             </a>
+            <div id="collapse2" class="panel-collapse collapse">
+              <div class="panel-body">
+                <table *ngIf="PneumatiqueTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+                  <thead>
+                    <tr>
+                      <th *ngFor="let header of PneumatiquetHeaders " class="user-info mdl-data-table__cell--non-numeric">
+                        <span>{{ header.name }}</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of PneumatiqueTable  | slice:0:limit; let i = index;">
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.code_Pneumatique }}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">Frais Pneumatique</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.dateupdate }}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.prix_Pneumatique }} €</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">
+                        &nbsp;
+                        <button (click)="openDeleteFrais(row, 'Pneumatique')"
+                          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red delete-button">Supprimer
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+              <div class="panel-heading ">
+                <h4 class="panel-title btn-default">
+                  Charge Entretien
+                </h4>
+              </div>
+             </a>
+            <div id="collapse3" class="panel-collapse collapse">
+              <div class="panel-body">
+                <table *ngIf="EntretienTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+                  <thead>
+                    <tr>
+                      <th *ngFor="let header of EntretienHeaders " class="user-info mdl-data-table__cell--non-numeric">
+                        <span>{{ header.name }}</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of EntretienTable  | slice:0:limit; let i = index;">
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.code_Entretien }}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">Frais Entretien</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.dateupdate }}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.prix_entretien }} €</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">
+                        &nbsp;
+                        <button (click)="openDeleteFrais(row, 'Entretien')"
+                          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red delete-button">Supprimer
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+              <div class="panel-heading ">
+                <h4 class="panel-title btn-default">
+                  Indice Carburant
+                </h4>
+              </div>
+             </a>
+            <div id="collapse4" class="panel-collapse collapse">
+              <div class="panel-body">
+                <table *ngIf="IndiceTable.length > 0" class="mdl-data-table mdl-js-data-table  sorting-table">
+                  <thead>
+                    <tr>
+                      <th *ngFor="let header of IndiceHeaders " class="user-info mdl-data-table__cell--non-numeric">
+                        <span>{{ header.name }}</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of IndiceTable  | slice:0:limit; let i = index;">
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.code_IndiceCarburant }}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">Frais Indice Carburant</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.dateupdate }}</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">{{ row.prix_IndiceCarburant }} €</td>
+                      <td class="user-info mdl-data-table__cell--non-numeric">
+                        &nbsp;
+                        <button (click)="openDeleteFrais(row, 'Indice')"
+                          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red delete-button">Supprimer
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div> 
+        </base-card-body>
+      </base-card>
+  </div>
+  
+  
+  
+  

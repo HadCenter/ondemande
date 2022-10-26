@@ -42,6 +42,7 @@ export class SidebarComponent extends BaseSidebarComponent {
           ]
           , icon: 'list'
         },
+        { name: "Frais Variables", link: '/frais', icon: 'list' },
         { name: "Rapports", link: '/rapports', icon: 'list' },
         { name: "Utilisateurs", link: '/users', icon: 'list' },
         {

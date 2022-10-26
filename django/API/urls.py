@@ -27,7 +27,6 @@ urlpatterns = [
     path('api/auth/', include('accounts.urls')),
     path('api/', include('core.urls')),
     path('api/', include('kpi.urls')),
-    path('api/', include('fraivariables.urls')),
     path('talendEsb/', include('talendEsb.urls')),
     path('salesforceEsb/', include('salesforceEsb.urls')),
     path('urbantzEsb/', include('urbantzEsb.urls')),
@@ -35,5 +34,6 @@ urlpatterns = [
     path('rabbitMQ/',include('rabbitMQ.urls')),
     path('embededPowerBI/',include('embededPowerBI.urls')),
     path('facturation/',include('facturation.urls')),
+    path('api/', include('fraivariables.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

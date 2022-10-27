@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 
 export class fraisService {
-  private url = `${environment.apiBaseUrl}/api`;
+  private url = `${environment.apiBaseUrl}/apii`;
   constructor(private http: HttpClient) { }
   
   public getAllFrais () : Observable<any> {

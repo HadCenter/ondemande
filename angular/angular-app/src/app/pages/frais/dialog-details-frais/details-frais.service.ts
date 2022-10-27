@@ -8,7 +8,7 @@ import { Carburant } from '../frais.component';
 @Injectable()
 export class DetailsUserService {
 
-  private url = `${environment.apiBaseUrl}/api`;
+  private url = `${environment.apiBaseUrl}/apii`;
   constructor(private http: HttpClient)
   { }
   get(id): Observable<any> {

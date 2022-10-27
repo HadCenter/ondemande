@@ -9,8 +9,4 @@ urlpatterns = [
     path("entretien/<int:pk>", views.entretienList_detail, name = "entretien"),
     path("IndiceCarburant", views.indicecarburantList, name = "IndiceCarburant"),#en utilisation et à voir la liste des clients après
     path("IndiceCarburant/<int:pk>", views.IndiceCarburantList_detail, name = "IndiceCarburant"),
-    #indicecarburantAdd
-    #path("AddIndiceCarburant", views.indicecarburantAdd, name = "AddIndiceCarburant"),#en utilisation et à voir la liste des clients après
-    
-
 ]

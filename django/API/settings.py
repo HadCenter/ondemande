@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'embededPowerBI',
     'facturation',
     'fraivariables',
+    'KpiTransp',
 ]
 
 MIDDLEWARE = [

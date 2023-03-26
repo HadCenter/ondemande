@@ -35,6 +35,8 @@ const routes: Routes = [
       { path: 'rapports', loadChildren: () => import('./pages/powerbi-embedded/powerbi-embedded.module').then(m => m.PowerbiEmbeddedModule), canActivate: [AuthGuard] },
       { path: 'details-rapport/:id', loadChildren: () => import('./pages/details-kpi-powerbi/details-kpi-powerbi.module').then(m => m.DetailsKpiPowerbiModule), canActivate: [AuthGuard] },
       { path: 'frais', loadChildren: () => import('./pages/frais/frais.module').then(m => m.fraisModule), canActivate: [AuthGuard] },
+      { path: 'KPI', loadChildren: () => import('./pages/KPI/KPI.module').then(m => m.KPIModule), canActivate: [AuthGuard] },
+      
     ],
   },
   {

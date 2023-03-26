@@ -48,7 +48,7 @@ export class KPIComponent extends UpgradableComponent implements OnInit {
       for (var i = 0; i < res.length; i++) {
           res[i].status = "Actif";
       }
-      this.date = this.AllKPI[res.length - 1]['date'];
+      //this.date = this.AllKPI[res.length - 1]['date'];
       this.val1 = this.AllKPI[res.length - 1]['prix_HT'];
       this.val2 = this.AllKPI[res.length - 2]['prix_HT'];
       this.val3 = this.AllKPI[res.length - 3]['prix_HT'];

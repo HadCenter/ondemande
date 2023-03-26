@@ -60,7 +60,7 @@ export class KPIComponent extends UpgradableComponent implements OnInit {
       this.datatransp=[ this.val7, this.val6, this.val5, this.val4, this.val3,this.val2, this.val1];
       
       
-      var speedCanvas = document.getElementById("speedChart");
+      var speedCanvas = document.getElementById("speedChartjs");
       var dataFirst = 
       {
         data: this.datatransp,

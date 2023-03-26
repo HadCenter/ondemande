@@ -7,7 +7,7 @@ import { WebsocketService } from 'app/services/websocket.service';
 @Injectable()
 export class KPIService {
 
-  private url = `${environment.apiBaseUrl}/api`;
+  private url = `${environment.apiBaseUrl}/api/Trans/`;
   //public WS_URL = "ws://52.47.208.8:8000/ws/notifications"
   public messages: Subject<any>;
   constructor(private http: HttpClient,private wsService: WebsocketService) { 

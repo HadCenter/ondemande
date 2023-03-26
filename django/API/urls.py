@@ -18,6 +18,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from KpiTransp import views as Kpit 
+
 from rest_framework.schemas import get_schema_view
 from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 schema_view = get_schema_view(title='Users API', renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer])
@@ -27,8 +29,7 @@ urlpatterns = [
     path('api/auth/', include('accounts.urls')),
     path('api/', include('core.urls')),
     path('api/', include('kpi.urls')),
-    path('api/', include('KpiTransp.urls')),
-    path('api/', include('KpiTransp.urls')),
+    path('api/Trans/KPITransport', Kpit.KPIHTList, name = "KPITransport"),
     path('talendEsb/', include('talendEsb.urls')),
     path('salesforceEsb/', include('salesforceEsb.urls')),
     path('urbantzEsb/', include('urbantzEsb.urls')),

@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/auth/', include('accounts.urls')),
     path('api/', include('core.urls')),
     path('api/', include('kpi.urls')),
-    path('kpi/', include('KpiTransp.urls')),
+    path('trans/', include('KpiTransp.urls')),
     path('talendEsb/', include('talendEsb.urls')),
     path('salesforceEsb/', include('salesforceEsb.urls')),
     path('urbantzEsb/', include('urbantzEsb.urls')),
